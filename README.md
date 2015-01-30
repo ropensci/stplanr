@@ -10,6 +10,6 @@ Department of Transport funded project to help planners identify where bicycle p
 ```r
 # you must have the devtools package (e.g. via install.packages("devtools"))
 library(devtools) 
-install_github("robinlovelace/pct-pack")
+install_github("robinlovelace/pctpack")
 ```
 
