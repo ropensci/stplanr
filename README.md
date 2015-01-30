@@ -1,6 +1,6 @@
-# pct-pack
+# pctpack
 
-This R package. Provides functions and data for estimating 'propensity to cycle'.
+This R package provides functions and data for estimating 'propensity to cycle'.
 
 Department of Transport funded project to help planners identify where bicycle pathes are most urgently needed.
 

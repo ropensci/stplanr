@@ -1,9 +1,10 @@
 #' Simplify geometry file of a shapfile.
 #'
-#' This is a wrapper funtion for the JavaScript function mapshaper, which must be installed for gMapshaper to work. Writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
+#' @section Details:
+#' This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: https://github.com/mbloch/mapshaper . mapshaper which must be installed locally for gMapshaper to work. Writes \code{gMapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
 #'
 #' @param dsn A character string providing the absolute path to the shapefile to simplify.
-#' @param y A number between 0 and 100 stating how aggressively to simplify the object. Roughly corresponds with the % space saving of the simplified shapefile compared with the original.
+#' @param y A number between 0 and 100 stating how aggressively to simplify the object. Roughly corresponds with the \% hard disk space saved by the simplified shapefile compared with the original.
 #' @examples
 #' \dontrun{
 #' gMapshape("~/geodata/myShapefile.shp", 5)
@@ -15,5 +16,4 @@ gMapshape <- function(dsn, percent){
   print(paste0("Attempting to run the following command from the system (requires mapshaper JavaScript library): ", cmd))
   system(cmd, wait = TRUE)
 }
-
 
