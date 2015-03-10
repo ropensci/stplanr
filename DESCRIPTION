@@ -1,4 +1,4 @@
-Package: pctpack
+Package: stplanr
 Type: Package
 Title: Estimate and explore propensity to cycle
 Version: 0.01

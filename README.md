@@ -1,4 +1,4 @@
-# pctpack
+# stplanr
 
 This R package provides functions and data for estimating 'propensity to cycle'.
 
@@ -10,6 +10,6 @@ Department of Transport funded project to help planners identify where bicycle p
 ```r
 # you must have the devtools package (e.g. via install.packages("devtools"))
 library(devtools) 
-install_github("robinlovelace/pctpack")
+install_github("robinlovelace/stplanr")
 ```
 

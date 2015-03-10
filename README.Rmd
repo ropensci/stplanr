@@ -1,5 +1,5 @@
 ---
-title: "pctpack"
+title: "stplanr"
 output:
   html_document:
     keep_md: yes
@@ -14,6 +14,6 @@ Department of Transport funded project to help planners identify where bicycle p
 ```{r, eval=FALSE}
 # you must have the devtools package (e.g. via install.packages("devtools"))
 library(devtools) 
-install_github("robinlovelace/pctpack")
+install_github("robinlovelace/stplanr")
 ```
 
