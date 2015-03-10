@@ -5,5 +5,5 @@ Version: 0.01
 Date: 2015-03-10
 Author: Robin Lovelace
 Maintainer: <rob00x@gmail.com>
-Description: Provides functions and data for estimating 'propensity to cycle'. Department of Transport funded project to help planners identify where bicycle pathes are most urgently needed.
+Description: This is an R package from sustainable transport planning in R (stplanr).
 License: MIT
