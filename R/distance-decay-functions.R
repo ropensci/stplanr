@@ -1,13 +1,11 @@
-#' log-linear distance-decay function (Iacono et al. 2011)
+#' log-linear distance-decay function
 #'
 #' @section Details:
 #' Implementation of the formula used to fit distance to probability of
 #'  travelling by a given mode by Iacono et al. (2010)
-#'
 #' @references
 #' Iacono, M., Krizek, K. J., & El-Geneidy, A. (2010).
 #' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002
-#'
 #' @examples
 #' d <- 0:10 # vector of distances
 #' params <- c(0, -0.002, -0.15, -3)
@@ -36,13 +34,9 @@ dd_iac(1:10)
 #' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002
 #'
 #' @examples
-#' d <- 0:10 # vector of distances
-#' (res <- dd_logsqr(d, 0.3, -0.2, 0.5)
-#' plot(d, res)
-#'
 #' d = seq(0, 50, 0.1)
-#' plot(d, dd_logsqr(d, 0.3, -0.2, -0.5))
-#' lines(d, dd_logsqr(d, b = 0.15))
+#' plot(d, dd_logsqr(d, a = 0.3, b = -0.2, c = -0.5), ylim = c(0, 0.5))
+#' lines(d, dd_logsqr(d, 0.3, -0.2, 0.5))
 #'
 dd_logsqr <- function(d, a, b, c = 0){
   exp(log(a) + b * d + c * d^0.5)
