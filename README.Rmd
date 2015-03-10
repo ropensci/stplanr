@@ -5,7 +5,7 @@ output:
     keep_md: yes
 ---
 
-This is an R package from sustainable transport planning in R (stplanr).
+This is an R package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
 researchers to better understand transport systems and inform policy.
