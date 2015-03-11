@@ -1,3 +1,11 @@
+#' Write to geojson easily
+writeGeoJSON <- function(x, filename){
+  name <- nm <-deparse(substitute(x))
+  writeOGR(obj = x, layer = name, dsn = filename, driver = "GeoJSON")
+  newname <- paste0(filename, ".geojson")
+  file.rename(filename, newname)
+}
+
 #' Simplify geometry file of a shapfile.
 #'
 #' @section Details:
