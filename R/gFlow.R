@@ -43,7 +43,8 @@ gFlow2line <- function(flow, zones){
 #' created using the \code{\link{gFlow2line}} function.
 #'
 #' @examples
-#' data(l)
+#' v = data(package = "stplanr")
+#' data(list = v$results[,3])
 #' plot(l)
 #'
 #' \dontrun{
@@ -55,6 +56,7 @@ gFlow2line <- function(flow, zones){
 #' plot(routes_fast, col = "red", add = TRUE) # previously saved from l
 #' plot(routes_slow, col = "green", add = TRUE)
 gLines2CyclePath <- function(l, plan = "fastest"){
+  if(is.null(cckey)) stop("You must have a CycleStreets.net api key saved as 'cckey'")
   coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))
@@ -67,17 +69,11 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     ft_string <- paste(from_string, to_string, sep = "|")
     journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
     request <- paste0(api_base, journey_plan)
-    obj <- getURL(request)
-    writeLines(obj, "/tmp/obj.geojson")
-    obj <- readLines("/tmp/obj.geojson")
-    just_lines <- obj[14:(length(obj) - 28)]
-    just_lines[1] <- paste0("{",  just_lines[1])
-    just_lines[length(just_lines)] <- "}"
-    writeLines(just_lines, "/tmp/just_lines.geojson")
-    route <- readOGR("/tmp/just_lines.geojson", layer = "OGRGeoJSON")
-    spChFIDs(route) <- i
-    route@data <- cbind(route@data, l@data[i, ])
-    route$line_num <- row.names(l[i,])
+
+    # Thanks to barry Rowlingson for this part:
+    obj <- jsonlite::fromJSON(request)
+    route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = row.names(l[i,]))))
+
     if(i == 1){
       output <- route
     }
