@@ -7,7 +7,9 @@ Author: Robin Lovelace
 Maintainer: <rob00x@gmail.com>
 Description: This is an R package for sustainable transport planning in R (stplanr).
 License: MIT
-Imports:
+Imports: 
     jsonlite,
     dplyr,
-    rgdal
+    rgdal,
+    RCurl,
+    maptools

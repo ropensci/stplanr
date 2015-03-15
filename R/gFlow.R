@@ -42,7 +42,7 @@ gFlow2line <- function(flow, zones){
 #' @param lines A SpatialLinesDataFrame object
 
 gLines2CyclePath <- function(lines, plan = "fastest"){
-  coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
+  coord_list <- lapply(slot(lines, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))
   api_base <- sprintf("https://%s@api.cyclestreets.net/v2/", cckey)
@@ -63,6 +63,8 @@ gLines2CyclePath <- function(lines, plan = "fastest"){
     writeLines(just_lines, "/tmp/just_lines.geojson")
     route <- readOGR("/tmp/just_lines.geojson", layer = "OGRGeoJSON")
     spChFIDs(route) <- i
+    route@data <- cbind(route@data, lines@data[i, ])
+    route$line_num <- row.names(lines[i,])
     if(i == 1){
       output <- route
     }
@@ -70,4 +72,5 @@ gLines2CyclePath <- function(lines, plan = "fastest"){
       output <- spRbind(route, output)
     }
   }
+  output
 }
