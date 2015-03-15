@@ -23,3 +23,51 @@ gFlow2line <- function(flow, zones){
   l <- SpatialLinesDataFrame(l, data = flow, match.ID = F)
   l
 }
+
+#' Convert straight SpatialLinesDataFrame from flow data in routes
+#'
+#' @section Details:
+#'
+#' You will need to have a cyclestreets api key for this function to work
+#'
+#' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+#'
+#' Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
+#'
+#' cckey <- Sys.getenv('CYCLESTREET')
+#'
+#' @param plan A text string. Must be either "balanced", "fastest" (default)
+#' or "quietest"
+#'
+#' @param lines A SpatialLinesDataFrame object
+
+gLines2CyclePath <- function(lines, plan = "fastest"){
+  coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
+    function(y) slot(y, "coords")))
+  output <- vector("list", length(coord_list))
+  api_base <- sprintf("https://%s@api.cyclestreets.net/v2/", cckey)
+  for(i in 1:length(output)){
+    from <- coord_list[[i]][[1]][1, ]
+    to <- coord_list[[i]][[1]][2, ]
+    from_string <- paste(from, collapse = ",")
+    to_string <- paste(to, collapse = ",")
+    ft_string <- paste(from_string, to_string, sep = "|")
+    journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
+    request <- paste0(api_base, journey_plan)
+    obj <- getURL(request)
+    writeLines(obj, "/tmp/obj.geojson")
+    obj <- readLines("/tmp/obj.geojson")
+    just_lines <- obj[14:(length(obj) - 28)]
+    just_lines[1] <- paste0("{",  just_lines[1])
+    just_lines[length(just_lines)] <- "}"
+    writeLines(just_lines, "/tmp/just_lines.geojson")
+    route <- readOGR("/tmp/just_lines.geojson", layer = "OGRGeoJSON")
+    spChFIDs(route) <- i
+    if(i == 1){
+      output <- route
+    }
+    else{
+      output <- spRbind(route, output)
+    }
+  }
+}
