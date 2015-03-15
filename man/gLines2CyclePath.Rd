@@ -4,10 +4,11 @@
 \alias{gLines2CyclePath}
 \title{Convert straight SpatialLinesDataFrame from flow data in routes}
 \usage{
-gLines2CyclePath(lines, plan = "fastest")
+gLines2CyclePath(l, plan = "fastest")
 }
 \arguments{
-\item{lines}{A SpatialLinesDataFrame object}
+\item{l}{A SpatialLinesDataFrame object composed of straight lines. l may be
+created using the \code{\link{gFlow2line}} function.}
 
 \item{plan}{A text string. Must be either "balanced", "fastest" (default)
 or "quietest"}
@@ -19,11 +20,26 @@ Convert straight SpatialLinesDataFrame from flow data in routes
 
 
 You will need to have a cyclestreets api key for this function to work
-
+\code{
 mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-
 Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
-
 cckey <- Sys.getenv('CYCLESTREET')
+}
+}
+\examples{
+data(l)
+plot(l)
+\dontrun{
+
+# This part is not run ...
+Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
+cckey <- Sys.getenv('CYCLESTREET')
+routes_fast <- gLines2CyclePath(l)
+routes_slow <- gLines2CyclePath(l, "quietest")
+}
+
+# Until here:
+plot(routes_fast, col = "red", add = TRUE) # previously saved from l
+plot(routes_slow, col = "green", add = TRUE)
 }
 

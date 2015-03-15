@@ -24,25 +24,38 @@ gFlow2line <- function(flow, zones){
   l
 }
 
-#' Convert straight SpatialLinesDataFrame from flow data in routes
+#' Convert straight SpatialLinesDataFrame from flow data into routes in the UK
+#' using the CycleStreets.net API.
 #'
 #' @section Details:
 #'
-#' You will need to have a cyclestreets api key for this function to work
+#' You will need to have a cyclestreets api key for this function to work, e.g.:
 #'
+#'\code{
 #' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-#'
 #' Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
-#'
 #' cckey <- Sys.getenv('CYCLESTREET')
-#'
+#' }
 #' @param plan A text string. Must be either "balanced", "fastest" (default)
 #' or "quietest"
 #'
-#' @param lines A SpatialLinesDataFrame object
-
-gLines2CyclePath <- function(lines, plan = "fastest"){
-  coord_list <- lapply(slot(lines, "lines"), function(x) lapply(slot(x, "Lines"),
+#' @param l A SpatialLinesDataFrame object composed of straight lines. l may be
+#' created using the \code{\link{gFlow2line}} function.
+#'
+#' @examples
+#' data(l)
+#' plot(l)
+#'
+#' \dontrun{
+#' Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
+#' cckey <- Sys.getenv('CYCLESTREET')
+#' routes_fast <- gLines2CyclePath(l)
+#' routes_slow <- gLines2CyclePath(l, "quietest")
+#' }
+#' plot(routes_fast, col = "red", add = TRUE) # previously saved from l
+#' plot(routes_slow, col = "green", add = TRUE)
+gLines2CyclePath <- function(l, plan = "fastest"){
+  coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))
   api_base <- sprintf("https://%s@api.cyclestreets.net/v2/", cckey)
@@ -63,13 +76,13 @@ gLines2CyclePath <- function(lines, plan = "fastest"){
     writeLines(just_lines, "/tmp/just_lines.geojson")
     route <- readOGR("/tmp/just_lines.geojson", layer = "OGRGeoJSON")
     spChFIDs(route) <- i
-    route@data <- cbind(route@data, lines@data[i, ])
-    route$line_num <- row.names(lines[i,])
+    route@data <- cbind(route@data, l@data[i, ])
+    route$line_num <- row.names(l[i,])
     if(i == 1){
       output <- route
     }
     else{
-      output <- spRbind(route, output)
+      output <- spRbind(output, route)
     }
   }
   output
