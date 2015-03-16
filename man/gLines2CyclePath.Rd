@@ -2,7 +2,8 @@
 % Please edit documentation in R/gFlow.R
 \name{gLines2CyclePath}
 \alias{gLines2CyclePath}
-\title{Convert straight SpatialLinesDataFrame from flow data in routes}
+\title{Convert straight SpatialLinesDataFrame from flow data into routes in the UK
+using the CycleStreets.net API.}
 \usage{
 gLines2CyclePath(l, plan = "fastest")
 }
@@ -14,12 +15,14 @@ created using the \code{\link{gFlow2line}} function.}
 or "quietest"}
 }
 \description{
-Convert straight SpatialLinesDataFrame from flow data in routes
+Convert straight SpatialLinesDataFrame from flow data into routes in the UK
+using the CycleStreets.net API.
 }
 \section{Details}{
 
 
-You will need to have a cyclestreets api key for this function to work
+You will need to have a cyclestreets api key for this function to work, e.g.:
+
 \code{
 mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
@@ -27,18 +30,16 @@ cckey <- Sys.getenv('CYCLESTREET')
 }
 }
 \examples{
-data(l)
+v = data(package = "stplanr")
+data(list = v$results[,3])
 plot(l)
-\dontrun{
 
-# This part is not run ...
+\dontrun{
 Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
 cckey <- Sys.getenv('CYCLESTREET')
 routes_fast <- gLines2CyclePath(l)
 routes_slow <- gLines2CyclePath(l, "quietest")
 }
-
-# Until here:
 plot(routes_fast, col = "red", add = TRUE) # previously saved from l
 plot(routes_slow, col = "green", add = TRUE)
 }
