@@ -19,8 +19,8 @@ gFlow2line <- function(flow, zones){
     y <- coordinates(zones[to, ])
     l[[i]] <- Lines(list(Line(rbind(x, y))), as.character(i))
   }
-  l <- SpatialLines(l)
-  l <- SpatialLinesDataFrame(l, data = flow, match.ID = F)
+  l <- sp::SpatialLines(l)
+  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
   l
 }
 
@@ -73,12 +73,14 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     # Thanks to barry Rowlingson for this part:
     obj <- jsonlite::fromJSON(request)
     route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = row.names(l[i,]))))
-
+    df <- obj$features[1,]$properties
+    row.names(df) <- row.names(l[i,])
+    route <- SpatialLinesDataFrame(route, df)
     if(i == 1){
       output <- route
     }
     else{
-      output <- spRbind(output, route)
+      output <- maptools::spRbind(output, route)
     }
   }
   output
