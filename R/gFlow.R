@@ -76,6 +76,14 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     df <- obj$features[1,]$properties
     row.names(df) <- row.names(l[i,])
     route <- SpatialLinesDataFrame(route, df)
+
+    # Status checker: % downloaded
+    if(i == 10)
+      print("The first 10 routes have been saved, be patient.")
+    if(i %% round(nrow(l) / 10) == 0)
+      print(paste0(round(100 * i/nrow(flow)), " % out of ", nrow(flow),
+        " distances calculated")) # print % of distances calculated
+
     if(i == 1){
       output <- route
     }
