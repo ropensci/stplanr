@@ -79,7 +79,7 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 
     # Status checker: % downloaded
     if(i == 10)
-      print("The first 10 routes have been saved, be patient.")
+      print("The first 10 routes have been saved, be patient. I'll say when 10% have been loaded.")
     if(i %% round(nrow(l) / 10) == 0)
       print(paste0(round(100 * i/nrow(flow)), " % out of ", nrow(flow),
         " distances calculated")) # print % of distances calculated
@@ -91,5 +91,6 @@ gLines2CyclePath <- function(l, plan = "fastest"){
       output <- maptools::spRbind(output, route)
     }
   }
+  proj4string(output) <- CRS("+init=epsg:4326")
   output
 }
