@@ -25,7 +25,13 @@ You will need to have a cyclestreets api key for this function to work, e.g.:
 
 \code{
 mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+}
+
+\code{
 Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
+}
+
+\code{
 cckey <- Sys.getenv('CYCLESTREET')
 }
 }

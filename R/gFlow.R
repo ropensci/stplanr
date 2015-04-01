@@ -31,11 +31,18 @@ gFlow2line <- function(flow, zones){
 #'
 #' You will need to have a cyclestreets api key for this function to work, e.g.:
 #'
-#'\code{
+#' \code{
 #' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+#' }
+#'
+#' \code{
 #' Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
+#' }
+#'
+#' \code{
 #' cckey <- Sys.getenv('CYCLESTREET')
 #' }
+#'
 #' @param plan A text string. Must be either "balanced", "fastest" (default)
 #' or "quietest"
 #'
@@ -80,9 +87,12 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     # Status checker: % downloaded
     if(i == 10)
       print("The first 10 routes have been saved, be patient. I'll say when 10% have been loaded.")
-    if(i %% round(nrow(l) / 10) == 0)
+    perc_temp <- i %% round(nrow(l) / 10)
+    if(!is.na(perc_temp) & perc_temp == 0){
       print(paste0(round(100 * i/nrow(flow)), " % out of ", nrow(flow),
         " distances calculated")) # print % of distances calculated
+    }
+
 
     if(i == 1){
       output <- route
