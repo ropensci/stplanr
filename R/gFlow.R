@@ -93,7 +93,6 @@ gLines2CyclePath <- function(l, plan = "fastest"){
         " distances calculated")) # print % of distances calculated
     }
 
-
     if(i == 1){
       output <- route
     }
