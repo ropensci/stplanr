@@ -36,13 +36,14 @@ cckey <- Sys.getenv('CYCLESTREET')
 }
 }
 \examples{
+library(sp)
 v = data(package = "stplanr")
 data(list = v$results[,3])
 plot(l)
 
 \dontrun{
-Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
-cckey <- Sys.getenv('CYCLESTREET')
+# see http://www.cyclestreets.net/api/
+cckey <- "f3fe3d078ac34737" # example key (not real)
 routes_fast <- gLines2CyclePath(l)
 routes_slow <- gLines2CyclePath(l, "quietest")
 }

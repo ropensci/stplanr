@@ -50,13 +50,14 @@ gFlow2line <- function(flow, zones){
 #' created using the \code{\link{gFlow2line}} function.
 #'
 #' @examples
+#' library(sp)
 #' v = data(package = "stplanr")
 #' data(list = v$results[,3])
 #' plot(l)
 #'
 #' \dontrun{
-#' Sys.setenv(CYCLESTREET = mytoken) # see http://www.cyclestreets.net/api/
-#' cckey <- Sys.getenv('CYCLESTREET')
+#' # see http://www.cyclestreets.net/api/
+#' cckey <- "f3fe3d078ac34737" # example key (not real)
 #' routes_fast <- gLines2CyclePath(l)
 #' routes_slow <- gLines2CyclePath(l, "quietest")
 #' }
@@ -79,8 +80,17 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 
     # Thanks to barry Rowlingson for this part:
     obj <- jsonlite::fromJSON(request)
-    route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = row.names(l[i,]))))
-    df <- obj$features[1,]$properties
+
+    # Catch 'no route found' stuff
+    if(is.null(obj$features[1,]$geometry$coordinates[[1]])){
+      route <- SpatialLines(list(Lines(list(Line(rbind(from, to))), row.names(l[i,]))))
+      df <- data.frame(matrix(NA, ncol = 6))
+      names(df) <- c("plan", "start", "finish", "length", "time", "waypoint")
+    } else {
+      route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = row.names(l[i,]))))
+      df <- obj$features[1,]$properties
+    }
+
     row.names(df) <- row.names(l[i,])
     route <- SpatialLinesDataFrame(route, df)
 
