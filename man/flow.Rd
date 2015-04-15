@@ -9,26 +9,7 @@
 data(flow)
 }
 \description{
-This dataset represents commuter flows (work travel) between origin
-and destination zones (see \code{\link{cents}}).
-The data is from the UK and is available as open data:
-\url{http://wicid.ukdataservice.ac.uk/}.
-}
-\details{
-The variables are as follows:
-
-\itemize{
-  \item Area.of.residence. id of origin zone
-  \item Area.of.workplace id of destination zone
-  \item All. Travel to work flows by all modes
-  \item [,4:15]. Flows for different modes
-  \item id. unique id of flow
-}
-
-Although these variable names are unique to UK data, the data
-structure is generalisable and typical of flow data from any source.
-The key variables are the origin and destination ids, which link to
-the \code{cents} georeferenced spatial objects.
+data frame of commuter flows
 }
 \examples{
 \dontrun{
@@ -55,9 +36,8 @@ use_data(routes_slow)
 }
 }
 \seealso{
-Other example.flow.data: \code{\link{cents}};
-  \code{\link{flowlines}}; \code{\link{routes_fast}};
-  \code{\link{routes_slow}}
+Other res: \code{\link{flowlines}};
+  \code{\link{routes_fast}}; \code{\link{routes_slow}}
 }
 \keyword{datasets}
 

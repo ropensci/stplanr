@@ -43,10 +43,5 @@ library(devtools)
 use_data(cents)
 }
 }
-\seealso{
-Other example.flow.data: \code{\link{flowlines}};
-  \code{\link{flow}}; \code{\link{routes_fast}};
-  \code{\link{routes_slow}}
-}
 \keyword{datasets}
 

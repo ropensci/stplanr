@@ -9,14 +9,10 @@
 data(routes_fast)
 }
 \description{
-Simulated travel route allocated to the transport network
-representing the 'fastest' between \code{\link{cents}}
-objects
-with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+SpatialLinesDataFrame of commuter flows on the travel network
 }
 \seealso{
-Other example.flow.data: \code{\link{cents}};
-  \code{\link{flowlines}}; \code{\link{flow}};
+Other res: \code{\link{flowlines}}; \code{\link{flow}};
   \code{\link{routes_slow}}
 }
 \keyword{datasets}

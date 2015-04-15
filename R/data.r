@@ -33,8 +33,6 @@
 #' use_data(cents)
 #' }
 #'
-#' @family example flow data
-#'
 #' @docType data
 #' @keywords datasets
 #' @name cents
@@ -42,9 +40,9 @@
 #' @format A SpatialPoints with 8 rows and 5 variables
 NULL
 
-
-
 #' data frame of commuter flows
+#'
+#' @family example flow data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see \code{\link{cents}}).
@@ -90,8 +88,6 @@ NULL
 #' use_data(routes_slow)
 #' }
 #'
-#' @family example flow data
-#'
 #' @docType data
 #' @keywords datasets
 #' @name flow
@@ -102,10 +98,10 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows
 #'
+#' @family example flow data
+#'
 #' Flow data after conversion to a spatial format
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
-#'
-#' @family example flow data
 #'
 #' @docType data
 #' @keywords datasets
@@ -118,12 +114,12 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
+#' @family example flow data
+#'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between \code{\link{cents}}
 #' objects
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
-#'
-#' @family example flow data
 #'
 #' @docType data
 #' @keywords datasets
@@ -134,12 +130,12 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
+#' @family example flow data
+#'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between \code{\link{cents}()}
 #' objects
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
-#'
-#' @family example flow data
 #'
 #' @docType data
 #' @keywords datasets
