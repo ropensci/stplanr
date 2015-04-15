@@ -21,6 +21,7 @@ gFlow2line <- function(flow, zones){
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
+  proj4string(l) <- proj4string(zones)
   l
 }
 
@@ -64,7 +65,12 @@ gFlow2line <- function(flow, zones){
 #' plot(routes_fast, col = "red", add = TRUE) # previously saved from l
 #' plot(routes_slow, col = "green", add = TRUE)
 gLines2CyclePath <- function(l, plan = "fastest"){
-  if(is.null(cckey)) stop("You must have a CycleStreets.net api key saved as 'cckey'")
+  if(!Sys.getenv('CYCLESTREET') == ""){
+    cckey <- Sys.getenv('CYCLESTREET')
+  }
+  if(is.null(cckey)){
+    stop("You must have a CycleStreets.net api key saved as 'cckey'")
+  }
   coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))

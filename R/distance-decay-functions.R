@@ -3,6 +3,8 @@
 #' @section Details:
 #' Implementation of the formula used to fit distance to probability of
 #'  travelling by a given mode by Iacono et al. (2010)
+#'
+#'  @seealso \code{\link{dd_logsqr}}
 #' @references
 #' Iacono, M., Krizek, K. J., & El-Geneidy, A. (2010).
 #' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002

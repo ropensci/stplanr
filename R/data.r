@@ -41,3 +41,107 @@
 NULL
 
 
+
+#' data frame of commuter flows
+#'
+#' This dataset represents commuter flows (work travel) between origin
+#' and destination zones (see \code{\link{cents}}).
+#' The data is from the UK and is available as open data:
+#' \url{http://wicid.ukdataservice.ac.uk/}.
+#'
+#' The variables are as follows:
+#'
+#' \itemize{
+#'   \item Area.of.residence. id of origin zone
+#'   \item Area.of.workplace id of destination zone
+#'   \item All. Travel to work flows by all modes
+#'   \item [,4:15]. Flows for different modes
+#'   \item id. unique id of flow
+#' }
+#'
+#' Although these variable names are unique to UK data, the data
+#' structure is generalisable and typical of flow data from any source.
+#' The key variables are the origin and destination ids, which link to
+#' the \code{cents} georeferenced spatial objects.
+#'
+#' @examples
+#' \dontrun{
+#' flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
+#' data(cents)
+#' o <- flow$Area.of.residence %in% cents$geo_code[-1]
+#' d <- flow$Area.of.workplace %in% cents$geo_code[-1]
+#' flow <- flow[o & d, ] # subset flows with o and d in study area
+#' library(devtools)
+#' flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
+#' use_data(flow, overwrite = T)
+#'
+#' # Convert flows to SpatialLinesDataFrame
+#' flowlines <- gFlow2line(flow = flow, zones = cents)
+#' use_data(flowlines)
+#'
+#' # Convert flows to routes
+#' flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
+#' routes_fast <- gLines2CyclePath(l = flowlines_84, plan = "fastest")
+#' routes_slow <- gLines2CyclePath(l = flowlines_84, plan = "quietest")
+#'
+#' use_data(routes_fast)
+#' use_data(routes_slow)
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name flow
+#' @usage data(flow)
+#' @format A data frame with 49 rows and 15 columns
+NULL
+
+
+#' SpatialLinesDataFrame of commuter flows
+#'
+#' Flow data after conversion to a spatial format
+#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#'
+#' @docType data
+#' @keywords datasets
+#' @name flowlines
+#' @usage data(flowlines)
+#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+NULL
+
+
+
+#' SpatialLinesDataFrame of commuter flows on the travel network
+#'
+#' Simulated travel route allocated to the transport network
+#' representing the 'fastest' between \code{\link{cents}}
+#' objects
+#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#'
+#' @docType data
+#' @keywords datasets
+#' @name routes_fast
+#' @usage data(routes_fast)
+#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+NULL
+
+
+
+
+#' SpatialLinesDataFrame of commuter flows on the travel network
+#'
+#' Simulated travel route allocated to the transport network
+#' representing the 'quietest' between \code{\link{cents}()}
+#' objects
+#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#'
+#' @family flow data
+#' @seealso  \code{\link{gFlow2line}}  \code{\link{cents}}
+#'  \code{\link{flow}}  \code{\link{routes_slow}}
+#'   \code{\link{routes_fast}}
+#'
+#' @docType data
+#' @keywords datasets
+#' @name routes_quiet
+#' @usage data(routes_slow)
+#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+NULL

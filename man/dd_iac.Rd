@@ -28,4 +28,7 @@ lines(d, dd_iac(d, b = 0.15))
 Iacono, M., Krizek, K. J., & El-Geneidy, A. (2010).
 Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002
 }
+\seealso{
+\code{\link{dd_logsqr}}
+}
 
