@@ -54,5 +54,10 @@ use_data(routes_fast)
 use_data(routes_slow)
 }
 }
+\seealso{
+Other example.flow.data: \code{\link{cents}};
+  \code{\link{flowlines}}; \code{\link{routes_fast}};
+  \code{\link{routes_slow}}
+}
 \keyword{datasets}
 

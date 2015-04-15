@@ -33,6 +33,8 @@
 #' use_data(cents)
 #' }
 #'
+#' @family example flow data
+#'
 #' @docType data
 #' @keywords datasets
 #' @name cents
@@ -88,6 +90,8 @@ NULL
 #' use_data(routes_slow)
 #' }
 #'
+#' @family example flow data
+#'
 #' @docType data
 #' @keywords datasets
 #' @name flow
@@ -100,6 +104,8 @@ NULL
 #'
 #' Flow data after conversion to a spatial format
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#'
+#' @family example flow data
 #'
 #' @docType data
 #' @keywords datasets
@@ -117,15 +123,14 @@ NULL
 #' objects
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
 #'
+#' @family example flow data
+#'
 #' @docType data
 #' @keywords datasets
 #' @name routes_fast
 #' @usage data(routes_fast)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
 NULL
-
-
-
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
@@ -134,14 +139,11 @@ NULL
 #' objects
 #' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
 #'
-#' @family flow data
-#' @seealso  \code{\link{gFlow2line}}  \code{\link{cents}}
-#'  \code{\link{flow}}  \code{\link{routes_slow}}
-#'   \code{\link{routes_fast}}
+#' @family example flow data
 #'
 #' @docType data
 #' @keywords datasets
-#' @name routes_quiet
+#' @name routes_slow
 #' @usage data(routes_slow)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
 NULL

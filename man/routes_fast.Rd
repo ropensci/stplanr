@@ -14,5 +14,10 @@ representing the 'fastest' between \code{\link{cents}}
 objects
 with \code{\link{gFlow2line}} (see \code{\link{flow}}).
 }
+\seealso{
+Other example.flow.data: \code{\link{cents}};
+  \code{\link{flowlines}}; \code{\link{flow}};
+  \code{\link{routes_slow}}
+}
 \keyword{datasets}
 

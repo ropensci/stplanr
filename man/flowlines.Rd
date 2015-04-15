@@ -12,5 +12,10 @@ data(flowlines)
 Flow data after conversion to a spatial format
 with \code{\link{gFlow2line}} (see \code{\link{flow}}).
 }
+\seealso{
+Other example.flow.data: \code{\link{cents}};
+  \code{\link{flow}}; \code{\link{routes_fast}};
+  \code{\link{routes_slow}}
+}
 \keyword{datasets}
 
