@@ -20,15 +20,38 @@ Square data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of flows. **stplanr** facilitates this with 
 `gFlow2Line()`, which takes flow and geographical data as inputs and
-outputs a `SpatialLinesDataFrame`:
+outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 
 ```r
 library(stplanr)
 library(sp)
 data(cents, flow)
+```
+
+Let's take a look at this data:
+
+
+```r
 flow[1:3, 1:3] # typical form of flow data
+```
+
+```
+##        Area.of.residence Area.of.workplace All
+## 920573         E02002361         E02002361 109
+## 920575         E02002361         E02002363  38
+## 920578         E02002361         E02002367  10
+```
+
+```r
 cents[1:3,] # points representing origins and destinations
+```
+
+```
+##               coordinates  geo_code  MSOA11NM percent_fem  avslope
+## 1708 (429963.1, 434898.2) E02002384 Leeds 055    0.458721 2.856563
+## 1712   (432240, 435146.3) E02002382 Leeds 053    0.438144 2.284782
+## 1805   (431432.8, 434305) E02002393 Leeds 064    0.408759 2.361707
 ```
 
 These datasets can be combined as follows:
@@ -40,7 +63,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README_files/figure-html/unnamed-chunk-3-1.png) 
+![](README_files/figure-html/plot1-1.png) 
 
 The package can also allocate flows to the travel network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
@@ -50,7 +73,7 @@ a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 example("gLines2CyclePath")
 ```
 
-![](README_files/figure-html/unnamed-chunk-4-1.png) ![](README_files/figure-html/unnamed-chunk-4-2.png) 
+![](README_files/figure-html/plot2-1.png) ![](README_files/figure-html/plot2-2.png) 
 
 
 ## Installation

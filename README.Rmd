@@ -27,19 +27,24 @@ Square data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of flows. **stplanr** facilitates this with 
 `gFlow2Line()`, which takes flow and geographical data as inputs and
-outputs a `SpatialLinesDataFrame`:
+outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 ```{r, results='hide', message=FALSE}
 library(stplanr)
 library(sp)
 data(cents, flow)
+```
+
+Let's take a look at this data:
+
+```{r}
 flow[1:3, 1:3] # typical form of flow data
 cents[1:3,] # points representing origins and destinations
 ```
 
 These datasets can be combined as follows:
 
-```{r}
+```{r plot1}
 travel_network <- gFlow2line(flow = flow, zones = cents)
 w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
@@ -48,7 +53,7 @@ plot(travel_network, lwd = w)
 The package can also allocate flows to the travel network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 
-```{r, results='hide', message=FALSE}
+```{r plot2, results='hide', message=FALSE}
 example("gLines2CyclePath")
 ```
 
