@@ -36,18 +36,25 @@ cckey <- Sys.getenv('CYCLESTREET')
 }
 }
 \examples{
-library(sp)
-v = data(package = "stplanr")
-data(list = v$results[,3])
-plot(l)
+library(rgdal)
+data(flowlines) # load demo flowlines dataset
+flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
+plot(flowlines_84)
 
 \dontrun{
-# see http://www.cyclestreets.net/api/
+# set cyclestreets api key: see http://www.cyclestreets.net/api/
 cckey <- "f3fe3d078ac34737" # example key (not real)
-routes_fast <- gLines2CyclePath(l)
-routes_slow <- gLines2CyclePath(l, "quietest")
+# plot save the routes
+routes_fast <- gLines2CyclePath(flowlines_84)
+routes_slow <- gLines2CyclePath(flowlines_84, "quietest")
 }
-plot(routes_fast, col = "red", add = TRUE) # previously saved from l
-plot(routes_slow, col = "green", add = TRUE)
+data(routes_fast, routes_slow) # load routes
+lines(routes_fast, col = "red")
+lines(routes_slow, col = "green")
+# Plot for a single line to compare 'fastest' and 'quietest' route
+n = 19
+plot(flowlines_84[n,])
+lines(routes_fast[n,], col = "red")
+lines(routes_slow[n,], col = "green")
 }
 

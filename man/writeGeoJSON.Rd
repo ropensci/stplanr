@@ -6,7 +6,12 @@
 \usage{
 writeGeoJSON(x, filename)
 }
+\arguments{
+\item{x}{The object to output}
+
+\item{filename}{File name of the output geojson}
+}
 \description{
-Write to geojson easily
+Provides a user-friendly wrapper for rgdal::writeOGR().
 }
 

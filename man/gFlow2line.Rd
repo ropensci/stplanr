@@ -6,6 +6,16 @@
 \usage{
 gFlow2line(flow, zones)
 }
+\arguments{
+\item{flow}{A data frame representing the flow between two points
+or zones. The first two columns of this data frame should correspond
+to the first column of the data in the zones. Thus in \code{\link{cents}},
+the first column is geo_code. This corresponds to the first two columns
+of \code{\link{flow}}.}
+
+\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+representing origins and destinations of travel flows.}
+}
 \description{
 Convert flow data to SpatialLinesDataFrame
 }
@@ -16,7 +26,15 @@ in the form of 1 line per flow with zone codes of origin and destination
 centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
 }
+\examples{
+library(sp) # enable spatial objects
+data(flow) # load data frame of od flows between zones
+data(cents) # load centroids data
+newflowlines <- gFlow2line(flow = flow, zones = cents)
+plot(cents)
+lines(newflowlines)
+}
 \references{
-Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3), 161–178. doi:10.1016/j.compenvurbsys.2009.01.007
+Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 }
 

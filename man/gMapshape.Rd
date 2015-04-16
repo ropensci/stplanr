@@ -9,14 +9,18 @@ gMapshape(dsn, percent)
 \arguments{
 \item{dsn}{A character string providing the absolute path to the shapefile to simplify.}
 
-\item{y}{A number between 0 and 100 stating how aggressively to simplify the object. Roughly corresponds with the \% hard disk space saved by the simplified shapefile compared with the original.}
+\item{percent}{A number between 0 and 100 stating how aggressively to simplify
+ the object
+Percentage of removable points to retain.
+So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
+hard-disk space.}
 }
 \description{
 Simplify geometry file of a shapfile.
 }
 \section{Details}{
 
-This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: https://github.com/mbloch/mapshaper . mapshaper which must be installed locally for gMapshaper to work. Writes \code{gMapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
+This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: \url{https://github.com/mbloch/mapshaper} . mapshaper which must be installed locally for gMapshaper to work. Writes \code{gMapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
 }
 \examples{
 \dontrun{

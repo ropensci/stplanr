@@ -1,68 +1,94 @@
 #' log-linear distance-decay function
 #'
-#' @section Details:
-#' Implementation of the formula used to fit distance to probability of
-#'  travelling by a given mode by Iacono et al. (2010)
+#' 'log-linear' distance decay function with two parameters:
+#' implementation of the formula used to fit distance to probability of
+#' travelling by a given mode by Iacono et al. (2010).
 #'
-#'  @seealso \code{\link{dd_logsqr}}
+#' @param x A positive vector representing distances (often in km)
+#' @param a Positive number (usually between 0 and 1) representing
+#'   the intercept of the distance decay curve with the y axis, when x = 0.
+#' @param b1 Number representing the 'beta' distance decay parameter.
+#' Larger negative values make the initial decay steeper.
+#'
 #' @references
 #' Iacono, M., Krizek, K. J. and El-Geneidy, A. (2010).
-#' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002
-#' @examples
-#' d <- 0:10 # vector of distances
-#' params <- c(0, -0.002, -0.15, -3)
-#' (res <- dd_iac(d, c(0, -0.002, -0.15, -3)))
-#' plot(d, res)
+#' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1). doi:10.1016/j.jtrangeo.2009.02.002
 #'
-#' d = seq(0, 50, 0.1)
-#' plot(d, dd_iac(d))
-#' lines(d, dd_iac(d, b = 0.15))
-dd_iac <- function(d, a = 0.3, b = 0.2){
-  a * exp(-b * d)
+#' @examples
+#' x <- 0:10 # vector of distances
+#' a = 0.3 # default alpha value
+#' b = 0.2 # default beta value
+#' (res <- dd_loglin(x, a, b))
+#' plot(x, res)
+#'
+#' x = seq(0, 50, 0.1)
+#' plot(x, dd_loglin(x))
+#' lines(x, dd_loglin(x, a = 0.1, b1 = 0.15))
+dd_loglin <- function(x, a = 0.3, b1 = -0.2){
+  a * exp(b1 * x)
 }
-dd_iac(1:10)
 
 #' log-linear-square-root distance decay
 #'
-#' @section Details:
+#' @param x A positive vector representing distances (often in km)
+#' @param a Positive number (usually between 0 and 1) representing
+#'   the intercept of the distance decay curve with the y axis, when x = 0.
+#' @param b1 Number representing the 'beta' distance decay parameter.
+#' Higher values make the decay steeper.
+#' @param b2 Number representing the second 'beta' distance decay parameter.
+#' Higher values make the decay steeper.
+#'
 #' log-linear distance decay (Iacono et al., 2010) with an additional
-#' square-root term to make the curve much more flexible. The additional
-#' term (c in the function below) describes the short-term response:
-#' positive c values result in a unimodal distance decay with a peak after d = 0;
-#' negative c values lead to rapid decay in cycling under 2 km.
+#' square-root term to make the curve more flexible. The additional
+#' term (b2 in the function below) describes the short-term response:
+#' positive b2 values result in a unimodal distance decay
+#' with a peak after x = 0;
+#' negative b2 values lead to rapid decay in cycling under 2 km.
 #'
 #' @references
+#'
 #' Iacono, M., Krizek, K. J. and El-Geneidy, A. (2010).
-#' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1), 133–140. doi:10.1016/j.jtrangeo.2009.02.002
+#' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1). doi:10.1016/j.jtrangeo.2009.02.002
 #'
 #' @examples
-#' d = seq(0, 50, 0.1)
-#' plot(d, dd_logsqr(d, a = 0.3, b = -0.2, c = -0.5), ylim = c(0, 0.5))
-#' lines(d, dd_logsqr(d, 0.3, -0.2, 0.5))
-#'
-dd_logsqr <- function(d, a, b, c = 0){
-  exp(log(a) + b * d + c * d^0.5)
+#' x = seq(0, 50, 0.1)
+#' plot(x, dd_logsqrt(x, a = 0.3, b1 = -0.2, b2 = -0.5), ylim = c(0, 0.5))
+#' lines(x, dd_logsqrt(x, a = 0.3, b1 = -0.2, b2 = 0.5))
+dd_logsqrt <- function(x, a, b1, b2){
+  a_log <- log(a)
+  log_p <- a_log + b1 * x + b2 * x^0.5
+  p <- exp(log_p)
+  p
 }
+
 #' Cubic logarithmic decay function
 #'
-#' @section Details:
 #' Function for converting distance of a trip into the probability of travel by
 #' a particular mode.
 #'
-#' @examples
-#' d <- 0:10 # vector of distances
-#' params <- c(0, -0.002, -0.15, -3)
-#' (res <- dd_logcub(d, c(0, -0.002, -0.15, -3)))
-#' plot(d, res)
+#' @param x A positive vector representing distances (often in km)
+#' @param a Positive number (usually between 0 and 1) representing
+#'   the intercept of the distance decay curve with the y axis, when x = 0.
+#' @param b1 The linear term of distance decay
+#' @param b2 The square term of distance decay
+#' @param b3 The cubic term of distance decay - should be negative to converge to 0
 #'
-#' par_male_urb <- c(0.0001945, -0.002273, -0.1489583, -2.923221)
-#' par_female_urb <- c(-0.0017932, 0.0655261, -0.8396819, -2.892149)
-#' d = seq(0, 50, 0.1)
-#' plot(d, dd_logcub(d, par = par_male_urb), ylim = c(0, 0.1)) # test plots
-#' lines(d, dd_logcub(d, par = par_female_urb), ylim = c(0, 0.1)) # test plots
-dd_logcub <- function(d, par){
-  log_d <- log(d)
-  log_p <- par[1] * d^3 + par[2] * d^2 + par[3] * d + par[4]
+#' @examples
+#' x <- 0:10 # vector of distances
+#' (res <- dd_logcub(x = x, a = 0.3, b1 = 0.003, b2 = -0.002, b3 = -0.001))
+#' plot(x, res)
+#'
+#' p1 <- c(0.05, -0.1489583, -0.002273, 0.0001945) # male distance decay
+#' p2 <- c(0.10, -0.8396819, 0.0655261, -0.0017932) # female distance decay
+#' x = seq(0, 20, 0.1)
+#' ym <- dd_logcub(x, p1[1], p1[2], p1[3], p1[4])
+#' yf <- dd_logcub(x, p2[1], p2[2], p2[3], p2[4])
+#' plot(x, ym, ylim = c(0, 0.1)) # test plots
+#' lines(x, yf) # test plots
+dd_logcub <- function(x, a, b1, b2, b3){
+  a_log <- log(a)
+  log_d <- log(x)
+  log_p <- a_log + b1 * x + b2 * x^2 + b3 * x^3
   p <- exp(log_p)
   p
 }

@@ -30,7 +30,7 @@ age_recat <- function(a){
 }
 
 #' @rdname age_recat
-age_recat2 <- function(c){
+age_recat2 <- function(a){
   c2 <- factor(rep(NA, length(c)), levels = c("0-16", "17-20", "21-29", "30-39","40-49",
     "50-59", "60-69", "70+"))
   c2[c == "Less than 1 year" | c == "1 - 2 years" | c == "3 - 4 years"| c == "5 - 10 years" | c == "11 - 15 years"| c == "16 years"] <- "0-16"
@@ -45,7 +45,7 @@ age_recat2 <- function(c){
 }
 
 #' @rdname age_recat
-disab_recat <- function(b){
+disab_recat <- function(a){
   b2 <- factor(rep(NA, length(b)), levels = c("Yes", "No"))
   b2[b == "DNA" | b == "No difficulties"] <- "No"
   b2[b == "NA"] <- "No"

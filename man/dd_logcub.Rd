@@ -4,26 +4,35 @@
 \alias{dd_logcub}
 \title{Cubic logarithmic decay function}
 \usage{
-dd_logcub(d, par)
+dd_logcub(x, a, b1, b2, b3)
+}
+\arguments{
+\item{x}{A positive vector representing distances (often in km)}
+
+\item{a}{Positive number (usually between 0 and 1) representing
+the intercept of the distance decay curve with the y axis, when x = 0.}
+
+\item{b1}{The linear term of distance decay}
+
+\item{b2}{The square term of distance decay}
+
+\item{b3}{The cubic term of distance decay - should be negative to converge to 0}
 }
 \description{
-Cubic logarithmic decay function
-}
-\section{Details}{
-
 Function for converting distance of a trip into the probability of travel by
 a particular mode.
 }
 \examples{
-d <- 0:10 # vector of distances
-params <- c(0, -0.002, -0.15, -3)
-(res <- dd_logcub(d, c(0, -0.002, -0.15, -3)))
-plot(d, res)
+x <- 0:10 # vector of distances
+(res <- dd_logcub(x = x, a = 0.3, b1 = 0.003, b2 = -0.002, b3 = -0.001))
+plot(x, res)
 
-par_male_urb <- c(0.0001945, -0.002273, -0.1489583, -2.923221)
-par_female_urb <- c(-0.0017932, 0.0655261, -0.8396819, -2.892149)
-d = seq(0, 50, 0.1)
-plot(d, dd_logcub(d, par = par_male_urb), ylim = c(0, 0.1)) # test plots
-lines(d, dd_logcub(d, par = par_female_urb), ylim = c(0, 0.1)) # test plots
+p1 <- c(0.05, -0.1489583, -0.002273, 0.0001945) # male distance decay
+p2 <- c(0.10, -0.8396819, 0.0655261, -0.0017932) # female distance decay
+x = seq(0, 20, 0.1)
+ym <- dd_logcub(x, p1[1], p1[2], p1[3], p1[4])
+yf <- dd_logcub(x, p2[1], p2[2], p2[3], p2[4])
+plot(x, ym, ylim = c(0, 0.1)) # test plots
+lines(x, yf) # test plots
 }
 
