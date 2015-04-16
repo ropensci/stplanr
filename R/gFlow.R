@@ -6,18 +6,33 @@
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #'
+#' @param flow A data frame representing the flow between two points
+#' or zones. The first two columns of this data frame should correspond
+#' to the first column of the data in the zones. Thus in \code{\link{cents}},
+#' the first column is geo_code. This corresponds to the first two columns
+#' of \code{\link{flow}}.
+#'
+#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+#' representing origins and destinations of travel flows.
+#'
 #' @references
 #' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3), 161–178. doi:10.1016/j.compenvurbsys.2009.01.007
 #'
-#'
+#' @examples
+#' library(sp) # enable spatial objects
+#' data(flow) # load data frame of od flows between zones
+#' data(cents) # load centroids data
+#' newflowlines <- gFlow2line(flow = flow, zones = cents)
+#' plot(cents)
+#' lines(newflowlines)
 gFlow2line <- function(flow, zones){
   l <- vector("list", nrow(flow))
   for(i in 1:nrow(flow)){
     from <- zones@data[,1] %in% flow[i, 1]
     to <- zones@data[,1] %in% flow[i, 2]
-    x <- coordinates(zones[from, ])
-    y <- coordinates(zones[to, ])
-    l[[i]] <- Lines(list(Line(rbind(x, y))), as.character(i))
+    x <- sp::coordinates(zones[from, ])
+    y <- sp::coordinates(zones[to, ])
+    l[[i]] <- sp::Lines(list(Line(rbind(x, y))), as.character(i))
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
@@ -71,6 +86,7 @@ gLines2CyclePath <- function(l, plan = "fastest"){
   if(is.null(cckey)){
     stop("You must have a CycleStreets.net api key saved as 'cckey'")
   }
+  library(sp)
   coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))
@@ -89,7 +105,7 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 
     # Catch 'no route found' stuff
     if(is.null(obj$features[1,]$geometry$coordinates[[1]])){
-      route <- SpatialLines(list(Lines(list(Line(rbind(from, to))), row.names(l[i,]))))
+      route <- sp::SpatialLines(list(Lines(list(Line(rbind(from, to))), row.names(l[i,]))))
       df <- data.frame(matrix(NA, ncol = 6))
       names(df) <- c("plan", "start", "finish", "length", "time", "waypoint")
     } else {
@@ -98,14 +114,14 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     }
 
     row.names(df) <- row.names(l[i,])
-    route <- SpatialLinesDataFrame(route, df)
+    route <- sp::SpatialLinesDataFrame(route, df)
 
     # Status checker: % downloaded
     if(i == 10)
       print("The first 10 routes have been saved, be patient. I'll say when 10% have been loaded.")
     perc_temp <- i %% round(nrow(l) / 10)
     if(!is.na(perc_temp) & perc_temp == 0){
-      print(paste0(round(100 * i/nrow(flow)), " % out of ", nrow(flow),
+      print(paste0(round(100 * i/nrow(l)), " % out of ", nrow(l),
         " distances calculated")) # print % of distances calculated
     }
 

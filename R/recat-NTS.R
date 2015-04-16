@@ -1,5 +1,15 @@
-# Functions for recategorising NTS data
-
+#' Recategorises UK Census age bands.
+#'
+#' \code{age_recat}, \code{age_recat2} and \code{disab_recat}
+#' are used to re-categorise the National Travel Survey age
+#' band and disability variables for comparison with other datasets.
+#'
+#' @param a The age variable supplied by the UK's NTS.
+#' @return A factor with new age categories.
+#'
+#' @examples
+#'
+#' age_recat("70 + years")
 age_recat <- function(a){
     a2 <- factor(rep(NA, length(a)), levels = c("0-14", "15-29", "30-44", "45-59", "60-69", "70-79", "80+"))
     a2[a == "0 - 4 years" | a == "5 - 10 years" | a == "11 - 15 years"] <- "0-14"
@@ -19,8 +29,7 @@ age_recat <- function(a){
   a2
 }
 
-
-### required for 2008-2012 data
+#' @rdname age_recat
 age_recat2 <- function(c){
   c2 <- factor(rep(NA, length(c)), levels = c("0-16", "17-20", "21-29", "30-39","40-49",
     "50-59", "60-69", "70+"))
@@ -35,6 +44,7 @@ age_recat2 <- function(c){
   c2
 }
 
+#' @rdname age_recat
 disab_recat <- function(b){
   b2 <- factor(rep(NA, length(b)), levels = c("Yes", "No"))
   b2[b == "DNA" | b == "No difficulties"] <- "No"
