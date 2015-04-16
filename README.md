@@ -1,6 +1,9 @@
 # stplanr
 
-This is an R package for sustainable transport planning in R (stplanr).
+
+
+
+This is a package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
 researchers to better understand transport systems and inform policy.
@@ -10,6 +13,45 @@ The initial work on the project was funded by the Department of Transport
 as part of the National Propensity to Cycle Tool
 ([NPCT](http://www.cedar.iph.cam.ac.uk/research/modelling/npct-tool/)) project to
 identify where bicycle paths are most urgently needed.
+
+## Key functions
+
+Square data frames representing flows between origins and destinations
+must be combined with geo-referenced zones or points to generate meaningful
+analyses and visualisations of flows. **stplanr** facilitates this with 
+`gFlow2Line()`, which takes flow and geographical data as inputs and
+outputs a `SpatialLinesDataFrame`:
+
+
+```r
+library(stplanr)
+library(sp)
+data(cents, flow)
+flow[1:3, 1:3] # typical form of flow data
+cents[1:3,] # points representing origins and destinations
+```
+
+These datasets can be combined as follows:
+
+
+```r
+travel_network <- gFlow2line(flow = flow, zones = cents)
+w <- flow$All / max(flow$All) *10
+plot(travel_network, lwd = w)
+```
+
+![](README_files/figure-html/unnamed-chunk-3-1.png) 
+
+The package can also allocate flows to the travel network, for example through
+a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
+
+
+```r
+example("gLines2CyclePath")
+```
+
+![](README_files/figure-html/unnamed-chunk-4-1.png) ![](README_files/figure-html/unnamed-chunk-4-2.png) 
+
 
 ## Installation
 
@@ -27,18 +69,24 @@ R's internal help functions will help here:
 
 
 ```r
-library(stplanr)
-?dd_iac # get help on an stplanr function
+?gLines2CyclePath # get help on an stplanr function
 lsf.str("package:stplanr", all = TRUE)
 ```
 
 ```
 ## age_recat : function (a)  
-## age_recat2 : function (c)  
-## dd_iac : function (d, a = 0.3, b = 0.2)  
-## dd_logcub : function (d, par)  
-## dd_logsqr : function (d, a, b, c = 0)  
-## disab_recat : function (b)  
-## gMapshape : function (dsn, percent)
+## age_recat2 : function (a)  
+## dd_logcub : function (x, a, b1, b2, b3)  
+## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
+## dd_logsqrt : function (x, a, b1, b2)  
+## disab_recat : function (a)  
+## gFlow2line : function (flow, zones)  
+## gLines2CyclePath : function (l, plan = "fastest")  
+## gMapshape : function (dsn, percent)  
+## writeGeoJSON : function (x, filename)
 ```
+
+Any questions?
+
+Email me on rob00 x at gmail dot com!
 
