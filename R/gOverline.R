@@ -26,14 +26,14 @@ islines <- function(g1, g2){
 #' Each new Lines object is the aggregate of a single number
 #' of aggregated lines.
 #'
-#' @example
+#' @examples
 #' data(routes_fast)
 #' rsec <- gSection(routes_fast)
 #' plot(rsec)
 #' length(rsec)
 #' set.seed(5)
 #' sel <- sample(length(rsec), 20)
-#' plot(rsec[sel,], col = "red", add = T, lwd = 3)
+#' # plot(rsec[sel,], col = "red", add = T, lwd = 3) # overlapping lines
 gSection <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
@@ -62,7 +62,7 @@ lineLabels <- function(sldf, attr){
 #' plot(rnet)
 #' points(cents)
 #' lineLabels(sldf = rnet, "length")
-#' sum(routes_fast@data$length[1:7], na.rm = T) # verify highest flow
+#' sum(routes_fast$length[1:7], na.rm = T) # verify highest flow
 gOverline <- function(sldf, attr, fun=sum){
   ## simplify down to SpatialLines
   sl = as(sldf, "SpatialLines")

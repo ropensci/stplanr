@@ -27,9 +27,8 @@ flowlines <- gFlow2line(flow = flow, zones = cents)
 use_data(flowlines)
 
 # Convert flows to routes
-flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
-routes_fast <- gLines2CyclePath(l = flowlines_84, plan = "fastest")
-routes_slow <- gLines2CyclePath(l = flowlines_84, plan = "quietest")
+routes_fast <- gLines2CyclePath(l = flowlines, plan = "fastest")
+routes_slow <- gLines2CyclePath(l = flowlines, plan = "quietest")
 
 use_data(routes_fast)
 use_data(routes_slow)

@@ -26,7 +26,9 @@ Cents was generated from the data repository pct-data: https://github.com/npct/p
 }
 \examples{
 \dontrun{
-cents <- rgdal::readOGR(dsn = "pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+cents <- rgdal::readOGR(dsn = "~/repos/pct/pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+# library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
+# cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
 crs <- CRS("+init=epsg:4326")
 crsuk <- CRS("+init=epsg:27700")
 cents <- sp::spTransform(x = cents, CRSobj = crsuk)
@@ -38,7 +40,7 @@ buf <- rgeos::gBuffer(home, width = 2000)
 cents <- cents[buf,]
 plot(buf)
 points(cents)
-load("~/repos/pct/cents.RData")
+cents <- sp::spTransform(x = cents, CRSobj = crs)
 library(devtools)
 use_data(cents)
 }
