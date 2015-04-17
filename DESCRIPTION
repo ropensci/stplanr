@@ -1,7 +1,7 @@
 Package: stplanr
 Type: Package
 Title: Sustainable transport planning with R
-Version: 0.01
+Version: 0.0.0.9005
 Date: 2015-03-10
 Authors@R: c(
     person("Robin", "Lovelace", ,"rob00x@gmail.com", role = c("aut", "cre")),
@@ -13,6 +13,7 @@ of origin-destination flow lines, route allocation and aggregation of routes
 to an on-road travel network.
 Depends: R (>= 3.1)
 License: MIT
+BugReports: https://github.com/robinlovelace/stplanr/issues
 Suggests:
     ggmap,
     tidyr,

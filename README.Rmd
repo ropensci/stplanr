@@ -57,7 +57,6 @@ a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 example("gLines2CyclePath")
 ```
 
-
 ## Installation
 
 ```{r, eval=FALSE}
