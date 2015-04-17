@@ -16,7 +16,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' cents <- rgdal::readOGR(dsn = "pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+#' cents <- rgdal::readOGR(dsn = "~/repos/pct/pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+#' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
+#' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
 #' crs <- CRS("+init=epsg:4326")
 #' crsuk <- CRS("+init=epsg:27700")
 #' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
@@ -28,7 +30,7 @@
 #' cents <- cents[buf,]
 #' plot(buf)
 #' points(cents)
-#' load("~/repos/pct/cents.RData")
+#' cents <- sp::spTransform(x = cents, CRSobj = crs)
 #' library(devtools)
 #' use_data(cents)
 #' }
@@ -80,9 +82,8 @@ NULL
 #' use_data(flowlines)
 #'
 #' # Convert flows to routes
-#' flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
-#' routes_fast <- gLines2CyclePath(l = flowlines_84, plan = "fastest")
-#' routes_slow <- gLines2CyclePath(l = flowlines_84, plan = "quietest")
+#' routes_fast <- gLines2CyclePath(l = flowlines, plan = "fastest")
+#' routes_slow <- gLines2CyclePath(l = flowlines, plan = "quietest")
 #'
 #' use_data(routes_fast)
 #' use_data(routes_slow)
