@@ -1,11 +1,16 @@
 Package: stplanr
 Type: Package
-Title: Estimate and explore propensity to cycle
+Title: Sustainable transport planning with R
 Version: 0.01
 Date: 2015-03-10
-Author: Robin Lovelace
+Authors@R: c(
+    person("Robin", "Lovelace", ,"rob00x@gmail.com", role = c("aut", "cre")),
+    person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline"),
+    )
 Maintainer: <rob00x@gmail.com>
-Description: This is an R package for sustainable transport planning in R (stplanr).
+Description: Provides functionality for transport planning, including creation
+of origin-destination flow lines, route allocation and aggregation of routes
+to an on-road travel network.
 Depends: R (>= 3.1)
 License: MIT
 Suggests:
@@ -16,6 +21,5 @@ Imports:
     jsonlite,
     dplyr,
     rgdal,
-    RCurl,
     maptools,
     rgeos
