@@ -10,6 +10,8 @@ gOverline(sldf, attr, fun = sum)
 \item{sldf}{A SpatialLinesDataFrame with overlapping elements}
 
 \item{attr}{A text string corresponding to a named variable in \code{sldf}}
+
+\item{fun}{The function used to aggregate the grouped values (default: sum)}
 }
 \description{
 This function takes a series of Lines stored in a
@@ -18,13 +20,19 @@ and converts these into a single route network.
 }
 \examples{
 data(routes_fast)
+data(cents)
 rnet <- gOverline(sldf = routes_fast[1:7,], attr = "length")
 plot(rnet)
 points(cents)
 lineLabels(sldf = rnet, "length")
-sum(routes_fast$length[1:7], na.rm = T) # verify highest flow
+sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
 }
 \author{
 Barry Rowlingson
+}
+\references{
+Rowlingson, B (2015). Overlaying lines and aggregating their values for
+ overlapping segments. Reproducible question from
+ \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
 

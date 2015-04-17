@@ -6,18 +6,23 @@
 \usage{
 gSection(sl)
 }
+\arguments{
+\item{sl}{SpatialLinesDataFrame with overlapping Lines to split by
+number of overlapping features.}
+}
 \description{
 Divides SpatialLinesDataFrame objects into separate Lines.
 Each new Lines object is the aggregate of a single number
 of aggregated lines.
 }
 \examples{
+library(sp)
 data(routes_fast)
 rsec <- gSection(routes_fast)
 plot(rsec)
 length(rsec)
 set.seed(5)
 sel <- sample(length(rsec), 20)
-# plot(rsec[sel,], col = "red", add = T, lwd = 3) # overlapping lines
+# plot(rsec[sel,], col = "red", add = TRUE, lwd = 3) # overlapping lines
 }
 

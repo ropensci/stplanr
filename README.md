@@ -1,8 +1,5 @@
 # stplanr
 
-
-
-
 This is a package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and

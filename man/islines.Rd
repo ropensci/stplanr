@@ -6,8 +6,13 @@
 \usage{
 islines(g1, g2)
 }
+\arguments{
+\item{g1}{A SpatialLinesDataFrame}
+
+\item{g2}{A SpatialLinesDataFrame}
+}
 \description{
-This is a function required in \code{\link{gOverline()}}. It identifies
+This is a function required in \code{\link{gOverline}}. It identifies
 whether sets of lines overlap (beyond shared points) or
 not.
 }
