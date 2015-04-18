@@ -7,7 +7,7 @@
 #' @param g1 A SpatialLinesDataFrame
 #' @param g2 A SpatialLinesDataFrame
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' data(routes_fast)
 #' rnet <- gOverline(routes_fast[c(2, 3, 22),], attr = "length")
 #' r1 <- routes_fast[2,]
@@ -18,6 +18,7 @@
 #' islines(r1, r2)
 #' islines(r1, r3)
 #' islines(r2, r3)
+#' }
 islines <- function(g1, g2){
   ## return TRUE if geometries intersect as lines, not points
   inherits(rgeos::gIntersection(g1,g2), "SpatialLines")
@@ -32,7 +33,7 @@ islines <- function(g1, g2){
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' data(routes_fast)
 #' rsec <- gSection(routes_fast)
 #' plot(rsec)
@@ -40,6 +41,7 @@ islines <- function(g1, g2){
 #' set.seed(5)
 #' sel <- sample(length(rsec), 20)
 #' # plot(rsec[sel,], col = "red", add = TRUE, lwd = 3) # overlapping lines
+#' }
 gSection <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
@@ -82,7 +84,7 @@ lineLabels <- function(sldf, attr){
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' data(routes_fast)
 #' data(cents)
 #' rnet <- gOverline(sldf = routes_fast[1:7,], attr = "length")
@@ -90,6 +92,7 @@ lineLabels <- function(sldf, attr){
 #' points(cents)
 #' lineLabels(sldf = rnet, "length")
 #' sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
+#' }
 gOverline <- function(sldf, attr, fun = sum){
   ## simplify down to SpatialLines
   sl = as(sldf, "SpatialLines")

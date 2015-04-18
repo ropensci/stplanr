@@ -7,17 +7,17 @@ Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline")
     )
-Maintainer: <rob00x@gmail.com>
 Description: Provides functionality for transport planning, including creation of origin-destination flow lines, route allocation and aggregation of routes to an on-road travel network.
-License: MIT
+License: MIT + file LICENSE
 BugReports: https://github.com/robinlovelace/stplanr/issues
+LazyData: yes
 Depends:
-    R (>= 2.10),
-    sp
+    R (>= 2.10)
 Imports:
     jsonlite,
     maptools,
     rgdal,
     rgeos,
+    sp
 Suggests:
     GISTools
