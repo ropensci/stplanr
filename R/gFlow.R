@@ -11,15 +11,12 @@
 #' to the first column of the data in the zones. Thus in \code{\link{cents}},
 #' the first column is geo_code. This corresponds to the first two columns
 #' of \code{\link{flow}}.
-#'
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
-#'
 #' @references
 #' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
-#'
+#' @export
 #' @examples
-#' library(sp) # enable spatial objects
 #' data(flow) # load data frame of od flows between zones
 #' data(cents) # load centroids data
 #' newflowlines <- gFlow2line(flow = flow, zones = cents)
@@ -64,7 +61,7 @@ gFlow2line <- function(flow, zones){
 #'
 #' @param l A SpatialLinesDataFrame object composed of straight lines. l may be
 #' created using the \code{\link{gFlow2line}} function.
-#'
+#' @export
 #' @examples
 #' library(rgdal)
 #' data(flowlines) # load demo flowlines dataset
@@ -94,7 +91,6 @@ gLines2CyclePath <- function(l, plan = "fastest"){
   if(is.null(cckey)){
     stop("You must have a CycleStreets.net api key saved as 'cckey'")
   }
-  library(sp)
   coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))

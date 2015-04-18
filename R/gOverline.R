@@ -6,7 +6,7 @@
 #'
 #' @param g1 A SpatialLinesDataFrame
 #' @param g2 A SpatialLinesDataFrame
-#'
+#' @export
 #' @examples
 #' data(routes_fast)
 #' rnet <- gOverline(routes_fast[c(2, 3, 22),], attr = "length")
@@ -31,9 +31,8 @@ islines <- function(g1, g2){
 #'
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
-#'
+#' @export
 #' @examples
-#' library(sp)
 #' data(routes_fast)
 #' rsec <- gSection(routes_fast)
 #' plot(rsec)
@@ -82,7 +81,7 @@ lineLabels <- function(sldf, attr){
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
-#'
+#' @export
 #' @examples
 #' data(routes_fast)
 #' data(cents)
@@ -93,7 +92,6 @@ lineLabels <- function(sldf, attr){
 #' sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
 gOverline <- function(sldf, attr, fun = sum){
   ## simplify down to SpatialLines
-  library(sp)
   sl = as(sldf, "SpatialLines")
   ## get the line sections that make the network
   slu = gSection(sl)

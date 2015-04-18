@@ -1,10 +1,11 @@
 #' Write to geojson easily
 #'
-#' Provides a user-friendly wrapper for rgdal::writeOGR().
+#' Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
+#' \code{geojson_write} from the geojsonio package
+#' provides the same functionality \url{https://github.com/ropensci/geojsonio}.
 #'
 #' @param x The object to output
 #' @param filename File name of the output geojson
-#'
 #'
 writeGeoJSON <- function(x, filename){
   name <- nm <-deparse(substitute(x))
@@ -24,7 +25,7 @@ writeGeoJSON <- function(x, filename){
 #' Percentage of removable points to retain.
 #' So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#'
+#' @export
 #' @examples
 #' \dontrun{
 #' gMapshape("~/geodata/myShapefile.shp", 5)

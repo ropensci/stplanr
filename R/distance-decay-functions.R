@@ -13,7 +13,7 @@
 #' @references
 #' Iacono, M., Krizek, K. J. and El-Geneidy, A. (2010).
 #' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1). doi:10.1016/j.jtrangeo.2009.02.002
-#'
+#' @export
 #' @examples
 #' x <- 0:10 # vector of distances
 #' a = 0.3 # default alpha value
@@ -49,7 +49,7 @@ dd_loglin <- function(x, a = 0.3, b1 = -0.2){
 #'
 #' Iacono, M., Krizek, K. J. and El-Geneidy, A. (2010).
 #' Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1). doi:10.1016/j.jtrangeo.2009.02.002
-#'
+#' @export
 #' @examples
 #' x = seq(0, 50, 0.1)
 #' plot(x, dd_logsqrt(x, a = 0.3, b1 = -0.2, b2 = -0.5), ylim = c(0, 0.5))
@@ -72,7 +72,7 @@ dd_logsqrt <- function(x, a, b1, b2){
 #' @param b1 The linear term of distance decay
 #' @param b2 The square term of distance decay
 #' @param b3 The cubic term of distance decay - should be negative to converge to 0
-#'
+#' @export
 #' @examples
 #' x <- 0:10 # vector of distances
 #' (res <- dd_logcub(x = x, a = 0.3, b1 = 0.003, b2 = -0.002, b3 = -0.001))
