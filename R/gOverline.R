@@ -58,6 +58,7 @@ gSection <- function(sl){
 #' @author Barry Rowlingson
 #'
 #' @seealso \code{\link{gOverline}}
+#' @export
 lineLabels <- function(sldf, attr){
   text(sp::coordinates(
     rgeos::gCentroid(sldf, byid = TRUE)
@@ -75,7 +76,6 @@ lineLabels <- function(sldf, attr){
 #' @param fun The function used to aggregate the grouped values (default: sum)
 #'
 #' @author Barry Rowlingson
-#'
 #' @references
 #'
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for

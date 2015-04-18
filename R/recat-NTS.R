@@ -6,7 +6,7 @@
 #'
 #' @param a The age variable supplied by the UK's NTS.
 #' @return A factor with new age categories.
-#'
+#' @export
 #' @examples
 #'
 #' age_recat("70 + years")
@@ -30,6 +30,7 @@ age_recat <- function(a){
 }
 
 #' @rdname age_recat
+#' @export
 age_recat2 <- function(a){
   c2 <- factor(rep(NA, length(c)), levels = c("0-16", "17-20", "21-29", "30-39","40-49",
     "50-59", "60-69", "70+"))
@@ -45,6 +46,7 @@ age_recat2 <- function(a){
 }
 
 #' @rdname age_recat
+#' @export
 disab_recat <- function(a){
   b2 <- factor(rep(NA, length(b)), levels = c("Yes", "No"))
   b2[a == "DNA" | a == "No difficulties"] <- "No"

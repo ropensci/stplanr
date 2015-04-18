@@ -9,10 +9,10 @@ Authors@R: c(
     )
 Maintainer: <rob00x@gmail.com>
 Description: Provides functionality for transport planning, including creation of origin-destination flow lines, route allocation and aggregation of routes to an on-road travel network.
-Depends: R (>= 3.1)
 License: MIT
 BugReports: https://github.com/robinlovelace/stplanr/issues
 Depends:
+    R (>= 2.10),
     sp
 Imports:
     jsonlite,

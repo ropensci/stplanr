@@ -1,6 +1,9 @@
-==> R CMD build stplanr
+==> devtools::check(document = FALSE)
 
-* checking for file ‘stplanr/DESCRIPTION’ ... OK
+'/usr/lib/R/bin/R' --vanilla CMD build '/home/robin/repos/stplanr'  \
+  --no-resave-data --no-manual
+
+* checking for file ‘/home/robin/repos/stplanr/DESCRIPTION’ ... OK
 * preparing ‘stplanr’:
 * checking DESCRIPTION meta-information ... OK
 * checking for LF line-endings in source and make files
@@ -8,7 +11,8 @@
 * looking to see if a ‘data/datalist’ file should be added
 * building ‘stplanr_0.0.0.9005.tar.gz’
 
-==> R CMD check stplanr_0.0.0.9005.tar.gz
+'/usr/lib/R/bin/R' --vanilla CMD check  \
+  '/tmp/RtmpWd0HuK/stplanr_0.0.0.9005.tar.gz' --timings
 
 * using log directory ‘/home/robin/repos/stplanr.Rcheck’
 * using R version 3.2.0 (2015-04-16)
@@ -31,7 +35,9 @@
 * checking DESCRIPTION meta-information ... NOTE
 License components which are templates and need '+ file LICENSE':
   MIT
-* checking top-level files ... OK
+* checking top-level files ... NOTE
+Non-standard files/directories found at top level:
+  ‘log-latest’ ‘README_files’ ‘README.html’ ‘README.Rmd’
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -43,11 +49,10 @@ License components which are templates and need '+ file LICENSE':
 * checking whether the namespace can be loaded with stated dependencies ... OK
 * checking whether the namespace can be unloaded cleanly ... OK
 * checking loading without being on the library search path ... OK
-* checking dependencies in R code ... WARNING
-'library' or 'require' call not declared from: ‘sp’
-'library' or 'require' call to ‘sp’ in package code.
-  Please use :: or requireNamespace() instead.
-  See section 'Suggested packages' in the 'Writing R Extensions' manual.
+* checking dependencies in R code ... NOTE
+Package in Depends field not imported from: ‘sp’
+  These packages need to be imported from (in the NAMESPACE file)
+  for when this namespace is loaded but not attached.
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
@@ -65,6 +70,7 @@ gLines2CyclePath: no visible global function definition for
 gLines2CyclePath: no visible global function definition for ‘CRS’
 * checking Rd files ... OK
 * checking Rd metadata ... OK
+* checking Rd line widths ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
 * checking for code/documentation mismatches ... OK
@@ -80,10 +86,11 @@ LaTeX errors when creating PDF version.
 This typically indicates Rd problems.
 * checking PDF version of manual without hyperrefs or index ... OK
 * DONE
-Status: 2 WARNINGs, 2 NOTEs
+Status: 1 WARNING, 4 NOTEs
 See
   ‘/home/robin/repos/stplanr.Rcheck/00check.log’
 for details.
+
 
 
 R CMD check succeeded
