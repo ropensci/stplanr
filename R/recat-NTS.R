@@ -47,8 +47,8 @@ age_recat2 <- function(a){
 #' @rdname age_recat
 disab_recat <- function(a){
   b2 <- factor(rep(NA, length(b)), levels = c("Yes", "No"))
-  b2[b == "DNA" | b == "No difficulties"] <- "No"
-  b2[b == "NA"] <- "No"
-  b2[grepl("Foot|Bus|Car", b, ignore.case = T)] <- "Yes"
+  b2[a == "DNA" | a == "No difficulties"] <- "No"
+  b2[a == "NA"] <- "No"
+  b2[grepl("Foot|Bus|Car", a, ignore.case = T)] <- "Yes"
   b2
 }

@@ -13,10 +13,6 @@ Depends: R (>= 3.1)
 License: MIT
 BugReports: https://github.com/robinlovelace/stplanr/issues
 Suggests:
-    dplyr,
-    ggmap,
-    tidyr,
-    GISTools
 Imports:
     jsonlite,
     maptools,

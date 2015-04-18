@@ -1,0 +1,89 @@
+==> R CMD build stplanr
+
+* checking for file ‘stplanr/DESCRIPTION’ ... OK
+* preparing ‘stplanr’:
+* checking DESCRIPTION meta-information ... OK
+* checking for LF line-endings in source and make files
+* checking for empty or unneeded directories
+* looking to see if a ‘data/datalist’ file should be added
+* building ‘stplanr_0.0.0.9005.tar.gz’
+
+==> R CMD check stplanr_0.0.0.9005.tar.gz
+
+* using log directory ‘/home/robin/repos/stplanr.Rcheck’
+* using R version 3.2.0 (2015-04-16)
+* using platform: i686-pc-linux-gnu (32-bit)
+* using session charset: UTF-8
+* checking for file ‘stplanr/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘stplanr’ version ‘0.0.0.9005’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘stplanr’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... NOTE
+License components which are templates and need '+ file LICENSE':
+  MIT
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... WARNING
+'library' or 'require' call not declared from: ‘sp’
+'library' or 'require' call to ‘sp’ in package code.
+  Please use :: or requireNamespace() instead.
+  See section 'Suggested packages' in the 'Writing R Extensions' manual.
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... NOTE
+disab_recat: no visible binding for global variable ‘b’
+gFlow2line: no visible global function definition for ‘Line’
+gFlow2line: no visible global function definition for ‘proj4string<-’
+gFlow2line: no visible global function definition for ‘proj4string’
+gLines2CyclePath: no visible global function definition for ‘Lines’
+gLines2CyclePath: no visible global function definition for ‘Line’
+gLines2CyclePath: no visible global function definition for
+  ‘SpatialLines’
+gLines2CyclePath: no visible global function definition for
+  ‘proj4string<-’
+gLines2CyclePath: no visible global function definition for ‘CRS’
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking examples ... OK
+* checking PDF version of manual ... WARNING
+LaTeX errors when creating PDF version.
+This typically indicates Rd problems.
+* checking PDF version of manual without hyperrefs or index ... OK
+* DONE
+Status: 2 WARNINGs, 2 NOTEs
+See
+  ‘/home/robin/repos/stplanr.Rcheck/00check.log’
+for details.
+
+
+R CMD check succeeded
