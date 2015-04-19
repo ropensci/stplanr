@@ -6,7 +6,9 @@
 #'
 #' @param g1 A SpatialLinesDataFrame
 #' @param g2 A SpatialLinesDataFrame
+#' @family Functions for manipulating flow data
 #' @export
+#'
 #' @examples \dontrun{
 #' data(routes_fast)
 #' rnet <- gOverline(routes_fast[c(2, 3, 22),], attrib = "length")
@@ -34,6 +36,7 @@ islines <- function(g1, g2){
 #'
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
+#' @family Functions for manipulating flow data
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
@@ -63,7 +66,7 @@ gSection <- function(sl){
 #'
 #' @author Barry Rowlingson
 #'
-#' @seealso \code{\link{gOverline}}
+#' @family Functions for manipulating flow data
 #' @export
 lineLabels <- function(sldf, attrib){
   text(sp::coordinates(
@@ -88,6 +91,7 @@ lineLabels <- function(sldf, attrib){
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+#' @family Functions for manipulating flow data
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
@@ -141,3 +145,132 @@ gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 
   sldf
 }
+
+#' Aggregate flows so they become non-directional (by geometry - the slow way)
+#'
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see \code{\link{flowlines}}) which can be confusing
+#' for users and are difficult to plot.
+#'
+#' This function aggregates directional flows into non-directional flows,
+#' potentially halving the number of lines objects and reducing the number
+#' of overlapping lines to zero.
+#'
+#' @param x A SpatialLinesDataFrame
+#' @param attrib A text string containing the name of the line's attribute to
+#' aggregate or a numeric vector of the columns to be aggregated
+#'
+#' @return \code{gOnewaygeo} outputs a SpatialLinesDataFrame with single lines
+#' and user-selected attribute values that have been aggregated. Only lines
+#' with a distance (i.e. not intra-zone flows) are included
+#' @family Functions for manipulating flow data
+#' @export
+#' @examples
+#' library(sp)
+#' data("flowlines")
+#' plot(flowlines)
+#' singlelines <- gOnewaygeo(flowlines, attrib = 3:14)
+#' plot(singlelines, lwd = 3, col = "red")
+#' lines(singlelines) # check we've got the right lines
+#' sum(singlelines$All)
+#' nrow(singlelines)
+gOnewaygeo <- function(x, attrib){
+  geq <- rgeos::gEquals(x, x, byid = T)
+  sel1 <- !duplicated(geq) # repeated rows
+  sel2 <- rowSums(geq) > 1 # all features with an overlap
+  sel3 <- rgeos::gLength(x, byid = TRUE) > 0 # remove points
+  sel4 <- sel1 & sel2 & sel3
+  singlelines <- x[sel4,]
+  otherlines <- x[!sel4, ] # the lines that are duplicated
+
+  for(i in 1:nrow(singlelines)){
+    # select matching line
+    l2 <- which(rgeos::gEquals(singlelines[i, ], x, byid = TRUE))[2]
+
+    if(class(attrib) == "character"){
+      # aggregate the data for reverse flows
+      singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
+    } else {
+      # aggregate the data for reverse flows
+      singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
+        as.numeric(x@data[l2, attrib])
+    }
+
+  }
+  singlelines
+}
+
+#' Aggregate flows so they become non-directional (by id - the faster way)
+#'
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see \code{\link{flowlines}}) which can be confusing
+#' for users and are difficult to plot.
+#'
+#' This function aggregates directional flows into non-directional flows,
+#' potentially halving the number of lines objects and reducing the number
+#' of overlapping lines to zero.
+#'
+#' @param x A SpatialLinesDataFrame
+#' @param attrib A text string containing the name of the line's attribute to
+#' aggregate or a numeric vector of the columns to be aggregated
+#' @param id1 A text string referring to the name of the variable containing the unique id of the origin
+#' @param id2 A text string referring to the name of the variable containing the unique id of the destination
+#'
+#' @return \code{gOnewayid} outputs a SpatialLinesDataFrame with single lines
+#' and user-selected attribute values that have been aggregated. Only lines
+#' with a distance (i.e. not intra-zone flows) are included.
+#' @family Functions for manipulating flow data
+#' @export
+#' @examples
+#' library(sp)
+#' data("flowlines")
+#' id1 <- names(flowlines)[1]
+#' id2 <- names(flowlines)[2]
+#' plot(flowlines)
+#' singlelines <- gOnewayid(flowlines, attrib = 3:14, id1, id2)
+#' lines(singlelines) # check we've got the right lines
+#' sum(singlelines$All)
+#' nrow(singlelines)
+#' sl2 <- gOnewaygeo(flowlines, attrib = 3:14)
+#' # Demonstrate the results from gOnewayid and gOnewaygeo are identical
+#` identical(singlelines, sl2)
+gOnewayid <- function(x, attrib, id1, id2){
+  ids <- cbind(x[[id1]], x[[id2]])
+  idsort <- t(apply(ids, 1, sort))
+  # duplicate pairs - see http://stackoverflow.com/questions/9028369/
+  sel <- !duplicated(idsort) & rgeos::gLength(x, byid = TRUE) > 0
+
+  singlelines <- x[sel,]
+  otherlines <- x[!sel, ] # the lines that are duplicated
+
+  for(i in 1:nrow(singlelines)){
+    # select matching lines
+    idp1 <- paste0(x[[id1]], x[[id2]])
+    idp2 <- paste0(x[[id2]], x[[id1]])
+    l2 <- which(idp2 %in% idp1[sel][i])
+
+    if(class(attrib) == "character"){
+      # aggregate the data for reverse flows
+      singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
+    } else {
+      # aggregate the data for reverse flows
+      singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
+        as.numeric(x@data[l2, attrib])
+    }
+
+  }
+  singlelines
+}
+
