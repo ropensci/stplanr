@@ -9,15 +9,17 @@
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
-#' rnet <- gOverline(routes_fast[c(2, 3, 22),], attr = "length")
+#' rnet <- gOverline(routes_fast[c(2, 3, 22),], attrib = "length")
 #' r1 <- routes_fast[2,]
 #' r2 <- routes_fast[3,]
 #' r3 <- routes_fast[22,]
+#' library(sp)
 #' plot(rnet)
 #' lines(r3, col = "red") # line without overlaps
 #' islines(r1, r2)
 #' islines(r1, r3)
 #' islines(r2, r3)
+#'
 #' }
 islines <- function(g1, g2){
   ## return TRUE if geometries intersect as lines, not points
@@ -36,16 +38,18 @@ islines <- function(g1, g2){
 #' @examples \dontrun{
 #' data(routes_fast)
 #' rsec <- gSection(routes_fast)
-#' plot(rsec)
+#' library(sp)
+#' plot(routes_fast)
+#' lines(rsec, col = "red", lwd = 3)
 #' length(rsec)
 #' set.seed(5)
 #' sel <- sample(length(rsec), 20)
-#' # plot(rsec[sel,], col = "red", add = TRUE, lwd = 3) # overlapping lines
+#' plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
 #' }
 gSection <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
-  sp::disaggregate(rgeos::gLineMerge(rgeos::gUnion(sl,sl)))
+  sp::disaggregate(rgeos::gLineMerge(rgeos::gUnion(sl, sl)))
 }
 
 #' Label SpatialLinesDataFrame objects
@@ -55,16 +59,16 @@ gSection <- function(sl){
 #' graphics.
 #'
 #' @param sldf A SpatialLinesDataFrame with overlapping elements
-#' @param attr A text string corresponding to a named variable in \code{sldf}
+#' @param attrib A text string corresponding to a named variable in \code{sldf}
 #'
 #' @author Barry Rowlingson
 #'
 #' @seealso \code{\link{gOverline}}
 #' @export
-lineLabels <- function(sldf, attr){
+lineLabels <- function(sldf, attrib){
   text(sp::coordinates(
     rgeos::gCentroid(sldf, byid = TRUE)
-    ), labels = sldf[[attr]])
+    ), labels = sldf[[attrib]])
 }
 
 #' Convert series of overlapping lines into a route network
@@ -74,8 +78,9 @@ lineLabels <- function(sldf, attr){
 #' and converts these into a single route network.
 #'
 #' @param sldf A SpatialLinesDataFrame with overlapping elements
-#' @param attr A text string corresponding to a named variable in \code{sldf}
+#' @param attrib A text string corresponding to a named variable in \code{sldf}
 #' @param fun The function used to aggregate the grouped values (default: sum)
+#' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #'
 #' @author Barry Rowlingson
 #' @references
@@ -87,13 +92,29 @@ lineLabels <- function(sldf, attr){
 #' @examples \dontrun{
 #' data(routes_fast)
 #' data(cents)
-#' rnet <- gOverline(sldf = routes_fast[1:7,], attr = "length")
+#' rnet <- gOverline(sldf = routes_fast[1:7,], attrib = "length")
+#' library(sp) # needed for plotting spatial objects
 #' plot(rnet)
 #' points(cents)
 #' lineLabels(sldf = rnet, "length")
 #' sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
+#' data(flowlines)
+#' plot(flowlines)
+#' aggflow <- gOverline(flowlines, attrib = "All")
+#' nrow(aggflow)
+#' aggflow2 <- gOverline(flowlines, attrib = "All", na.zero = TRUE)
+#' plot(aggflow2) # 8 lines
+#' sel <- as.logical(colSums(gEquals(flowlines, aggflow2, byid = TRUE)))
+#' flowlines_sub <- flowlines[!sel,]
+#' plot(flowlines_sub)
+#' flowlines_2way <- flowlines[sel,]
+#' library(maptools)
+#' flowlines_2way <- spChFIDs(flowlines_2way, as.character(100001:(nrow(flowlines_2way) + 100000)))
+#' flowlines_1way <- maptools::spRbind(flowlines_sub, flowlines_2way)
+#' overlaps <- over()
+#' nrow(overlaps)
 #' }
-gOverline <- function(sldf, attr, fun = sum){
+gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
   ## simplify down to SpatialLines
   sl = as(sldf, "SpatialLines")
   ## get the line sections that make the network
@@ -106,11 +127,17 @@ gOverline <- function(sldf, attr, fun = sum){
       islines(sl[isl,],slu[islu,])
     }, overs[[islu]])
   })
-  ## now aggregate the required attribute using fun():
-  aggs = sapply(overs, function(os){fun(sldf[[attr]][os])})
+  ## now aggregate the required attribibute using fun():
+  aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
 
-  ## make a SLDF with the named attribute:
+  ## make a SLDF with the named attribibute:
   sldf = sp::SpatialLinesDataFrame(slu, data.frame(Z=aggs))
-  names(sldf) = attr
+  names(sldf) = attrib
+
+  ## remove lines with attribute values of zero
+  if(na.zero == TRUE){
+    sldf <- sldf[sldf[[attrib]] > 0, ]
+  }
+
   sldf
 }

@@ -12,7 +12,7 @@
 * building ‘stplanr_0.0.0.9005.tar.gz’
 
 '/usr/lib/R/bin/R' --vanilla CMD check  \
-  '/tmp/RtmpWd0HuK/stplanr_0.0.0.9005.tar.gz' --timings
+  '/tmp/RtmpyNtilK/stplanr_0.0.0.9005.tar.gz' --timings
 
 * using log directory ‘/home/robin/repos/stplanr.Rcheck’
 * using R version 3.2.0 (2015-04-16)
@@ -32,12 +32,10 @@
 * checking whether package ‘stplanr’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
-* checking DESCRIPTION meta-information ... NOTE
-License components which are templates and need '+ file LICENSE':
-  MIT
+* checking DESCRIPTION meta-information ... OK
 * checking top-level files ... NOTE
-Non-standard files/directories found at top level:
-  ‘log-latest’ ‘README_files’ ‘README.html’ ‘README.Rmd’
+Non-standard file/directory found at top level:
+  ‘README.html’
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -49,32 +47,26 @@ Non-standard files/directories found at top level:
 * checking whether the namespace can be loaded with stated dependencies ... OK
 * checking whether the namespace can be unloaded cleanly ... OK
 * checking loading without being on the library search path ... OK
-* checking dependencies in R code ... NOTE
-Package in Depends field not imported from: ‘sp’
-  These packages need to be imported from (in the NAMESPACE file)
-  for when this namespace is loaded but not attached.
+* checking dependencies in R code ... OK
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... NOTE
-disab_recat: no visible binding for global variable ‘b’
-gFlow2line: no visible global function definition for ‘Line’
-gFlow2line: no visible global function definition for ‘proj4string<-’
-gFlow2line: no visible global function definition for ‘proj4string’
-gLines2CyclePath: no visible global function definition for ‘Lines’
-gLines2CyclePath: no visible global function definition for ‘Line’
-gLines2CyclePath: no visible global function definition for
-  ‘SpatialLines’
-gLines2CyclePath: no visible global function definition for
-  ‘proj4string<-’
-gLines2CyclePath: no visible global function definition for ‘CRS’
+* checking R code for possible problems ... OK
 * checking Rd files ... OK
 * checking Rd metadata ... OK
 * checking Rd line widths ... OK
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
 * checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... OK
+* checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'gOverline'
+  ‘na.zero’
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter ‘Writing R documentation files’ in the ‘Writing R
+Extensions’ manual.
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
 * checking contents of ‘data’ directory ... OK
@@ -86,7 +78,7 @@ LaTeX errors when creating PDF version.
 This typically indicates Rd problems.
 * checking PDF version of manual without hyperrefs or index ... OK
 * DONE
-Status: 1 WARNING, 4 NOTEs
+Status: 2 WARNINGs, 1 NOTE
 See
   ‘/home/robin/repos/stplanr.Rcheck/00check.log’
 for details.
