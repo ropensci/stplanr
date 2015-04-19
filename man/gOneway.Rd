@@ -37,10 +37,10 @@ of overlapping lines to zero.
 library(sp)
 data("flowlines")
 plot(flowlines)
-singlelines <- gOneway(flowlines, attrib = "All")
+singlelines <- gOneway(flowlines, attrib = 3:14)
 plot(x, lwd = 3, col = "red")
 lines(singlelines) # check we've got the right lines
-sum(singlelines[[attrib]])
+sum(singlelines$All)
 nrow(singlelines)
 }
 

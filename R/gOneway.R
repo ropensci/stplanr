@@ -26,10 +26,10 @@
 #' library(sp)
 #' data("flowlines")
 #' plot(flowlines)
-#' singlelines <- gOneway(flowlines, attrib = "All")
+#' singlelines <- gOneway(flowlines, attrib = 3:14)
 #' plot(x, lwd = 3, col = "red")
 #' lines(singlelines) # check we've got the right lines
-#' sum(singlelines[[attrib]])
+#' sum(singlelines$All)
 #' nrow(singlelines)
 gOneway <- function(x, attrib){
   geq <- rgeos::gEquals(x, x, byid = T)
@@ -50,11 +50,8 @@ gOneway <- function(x, attrib){
     } else {
       # aggregate the data for reverse flows
       singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-        colSums(x@data[l2, attrib])
+        as.numeric(x@data[l2, attrib])
     }
-
-    # add the reverse flow
-    apply(x@data, 2, is.numeric)
 
   }
   singlelines
