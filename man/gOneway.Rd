@@ -9,7 +9,8 @@ gOneway(x, attrib)
 \arguments{
 \item{x}{A SpatialLinesDataFrame}
 
-\item{attrib}{A text string containing the name of the line's attribute to aggregate}
+\item{attrib}{A text string containing the name of the line's attribute to
+aggregate or a numeric vector of the columns to be aggregated}
 }
 \value{
 \code{gOneway} outputs a SpatialLinesDataFrame with single lines
@@ -37,7 +38,9 @@ library(sp)
 data("flowlines")
 plot(flowlines)
 singlelines <- gOneway(flowlines, attrib = "All")
+plot(x, lwd = 3, col = "red")
+lines(singlelines) # check we've got the right lines
+sum(singlelines[[attrib]])
 nrow(singlelines)
-sum(singlelines$All)
 }
 

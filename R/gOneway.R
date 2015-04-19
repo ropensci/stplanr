@@ -15,7 +15,8 @@
 #' of overlapping lines to zero.
 #'
 #' @param x A SpatialLinesDataFrame
-#' @param attrib A text string containing the name of the line's attribute to aggregate
+#' @param attrib A text string containing the name of the line's attribute to
+#' aggregate or a numeric vector of the columns to be aggregated
 #'
 #' @return \code{gOneway} outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
@@ -26,8 +27,10 @@
 #' data("flowlines")
 #' plot(flowlines)
 #' singlelines <- gOneway(flowlines, attrib = "All")
+#' plot(x, lwd = 3, col = "red")
+#' lines(singlelines) # check we've got the right lines
+#' sum(singlelines[[attrib]])
 #' nrow(singlelines)
-#' sum(singlelines$All)
 gOneway <- function(x, attrib){
   geq <- rgeos::gEquals(x, x, byid = T)
   sel1 <- !duplicated(geq) # repeated rows
@@ -36,17 +39,23 @@ gOneway <- function(x, attrib){
   sel4 <- sel1 & sel2 & sel3
   singlelines <- x[sel4,]
   otherlines <- x[!sel4, ] # the lines that are duplicated
-  plot(x, lwd = 3, col = "red")
-  lines(singlelines) # check we've got the right lines
 
-  sum(singlelines[[attrib]])
-
-  singlelines$agg <- NA
   for(i in 1:nrow(singlelines)){
     # select matching line
     l2 <- which(rgeos::gEquals(singlelines[i, ], x, byid = TRUE))[2]
+
+    if(class(attrib) == "character"){
+      # aggregate the data for reverse flows
+      singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
+    } else {
+      # aggregate the data for reverse flows
+      singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
+        colSums(x@data[l2, attrib])
+    }
+
     # add the reverse flow
-    singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
+    apply(x@data, 2, is.numeric)
+
   }
   singlelines
 }
