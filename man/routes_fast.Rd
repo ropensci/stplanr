@@ -11,9 +11,5 @@ data(routes_fast)
 \description{
 SpatialLinesDataFrame of commuter flows on the travel network
 }
-\seealso{
-Other res: \code{\link{flowlines}}; \code{\link{flow}};
-  \code{\link{routes_slow}}
-}
 \keyword{datasets}
 

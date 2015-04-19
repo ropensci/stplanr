@@ -28,4 +28,9 @@ sel <- sample(length(rsec), 20)
 plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
 }
 }
+\seealso{
+Other Functions for manipulating flow data: \code{\link{gOnewaygeo}};
+  \code{\link{gOnewayid}}; \code{\link{gOverline}};
+  \code{\link{islines}}; \code{\link{lineLabels}}
+}
 
