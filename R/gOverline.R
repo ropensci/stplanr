@@ -261,13 +261,16 @@ gOnewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
     idp2 <- paste0(x[[id2]], x[[id1]])
     l2 <- which(idp2 %in% idp1[sel][i])
 
-    if(class(attrib) == "character"){
-      # aggregate the data for reverse flows
-      singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
-    } else {
-      # aggregate the data for reverse flows
-      singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-        as.numeric(x@data[l2, attrib])
+    # only perform aggregation on flows that have a return flow
+    if(length(l2) > 0){
+      if(class(attrib) == "character"){
+        # aggregate the data for reverse flows
+        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
+      } else {
+        # aggregate the data for reverse flows
+        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
+          as.numeric(x@data[l2, attrib])
+      }
     }
 
   }
