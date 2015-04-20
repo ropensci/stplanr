@@ -193,13 +193,16 @@ gOnewaygeo <- function(x, attrib){
     # select matching line
     l2 <- which(rgeos::gEquals(singlelines[i, ], x, byid = TRUE))[2]
 
-    if(class(attrib) == "character"){
-      # aggregate the data for reverse flows
-      singlelines[[attrib]][i] <- sum(singlelines[[attrib]][i]) + sum(x[[attrib]][l2])
-    } else {
-      # aggregate the data for reverse flows
-      singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-        as.numeric(x@data[l2, attrib])
+    # only perform aggregation on flows that have a return flow
+    if(length(l2) > 0){
+      if(class(attrib) == "character"){
+        # aggregate the data for reverse flows
+        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
+      } else {
+        # aggregate the data for reverse flows
+        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
+          as.numeric(x@data[l2, attrib])
+      }
     }
 
   }
