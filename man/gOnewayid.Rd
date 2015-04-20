@@ -4,7 +4,7 @@
 \alias{gOnewayid}
 \title{Aggregate flows so they become non-directional (by id - the faster way)}
 \usage{
-gOnewayid(x, attrib, id1, id2)
+gOnewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 }
 \arguments{
 \item{x}{A SpatialLinesDataFrame}

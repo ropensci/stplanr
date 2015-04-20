@@ -246,7 +246,7 @@ gOnewaygeo <- function(x, attrib){
 #' sl2 <- gOnewaygeo(flowlines, attrib = 3:14)
 #' # Demonstrate the results from gOnewayid and gOnewaygeo are identical
 #` identical(singlelines, sl2)
-gOnewayid <- function(x, attrib, id1, id2){
+gOnewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   ids <- cbind(x[[id1]], x[[id2]])
   idsort <- t(apply(ids, 1, sort))
   # duplicate pairs - see http://stackoverflow.com/questions/9028369/
