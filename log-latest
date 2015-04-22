@@ -12,7 +12,7 @@
 * building ‘stplanr_0.0.0.9005.tar.gz’
 
 '/usr/lib/R/bin/R' --vanilla CMD check  \
-  '/tmp/RtmpyNtilK/stplanr_0.0.0.9005.tar.gz' --timings
+  '/tmp/RtmpBSyFre/stplanr_0.0.0.9005.tar.gz' --timings
 
 * using log directory ‘/home/robin/repos/stplanr.Rcheck’
 * using R version 3.2.0 (2015-04-16)
@@ -33,9 +33,7 @@
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking DESCRIPTION meta-information ... OK
-* checking top-level files ... NOTE
-Non-standard file/directory found at top level:
-  ‘README.html’
+* checking top-level files ... OK
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -58,30 +56,16 @@ Non-standard file/directory found at top level:
 * checking Rd cross-references ... OK
 * checking for missing documentation entries ... OK
 * checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... WARNING
-Undocumented arguments in documentation object 'gOverline'
-  ‘na.zero’
-
-Functions with \usage entries need to have the appropriate \alias
-entries, and all their arguments documented.
-The \usage entries must correspond to syntactically valid R code.
-See chapter ‘Writing R documentation files’ in the ‘Writing R
-Extensions’ manual.
+* checking Rd \usage sections ... OK
 * checking Rd contents ... OK
 * checking for unstated dependencies in examples ... OK
 * checking contents of ‘data’ directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
 * checking examples ... OK
-* checking PDF version of manual ... WARNING
-LaTeX errors when creating PDF version.
-This typically indicates Rd problems.
-* checking PDF version of manual without hyperrefs or index ... OK
+* checking PDF version of manual ... OK
 * DONE
-Status: 2 WARNINGs, 1 NOTE
-See
-  ‘/home/robin/repos/stplanr.Rcheck/00check.log’
-for details.
+Status: OK
 
 
 

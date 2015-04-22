@@ -20,4 +20,6 @@ Imports:
     rgeos,
     sp
 Suggests:
-    GISTools
+    GISTools,
+    igraph,
+    osmar
