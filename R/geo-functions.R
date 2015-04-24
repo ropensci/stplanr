@@ -38,3 +38,36 @@ gMapshape <- function(dsn, percent){
   system(cmd, wait = TRUE)
 }
 
+#' Crops spatial object x to the bounding box of spatial object (or matrix) b
+#'
+#' This function is a cross between the spatial subsetting funtions such as
+#' sp::over(), rgeos::gIntersects() etc, and the cropping functions of
+#' raster::crop() and rgeos::gIntersection(). The output is the subset of
+#' spatial object a with an outline described by a square bounding box.
+#' The utility of such a function is illustrated in the following question:
+#' \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
+#'
+#' @param shp The spatial object a to be cropped
+#' @param bb the bounding box or spatial object that will be used to crop \code{shp}
+#'
+#' @export
+#' @examples
+#' library(sp)
+#' data(cents)
+#' bb <- sp::bbox(cents)
+#' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
+#' plot(cents)
+#' plot(cb, add = TRUE)
+#' clipped <- gClip(cents, cb)
+#' points(clipped)
+#' points(cents[cb,], col = "red") # note difference
+gClip <- function(shp, bb){
+  library(sp) # for as("Spatial*") functions
+  if(class(bb) == "matrix"){
+    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
+  }
+  else{
+    b_poly <- as(raster::extent(bb), "SpatialPolygons")
+  }
+  rgeos::gIntersection(shp, b_poly, byid = TRUE)
+}
