@@ -1,8 +1,3 @@
-==> devtools::check(document = FALSE)
-
-'/usr/lib/R/bin/R' --vanilla CMD build '/home/robin/repos/stplanr'  \
-  --no-resave-data --no-manual
-
 * checking for file ‘/home/robin/repos/stplanr/DESCRIPTION’ ... OK
 * preparing ‘stplanr’:
 * checking DESCRIPTION meta-information ... OK
@@ -11,10 +6,10 @@
 * looking to see if a ‘data/datalist’ file should be added
 * building ‘stplanr_0.0.0.9005.tar.gz’
 
-'/usr/lib/R/bin/R' --vanilla CMD check  \
-  '/tmp/RtmpBSyFre/stplanr_0.0.0.9005.tar.gz' --timings
+'/usr/lib/R/bin/R' --vanilla CMD check '/tmp/Rtmp5KaFBo/stplanr_0.0.0.9005.tar.gz'  \
+  --timings
 
-* using log directory ‘/home/robin/repos/stplanr.Rcheck’
+* using log directory ‘/tmp/Rtmp5KaFBo/stplanr.Rcheck’
 * using R version 3.2.0 (2015-04-16)
 * using platform: i686-pc-linux-gnu (32-bit)
 * using session charset: UTF-8
@@ -45,7 +40,11 @@
 * checking whether the namespace can be loaded with stated dependencies ... OK
 * checking whether the namespace can be unloaded cleanly ... OK
 * checking loading without being on the library search path ... OK
-* checking dependencies in R code ... OK
+* checking dependencies in R code ... WARNING
+'library' or 'require' call not declared from: ‘sp’
+'library' or 'require' call to ‘sp’ in package code.
+  Please use :: or requireNamespace() instead.
+  See section 'Suggested packages' in the 'Writing R Extensions' manual.
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
@@ -65,8 +64,8 @@
 * checking examples ... OK
 * checking PDF version of manual ... OK
 * DONE
-Status: OK
 
-
-
-R CMD check succeeded
+Status: 1 WARNING
+See
+  ‘/tmp/Rtmp5KaFBo/stplanr.Rcheck/00check.log’
+for details.

@@ -16,6 +16,7 @@ Depends:
 Imports:
     jsonlite,
     maptools,
+    raster,
     rgdal,
     rgeos,
     sp
