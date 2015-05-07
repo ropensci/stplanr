@@ -1,0 +1,14 @@
+language: r
+sudo: true
+
+r_packages:
+  - rmarkdown
+
+apt_packages:
+- texlive-science
+- latex-xcolor
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
