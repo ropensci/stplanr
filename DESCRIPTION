@@ -7,7 +7,7 @@ Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline")
     )
-Description: Functionality and data acces for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
+Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
 License: MIT + file LICENSE
 BugReports: https://github.com/robinlovelace/stplanr/issues
 LazyData: yes
