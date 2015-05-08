@@ -6,7 +6,6 @@
 #'
 #' @param x The object to output
 #' @param filename File name of the output geojson
-#'
 writeGeoJSON <- function(x, filename){
   name <- nm <-deparse(substitute(x))
   rgdal::writeOGR(obj = x, layer = name, dsn = filename, driver = "GeoJSON")
@@ -52,7 +51,6 @@ gMapshape <- function(dsn, percent){
 #'
 #' @export
 #' @examples
-#' library(sp)
 #' data(cents)
 #' bb <- sp::bbox(cents)
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
@@ -62,7 +60,6 @@ gMapshape <- function(dsn, percent){
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
 gClip <- function(shp, bb){
-  library(sp) # for as("Spatial*") functions
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }

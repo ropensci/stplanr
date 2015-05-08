@@ -33,7 +33,6 @@ outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 ```{r, results='hide', message=FALSE}
 library(stplanr)
-library(sp)
 data(cents, flow)
 ```
 

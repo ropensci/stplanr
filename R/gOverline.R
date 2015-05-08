@@ -15,7 +15,6 @@
 #' r1 <- routes_fast[2,]
 #' r2 <- routes_fast[3,]
 #' r3 <- routes_fast[22,]
-#' library(sp)
 #' plot(rnet)
 #' lines(r3, col = "red") # line without overlaps
 #' islines(r1, r2)
@@ -41,7 +40,6 @@ islines <- function(g1, g2){
 #' @examples \dontrun{
 #' data(routes_fast)
 #' rsec <- gSection(routes_fast)
-#' library(sp)
 #' plot(routes_fast)
 #' lines(rsec, col = "red", lwd = 3)
 #' length(rsec)
@@ -97,7 +95,6 @@ lineLabels <- function(sldf, attrib){
 #' data(routes_fast)
 #' data(cents)
 #' rnet <- gOverline(sldf = routes_fast[1:7,], attrib = "length")
-#' library(sp) # needed for plotting spatial objects
 #' plot(rnet)
 #' points(cents)
 #' lineLabels(sldf = rnet, "length")
@@ -172,7 +169,6 @@ gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 #' @family Functions for manipulating flow data
 #' @export
 #' @examples
-#' library(sp)
 #' data("flowlines")
 #' plot(flowlines)
 #' singlelines <- gOnewaygeo(flowlines, attrib = 3:14)
@@ -237,7 +233,6 @@ gOnewaygeo <- function(x, attrib){
 #' @family Functions for manipulating flow data
 #' @export
 #' @examples
-#' library(sp)
 #' data("flowlines")
 #' id1 <- names(flowlines)[1]
 #' id2 <- names(flowlines)[2]

@@ -33,6 +33,7 @@ it can be loaded in with `library()`:
 
 ```{r, message=FALSE}
 library(stplanr)
+library(sp) # needed for geographical objects
 ```
 
 
@@ -75,16 +76,31 @@ the former to the latter. We will visualise the
 l <- gFlow2line(flow = flow, zones = cents)
 ```
 
-## Analysis and visualisation of flow data
-
-To assist
+The data is now in a form that is much easier to analyse. We can plot the
+data with the command `plot(l)`, which was not possible before. Because the
+`SpatialLinesDataFrame` object also contains data per line, it also helps
+with visualisation of the flows, as illustrated below.
 
 ```{r}
-library(sp)
 plot(l, lwd = l$All / 10)
 ```
 
 ## Allocating flows to the transport network
+
+A common problem faced by transport researchers is network
+allocation: converting the 'as the crow flies' lines illustrated in the
+figure above into routes. These are the complex, winding
+paths that people and
+animals make to avoid obstacles such as buildings and to make the journey
+faster and more efficient (e.g. by following the road network).
+
+This is difficult (and until recently near impossible using free software)
+because of the size and complexity of transport networks, the complexity
+of realistic routing algorithms and need for context-specificity in the routing
+engine. 
+
+
+
 
 ```{r}
 data("routes_fast")

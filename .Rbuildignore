@@ -1,6 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 README.Rmd
+README.html
 README_files
 log-latest
 ^cran-comments\.md$
+.travis.yml

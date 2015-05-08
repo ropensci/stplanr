@@ -12,8 +12,7 @@ License: MIT + file LICENSE
 BugReports: https://github.com/robinlovelace/stplanr/issues
 LazyData: yes
 Depends:
-    R (>= 2.10),
-    sp
+    R (>= 2.10), sp
 Imports:
     jsonlite,
     maptools,

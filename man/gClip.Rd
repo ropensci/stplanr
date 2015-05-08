@@ -20,7 +20,6 @@ The utility of such a function is illustrated in the following question:
 \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
 }
 \examples{
-library(sp)
 data(cents)
 bb <- sp::bbox(cents)
 cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)

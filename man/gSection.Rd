@@ -19,7 +19,6 @@ of aggregated lines.
 \dontrun{
 data(routes_fast)
 rsec <- gSection(routes_fast)
-library(sp)
 plot(routes_fast)
 lines(rsec, col = "red", lwd = 3)
 length(rsec)

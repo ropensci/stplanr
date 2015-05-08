@@ -38,7 +38,6 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-library(sp)
 data("flowlines")
 id1 <- names(flowlines)[1]
 id2 <- names(flowlines)[2]

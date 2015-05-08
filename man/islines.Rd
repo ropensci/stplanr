@@ -23,7 +23,6 @@ rnet <- gOverline(routes_fast[c(2, 3, 22),], attrib = "length")
 r1 <- routes_fast[2,]
 r2 <- routes_fast[3,]
 r3 <- routes_fast[22,]
-library(sp)
 plot(rnet)
 lines(r3, col = "red") # line without overlaps
 islines(r1, r2)

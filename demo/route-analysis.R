@@ -1,5 +1,4 @@
 data("cents", package = "stplanr")
-library(sp)
 plot(cents)
 data("flowlines")
 lines(flowlines)

@@ -25,7 +25,6 @@ and converts these into a single route network.
 data(routes_fast)
 data(cents)
 rnet <- gOverline(sldf = routes_fast[1:7,], attrib = "length")
-library(sp) # needed for plotting spatial objects
 plot(rnet)
 points(cents)
 lineLabels(sldf = rnet, "length")
