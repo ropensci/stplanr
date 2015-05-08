@@ -21,7 +21,6 @@ Imports:
     rgeos
 Suggests:
     GISTools,
-    igraph,
     osmar,
     knitr,
     testthat

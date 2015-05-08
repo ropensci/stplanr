@@ -94,27 +94,41 @@ paths that people and
 animals make to avoid obstacles such as buildings and to make the journey
 faster and more efficient (e.g. by following the road network).
 
-This is difficult (and until recently near impossible using free software)
+This is difficult (and was until recently near impossible using free software)
 because of the size and complexity of transport networks, the complexity
 of realistic routing algorithms and need for context-specificity in the routing
-engine. 
+engine. Inexperienced cyclists, for example, would take a very different route
+than a heavy goods vehicle.
 
-
-
+**stplanr** tackles this issue by using 3rd party APIs to provide
+route-allocation. The `gLines2Cyclepath` function allocates straight line
+routes to the transport network using the
+[CycleStreets.net API](http://www.cyclestreets.net/api/) (you must request
+an API key for the function to work):
 
 ```{r}
-data("routes_fast")
+if(nchar(Sys.getenv('CYCLESTREET')) == 16){
+  rf <- gLines2CyclePath(l = flowlines)
+} else{
+  data("routes_fast")
+  rf <- routes_fast
+}
+
 plot(l)
-lines(routes_fast, col = "red")
+lines(rf, col = "red")
 ```
 
+What this does is fire requests to CycleStreets.net.
+By changing the `plan` argument of `gLines2Cyclepath()`, we can download
+routes that are more suitable for people prioritising speed, quietness or
+a balance between speed and quietness. To illustrate the difference between
+different types of route, the figure below shows 'fast' and 'quiet' routes
+allocated to the transport network in Manchester (the package 'leaflet'
+was used to generate the basemap).
 
+![](figures/fast-slow-manc.png)
 
-
-
-
-
-
+## Developing models of transport
 
 
 

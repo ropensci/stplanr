@@ -24,7 +24,7 @@ using the CycleStreets.net API.
 You will need to have a cyclestreets api key for this function to work, e.g.:
 
 \code{
-mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+mytoken <- "f3fe3d078ac34737" # warning: not a real key
 }
 
 \code{
