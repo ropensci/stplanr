@@ -5,6 +5,7 @@ r_packages:
   - rmarkdown
 
 apt_packages:
+- libgdal-dev
 - texlive-science
 - latex-xcolor
 
