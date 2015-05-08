@@ -4,10 +4,6 @@ sudo: true
 r_binary_packages:
   - rgdal
 
-apt_packages:
-- texlive-science
-- latex-xcolor
-
 notifications:
   email:
     on_success: change
