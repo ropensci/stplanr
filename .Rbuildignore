@@ -3,3 +3,4 @@
 README.Rmd
 README_files
 log-latest
+^cran-comments\.md$

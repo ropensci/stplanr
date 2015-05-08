@@ -13,6 +13,8 @@ data frame of commuter flows
 }
 \examples{
 \dontrun{
+# This is how the dataset was constructed - see
+# https://github.com/npct/pct - if download to ~/repos
 flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
 data(cents)
 o <- flow$Area.of.residence \%in\% cents$geo_code[-1]

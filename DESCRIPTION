@@ -11,18 +11,19 @@ Description: Functionality and data acces for transport planning, including orig
 License: MIT + file LICENSE
 BugReports: https://github.com/robinlovelace/stplanr/issues
 LazyData: yes
-Depends: 
-    R (>= 2.10)
-Imports: 
+Depends:
+    R (>= 2.10),
+    sp
+Imports:
     jsonlite,
     maptools,
     raster,
     rgdal,
     rgeos,
-    sp
-Suggests: 
+Suggests:
     GISTools,
     igraph,
     osmar,
-    knitr
+    knitr,
+    testthat
 VignetteBuilder: knitr
