@@ -1,0 +1,104 @@
+---
+title: "Introducing stplanr"
+author: "Robin Lovelace"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing stplanr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Common tasks in transportation research and planning include:
+
+- Access and processing of data on transport infrastructure and behaviour
+- Analysis and visualisation of origin-destination flow data
+- Allocation of flows to the transport (road) network
+- Development of models to estimate transport behaviour
+
+**stplanr** facilitates each of these tasks with an integrated 
+series of tools and example datasets. The 'sustainable' in the
+package name ("sustainable transport planning with R")
+refers to both the focus on active travel
+and the aim for longevity and accessibility in the software.
+Transport planning is notoriously reliant on 'black boxes' and
+the same applies to scientific research into transport systems.
+
+**stplanr** seeks to address these issues. After the package
+has been installed (see the package's
+[README](https://github.com/Robinlovelace/stplanr) for details),
+it can be loaded in with `library()`:
+
+```{r}
+library(stplanr)
+```
+
+
+## Accessing and converting data
+
+Transport data is often provided in origin-destination ('OD')
+form, either as a matrix or (more commonly) a long table
+of OD pairs. An example of this type of raw data is provided
+below (see `?flow` to see how this dataset was created).  
+
+```{r}
+data("flow", package = "stplanr")
+head(flow[c(1:3, 12)])
+```
+
+Although the flow data displayed above describes movement over
+geographical space, it contains no explicitly geographical
+information. Instead, the coordinates of the origins and
+destinations are linked to a separate geographical dataset
+which also must be loaded to analyse the flows. This is a
+common problem solved by the function `gFlow2Lines()`.
+The geographical data is a set of points representing centroids
+of the origin and destinations, saved as a
+`SpatialPointsDataFrame`. Geographical data in R is best
+represented as such `Spatial*` objects, which use the
+`S4` object engine. This explains the close integration of
+**stplanr** with R's spatial packages, especially **sp**, which
+defines the `S4` spatial object system.
+
+```{r}
+data("cents", package = "stplanr")
+as.data.frame(cents[1:3,-c(3,4)])
+```
+
+We use `gFlow2Lines` to combine `flow` and `cents`, to join
+the former to the latter. We will visualise the
+`l` object created below in the next section. 
+
+```{r}
+l <- gFlow2line(flow = flow, zones = cents)
+```
+
+## Analysis and visualisation of flow data
+
+To assist
+
+```{r}
+library(sp)
+plot(l, lwd = l$All / 10)
+```
+
+## Allocating flows to the transport network
+
+```{r}
+data("routes_fast")
+plot(l)
+lines(routes_fast, col = "red")
+```
+
+
+
+
+
+
+
+
+
+
+

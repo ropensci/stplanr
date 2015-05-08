@@ -1,5 +1,10 @@
 # stplanr
 
+[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr)
+
+
+
+
 This is a package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
@@ -45,10 +50,10 @@ cents[1:3,] # points representing origins and destinations
 ```
 
 ```
-##               coordinates  geo_code  MSOA11NM percent_fem  avslope
-## 1708 (429963.1, 434898.2) E02002384 Leeds 055    0.458721 2.856563
-## 1712   (432240, 435146.3) E02002382 Leeds 053    0.438144 2.284782
-## 1805   (431432.8, 434305) E02002393 Leeds 064    0.408759 2.361707
+##              coordinates  geo_code  MSOA11NM percent_fem avslope
+## 1708 (-1.54646, 53.8095) E02002384 Leeds 055      0.4587   2.857
+## 1712 (-1.51186, 53.8116) E02002382 Leeds 053      0.4381   2.285
+## 1805  (-1.5242, 53.8041) E02002393 Leeds 064      0.4088   2.362
 ```
 
 These datasets can be combined as follows:
@@ -71,7 +76,6 @@ example("gLines2CyclePath")
 ```
 
 ![](README_files/figure-html/plot2-1.png) ![](README_files/figure-html/plot2-2.png) 
-
 
 ## Installation
 
@@ -103,10 +107,18 @@ lsf.str("package:stplanr", all = TRUE)
 ## gFlow2line : function (flow, zones)  
 ## gLines2CyclePath : function (l, plan = "fastest")  
 ## gMapshape : function (dsn, percent)  
-## writeGeoJSON : function (x, filename)
+## gOnewaygeo : function (x, attrib)  
+## gOnewayid : function (x, attrib, id1 = names(x)[1], id2 = names(x)[2])  
+## gOverline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
+## gSection : function (sl)  
+## islines : function (g1, g2)  
+## lineLabels : function (sldf, attrib)
 ```
 
 Any questions?
 
 Email me on rob00 x at gmail dot com!
+
+
+
 
