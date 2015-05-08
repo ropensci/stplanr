@@ -19,7 +19,7 @@ Imports:
     maptools,
     raster,
     rgdal,
-    rgeos,
+    rgeos
 Suggests:
     GISTools,
     igraph,
