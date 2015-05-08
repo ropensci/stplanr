@@ -31,7 +31,7 @@ has been installed (see the package's
 [README](https://github.com/Robinlovelace/stplanr) for details),
 it can be loaded in with `library()`:
 
-```{r}
+```{r, message=FALSE}
 library(stplanr)
 ```
 
@@ -53,7 +53,7 @@ geographical space, it contains no explicitly geographical
 information. Instead, the coordinates of the origins and
 destinations are linked to a separate geographical dataset
 which also must be loaded to analyse the flows. This is a
-common problem solved by the function `gFlow2Lines()`.
+common problem solved by the function `gFlow2Lines`.
 The geographical data is a set of points representing centroids
 of the origin and destinations, saved as a
 `SpatialPointsDataFrame`. Geographical data in R is best

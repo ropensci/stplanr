@@ -1,15 +1,23 @@
+check()
+Updating stplanr documentation
+Loading stplanr
+'/usr/lib/R/bin/R' --vanilla CMD build '/home/robin/repos/stplanr' --no-resave-data  \
+  --no-manual
+
 * checking for file ‘/home/robin/repos/stplanr/DESCRIPTION’ ... OK
 * preparing ‘stplanr’:
 * checking DESCRIPTION meta-information ... OK
+* installing the package to build vignettes
+* creating vignettes ... OK
 * checking for LF line-endings in source and make files
 * checking for empty or unneeded directories
 * looking to see if a ‘data/datalist’ file should be added
 * building ‘stplanr_0.0.0.9005.tar.gz’
 
-'/usr/lib/R/bin/R' --vanilla CMD check '/tmp/Rtmp5KaFBo/stplanr_0.0.0.9005.tar.gz'  \
+'/usr/lib/R/bin/R' --vanilla CMD check '/tmp/RtmpMBit6T/stplanr_0.0.0.9005.tar.gz'  \
   --timings
 
-* using log directory ‘/tmp/Rtmp5KaFBo/stplanr.Rcheck’
+* using log directory ‘/tmp/RtmpMBit6T/stplanr.Rcheck’
 * using R version 3.2.0 (2015-04-16)
 * using platform: i686-pc-linux-gnu (32-bit)
 * using session charset: UTF-8
@@ -21,14 +29,21 @@
 * checking if this is a source package ... OK
 * checking if there is a namespace ... OK
 * checking for executable files ... OK
-* checking for hidden files and directories ... OK
+* checking for hidden files and directories ... NOTE
+Found the following hidden files and directories:
+  .travis.yml
+These were most likely included in error. See section ‘Package
+structure’ in the ‘Writing R Extensions’ manual.
 * checking for portable file names ... OK
 * checking for sufficient/correct file permissions ... OK
 * checking whether package ‘stplanr’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
+* checking ‘build’ directory ... OK
 * checking DESCRIPTION meta-information ... OK
-* checking top-level files ... OK
+* checking top-level files ... NOTE
+Non-standard file/directory found at top level:
+  ‘README.html’
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -40,11 +55,9 @@
 * checking whether the namespace can be loaded with stated dependencies ... OK
 * checking whether the namespace can be unloaded cleanly ... OK
 * checking loading without being on the library search path ... OK
-* checking dependencies in R code ... WARNING
-'library' or 'require' call not declared from: ‘sp’
-'library' or 'require' call to ‘sp’ in package code.
-  Please use :: or requireNamespace() instead.
-  See section 'Suggested packages' in the 'Writing R Extensions' manual.
+* checking dependencies in R code ... NOTE
+'library' or 'require' call to ‘sp’ which was already attached by Depends.
+  Please remove these calls from your code.
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
@@ -61,11 +74,23 @@
 * checking contents of ‘data’ directory ... OK
 * checking data for non-ASCII characters ... OK
 * checking data for ASCII and uncompressed saves ... OK
+* checking installed files from ‘inst/doc’ ... OK
+* checking files in ‘vignettes’ ... OK
 * checking examples ... OK
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ...
+  Running ‘testthat.R’
+ OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in ‘inst/doc’ ... OK
+* checking running R code from vignettes ...
+   ‘introducing-stplanr.Rmd’ using ‘UTF-8’ ... OK
+ OK
+* checking re-building of vignette outputs ... OK
 * checking PDF version of manual ... OK
 * DONE
 
-Status: 1 WARNING
+Status: 3 NOTEs
 See
-  ‘/tmp/Rtmp5KaFBo/stplanr.Rcheck/00check.log’
+  ‘/tmp/RtmpMBit6T/stplanr.Rcheck/00check.log’
 for details.
