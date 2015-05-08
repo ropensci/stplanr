@@ -1,8 +1,8 @@
 language: r
 sudo: true
 
-r_packages:
-  - rmarkdown
+r_binary_packages:
+  - rgdal
 
 apt_packages:
 - libhdf5-serial-dev
