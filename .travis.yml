@@ -4,7 +4,7 @@ sudo: true
 r_binary_packages:
   - rgdal
 
-r_packages:
+# r_packages:
 
 
 notifications:
