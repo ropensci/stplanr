@@ -2,7 +2,6 @@
 title: "Introducing stplanr"
 author: "Robin Lovelace"
 date: "`r Sys.Date()`"
-bibliography: refs.bib
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introducing stplanr}
@@ -250,11 +249,18 @@ and we hope to add more functionality, including tools for creating
 spatial interaction models, more functions to access routing APIs and
 improved functionality for accessing OpenStreetMap data.
 
+If you would like to contribute or request new features, see
+https://github.com/Robinlovelace/stplanr
+
 ## References
 
-```{r, echo=FALSE, eval=FALSE}
-# copy home-generated citations to local dir
-file.copy("~/Documents/Other-stplanr.bib", "vignettes/refs.bib", overwrite = T) 
-```
+Cheshire, James, and Robin Lovelace. 2015. “Spatial data visualisation with R.” In Geocomputation, edited by Chris Brunsdon and Alex Singleton, 1–14. SAGE Publications. https://github.com/geocomPP/sdv
 
+Iacono, Michael, Kevin J. Krizek, and Ahmed El-Geneidy. 2010. “Measuring non-motorized accessibility: issues, alternatives, and execution.” Journal of Transport Geography 18 (1). Elsevier Ltd: 133–40. doi:10.1016/j.jtrangeo.2009.02.002
+
+Kahle, D, and Hadley Wickham. 2013. “ggmap: Spatial Visualization with ggplot2.” The R Journal 5: 144–61. http://stat405.had.co.nz/ggmap.pdf
+
+Martínez, L. Miguel, and José Manuel Viegas. 2013. “A new approach to modelling distance-decay functions for accessibility assessment in transport studies.” Journal of Transport Geography 26: 87–96. doi:10.1016/j.jtrangeo.2012.08.018
+
+Waddell, Paul. 2002. “UrbanSim: Modeling urban development for land use, transportation, and environmental planning.” Journal of the American Planning Association 68 (3). Taylor & Francis: 297–314
 
