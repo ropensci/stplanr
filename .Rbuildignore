@@ -6,3 +6,4 @@ README_files
 log-latest
 ^cran-comments\.md$
 .travis.yml
+README_files

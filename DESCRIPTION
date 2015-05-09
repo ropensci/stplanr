@@ -23,5 +23,6 @@ Suggests:
     GISTools,
     osmar,
     knitr,
-    testthat
+    testthat,
+    ggmap,
 VignetteBuilder: knitr
