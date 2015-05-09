@@ -5,7 +5,7 @@ r_binary_packages:
   - rgdal
 
 r_packages:
-    - rmarkdown
+
 
 notifications:
     email:
