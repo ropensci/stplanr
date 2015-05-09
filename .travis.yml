@@ -5,7 +5,6 @@ r_binary_packages:
   - rgdal
 
 r_packages:
-    - testthat
     - rmarkdown
 
 notifications:
