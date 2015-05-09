@@ -4,6 +4,10 @@ sudo: true
 r_binary_packages:
   - rgdal
 
+r_packages:
+    - testthat
+    - rmarkdown
+
 notifications:
     email:
       on_success: change
