@@ -5,7 +5,7 @@ output:
     keep_md: yes
 ---
 
-[[Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr)
+[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
 
 ```{r, echo=FALSE}
 library(stplanr)
@@ -79,14 +79,5 @@ lsf.str("package:stplanr", all = TRUE)
 Any questions?
 
 Email me on rob00 x at gmail dot com!
-
-```{r, echo=FALSE}
-md <- readLines("README.md")
-sel <- grep(pattern = "Build", x = md)
-bsl <- md[sel]
-bsl <- gsub(pattern = "\\[\\[Build Status]", replacement = "\\[!\\[Build Status]", x = bsl)
-md[sel] <- bsl
-writeLines(text = md, con = "README.md")
-```
 
 

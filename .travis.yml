@@ -6,7 +6,6 @@ r_binary_packages:
 
 # r_packages:
 
-
 notifications:
     email:
       on_success: change

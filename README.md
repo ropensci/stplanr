@@ -1,8 +1,11 @@
 # stplanr
 
-[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr)
+[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
 
 
+```
+## Loading required package: sp
+```
 
 
 This is a package for sustainable transport planning in R (stplanr).
@@ -27,7 +30,6 @@ outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 ```r
 library(stplanr)
-library(sp)
 data(cents, flow)
 ```
 
@@ -104,6 +106,7 @@ lsf.str("package:stplanr", all = TRUE)
 ## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
 ## dd_logsqrt : function (x, a, b1, b2)  
 ## disab_recat : function (a)  
+## gClip : function (shp, bb)  
 ## gFlow2line : function (flow, zones)  
 ## gLines2CyclePath : function (l, plan = "fastest")  
 ## gMapshape : function (dsn, percent)  
