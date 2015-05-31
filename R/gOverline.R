@@ -251,7 +251,7 @@ gOnewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   sel <- !duplicated(idsort) & rgeos::gLength(x, byid = TRUE) > 0
 
   singlelines <- x[sel,]
-  otherlines <- x[!sel, ] # the lines that are duplicated
+  if(sum(sel) != nrow(x)) otherlines <- x[!sel, ] # the lines that are duplicated
 
   for(i in 1:nrow(singlelines)){
     # select matching lines
