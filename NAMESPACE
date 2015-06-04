@@ -2,6 +2,7 @@
 
 export(age_recat)
 export(age_recat2)
+export(bbox_scale)
 export(dd_logcub)
 export(dd_loglin)
 export(dd_logsqrt)

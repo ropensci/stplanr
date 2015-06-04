@@ -4,10 +4,10 @@
 \alias{writeGeoJSON}
 \title{Write to geojson easily}
 \usage{
-writeGeoJSON(x, filename)
+writeGeoJSON(shp, filename)
 }
 \arguments{
-\item{x}{The object to output}
+\item{shp}{The spatial object a to be cropped}
 
 \item{filename}{File name of the output geojson}
 }

@@ -4,11 +4,11 @@
 #' \code{geojson_write} from the geojsonio package
 #' provides the same functionality \url{https://github.com/ropensci/geojsonio}.
 #'
-#' @param x The object to output
+#' @inheritParams gClip
 #' @param filename File name of the output geojson
-writeGeoJSON <- function(x, filename){
-  name <- nm <-deparse(substitute(x))
-  rgdal::writeOGR(obj = x, layer = name, dsn = filename, driver = "GeoJSON")
+writeGeoJSON <- function(shp, filename){
+  name <- nm <-deparse(substitute(shp))
+  rgdal::writeOGR(obj = shp, layer = name, dsn = filename, driver = "GeoJSON")
   newname <- paste0(filename, ".geojson")
   file.rename(filename, newname)
 }
@@ -45,7 +45,6 @@ gMapshape <- function(dsn, percent){
 #' spatial object a with an outline described by a square bounding box.
 #' The utility of such a function is illustrated in the following question:
 #' \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
-#'
 #' @param shp The spatial object a to be cropped
 #' @param bb the bounding box or spatial object that will be used to crop \code{shp}
 #'
@@ -67,4 +66,31 @@ gClip <- function(shp, bb){
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
   }
   rgeos::gIntersection(shp, b_poly, byid = TRUE)
+}
+
+#' Scale a bounding box
+#'
+#' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
+#'
+#' @inheritParams gClip
+#' @param scale_factor Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.
+#' @export
+#' @examples
+#' # dput(bbox(cents))
+#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
+#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
+#'   "coords.x2"), c("min", "max")))
+#' bb1 <- bbox_scale(bb, 1.05)
+#' bb1
+#' bb2 <- bbox_scale(bb, 0.75)
+#' bb2
+#' bb3 <- bbox_scale(bb, 0.1)
+#' plot(x = bb1[1,], y = bb1[2,])
+#' points(bb2[1,], bb2[2,])
+#' points(bb3[1,], bb3[2,])
+#' points(bb[1,], bb[2,], col = "red")
+#' bbox_scale(bb, 0.75)
+bbox_scale <- function(bb, scale_factor){
+  b <- (bb - rowMeans(bb)) * scale_factor + rowMeans(bb)
+  b
 }
