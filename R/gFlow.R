@@ -96,7 +96,7 @@ gLines2CyclePath <- function(l, plan = "fastest"){
   coord_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
     function(y) slot(y, "coords")))
   output <- vector("list", length(coord_list))
-  api_base <- sprintf("https://%s@api.cyclestreets.net/v2/", cckey)
+  api_base <- sprintf("https://api.cyclestreets.net/v2/")
   for(i in 1:length(output)){
     from <- coord_list[[i]][[1]][1, ]
     to <- coord_list[[i]][[1]][2, ]
@@ -105,6 +105,7 @@ gLines2CyclePath <- function(l, plan = "fastest"){
     ft_string <- paste(from_string, to_string, sep = "|")
     journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
     request <- paste0(api_base, journey_plan)
+    request <- paste0(request, "&key=", cckey)
 
     # Thanks to barry Rowlingson for this part:
     obj <- jsonlite::fromJSON(request)

@@ -24,5 +24,6 @@ Suggests:
     osmar,
     knitr,
     testthat,
-    ggmap
+    ggmap,
+    dplyr
 VignetteBuilder: knitr
