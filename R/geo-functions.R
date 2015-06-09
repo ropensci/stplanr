@@ -50,12 +50,15 @@ gMapshape <- function(dsn, percent){
 #'
 #' @export
 #' @examples
+#' library(sp)
 #' data(cents)
-#' bb <- sp::bbox(cents)
+#' bb <- bbox(cents)
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 #' plot(cents)
 #' plot(cb, add = TRUE)
 #' clipped <- gClip(cents, cb)
+#' row.names(clipped)
+#' clipped$avslope # gClip also returns the data attribute
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
 gClip <- function(shp, bb){
@@ -65,7 +68,14 @@ gClip <- function(shp, bb){
   else{
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
   }
-  rgeos::gIntersection(shp, b_poly, byid = TRUE)
+  clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
+  if(grepl("DataFrame", class(shp))){
+    geodata <- data.frame(id = row.names(clipped))
+    joindata <- cbind(id = row.names(shp), shp@data)
+    geodata <- dplyr::left_join(geodata, joindata)
+    clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
+  }
+  clipped
 }
 
 #' Scale a bounding box
