@@ -5,7 +5,8 @@ Version: 0.0.1.0
 Date: 2015-03-10
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
-    person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline")
+    person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline"),
+    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gClip")
     )
 Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
 License: MIT + file LICENSE
@@ -18,12 +19,12 @@ Imports:
     maptools,
     raster,
     rgdal,
-    rgeos
+    rgeos,
+    dplyr
 Suggests:
     GISTools,
     osmar,
     knitr,
     testthat,
-    ggmap,
-    dplyr
+    ggmap
 VignetteBuilder: knitr

@@ -1,0 +1,56 @@
+---
+title: "Mapping flow data with R"
+author: "Robin Lovelace and Ben Holland"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: Transport-r-flows.bib
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In the same way that climate is "weather conditions prevailing
+in an area in general or over a long 
+period",^[https://www.oxforddictionaries.com/definition/english/climate] flow data represents average patterns of travel over extended
+chunks of space and time.
+
+This vignette provides a brief introduction to flow data in R.
+We will explore how it is structured, stored, processed and analysed.
+Sight is our most powerful sense (followed closely by hearing) and
+transport behaviour generally exhibits strong spatial patterns.
+A critical skill for interpretting and communicating travel data
+is presenting flow data visually. This vignette therefore has a strong
+focus on visualisation.
+
+We assume some prior experience with R and spatial data and it would be
+wise to have worked through an introductory textbook or on-line
+tutorial before tackling flow data with R
+[e.g. @lovelace2014introduction; @kabacoff2011r]. Experience using
+R in the real-world and an ability to make sense of
+on-line resources for learning R is potentially of
+greater value when facing the complexities of flow data.
+In any case, 'throwing yourself in at the deep end' is also
+a valid approach in programming, provided you have the
+required tenacity. So let's dive in.
+
+# The structure of flow data
+
+# Flow data structures in R
+
+# Handling and converting flow data
+
+# Visualising flow data
+
+# Analysing travel patterns with flow data
+
+# Route assignment
+
+# Modelling flow data
+
+# Further resources
+
+```{r, echo=FALSE, eval=FALSE}
+file.copy("~/Documents/Transport-r-flows.bib", "vignettes/Transport-r-flows.bib", overwrite = T)
+```
+
