@@ -48,7 +48,14 @@
 #' # Plan a 'balanced' route from Pedaller's Arms in Leeds
 #' to the University of Leeds
 #'
-#' route_cyclestreet(from = "Pedaller's Arms, Leeds", to = "University of Leeds", plan = "balanced")
+#' rb_pa <- route_cyclestreet(from = "Pedaller's Arms, Leeds", to = "University of Leeds", plan = "balanced")
+#'
+#' library(leaflet) # requires the leaflet CRAN package
+#' # display the route on an interactive map
+#' leaflet() %>% addTiles() %>%
+#'   addPolylines(data = rb_pa)
+#'
+#' woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
 #'
 #' # Plan a route between two lat/lon pairs in the UK
 #'
