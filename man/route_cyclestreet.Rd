@@ -58,6 +58,8 @@ library(leaflet) # requires the leaflet CRAN package
 leaflet() \%>\% addTiles() \%>\%
   addPolylines(data = rb_pa)
 
+woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
+
 # Plan a route between two lat/lon pairs in the UK
 
 p1 <- c(-2, 52)

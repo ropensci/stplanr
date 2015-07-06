@@ -85,12 +85,14 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
   request <- paste0(api_base, journey_plan)
   request <- paste0(request, "&key=", cckey)
 
+  print(paste0("The request sent to cyclestreets.net was: ", request))
+
   obj <- jsonlite::fromJSON(request)
 
   df <- data.frame(matrix(NA, ncol = 6))
   names(df) <- c("plan", "start", "finish", "length", "time", "waypoint")
 
-  route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = 1)))
+  route <- SpatialLines(list(Lines(list(Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
 
   df <- obj$features[1,]$properties
   row.names(df) <- route@lines[[1]]@ID
