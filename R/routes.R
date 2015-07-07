@@ -85,6 +85,13 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
   request <- paste0(api_base, journey_plan)
   request <- paste0(request, "&key=", cckey)
 
+  requestv1 <- "http://www.cyclestreets.net/api/journey.xml?key="
+  requestv1 <- paste0(requestv1, cckey)
+  requestv1 <- paste0(requestv1, "&itinerarypoints=", ft_string, "&plan=")
+  requestv1 <- paste0(requestv1, plan)
+
+  obj2 <- xmlTreeParse(requestv1)
+
   print(paste0("The request sent to cyclestreets.net was: ", request))
 
   obj <- jsonlite::fromJSON(request)
