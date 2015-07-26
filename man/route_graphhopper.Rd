@@ -40,11 +40,14 @@ Where \code{url} is an example api request from \url{https://github.com/graphhop
 }
 \examples{
 \dontrun{
-r <- route_graphhopper("Leeds", "Dublin")
+r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
 
 library(leaflet)
 
 leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)
 }
+}
+\seealso{
+route_cyclestreet
 }
 

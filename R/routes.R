@@ -135,10 +135,14 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
 #'
 #' @inheritParams route_cyclestreet
 #'
+#' @export
+#'
+#' @seealso route_cyclestreet
+#'
 #' @examples
 #'
 #' \dontrun{
-#' r <- route_graphhopper("Leeds", "Dublin")
+#' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
 #'
 #' library(leaflet)
 #'
