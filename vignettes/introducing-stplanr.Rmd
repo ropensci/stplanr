@@ -109,7 +109,11 @@ engine. Inexperienced cyclists, for example, would take a very different route
 than a heavy goods vehicle.
 
 **stplanr** tackles this issue by using 3rd party APIs to provide
-route-allocation. The `gLines2Cyclepath` function allocates straight line
+route-allocation.
+
+### CycleStreets.net
+
+The `gLines2Cyclepath` function allocates straight line
 routes to the transport network using the
 [CycleStreets.net API](http://www.cyclestreets.net/api/) (you must request
 an API key for the function to work):
@@ -119,15 +123,10 @@ an API key for the function to work):
 x = try(download.file("http://www.google.com", "test.html"), silent = T) 
 offline <- grepl("Error", x)
 
-if(nchar(Sys.getenv('CYCLESTREET')) == 16 & !offline){
-  rf <- gLines2CyclePath(l = flowlines)
-  rq <- gLines2CyclePath(l = flowlines, plan = "quietest")
-} else{
-  data("routes_fast")
-  data("routes_slow")
-  rf <- routes_fast
-  rq <- routes_slow
-}
+data("routes_fast")
+data("routes_slow")
+rf <- routes_fast
+rq <- routes_slow
 
 plot(l)
 lines(rf, col = "red")
@@ -143,6 +142,30 @@ with additional packages for creating maps in R
 [e.g. see @Cheshire2015; @Kahle2013], will further enhance the utility of
 the package's functions. Route-allocated flows are also useful for 
 analysis.
+
+### Graphhopper
+
+`route_graphhopper()` extracts geographical and other data from the graphhopper
+routing engine to allocate flows to the travel network.
+
+```{r}
+if(!offline){
+  ny2oaxaca1 <- route_graphhopper("New York", "Oaxaca", vehicle = "bike")
+  ny2oaxaca2 <- route_graphhopper("New York", "Oaxaca", vehicle = "car")
+  plot(ny2oaxaca1)
+  plot(ny2oaxaca2, add = T, col = "red")
+}
+```
+
+Note that the function also saves time, distance and (for bike trips)
+vertical distance climbed for the trips:
+
+```{r}
+ny2oaxaca1@data
+ny2oaxaca2@data
+```
+
+
 
 ## Analysis of origin-destination flow data
 

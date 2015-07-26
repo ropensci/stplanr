@@ -24,7 +24,7 @@
 #' internet connection, a CycleStreets.net API key
 #' and origins and destinations within the UK to run.
 #'
-#' Note that if \code{from} and \to{to} are supplied as
+#' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
 #' geo-coding services are used via \code{ggmap::geocode()}.
 #'
@@ -90,7 +90,7 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
   requestv1 <- paste0(requestv1, "&itinerarypoints=", ft_string, "&plan=")
   requestv1 <- paste0(requestv1, plan)
 
-  obj2 <- xmlTreeParse(requestv1)
+  obj2 <- XML::xmlTreeParse(requestv1)
 
   print(paste0("The request sent to cyclestreets.net was: ", request))
 
@@ -105,4 +105,98 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
   row.names(df) <- route@lines[[1]]@ID
   route <- sp::SpatialLinesDataFrame(route, df)
   route
+}
+
+#' Plan a route with the graphhopper routing engine
+#'
+#' Provides an R interface to the graphhopper routing engine,
+#' an open source route planning service.
+#' To use this function you will need to obtain an API key from
+#' \url{https://graphhopper.com/#directions-api}.
+#' It is assumed that you have set your api key as a system environment
+#' for security reasons (so you avoid typing the API key in your code).
+#' Do this with \code{GRAPHHOPPER}, e.g. by typing \code{Sys.setenv(GRAPHHOPPER = 'eccbf612-214e-437d-8b73-06bdf9e68731')}. (Note: key not real, use your own key.)
+#'
+#' The function returns a SpatialLinesDataFrame object.
+#' See \url{https://github.com/graphhopper} for more information.
+#'
+#' @param vehicle A text string representing the vehicle. Can be bike, bike2, car
+#' or foot.
+#'
+#'
+#' @details
+#'
+#' To test graphopper is working for you, try something like this, but with
+#' your own API key:
+#'
+#' \code{obj <- jsonlite::fromJSON(url)}
+#'
+#' Where \code{url} is an example api request from \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
+#'
+#' @inheritParams route_cyclestreet
+#'
+#' @examples
+#'
+#' \dontrun{
+#' r <- route_graphhopper("Leeds", "Dublin")
+#'
+#' library(leaflet)
+#'
+#' leaflet() %>% addTiles() %>% addPolylines(data = r)
+#' }
+
+route_graphhopper <- function(from, to, vehicle = "bike"){
+  if(!Sys.getenv('GRAPHHOPPER') == ""){
+    key <- Sys.getenv('GRAPHHOPPER')
+  }
+  if(is.null(key)){
+    stop("You must have a an api key saved as 'key'")
+  }
+
+  # Convert character strings to lon/lat if needs be
+  if(is.character(from) | is.character(to)){
+    from <- ggmap::geocode(from)
+    to <- ggmap::geocode(to)
+  }
+
+  api_base <- "https://graphhopper.com/api/1/route?"
+  orig <- paste0(from[2:1], collapse = "%2C")
+  dest <- paste0(to[2:1], collapse = "%2C")
+  ft_string <- paste0("point=", orig, "&point=", dest)
+  veh <- paste0("&vehicle=", vehicle)
+
+  request <- paste0(api_base, ft_string, veh, "&locale=en-US&debug=true&points_encoded=false&key=", key)
+
+  if(vehicle == "bike"){
+    request <- paste0(request, "&elevation=true")
+  }
+
+  print(paste0("The request sent was: ", request))
+
+  obj <- jsonlite::fromJSON(request)
+
+  route <- SpatialLines(list(Lines(list(Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
+
+  climb <- NA # to set elev variable up
+
+  # get elevation data if it was a bike trip
+  if(vehicle == "bike"){
+    elevs <- obj$paths$points[[1]][[1]][,3]
+    climb <- elevs[-1] - elevs[-length(elevs)]
+    climb <- sum(climb[climb > 0])
+  }
+
+  # Attribute data for the route
+  df <- data.frame(
+
+    time = obj$paths$time / (1000 * 60),
+    dist = obj$paths$distance,
+    climb = climb
+
+  )
+
+  route <- SpatialLinesDataFrame(route, df)
+
+  route
+
 }

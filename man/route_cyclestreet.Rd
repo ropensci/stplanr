@@ -34,7 +34,7 @@ between origins and destinations. Requires an
 internet connection, a CycleStreets.net API key
 and origins and destinations within the UK to run.
 
-Note that if \code{from} and \to{to} are supplied as
+Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
 geo-coding services are used via \code{ggmap::geocode()}.
 }

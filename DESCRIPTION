@@ -20,7 +20,8 @@ Imports:
     raster,
     rgdal,
     rgeos,
-    dplyr
+    dplyr,
+    XML
 Suggests:
     GISTools,
     osmar,
