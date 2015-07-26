@@ -149,23 +149,19 @@ analysis.
 routing engine to allocate flows to the travel network.
 
 ```{r}
-if(!offline){
+if(!offline & !Sys.getenv("GRAPHHOPPER") == ""){
   ny2oaxaca1 <- route_graphhopper("New York", "Oaxaca", vehicle = "bike")
   ny2oaxaca2 <- route_graphhopper("New York", "Oaxaca", vehicle = "car")
   plot(ny2oaxaca1)
   plot(ny2oaxaca2, add = T, col = "red")
+  
+  ny2oaxaca1@data
+  ny2oaxaca2@data
 }
 ```
 
 Note that the function also saves time, distance and (for bike trips)
-vertical distance climbed for the trips:
-
-```{r}
-ny2oaxaca1@data
-ny2oaxaca2@data
-```
-
-
+vertical distance climbed for the trips.
 
 ## Analysis of origin-destination flow data
 
