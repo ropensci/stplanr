@@ -4,7 +4,7 @@
 \alias{route_cyclestreet}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
+route_cyclestreet(from, to, plan = "fastest", silent = FALSE)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -17,6 +17,8 @@ route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
 
 \item{plan}{A text string. Must be either "balanced", "fastest" (default)
 or "quietest"}
+
+\item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 }
 \description{
 Provides an R interface to the CycleStreets.net cycle planning API,

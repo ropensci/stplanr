@@ -63,7 +63,11 @@ gFlow2line <- function(flow, zones){
 #'
 #' @param l A SpatialLinesDataFrame object composed of straight lines. l may be
 #' created using the \code{\link{gFlow2line}} function.
+#'
+#' @inheritParams route_cyclestreet
+#'
 #' @export
+#'
 #' @examples
 #' library(rgdal)
 #' data(flowlines) # load demo flowlines dataset
@@ -74,14 +78,17 @@ gFlow2line <- function(flow, zones){
 #' # set cyclestreets api key: see http://www.cyclestreets.net/api/
 #' cckey <- "f3fe3d078ac34737" # example key (not real)
 #' # plot save the routes
+#'
 #' routes_fast <- gLines2CyclePath(flowlines_84)
 #' routes_slow <- gLines2CyclePath(flowlines_84, "quietest")
 #' }
-#' data(routes_fast, routes_slow) # load routes
+#' if(!exists("routes_fast")){
+#'   data(routes_fast, routes_slow) # load routes
+#' }
 #' lines(routes_fast, col = "red")
 #' lines(routes_slow, col = "green")
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
-#' n = 19
+#' n = 20
 #' plot(flowlines_84[n,])
 #' lines(routes_fast[n,], col = "red")
 #' lines(routes_slow[n,], col = "green")
@@ -100,28 +107,21 @@ gLines2CyclePath <- function(l, plan = "fastest"){
   for(i in 1:length(output)){
     from <- coord_list[[i]][[1]][1, ]
     to <- coord_list[[i]][[1]][2, ]
-    from_string <- paste(from, collapse = ",")
-    to_string <- paste(to, collapse = ",")
-    ft_string <- paste(from_string, to_string, sep = "|")
-    journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
-    request <- paste0(api_base, journey_plan)
-    request <- paste0(request, "&key=", cckey)
 
-    # Thanks to barry Rowlingson for this part:
-    obj <- jsonlite::fromJSON(request)
-
-    # Catch 'no route found' stuff
-    if(is.null(obj$features[1,]$geometry$coordinates[[1]])){
-      route <- sp::SpatialLines(list(Lines(list(Line(rbind(from, to))), row.names(l[i,]))))
+    if(identical(from, to)){
+      # if the length is zero...
+      route <-
+        sp::SpatialLines(list(Lines(list(Line(rbind(from, to))),
+          row.names(l[i,]))))
       df <- data.frame(matrix(NA, ncol = 6))
       names(df) <- c("plan", "start", "finish", "length", "time", "waypoint")
-    } else {
-      route <- SpatialLines(list(Lines(list(Line(obj$features[1,]$geometry$coordinates[[1]])), ID = row.names(l[i,]))))
-      df <- obj$features[1,]$properties
+      row.names(df) <- row.names(l[i,])
+      route <- SpatialLinesDataFrame(route, df)
+    }else{
+      # save lines that have a distance
+      route <- route_cyclestreet(from, to, plan = plan, silent = TRUE)
     }
-
-    row.names(df) <- row.names(l[i,])
-    route <- sp::SpatialLinesDataFrame(route, df)
+    sp::spChFIDs(route) <- i
 
     # Status checker: % downloaded
     if(i == 10)
@@ -134,11 +134,12 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 
     if(i == 1){
       output <- route
-    }
-    else{
+    }else{
       output <- maptools::spRbind(output, route)
     }
   }
   proj4string(output) <- CRS("+init=epsg:4326")
+
   output
+
 }

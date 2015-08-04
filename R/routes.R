@@ -16,6 +16,8 @@
 #'  \code{length = 2} representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
+#' @param silent Logical (default is FALSE). TRUE hides request sent.
+#'
 #' @details
 #'
 #' This function uses the online routing service
@@ -63,7 +65,7 @@
 #' p2 <- p1 + 1 # add a degree!
 #' route_cyclestreet(p1, p2, "fastest")
 #' }
-route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
+route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
   if(!Sys.getenv('CYCLESTREET') == ""){
     cckey <- Sys.getenv('CYCLESTREET')
   }
@@ -85,23 +87,23 @@ route_cyclestreet <- function(from = "M3 4EE", to = "M1 4BT", plan = "fastest"){
   request <- paste0(api_base, journey_plan)
   request <- paste0(request, "&key=", cckey)
 
-  requestv1 <- "http://www.cyclestreets.net/api/journey.xml?key="
-  requestv1 <- paste0(requestv1, cckey)
-  requestv1 <- paste0(requestv1, "&itinerarypoints=", ft_string, "&plan=")
-  requestv1 <- paste0(requestv1, plan)
-
-  obj2 <- XML::xmlTreeParse(requestv1)
-
-  print(paste0("The request sent to cyclestreets.net was: ", request))
+  if(silent == FALSE){
+    print(paste0("The request sent to cyclestreets.net was: ", request))
+  }
 
   obj <- jsonlite::fromJSON(request)
 
-  df <- data.frame(matrix(NA, ncol = 6))
-  names(df) <- c("plan", "start", "finish", "length", "time", "waypoint")
-
   route <- SpatialLines(list(Lines(list(Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
 
-  df <- obj$features[1,]$properties
+  df <- data.frame(
+    plan = obj$features[3,]$properties$plan,
+    start = obj$properties$start,
+    finish = obj$properties$finish,
+    length = obj$features[3,]$properties$length,
+    time = obj$features[3,]$properties$time,
+    waypoint = nrow(route@lines[[1]]@Lines[[1]]@coords)
+  )
+
   row.names(df) <- route@lines[[1]]@ID
   route <- sp::SpatialLinesDataFrame(route, df)
   route

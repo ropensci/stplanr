@@ -45,14 +45,17 @@ plot(flowlines_84)
 # set cyclestreets api key: see http://www.cyclestreets.net/api/
 cckey <- "f3fe3d078ac34737" # example key (not real)
 # plot save the routes
+
 routes_fast <- gLines2CyclePath(flowlines_84)
 routes_slow <- gLines2CyclePath(flowlines_84, "quietest")
 }
-data(routes_fast, routes_slow) # load routes
+if(!exists("routes_fast")){
+  data(routes_fast, routes_slow) # load routes
+}
 lines(routes_fast, col = "red")
 lines(routes_slow, col = "green")
 # Plot for a single line to compare 'fastest' and 'quietest' route
-n = 19
+n = 20
 plot(flowlines_84[n,])
 lines(routes_fast[n,], col = "red")
 lines(routes_slow[n,], col = "green")
