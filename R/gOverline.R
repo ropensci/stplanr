@@ -79,7 +79,8 @@ lineLabels <- function(sldf, attrib){
 #' and converts these into a single route network.
 #'
 #' @param sldf A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to a named variable in \code{sldf}
+#' @param attrib A text string corresponding to the variable in \code{sldf$} on
+#' which the function will operate.
 #' @param fun The function used to aggregate the grouped values (default: sum)
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #'
