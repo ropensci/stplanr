@@ -9,7 +9,8 @@ gOverline(sldf, attrib, fun = sum, na.zero = FALSE)
 \arguments{
 \item{sldf}{A SpatialLinesDataFrame with overlapping elements}
 
-\item{attrib}{A text string corresponding to a named variable in \code{sldf}}
+\item{attrib}{A text string corresponding to the variable in \code{sldf$} on
+which the function will operate.}
 
 \item{fun}{The function used to aggregate the grouped values (default: sum)}
 

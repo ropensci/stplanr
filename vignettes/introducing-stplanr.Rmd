@@ -62,7 +62,7 @@ geographical space, it contains no explicitly geographical
 information. Instead, the coordinates of the origins and
 destinations are linked to a separate geographical dataset
 which also must be loaded to analyse the flows. This is a
-common problem solved by the function `gFlow2Lines`.
+common problem solved by the function `od2line`.
 The geographical data is a set of points representing centroids
 of the origin and destinations, saved as a
 `SpatialPointsDataFrame`. Geographical data in R is best
@@ -76,12 +76,12 @@ data("cents", package = "stplanr")
 as.data.frame(cents[1:3,-c(3,4)])
 ```
 
-We use `gFlow2Lines` to combine `flow` and `cents`, to join
+We use `od2line` to combine `flow` and `cents`, to join
 the former to the latter. We will visualise the
 `l` object created below in the next section. 
 
 ```{r}
-l <- gFlow2line(flow = flow, zones = cents)
+l <- od2line(flow = flow, zones = cents)
 ```
 
 The data is now in a form that is much easier to analyse. We can plot the
@@ -148,7 +148,8 @@ analysis.
 `route_graphhopper()` extracts geographical and other data from the graphhopper
 routing engine to allocate flows to the travel network.
 
-```{r}
+```{r, eval=FALSE}
+# ggmap dependency may be down
 if(!offline & !Sys.getenv("GRAPHHOPPER") == ""){
   ny2oaxaca1 <- route_graphhopper("New York", "Oaxaca", vehicle = "bike")
   ny2oaxaca2 <- route_graphhopper("New York", "Oaxaca", vehicle = "car")
@@ -195,7 +196,7 @@ are clearly allocated to the transport network
 (the package 'leaflet' was used to generate the basemap).
 
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
 if(offline){
   print("Figure not shown: requires internet connection")
 } else {

@@ -1,11 +1,11 @@
-context("Test the gFlow2Line function")
+context("Test the od2line function")
 
 test_that(
-  desc = "gFlow2Line generates SpatialLinesDataFrame output",
+  desc = "od2line generates SpatialLinesDataFrame output",
   code = {
     data("flow", package = "stplanr")
     data("cents", package = "stplanr")
-    l <- gFlow2line(flow = flow, zones = cents)
+    l <- od2line(flow = flow, zones = cents)
     data("flowlines")
     expect_identical(object = l, expected = flowlines)
   })

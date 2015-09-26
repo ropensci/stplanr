@@ -25,7 +25,7 @@ flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
 use_data(flow, overwrite = T)
 
 # Convert flows to SpatialLinesDataFrame
-flowlines <- gFlow2line(flow = flow, zones = cents)
+flowlines <- od2line(flow = flow, zones = cents)
 use_data(flowlines)
 
 # Convert flows to routes

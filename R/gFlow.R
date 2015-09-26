@@ -20,11 +20,11 @@
 #' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
 #' data(cents) # load centroids data
-#' newflowlines <- gFlow2line(flow = flow, zones = cents)
+#' newflowlines <- od2line(flow = flow, zones = cents)
 #' plot(cents)
 #' lines(newflowlines)
 #' }
-gFlow2line <- function(flow, zones){
+od2line <- function(flow, zones){
   l <- vector("list", nrow(flow))
   for(i in 1:nrow(flow)){
     from <- zones@data[,1] %in% flow[i, 1]
@@ -37,6 +37,31 @@ gFlow2line <- function(flow, zones){
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
   proj4string(l) <- proj4string(zones)
   l
+}
+
+#' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
+#'
+#'
+#' @param l A SpatialLinesDataFrame
+#'
+#' @export
+#'
+#' @examples
+#' library(rgdal)
+#' data(flowlines) # load demo flowlines dataset
+#' ldf <- line2df(flowlines)
+line2df <- function(l){
+  l_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
+  function(y) slot(y, "coords")))
+  from_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[1,])
+  to_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[2,])
+  from_mat <- do.call(rbind, from_list)
+  to_mat <- do.call(rbind, to_list)
+
+  output <- as.data.frame(cbind(from_mat, to_mat))
+  names(output) <- c("fx", "fy", "tx", "ty")
+
+  output
 }
 
 #' Convert straight SpatialLinesDataFrame from flow data into routes in the UK
@@ -62,7 +87,7 @@ gFlow2line <- function(flow, zones){
 #' or "quietest"
 #'
 #' @param l A SpatialLinesDataFrame object composed of straight lines. l may be
-#' created using the \code{\link{gFlow2line}} function.
+#' created using \code{\link{od2line}}.
 #'
 #' @inheritParams route_cyclestreet
 #'
@@ -142,4 +167,62 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 
   output
 
+}
+
+#' Convert straight SpatialLinesDataFrame from flow data into routes
+#'
+#' @section Details:
+#'
+#' See \code{\link{route_cyclestreet}} and other route functions for details
+
+#' @param l A SpatialLinesDataFrame or data.frame of coordinates produced by
+#' \code{\link{line2df}}
+#'
+#' @inheritParams route_cyclestreet
+#'
+#' @export
+#'
+#' @examples
+#' library(rgdal)
+#' data(flowlines) # load demo flowlines dataset
+#' flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
+#' fl <- flowlines_84[rgeos::gLength(flowlines_84, byid = T) > 0,]
+#' plot(fl)
+#'
+#' \dontrun{
+#'
+#' routes_f <- line2route(fl)
+#' routes_s <- line2route(fl, plan = "quietest", silent = T)
+#' }
+#' if(!exists("routes_f")){
+#'   data(routes_fast, routes_s) # load routes
+#' }
+#' lines(routes_f, col = "red")
+#' lines(routes_s, col = "green")
+#' # Plot for a single line to compare 'fastest' and 'quietest' route
+#' n = 18
+#' plot(fl[n,])
+#' lines(routes_f[n,], col = "red")
+#' lines(routes_s[n,], col = "green")
+
+line2route <- function(ldf, ...){
+  if(class(ldf) == "SpatialLinesDataFrame") ldf <- line2df(ldf)
+  rf <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4])
+
+  for(i in 2:nrow(ldf)){
+    tryCatch({
+      # if (i==7) stop("Urgh, the iphone is in the blender !") # testing tryCatch
+      rfnew <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+      row.names(rfnew) <- as.character(i)
+      rf <- maptools::spRbind(rf, rfnew)
+    }, error = function(e){print(paste0("Fail for line number ", i))})
+
+    # Status bar
+    perc_temp <- i %% round(nrow(ldf) / 10)
+    if(!is.na(perc_temp) & perc_temp == 0){
+      print(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+        " distances calculated")) # print % of distances calculated
+    }
+  }
+  rf
 }

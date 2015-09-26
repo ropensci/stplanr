@@ -28,7 +28,7 @@ identify where bicycle paths are most urgently needed.
 Square data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of flows. **stplanr** facilitates this with 
-`gFlow2Line()`, which takes flow and geographical data as inputs and
+`od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 ```{r, results='hide', message=FALSE}
@@ -46,7 +46,7 @@ cents[1:3,] # points representing origins and destinations
 These datasets can be combined as follows:
 
 ```{r plot1}
-travel_network <- gFlow2line(flow = flow, zones = cents)
+travel_network <- od2line(flow = flow, zones = cents)
 w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```

@@ -9,7 +9,7 @@ gLines2CyclePath(l, plan = "fastest")
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame object composed of straight lines. l may be
-created using the \code{\link{gFlow2line}} function.}
+created using \code{\link{od2line}}.}
 
 \item{plan}{A text string. Must be either "balanced", "fastest" (default)
 or "quietest"}

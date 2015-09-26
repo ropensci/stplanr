@@ -52,10 +52,10 @@ cents[1:3,] # points representing origins and destinations
 ```
 
 ```
-##              coordinates  geo_code  MSOA11NM percent_fem avslope
-## 1708 (-1.54646, 53.8095) E02002384 Leeds 055      0.4587   2.857
-## 1712 (-1.51186, 53.8116) E02002382 Leeds 053      0.4381   2.285
-## 1805  (-1.5242, 53.8041) E02002393 Leeds 064      0.4088   2.362
+##                coordinates  geo_code  MSOA11NM percent_fem  avslope
+## 1708 (-1.546463, 53.80952) E02002384 Leeds 055    0.458721 2.856563
+## 1712 (-1.511861, 53.81161) E02002382 Leeds 053    0.438144 2.284782
+## 1805  (-1.524205, 53.8041) E02002393 Leeds 064    0.408759 2.361707
 ```
 
 These datasets can be combined as follows:
@@ -102,6 +102,7 @@ lsf.str("package:stplanr", all = TRUE)
 ```
 ## age_recat : function (a)  
 ## age_recat2 : function (a)  
+## bbox_scale : function (bb, scale_factor)  
 ## dd_logcub : function (x, a, b1, b2, b3)  
 ## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
 ## dd_logsqrt : function (x, a, b1, b2)  
@@ -115,13 +116,13 @@ lsf.str("package:stplanr", all = TRUE)
 ## gOverline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
 ## gSection : function (sl)  
 ## islines : function (g1, g2)  
-## lineLabels : function (sldf, attrib)
+## lineLabels : function (sldf, attrib)  
+## route_cyclestreet : function (from = "M3 4EE", to = "M1 4BT", plan = "fastest")  
+## route_graphhopper : function (from, to, vehicle = "bike")
 ```
 
 Any questions?
 
 Email me on rob00 x at gmail dot com!
-
-
 
 
