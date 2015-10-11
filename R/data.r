@@ -80,7 +80,7 @@ NULL
 #' use_data(flow, overwrite = T)
 #'
 #' # Convert flows to SpatialLinesDataFrame
-#' flowlines <- gFlow2line(flow = flow, zones = cents)
+#' flowlines <- od2line(flow = flow, zones = cents)
 #' use_data(flowlines)
 #'
 #' # Convert flows to routes
@@ -104,7 +104,7 @@ NULL
 #' @family example flow data
 #'
 #' Flow data after conversion to a spatial format
-#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#' with \code{\link{od2line}} (see \code{\link{flow}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -122,7 +122,7 @@ NULL
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between \code{\link{cents}}
 #' objects
-#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#' with \code{\link{od2line}} (see \code{\link{flow}}).
 #'
 #' @docType data
 #' @keywords datasets
@@ -138,7 +138,7 @@ NULL
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between \code{\link{cents}()}
 #' objects
-#' with \code{\link{gFlow2line}} (see \code{\link{flow}}).
+#' with \code{\link{od2line}} (see \code{\link{flow}}).
 #'
 #' @docType data
 #' @keywords datasets

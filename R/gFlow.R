@@ -83,6 +83,18 @@ line2df <- function(l){
 #' cckey <- Sys.getenv('CYCLESTREET')
 #' }
 #'
+#' or on Linux
+#'
+#' \code{
+#' line_to_add <- "export CYCLESTREET='f3fe3d078ac34737'"
+#' write(line_to_add, "~/.bashrc", append = TRUE)
+#' }
+#'
+#' Then restart so the envrionment variable is set and can be viewed with
+#' \code{
+#' $CYCLESTREET
+#' }
+#'
 #' @param plan A text string. Must be either "balanced", "fastest" (default)
 #' or "quietest"
 #'
@@ -184,9 +196,11 @@ gLines2CyclePath <- function(l, plan = "fastest"){
 #'
 #' @examples
 #' library(rgdal)
+#' library(sp)
 #' data(flowlines) # load demo flowlines dataset
 #' flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
-#' fl <- flowlines_84[rgeos::gLength(flowlines_84, byid = T) > 0,]
+#' sel <- rgeos::gLength(flowlines_84, byid = TRUE) > 0
+#' fl <- flowlines_84[sel,]
 #' plot(fl)
 #'
 #' \dontrun{
@@ -226,3 +240,4 @@ line2route <- function(ldf, ...){
   }
   rf
 }
+

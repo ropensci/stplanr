@@ -27,5 +27,6 @@ Suggests:
     osmar,
     knitr,
     testthat,
-    ggmap
+    ggmap,
+    RCurl
 VignetteBuilder: knitr

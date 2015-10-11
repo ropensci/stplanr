@@ -20,9 +20,11 @@ See \code{\link{route_cyclestreet}} and other route functions for details
 }
 \examples{
 library(rgdal)
+library(sp)
 data(flowlines) # load demo flowlines dataset
 flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
-fl <- flowlines_84[rgeos::gLength(flowlines_84, byid = T) > 0,]
+sel <- rgeos::gLength(flowlines_84, byid = TRUE) > 0
+fl <- flowlines_84[sel,]
 plot(fl)
 
 \dontrun{
