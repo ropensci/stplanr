@@ -83,6 +83,18 @@ line2df <- function(l){
 #' cckey <- Sys.getenv('CYCLESTREET')
 #' }
 #'
+#' or on Linux
+#'
+#' \code{
+#' line_to_add <- "export CYCLESTREET='f3fe3d078ac34737'"
+#' write(line_to_add, "~/.bashrc", append = TRUE)
+#' }
+#'
+#' Then restart so the envrionment variable is set and can be viewed with
+#' \code{
+#' $CYCLESTREET
+#' }
+#'
 #' @param plan A text string. Must be either "balanced", "fastest" (default)
 #' or "quietest"
 #'
