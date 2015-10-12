@@ -29,8 +29,8 @@ flowlines <- od2line(flow = flow, zones = cents)
 use_data(flowlines)
 
 # Convert flows to routes
-routes_fast <- gLines2CyclePath(l = flowlines, plan = "fastest")
-routes_slow <- gLines2CyclePath(l = flowlines, plan = "quietest")
+routes_fast <- line2route(l = flowlines, plan = "fastest")
+routes_slow <- line2route(l = flowlines, plan = "quietest")
 
 use_data(routes_fast)
 use_data(routes_slow)
