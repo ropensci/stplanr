@@ -71,7 +71,7 @@ library(stplanr)
 We aim to make this package well-documented to make it easy to use.
 R's internal help functions will help here:
 
-```{r}
+```{r, message=FALSE, results='hide'}
 ?route_cyclestreet # get help on an stplanr function
 if(Sys.info()["sysname"] == "Linux"){
   # On Linux
@@ -83,11 +83,21 @@ if(Sys.info()["sysname"] == "Linux"){
 Sys.setenv(CYCLESTREET = mytoken)
 trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
-# library(tmap)
-# osm_tiles <- read_osm(bb(trip_to_pub, ext=1.5, projection ="longlat"))
-plot(trip_to_pub)
+library(tmap)
+osm_tiles <- read_osm(bb("Herefordshire", ext = 0.6, projection ="longlat"))
+tm_shape(osm_tiles) +
+  tm_raster() +
+  tm_shape(trip_to_pub) +
+  tm_lines(lwd = 3)
+```
+
+The current list of available functions from stplanr is printed by the following
+command:
+
+```{r}
 lsf.str("package:stplanr", all = TRUE)
 ```
+
 
 Any questions?
 

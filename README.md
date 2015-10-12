@@ -77,11 +77,6 @@ a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 example("line2route")
 ```
 
-```
-## Warning in RGEOSMiscFunc(spgeom, byid, "rgeos_length"): Spatial object is
-## not projected; GEOS expects planar coordinates
-```
-
 ![](README_files/figure-html/plot2-1.png) ![](README_files/figure-html/plot2-2.png) 
 
 ## Installation
@@ -102,31 +97,33 @@ R's internal help functions will help here:
 ```r
 ?route_cyclestreet # get help on an stplanr function
 if(Sys.info()["sysname"] == "Linux"){
+  # On Linux
   mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 } else {
+  # Example on Windows
   mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
 }
 Sys.setenv(CYCLESTREET = mytoken)
 trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
-```
-
-```
-## Information from URL : http://www.datasciencetoolkit.org/maps/api/geocode/json?address=Weobley&sensor=false
-## Information from URL : http://www.datasciencetoolkit.org/maps/api/geocode/json?address=Hereford&sensor=false
-```
-
-```
-## [1] "The request sent to cyclestreets.net was: https://api.cyclestreets.net/v2/journey.plan?waypoints=-2.875,52.1596|-2.71482,52.05684&plan=balanced&key=f3fe3d078ac34738"
-```
-
-```r
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
-# library(tmap)
-# osm_tiles <- read_osm(bb(trip_to_pub, ext=1.5, projection ="longlat"))
-plot(trip_to_pub)
+library(tmap)
+osm_tiles <- read_osm(bb("Herefordshire", ext = 0.6, projection ="longlat"))
+tm_shape(osm_tiles) +
+  tm_raster() +
+  tm_shape(trip_to_pub) +
+  tm_lines(lwd = 3)
+```
+
+```
+## Warning in (function (x, shp_nm) : Currect projection of shape trip_to_pub
+## unknown. Long-lat (WGS84) is assumed.
 ```
 
 ![](README_files/figure-html/unnamed-chunk-5-1.png) 
+
+The current list of available functions from stplanr is printed by the following
+command:
+
 
 ```r
 lsf.str("package:stplanr", all = TRUE)
@@ -141,7 +138,6 @@ lsf.str("package:stplanr", all = TRUE)
 ## dd_logsqrt : function (x, a, b1, b2)  
 ## disab_recat : function (a)  
 ## gClip : function (shp, bb)  
-## gLines2CyclePath : function (l, plan = "fastest")  
 ## gMapshape : function (dsn, percent)  
 ## gOnewaygeo : function (x, attrib)  
 ## gOnewayid : function (x, attrib, id1 = names(x)[1], id2 = names(x)[2])  
@@ -156,6 +152,7 @@ lsf.str("package:stplanr", all = TRUE)
 ## route_cyclestreet : function (from, to, plan = "fastest", silent = FALSE)  
 ## route_graphhopper : function (from, to, vehicle = "bike")
 ```
+
 
 Any questions?
 

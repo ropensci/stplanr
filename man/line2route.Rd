@@ -45,6 +45,7 @@ if(!exists("routes_fast")){
   data(routes_fast, routes_slow) # load routes
 }
 
+plot(flowlines)
 lines(routes_fast, col = "red")
 lines(routes_slow, col = "green")
 
