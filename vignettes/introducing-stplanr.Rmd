@@ -82,6 +82,9 @@ the former to the latter. We will visualise the
 
 ```{r}
 l <- od2line(flow = flow, zones = cents)
+
+# remove lines with no length
+l <- l[!l$Area.of.residence == l$Area.of.workplace,]
 ```
 
 The data is now in a form that is much easier to analyse. We can plot the
@@ -125,11 +128,9 @@ offline <- grepl("Error", x)
 
 data("routes_fast")
 data("routes_slow")
-rf <- routes_fast
-rq <- routes_slow
 
 plot(l)
-lines(rf, col = "red")
+lines(routes_fast, col = "red")
 ```
 
 The above code sends requests to CycleStreets.net and saves the results.

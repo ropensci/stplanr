@@ -72,6 +72,8 @@ line2df <- function(l){
 #' @param ldf A SpatialLinesDataFrame or data.frame of coordinates produced by
 #' \code{\link{line2df}}
 #'
+#' @param ... Arguements passed to \code{\link{route_cyclestreet}}
+#'
 #' @inheritParams route_cyclestreet
 #'
 #' @export

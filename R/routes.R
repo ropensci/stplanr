@@ -16,6 +16,8 @@
 #'  \code{length = 2} representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
+#'  @param plan Text strong of either "fastest", "quietest" or "balanced"
+#'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
 #'
 #' @details
