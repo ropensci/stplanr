@@ -47,7 +47,6 @@ od2line <- function(flow, zones){
 #' @export
 #'
 #' @examples
-#' library(rgdal)
 #' data(flowlines) # load demo flowlines dataset
 #' ldf <- line2df(flowlines)
 line2df <- function(l){
@@ -70,7 +69,7 @@ line2df <- function(l){
 #'
 #' See \code{\link{route_cyclestreet}} and other route functions for details
 
-#' @param l A SpatialLinesDataFrame or data.frame of coordinates produced by
+#' @param ldf A SpatialLinesDataFrame or data.frame of coordinates produced by
 #' \code{\link{line2df}}
 #'
 #' @inheritParams route_cyclestreet
@@ -78,20 +77,23 @@ line2df <- function(l){
 #' @export
 #'
 #' @examples
-#' library(rgdal)
+#'
 #' data(flowlines) # load demo flowlines dataset
+#' \dontrun{
+#' # Don't run as requires gdal dependency, can cause issues
+#' library(rgdal)
 #' flowlines <- spTransform(flowlines, CRS("+init=epsg:27700"))
 #' flowlines <- flowlines[rgeos::gLength(flowlines, byid = TRUE) > 0,]
 #' flowlines <- spTransform(flowlines, CRS("+init=epsg:4326"))
 #' plot(flowlines)
 #'
-#' \dontrun{
 #' cckey <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 #' Sys.setenv(CYCLESTREET = cckey)
 #' routes_fast <- line2route(l = flowlines, plan = "fastest")
 #' routes_slow <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
 #' }
 #'
+#' flowlines <- flowlines[flowlines$Area.of.residence != flowlines$Area.of.workplace,]
 #' # Save the route data (uncomment if this changes)
 #' # devtools::use_data(routes_fast, overwrite = TRUE)
 #' # devtools::use_data(routes_slow, overwrite = TRUE)
@@ -105,7 +107,7 @@ line2df <- function(l){
 #'
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
 #' n = 18
-#' plot(fl[n,])
+#' plot(flowlines[n,])
 #' lines(routes_fast[n,], col = "red")
 #' lines(routes_slow[n,], col = "green")
 
