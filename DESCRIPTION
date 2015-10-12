@@ -21,7 +21,8 @@ Imports:
     rgdal,
     rgeos,
     dplyr,
-    XML
+    XML,
+    openxlsx
 Suggests:
     GISTools,
     osmar,
