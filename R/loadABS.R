@@ -32,7 +32,6 @@ readTableBuilder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE) {
     tbfile <- dataset
   } else if (is.character(dataset)) {
     if (filetype=="xlsx") {
-      require(openxlsx)
       tbfile <- openxlsx::readWorkbook(dataset,sheet = sheet, colNames = FALSE)
     } else {
       tbfile <- read.csv(dataset,header=FALSE)
