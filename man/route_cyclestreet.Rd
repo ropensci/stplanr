@@ -15,6 +15,8 @@ route_cyclestreet(from, to, plan = "fastest", silent = FALSE)
  \code{length = 2} representing latitude and longitude) representing a point
  on Earth. This represents the destination of the trip.}
 
+\item{plan}{Text strong of either "fastest", "quietest" or "balanced"}
+
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 }
 \description{
@@ -57,8 +59,8 @@ cckey <- Sys.getenv('CYCLESTREET')
 or on Linux
 
 \code{
-sudo echo "export CYCLESTREET='f3fe3d078ac34737'" >>
-write(line_to_add, "~/.bashrc", append = TRUE)
+sudo -i # become route
+echo "export CYCLESTREET='f3fe3d078ac34737'" >> /etc/environment
 }
 
 Then restart so the envrionment variable is set and can be viewed with

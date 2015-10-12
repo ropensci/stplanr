@@ -7,8 +7,10 @@
 line2route(ldf, ...)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame or data.frame of coordinates produced by
+\item{ldf}{A SpatialLinesDataFrame or data.frame of coordinates produced by
 \code{\link{line2df}}}
+
+\item{...}{Arguements passed to \code{\link{route_cyclestreet}}}
 }
 \description{
 Convert straight SpatialLinesDataFrame from flow data into routes
@@ -19,28 +21,37 @@ Convert straight SpatialLinesDataFrame from flow data into routes
 See \code{\link{route_cyclestreet}} and other route functions for details
 }
 \examples{
-library(rgdal)
-library(sp)
 data(flowlines) # load demo flowlines dataset
-flowlines_84 <- sp::spTransform(flowlines, CRS("+init=epsg:4326"))
-sel <- rgeos::gLength(flowlines_84, byid = TRUE) > 0
-fl <- flowlines_84[sel,]
-plot(fl)
-
 \dontrun{
+# Don't run as requires gdal dependency, can cause issues
+library(rgdal)
+flowlines <- spTransform(flowlines, CRS("+init=epsg:27700"))
+flowlines <- flowlines[rgeos::gLength(flowlines, byid = TRUE) > 0,]
+flowlines <- spTransform(flowlines, CRS("+init=epsg:4326"))
+plot(flowlines)
 
-routes_f <- line2route(fl)
-routes_s <- line2route(fl, plan = "quietest", silent = T)
+cckey <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+Sys.setenv(CYCLESTREET = cckey)
+routes_fast <- line2route(l = flowlines, plan = "fastest")
+routes_slow <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
 }
-if(!exists("routes_f")){
-  data(routes_fast, routes_s) # load routes
+
+flowlines <- flowlines[flowlines$Area.of.residence != flowlines$Area.of.workplace,]
+# Save the route data (uncomment if this changes)
+# devtools::use_data(routes_fast, overwrite = TRUE)
+# devtools::use_data(routes_slow, overwrite = TRUE)
+
+if(!exists("routes_fast")){
+  data(routes_fast, routes_slow) # load routes
 }
-lines(routes_f, col = "red")
-lines(routes_s, col = "green")
+
+lines(routes_fast, col = "red")
+lines(routes_slow, col = "green")
+
 # Plot for a single line to compare 'fastest' and 'quietest' route
 n = 18
-plot(fl[n,])
-lines(routes_f[n,], col = "red")
-lines(routes_s[n,], col = "green")
+plot(flowlines[n,])
+lines(routes_fast[n,], col = "red")
+lines(routes_slow[n,], col = "green")
 }
 
