@@ -24,7 +24,7 @@ identify where bicycle paths are most urgently needed.
 Square data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of flows. **stplanr** facilitates this with 
-`gFlow2Line()`, which takes flow and geographical data as inputs and
+`od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 
@@ -62,7 +62,7 @@ These datasets can be combined as follows:
 
 
 ```r
-travel_network <- gFlow2line(flow = flow, zones = cents)
+travel_network <- od2line(flow = flow, zones = cents)
 w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
@@ -74,7 +74,12 @@ a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 
 
 ```r
-example("gLines2CyclePath")
+example("line2route")
+```
+
+```
+## Warning in RGEOSMiscFunc(spgeom, byid, "rgeos_length"): Spatial object is
+## not projected; GEOS expects planar coordinates
 ```
 
 ![](README_files/figure-html/plot2-1.png) ![](README_files/figure-html/plot2-2.png) 
@@ -84,8 +89,8 @@ example("gLines2CyclePath")
 
 ```r
 # you must have the devtools package (e.g. via install.packages("devtools"))
-library(devtools) 
-install_github("robinlovelace/stplanr")
+devtools::install_github("robinlovelace/stplanr")
+library(stplanr)
 ```
 
 ## Getting help
@@ -95,7 +100,16 @@ R's internal help functions will help here:
 
 
 ```r
-?gLines2CyclePath # get help on an stplanr function
+?route_cyclestreet # get help on an stplanr function
+```
+
+```
+## starting httpd help server ... done
+```
+
+```r
+mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
+Sys.setenv(CYCLESTREET = mytoken)
 lsf.str("package:stplanr", all = TRUE)
 ```
 
@@ -108,7 +122,6 @@ lsf.str("package:stplanr", all = TRUE)
 ## dd_logsqrt : function (x, a, b1, b2)  
 ## disab_recat : function (a)  
 ## gClip : function (shp, bb)  
-## gFlow2line : function (flow, zones)  
 ## gLines2CyclePath : function (l, plan = "fastest")  
 ## gMapshape : function (dsn, percent)  
 ## gOnewaygeo : function (x, attrib)  
@@ -116,8 +129,12 @@ lsf.str("package:stplanr", all = TRUE)
 ## gOverline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
 ## gSection : function (sl)  
 ## islines : function (g1, g2)  
+## line2df : function (l)  
+## line2route : function (ldf, ...)  
 ## lineLabels : function (sldf, attrib)  
-## route_cyclestreet : function (from = "M3 4EE", to = "M1 4BT", plan = "fastest")  
+## od2line : function (flow, zones)  
+## readTableBuilder : function (dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)  
+## route_cyclestreet : function (from, to, plan = "fastest", silent = FALSE)  
 ## route_graphhopper : function (from, to, vehicle = "bike")
 ```
 

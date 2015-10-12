@@ -113,7 +113,7 @@ route-allocation.
 
 ### CycleStreets.net
 
-The `gLines2Cyclepath` function allocates straight line
+The `line2route` function allocates straight line
 routes to the transport network using the
 [CycleStreets.net API](http://www.cyclestreets.net/api/) (you must request
 an API key for the function to work):
@@ -133,7 +133,7 @@ lines(rf, col = "red")
 ```
 
 The above code sends requests to CycleStreets.net and saves the results.
-By changing the `plan` argument of `gLines2Cyclepath()`, we can download
+By changing the `plan` argument of `line2route`, we can download
 routes that are more suitable for people prioritising speed, quietness or
 a balance between speed and quietness. The plots of `l` and `rf` illustrate
 how the spatial classes that the flow data are converted to are easy to

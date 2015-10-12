@@ -55,15 +55,15 @@ The package can also allocate flows to the travel network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 
 ```{r plot2, results='hide', message=FALSE}
-example("gLines2CyclePath")
+example("line2route")
 ```
 
 ## Installation
 
 ```{r, eval=FALSE}
 # you must have the devtools package (e.g. via install.packages("devtools"))
-library(devtools) 
-install_github("robinlovelace/stplanr")
+devtools::install_github("robinlovelace/stplanr")
+library(stplanr)
 ```
 
 ## Getting help
@@ -72,7 +72,14 @@ We aim to make this package well-documented to make it easy to use.
 R's internal help functions will help here:
 
 ```{r}
-?gLines2CyclePath # get help on an stplanr function
+?route_cyclestreet # get help on an stplanr function
+mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
+Sys.setenv(CYCLESTREET = mytoken)
+trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
+# devtools::install_github("mtennekes/tmap", subdir = "pkg")
+# library(tmap)
+# osm_tiles <- read_osm(bb(trip_to_pub, ext=1.5, projection ="longlat"))
+plot(trip_to_pub)
 lsf.str("package:stplanr", all = TRUE)
 ```
 

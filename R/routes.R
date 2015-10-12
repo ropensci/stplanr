@@ -30,11 +30,40 @@
 #' character strings (instead of lon/lat pairs), Google's
 #' geo-coding services are used via \code{ggmap::geocode()}.
 #'
-#' @inheritParams gLines2CyclePath
+#' You need to have an api key for this code to run.
+#' Loading a locally saved copy of the api key text string
+#' before running the function, for example, will ensure it
+#' is available on any computer:
+#'
+#' \code{
+#' # mytoken <- "f3fe3d078ac34737" # warning: not a real key - keep yours private
+#' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+#' Sys.setenv(CYCLESTREET = mytoken)
+#' }
+#'
+#'
+#'
+#' \code{
+#' cckey <- Sys.getenv('CYCLESTREET')
+#' }
+#'
+#' or on Linux
+#'
+#' \code{
+#' sudo echo "export CYCLESTREET='f3fe3d078ac34737'" >>
+#' write(line_to_add, "~/.bashrc", append = TRUE)
+#' }
+#'
+#' Then restart so the envrionment variable is set and can be viewed with
+#' \code{
+#' $CYCLESTREET
+#' }
+#'
+#' @inheritParams line2route
 #'
 #' @export
 #'
-#' @seealso gLines2CyclePath
+#' @seealso line2route
 #'
 #' @examples
 #'
