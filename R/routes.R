@@ -146,7 +146,9 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 #' \url{https://graphhopper.com/#directions-api}.
 #' It is assumed that you have set your api key as a system environment
 #' for security reasons (so you avoid typing the API key in your code).
-#' Do this with \code{GRAPHHOPPER}, e.g. by typing \code{Sys.setenv(GRAPHHOPPER = 'eccbf612-214e-437d-8b73-06bdf9e68731')}. (Note: key not real, use your own key.)
+#' Do this with \code{GRAPHHOPPER}, e.g. by typing \code{
+#' Sys.setenv(GRAPHHOPPER = 'eccbf612-214e-437d-8b73-06bdf9e6877d')
+#' }. (Note: key not real, use your own key.)
 #'
 #' The function returns a SpatialLinesDataFrame object.
 #' See \url{https://github.com/graphhopper} for more information.
@@ -162,7 +164,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 #'
 #' \code{obj <- jsonlite::fromJSON(url)}
 #'
-#' Where \code{url} is an example api request from \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
+#' Where \code{url} is an example api request from
+#'  \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
 #'
 #' @inheritParams route_cyclestreet
 #'
