@@ -31,9 +31,4 @@ islines(r2, r3)
 
 }
 }
-\seealso{
-Other Functions for manipulating flow data: \code{\link{gOnewaygeo}};
-  \code{\link{gOnewayid}}; \code{\link{gOverline}};
-  \code{\link{gSection}}; \code{\link{lineLabels}}
-}
 

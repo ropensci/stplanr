@@ -49,9 +49,4 @@ nrow(singlelines)
 sl2 <- gOnewaygeo(flowlines, attrib = 3:14)
 # Demonstrate the results from gOnewayid and gOnewaygeo are identical
 }
-\seealso{
-Other Functions for manipulating flow data: \code{\link{gOnewaygeo}};
-  \code{\link{gOverline}}; \code{\link{gSection}};
-  \code{\link{islines}}; \code{\link{lineLabels}}
-}
 

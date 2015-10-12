@@ -42,9 +42,4 @@ lines(singlelines) # check we've got the right lines
 sum(singlelines$All)
 nrow(singlelines)
 }
-\seealso{
-Other Functions for manipulating flow data: \code{\link{gOnewayid}};
-  \code{\link{gOverline}}; \code{\link{gSection}};
-  \code{\link{islines}}; \code{\link{lineLabels}}
-}
 

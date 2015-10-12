@@ -19,9 +19,4 @@ graphics.
 \author{
 Barry Rowlingson
 }
-\seealso{
-Other Functions for manipulating flow data: \code{\link{gOnewaygeo}};
-  \code{\link{gOnewayid}}; \code{\link{gOverline}};
-  \code{\link{gSection}}; \code{\link{islines}}
-}
 
