@@ -15,9 +15,6 @@ route_cyclestreet(from, to, plan = "fastest", silent = FALSE)
  \code{length = 2} representing latitude and longitude) representing a point
  on Earth. This represents the destination of the trip.}
 
-\item{plan}{A text string. Must be either "balanced", "fastest" (default)
-or "quietest"}
-
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 }
 \description{
@@ -39,6 +36,35 @@ and origins and destinations within the UK to run.
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
 geo-coding services are used via \code{ggmap::geocode()}.
+
+You need to have an api key for this code to run.
+Loading a locally saved copy of the api key text string
+before running the function, for example, will ensure it
+is available on any computer:
+
+\code{
+# mytoken <- "f3fe3d078ac34737" # warning: not a real key - keep yours private
+mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+Sys.setenv(CYCLESTREET = mytoken)
+}
+
+
+
+\code{
+cckey <- Sys.getenv('CYCLESTREET')
+}
+
+or on Linux
+
+\code{
+sudo echo "export CYCLESTREET='f3fe3d078ac34737'" >>
+write(line_to_add, "~/.bashrc", append = TRUE)
+}
+
+Then restart so the envrionment variable is set and can be viewed with
+\code{
+$CYCLESTREET
+}
 }
 \examples{
 \dontrun{
@@ -70,6 +96,6 @@ route_cyclestreet(p1, p2, "fastest")
 }
 }
 \seealso{
-gLines2CyclePath
+line2route
 }
 

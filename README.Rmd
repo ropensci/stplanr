@@ -73,7 +73,13 @@ R's internal help functions will help here:
 
 ```{r}
 ?route_cyclestreet # get help on an stplanr function
-mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
+if(Sys.info()["sysname"] == "Linux"){
+  # On Linux
+  mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+} else {
+  # Example on Windows
+  mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
+}
 Sys.setenv(CYCLESTREET = mytoken)
 trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")

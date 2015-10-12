@@ -101,15 +101,34 @@ R's internal help functions will help here:
 
 ```r
 ?route_cyclestreet # get help on an stplanr function
+if(Sys.info()["sysname"] == "Linux"){
+  mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
+} else {
+  mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
+}
+Sys.setenv(CYCLESTREET = mytoken)
+trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
 ```
 
 ```
-## starting httpd help server ... done
+## Information from URL : http://www.datasciencetoolkit.org/maps/api/geocode/json?address=Weobley&sensor=false
+## Information from URL : http://www.datasciencetoolkit.org/maps/api/geocode/json?address=Hereford&sensor=false
+```
+
+```
+## [1] "The request sent to cyclestreets.net was: https://api.cyclestreets.net/v2/journey.plan?waypoints=-2.875,52.1596|-2.71482,52.05684&plan=balanced&key=f3fe3d078ac34738"
 ```
 
 ```r
-mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
-Sys.setenv(CYCLESTREET = mytoken)
+# devtools::install_github("mtennekes/tmap", subdir = "pkg")
+# library(tmap)
+# osm_tiles <- read_osm(bb(trip_to_pub, ext=1.5, projection ="longlat"))
+plot(trip_to_pub)
+```
+
+![](README_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
 lsf.str("package:stplanr", all = TRUE)
 ```
 
