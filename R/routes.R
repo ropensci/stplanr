@@ -50,8 +50,8 @@
 #' or on Linux
 #'
 #' \code{
-#' sudo echo "export CYCLESTREET='f3fe3d078ac34737'" >>
-#' write(line_to_add, "~/.bashrc", append = TRUE)
+#' sudo -i # become route
+#' echo "export CYCLESTREET='f3fe3d078ac34737'" >> /etc/environment
 #' }
 #'
 #' Then restart so the envrionment variable is set and can be viewed with
