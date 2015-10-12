@@ -6,7 +6,6 @@
 #'
 #' @param g1 A SpatialLinesDataFrame
 #' @param g2 A SpatialLinesDataFrame
-#' @family Functions for manipulating flow data
 #' @export
 #'
 #' @examples \dontrun{
@@ -35,7 +34,6 @@ islines <- function(g1, g2){
 #'
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
-#' @family Functions for manipulating flow data
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
@@ -64,7 +62,6 @@ gSection <- function(sl){
 #'
 #' @author Barry Rowlingson
 #'
-#' @family Functions for manipulating flow data
 #' @export
 lineLabels <- function(sldf, attrib){
   text(sp::coordinates(
@@ -90,7 +87,6 @@ lineLabels <- function(sldf, attrib){
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
-#' @family Functions for manipulating flow data
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
@@ -167,7 +163,6 @@ gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 #' @return \code{gOnewaygeo} outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included
-#' @family Functions for manipulating flow data
 #' @export
 #' @examples
 #' data("flowlines")
@@ -231,7 +226,6 @@ gOnewaygeo <- function(x, attrib){
 #' @return \code{gOnewayid} outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included.
-#' @family Functions for manipulating flow data
 #' @export
 #' @examples
 #' data("flowlines")
