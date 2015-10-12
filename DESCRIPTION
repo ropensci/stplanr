@@ -22,12 +22,12 @@ Imports:
     rgeos,
     dplyr,
     XML,
+    ggmap,
     openxlsx
 Suggests:
     GISTools,
     osmar,
     knitr,
     testthat,
-    ggmap,
     RCurl
 VignetteBuilder: knitr
