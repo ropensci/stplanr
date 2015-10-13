@@ -44,7 +44,7 @@ NULL
 
 #' data frame of commuter flows
 #'
-#' @family example flow data
+# @family example flow data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see \code{\link{cents}}).
@@ -101,7 +101,7 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows
 #'
-#' @family example flow data
+# @family example flow data
 #'
 #' Flow data after conversion to a spatial format
 #' with \code{\link{od2line}} (see \code{\link{flow}}).
@@ -117,7 +117,7 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
-#' @family example flow data
+# @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between \code{\link{cents}}
@@ -133,7 +133,7 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
-#' @family example flow data
+# @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between \code{\link{cents}()}

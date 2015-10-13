@@ -9,11 +9,10 @@
 data(routes_fast)
 }
 \description{
-SpatialLinesDataFrame of commuter flows on the travel network
-}
-\seealso{
-Other res: \code{\link{flowlines}}; \code{\link{flow}};
-  \code{\link{routes_slow}}
+Simulated travel route allocated to the transport network
+representing the 'fastest' between \code{\link{cents}}
+objects
+with \code{\link{od2line}} (see \code{\link{flow}}).
 }
 \keyword{datasets}
 

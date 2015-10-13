@@ -1,7 +1,11 @@
 language: r
 sudo: true
 
+before_install:
+  - sudo apt-get install libgdal-dev libproj-dev libgeos-dev
+
 r_binary_packages:
+  - colorspace
   - rgdal
 
 # r_packages:
