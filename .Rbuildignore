@@ -7,3 +7,4 @@ log-latest
 ^cran-comments\.md$
 .travis.yml
 ^revdep$
+^CONDUCT\.md$

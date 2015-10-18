@@ -130,6 +130,9 @@ command:
 lsf.str("package:stplanr", all = TRUE)
 ```
 
+This project is released with a [Contributor Code of Conduct](CONDUCT.md).
+By participating in this project you agree to abide by its terms.
+
 Please report issues, feature requests and questions to the
 [github issue tracker](https://github.com/robinlovelace/stplanr/issues).
 
