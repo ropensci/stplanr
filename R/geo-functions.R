@@ -70,15 +70,25 @@ gClip <- function(shp, bb){
   }
   clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
   if(grepl("DataFrame", class(shp))){
-    geodata <- data.frame(id = row.names(clipped))
+    if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
+      geodata <- data.frame(id = row.names(clipped@lineobj))
+    }
+    else {
+      geodata <- data.frame(id = row.names(clipped))
+    }
     joindata <- cbind(id = row.names(shp), shp@data)
     geodata <- dplyr::left_join(geodata, joindata)
+    row.names(geodata) <- geodata$id
     #if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
     if(grepl("SpatialPolygons", class(shp))){
-      #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values) 
-      clipped <- SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped),], "data.frame"))
+      #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
+      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped),], "data.frame"))
+    } else if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
+      clipped <- sp::SpatialLinesDataFrame(clipped@lineobj, geodata)
+    } else if(grepl("SpatialLines", class(shp))) {
+      clipped <- sp::SpatialLinesDataFrame(clipped, geodata)
     } else { #assumes the data is a SpatialPointsDataFrame
-    clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
+      clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
     }
   }
   clipped
