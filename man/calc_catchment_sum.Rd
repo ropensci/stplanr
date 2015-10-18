@@ -6,7 +6,7 @@
 \usage{
 calc_catchment_sum(polygonlayer, targetlayer, calccols, distance = 500,
   projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
-  retainAreaProportion = FALSE)
+  retainAreaProportion = FALSE, dissolve = FALSE)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -44,7 +44,7 @@ original area within the catchment area (Default = FALSE).}
 
 \item{dissolve}{Boolean value. If TRUE collapses the underlying zones
 within the catchment area into a single region with statistics for the
-whole catchment area.}
+whole catchment area. Default is FALSE.}
 }
 \description{
 Calculate summary statistics for catchment area.
@@ -65,8 +65,17 @@ calc_catchment_sum(
    targetlayer = testcycleway,
    calccols = c('Total'),
    distance = 800,
-   projection = 'austalbers'
+   projection = 'austalbers',
+   dissolve = FALSE
 )
+
+calc_catchment_sum(
+polygonlayer = sa1income,
+targetlayer = testcycleway,
+calccols = c('Total'),
+distance = 800,
+projection = 'austalbers',
+dissolve = TRUE)
 }
 }
 

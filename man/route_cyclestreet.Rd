@@ -81,7 +81,7 @@ plot(rq_hfd)
 # Plan a 'balanced' route from Pedaller's Arms in Leeds
 to the University of Leeds
 
-rb_pa <- route_cyclestreet(from = "Pedaller's Arms, Leeds", to = "University of Leeds", plan = "balanced")
+rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
 
 library(leaflet) # requires the leaflet CRAN package
 # display the route on an interactive map
