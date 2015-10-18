@@ -15,7 +15,6 @@
 #' representing origins and destinations of travel flows.
 #' @references
 #' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
-#' @import sp
 #' @export
 #' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
@@ -31,7 +30,7 @@ od2line <- function(flow, zones){
     to <- zones@data[,1] %in% flow[i, 2]
     x <- sp::coordinates(zones[from, ])
     y <- sp::coordinates(zones[to, ])
-    l[[i]] <- sp::Lines(list(Line(rbind(x, y))), as.character(i))
+    l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)

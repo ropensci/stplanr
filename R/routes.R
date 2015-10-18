@@ -124,7 +124,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 
   obj <- jsonlite::fromJSON(request)
 
-  route <- SpatialLines(list(Lines(list(Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
+  route <- SpatialLines(list(Lines(list(sp::Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
 
   df <- data.frame(
     plan = obj$features[3,]$properties$plan,
@@ -215,7 +215,7 @@ route_graphhopper <- function(from, to, vehicle = "bike"){
 
   obj <- jsonlite::fromJSON(request)
 
-  route <- SpatialLines(list(Lines(list(Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
+  route <- SpatialLines(list(Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
 
