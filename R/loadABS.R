@@ -11,7 +11,11 @@
 #' TableBuilder or a character string containing the path of the
 #' unzipped TableBuilder file.
 #' @param filetype A character string containing the filetype. Valid values
-#' are 'csv' and 'xlsx' (default = 'csv'). Not used if dataset is a dataframe.
+#' are 'csv', 'legacycsv' and 'xlsx' (default = 'csv'). Required even when
+#' dataset is a dataframe. Use 'legacycsv' for csv files derived from earlier
+#' versions of TableBuilder for which csv outputs were csv versions of the
+#' xlsx files. Current csv output from TableBuilder follow a more standard
+#' csv format.
 #' @param sheet An integer value containing the index of the sheet in the
 #' xlsx file (default = 1).
 #' @param removeTotal A boolean value. If TRUE removes the rows and columns
@@ -19,12 +23,12 @@
 #' @import openxlsx
 #' @export
 #' @examples \dontrun{
-#' readTableBuilder('employmentSLA.csv')
-#' readTableBuilder('employmentSLA.xlsx',filetype='xlsx',sheet=1,removeTotal=TRUE)
-#' employment <- read.csv('employmentSLA.csv')
-#' readTableBuilder(employment)
+#' read_table_builder('SA1Population.csv')
+#' read_table_builder('SA1Population.xlsx',filetype='xlsx',sheet=1,removeTotal=TRUE)
+#' sa1pop <- read.csv('SA1Population.csv')
+#' read_table_builder(sa1pop)
 #' }
-readTableBuilder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE) {
+read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE) {
   if (missing(dataset)) {
     stop("Dataset is missing")
   }
@@ -42,28 +46,39 @@ readTableBuilder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE) {
   if (is.null(tbfile) == TRUE) {
     stop("File could not be loaded")
   } else {
-    tbfile[,1] <- NULL
-    tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)),]
-    valuecols <- which(!is.na(tbfile[1,]))
-    colnames(tbfile) <- unlist(c(tbfile[2,which(!is.na(tbfile[2,]))],tbfile[1,which(!is.na(tbfile[1,]))]))
-    tbfile <- tbfile[3:nrow(tbfile),]
-    tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)-1),]
-    i <- 1
-    while (sum(is.na(tbfile[,i])) != 0) {
-      tbfile[,i] <- rep(
-        unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
-        each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
-        times=length(tbfile[which(is.na(tbfile[,i])==FALSE),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]))
-      )
-      i <- i + 1
+    if (filetype == "xlsx" | filetype == "legacycsv") {
+      tbfile[,1] <- NULL
+      tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)),]
+      valuecols <- which(!is.na(tbfile[1,]))
+      colnames(tbfile) <- unlist(c(tbfile[2,which(!is.na(tbfile[2,]))],tbfile[1,which(!is.na(tbfile[1,]))]))
+      tbfile <- tbfile[3:nrow(tbfile),]
+      tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)-1),]
+      i <- 1
+      while (sum(is.na(tbfile[,i])) != 0) {
+        tbfile[,i] <- rep(
+          unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
+          each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
+          times=length(tbfile[which(is.na(tbfile[,i])==FALSE),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]))
+        )
+        i <- i + 1
+      }
+      if (removeTotal == TRUE) {
+        tbfile <- tbfile[,which(colnames(tbfile) != "Total")]
+        tbfile <- tbfile[which(tbfile[,1] != "Total"),]
+      }
+      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.character)
+      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.numeric)
+      row.names(tbfile) <- NULL
+    } else {
+      colnamevals <- c(as.character(unname(unlist(tbfile[(min(which(is.na(tbfile[,ncol(tbfile)])==FALSE))-1),1:(ncol(tbfile)-1)]))),'value')
+      tbfile <- tbfile[which(is.na(tbfile[,ncol(tbfile)])==FALSE),]
+      colnames(tbfile) <- colnamevals
+      if (removeTotal == TRUE) {
+        tbfile <- tbfile[apply(tbfile, 1, function(x) all(x != 'Total')),]
+      }
+      row.names(tbfile) <- NULL
+      tbfile$value <- as.numeric(as.character(tbfile$value))
     }
-    if (removeTotal == TRUE) {
-      tbfile <- tbfile[,which(colnames(tbfile) != "Total")]
-      tbfile <- tbfile[which(tbfile[,1] != "Total"),]
-    }
-    tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.character)
-    tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.numeric)
-    row.names(tbfile) <- NULL
   }
   return(tbfile)
 }
