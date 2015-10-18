@@ -98,9 +98,7 @@ command:
 lsf.str("package:stplanr", all = TRUE)
 ```
 
-
-Any questions?
-
-Email me on rob00 x at gmail dot com!
+Please report issues, feature requests and questions to the
+[github issue tracker](https://github.com/robinlovelace/stplanr/issues).
 
 
