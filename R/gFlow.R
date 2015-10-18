@@ -34,7 +34,7 @@ od2line <- function(flow, zones){
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
-  proj4string(l) <- proj4string(zones)
+  sp::proj4string(l) <- sp::proj4string(zones)
   l
 }
 
