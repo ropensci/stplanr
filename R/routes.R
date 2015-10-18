@@ -81,7 +81,7 @@
 #' # Plan a 'balanced' route from Pedaller's Arms in Leeds
 #' to the University of Leeds
 #'
-#' rb_pa <- route_cyclestreet(from = "Pedaller's Arms, Leeds", to = "University of Leeds", plan = "balanced")
+#' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
 #'
 #' library(leaflet) # requires the leaflet CRAN package
 #' # display the route on an interactive map
@@ -205,7 +205,8 @@ route_graphhopper <- function(from, to, vehicle = "bike"){
   ft_string <- paste0("point=", orig, "&point=", dest)
   veh <- paste0("&vehicle=", vehicle)
 
-  request <- paste0(api_base, ft_string, veh, "&locale=en-US&debug=true&points_encoded=false&key=", key)
+  request <- paste0(api_base, ft_string, veh,
+                    "&locale=en-US&debug=true&points_encoded=false&key=", key)
 
   if(vehicle == "bike"){
     request <- paste0(request, "&elevation=true")
