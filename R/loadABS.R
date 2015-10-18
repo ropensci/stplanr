@@ -20,7 +20,6 @@
 #' xlsx file (default = 1).
 #' @param removeTotal A boolean value. If TRUE removes the rows and columns
 #' with totals (default = TRUE).
-#' @import openxlsx
 #' @export
 #' @examples \dontrun{
 #' read_table_builder('SA1Population.csv')
