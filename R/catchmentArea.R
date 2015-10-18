@@ -193,6 +193,14 @@ calc_catchment <- function(
 #'    projection = 'austalbers',
 #'    dissolve = FALSE
 #' )
+#'
+#' calc_catchment_sum(
+#' polygonlayer = sa1income,
+#' targetlayer = testcycleway,
+#' calccols = c('Total'),
+#' distance = 800,
+#' projection = 'austalbers',
+#' dissolve = TRUE)
 #' }
 calc_catchment_sum <- function(
   polygonlayer,
@@ -200,8 +208,9 @@ calc_catchment_sum <- function(
   calccols,
   distance = 500,
   projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
-  retainAreaProportion = FALSE
-){
+  retainAreaProportion = FALSE,
+  dissolve = FALSE
+  ){
   if(length(calccols) == 1) {
     return(sum(calc_catchment(
       polygonlayer = polygonlayer,
