@@ -21,12 +21,13 @@
 #' @param removeTotal A boolean value. If TRUE removes the rows and columns
 #' with totals (default = TRUE).
 #' @export
-#' @examples \dontrun{
-#' read_table_builder('SA1Population.csv')
-#' read_table_builder('SA1Population.xlsx',filetype='xlsx',sheet=1,removeTotal=TRUE)
-#' sa1pop <- read.csv('SA1Population.csv')
-#' read_table_builder(sa1pop)
-#' }
+#' @examples
+#' data_dir <- system.file("extdata", package = "stplanr")
+#' t1 <- read_table_builder(file.path(data_dir, 'SA1Population.csv'))
+#' t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
+#'  filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
+#' sa1pop <- read.csv(file.path(data_dir, 'SA1Population.csv'))
+#' t3 <- read_table_builder(sa1pop)
 read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE) {
   if (missing(dataset)) {
     stop("Dataset is missing")
