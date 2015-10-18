@@ -1,20 +1,20 @@
 Package: stplanr
 Type: Package
-Title: Sustainable transport planning with R
+Title: Sustainable Transport Planning with R
 Version: 0.0.1.1
 Date: 2015-10-18
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
+    person("Richard", "Ellison", role = c("aut"), comment = "Author of various functions"),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline"),
-    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gClip"),
-    person("Richard", "Ellison", role = c("aut"), comment = "Author of readTableBuilder")
+    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gClip")
     )
 Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
 License: MIT + file LICENSE
 BugReports: https://github.com/robinlovelace/stplanr/issues
 LazyData: yes
 Depends:
-    R (>= 2.10), sp
+    sp, R (>= 3.0)
 Imports:
     jsonlite,
     maptools,
@@ -22,14 +22,13 @@ Imports:
     rgdal,
     rgeos,
     dplyr,
-    XML,
     ggmap,
-    openxlsx
+    openxlsx,
+    RCurl
 Suggests:
     osmar,
-    knitr,
     testthat,
-    RCurl,
+    knitr,
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/Robinlovelace/stplanr
