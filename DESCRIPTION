@@ -1,8 +1,8 @@
 Package: stplanr
 Type: Package
 Title: Sustainable transport planning with R
-Version: 0.0.1.0
-Date: 2015-03-10
+Version: 0.0.1.1
+Date: 2015-10-18
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline"),
@@ -26,9 +26,10 @@ Imports:
     ggmap,
     openxlsx
 Suggests:
-    GISTools,
     osmar,
     knitr,
     testthat,
-    RCurl
+    RCurl,
+    tmap
 VignetteBuilder: knitr
+URL: https://github.com/Robinlovelace/stplanr
