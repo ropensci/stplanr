@@ -11,7 +11,6 @@ output:
 library(stplanr)
 ```
 
-
 This is a package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
@@ -64,6 +63,39 @@ example("line2route")
 # you must have the devtools package (e.g. via install.packages("devtools"))
 devtools::install_github("robinlovelace/stplanr")
 library(stplanr)
+```
+
+stplanr depends on rgdal, which can be difficult to install, especially for Mac and Linux
+users.
+
+### Install binary version of rgdal
+
+This can be done from Ubuntu with
+
+```
+sudo apt-get install r-cran-rgdal
+```
+
+Also ggplot2, on which ggmap depends, may need to be installed as a binary, e.g.:
+
+```
+sudo apt-get install r-cran-ggplot2
+```
+
+### Set up rgdal manually
+
+The version of gdal needs to be newer than 1.11
+```{r}
+rgdal::getGDALVersionInfo()
+# Should return GDAL 1.11.2, released 2015/02/10 (or newer)
+
+```
+
+It is possible to use the following Personal Package Archive (PPA) to get the latest version of gdal
+
+```{r, engine='bash', eval = FALSE}
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable && sudo apt-get update
+sudo apt-get install gdal-bin libgdal-dev
 ```
 
 ## Getting help
