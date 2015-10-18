@@ -20,7 +20,7 @@
 #' @import sp
 #' @import rgdal
 #' @import rgeos
-#' @importFrom openxls readWorkbook
+#' @importFrom openxlsx readWorkbook
 #' @importFrom ggmap geocode
 #' @importFrom jsonlite fromJSON
 #' @importFrom raster extent crop
