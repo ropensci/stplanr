@@ -104,22 +104,13 @@ We aim to make this package well-documented to make it easy to use.
 R's internal help functions will help here:
 
 ```{r, message=FALSE, results='hide'}
-?route_cyclestreet # get help on an stplanr function
-if(Sys.info()["sysname"] == "Linux"){
-  # On Linux
-  mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-} else {
-  # Example on Windows
-  mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
-}
-Sys.setenv(CYCLESTREET = mytoken)
-trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
+trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
-osm_tiles <- read_osm(bb("Herefordshire", ext = 0.6, projection ="longlat"))
+osm_tiles <- read_osm(bbox(trip))
 tm_shape(osm_tiles) +
   tm_raster() +
-  tm_shape(trip_to_pub) +
+  tm_shape(trip) +
   tm_lines(lwd = 3)
 ```
 

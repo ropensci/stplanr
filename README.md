@@ -7,7 +7,6 @@
 ## Loading required package: sp
 ```
 
-
 This is a package for sustainable transport planning in R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
@@ -52,10 +51,14 @@ cents[1:3,] # points representing origins and destinations
 ```
 
 ```
-##                coordinates  geo_code  MSOA11NM percent_fem  avslope
-## 1708 (-1.546463, 53.80952) E02002384 Leeds 055    0.458721 2.856563
-## 1712 (-1.511861, 53.81161) E02002382 Leeds 053    0.438144 2.284782
-## 1805  (-1.524205, 53.8041) E02002393 Leeds 064    0.408759 2.361707
+## class       : SpatialPointsDataFrame 
+## features    : 3 
+## extent      : -1.546463, -1.511861, 53.8041, 53.81161  (xmin, xmax, ymin, ymax)
+## coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## variables   : 4
+## names       :  geo_code,  MSOA11NM, percent_fem,  avslope 
+## min values  : E02002382, Leeds 053,    0.408759, 2.284782 
+## max values  : E02002393, Leeds 064,    0.458721, 2.856563
 ```
 
 These datasets can be combined as follows:
@@ -88,6 +91,47 @@ devtools::install_github("robinlovelace/stplanr")
 library(stplanr)
 ```
 
+stplanr depends on rgdal, which can be difficult to install, especially for Mac and Linux
+users.
+
+### Install binary version of rgdal
+
+This can be done from Ubuntu with
+
+```
+sudo apt-get install r-cran-rgdal
+```
+
+Also ggplot2, on which ggmap depends, may need to be installed as a binary, e.g.:
+
+```
+sudo apt-get install r-cran-ggplot2
+```
+
+### Set up rgdal manually
+
+The version of gdal needs to be newer than 1.11
+
+```r
+rgdal::getGDALVersionInfo()
+```
+
+```
+## [1] "GDAL 1.11.2, released 2015/02/10"
+```
+
+```r
+# Should return GDAL 1.11.2, released 2015/02/10 (or newer)
+```
+
+It is possible to use the following Personal Package Archive (PPA) to get the latest version of gdal
+
+
+```bash
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable && sudo apt-get update
+sudo apt-get install gdal-bin libgdal-dev
+```
+
 ## Getting help
 
 We aim to make this package well-documented to make it easy to use.
@@ -95,31 +139,22 @@ R's internal help functions will help here:
 
 
 ```r
-?route_cyclestreet # get help on an stplanr function
-if(Sys.info()["sysname"] == "Linux"){
-  # On Linux
-  mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-} else {
-  # Example on Windows
-  mytoken <- readLines("file:///C:/Users/georl/Dropbox/dotfiles/cyclestreets-api-key-rl")
-}
-Sys.setenv(CYCLESTREET = mytoken)
-trip_to_pub <- route_cyclestreet(from = "Weobley", to = "Hereford", plan = "balanced")
+trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
-osm_tiles <- read_osm(bb("Herefordshire", ext = 0.6, projection ="longlat"))
+osm_tiles <- read_osm(bbox(trip))
 tm_shape(osm_tiles) +
   tm_raster() +
-  tm_shape(trip_to_pub) +
+  tm_shape(trip) +
   tm_lines(lwd = 3)
 ```
 
 ```
-## Warning in (function (x, shp_nm) : Currect projection of shape trip_to_pub
+## Warning in (function (x, shp_nm) : Currect projection of shape trip
 ## unknown. Long-lat (WGS84) is assumed.
 ```
 
-![](README_files/figure-html/unnamed-chunk-5-1.png) 
+![](README_files/figure-html/unnamed-chunk-7-1.png) 
 
 The current list of available functions from stplanr is printed by the following
 command:
@@ -133,6 +168,10 @@ lsf.str("package:stplanr", all = TRUE)
 ## age_recat : function (a)  
 ## age_recat2 : function (a)  
 ## bbox_scale : function (bb, scale_factor)  
+## calc_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
+##     retainAreaProportion = FALSE, dissolve = FALSE)  
+## calc_catchment_sum : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
+##     retainAreaProportion = FALSE, dissolve = FALSE)  
 ## dd_logcub : function (x, a, b1, b2, b3)  
 ## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
 ## dd_logsqrt : function (x, a, b1, b2)  
@@ -148,14 +187,15 @@ lsf.str("package:stplanr", all = TRUE)
 ## line2route : function (ldf, ...)  
 ## lineLabels : function (sldf, attrib)  
 ## od2line : function (flow, zones)  
-## readTableBuilder : function (dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)  
+## read_table_builder : function (dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)  
 ## route_cyclestreet : function (from, to, plan = "fastest", silent = FALSE)  
 ## route_graphhopper : function (from, to, vehicle = "bike")
 ```
 
+This project is released with a [Contributor Code of Conduct](CONDUCT.md).
+By participating in this project you agree to abide by its terms.
 
-Any questions?
-
-Email me on rob00 x at gmail dot com!
+Please report issues, feature requests and questions to the
+[github issue tracker](https://github.com/robinlovelace/stplanr/issues).
 
 
