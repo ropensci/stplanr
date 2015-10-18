@@ -1,9 +1,7 @@
 language: r
-sudo: true
 
 r_binary_packages:
   - rgdal
-  - rgeos
 
 # r_packages:
 
