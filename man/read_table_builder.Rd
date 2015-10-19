@@ -37,11 +37,11 @@ This function imports the original (unzipped) TableBuilder files in .csv
 or .xlsx format before creating an R dataframe with the data.
 }
 \examples{
-\dontrun{
-read_table_builder('SA1Population.csv')
-read_table_builder('SA1Population.xlsx',filetype='xlsx',sheet=1,removeTotal=TRUE)
-sa1pop <- read.csv('SA1Population.csv')
-read_table_builder(sa1pop)
-}
+data_dir <- system.file("extdata", package = "stplanr")
+t1 <- read_table_builder(file.path(data_dir, 'SA1Population.csv'))
+t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
+ filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
+sa1pop <- read.csv(file.path(data_dir, 'SA1Population.csv'), header=FALSE)
+t3 <- read_table_builder(sa1pop)
 }
 
