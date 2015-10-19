@@ -180,9 +180,6 @@ calc_catchment <- function(
 #' @param retainAreaProportion Boolean value. If TRUE retains a variable in
 #' the resulting SpatialPolygonsDataFrame containing the proportion of the
 #' original area within the catchment area (Default = FALSE).
-#' @param dissolve Boolean value. If TRUE collapses the underlying zones
-#' within the catchment area into a single region with statistics for the
-#' whole catchment area. Default is FALSE.
 #' @export
 #' @examples \dontrun{
 #' calc_catchment_sum(
@@ -190,8 +187,7 @@ calc_catchment <- function(
 #'    targetlayer = testcycleway,
 #'    calccols = c('Total'),
 #'    distance = 800,
-#'    projection = 'austalbers',
-#'    dissolve = FALSE
+#'    projection = 'austalbers'
 #' )
 #'
 #' calc_catchment_sum(
@@ -199,8 +195,8 @@ calc_catchment <- function(
 #' targetlayer = testcycleway,
 #' calccols = c('Total'),
 #' distance = 800,
-#' projection = 'austalbers',
-#' dissolve = TRUE)
+#' projection = 'austalbers'
+#' )
 #' }
 calc_catchment_sum <- function(
   polygonlayer,
@@ -208,8 +204,7 @@ calc_catchment_sum <- function(
   calccols,
   distance = 500,
   projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
-  retainAreaProportion = FALSE,
-  dissolve = FALSE
+  retainAreaProportion = FALSE
   ){
   if(length(calccols) == 1) {
     return(sum(calc_catchment(
@@ -218,7 +213,8 @@ calc_catchment_sum <- function(
       calccols = calccols,
       distance = distance,
       projection = projection,
-      retainAreaProportion = retainAreaProportion
+      retainAreaProportion = retainAreaProportion,
+      dissolve = FALSE
     )@data[,calccols]))
   } else {
     return(colSums(calc_catchment(
@@ -227,7 +223,83 @@ calc_catchment_sum <- function(
       calccols = calccols,
       distance = distance,
       projection = projection,
-      retainAreaProportion = retainAreaProportion
+      retainAreaProportion = retainAreaProportion,
+      dissolve = FALSE
     )@data[,calccols]))
   }
+}
+
+#' Calculate summary statistics for all features independently.
+#'
+#' @section Details:
+#' Calculates the summary statistics for a catchment area of multiple
+#' facilities or zones using straight-line distance from variables
+#' available in a SpatialPolygonsDataFrame with census tracts or other
+#' zones. Assumes that the frequency of the variable is evenly distributed
+#' throughout the zone. Returns the original source dataframe with additional
+#' columns with summary variables.
+#'
+#' @param polygonlayer A SpatialPolygonsDataFrame containing zones from which
+#' the summary statistics for the catchment variable will be calculated.
+#' Smaller polygons will increase the accuracy of the results.
+#' @param targetlayer A SpatialPolygonsDataFrame, SpatialLinesDataFrame or
+#' SpatialPointsDataFrame object containing the specifications of the
+#' facilities and zones for which the catchment areas are being calculated.
+#' @param calccols A vector of column names containing the variables in the
+#' polygonlayer to be used in the calculation of the summary statistics for
+#' the catchment areas.
+#' @param distance Defines the size of the catchment areas as the distance
+#' around the targetlayer in the units of the projection
+#' (default = 500 metres)
+#' @param projection The proj4string used to define the projection to be used
+#' for calculating the catchment areas or a character string 'austalbers' to
+#' use the Australian Albers Equal Area projection. Ignored if the polygonlayer
+#' is projected in which case the targetlayer will be converted to the
+#' projection used by the polygonlayer. In all cases the resulting object will
+#' be reprojected to the original coordinate system and projection of the
+#' polygon layer. Default is an Albers Equal Area projection but for more
+#' reliable results should use a local projection (e.g., Australian Albers
+#' Equal Area project).
+#' @param retainAreaProportion Boolean value. If TRUE retains a variable in
+#' the resulting SpatialPolygonsDataFrame containing the proportion of the
+#' original area within the catchment area (Default = FALSE).
+#' @export
+#' @examples \dontrun{
+#' calc_moving_catchment(
+#'    polygonlayer = sa1income,
+#'    targetlayer = testcycleway,
+#'    calccols = c('Total'),
+#'    distance = 800,
+#'    projection = 'austalbers'
+#' )
+#' }
+calc_moving_catchment <- function(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = 'worldalbers',
+  retainAreaProportion = FALSE
+){
+  newcalccols <- paste0('sum_',calccols)
+
+  targetlayer@data[,newcalccols] <- NA
+
+  count <- 1
+  while (count <= nrow(targetlayer)) {
+    targetlayer[count,newcalccols] <- setNames(
+      calc_catchment_sum(
+        polygonlayer = polygonlayer,
+        targetlayer = targetlayer[count,],
+        calccols = calccols,
+        distance = distance,
+        projection = projection,
+        retainAreaProportion = retainAreaProportion
+      ),
+      newcalccols
+    )
+    count <- count + 1
+  }
+
+  return(targetlayer)
 }
