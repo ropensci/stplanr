@@ -50,60 +50,10 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-The package can also allocate flows to the travel network, for example through
+The package can also allocate flows to the road network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 
-```{r plot2, results='hide', message=FALSE}
-example("line2route")
-```
-
-## Installation
-
-```{r, eval=FALSE}
-# you must have the devtools package (e.g. via install.packages("devtools"))
-devtools::install_github("robinlovelace/stplanr")
-library(stplanr)
-```
-
-stplanr depends on rgdal, which can be difficult to install, especially for Mac and Linux
-users.
-
-### Install binary version of rgdal
-
-This can be done from Ubuntu with
-
-```
-sudo apt-get install r-cran-rgdal
-```
-
-Also ggplot2, on which ggmap depends, may need to be installed as a binary, e.g.:
-
-```
-sudo apt-get install r-cran-ggplot2
-```
-
-### Set up rgdal manually
-
-The version of gdal needs to be newer than 1.11
-```{r}
-rgdal::getGDALVersionInfo()
-# Should return GDAL 1.11.2, released 2015/02/10 (or newer)
-
-```
-
-It is possible to use the following Personal Package Archive (PPA) to get the latest version of gdal
-
-```{r, engine='bash', eval = FALSE}
-sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable && sudo apt-get update
-sudo apt-get install gdal-bin libgdal-dev
-```
-
-## Getting help
-
-We aim to make this package well-documented to make it easy to use.
-R's internal help functions will help here:
-
-```{r, message=FALSE, results='hide'}
+```{r cycle-trip, message=FALSE, results='hide'}
 trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
@@ -114,11 +64,69 @@ tm_shape(osm_tiles) +
   tm_lines(lwd = 3)
 ```
 
-The current list of available functions from stplanr is printed by the following
-command:
+We can replicate this call to CycleStreets.net multiple times
+using `line2route`.
+
+```{r plot2, results='hide', message=FALSE}
+# Remove intra-zone flow
+intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
+travel_network <- travel_network[!intrazone,]
+routes <- line2route(travel_network)
+plot(routes)
+```
+
+For more examples, `example("line2route")`.
+
+`gOverline` is a function which takes a series of route-allocated lines,
+splits them into unique segmentes and aggregates
+the values of overlapping lines. This can represent where there will be
+most traffic on the transport system, as illustrated below.
+
+```{r rnet}
+routes$All <- travel_network$All
+rnet <- gOverline(sldf = routes, attrib = "All", fun = sum)
+plot(rnet, lwd = rnet$All / mean(rnet$All))
+points(cents, col = "red", pch = 18)
+```
+
+## Installation
+
+```{r, eval=FALSE}
+# you must have the devtools package (e.g. via install.packages("devtools"))
+devtools::install_github("robinlovelace/stplanr")
+library(stplanr)
+```
+
+stplanr depends on rgdal, which can be difficult to installon Mac and Linux
+users. 
+
+### Installing rgdal on Ubuntu and Mac
+
+On Ubuntu rgdal can be installed with:
+
+```
+sudo apt-get install r-cran-rgdal
+```
+
+Using apt-get ensures the system dependencies, such as
+[gdal](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries) are also installed.
+
+On Mac, homebrew can install gdal. Full instructions are provided
+[here](https://github.com/ropensci/geojsonio#install).
+
+
+## Funtions, help and contributing
+
+The current list of available functions can be seen with:
 
 ```{r}
 lsf.str("package:stplanr", all = TRUE)
+```
+
+To get internal help on a specific function, use the standard way.
+
+```{r, eval=FALSE}
+?od2line
 ```
 
 This project is released with a [Contributor Code of Conduct](CONDUCT.md).

@@ -72,70 +72,8 @@ plot(travel_network, lwd = w)
 
 ![](README_files/figure-html/plot1-1.png) 
 
-The package can also allocate flows to the travel network, for example through
+The package can also allocate flows to the road network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
-
-
-```r
-example("line2route")
-```
-
-![](README_files/figure-html/plot2-1.png) ![](README_files/figure-html/plot2-2.png) 
-
-## Installation
-
-
-```r
-# you must have the devtools package (e.g. via install.packages("devtools"))
-devtools::install_github("robinlovelace/stplanr")
-library(stplanr)
-```
-
-stplanr depends on rgdal, which can be difficult to install, especially for Mac and Linux
-users.
-
-### Install binary version of rgdal
-
-This can be done from Ubuntu with
-
-```
-sudo apt-get install r-cran-rgdal
-```
-
-Also ggplot2, on which ggmap depends, may need to be installed as a binary, e.g.:
-
-```
-sudo apt-get install r-cran-ggplot2
-```
-
-### Set up rgdal manually
-
-The version of gdal needs to be newer than 1.11
-
-```r
-rgdal::getGDALVersionInfo()
-```
-
-```
-## [1] "GDAL 1.11.2, released 2015/02/10"
-```
-
-```r
-# Should return GDAL 1.11.2, released 2015/02/10 (or newer)
-```
-
-It is possible to use the following Personal Package Archive (PPA) to get the latest version of gdal
-
-
-```bash
-sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable && sudo apt-get update
-sudo apt-get install gdal-bin libgdal-dev
-```
-
-## Getting help
-
-We aim to make this package well-documented to make it easy to use.
-R's internal help functions will help here:
 
 
 ```r
@@ -154,10 +92,69 @@ tm_shape(osm_tiles) +
 ## unknown. Long-lat (WGS84) is assumed.
 ```
 
-![](README_files/figure-html/unnamed-chunk-7-1.png) 
+![](README_files/figure-html/cycle-trip-1.png) 
 
-The current list of available functions from stplanr is printed by the following
-command:
+We can replicate this call to CycleStreets.net multiple times
+using `line2route`.
+
+
+```r
+# Remove intra-zone flow
+intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
+travel_network <- travel_network[!intrazone,]
+routes <- line2route(travel_network)
+plot(routes)
+```
+
+![](README_files/figure-html/plot2-1.png) 
+
+For more examples, `example("line2route")`.
+
+`gOverline` is a function which takes a series of route-allocated lines,
+splits them into unique segmentes and aggregates
+the values of overlapping lines. This can represent where there will be
+most traffic on the transport system, as illustrated below.
+
+
+```r
+routes$All <- travel_network$All
+rnet <- gOverline(sldf = routes, attrib = "All", fun = sum)
+plot(rnet, lwd = rnet$All / mean(rnet$All))
+points(cents, col = "red", pch = 18)
+```
+
+![](README_files/figure-html/rnet-1.png) 
+
+## Installation
+
+
+```r
+# you must have the devtools package (e.g. via install.packages("devtools"))
+devtools::install_github("robinlovelace/stplanr")
+library(stplanr)
+```
+
+stplanr depends on rgdal, which can be difficult to installon Mac and Linux
+users. 
+
+### Installing rgdal on Ubuntu and Mac
+
+On Ubuntu rgdal can be installed with:
+
+```
+sudo apt-get install r-cran-rgdal
+```
+
+Using apt-get ensures the system dependencies, such as
+[gdal](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries) are also installed.
+
+On Mac, homebrew can install gdal. Full instructions are provided
+[here](https://github.com/ropensci/geojsonio#install).
+
+
+## Funtions, help and contributing
+
+The current list of available functions can be seen with:
 
 
 ```r
@@ -171,7 +168,9 @@ lsf.str("package:stplanr", all = TRUE)
 ## calc_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
 ##     retainAreaProportion = FALSE, dissolve = FALSE)  
 ## calc_catchment_sum : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
-##     retainAreaProportion = FALSE, dissolve = FALSE)  
+##     retainAreaProportion = FALSE)  
+## calc_moving_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "worldalbers", 
+##     retainAreaProportion = FALSE)  
 ## dd_logcub : function (x, a, b1, b2, b3)  
 ## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
 ## dd_logsqrt : function (x, a, b1, b2)  
@@ -190,6 +189,13 @@ lsf.str("package:stplanr", all = TRUE)
 ## read_table_builder : function (dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)  
 ## route_cyclestreet : function (from, to, plan = "fastest", silent = FALSE)  
 ## route_graphhopper : function (from, to, vehicle = "bike")
+```
+
+To get internal help on a specific function, use the standard way.
+
+
+```r
+?od2line
 ```
 
 This project is released with a [Contributor Code of Conduct](CONDUCT.md).
