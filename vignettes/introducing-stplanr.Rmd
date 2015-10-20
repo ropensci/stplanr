@@ -12,7 +12,7 @@ vignette: >
 ```{r, include=FALSE}
 library(stplanr)
 library(sp) # needed for geographical objects
-library(tmap) # needed for plotting data
+library(leaflet) # needed for plotting data
 ```
 
 
@@ -189,40 +189,26 @@ have a proportionally higher route distance than others.
 This is illustrated
 by distance from the black line in the above plot, which represents circuity. 
 
-The difference between
-different types of route is shown in the figure below.
-'Fast' and 'quiet' routes (red and green, respectively)
-are clearly allocated to the transport network
-(the package 'leaflet' was used to generate the basemap).
+To estimate the amount of capacity needed at each segment on the transport
+network, the `gOverline` function, written by Barry Rowlingson can be used. This
+divides up line geometries into unique segments then aggregates the overlapping
+values. The results, plotted on the map, can be used to estimate where there is
+most need to improve the transport network, for example informing the decision of
+where to build new bicycle paths.
+(The leaflet package was used to generate the basemap).
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+routes_fast$All <- l$All
+rnet <- gOverline(routes_fast, "All", fun = sum)
+w <- rnet$All / mean(rnet$All) * 3
 if(offline){
   print("Figure not shown: requires internet connection")
 } else {
   n <- 30
   bb <- bbox(routes_fast[n,])
-  # lf <- fortify(l[n,])
-  # rff <- fortify(routes_fast[n,])
-  # rqf <- fortify(routes_slow[n,])
-  # the ggmap way
-  # bb <- make_bbox(lon = bb[1,], lat = bb[2,], f = 0.5)
-  # ggmap(ggmap = get_map(location = bb)) +
-  #   geom_path(aes(x = long, y = lat), data = lf) + 
-  #   geom_path(aes(x = long, y = lat), data = rqf, colour = "red") + 
-  #   geom_path(aes(x = long, y = lat), data = rff, colour = "green") +
-  #   theme_nothing()
-  
-  # the tmap way
-  otile <- read_osm(bbox(routes_fast))
-  tm_shape(otile) +
-    tm_raster() +
-    tm_shape(routes_fast) +
-    tm_lines() +
-    tm_shape(routes_slow) +
-    tm_lines(col = "darkgreen") +
-    tm_shape(l) +
-    tm_lines(col = "grey")
+  leaflet() %>% addTiles() %>%
+    addPolylines(data = rnet, color = "red", weight = w) 
 }
 ```
 

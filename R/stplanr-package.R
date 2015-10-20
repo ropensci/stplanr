@@ -20,6 +20,7 @@
 #' @import sp
 #' @import rgdal
 #' @import rgeos
+#' @import leaflet
 #' @importFrom openxlsx readWorkbook
 #' @importFrom RgoogleMaps getGeoCode
 #' @importFrom jsonlite fromJSON

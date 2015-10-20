@@ -23,7 +23,8 @@ Imports:
     rgeos,
     dplyr,
     RgoogleMaps,
-    openxlsx
+    openxlsx,
+    leaflet
 Suggests:
     osmar,
     testthat,
