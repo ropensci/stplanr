@@ -22,9 +22,8 @@ Imports:
     rgdal,
     rgeos,
     dplyr,
-    ggmap,
-    openxlsx,
-    RCurl
+    RgoogleMaps,
+    openxlsx
 Suggests:
     osmar,
     testthat,

@@ -21,7 +21,7 @@
 #' @import rgdal
 #' @import rgeos
 #' @importFrom openxlsx readWorkbook
-#' @importFrom ggmap geocode
+#' @importFrom RgoogleMaps getGeoCode
 #' @importFrom jsonlite fromJSON
 #' @importFrom raster extent crop
 NULL

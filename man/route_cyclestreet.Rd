@@ -37,7 +37,7 @@ and origins and destinations within the UK to run.
 
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
-geo-coding services are used via \code{ggmap::geocode()}.
+geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
 
 You need to have an api key for this code to run.
 Loading a locally saved copy of the api key text string

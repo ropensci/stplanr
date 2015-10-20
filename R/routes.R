@@ -30,7 +30,7 @@
 #'
 #' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{ggmap::geocode()}.
+#' geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
 #'
 #' You need to have an api key for this code to run.
 #' Loading a locally saved copy of the api key text string
@@ -106,8 +106,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
-    from <- ggmap::geocode(from)
-    to <- ggmap::geocode(to)
+    from <- rev(RgoogleMaps::getGeoCode(from))
+    to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
   orig <- paste0(from, collapse = ",")
@@ -124,7 +124,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 
   obj <- jsonlite::fromJSON(request)
 
-  route <- SpatialLines(list(Lines(list(sp::Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
 
   df <- data.frame(
     plan = obj$features[3,]$properties$plan,
@@ -195,8 +195,8 @@ route_graphhopper <- function(from, to, vehicle = "bike"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
-    from <- ggmap::geocode(from)
-    to <- ggmap::geocode(to)
+    from <- rev(RgoogleMaps::getGeoCode(from))
+    to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
   api_base <- "https://graphhopper.com/api/1/route?"
