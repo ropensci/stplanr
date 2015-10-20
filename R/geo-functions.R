@@ -71,14 +71,14 @@ gClip <- function(shp, bb){
   clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
   if(grepl("DataFrame", class(shp))){
     if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
-      geodata <- data.frame(id = row.names(clipped@lineobj))
+      geodata <- data.frame(gClip_id = row.names(clipped@lineobj))
     }
     else {
-      geodata <- data.frame(id = row.names(clipped))
+      geodata <- data.frame(gClip_id = row.names(clipped))
     }
-    joindata <- cbind(id = row.names(shp), shp@data)
+    joindata <- cbind(gClip_id = row.names(shp), shp@data)
     geodata <- dplyr::left_join(geodata, joindata)
-    row.names(geodata) <- geodata$id
+    row.names(geodata) <- geodata$gClip_id
     #if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
     if(grepl("SpatialPolygons", class(shp))){
       #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
@@ -91,6 +91,7 @@ gClip <- function(shp, bb){
       clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
     }
   }
+  clipped@data$gClip_id <- NULL
   clipped
 }
 
