@@ -100,7 +100,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
   if(!Sys.getenv('CYCLESTREET') == ""){
     cckey <- Sys.getenv('CYCLESTREET')
   }
-  if(is.null(cckey)){
+  if(!exists("cckey")){
     stop("You must have a CycleStreets.net api key saved as 'cckey'")
   }
 
