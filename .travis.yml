@@ -3,7 +3,6 @@ sudo: true
 
 r_binary_packages:
   - rgdal
-  - ggplot2
 
 # r_packages:
 
