@@ -113,14 +113,29 @@ For more examples, `example("line2route")`.
 `gOverline` is a function which takes a series of route-allocated lines,
 splits them into unique segmentes and aggregates
 the values of overlapping lines. This can represent where there will be
-most traffic on the transport system, as illustrated below.
+most traffic on the transport system, as illustrated
+below.^[Thanks
+to Martijn Tennekes for helping
+with the plotting using [tmap](https://github.com/mtennekes/tmap).]
 
 
 ```r
 routes$All <- travel_network$All
 rnet <- gOverline(sldf = routes, attrib = "All", fun = sum)
-plot(rnet, lwd = rnet$All / mean(rnet$All))
-points(cents, col = "red", pch = 18)
+
+osm_tiles <- read_osm(bb(rnet, ext = 1.05))
+rnet$lwd <- rnet$All / mean(rnet$All)
+tm_shape(osm_tiles) +
+    tm_raster(saturation = .25) +
+tm_shape(rnet) +
+    tm_lines(lwd = "lwd", scale = 5, legend.lwd.show = FALSE)  +
+tm_shape(cents) +
+    tm_bubbles()
+```
+
+```
+## Warning in (function (x, shp_nm) : Currect projection of shape rnet
+## unknown. Long-lat (WGS84) is assumed.
 ```
 
 ![](README_files/figure-html/rnet-1.png) 
