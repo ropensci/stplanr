@@ -12,7 +12,7 @@
 #'
 #' @section Interesting functions:
 #' \itemize{
-#'  \item \code{\link{gOverline}} - Aggregate overlaying route lines and data intelligently
+#'  \item \code{\link{overline}} - Aggregate overlaying route lines and data intelligently
 #'  \item \code{\link{calc_catchment}} - Create a 'catchment area' to show the areas serving a destination
 #'  \item \code{\link{route_cyclestreet}} - Finds the fastest routes for cyclists between two places.
 #' }

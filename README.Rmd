@@ -77,7 +77,7 @@ plot(routes)
 
 For more examples, `example("line2route")`.
 
-`gOverline` is a function which takes a series of route-allocated lines,
+`overline` is a function which takes a series of route-allocated lines,
 splits them into unique segmentes and aggregates
 the values of overlapping lines. This can represent where there will be
 most traffic on the transport system, as illustrated
@@ -87,7 +87,7 @@ with the plotting using [tmap](https://github.com/mtennekes/tmap).]
 
 ```{r rnet}
 routes$All <- travel_network$All
-rnet <- gOverline(sldf = routes, attrib = "All", fun = sum)
+rnet <- overline(sldf = routes, attrib = "All", fun = sum)
 
 osm_tiles <- read_osm(bb(rnet, ext = 1.05))
 rnet$lwd <- rnet$All / mean(rnet$All)

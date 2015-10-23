@@ -1,6 +1,6 @@
 #' Do the intersections between two geometries create lines?
 #'
-#' This is a function required in \code{\link{gOverline}}. It identifies
+#' This is a function required in \code{\link{overline}}. It identifies
 #' whether sets of lines overlap (beyond shared points) or
 #' not.
 #'
@@ -10,7 +10,7 @@
 #'
 #' @examples \dontrun{
 #' data(routes_fast)
-#' rnet <- gOverline(routes_fast[c(2, 3, 22),], attrib = "length")
+#' rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")
 #' r1 <- routes_fast[2,]
 #' r2 <- routes_fast[3,]
 #' r3 <- routes_fast[22,]
@@ -37,7 +37,7 @@ islines <- function(g1, g2){
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
-#' rsec <- gSection(routes_fast)
+#' rsec <- gsection(routes_fast)
 #' plot(routes_fast)
 #' lines(rsec, col = "red", lwd = 3)
 #' length(rsec)
@@ -45,7 +45,7 @@ islines <- function(g1, g2){
 #' sel <- sample(length(rsec), 20)
 #' plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
 #' }
-gSection <- function(sl){
+gsection <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
   sp::disaggregate(rgeos::gLineMerge(rgeos::gUnion(sl, sl)))
@@ -91,16 +91,16 @@ lineLabels <- function(sldf, attrib){
 #' @examples \dontrun{
 #' data(routes_fast)
 #' data(cents)
-#' rnet <- gOverline(sldf = routes_fast[1:7,], attrib = "length")
+#' rnet <- overline(sldf = routes_fast[1:7,], attrib = "length")
 #' plot(rnet)
 #' points(cents)
 #' lineLabels(sldf = rnet, "length")
 #' sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
 #' data(flowlines)
 #' plot(flowlines)
-#' aggflow <- gOverline(flowlines, attrib = "All")
+#' aggflow <- overline(flowlines, attrib = "All")
 #' nrow(aggflow)
-#' aggflow2 <- gOverline(flowlines, attrib = "All", na.zero = TRUE)
+#' aggflow2 <- overline(flowlines, attrib = "All", na.zero = TRUE)
 #' plot(aggflow2) # 8 lines
 #' sel <- as.logical(colSums(gEquals(flowlines, aggflow2, byid = TRUE)))
 #' flowlines_sub <- flowlines[!sel,]
@@ -112,11 +112,11 @@ lineLabels <- function(sldf, attrib){
 #' overlaps <- over()
 #' nrow(overlaps)
 #' }
-gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
+overline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
   ## simplify down to SpatialLines
   sl = as(sldf, "SpatialLines")
   ## get the line sections that make the network
-  slu = gSection(sl)
+  slu = gsection(sl)
   ## overlay network with routes
   overs = sp::over(slu, sl, returnList=TRUE)
   ## overlay is true if end points overlay, so filter them out:
@@ -160,19 +160,19 @@ gOverline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 #' @param attrib A text string containing the name of the line's attribute to
 #' aggregate or a numeric vector of the columns to be aggregated
 #'
-#' @return \code{gOnewaygeo} outputs a SpatialLinesDataFrame with single lines
+#' @return \code{onewaygeo} outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included
 #' @export
 #' @examples
 #' data("flowlines")
 #' plot(flowlines)
-#' singlelines <- gOnewaygeo(flowlines, attrib = 3:14)
+#' singlelines <- onewaygeo(flowlines, attrib = 3:14)
 #' plot(singlelines, lwd = 3, col = "red")
 #' lines(singlelines) # check we've got the right lines
 #' sum(singlelines$All)
 #' nrow(singlelines)
-gOnewaygeo <- function(x, attrib){
+onewaygeo <- function(x, attrib){
   geq <- rgeos::gEquals(x, x, byid = T)
   sel1 <- !duplicated(geq) # repeated rows
   sel2 <- rowSums(geq) > 1 # all features with an overlap
@@ -223,7 +223,7 @@ gOnewaygeo <- function(x, attrib){
 #' @param id1 A text string referring to the name of the variable containing the unique id of the origin
 #' @param id2 A text string referring to the name of the variable containing the unique id of the destination
 #'
-#' @return \code{gOnewayid} outputs a SpatialLinesDataFrame with single lines
+#' @return \code{onewayid} outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included.
 #' @export
@@ -232,14 +232,14 @@ gOnewaygeo <- function(x, attrib){
 #' id1 <- names(flowlines)[1]
 #' id2 <- names(flowlines)[2]
 #' plot(flowlines)
-#' singlelines <- gOnewayid(flowlines, attrib = 3:14, id1, id2)
+#' singlelines <- onewayid(flowlines, attrib = 3:14, id1, id2)
 #' lines(singlelines) # check we've got the right lines
 #' sum(singlelines$All)
 #' nrow(singlelines)
-#' sl2 <- gOnewaygeo(flowlines, attrib = 3:14)
-#' # Demonstrate the results from gOnewayid and gOnewaygeo are identical
+#' sl2 <- onewaygeo(flowlines, attrib = 3:14)
+#' # Demonstrate the results from onewayid and onewaygeo are identical
 #` identical(singlelines, sl2)
-gOnewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
+onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   ids <- cbind(x[[id1]], x[[id2]])
   idsort <- t(apply(ids, 1, sort))
   # duplicate pairs - see http://stackoverflow.com/questions/9028369/

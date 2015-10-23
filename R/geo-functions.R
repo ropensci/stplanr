@@ -4,7 +4,7 @@
 #' \code{geojson_write} from the geojsonio package
 #' provides the same functionality \url{https://github.com/ropensci/geojsonio}.
 #'
-#' @inheritParams gClip
+#' @inheritParams gclip
 #' @param filename File name of the output geojson
 writeGeoJSON <- function(shp, filename){
   name <- nm <-deparse(substitute(shp))
@@ -16,7 +16,7 @@ writeGeoJSON <- function(shp, filename){
 #' Simplify geometry file of a shapfile.
 #'
 #' @section Details:
-#' This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: \url{https://github.com/mbloch/mapshaper} . mapshaper which must be installed locally for gMapshaper to work. Writes \code{gMapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
+#' This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: \url{https://github.com/mbloch/mapshaper} . mapshaper which must be installed locally for mapshaper to work. Writes \code{mapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
 #'
 #' @param dsn A character string providing the absolute path to the shapefile to simplify.
 #' @param percent A number between 0 and 100 stating how aggressively to simplify
@@ -27,9 +27,9 @@ writeGeoJSON <- function(shp, filename){
 #' @export
 #' @examples
 #' \dontrun{
-#' gMapshape("~/geodata/myShapefile.shp", 5)
+#' mapshape("~/geodata/myShapefile.shp", 5)
 #' }
-gMapshape <- function(dsn, percent){
+mapshape <- function(dsn, percent){
   from_layer <- gsub(".shp", replacement = "", dsn)
   to_layer <- paste0(from_layer, "mapshaped_", percent, "%.shp")
   cmd <- paste0("mapshaper ", dsn, " auto-snap -simplify keep-shapes ", percent, "% -o force ", to_layer)
@@ -56,12 +56,12 @@ gMapshape <- function(dsn, percent){
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 #' plot(cents)
 #' plot(cb, add = TRUE)
-#' clipped <- gClip(cents, cb)
+#' clipped <- gclip(cents, cb)
 #' row.names(clipped)
-#' clipped$avslope # gClip also returns the data attribute
+#' clipped$avslope # gclip also returns the data attribute
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
-gClip <- function(shp, bb){
+gclip <- function(shp, bb){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
@@ -71,14 +71,14 @@ gClip <- function(shp, bb){
   clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
   if(grepl("DataFrame", class(shp))){
     if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
-      geodata <- data.frame(gClip_id = row.names(clipped@lineobj))
+      geodata <- data.frame(gclip_id = row.names(clipped@lineobj))
     }
     else {
-      geodata <- data.frame(gClip_id = row.names(clipped))
+      geodata <- data.frame(gclip_id = row.names(clipped))
     }
-    joindata <- cbind(gClip_id = row.names(shp), shp@data)
+    joindata <- cbind(gclip_id = row.names(shp), shp@data)
     geodata <- dplyr::left_join(geodata, joindata)
-    row.names(geodata) <- geodata$gClip_id
+    row.names(geodata) <- geodata$gclip_id
     #if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
     if(grepl("SpatialPolygons", class(shp))){
       #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
@@ -91,7 +91,7 @@ gClip <- function(shp, bb){
       clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
     }
   }
-  clipped@data$gClip_id <- NULL
+  clipped@data$gclip_id <- NULL
   clipped
 }
 
@@ -99,7 +99,7 @@ gClip <- function(shp, bb){
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 #'
-#' @inheritParams gClip
+#' @inheritParams gclip
 #' @param scale_factor Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.
 #' @export
 #' @examples

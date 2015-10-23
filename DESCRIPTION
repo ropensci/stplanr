@@ -6,8 +6,8 @@ Date: 2015-10-18
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut"), comment = "Author of various functions"),
-    person("Barry", "Rowlingson", role = c("aut"), comment = "Author of gOverline"),
-    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gClip")
+    person("Barry", "Rowlingson", role = c("aut"), comment = "Author of overline"),
+    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip")
     )
 Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
 License: MIT + file LICENSE

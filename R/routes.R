@@ -43,8 +43,6 @@
 #' Sys.setenv(CYCLESTREET = mytoken)
 #' }
 #'
-#'
-#'
 #' \code{
 #' cckey <- Sys.getenv('CYCLESTREET')
 #' }

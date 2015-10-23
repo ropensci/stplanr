@@ -110,7 +110,7 @@ plot(routes)
 
 For more examples, `example("line2route")`.
 
-`gOverline` is a function which takes a series of route-allocated lines,
+`overline` is a function which takes a series of route-allocated lines,
 splits them into unique segmentes and aggregates
 the values of overlapping lines. This can represent where there will be
 most traffic on the transport system, as illustrated
@@ -121,7 +121,7 @@ with the plotting using [tmap](https://github.com/mtennekes/tmap).]
 
 ```r
 routes$All <- travel_network$All
-rnet <- gOverline(sldf = routes, attrib = "All", fun = sum)
+rnet <- overline(sldf = routes, attrib = "All", fun = sum)
 
 osm_tiles <- read_osm(bb(rnet, ext = 1.05))
 rnet$lwd <- rnet$All / mean(rnet$All)
@@ -190,12 +190,12 @@ lsf.str("package:stplanr", all = TRUE)
 ## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
 ## dd_logsqrt : function (x, a, b1, b2)  
 ## disab_recat : function (a)  
-## gClip : function (shp, bb)  
-## gMapshape : function (dsn, percent)  
-## gOnewaygeo : function (x, attrib)  
-## gOnewayid : function (x, attrib, id1 = names(x)[1], id2 = names(x)[2])  
-## gOverline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
-## gSection : function (sl)  
+## gclip : function (shp, bb)  
+## mapshape : function (dsn, percent)  
+## onewaygeo : function (x, attrib)  
+## onewayid : function (x, attrib, id1 = names(x)[1], id2 = names(x)[2])  
+## overline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
+## gsection : function (sl)  
 ## islines : function (g1, g2)  
 ## line2df : function (l)  
 ## line2route : function (ldf, ...)  
