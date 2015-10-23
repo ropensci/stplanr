@@ -24,9 +24,9 @@ Imports:
     dplyr,
     RgoogleMaps,
     openxlsx,
-    leaflet
+    leaflet,
+    httr
 Suggests:
-    osmar,
     testthat,
     knitr,
     tmap

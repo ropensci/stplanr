@@ -21,6 +21,7 @@
 #' @import rgdal
 #' @import rgeos
 #' @import leaflet
+#' @import httr
 #' @importFrom openxlsx readWorkbook
 #' @importFrom RgoogleMaps getGeoCode
 #' @importFrom jsonlite fromJSON
