@@ -38,7 +38,6 @@
 #' is available on any computer:
 #'
 #' \code{
-#' # mytoken <- "f3fe3d078ac34737" # warning: not a real key - keep yours private
 #' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 #' Sys.setenv(CYCLESTREET = mytoken)
 #' }
@@ -49,6 +48,8 @@
 #' \code{
 #' echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
 #' }
+#'
+#' Read more about the .Renviron here: \code{?.Renviron}
 #'
 #'
 #' @inheritParams line2route
@@ -129,13 +130,6 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #'
 #' Provides an R interface to the graphhopper routing engine,
 #' an open source route planning service.
-#' To use this function you will need to obtain an API key from
-#' \url{https://graphhopper.com/#directions-api}.
-#' It is assumed that you have set your api key as a system environment
-#' for security reasons (so you avoid typing the API key in your code).
-#' Do this with \code{GRAPHHOPPER}, e.g. by typing \code{
-#' Sys.setenv(GRAPHHOPPER = 'eccbf612-214e-437d-8b73-06bdf9e6877d')
-#' }. (Note: key not real, use your own key.)
 #'
 #' The function returns a SpatialLinesDataFrame object.
 #' See \url{https://github.com/graphhopper} for more information.
@@ -143,11 +137,21 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' @param vehicle A text string representing the vehicle. Can be bike, bike2, car
 #' or foot.
 #'
-#'
 #' @details
 #'
 #' To test graphopper is working for you, try something like this, but with
 #' your own API key:
+#' To use this function you will need to obtain an API key from
+#' \url{https://graphhopper.com/#directions-api}.
+#' It is assumed that you have set your api key as a system environment
+#' for security reasons (so you avoid typing the API key in your code).
+#' Do this by adding the following to your .Renviron file (see \code{?.Renviron}
+#' or \url{https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html}
+#' for more on this):
+#'
+#' \code{GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'}.
+#'
+#' (Note: key not real, use your own key.)
 #'
 #' \code{obj <- jsonlite::fromJSON(url)}
 #'
@@ -164,7 +168,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #'
 #' \dontrun{
 #' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-#'
+#' r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' library(leaflet)
 #'
 #' leaflet() %>% addTiles() %>% addPolylines(data = r)
@@ -277,7 +281,7 @@ graphhopper_pat <- function(force = FALSE) {
   }
 
   message("Updating GRAPHHOPPER env var to API key")
-  Sys.setenv(GRAPHHOPPER. = pat)
+  Sys.setenv(GRAPHHOPPER = pat)
 
   pat
 
