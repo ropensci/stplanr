@@ -16,9 +16,10 @@
 #'  \code{length = 2} representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
-#'  @param plan Text strong of either "fastest", "quietest" or "balanced"
-#'
+#' @param plan Text strong of either "fastest", "quietest" or "balanced"
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
+#' @param pat The API key used - this is usually aquired automatically through a helper
+#' function
 #'
 #' @details
 #'
@@ -42,8 +43,9 @@
 #' Sys.setenv(CYCLESTREET = mytoken)
 #' }
 #'
-#'
-#' or on Linux machines in bash
+#' if you want the API key to be available in future
+#' sessions, set it using the .Renviron file
+#' e.g. on Linux machines in bash via:
 #'
 #' \code{
 #' echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
