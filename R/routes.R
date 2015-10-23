@@ -197,7 +197,7 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
   obj <- jsonlite::fromJSON(request)
 
-  route <- SpatialLines(list(Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
 
@@ -217,7 +217,7 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
   )
 
-  route <- SpatialLinesDataFrame(route, df)
+  route <- sp::SpatialLinesDataFrame(route, df)
 
   route
 
