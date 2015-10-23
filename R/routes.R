@@ -43,21 +43,13 @@
 #' Sys.setenv(CYCLESTREET = mytoken)
 #' }
 #'
-#' \code{
-#' cckey <- Sys.getenv('CYCLESTREET')
-#' }
 #'
-#' or on Linux
+#' or on Linux machines in bash
 #'
 #' \code{
-#' sudo -i # become route
-#' echo "export CYCLESTREET='f3fe3d078ac34737'" >> /etc/environment
+#' echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
 #' }
 #'
-#' Then restart so the envrionment variable is set and can be viewed with
-#' \code{
-#' $CYCLESTREET
-#' }
 #'
 #' @inheritParams line2route
 #'
@@ -94,13 +86,8 @@
 #' p2 <- p1 + 1 # add a degree!
 #' route_cyclestreet(p1, p2, "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
-  if(!Sys.getenv('CYCLESTREET') == ""){
-    cckey <- Sys.getenv('CYCLESTREET')
-  }
-  if(!exists("cckey")){
-    stop("You must have a CycleStreets.net api key saved as 'cckey'")
-  }
+#'
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat()){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -114,7 +101,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
   ft_string <- paste(orig, dest, sep = "|")
   journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
   request <- paste0(api_base, journey_plan)
-  request <- paste0(request, "&key=", cckey)
+  request <- paste0(request, "&key=", pat)
 
   if(silent == FALSE){
     print(paste0("The request sent to cyclestreets.net was: ", request))
@@ -183,13 +170,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = FALSE){
 #' leaflet() %>% addTiles() %>% addPolylines(data = r)
 #' }
 
-route_graphhopper <- function(from, to, vehicle = "bike"){
-  if(!Sys.getenv('GRAPHHOPPER') == ""){
-    key <- Sys.getenv('GRAPHHOPPER')
-  }
-  if(is.null(key)){
-    stop("You must have a an api key saved as 'key'")
-  }
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat()){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -204,13 +185,15 @@ route_graphhopper <- function(from, to, vehicle = "bike"){
   veh <- paste0("&vehicle=", vehicle)
 
   request <- paste0(api_base, ft_string, veh,
-                    "&locale=en-US&debug=true&points_encoded=false&key=", key)
+                    "&locale=en-US&debug=true&points_encoded=false&key=", pat)
 
   if(vehicle == "bike"){
     request <- paste0(request, "&elevation=true")
   }
 
-  print(paste0("The request sent was: ", request))
+  if(silent == FALSE){
+    print(paste0("The request sent was: ", request))
+  }
 
   obj <- jsonlite::fromJSON(request)
 
@@ -237,5 +220,65 @@ route_graphhopper <- function(from, to, vehicle = "bike"){
   route <- SpatialLinesDataFrame(route, df)
 
   route
+
+}
+
+#' Retrieve personal access token.
+#'
+#' A personal access token.
+#'
+#' @keywords internal
+#' @export
+cyclestreet_pat <- function(force = FALSE) {
+  env <- Sys.getenv('CYCLESTREET')
+  if (!identical(env, "") && !force) return(env)
+
+  if (!interactive()) {
+    stop("Please set env var CYCLESTREET to your github personal access token",
+         call. = FALSE)
+  }
+
+  message("Couldn't find env var CYCLESTREET. See ?cyclestreet_pat for more details.")
+  message("Please enter your API key you requested from https://www.cyclestreets.net/api/apply/,  and press enter:")
+  pat <- readline(": ")
+
+  if (identical(pat, "")) {
+    stop("Personal access token entry failed", call. = FALSE)
+  }
+
+  message("Updating GRAPHHOPPER env var to API key. Save this to your .Renviron")
+  Sys.setenv(CYCLESTREET = pat)
+
+  pat
+
+}
+
+#' Retrieve personal access token.
+#'
+#' A personal access token.
+#'
+#' @keywords internal
+#' @export
+graphhopper_pat <- function(force = FALSE) {
+  env <- Sys.getenv('GRAPHHOPPER')
+  if (!identical(env, "") && !force) return(env)
+
+  if (!interactive()) {
+    stop("Please set env var GRAPHHOPPER to your github personal access token",
+         call. = FALSE)
+  }
+
+  message("Couldn't find env var GRAPHHOPPER. See ?cyclestreet_pat for more details.")
+  message("Please enter your API key, e.g. from https://graphhopper.com/dashboard/#/api-keys , and press enter:")
+  pat <- readline(": ")
+
+  if (identical(pat, "")) {
+    stop("Personal access token entry failed", call. = FALSE)
+  }
+
+  message("Updating GRAPHHOPPER env var to API key")
+  Sys.setenv(GRAPHHOPPER. = pat)
+
+  pat
 
 }
