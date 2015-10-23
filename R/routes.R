@@ -108,7 +108,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
     print(paste0("The request sent to cyclestreets.net was: ", request))
   }
 
-  obj <- jsonlite::fromJSON(request)
+  txt <- httr::content(httr::GET(request), as = "text")
+  obj <- jsonlite::fromJSON(txt)
 
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
 
@@ -199,7 +200,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     print(paste0("The request sent was: ", request))
   }
 
-  obj <- jsonlite::fromJSON(request)
+  txt <- httr::content(httr::GET(request), as = "text")
+  obj <- jsonlite::fromJSON(txt)
 
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
 
