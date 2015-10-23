@@ -15,7 +15,6 @@ library(sp) # needed for geographical objects
 library(leaflet) # needed for plotting data
 ```
 
-
 ## Introduction
 
 Common tasks in transportation research and planning include:
@@ -190,7 +189,7 @@ This is illustrated
 by distance from the black line in the above plot, which represents circuity. 
 
 To estimate the amount of capacity needed at each segment on the transport
-network, the `gOverline` function, written by Barry Rowlingson can be used. This
+network, the `overline` function, written by Barry Rowlingson can be used. This
 divides up line geometries into unique segments then aggregates the overlapping
 values. The results, plotted on the map, can be used to estimate where there is
 most need to improve the transport network, for example informing the decision of
@@ -200,7 +199,7 @@ where to build new bicycle paths.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 routes_fast$All <- l$All
-rnet <- gOverline(routes_fast, "All", fun = sum)
+rnet <- overline(routes_fast, "All", fun = sum)
 w <- rnet$All / mean(rnet$All) * 3
 if(offline){
   print("Figure not shown: requires internet connection")

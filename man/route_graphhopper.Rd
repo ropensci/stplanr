@@ -4,7 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, vehicle = "bike")
+route_graphhopper(from, to, vehicle = "bike", silent = TRUE,
+  pat = graphhopper_pat())
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -17,17 +18,15 @@ route_graphhopper(from, to, vehicle = "bike")
 
 \item{vehicle}{A text string representing the vehicle. Can be bike, bike2, car
 or foot.}
+
+\item{silent}{Logical (default is FALSE). TRUE hides request sent.}
+
+\item{pat}{The API key used - this is usually aquired automatically through a helper
+function}
 }
 \description{
 Provides an R interface to the graphhopper routing engine,
 an open source route planning service.
-To use this function you will need to obtain an API key from
-\url{https://graphhopper.com/#directions-api}.
-It is assumed that you have set your api key as a system environment
-for security reasons (so you avoid typing the API key in your code).
-Do this with \code{GRAPHHOPPER}, e.g. by typing \code{
-Sys.setenv(GRAPHHOPPER = 'eccbf612-214e-437d-8b73-06bdf9e6877d')
-}. (Note: key not real, use your own key.)
 }
 \details{
 The function returns a SpatialLinesDataFrame object.
@@ -35,6 +34,17 @@ See \url{https://github.com/graphhopper} for more information.
 
 To test graphopper is working for you, try something like this, but with
 your own API key:
+To use this function you will need to obtain an API key from
+\url{https://graphhopper.com/#directions-api}.
+It is assumed that you have set your api key as a system environment
+for security reasons (so you avoid typing the API key in your code).
+Do this by adding the following to your .Renviron file (see \code{?.Renviron}
+or \url{https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html}
+for more on this):
+
+\code{GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'}.
+
+(Note: key not real, use your own key.)
 
 \code{obj <- jsonlite::fromJSON(url)}
 
@@ -44,7 +54,7 @@ Where \code{url} is an example api request from
 \examples{
 \dontrun{
 r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-
+r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
 library(leaflet)
 
 leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)

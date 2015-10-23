@@ -4,7 +4,8 @@
 \alias{route_cyclestreet}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = FALSE)
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
+  pat = cyclestreet_pat())
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -18,6 +19,9 @@ route_cyclestreet(from, to, plan = "fastest", silent = FALSE)
 \item{plan}{Text strong of either "fastest", "quietest" or "balanced"}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
+
+\item{pat}{The API key used - this is usually aquired automatically through a helper
+function}
 }
 \description{
 Provides an R interface to the CycleStreets.net cycle planning API,
@@ -45,28 +49,19 @@ before running the function, for example, will ensure it
 is available on any computer:
 
 \code{
-# mytoken <- "f3fe3d078ac34737" # warning: not a real key - keep yours private
 mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 Sys.setenv(CYCLESTREET = mytoken)
 }
 
-
-
-\code{
-cckey <- Sys.getenv('CYCLESTREET')
-}
-
-or on Linux
+if you want the API key to be available in future
+sessions, set it using the .Renviron file
+e.g. on Linux machines in bash via:
 
 \code{
-sudo -i # become route
-echo "export CYCLESTREET='f3fe3d078ac34737'" >> /etc/environment
+echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
 }
 
-Then restart so the envrionment variable is set and can be viewed with
-\code{
-$CYCLESTREET
-}
+Read more about the .Renviron here: \code{?.Renviron}
 }
 \examples{
 \dontrun{
