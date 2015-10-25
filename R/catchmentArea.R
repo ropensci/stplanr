@@ -43,6 +43,11 @@
 #' whole catchment area.
 #' @export
 #' @examples \dontrun{
+#' data_dir <- system.file("extdata", package = "stplanr")
+#' unzip(file.path(data_dir, 'smallsa1.zip'))
+#' unzip(file.path(data_dir, 'testcycleway.zip'))
+#' sa1income <- readOGR(".","smallsa1")
+#' testcycleway <- readOGR(".","testcycleway")
 #' calc_catchment(
 #'    polygonlayer = sa1income,
 #'    targetlayer = testcycleway,
@@ -62,33 +67,11 @@ calc_catchment <- function(
   dissolve = FALSE
   ){
 
-  # Define Named vector of known projection strings
-  knownprojs <- c(
-    'austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-    'worldalbers'='+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-  )
-
-  if (sum(is.na(knownprojs[projection])) == 0) {
-    projection <- knownprojs[projection]
-  }
-
-  polyproj <- sp::is.projected(polygonlayer)
-  lineproj <- sp::is.projected(targetlayer)
-
-  origprojpolygon <- sp::proj4string(polygonlayer)
-
-  if (polyproj == FALSE & lineproj == FALSE) {
-
-    polygonlayer <- sp::spTransform(polygonlayer, sp::CRS(projection))
-    targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
-  } else if (polyproj == TRUE & lineproj == FALSE) {
-    projection = sp::proj4string(polygonlayer)
-    targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
-  } else if (polyproj == TRUE & lineproj == TRUE) {
-    if (sp::proj4string(polyproj) != sp::proj4string(lineproj)) {
-      projection = sp::proj4string(polygonlayer)
-      targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
-    }
+  if (projection != "skipproj") {
+    confproj <- checkprojs(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
+    polygonlayer <- confproj[["polygonlayer"]]
+    targetlayer <- confproj[["targetlayer"]]
+    origprojpolygon <- confproj[["origprojpolygon"]]
   }
 
   polygonlayer@data$calc_catchment_fullArea <- rgeos::gArea(polygonlayer, byid=TRUE)
@@ -138,7 +121,9 @@ calc_catchment <- function(
 
   row.names(targetintersect@data) <- 1:nrow(targetintersect@data)
 
-  targetintersect <- sp::spTransform(targetintersect, sp::CRS(origprojpolygon))
+  if (projection != "skipproj") {
+    targetintersect <- sp::spTransform(targetintersect, sp::CRS(origprojpolygon))
+  }
   return(targetintersect)
 
 }
@@ -182,6 +167,11 @@ calc_catchment <- function(
 #' original area within the catchment area (Default = FALSE).
 #' @export
 #' @examples \dontrun{
+#' data_dir <- system.file("extdata", package = "stplanr")
+#' unzip(file.path(data_dir, 'smallsa1.zip'))
+#' unzip(file.path(data_dir, 'testcycleway.zip'))
+#' sa1income <- readOGR(".","smallsa1")
+#' testcycleway <- readOGR(".","testcycleway")
 #' calc_catchment_sum(
 #'    polygonlayer = sa1income,
 #'    targetlayer = testcycleway,
@@ -190,13 +180,6 @@ calc_catchment <- function(
 #'    projection = 'austalbers'
 #' )
 #'
-#' calc_catchment_sum(
-#' polygonlayer = sa1income,
-#' targetlayer = testcycleway,
-#' calccols = c('Total'),
-#' distance = 800,
-#' projection = 'austalbers'
-#' )
 #' }
 calc_catchment_sum <- function(
   polygonlayer,
@@ -265,6 +248,11 @@ calc_catchment_sum <- function(
 #' original area within the catchment area (Default = FALSE).
 #' @export
 #' @examples \dontrun{
+#' data_dir <- system.file("extdata", package = "stplanr")
+#' unzip(file.path(data_dir, 'smallsa1.zip'))
+#' unzip(file.path(data_dir, 'testcycleway.zip'))
+#' sa1income <- readOGR(".","smallsa1")
+#' testcycleway <- readOGR(".","testcycleway")
 #' calc_moving_catchment(
 #'    polygonlayer = sa1income,
 #'    targetlayer = testcycleway,
@@ -283,6 +271,11 @@ calc_moving_catchment <- function(
 ){
   newcalccols <- paste0('sum_',calccols)
 
+  confproj <- checkprojs(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
+  polygonlayer <- confproj[["polygonlayer"]]
+  targetlayer <- confproj[["targetlayer"]]
+  origprojpolygon <- confproj[["origprojpolygon"]]
+
   targetlayer@data[,newcalccols] <- NA
 
   count <- 1
@@ -293,7 +286,7 @@ calc_moving_catchment <- function(
         targetlayer = targetlayer[count,],
         calccols = calccols,
         distance = distance,
-        projection = projection,
+        projection = "skipproj",
         retainAreaProportion = retainAreaProportion
       ),
       newcalccols
@@ -301,5 +294,40 @@ calc_moving_catchment <- function(
     count <- count + 1
   }
 
+  targetlayer <- sp::spTransform(targetlayer, sp::CRS(origprojpolygon))
+
   return(targetlayer)
+}
+
+
+checkprojs <- function(polygonlayer, targetlayer, projection) {
+  # Define Named vector of known projection strings
+  knownprojs <- c(
+    'austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+    'worldalbers'='+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+  )
+
+  if (sum(is.na(knownprojs[projection])) == 0) {
+    projection <- knownprojs[projection]
+  }
+
+  polyproj <- sp::is.projected(polygonlayer)
+  lineproj <- sp::is.projected(targetlayer)
+
+  origprojpolygon <- sp::proj4string(polygonlayer)
+
+  if (polyproj == FALSE & lineproj == FALSE) {
+
+    polygonlayer <- sp::spTransform(polygonlayer, sp::CRS(projection))
+    targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
+  } else if (polyproj == TRUE & lineproj == FALSE) {
+    projection = sp::proj4string(polygonlayer)
+    targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
+  } else if (polyproj == TRUE & lineproj == TRUE) {
+    if (sp::proj4string(polyproj) != sp::proj4string(lineproj)) {
+      projection = sp::proj4string(polygonlayer)
+      targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
+    }
+  }
+  return(list("polygonlayer"=polygonlayer,"targetlayer"=targetlayer,"origprojpolygon"=origprojpolygon))
 }
