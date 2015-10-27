@@ -65,6 +65,11 @@ throughout the zone. Returns a SpatialPolygonsDataFrame.
 }
 \examples{
 \dontrun{
+data_dir <- system.file("extdata", package = "stplanr")
+unzip(file.path(data_dir, 'smallsa1.zip'))
+unzip(file.path(data_dir, 'testcycleway.zip'))
+sa1income <- readOGR(".","smallsa1")
+testcycleway <- readOGR(".","testcycleway")
 calc_catchment(
    polygonlayer = sa1income,
    targetlayer = testcycleway,
