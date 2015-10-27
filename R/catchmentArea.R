@@ -57,15 +57,19 @@ calc_catchment <- function(
   targetlayer,
   calccols,
   distance = 500,
-  projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
+                      "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
+                      " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
   retainAreaProportion = FALSE,
   dissolve = FALSE
   ){
 
   # Define Named vector of known projection strings
   knownprojs <- c(
-    'austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-    'worldalbers'='+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+    paste0('austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0',
+           ' +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'),
+    paste0('worldalbers'='+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0',
+    ' +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs')
   )
 
   if (sum(is.na(knownprojs[projection])) == 0) {
@@ -203,7 +207,9 @@ calc_catchment_sum <- function(
   targetlayer,
   calccols,
   distance = 500,
-  projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs",
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
+                      " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
+                      " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
   retainAreaProportion = FALSE
   ){
   if(length(calccols) == 1) {
