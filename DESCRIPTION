@@ -32,3 +32,4 @@ Suggests:
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/Robinlovelace/stplanr
+
