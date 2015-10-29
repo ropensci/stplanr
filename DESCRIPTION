@@ -11,7 +11,7 @@ Authors@R: c(
     )
 Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
 License: MIT + file LICENSE
-BugReports: https://github.com/robinlovelace/stplanr/issues
+BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
 Depends:
     sp, R (>= 3.0)
@@ -31,5 +31,5 @@ Suggests:
     knitr,
     tmap
 VignetteBuilder: knitr
-URL: https://github.com/Robinlovelace/stplanr
+URL: https://github.com/ropensci/stplanr
 
