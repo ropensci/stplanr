@@ -1,6 +1,6 @@
 # stplanr
 
-[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
+[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
 
 
 ```
@@ -215,10 +215,12 @@ To get internal help on a specific function, use the standard way.
 ?od2line
 ```
 
-This project is released with a [Contributor Code of Conduct](CONDUCT.md).
+## Meta
+
+* Please report issues, feature requests and questions to the [github issue tracker](https://github.com/ropensci/stplanr/issues)
+* License: MIT
+* Get citation information for `stplanr` in R doing `citation(package = 'stplanr')`
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
-Please report issues, feature requests and questions to the
-[github issue tracker](https://github.com/robinlovelace/stplanr/issues).
-
-
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
