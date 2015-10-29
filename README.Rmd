@@ -5,7 +5,7 @@ output:
     keep_md: yes
 ---
 
-[![Build Status](https://travis-ci.org/Robinlovelace/stplanr.svg?branch=master)](https://travis-ci.org/Robinlovelace/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
+[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
 
 ```{r, echo=FALSE}
 library(stplanr)
@@ -26,7 +26,7 @@ identify where bicycle paths are most urgently needed.
 
 Square data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
-analyses and visualisations of flows. **stplanr** facilitates this with 
+analyses and visualisations of flows. **stplanr** facilitates this with
 `od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
@@ -108,7 +108,7 @@ library(stplanr)
 ```
 
 stplanr depends on rgdal, which can be difficult to installon Mac and Linux
-users. 
+users.
 
 ### Installing rgdal on Ubuntu and Mac
 
@@ -139,10 +139,12 @@ To get internal help on a specific function, use the standard way.
 ?od2line
 ```
 
-This project is released with a [Contributor Code of Conduct](CONDUCT.md).
+## Meta
+
+* Please report issues, feature requests and questions to the [github issue tracker](https://github.com/ropensci/stplanr/issues)
+* License: MIT
+* Get citation information for `stplanr` in R doing `citation(package = 'stplanr')`
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
-Please report issues, feature requests and questions to the
-[github issue tracker](https://github.com/robinlovelace/stplanr/issues).
-
-
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
