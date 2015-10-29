@@ -3,11 +3,8 @@
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/web/packages/stplanr)
 
 
-```
-## Loading required package: sp
-```
 
-This is a package for sustainable transport planning in R (stplanr).
+This is a package for sustainable transport planning with R (stplanr).
 
 It brings together a range of tools for transport planning practitioners and
 researchers to better understand transport systems and inform policy.
@@ -15,14 +12,21 @@ researchers to better understand transport systems and inform policy.
 The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
 as part of the National Propensity to Cycle Tool
-([NPCT](http://www.cedar.iph.cam.ac.uk/research/modelling/npct-tool/)) project to
-identify where bicycle paths are most urgently needed.
+([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
+identify where bicycle paths are most urgently needed [@lovelace2015propensity].
+
+Although it was started in the UK it aims to be of use to researchers everywhere.
+The function `route_graphhopper()`, for example, works anywhere in the world and
+`read_table_builder()` reads-in Australian data. We welcome contributions that make
+transport research easier in any nation.
 
 ## Key functions
 
-Square data frames representing flows between origins and destinations
+Data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
-analyses and visualisations of flows. **stplanr** facilitates this with 
+analyses and visualisations of 'flows' or origin-destination (OD) data
+[see @caceres2007deriving for more on OD data].
+**stplanr** facilitates this with
 `od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
@@ -77,19 +81,18 @@ a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
 
 
 ```r
-trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+# Route functions take lat/lon inputs...
+# trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+
+# ...and place names, found using the Google Map API:
+trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
-osm_tiles <- read_osm(bbox(trip))
+osm_tiles <- read_osm(bb(bbox(trip), ext = 1.5))
 tm_shape(osm_tiles) +
   tm_raster() +
   tm_shape(trip) +
   tm_lines(lwd = 3)
-```
-
-```
-## Warning in (function (x, shp_nm) : Currect projection of shape trip
-## unknown. Long-lat (WGS84) is assumed.
 ```
 
 ![](README_files/figure-html/cycle-trip-1.png) 
@@ -114,9 +117,7 @@ For more examples, `example("line2route")`.
 splits them into unique segmentes and aggregates
 the values of overlapping lines. This can represent where there will be
 most traffic on the transport system, as illustrated
-below.^[Thanks
-to Martijn Tennekes for helping
-with the plotting using [tmap](https://github.com/mtennekes/tmap).]
+below using the [tmap](https://github.com/mtennekes/tmap) package.
 
 
 ```r
@@ -133,11 +134,6 @@ tm_shape(cents) +
     tm_bubbles()
 ```
 
-```
-## Warning in (function (x, shp_nm) : Currect projection of shape rnet
-## unknown. Long-lat (WGS84) is assumed.
-```
-
 ![](README_files/figure-html/rnet-1.png) 
 
 ## Installation
@@ -145,12 +141,12 @@ tm_shape(cents) +
 
 ```r
 # you must have the devtools package (e.g. via install.packages("devtools"))
-devtools::install_github("robinlovelace/stplanr")
+devtools::install_github("ropensci/stplanr")
 library(stplanr)
 ```
 
 stplanr depends on rgdal, which can be difficult to installon Mac and Linux
-users. 
+users.
 
 ### Installing rgdal on Ubuntu and Mac
 
@@ -180,9 +176,11 @@ lsf.str("package:stplanr", all = TRUE)
 ## age_recat : function (a)  
 ## age_recat2 : function (a)  
 ## bbox_scale : function (bb, scale_factor)  
-## calc_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
+## calc_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ", 
+##     "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80", " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), 
 ##     retainAreaProportion = FALSE, dissolve = FALSE)  
-## calc_catchment_sum : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs", 
+## calc_catchment_sum : function (polygonlayer, targetlayer, calccols, distance = 500, projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667", 
+##     " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0", " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), 
 ##     retainAreaProportion = FALSE)  
 ## calc_moving_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "worldalbers", 
 ##     retainAreaProportion = FALSE)  
@@ -224,3 +222,5 @@ To get internal help on a specific function, use the standard way.
 By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+
+## References
