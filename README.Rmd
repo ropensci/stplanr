@@ -21,7 +21,8 @@ The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
 as part of the National Propensity to Cycle Tool
 ([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
-identify where bicycle paths are most urgently needed [@lovelace2015propensity].
+identify where bicycle paths are most urgently needed
+([Lovelace et al., 2015](http://arxiv.org/abs/1509.04425)).
 
 Although it was started in the UK it aims to be of use to researchers everywhere.
 The function `route_graphhopper()`, for example, works anywhere in the world and
@@ -33,7 +34,7 @@ transport research easier in any nation.
 Data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of 'flows' or origin-destination (OD) data
-[see @caceres2007deriving for more on OD data].
+([Caceres 2007](https://www.researchgate.net/profile/Francisco_Benitez/publication/3480996_Deriving_origin_destination_data_from_a_mobile_phone_network/links/0f31753ad7db9e7ece000000.pdf)).
 **stplanr** facilitates this with
 `od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
@@ -158,5 +159,3 @@ To get internal help on a specific function, use the standard way.
 By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
-
-## References
