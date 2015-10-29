@@ -17,7 +17,8 @@ identify where bicycle paths are most urgently needed
 ([Lovelace et al., 2015](http://arxiv.org/abs/1509.04425)).
 
 Although it was started in the UK it aims to be of use to researchers everywhere.
-The function `route_graphhopper()`, for example, works anywhere in the world and
+The function `route_graphhopper()`, for example, works anywhere in the world
+using the [graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome contributions that make
 transport research easier in any nation.
 
