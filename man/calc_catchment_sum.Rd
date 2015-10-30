@@ -71,6 +71,13 @@ calc_catchment_sum(
    projection = 'austalbers'
 )
 
+calc_catchment_sum(
+polygonlayer = sa1income,
+targetlayer = testcycleway,
+calccols = c('Total'),
+distance = 800,
+projection = 'austalbers'
+)
 }
 }
 
