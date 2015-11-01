@@ -33,6 +33,6 @@ lines(x, dd_loglin(x, a = 0.1, b1 = 0.15))
 }
 \references{
 Iacono, M., Krizek, K. J. and El-Geneidy, A. (2010).
-Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1). doi:10.1016/j.jtrangeo.2009.02.002
+Measuring non-motorized accessibility: issues, alternatives, and execution. Journal of Transport Geography, 18(1).
 }
 
