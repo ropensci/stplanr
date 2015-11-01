@@ -1,6 +1,6 @@
 Package: stplanr
 Type: Package
-Title: Sustainable Transport Planning with R
+Title: Sustainable Transport Planning
 Version: 0.0.1.2
 Date: 2015-10-18
 Authors@R: c(
