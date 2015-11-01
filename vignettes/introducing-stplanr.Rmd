@@ -299,13 +299,13 @@ https://github.com/Robinlovelace/stplanr
 
 ## References
 
-Cheshire, James, and Robin Lovelace. 2015. “Spatial data visualisation with R.” In Geocomputation, edited by Chris Brunsdon and Alex Singleton, 1–14. SAGE Publications. https://github.com/geocomPP/sdv
+Cheshire, James, and Robin Lovelace. 2015. “Spatial data visualisation with R.” In Geocomputation, edited by Chris Brunsdon and Alex Singleton, 1–14. SAGE Publications.
 
-Iacono, Michael, Kevin J. Krizek, and Ahmed El-Geneidy. 2010. “Measuring non-motorized accessibility: issues, alternatives, and execution.” Journal of Transport Geography 18 (1). Elsevier Ltd: 133–40. doi:10.1016/j.jtrangeo.2009.02.002
+Iacono, Michael, Kevin J. Krizek, and Ahmed El-Geneidy. 2010. “Measuring non-motorized accessibility: issues, alternatives, and execution.” Journal of Transport Geography 18 (1). Elsevier Ltd: 133–40.
 
-Kahle, D, and Hadley Wickham. 2013. “ggmap: Spatial Visualization with ggplot2.” The R Journal 5: 144–61. http://stat405.had.co.nz/ggmap.pdf
+Kahle, D, and Hadley Wickham. 2013. “ggmap: Spatial Visualization with ggplot2.” The R Journal 5: 144–61.
 
-Martínez, L. Miguel, and José Manuel Viegas. 2013. “A new approach to modelling distance-decay functions for accessibility assessment in transport studies.” Journal of Transport Geography 26: 87–96. doi:10.1016/j.jtrangeo.2012.08.018
+Martínez, L. Miguel, and José Manuel Viegas. 2013. “A new approach to modelling distance-decay functions for accessibility assessment in transport studies.” Journal of Transport Geography 26: 87–96.
 
-Waddell, Paul. 2002. “UrbanSim: Modeling urban development for land use, transportation, and environmental planning.” Journal of the American Planning Association 68 (3). Taylor & Francis: 297–314
+Waddell, Paul. 2002. “UrbanSim: Modeling urban development for land use, transportation, and environmental planning.” Journal of the American Planning Association 68 (3). Taylor & Francis: 297–314.
 
