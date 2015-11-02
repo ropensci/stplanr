@@ -26,6 +26,7 @@ Imports:
     RgoogleMaps,
     openxlsx,
     leaflet,
+    methods,
     httr
 Suggests:
     testthat,
