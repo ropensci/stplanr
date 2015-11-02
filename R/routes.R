@@ -5,8 +5,7 @@
 #' The function returns a SpatialLinesDataFrame object representing the
 #' an estimate of the fastest, quietest or most balance route.
 #' Currently only works for the United Kingdom and part of continental Europe.
-#' See \url{https://api.cyclestreets.net} and
-#' \url{https://api.cyclestreets.net/v2/} for more information.
+#' See \url{http://www.cyclestreets.net/api/}for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
 #'  \code{length = 2} representing latitude and longitude) representing a point
