@@ -30,4 +30,6 @@
 #' @importFrom RgoogleMaps getGeoCode
 #' @importFrom jsonlite fromJSON
 #' @importFrom raster extent crop
+#' @importFrom stringi stri_enc_toutf32
+#' @importFrom R.utils intToBin
 NULL
