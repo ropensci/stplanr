@@ -23,6 +23,7 @@
 #' @import leaflet
 #' @import httr
 #' @importFrom graphics text
+#' @importFrom maptools spRbind
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv

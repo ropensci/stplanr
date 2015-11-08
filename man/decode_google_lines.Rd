@@ -4,11 +4,14 @@
 \alias{decode_google_lines}
 \title{Decode Google polyline compressed string}
 \usage{
-decode_google_lines(polyline)
+decode_google_lines(polyline, precision = 6)
 }
 \arguments{
 \item{polyline}{A character string or vector of character strings containing
 the encoded polyline to be decoded.}
+
+\item{precision}{An integer indicating the number of decimals in the
+initial encoded coordinates. Default is 6 (for OSRM default).}
 }
 \description{
 Decode Google polyline compressed string
@@ -21,7 +24,7 @@ dataframes otherwise.
 }
 \examples{
 \dontrun{
- decode_google_lines('')
+ decode_google_lines("_p~iF~ps|U_ulLnnqC_mqNvxq`@")
 }
 }
 
