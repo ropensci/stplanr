@@ -23,6 +23,7 @@
 #' @import leaflet
 #' @import httr
 #' @importFrom graphics text
+#' @importFrom maptools spRbind
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv
@@ -30,4 +31,6 @@
 #' @importFrom RgoogleMaps getGeoCode
 #' @importFrom jsonlite fromJSON
 #' @importFrom raster extent crop
+#' @importFrom stringi stri_enc_toutf32
+#' @importFrom R.utils intToBin
 NULL

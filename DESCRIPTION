@@ -27,7 +27,9 @@ Imports:
     openxlsx,
     leaflet,
     methods,
-    httr
+    httr,
+    R.utils,
+    stringi
 Suggests:
     testthat,
     knitr,
