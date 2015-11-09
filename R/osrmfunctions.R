@@ -11,9 +11,9 @@
 #' initial encoded coordinates. Default is 6 (for OSRM default).
 #' @export
 #' @examples \dontrun{
-#'  decode_google_lines("_p~iF~ps|U_ulLnnqC_mqNvxq`@@")
+#'  decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@@", precision = 5)
 #' }
-decode_google_lines <- function(polyline, precision=6) {
+decode_gl <- function(polyline, precision=6) {
 
   latlngsets <- lapply(polyline, function(polyline, precision){
 
@@ -58,17 +58,17 @@ decode_google_lines <- function(polyline, precision=6) {
 #' @export
 #' @examples \dontrun{
 #' library(RCurl)
-#'  osrm_viaroutes_sldf(
+#'  viaroute2sldf(
 #'    RCurl::getURL(paste0(
 #'    "http://router.project-osrm.org/viaroute?loc=52.503033,13.420526&",
 #'    "loc=52.516582,13.429290&instructions=true"))
 #'  )
 #' }
-osrm_viaroutes_sldf <- function(osrmresult) {
+viaroute2sldf <- function(osrmresult) {
 
   osrmjson <- jsonlite::fromJSON(osrmresult)
 
-  routecoords <- decode_google_lines(osrmjson$route_geometry)
+  routecoords <- decode_gl(osrmjson$route_geometry)
 
   if (exists("route_instructions",osrmjson) == TRUE) {
     if (length(osrmjson$route_instructions[[length(osrmjson$route_instructions)]]) <
@@ -89,6 +89,11 @@ osrm_viaroutes_sldf <- function(osrmresult) {
                                     "mode"
                                   )
     )
+    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
+      sapply(
+        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
+        as.character
+      )
     osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
       sapply(
         osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
@@ -133,7 +138,7 @@ osrm_viaroutes_sldf <- function(osrmresult) {
     i <- 1
     while (i <= length(osrmjson$alternative_geometries)) {
 
-      routecoords <- decode_google_lines(osrmjson$alternative_geometries[i])
+      routecoords <- decode_gl(osrmjson$alternative_geometries[i])
 
       if (exists("route_instructions",osrmjson) == TRUE) {
 
@@ -154,6 +159,11 @@ osrm_viaroutes_sldf <- function(osrmresult) {
                                         "mode"
                                       )
         )
+        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
+          sapply(
+            osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
+            as.character
+          )
         osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
           sapply(
             osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
