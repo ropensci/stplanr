@@ -92,12 +92,9 @@ viaroute2sldf <- function(osrmresult) {
     osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
       sapply(
         osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
-        as.character
-      )
-    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
-      sapply(
-        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
-        as.numeric
+        function(x) {
+          as.numeric(as.character(x))
+        }
       )
     osrmrouteinstruct$routesect <- 1:nrow(osrmrouteinstruct)
 
@@ -162,12 +159,9 @@ viaroute2sldf <- function(osrmresult) {
         osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
           sapply(
             osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
-            as.character
-          )
-        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
-          sapply(
-            osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
-            as.numeric
+            function(x) {
+              as.numeric(as.character(x))
+            }
           )
         osrmrouteinstruct$routesect <- 1:nrow(osrmrouteinstruct)
 
