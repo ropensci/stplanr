@@ -1,6 +1,6 @@
 #' Download Stats19 data
 #'
-#' @section Details
+#' @section Details:
 #' This convenience function downloads and unzips UK road traffic casualty data.
 #' It results in unzipped .csv data in R's temporary directory.
 #'
@@ -31,7 +31,7 @@ dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com
 
 #' Import and format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a wrapper function to access and load stats 19 data in a user-friendly way.
 #' The function returns a data frame, in which each record is a reported incident in the
 #' stats19 dataset.
@@ -64,7 +64,7 @@ read_stats19_ac <- function(data_dir = tempdir()){
 
 #' Format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ac Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
@@ -74,6 +74,9 @@ read_stats19_ac <- function(data_dir = tempdir()){
 #' ac <- format_stats19_ac(ac)
 #' }
 format_stats19_ac <- function(ac){
+
+  data(wb, package = "stplanr")
+
   ac$Accident_Severity <-
     factor(ac$Accident_Severity, labels = wb$Accident.Severity$label)
   ac$Police_Force <-
@@ -102,7 +105,7 @@ format_stats19_ac <- function(ac){
 
 #' Import and format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a wrapper function to access and load stats 19 data in a user-friendly way.
 #' The function returns a data frame, in which each record is a reported incident in the
 #' stats19 dataset.
@@ -135,7 +138,7 @@ read_stats19_ve <- function(data_dir = tempdir()){
 
 #' Format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ve Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
@@ -145,6 +148,8 @@ read_stats19_ve <- function(data_dir = tempdir()){
 #' ve <- format_stats19_ve(ve)
 #' }
 format_stats19_ve <- function(ve){
+
+  data(wb, package = "stplanr")
 
   tfact <-
     wb$Vehicle.Type$label[ as.character(wb$Vehicle.Type$code) %in%
@@ -172,7 +177,7 @@ format_stats19_ve <- function(ve){
 
 #' Import and format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a wrapper function to access and load stats 19 data in a user-friendly way.
 #' The function returns a data frame, in which each record is a reported incident in the
 #' stats19 dataset.
@@ -205,7 +210,7 @@ read_stats19_ca <- function(data_dir = tempdir()){
 
 #' Format UK 'Stats19' road traffic casualty data
 #'
-#' @section Details
+#' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ca Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
@@ -216,7 +221,31 @@ read_stats19_ca <- function(data_dir = tempdir()){
 #' }
 format_stats19_ca <- function(ca){
 
+  data(wb, package = "stplanr")
+
+  # nrow(ca) / nrow(ac) # 1.3 casualties per incident: reasonable
+  ca$Casualty_Class <- factor(ca$Casualty_Class, labels = wb$Casualty.Class$label)
+
+  ca$Sex_of_Casualty <- factor(ca$Sex_of_Casualty, labels = wb$Sex.of.Casualty$label[c(3,1,2)])
+  levels(ca$Sex_of_Casualty)[1] <- "Not known"
+
+  ca$Age_Band_of_Casualty <- factor(ca$Age_Band_of_Casualty, labels = c("na", wb$Age.Band$label[c(1:11)]))
+
+  summary(as.factor(ca$Casualty_Severity))
+  ca$Casualty_Severity <- factor(ca$Casualty_Severity, labels = wb$Casualty.Severity$label)
+
+  ca$Casualty_Type <- as.factor(ca$Casualty_Type)
+  ca_type_labs <-
+    wb$Casualty.Type$label[match(levels(ca$Casualty_Type), (wb$Casualty.Type$code))]
+  ca$Type <- factor(ca$Casualty_Type, labels = ca_type_labs)
+
   ca
 
+}
+
+merge_stats19 <- function(ca, ve, ac){
+  all_stats19 <- dplyr::inner_join(ve, ca)
+  all_stats19 <- dplyr::inner_join(all_stats19, ac)
+  all_stats19
 }
 
