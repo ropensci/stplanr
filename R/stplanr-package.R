@@ -22,6 +22,9 @@
 #' @import rgeos
 #' @import leaflet
 #' @import httr
+#' @import readr
+#' @import dplyr
+#' @import lubridate
 #' @importFrom graphics text
 #' @importFrom maptools spRbind
 #' @importFrom methods as slot

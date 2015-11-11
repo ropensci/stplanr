@@ -29,7 +29,9 @@ Imports:
     methods,
     httr,
     R.utils,
-    stringi
+    stringi,
+    readr,
+    lubridate
 Suggests:
     testthat,
     knitr,
