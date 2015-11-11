@@ -1,21 +1,222 @@
-#' Import and format UK 'Stats19' road traffic casualty data
+#' Download Stats19 data
 #'
-#' @section Details:
+#' @section Details
+#' This convenience function downloads and unzips UK road traffic casualty data.
+#' It results in unzipped .csv data in R's temporary directory.
 #'
-#' @param dataset
+#' Ensure you have a fast internet connection and at least 100 Mb space
+#'
+#' @param zip_url The url where the data is stored
 #' @export
 #' @examples
-read_stats19 <- function(data_dir, zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
+#' \dontrun{
+#' dl_stats19()
+#' }
+dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
   "road-accidents-safety-data/Stats19_Data_2005-2014.zip")){
 
   # download and unzip the data if it's not present
-  if(exists("data_dir")){
+  if(!"Accidents0514.csv" %in% list.files(tempdir())){
     data_dir <- tempdir()
     destfile <- file.path(data_dir, "Stats19_Data_2005-2014.zip")
     downloader::download(zip_url, destfile)
     unzip(destfile, exdir = data_dir)
   }
 
-  # read-in the data
+  list.files(tempdir())
+  print(paste0("Data saved at: ", list.files(tempdir(),
+              pattern = "csv", full.names = TRUE)))
 
 }
+
+#' Import and format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a wrapper function to access and load stats 19 data in a user-friendly way.
+#' The function returns a data frame, in which each record is a reported incident in the
+#' stats19 dataset.
+#'
+#' Ensure you have a fast internet connection and at least 100 Mb space.
+#'
+#' @param data_dir Character string representing where the data is stored.
+#' If empty, R will attempt to download and unzip the data for you.
+#' @export
+#' @examples
+#' \dontrun{
+#' ac <- read_stats19_ac()
+#' }
+read_stats19_ac <- function(data_dir = tempdir()){
+  if(!"Accidents0514.csv" %in% list.files(data_dir)){
+    dl_stats19()
+  }
+
+  # read the data in
+  ac <- readr::read_csv(file.path(data_dir, "Accidents0514.csv"))
+#   ve <- readr::read_csv(file.path(data_dir, "Vehicles0514.csv"))
+#   ca <- readr::read_csv(file.path(data_dir, "Casualties0514.csv"))
+
+  # format ac data
+  ac <- format_stats19_ac(ac)
+
+  ac
+
+}
+
+#' Format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a helper function to format raw stats19 data
+#'
+#' @param ac Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @export
+#' @examples
+#' \dontrun{
+#' ac <- format_stats19_ac(ac)
+#' }
+format_stats19_ac <- function(ac){
+  ac$Accident_Severity <-
+    factor(ac$Accident_Severity, labels = wb$Accident.Severity$label)
+  ac$Police_Force <-
+    factor(ac$Police_Force, labels = wb$Police.Force$label)
+  ac$`1st_Road_Class` <-
+    factor(ac$`1st_Road_Class`, labels = wb$.st.Road.Class$label)
+  ac$Road_Type <-
+    factor(ac$Road_Type, labels = wb$Road.Type$label[1:6])
+  ac$Junction_Detail <-
+    factor(ac$Junction_Detail, labels = wb$Junction.Detail$label[c(10, 1:9)])
+  ac$Light_Conditions <-
+    factor(ac$Light_Conditions, labels = wb$Light.Conditions$label[1:5])
+  ac$Weather_Conditions <-
+    factor(ac$Weather_Conditions, labels = wb$Weather$label[c(10, 1:9)])
+  ac$Road_Surface_Conditions <-
+    factor(ac$Road_Surface_Conditions, label = wb$Road.Surface$label[c(8, 1:5)])
+  ac$Time <-
+    lubridate::hm(ac$Time)
+  # hist(ac$Time@hour) # verify times
+  ac$Date <- lubridate::dmy(ac$Date)
+  # barplot(table(lubridate::wday(ac$Date, label = TRUE)))
+
+  ac
+
+}
+
+#' Import and format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a wrapper function to access and load stats 19 data in a user-friendly way.
+#' The function returns a data frame, in which each record is a reported incident in the
+#' stats19 dataset.
+#'
+#' Ensure you have a fast internet connection and at least 100 Mb space.
+#'
+#' @param data_dir Character string representing where the data is stored.
+#' If empty, R will attempt to download and unzip the data for you.
+#' @export
+#' @examples
+#' \dontrun{
+#' ve <- read_stats19_ve()
+#' }
+read_stats19_ve <- function(data_dir = tempdir()){
+  if(!"Vehicles0514.csv" %in% list.files(data_dir)){
+    dl_stats19()
+  }
+
+  # read the data in
+  #   ac <- readr::read_csv(file.path(data_dir, "Accidents0514.csv"))
+  ve <- readr::read_csv(file.path(data_dir, "Vehicles0514.csv"))
+  #   ca <- readr::read_csv(file.path(data_dir, "Casualties0514.csv"))
+
+  # format ac data
+  ve <- format_stats19_ve(ve)
+
+  ve
+
+}
+
+#' Format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a helper function to format raw stats19 data
+#'
+#' @param ve Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @export
+#' @examples
+#' \dontrun{
+#' ve <- format_stats19_ve(ve)
+#' }
+format_stats19_ve <- function(ve){
+
+  tfact <-
+    wb$Vehicle.Type$label[ as.character(wb$Vehicle.Type$code) %in%
+                             levels(as.factor(ve$Vehicle_Type)) ]
+  ve$Vehicle_Type <- factor(ve$Vehicle_Type,
+                          labels=tfact[c(20, 1:19, 21)])
+  # summary(ve$Vehicle_Type)
+  ve$Vehicle_Manoeuvre <-
+    factor(ve$Vehicle_Manoeuvre, labels = wb$Vehicle.Manoeuvre$label[c(19,1:18)])
+  # summary(ve$Vehicle_Manoeuvre)
+  ve$Journey_Purpose_of_Driver <-
+    factor(ve$Journey_Purpose_of_Driver, labels = wb$Journey.Purpose$label[c(8,1:7)])
+  # summary(ve$Journey_Purpose_of_Driver)
+  ve$Sex_of_Driver <- factor(ve$Sex_of_Driver , labels = wb$Sex.of.Driver$label[c(4,1:3)])
+  levels(ve$Sex_Driver_f)[1] <- levels(ve$Sex_Driver_f)[4]
+  summary(ve$Sex_of_Driver)
+
+  wb$IMD.Decile <- dplyr::rename(wb$IMD.Decile, Driver_IMD_Decile = code, IMD_Decile = label)
+
+  ve$Driver_IMD_Decile <- factor(dplyr::inner_join(ve, wb$IMD.Decile)$IMD_Decile)
+
+  ve
+
+}
+
+#' Import and format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a wrapper function to access and load stats 19 data in a user-friendly way.
+#' The function returns a data frame, in which each record is a reported incident in the
+#' stats19 dataset.
+#'
+#' Ensure you have a fast internet connection and at least 100 Mb space.
+#'
+#' @param data_dir Character string representing where the data is stored.
+#' If empty, R will attempt to download and unzip the data for you.
+#' @export
+#' @examples
+#' \dontrun{
+#' ca <- read_stats19_ca()
+#' }
+read_stats19_ca <- function(data_dir = tempdir()){
+  if(!"Casualties0514.csv" %in% list.files(data_dir)){
+    dl_stats19()
+  }
+
+  # read the data in
+  #   ac <- readr::read_csv(file.path(data_dir, "Accidents0514.csv"))
+  #   ve <- readr::read_csv(file.path(data_dir, "Vehicles0514.csv"))
+  ca <- readr::read_csv(file.path(data_dir, "Casualties0514.csv"))
+
+  # format ca data
+  ca <- format_stats19_ca(ca)
+
+  ca
+
+}
+
+#' Format UK 'Stats19' road traffic casualty data
+#'
+#' @section Details
+#' This is a helper function to format raw stats19 data
+#'
+#' @param ca Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @export
+#' @examples
+#' \dontrun{
+#' ca <- format_stats19_ca(ca)
+#' }
+format_stats19_ca <- function(ca){
+
+  ca
+
+}
+
