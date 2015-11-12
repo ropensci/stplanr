@@ -11,6 +11,15 @@
 #' @examples
 #' \dontrun{
 #' dl_stats19()
+#'
+#' # Load all stats19 datasets
+#' ac <- read_stats19_ac()
+#' ca <- read_stats19_ca()
+#' ve <- read_stats19_ve()
+#'
+#' merge_stats19 <- function(ca, ve, ac){
+#' all_stats19 <- dplyr::inner_join(ve, ca)
+#' all_stats19 <- dplyr::inner_join(all_stats19, ac)
 #' }
 dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
   "road-accidents-safety-data/Stats19_Data_2005-2014.zip")){
@@ -40,13 +49,16 @@ dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com
 #'
 #' @param data_dir Character string representing where the data is stored.
 #' If empty, R will attempt to download and unzip the data for you.
+#' @param filename Character string of the filename of the .csv to read in - default values
+#' are those downloaded from the UK Department for Transport (DfT).
+#'
 #' @export
 #' @examples
 #' \dontrun{
 #' ac <- read_stats19_ac()
 #' }
-read_stats19_ac <- function(data_dir = tempdir()){
-  if(!"Accidents0514.csv" %in% list.files(data_dir)){
+read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"){
+  if(!filename %in% list.files(data_dir)){
     dl_stats19()
   }
 
@@ -112,15 +124,14 @@ format_stats19_ac <- function(ac){
 #'
 #' Ensure you have a fast internet connection and at least 100 Mb space.
 #'
-#' @param data_dir Character string representing where the data is stored.
-#' If empty, R will attempt to download and unzip the data for you.
+#' @inheritParams read_stats19_ac
 #' @export
 #' @examples
 #' \dontrun{
 #' ve <- read_stats19_ve()
 #' }
-read_stats19_ve <- function(data_dir = tempdir()){
-  if(!"Vehicles0514.csv" %in% list.files(data_dir)){
+read_stats19_ve <- function(data_dir = tempdir(), filename = "Vehicles0514.csv"){
+  if(!filename %in% list.files(data_dir)){
     dl_stats19()
   }
 
@@ -184,15 +195,14 @@ format_stats19_ve <- function(ve){
 #'
 #' Ensure you have a fast internet connection and at least 100 Mb space.
 #'
-#' @param data_dir Character string representing where the data is stored.
-#' If empty, R will attempt to download and unzip the data for you.
+#' @inheritParams read_stats19_ac
 #' @export
 #' @examples
 #' \dontrun{
 #' ca <- read_stats19_ca()
 #' }
-read_stats19_ca <- function(data_dir = tempdir()){
-  if(!"Casualties0514.csv" %in% list.files(data_dir)){
+read_stats19_ca <- function(data_dir = tempdir(), filename = "Casualties0514.csv"){
+  if(!filename %in% list.files(data_dir)){
     dl_stats19()
   }
 
@@ -241,11 +251,5 @@ format_stats19_ca <- function(ca){
 
   ca
 
-}
-
-merge_stats19 <- function(ca, ve, ac){
-  all_stats19 <- dplyr::inner_join(ve, ca)
-  all_stats19 <- dplyr::inner_join(all_stats19, ac)
-  all_stats19
 }
 
