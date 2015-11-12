@@ -10,12 +10,15 @@ Authors@R: c(
     person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip")
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
-Description: Functionality and data access tools for transport planning, including origin-destination analysis, route allocation and modelling travel patterns.
+Description: Functionality and data access tools for transport planning,
+    including origin-destination analysis, route allocation and modelling travel
+    patterns.
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
 Depends:
-    sp, R (>= 3.0)
+    sp,
+    R (>= 3.0)
 Imports:
     jsonlite,
     maptools,
@@ -29,11 +32,14 @@ Imports:
     methods,
     httr,
     R.utils,
-    stringi
+    stringi,
+    readr,
+    lubridate,
+    downloader
 Suggests:
     testthat,
     knitr,
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
-
+RoxygenNote: 5.0.1
