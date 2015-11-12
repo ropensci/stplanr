@@ -34,7 +34,8 @@ Imports:
     R.utils,
     stringi,
     readr,
-    lubridate
+    lubridate,
+    downloader
 Suggests:
     testthat,
     knitr,
