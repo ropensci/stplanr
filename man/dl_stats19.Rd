@@ -23,6 +23,16 @@ Ensure you have a fast internet connection and at least 100 Mb space
 \examples{
 \dontrun{
 dl_stats19()
+
+# Load all stats19 datasets
+ac <- read_stats19_ac()
+ca <- read_stats19_ca()
+ve <- read_stats19_ve()
+
+merge_stats19 <- function(ca, ve, ac){
+all_stats19 <- dplyr::inner_join(ve, ca)
+all_stats19 <- dplyr::inner_join(all_stats19, ac)
+}
 }
 }
 

@@ -4,20 +4,12 @@
 \name{routes_slow}
 \alias{routes_slow}
 \title{SpatialLinesDataFrame of commuter flows on the travel network}
-\format{A SpatialLinesDataFrame 49 rows and 15 columns
-
-list of data labels associated with UK 'Stats19' road casualty data, used to clean
-the raw data
-
-These labels originate from this project: \url{https://github.com/Robinlovelace/bikeR}}
+\format{A SpatialLinesDataFrame 49 rows and 15 columns}
 \usage{
 data(routes_slow)
 }
 \description{
-Simulated travel route allocated to the transport network
-representing the 'quietest' between \code{\link{cents}()}
-objects
-with \code{\link{od2line}} (see \code{\link{flow}}).
+SpatialLinesDataFrame of commuter flows on the travel network
 }
 \keyword{datasets}
 

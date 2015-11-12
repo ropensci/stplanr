@@ -4,11 +4,14 @@
 \alias{read_stats19_ca}
 \title{Import and format UK 'Stats19' road traffic casualty data}
 \usage{
-read_stats19_ca(data_dir = tempdir())
+read_stats19_ca(data_dir = tempdir(), filename = "Casualties0514.csv")
 }
 \arguments{
 \item{data_dir}{Character string representing where the data is stored.
 If empty, R will attempt to download and unzip the data for you.}
+
+\item{filename}{Character string of the filename of the .csv to read in - default values
+are those downloaded from the UK Department for Transport (DfT).}
 }
 \description{
 Import and format UK 'Stats19' road traffic casualty data

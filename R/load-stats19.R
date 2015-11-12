@@ -81,14 +81,16 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ac Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param wb List of dataframes containing data labels for stats19 data
+#'
 #' @export
 #' @examples
 #' \dontrun{
 #' ac <- format_stats19_ac(ac)
 #' }
-format_stats19_ac <- function(ac){
+format_stats19_ac <- function(ac, wb){
 
-  data(wb, package = "stplanr")
+  data("wb")
 
   ac$Accident_Severity <-
     factor(ac$Accident_Severity, labels = wb$Accident.Severity$label)
@@ -105,7 +107,7 @@ format_stats19_ac <- function(ac){
   ac$Weather_Conditions <-
     factor(ac$Weather_Conditions, labels = wb$Weather$label[c(10, 1:9)])
   ac$Road_Surface_Conditions <-
-    factor(ac$Road_Surface_Conditions, label = wb$Road.Surface$label[c(8, 1:5)])
+    factor(ac$Road_Surface_Conditions, labels = wb$Road.Surface$label[c(8, 1:5)])
   ac$Time <-
     lubridate::hm(ac$Time)
   # hist(ac$Time@hour) # verify times
@@ -154,14 +156,15 @@ read_stats19_ve <- function(data_dir = tempdir(), filename = "Vehicles0514.csv")
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ve Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param wb List of dataframes containing data labels for stats19 data
 #' @export
 #' @examples
 #' \dontrun{
 #' ve <- format_stats19_ve(ve)
 #' }
-format_stats19_ve <- function(ve){
+format_stats19_ve <- function(ve, wb){
 
-  data(wb, package = "stplanr")
+  data("wb")
 
   tfact <-
     wb$Vehicle.Type$label[ as.character(wb$Vehicle.Type$code) %in%
@@ -225,14 +228,15 @@ read_stats19_ca <- function(data_dir = tempdir(), filename = "Casualties0514.csv
 #' This is a helper function to format raw stats19 data
 #'
 #' @param ca Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param wb List of dataframes containing data labels for stats19 data
 #' @export
 #' @examples
 #' \dontrun{
 #' ca <- format_stats19_ca(ca)
 #' }
-format_stats19_ca <- function(ca){
+format_stats19_ca <- function(ca, wb){
 
-  data(wb, package = "stplanr")
+  data("wb")
 
   # nrow(ca) / nrow(ac) # 1.3 casualties per incident: reasonable
   ca$Casualty_Class <- factor(ca$Casualty_Class, labels = wb$Casualty.Class$label)
