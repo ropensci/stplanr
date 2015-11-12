@@ -98,7 +98,6 @@ NULL
 #' @format A data frame with 49 rows and 15 columns
 NULL
 
-
 #' SpatialLinesDataFrame of commuter flows
 #'
 # @family example flow data
@@ -112,8 +111,6 @@ NULL
 #' @usage data(flowlines)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
 NULL
-
-
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
@@ -133,7 +130,7 @@ NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
 #'
-# @family example flow data
+#' @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between \code{\link{cents}()}
@@ -145,7 +142,8 @@ NULL
 #' @name routes_slow
 #' @usage data(routes_slow)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
-#'
+NULL
+
 #' list of data labels associated with UK 'Stats19' road casualty data, used to clean
 #' the raw data
 #'
