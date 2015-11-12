@@ -21,6 +21,7 @@
 #' all_stats19 <- dplyr::inner_join(ve, ca)
 #' all_stats19 <- dplyr::inner_join(all_stats19, ac)
 #' }
+#' }
 dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
   "road-accidents-safety-data/Stats19_Data_2005-2014.zip")){
 
