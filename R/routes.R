@@ -54,11 +54,8 @@
 #'
 #'
 #' @inheritParams line2route
-#'
 #' @export
-#'
 #' @seealso line2route
-#'
 #' @examples
 #'
 #' \dontrun{
@@ -161,11 +158,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #'  \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
 #'
 #' @inheritParams route_cyclestreet
-#'
 #' @export
-#'
 #' @seealso route_cyclestreet
-#'
 #' @examples
 #'
 #' \dontrun{
