@@ -32,11 +32,18 @@ Imports:
     methods,
     httr,
     R.utils,
-    stringi
+    stringi,
+    readr,
+    lubridate,
+    downloader
 Suggests:
     testthat,
     knitr,
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
+<<<<<<< HEAD
 RoxygenNote: 5.0.0
+=======
+RoxygenNote: 5.0.1
+>>>>>>> 5d8919af787eb466d4ef5c47367900e5e4c9e129

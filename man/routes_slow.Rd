@@ -9,10 +9,7 @@
 data(routes_slow)
 }
 \description{
-Simulated travel route allocated to the transport network
-representing the 'quietest' between \code{\link{cents}()}
-objects
-with \code{\link{od2line}} (see \code{\link{flow}}).
+SpatialLinesDataFrame of commuter flows on the travel network
 }
 \keyword{datasets}
 
