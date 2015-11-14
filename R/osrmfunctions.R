@@ -175,3 +175,145 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
   return(osrmsldf)
 
 }
+
+
+#' Return SpatialPointsDataFrame with located points from OSRM locate service
+#'
+#' @section Details:
+#' Retrieve coordinates of the node(s) on the network mapped from coordinates
+#' passed to functions.
+#'
+#' @param lat Numeric vector containing latitude coordinate for each coordinate
+#' to map. Also accepts dataframe with latitude in the first column and
+#' longitude in the second column.
+#' @param lng Numeric vector containing longitude coordinate for each
+#' coordinate to map.
+#' @param osrmurl Base URL of the OSRM service
+#' @export
+#' @examples \dontrun{
+#'  locate2spdf(
+#'    lat = c(50.3, 50.2),
+#'    lng = c(13.2, 13.1)
+#'  )
+#' }
+#'
+locate2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org") {
+
+  return(getlocnear(lat=lat,lng=lng,osrmurl=osrmurl,"locate"))
+
+}
+
+#' Return SpatialPointsDataFrame with nearest street from OSRM nearest service
+#'
+#' @section Details:
+#' Retrieve coordinates and name of the node(s) on the network mapped from
+#' coordinates passed to functions.
+#'
+#' @param lat Numeric vector containing latitude coordinate for each coordinate
+#' to map. Also accepts dataframe with latitude in the first column and
+#' longitude in the second column.
+#' @param lng Numeric vector containing longitude coordinate for each
+#' coordinate to map.
+#' @param osrmurl Base URL of the OSRM service
+#' @export
+#' @examples \dontrun{
+#'  nearest2spdf(
+#'    lat = c(50.3, 50.2),
+#'    lng = c(13.2, 13.1)
+#'  )
+#' }
+#'
+nearest2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org") {
+
+  return(getlocnear(lat=lat,lng=lng,osrmurl=osrmurl,"nearest"))
+
+}
+
+getlocnear <- function(lat,lng = NA, osrmurl = "http://router.project-osrm.org", service="locate") {
+  if(class(lat) == "data.frame") {
+    lng <- lat[,2]
+    lat <- lat[,1]
+  }
+  if(length(lat) != length(lng)) {
+    stop("Error - Lengths of vectors not equal.")
+  }
+
+  if (service == "locate") {
+    coorddf <- data.frame(origlat = lat, origlng = lng, mappedlat = NA, mappedlng = NA, status = NA)
+  }
+  else {
+    coorddf <- data.frame(origlat = lat, origlng = lng, mappedlat = NA, mappedlng = NA, street = NA, status = NA)
+  }
+
+  i <- 1
+  p <- dplyr::progress_estimated(length(lat), min_time = 5)
+  while (i <= length(lat)) {
+    locatedata <- RCurl::getURL(paste0(osrmurl,
+                                       "/",service,"?loc=",
+                                       coorddf[i,]$origlat,
+                                       ",",
+                                       coorddf[i,]$origlng))
+    locatedata2 <- jsonlite::fromJSON(locatedata)
+    if (locatedata2$status == 0) {
+      if (service == "locate") {
+        coorddf[i,c("mappedlat","mappedlng","status")] <- c(locatedata2$mapped_coordinate,0)
+      }
+      else {
+        coorddf[i,c("mappedlat","mappedlng","street","status")] <- c(locatedata2$mapped_coordinate,locatedata2$name,0)
+      }
+    }
+    else {
+      coorddf[i,"status"] <- locatedata2$status
+    }
+    p$tick()$print()
+    i <- i + 1
+  }
+  coorddf$mappedlat <- as.numeric(as.character(coorddf$mappedlat))
+  coorddf$mappedlng <- as.numeric(as.character(coorddf$mappedlng))
+
+  osrmspdf <- sp::SpatialPointsDataFrame(
+    sp::SpatialPoints(
+      coords=coorddf[,c('mappedlng','mappedlat')],
+      proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+    ),
+    data=coorddf[,which(!names(coorddf) %in% c('mappedlng','mappedlat'))]
+  )
+
+  return(osrmspdf)
+}
+
+#' Return SpatialPointsDataFrame with nearest street from OSRM nearest service
+#'
+#' @section Details:
+#' Retrieve coordinates and name of the node(s) on the network mapped from
+#' coordinates passed to functions.
+#'
+#' @param lat Numeric vector containing latitude coordinate for each coordinate
+#' to calculate travel times. Also accepts dataframe with latitude in the first
+#' column and longitude in the second column.
+#' @param lng Numeric vector containing longitude coordinate for each
+#' coordinate to calculate travel times.
+#' @param osrmurl Base URL of the OSRM service
+#' @export
+#' @examples \dontrun{
+#'  table2matrix(seq(from=50,to=52,by=0.1),seq(from=12,to=14,by=0.1))
+#' }
+#'
+table2matrix <- function(lat, lng=NA, osrmurl="http://router.project-osrm.org") {
+
+  if(class(lat) == "data.frame") {
+    lng <- lat[,2]
+    lat <- lat[,1]
+  }
+  if(length(lat) != length(lng)) {
+    stop("Error - Lengths of vectors not equal.")
+  }
+
+  tabledata <- RCurl::getURL(paste0(osrmurl,
+               "/table?loc=",
+               paste0(apply(data.frame(lat=lat,lng=lng),1,function(x){paste0(x,collapse=',')}),collapse='&loc=')
+               ))
+  tabledata2 <- jsonlite::fromJSON(tabledata)
+  return(tabledata2$distance_table)
+
+}
