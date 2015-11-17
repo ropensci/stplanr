@@ -5,7 +5,7 @@ Version: 0.0.2
 Date: 2015-10-18
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
-    person("Richard", "Ellison", role = c("aut"), comment = "Author of various functions"),
+    person("Richard", "Ellison", role = c("aut"), role = "aut"),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of overline"),
     person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip")
     )
@@ -42,8 +42,4 @@ Suggests:
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
-<<<<<<< HEAD
-RoxygenNote: 5.0.0
-=======
 RoxygenNote: 5.0.1
->>>>>>> 5d8919af787eb466d4ef5c47367900e5e4c9e129
