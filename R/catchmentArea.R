@@ -289,6 +289,7 @@ calc_moving_catchment <- function(
 
   targetlayer@data[,newcalccols] <- NA
 
+  p <- dplyr::progress_estimated(nrow(targetlayer), min_time = 10)
   count <- 1
   while (count <= nrow(targetlayer)) {
     targetlayer[count,newcalccols] <- setNames(
@@ -302,6 +303,7 @@ calc_moving_catchment <- function(
       ),
       newcalccols
     )
+    p$tick()$print()
     count <- count + 1
   }
 

@@ -47,12 +47,27 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
     stop("File could not be loaded")
   } else {
     if (filetype == "xlsx" | filetype == "legacycsv") {
-      tbfile[,1] <- NULL
+      tbfile[tbfile == ''] <- NA
+      tbfile <- tbfile[,which(!(colSums(is.na(tbfile)) == nrow(tbfile)))]
+      if (is.na(tbfile[which(rowSums(is.na(tbfile[,2:ncol(tbfile)])) == min(rowSums(is.na(tbfile[,2:ncol(tbfile)])))),][1,1]) == TRUE) {
+        tbfile[,1] <- NULL
+      }
+      else {
+        tbfile <- tbfile[which(rowSums(is.na(tbfile)) < (ncol(tbfile)-1)),]
+      }
       tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)),]
       valuecols <- which(!is.na(tbfile[1,]))
-      colnames(tbfile) <- unlist(c(tbfile[2,which(!is.na(tbfile[2,]))],tbfile[1,which(!is.na(tbfile[1,]))]))
+      valuecols <- valuecols[which(valuecols > 1)]
+      valuecols <- valuecols[!valuecols %in% which(!is.na(tbfile[2,]))]
+      colnames(tbfile) <- c(as.character(unlist(unname(tbfile[2,which(!is.na(tbfile[2,]))]))),as.character(unlist(unname(tbfile[1,valuecols]))))
       tbfile <- tbfile[3:nrow(tbfile),]
       tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)-1),]
+      if (length(valuecols) > 1) {
+        tbfile <- tbfile[which(!rowSums(is.na(tbfile[,valuecols])) == length(valuecols)),]
+      }
+      else {
+        tbfile <- tbfile[which(is.na(tbfile[,valuecols]) != TRUE),]
+      }
       i <- 1
       while (sum(is.na(tbfile[,i])) != 0) {
         tbfile[,i] <- rep(
@@ -66,8 +81,7 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
         tbfile <- tbfile[,which(colnames(tbfile) != "Total")]
         tbfile <- tbfile[which(tbfile[,1] != "Total"),]
       }
-      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.character)
-      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.numeric)
+      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],function(x){as.numeric(as.character(x))})
       row.names(tbfile) <- NULL
     } else {
       colnamevals <- c(as.character(unname(unlist(tbfile[(min(which(is.na(tbfile[,ncol(tbfile)])==FALSE))-1),1:(ncol(tbfile)-1)]))),'value')
