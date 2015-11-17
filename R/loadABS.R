@@ -71,9 +71,9 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
       i <- 1
       while (sum(is.na(tbfile[,i])) != 0) {
         tbfile[,i] <- rep(
-          unique(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]),
-          each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]),
-          times=length(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]))
+          unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
+          each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
+          times=length(tbfile[which(is.na(tbfile[,i])==FALSE),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]))
         )
         i <- i + 1
       }
@@ -81,8 +81,7 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
         tbfile <- tbfile[,which(colnames(tbfile) != "Total")]
         tbfile <- tbfile[which(tbfile[,1] != "Total"),]
       }
-      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.character)
-      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],as.numeric)
+      tbfile[valuecols[which(valuecols <= ncol(tbfile))]] <- sapply(tbfile[valuecols[which(valuecols <= ncol(tbfile))]],function(x){as.numeric(as.character(x))})
       row.names(tbfile) <- NULL
     } else {
       colnamevals <- c(as.character(unname(unlist(tbfile[(min(which(is.na(tbfile[,ncol(tbfile)])==FALSE))-1),1:(ncol(tbfile)-1)]))),'value')
