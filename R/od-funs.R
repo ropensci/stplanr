@@ -42,12 +42,12 @@ od2line <- function(flow, zones){
 #'
 #'
 #' @param l A SpatialLinesDataFrame
-#'
 #' @export
-#'
 #' @examples
+#' \dontrun{
 #' data(flowlines) # load demo flowlines dataset
 #' ldf <- line2df(flowlines)
+#' }
 line2df <- function(l){
   l_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
   function(y) slot(y, "coords")))
@@ -60,6 +60,7 @@ line2df <- function(l){
   names(output) <- c("fx", "fy", "tx", "ty")
 
   output
+
 }
 
 #' Convert straight SpatialLinesDataFrame from flow data into routes
@@ -74,9 +75,7 @@ line2df <- function(l){
 #' @param ... Arguements passed to \code{\link{route_cyclestreet}}
 #'
 #' @inheritParams route_cyclestreet
-#'
 #' @export
-#'
 #' @examples
 #'
 #' data(flowlines) # load demo flowlines dataset

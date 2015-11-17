@@ -7,7 +7,6 @@
 #' @param g1 A SpatialLinesDataFrame
 #' @param g2 A SpatialLinesDataFrame
 #' @export
-#'
 #' @examples \dontrun{
 #' data(routes_fast)
 #' rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")

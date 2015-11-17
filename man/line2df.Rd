@@ -13,7 +13,9 @@ line2df(l)
 Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
 }
 \examples{
+\dontrun{
 data(flowlines) # load demo flowlines dataset
 ldf <- line2df(flowlines)
+}
 }
 
