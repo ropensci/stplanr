@@ -47,18 +47,33 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
     stop("File could not be loaded")
   } else {
     if (filetype == "xlsx" | filetype == "legacycsv") {
-      tbfile[,1] <- NULL
+      tbfile[tbfile == ''] <- NA
+      tbfile <- tbfile[,which(!(colSums(is.na(tbfile)) == nrow(tbfile)))]
+      if (is.na(tbfile[which(rowSums(is.na(tbfile[,2:ncol(tbfile)])) == min(rowSums(is.na(tbfile[,2:ncol(tbfile)])))),][1,1]) == TRUE) {
+        tbfile[,1] <- NULL
+      }
+      else {
+        tbfile <- tbfile[which(rowSums(is.na(tbfile)) < (ncol(tbfile)-1)),]
+      }
       tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)),]
       valuecols <- which(!is.na(tbfile[1,]))
-      colnames(tbfile) <- unlist(c(tbfile[2,which(!is.na(tbfile[2,]))],tbfile[1,which(!is.na(tbfile[1,]))]))
+      valuecols <- valuecols[which(valuecols > 1)]
+      valuecols <- valuecols[!valuecols %in% which(!is.na(tbfile[2,]))]
+      colnames(tbfile) <- c(as.character(unlist(unname(tbfile[2,which(!is.na(tbfile[2,]))]))),as.character(unlist(unname(tbfile[1,valuecols]))))
       tbfile <- tbfile[3:nrow(tbfile),]
       tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)-1),]
+      if (length(valuecols) > 1) {
+        tbfile <- tbfile[which(!rowSums(is.na(tbfile[,valuecols])) == length(valuecols)),]
+      }
+      else {
+        tbfile <- tbfile[which(is.na(tbfile[,valuecols]) != TRUE),]
+      }
       i <- 1
       while (sum(is.na(tbfile[,i])) != 0) {
         tbfile[,i] <- rep(
-          unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
-          each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE),i]),
-          times=length(tbfile[which(is.na(tbfile[,i])==FALSE),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE),i]))
+          unique(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]),
+          each=nrow(tbfile)/length(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]),
+          times=length(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i])/length(unique(tbfile[which(is.na(tbfile[,i])==FALSE | tbfile[,i] == ''),i]))
         )
         i <- i + 1
       }
