@@ -59,7 +59,6 @@ read_table_builder <- function(dataset, filetype="csv",sheet=1,removeTotal=TRUE)
       valuecols <- which(!is.na(tbfile[1,]))
       valuecols <- valuecols[which(valuecols > 1)]
       valuecols <- valuecols[!valuecols %in% which(!is.na(tbfile[2,]))]
-      #colnames(tbfile) <- c(as.character(unlist(unname(tbfile[2,which(!(is.na(tbfile[2,]) | tbfile[2,] == ''))]))),as.character(unlist(unname(tbfile[1,valuecols[!valuecols %in% which(!(is.na(tbfile[2,]) | tbfile[2,] == ''))]]))))
       colnames(tbfile) <- c(as.character(unlist(unname(tbfile[2,which(!is.na(tbfile[2,]))]))),as.character(unlist(unname(tbfile[1,valuecols]))))
       tbfile <- tbfile[3:nrow(tbfile),]
       tbfile <- tbfile[which(rowSums(is.na(tbfile)) != ncol(tbfile)-1),]
