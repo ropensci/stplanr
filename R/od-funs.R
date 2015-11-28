@@ -63,6 +63,32 @@ line2df <- function(l){
 
 }
 
+#' Convert a SpatialLinesDataFrame to points at the origin and destination
+#'
+#' @param l A SpatialLinesDataFrame
+#' @export
+#' @examples
+#' data(routes_fast)
+#' lpoints <- line2points(routes_fast[2,]) # for a single line
+#' data(flowlines) # load demo flowlines dataset
+#' lpoints <- line2points(flowlines) # for many lines
+#' plot(lpoints) # note overlapping points
+#'
+line2points <- function(l){
+  for(i in 1:length(l)){
+    l1 <- l[i,]
+    lcoords <- sp::coordinates(l1)[[1]][[1]]
+    lpoints <- sp::SpatialPoints(matrix(lcoords[c(1, nrow(lcoords)),], nrow = 2))
+    sp::proj4string(lpoints) <- sp::proj4string(l)
+    if(i == 1){
+      out <- lpoints
+    } else {
+      out <- tmap::sbind(out, lpoints)
+    }
+  }
+  out
+}
+
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
 #' @section Details:
