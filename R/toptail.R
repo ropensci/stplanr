@@ -68,8 +68,8 @@ toptail <- function(l, toptail_dist, ...){
 #' data("routes_fast")
 #' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 #' buff <- buff_geo(routes_fast, width = 100)
-#' plot(buff_geo)
-#' plot(routes_fast, add = T)
+#' plot(buff)
+#' plot(routes_fast, add = TRUE)
 buff_geo <- function(sp_obj, width, ..., silent = TRUE){
   old_proj <- CRS(proj4string(sp_obj))
   new_proj <- crs_select_aeq(sp_obj)
