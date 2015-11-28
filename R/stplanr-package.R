@@ -38,4 +38,5 @@
 #' @importFrom stringi stri_enc_toutf32
 #' @importFrom R.utils intToBin
 #' @importFrom RCurl getURL
+#' @importFrom geosphere distHaversine
 NULL
