@@ -37,7 +37,8 @@ gtfs2sldf <- function(gtfszip = "") {
                                     proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))))[[1]][[1]],
    data=gtfstrips %>%
      dplyr::inner_join(
-       gtfsroutes) %>%
+       gtfsroutes
+     ) %>%
      dplyr::distinct(
        route_id,
        shape_id,
@@ -46,14 +47,24 @@ gtfs2sldf <- function(gtfszip = "") {
        route_desc,
        route_type,
        route_color,
-       route_text_color
+       route_text_color,
+       agency_id
      ) %>%
+     dplyr::select(route_id,
+            shape_id,
+            route_short_name,
+            route_long_name,
+            route_desc,
+            route_type,
+            route_color,
+            route_text_color,
+            agency_id) %>%
      dplyr::inner_join(
        gtfsagency
      ) %>%
      dplyr::do(
-       `rownames<-`(.,.$shape_id))
-  )
+       `rownames<-`(.,.$shape_id)
+     ))
   rm(gtfstrips,gtfsshape,gtfsagency,gtfsroutes)
   return(gtfslines)
 }

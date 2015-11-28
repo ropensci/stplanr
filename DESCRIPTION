@@ -27,6 +27,7 @@ Imports:
     rgeos,
     dplyr,
     magrittr,
+    geosphere,
     RgoogleMaps,
     openxlsx,
     leaflet,
