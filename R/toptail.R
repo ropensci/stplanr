@@ -37,7 +37,7 @@ toptail <- function(l, toptail_dist, ...){
     }
 
     if(rgeos::gContainsProperly(sel, l1)){
-      print(paste0("Line ", i, " is completely removed by the clip and",
+      message(paste0("Line ", i, " is completely removed by the clip and",
                    " is omitted from the results"))
       next
     }
@@ -74,9 +74,9 @@ buff_geo <- function(sp_obj, width, ..., silent = TRUE){
   old_proj <- CRS(proj4string(sp_obj))
   new_proj <- crs_select_aeq(sp_obj)
   if(silent == FALSE){
-    print(paste0("The new Azimuthal equidistant projection",
+    message(paste0("The new Azimuthal equidistant projection",
     "used to create the buffer was ", new_proj))
-    print(paste0("The original projection was ", old_proj))
+    message(paste0("The original projection was ", old_proj))
   }
   sp_obj <- sp::spTransform(sp_obj, new_proj)
   buff <- rgeos::gBuffer(sp_obj, width = width, ...)
