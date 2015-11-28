@@ -3,6 +3,10 @@
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the user.
 #'
+#' Note: \code{\link{toptailgs}} is around 10 times faster, but only works
+#' on data with geographic CRS's due to its reliance on the geosphere
+#' package.
+#'
 #' @param l A SpatialLines object
 #' @param toptail_dist The distance (in metres) to top and tail the line by
 #' @param ... Arguments passed to rgeos::gBuffer()
