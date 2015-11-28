@@ -14,4 +14,12 @@ Takes a string with the file path of the zip file with the GTFS feed,
 imports the shapes (geometry), route and agency data and returns a
 SpatialLinesDataFrame for the GTFS feed.
 }
+\examples{
+\dontrun{
+downloader::download("http://www.yrt.ca/google/google_transit.zip",
+                     paste0(tempdir(),"/gtfsfeed.zip"))
+yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
+plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
+}
+}
 

@@ -6,6 +6,12 @@
 #'
 #' @param gtfszip String with the file path of the GTFS feed zip file
 #' @export
+#' @examples \dontrun{
+#' downloader::download("http://www.yrt.ca/google/google_transit.zip",
+#'                      paste0(tempdir(),"/gtfsfeed.zip"))
+#' yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
+#' plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
+#' }
 gtfs2sldf <- function(gtfszip = "") {
 
   if (gtfszip == "") {
