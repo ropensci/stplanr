@@ -4,16 +4,23 @@
 \alias{toptail}
 \title{Clip the first and last n metres of SpatialLines}
 \usage{
-toptail(l, toptail_dist)
+toptail(l, toptail_dist, ...)
 }
 \arguments{
 \item{l}{A SpatialLines object}
 
 \item{toptail_dist}{The distance (in metres) to top and tail the line by}
+
+\item{...}{Arguments passed to rgeos::gBuffer()}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
 by the user.
+}
+\details{
+Note: \code{\link{toptailgs}} is around 10 times faster, but only works
+on data with geographic CRS's due to its reliance on the geosphere
+package.
 }
 \examples{
 data("routes_fast")
@@ -21,7 +28,7 @@ sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 r_toptail <- toptail(routes_fast, toptail_dist = 300)
 plot(routes_fast, lwd = 3)
 plot(r_toptail, col = "red", add = TRUE)
-plot(cents, add = TRUE)
+plot(cents, col = "blue", add = TRUE, pch = 15)
 # Note the behaviour when the buffer size removes lines
 r_toptail <- toptail(routes_fast, toptail_dist = 1000)
 length(r_toptail) # note short routes have been removed

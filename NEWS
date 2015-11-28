@@ -1,0 +1,22 @@
+stplanr 0.0.3
+----------------------------------------------------------------
+
+NEW FEATURES
+
+* Functions for removing beginning and end of lines: `toptail` and
+  `toptailgs` (@richardellison). Helper functions `buff_geo`,
+  `crs_select_aeq` and `line2points` added.
+
+* Functionality for reading in the UK's stats19 data: `read_stats19_*`
+  functions download, unzip and re-categorise the data.
+
+* `read_table` functions added for reading Australian OD data
+  (@richardellison).
+
+* `decode_gl` added to decode Google polylines (@richardellison).
+  Towards osrm routing in R!
+
+stplanr 0.0.2
+----------------------------------------------------------------
+
+* Published on CRAN
