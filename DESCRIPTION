@@ -36,7 +36,8 @@ Imports:
     readr,
     lubridate,
     downloader,
-    RCurl
+    RCurl,
+    geosphere
 Suggests:
     testthat,
     knitr,
