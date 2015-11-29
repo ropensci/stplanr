@@ -37,6 +37,10 @@ gtfs2sldf <- function(gtfszip = "") {
   gtfsagency <- read.csv(paste0(tempdir(),"/agency.txt"))
   gtfsshape <- read.csv(paste0(tempdir(),"/shapes.txt"))
 
+  if (nrow(gtfsshape) == 0) {
+    stop("GTFS shapes.txt file is empty.")
+  }
+
   unlink(gtfsfiles)
 
   gtfslines <- sp::SpatialLinesDataFrame((gtfsshape %>%
