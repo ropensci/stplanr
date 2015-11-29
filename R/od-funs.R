@@ -144,7 +144,7 @@ line2route <- function(ldf, ...){
   rf <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4])
   tryCatch({
     rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
-  }, error = function(e){print(paste0("Fail for line number ", i))})
+  }, error = function(e){print(paste0("Fail for line number ", 1))})
 
   for(i in 2:nrow(ldf)){
     tryCatch({
