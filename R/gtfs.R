@@ -6,11 +6,19 @@
 #'
 #' @param gtfszip String with the file path of the GTFS feed zip file
 #' @export
-#' @examples \dontrun{
+#' @examples
+#' f <- system.file("extdata", "beartransit-ca-us.zip", package = "stplanr")
+#' # update file to latest version
+#' # see https://code.google.com/p/googletransitdatafeed/wiki/PublicFeeds
+#' u <- "http://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip"
+#' # download.file(u, f)
+#' gtfs <- gtfs2sldf(gtfszip = f)
+#' \dontrun{
+#' # An example of a larger gtfs feed
 #' downloader::download("http://www.yrt.ca/google/google_transit.zip",
 #'                      paste0(tempdir(),"/gtfsfeed.zip"))
 #' yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
-#' plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
+#' sp::plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
 #' }
 gtfs2sldf <- function(gtfszip = "") {
 
@@ -74,3 +82,4 @@ gtfs2sldf <- function(gtfszip = "") {
   rm(gtfstrips,gtfsshape,gtfsagency,gtfsroutes)
   return(gtfslines)
 }
+
