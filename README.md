@@ -14,14 +14,13 @@ The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
 as part of the National Propensity to Cycle Tool
 ([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
-identify where bicycle paths are most urgently needed
-([Lovelace et al., 2015](http://arxiv.org/abs/1509.04425)).
+identify where bicycle paths are most urgently needed.
 
-Although it was started in the UK it aims to be of use to researchers everywhere.
+stplanr aims to be of use to researchers everywhere.
 The function `route_graphhopper()`, for example, works anywhere in the world
 using the [graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome contributions that make
-transport research easier in any nation.
+transport research easier worldwide.
 
 ## Key functions
 
@@ -80,14 +79,20 @@ plot(travel_network, lwd = w)
 ![](README_files/figure-html/plot1-1.png) 
 
 The package can also allocate flows to the road network, for example through
-a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
+a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
+
+Route functions take lat/lon inputs:
 
 
 ```r
-# Route functions take lat/lon inputs...
-# trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+trip <-
+  route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+```
 
-# ...and place names, found using the Google Map API:
+and place names, found using the Google Map API:
+
+
+```r
 trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
@@ -108,11 +113,19 @@ using `line2route`.
 # Remove intra-zone flow
 intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
 travel_network <- travel_network[!intrazone,]
-routes <- line2route(travel_network)
-plot(routes)
+t_routes <- line2route(travel_network)
+plot(t_routes)
 ```
 
 ![](README_files/figure-html/plot2-1.png) 
+
+Another way to visualise this is with the leaflet package (not shown):
+
+
+```r
+library(leaflet)
+leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
+```
 
 For more examples, `example("line2route")`.
 
@@ -124,8 +137,8 @@ below using the [tmap](https://github.com/mtennekes/tmap) package.
 
 
 ```r
-routes$All <- travel_network$All
-rnet <- overline(sldf = routes, attrib = "All", fun = sum)
+t_routes$All <- travel_network$All
+rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
 
 osm_tiles <- read_osm(bb(rnet, ext = 1.05))
 rnet$lwd <- rnet$All / mean(rnet$All)
@@ -141,15 +154,23 @@ tm_shape(cents) +
 
 ## Installation
 
+To install the stable version, use:
+
 
 ```r
-# you must have the devtools package (e.g. via install.packages("devtools"))
+install.packages("stplanr")
+```
+
+The development version can be installed using devtools:
+
+
+```r
+# install.packages("devtools") # if not already installed
 devtools::install_github("ropensci/stplanr")
 library(stplanr)
 ```
 
-stplanr depends on rgdal, which can be difficult to installon Mac and Linux
-users.
+stplanr depends on rgdal, which can be tricky to install.
 
 ### Installing rgdal on Ubuntu and Mac
 
@@ -173,53 +194,6 @@ The current list of available functions can be seen with:
 
 ```r
 lsf.str("package:stplanr", all = TRUE)
-```
-
-```
-## age_recat : function (a)  
-## age_recat2 : function (a)  
-## bbox_scale : function (bb, scale_factor)  
-## calc_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ", 
-##     "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80", " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), 
-##     retainAreaProportion = FALSE, dissolve = FALSE)  
-## calc_catchment_sum : function (polygonlayer, targetlayer, calccols, distance = 500, projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667", 
-##     " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0", " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), 
-##     retainAreaProportion = FALSE)  
-## calc_moving_catchment : function (polygonlayer, targetlayer, calccols, distance = 500, projection = "worldalbers", 
-##     retainAreaProportion = FALSE)  
-## cyclestreet_pat : function (force = FALSE)  
-## dd_logcub : function (x, a, b1, b2, b3)  
-## dd_loglin : function (x, a = 0.3, b1 = -0.2)  
-## dd_logsqrt : function (x, a, b1, b2)  
-## decode_gl : function (polyline, precision = 6)  
-## disab_recat : function (a)  
-## dl_stats19 : function (zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/", 
-##     "road-accidents-safety-data/Stats19_Data_2005-2014.zip"))  
-## format_stats19_ac : function (ac, wb)  
-## format_stats19_ca : function (ca, wb)  
-## format_stats19_ve : function (ve, wb)  
-## gclip : function (shp, bb)  
-## graphhopper_pat : function (force = FALSE)  
-## gsection : function (sl)  
-## islines : function (g1, g2)  
-## line2df : function (l)  
-## line2route : function (ldf, ...)  
-## lineLabels : function (sldf, attrib)  
-## locate2spdf : function (lat, lng = NA, osrmurl = "http://router.project-osrm.org")  
-## mapshape : function (dsn, percent)  
-## nearest2spdf : function (lat, lng = NA, osrmurl = "http://router.project-osrm.org")  
-## od2line : function (flow, zones)  
-## onewaygeo : function (x, attrib)  
-## onewayid : function (x, attrib, id1 = names(x)[1], id2 = names(x)[2])  
-## overline : function (sldf, attrib, fun = sum, na.zero = FALSE)  
-## read_stats19_ac : function (data_dir = tempdir(), filename = "Accidents0514.csv")  
-## read_stats19_ca : function (data_dir = tempdir(), filename = "Casualties0514.csv")  
-## read_stats19_ve : function (data_dir = tempdir(), filename = "Vehicles0514.csv")  
-## read_table_builder : function (dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)  
-## route_cyclestreet : function (from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat())  
-## route_graphhopper : function (from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat())  
-## table2matrix : function (lat, lng = NA, osrmurl = "http://router.project-osrm.org")  
-## viaroute2sldf : function (osrmresult)
 ```
 
 To get internal help on a specific function, use the standard way.

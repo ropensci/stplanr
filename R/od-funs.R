@@ -139,27 +139,29 @@ line2points <- function(l){
 #' lines(routes_slow[n,], col = "green")
 
 line2route <- function(ldf, ...){
-  if (class(ldf) == "SpatialLinesDataFrame") ldf <- line2df(ldf)
-  for (i in 1:nrow(ldf)){
+  if(class(ldf) == "SpatialLinesDataFrame") ldf <- line2df(ldf)
+
+  rf <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4])
+  tryCatch({
+    rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+  }, error = function(e){warning(paste0("Fail for line number ", 1))})
+
+  for(i in 2:nrow(ldf)){
     tryCatch({
-
-      rfnew <- route_cyclestreet(from = ldf[i, 1:2], to = ldf[i,
-                                                              3:4], ...)
-      row.names(rfnew) <- as.character(i)
-
       if(!exists("rf")){
-        rf <- rfnew
-      } else {
+        rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+      }else{
+        rfnew <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+        row.names(rfnew) <- as.character(i)
         rf <- maptools::spRbind(rf, rfnew)
       }
+    }, error = function(e){warning(paste0("Fail for line number ", i))})
 
-    }, error = function(e) {
-      print(paste0("Fail for line number ", i))
-    })
-    perc_temp <- i%%round(nrow(ldf)/10)
-    if (!is.na(perc_temp) & perc_temp == 0) {
-      print(paste0(round(100 * i/nrow(ldf)), " % out of ",
-                   nrow(ldf), " distances calculated"))
+    # Status bar
+    perc_temp <- i %% round(nrow(ldf) / 10)
+    if(!is.na(perc_temp) & perc_temp == 0){
+      message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+                   " distances calculated")) # print % of distances calculated
     }
   }
   rf
