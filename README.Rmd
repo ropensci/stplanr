@@ -22,14 +22,13 @@ The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
 as part of the National Propensity to Cycle Tool
 ([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
-identify where bicycle paths are most urgently needed
-([Lovelace et al., 2015](http://arxiv.org/abs/1509.04425)).
+identify where bicycle paths are most urgently needed.
 
-Although it was started in the UK it aims to be of use to researchers everywhere.
+stplanr aims to be of use to researchers everywhere.
 The function `route_graphhopper()`, for example, works anywhere in the world
 using the [graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome contributions that make
-transport research easier in any nation.
+transport research easier worldwide.
 
 ## Key functions
 
@@ -62,13 +61,18 @@ plot(travel_network, lwd = w)
 ```
 
 The package can also allocate flows to the road network, for example through
-a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/):
+a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
+
+Route functions take lat/lon inputs:
+
+```{r, eval=FALSE}
+trip <-
+  route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+```
+
+and place names, found using the Google Map API:
 
 ```{r cycle-trip, message=FALSE, warning=FALSE}
-# Route functions take lat/lon inputs...
-# trip <- route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
-
-# ...and place names, found using the Google Map API:
 trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
 # devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
@@ -86,8 +90,15 @@ using `line2route`.
 # Remove intra-zone flow
 intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
 travel_network <- travel_network[!intrazone,]
-routes <- line2route(travel_network)
-plot(routes)
+t_routes <- line2route(travel_network)
+plot(t_routes)
+```
+
+Another way to visualise this is with the leaflet package (not shown):
+
+```{r, eval=FALSE}
+library(leaflet)
+leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
 ```
 
 For more examples, `example("line2route")`.
@@ -99,8 +110,8 @@ most traffic on the transport system, as illustrated
 below using the [tmap](https://github.com/mtennekes/tmap) package.
 
 ```{r rnet, warning=FALSE}
-routes$All <- travel_network$All
-rnet <- overline(sldf = routes, attrib = "All", fun = sum)
+t_routes$All <- travel_network$All
+rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
 
 osm_tiles <- read_osm(bb(rnet, ext = 1.05))
 rnet$lwd <- rnet$All / mean(rnet$All)
@@ -114,14 +125,21 @@ tm_shape(cents) +
 
 ## Installation
 
+To install the stable version, use:
+
 ```{r, eval=FALSE}
-# you must have the devtools package (e.g. via install.packages("devtools"))
+install.packages("stplanr")
+```
+
+The development version can be installed using devtools:
+
+```{r, eval=FALSE}
+# install.packages("devtools") # if not already installed
 devtools::install_github("ropensci/stplanr")
 library(stplanr)
 ```
 
-stplanr depends on rgdal, which can be difficult to installon Mac and Linux
-users.
+stplanr depends on rgdal, which can be tricky to install.
 
 ### Installing rgdal on Ubuntu and Mac
 
@@ -142,7 +160,7 @@ On Mac, homebrew can install gdal. Full instructions are provided
 
 The current list of available functions can be seen with:
 
-```{r}
+```{r, eval=FALSE}
 lsf.str("package:stplanr", all = TRUE)
 ```
 
