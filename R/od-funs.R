@@ -143,13 +143,15 @@ line2route <- function(ldf, ...){
 
   # Save the first line - catch it if it's an error
   tryCatch({
-    rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+    rf1 <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+    rf <- rf1
   }, error = function(e){warning(paste0("Fail for line number ", 1))})
 
   for(i in 2:nrow(ldf)){
     tryCatch({
-      if(!exists("rf")){
-        rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+      if(!exists("rf1")){
+        rf1 <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+        rf <- rf1
       }else{
         rfnew <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
         row.names(rfnew) <- as.character(i)
