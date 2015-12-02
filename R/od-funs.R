@@ -141,7 +141,7 @@ line2points <- function(l){
 line2route <- function(ldf, ...){
   if(class(ldf) == "SpatialLinesDataFrame") ldf <- line2df(ldf)
 
-  rf <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4])
+  # Save the first line - catch it if it's an error
   tryCatch({
     rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
   }, error = function(e){print(paste0("Fail for line number ", 1))})
