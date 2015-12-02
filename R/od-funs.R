@@ -144,7 +144,7 @@ line2route <- function(ldf, ...){
   # Save the first line - catch it if it's an error
   tryCatch({
     rf <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
-  }, error = function(e){print(paste0("Fail for line number ", 1))})
+  }, error = function(e){warning(paste0("Fail for line number ", 1))})
 
   for(i in 2:nrow(ldf)){
     tryCatch({
@@ -155,12 +155,12 @@ line2route <- function(ldf, ...){
         row.names(rfnew) <- as.character(i)
         rf <- maptools::spRbind(rf, rfnew)
       }
-    }, error = function(e){print(paste0("Fail for line number ", i))})
+    }, error = function(e){warning(paste0("Fail for line number ", i))})
 
     # Status bar
     perc_temp <- i %% round(nrow(ldf) / 10)
     if(!is.na(perc_temp) & perc_temp == 0){
-      print(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+      message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
                    " distances calculated")) # print % of distances calculated
     }
   }
