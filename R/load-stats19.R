@@ -88,26 +88,53 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
 #' \dontrun{
 #' ac <- format_stats19_ac(ac)
 #' }
-format_stats19_ac <- function(ac, wb){
+format_stats19_ac <- function(ac){
 
   data("wb")
 
   ac$Accident_Severity <-
-    factor(ac$Accident_Severity, labels = wb$Accident.Severity$label)
+    factor(ac$Accident_Severity, labels = c("Fatal", "Serious", "Slight"))
   ac$Police_Force <-
-    factor(ac$Police_Force, labels = wb$Police.Force$label)
+    factor(ac$Police_Force,
+           labels =
+             c("Metropolitan Police", "Cumbria", "Lancashire", "Merseyside",
+               "Greater Manchester", "Cheshire", "Northumbria", "Durham", "North Yorkshire",
+               "West Yorkshire", "South Yorkshire", "Humberside", "Cleveland",
+               "West Midlands", "Staffordshire", "West Mercia", "Warwickshire",
+               "Derbyshire", "Nottinghamshire", "Lincolnshire", "Leicestershire",
+               "Northamptonshire", "Cambridgeshire", "Norfolk", "Suffolk", "Bedfordshire",
+               "Hertfordshire", "Essex", "Thames Valley", "Hampshire", "Surrey",
+               "Kent", "Sussex", "City of London", "Devon and Cornwall", "Avon and Somerset",
+               "Gloucestershire", "Wiltshire", "Dorset", "North Wales", "Gwent",
+               "South Wales", "Dyfed-Powys", "Northern", "Grampian", "Tayside",
+               "Fife", "Lothian and Borders", "Central", "Strathclyde", "Dumfries and Galloway"
+             ))
   ac$`1st_Road_Class` <-
-    factor(ac$`1st_Road_Class`, labels = wb$.st.Road.Class$label)
+    factor(ac$`1st_Road_Class`,
+           labels = c("Motorway", "A(M)", "A", "B", "C", "Unclassified"))
   ac$Road_Type <-
-    factor(ac$Road_Type, labels = wb$Road.Type$label[1:6])
+    factor(ac$Road_Type,
+           labels = c("Roundabout", "One way street", "Dual carriageway", "Single carriageway",
+                                    "Slip road", "Unknown"))
   ac$Junction_Detail <-
-    factor(ac$Junction_Detail, labels = wb$Junction.Detail$label[c(10, 1:9)])
+    factor(ac$Junction_Detail, labels =
+             c("Data missing or out of range", "Not at junction or within 20 metres",
+               "Roundabout", "Mini-roundabout", "T or staggered junction", "Slip road",
+               "Crossroads", "More than 4 arms (not roundabout)", "Private drive or entrance",
+               "Other junction"))
   ac$Light_Conditions <-
-    factor(ac$Light_Conditions, labels = wb$Light.Conditions$label[1:5])
+    factor(ac$Light_Conditions,
+           labels = c("Daylight", "Darkness - lights lit", "Darkness - lights unlit",
+                      "Darkness - no lighting", "Darkness - lighting unknown"))
   ac$Weather_Conditions <-
-    factor(ac$Weather_Conditions, labels = wb$Weather$label[c(10, 1:9)])
+    factor(ac$Weather_Conditions,
+           labels = c("Data missing or out of range", "Fine no high winds", "Raining no high winds",
+                      "Snowing no high winds", "Fine + high winds", "Raining + high winds",
+                      "Snowing + high winds", "Fog or mist", "Other", "Unknown"))
   ac$Road_Surface_Conditions <-
-    factor(ac$Road_Surface_Conditions, labels = wb$Road.Surface$label[c(8, 1:5)])
+    factor(ac$Road_Surface_Conditions,
+           labels = c("Data missing or out of range", "Dry", "Wet or damp", "Snow",
+                      "Frost or ice", "Flood over 3cm. deep"))
   ac$Time <-
     lubridate::hm(ac$Time)
   # hist(ac$Time@hour) # verify times
