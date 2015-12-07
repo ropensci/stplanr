@@ -139,12 +139,16 @@ line2points <- function(l){
 #' lines(routes_slow[n,], col = "green")
 
 line2route <- function(ldf, ...){
-  if(class(ldf) == "SpatialLinesDataFrame") ldf <- line2df(ldf)
+  if(class(ldf) == "SpatialLinesDataFrame"){
+    l <- ldf # save spatial data and row numbers
+    ldf <- line2df(ldf)
+  }
 
   # Save the first line - catch it if it's an error
   tryCatch({
     rf1 <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
     rf <- rf1
+    row.names(rf) <- row.names(l[i,])
   }, error = function(e){warning(paste0("Fail for line number ", 1))})
 
   for(i in 2:nrow(ldf)){
@@ -152,9 +156,10 @@ line2route <- function(ldf, ...){
       if(!exists("rf1")){
         rf1 <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
         rf <- rf1
+        row.names(rf) <- row.names(l[i,])
       }else{
         rfnew <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
-        row.names(rfnew) <- as.character(i)
+        row.names(rfnew) <- row.names(l[i,])
         rf <- maptools::spRbind(rf, rfnew)
       }
     }, error = function(e){warning(paste0("Fail for line number ", i))})
