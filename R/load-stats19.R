@@ -17,10 +17,10 @@
 #' ca <- read_stats19_ca()
 #' ve <- read_stats19_ve()
 #'
-#' merge_stats19 <- function(ca, ve, ac){
+#' # merge all stats 19 data at the (lowest) vehicle level
 #' all_stats19 <- dplyr::inner_join(ve, ca)
 #' all_stats19 <- dplyr::inner_join(all_stats19, ac)
-#' }
+#' # now you can analyse the UK's stats19 data in a single table!
 #' }
 dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
   "road-accidents-safety-data/Stats19_Data_2005-2014.zip")){
@@ -138,6 +138,8 @@ format_stats19_ac <- function(ac){
   ac$Date <- lubridate::dmy(ac$Date)
   # barplot(table(lubridate::wday(ac$Date, label = TRUE)))
 
+  names(ac)[1] <- "Accident_Index" # rename faulty index name
+
   ac
 
 }
@@ -228,6 +230,8 @@ ve$Vehicle_Type <- factor(ve$Vehicle_Type,
                                                                                             )), row.names = c(NA, -11L), class = "data.frame", .Names = c("Driver_IMD_Decile",
                                                                                                                                                           "IMD_Decile")))$IMD_Decile)
 
+  names(ve)[1] <- "Accident_Index" # rename faulty index name
+
   ve
 
 }
@@ -294,7 +298,7 @@ format_stats19_ca <- function(ca){
                                  labels = c("Fatal", "Serious", "Slight"))
 
   ca$Casualty_Type <- as.factor(ca$Casualty_Type)
-  ca$Type <- factor(ca$Casualty_Type,
+  ca$Casualty_Type <- factor(ca$Casualty_Type,
                     labels = c("Pedestrian", "Cyclist", "Motorcycle 50cc and under rider or passenger",
                                "Motorcycle 125cc and under rider or passenger", "Motorcycle over 125cc and up to 500cc rider or  passenger",
                                "Motorcycle over 500cc rider or passenger", "Taxi/Private hire car occupant",
@@ -305,6 +309,9 @@ format_stats19_ca <- function(ca){
                                "Mobility scooter rider", "Electric motorcycle rider or passenger",
                                "Other vehicle occupant", "Motorcycle - unknown cc rider or passenger",
                                "Goods vehicle (unknown weight) occupant"))
+
+  names(ca)[1] <- "Accident_Index" # rename faulty index name
+
 
   ca
 
