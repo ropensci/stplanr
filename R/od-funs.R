@@ -139,9 +139,9 @@ line2points <- function(l){
 #' lines(routes_slow[n,], col = "green")
 
 line2route <- function(ldf, ...){
+  l <- ldf # save spatial data and row numbers
   if(class(ldf) == "SpatialLinesDataFrame"){
-    l <- ldf # save spatial data and row numbers
-    ldf <- line2df(ldf)
+    ldf <- line2df(l)
   }
 
   # Save the first line - catch it if it's an error
