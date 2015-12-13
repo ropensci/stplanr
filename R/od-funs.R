@@ -148,7 +148,7 @@ line2route <- function(ldf, ...){
   tryCatch({
     rf1 <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4], ...)
     rf <- rf1
-    row.names(rf) <- row.names(l[i,])
+    row.names(rf) <- row.names(l[1,])
   }, error = function(e){warning(paste0("Fail for line number ", 1))})
 
   for(i in 2:nrow(ldf)){
