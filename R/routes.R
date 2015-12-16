@@ -121,6 +121,12 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   h <- as.numeric(unlist(h)[-1])
   htot <- sum(abs(diff(h)))
 
+  # busyness overall
+  bseg <- obj$marker$`@attributes`$busynance
+  bseg <- stringr::str_split(bseg, pattern = ",")
+  bseg <- as.numeric(unlist(bseg)[-1])
+  bseg <- sum(bseg)
+
   df <- data.frame(
     plan = obj$marker$`@attributes`$plan[1],
     start = obj$marker$`@attributes`$start[1],
@@ -131,7 +137,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
     change_elev = htot,
     av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
     co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
-    calories = as.numeric(obj$marker$`@attributes`$calories[1])
+    calories = as.numeric(obj$marker$`@attributes`$calories[1]),
+    busyness = bseg
   )
 
   row.names(df) <- route@lines[[1]]@ID
