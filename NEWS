@@ -13,8 +13,12 @@ NEW FEATURES
 * `read_table` functions added for reading Australian OD data
   (@richardellison).
 
-* `decode_gl` added to decode Google polylines (@richardellison).
-  Towards osrm routing in R!
+* `decode_gl` added to decode Google polylines (@richardellison)
+  and other functions for querying and reading data from OSRM
+  services.
+
+* `gtfs2sldf` added to import GTFS routes as SpatialLinesDataFrames
+  (@richardellison).
 
 stplanr 0.0.2
 ----------------------------------------------------------------
