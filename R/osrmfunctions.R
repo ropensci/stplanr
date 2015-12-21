@@ -75,6 +75,8 @@ decode_gl <- function(polyline, precision=6) {
 #'
 #' @export
 #' @examples \dontrun{
+#'   exroutes <- viaroute(50, 0, 51, 1)
+#'   viaroute2sldf(exroutes)
 #'   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
 #'   viaroute2sldf(exroutes)
 #' }
