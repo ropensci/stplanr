@@ -66,8 +66,8 @@ decode_gl <- function(polyline, precision=6) {
 #' longitude (second) column for points to use for each route. Optionally a
 #' third column containing a boolean value indicating if u-turns are allowed
 #' at each viapoint.
-#' @param osrmurl URL for OSRM sservice.
-#' @param zoom Zoom level for route geometry (0 to 18) (default = 18).
+#' @param osrmurl URL for OSRM sservice, e.g. an osrm instance running on localhost. By default this is \code{"http://router.project-osrm.org"}.
+#' @param zoom Zoom level for route geometry (0 to 18) (default = 18). Higher values are more detailed.
 #' @param instructions Boolean value to return instructions (default = TRUE).
 #' @param alt Boolean value to return alternative routes (default = TRUE).
 #' @param geometry Boolean value to return route geometries (default = TRUE).
