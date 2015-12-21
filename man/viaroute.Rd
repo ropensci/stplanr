@@ -26,9 +26,9 @@ longitude (second) column for points to use for each route. Optionally a
 third column containing a boolean value indicating if u-turns are allowed
 at each viapoint.}
 
-\item{osrmurl}{URL for OSRM sservice.}
+\item{osrmurl}{URL for OSRM sservice, e.g. an osrm instance running on localhost. By default this is \code{"http://router.project-osrm.org"}.}
 
-\item{zoom}{Zoom level for route geometry (0 to 18) (default = 18).}
+\item{zoom}{Zoom level for route geometry (0 to 18) (default = 18). Higher values are more detailed.}
 
 \item{instructions}{Boolean value to return instructions (default = TRUE).}
 
@@ -49,6 +49,8 @@ conjunction with the viaroute2sldf function.
 }
 \examples{
 \dontrun{
+  exroutes <- viaroute(50, 0, 51, 1)
+  viaroute2sldf(exroutes)
   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
   viaroute2sldf(exroutes)
 }

@@ -4,12 +4,10 @@
 \alias{format_stats19_ac}
 \title{Format UK 'Stats19' road traffic casualty data}
 \usage{
-format_stats19_ac(ac, wb)
+format_stats19_ac(ac)
 }
 \arguments{
 \item{ac}{Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.}
-
-\item{wb}{List of dataframes containing data labels for stats19 data}
 }
 \description{
 Format UK 'Stats19' road traffic casualty data
