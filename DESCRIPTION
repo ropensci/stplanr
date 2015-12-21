@@ -16,10 +16,10 @@ Description: Functionality and data access tools for transport planning,
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
-Depends: 
+Depends:
     sp,
     R (>= 3.0)
-Imports: 
+Imports:
     jsonlite,
     maptools,
     raster,
@@ -34,12 +34,13 @@ Imports:
     httr,
     R.utils,
     stringi,
+    stringr,
     readr,
     lubridate,
     downloader,
     RCurl,
     geosphere
-Suggests: 
+Suggests:
     testthat,
     knitr,
     tmap,
