@@ -47,6 +47,109 @@ decode_gl <- function(polyline, precision=6) {
   }
 }
 
+#' Query OSRM service and return json string result
+#'
+#' @section Details:
+#' Constructs the query URL used with the OSRM HTTP API and returns a string
+#' or vector of strings with the json-encoded results. Can be used in
+#' conjunction with the viaroute2sldf function.
+#'
+#' @param startlat A single value or vector containing latitude(s) of the start
+#' of routes.
+#' @param startlng A single value or vector containing longitude(s) of the end
+#' of routes.
+#' @param endlat A single value or vector containing latitude(s) of the end of
+#' routes.
+#' @param endlng A single value or vector containing longitude(s) of the end
+#' of routes.
+#' @param viapoints A list of dataframes containing latitude (first column),
+#' longitude (second) column for points to use for each route. Optionally a
+#' third column containing a boolean value indicating if u-turns are allowed
+#' at each viapoint.
+#' @param osrmurl URL for OSRM sservice.
+#' @param zoom Zoom level for route geometry (0 to 18) (default = 18).
+#' @param instructions Boolean value to return instructions (default = TRUE).
+#' @param alt Boolean value to return alternative routes (default = TRUE).
+#' @param geometry Boolean value to return route geometries (default = TRUE).
+#' @param uturns Boolean value to allow uturns at via points (default = TRUE).
+#'
+#' @export
+#' @examples \dontrun{
+#'   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
+#'   viaroute2sldf(exroutes)
+#' }
+viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
+                     endlng = NULL, viapoints = NULL,
+                     osrmurl = "http://router.project-osrm.org", zoom=18,
+                     instructions=TRUE, alt=TRUE, geometry=TRUE, uturns=TRUE) {
+
+  qryurl <- paste0(osrmurl,"/viaroute?")
+  returnval <- c()
+
+  instructions <- ifelse(instructions==TRUE,"true","false")
+  alt <- ifelse(alt==TRUE,"true","false")
+  geometry <- ifelse(geometry==TRUE,"true","false")
+  uturns <- ifelse(uturns==TRUE,"true","false")
+
+  if (missing(viapoints) == FALSE) {
+
+    if (class(viapoints) != "list") {
+      stop("viapoints is not a list.")
+    }
+
+    i <- 1
+    while (i <= length(viapoints)) {
+      if(ncol(viapoints[[i]]) == 3) {
+        returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
+                             paste0(paste0(
+                             c("z","instructions","alt","geometry","uturns"),'=',
+                             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+        ))
+      }
+      else {
+        returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
+           paste0(paste0(
+             c("z","instructions","alt","geometry","uturns"),'=',
+             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+        ))
+      }
+      i <- i + 1
+    }
+
+  }
+  else if (missing(startlat) == FALSE & missing(startlng) == FALSE &
+           missing(endlat) == FALSE & missing(endlng) == FALSE) {
+
+          if (length(startlat) != (sum(length(startlat), length(startlng), length(endlat), length(endlng))/4)) {
+            stop("Length of vectors not equal")
+          }
+
+          if (length(startlat) == 1) {
+            returnval <- RCurl::getURL(paste0(qryurl,"loc=",startlat,",",startlng,"&loc=",endlat,",",endlng,"&",
+                                              paste0(paste0(c("z","instructions","alt","geometry","uturns"),'=',
+                                                            c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+            ))
+          }
+          else {
+            i <- 1
+            while (i <= length(startlat)) {
+              returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",startlat[i],",",startlng[i],"&loc=",endlat[i],",",endlng[i],"&",
+                                                   paste(paste0(c("z","instructions","alt","geometry","uturns"),'=',
+                                                                c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+              ))
+              i <- i + 1
+            }
+          }
+
+  }
+  else {
+    stop("Missing viapoints coordinates")
+  }
+
+  return(returnval)
+
+}
+
 #' Convert json result of OSRM routing query to SpatialLinesDataFrame
 #'
 #' @section Details:
