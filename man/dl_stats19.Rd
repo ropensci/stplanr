@@ -29,10 +29,10 @@ ac <- read_stats19_ac()
 ca <- read_stats19_ca()
 ve <- read_stats19_ve()
 
-merge_stats19 <- function(ca, ve, ac){
+# merge all stats 19 data at the (lowest) vehicle level
 all_stats19 <- dplyr::inner_join(ve, ca)
 all_stats19 <- dplyr::inner_join(all_stats19, ac)
-}
+# now you can analyse the UK's stats19 data in a single table!
 }
 }
 

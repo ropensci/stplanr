@@ -39,4 +39,5 @@
 #' @importFrom R.utils intToBin
 #' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
+#' @importFrom stringr str_split
 NULL

@@ -21,6 +21,8 @@ f <- system.file("extdata", "beartransit-ca-us.zip", package = "stplanr")
 u <- "http://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip"
 # download.file(u, f)
 gtfs <- gtfs2sldf(gtfszip = f)
+plot(gtfs, col = gtfs$route_long_name)
+plot(gtfs[gtfs$route_long_name == "Central Campus",])
 \dontrun{
 # An example of a larger gtfs feed
 downloader::download("http://www.yrt.ca/google/google_transit.zip",

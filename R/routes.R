@@ -96,28 +96,49 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
-  api_base <- sprintf("https://api.cyclestreets.net/v2/")
+  api_base <- sprintf("http://www.cyclestreets.net/api/")
   ft_string <- paste(orig, dest, sep = "|")
-  journey_plan <- sprintf("journey.plan?waypoints=%s&plan=%s", ft_string, plan)
+  journey_plan <- sprintf("journey.json?key=%s&itinerarypoints=%s&plan=%s",
+                          pat, ft_string, plan)
   request <- paste0(api_base, journey_plan)
   request <- paste0(request, "&key=", pat)
-
-  if(silent == FALSE){
-    print(paste0("The request sent to cyclestreets.net was: ", request))
+  if (silent == FALSE) {
+    print(paste0("The request sent to cyclestreets.net was: ",
+                 request))
   }
-
   txt <- httr::content(httr::GET(request), as = "text")
   obj <- jsonlite::fromJSON(txt)
 
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$features[3,]$geometry$coordinates)), ID = 1)))
+  # obj$marker$`@attributes`$elevations
+  # obj$marker$`@attributes`$points
+  coords <- obj$marker$`@attributes`$coordinates[1]
+  coords <- stringr::str_split(coords, pattern = " |,")[[1]]
+  coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
+
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
+  h <-  obj$marker$`@attributes`$elevations # hilliness
+  h <- stringr::str_split(h, pattern = ",")
+  h <- as.numeric(unlist(h)[-1])
+  htot <- sum(abs(diff(h)))
+
+  # busyness overall
+  bseg <- obj$marker$`@attributes`$busynance
+  bseg <- stringr::str_split(bseg, pattern = ",")
+  bseg <- as.numeric(unlist(bseg)[-1])
+  bseg <- sum(bseg)
 
   df <- data.frame(
-    plan = obj$features[3,]$properties$plan,
-    start = obj$properties$start,
-    finish = obj$properties$finish,
-    length = obj$features[3,]$properties$length,
-    time = obj$features[3,]$properties$time,
-    waypoint = nrow(route@lines[[1]]@Lines[[1]]@coords)
+    plan = obj$marker$`@attributes`$plan[1],
+    start = obj$marker$`@attributes`$start[1],
+    finish = obj$marker$`@attributes`$finish[1],
+    length = as.numeric(obj$marker$`@attributes`$length[1]),
+    time = sum(as.numeric(obj$marker$`@attributes`$time)),
+    waypoint = nrow(coords),
+    change_elev = htot,
+    av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
+    co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
+    calories = as.numeric(obj$marker$`@attributes`$calories[1]),
+    busyness = bseg
   )
 
   row.names(df) <- route@lines[[1]]@ID

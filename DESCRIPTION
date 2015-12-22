@@ -34,6 +34,7 @@ Imports:
     httr,
     R.utils,
     stringi,
+    stringr,
     readr,
     lubridate,
     downloader,
@@ -42,7 +43,8 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    tmap
+    tmap,
+    rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 RoxygenNote: 5.0.1
