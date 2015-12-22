@@ -100,18 +100,18 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
     i <- 1
     while (i <= length(viapoints)) {
       if(ncol(viapoints[[i]]) == 3) {
-        returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
+        returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
                              paste0(paste0(
                              c("z","instructions","alt","geometry","uturns"),'=',
                              c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))
+        )))
       }
       else {
-        returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
+        returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
            paste0(paste0(
              c("z","instructions","alt","geometry","uturns"),'=',
              c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))
+        )))
       }
       i <- i + 1
     }
@@ -125,18 +125,18 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
           }
 
           if (length(startlat) == 1) {
-            returnval <- RCurl::getURL(paste0(qryurl,"loc=",startlat,",",startlng,"&loc=",endlat,",",endlng,"&",
+            returnval <- gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat,",",startlng,"&loc=",endlat,",",endlng,"&",
                                               paste0(paste0(c("z","instructions","alt","geometry","uturns"),'=',
                                                             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-            ))
+            )))
           }
           else {
             i <- 1
             while (i <= length(startlat)) {
-              returnval[i] <- RCurl::getURL(paste0(qryurl,"loc=",startlat[i],",",startlng[i],"&loc=",endlat[i],",",endlng[i],"&",
+              returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat[i],",",startlng[i],"&loc=",endlat[i],",",endlng[i],"&",
                                                    paste(paste0(c("z","instructions","alt","geometry","uturns"),'=',
                                                                 c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-              ))
+              )))
               i <- i + 1
             }
           }
