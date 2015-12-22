@@ -217,27 +217,53 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 
   if (class(routeinst) == "list") {
     routeinst <- unlist(routeinst, recursive = FALSE)
-    if (length(routeinst[[length(routeinst)]]) <
-        length(routeinst[[1]])) {
-      routeinst[[length(routeinst)]][9] <- 1
+    if (length(routeinst[[1]]) == 11) {
+      if (length(routeinst[[length(routeinst)]]) <
+          length(routeinst[[1]])) {
+        routeinst[[length(routeinst)]][length(routeinst[[1]])] <- routeinst[[length(routeinst)]][length(routeinst[[1]])-1]
+        routeinst[[length(routeinst)]][length(routeinst[[1]])-1] <- routeinst[[length(routeinst)]][length(routeinst[[1]])-2]
+        routeinst[[length(routeinst)]][length(routeinst[[1]])-2] <- routeinst[[length(routeinst)-1]][length(routeinst[[1]])-2]
+      }
+      dfnames <- c(
+        "directions_code",
+        "street_name",
+        "length",
+        "position",
+        "time",
+        "formatted_length",
+        "direction",
+        "azimuth",
+        "mode",
+        "preturn_direction",
+        "preturn_azimuth"
+      )
+    }
+    else {
+      if (length(routeinst[[length(routeinst)]]) <
+          length(routeinst[[1]])) {
+        routeinst[[length(routeinst)]][length(routeinst[[1]])] <- routeinst[[length(routeinst)-1]][length(routeinst[[1]])]
+      }
+
+      dfnames <- c(
+        "directions_code",
+        "street_name",
+        "length",
+        "position",
+        "time",
+        "formatted_length",
+        "direction",
+        "azimuth",
+        "mode"
+      )
+
     }
 
     osrmrouteinstruct <- setNames(data.frame(lapply(data.frame(t(sapply(routeinst, `[`))), unlist)),
-                                  c(
-                                    "directions_code",
-                                    "street_name",
-                                    "length",
-                                    "position",
-                                    "time",
-                                    "formatted_length",
-                                    "direction",
-                                    "azimuth",
-                                    "mode"
-                                  )
+                                  dfnames
     )
-    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
+    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode','preturn_azimuth'))] <-
       sapply(
-        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
+        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode','preturn_azimuth'))],
         function(x) {
           as.numeric(as.character(x))
         }
