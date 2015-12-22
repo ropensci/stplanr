@@ -46,44 +46,44 @@ gtfs2sldf <- function(gtfszip = "") {
   unlink(gtfsfiles)
 
   gtfslines <- sp::SpatialLinesDataFrame((gtfsshape %>%
-      dplyr::group_by(shape_id) %>%
-      dplyr::arrange(shape_pt_sequence) %>%
-      dplyr::do(
-        gtfsline = sp::Lines(sp::Line(as.matrix(.[,c('shape_pt_lon','shape_pt_lat')])),unique(.$shape_id))
+      dplyr::group_by_(~shape_id) %>%
+      dplyr::arrange_(~shape_pt_sequence) %>%
+      dplyr::do_(
+        gtfsline = "sp::Lines(sp::Line(as.matrix(.[,c('shape_pt_lon','shape_pt_lat')])),unique(.$shape_id))"
       ) %>%
       dplyr::ungroup() %>%
-      dplyr::do(
-        gtfsline = sp::SpatialLines(.[[2]],
-                                    proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))))[[1]][[1]],
+      dplyr::do_(
+        gtfsline = "sp::SpatialLines(.[[2]],
+                                    proj4string = sp::CRS('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'))"))[[1]][[1]],
    data=gtfstrips %>%
      dplyr::inner_join(
        gtfsroutes
      ) %>%
-     dplyr::distinct(
-       route_id,
-       shape_id,
-       route_short_name,
-       route_long_name,
-       route_desc,
-       route_type,
-       route_color,
-       route_text_color,
-       agency_id
+     dplyr::distinct_(
+       ~route_id,
+       ~shape_id,
+       ~route_short_name,
+       ~route_long_name,
+       ~route_desc,
+       ~route_type,
+       ~route_color,
+       ~route_text_color,
+       ~agency_id
      ) %>%
-     dplyr::select(route_id,
-            shape_id,
-            route_short_name,
-            route_long_name,
-            route_desc,
-            route_type,
-            route_color,
-            route_text_color,
-            agency_id) %>%
+     dplyr::select_(~route_id,
+            ~shape_id,
+            ~route_short_name,
+            ~route_long_name,
+            ~route_desc,
+            ~route_type,
+            ~route_color,
+            ~route_text_color,
+            ~agency_id) %>%
      dplyr::inner_join(
        gtfsagency
      ) %>%
-     dplyr::do(
-       `rownames<-`(.,.$shape_id)
+     dplyr::do_(
+       "`rownames<-`(.,.$shape_id)"
      ))
   rm(gtfstrips,gtfsshape,gtfsagency,gtfsroutes)
   return(gtfslines)
