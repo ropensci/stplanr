@@ -259,9 +259,9 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
     osrmrouteinstruct <- setNames(data.frame(lapply(data.frame(t(sapply(routeinst, `[`))), unlist)),
                                   dfnames
     )
-    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))] <-
+    osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode','preturn_azimuth'))] <-
       sapply(
-        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode'))],
+        osrmrouteinstruct[,which(names(osrmrouteinstruct) %in% c('directions_code','length','position','time','azimuth','mode','preturn_azimuth'))],
         function(x) {
           as.numeric(as.character(x))
         }
