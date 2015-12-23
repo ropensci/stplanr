@@ -33,7 +33,7 @@ crs <- CRS("+init=epsg:4326")
 crsuk <- CRS("+init=epsg:27700")
 cents <- sp::spTransform(x = cents, CRSobj = crsuk)
 home <- rev(RgoogleMaps::getGeoCode("LS7 3HB"))
-home <- sp::SpatialPoints(coords = home, proj4string = crs)
+home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
 home <- sp::spTransform(x = home, CRSobj = crsuk)
 buf <- rgeos::gBuffer(home, width = 2000)
 # Check it saved the points OK
@@ -41,8 +41,9 @@ cents <- cents[buf,]
 plot(buf)
 points(cents)
 cents <- sp::spTransform(x = cents, CRSobj = crs)
+cents$geo_code <- as.character(cents$geo_code)
 library(devtools)
-use_data(cents)
+# use_data(cents, overwrite = TRUE)
 }
 
 }
