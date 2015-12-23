@@ -45,7 +45,7 @@ use_data(flow, overwrite = T)
 
 # Convert flows to SpatialLinesDataFrame
 flowlines <- od2line(flow = flow, zones = cents)
-use_data(flowlines)
+# use_data(flowlines, overwrite = TRUE)
 
 # Convert flows to routes
 routes_fast <- line2route(l = flowlines, plan = "fastest")

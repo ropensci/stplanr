@@ -2,9 +2,6 @@
 #'
 #'  These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#'  diamonds. The variables are as follows:
-#'
 #' \itemize{
 #'   \item geo_code. the official code of the zone
 #'   \item MSOA11NM. name zone name
@@ -16,14 +13,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' cents <- rgdal::readOGR(dsn = "~/repos/pct/pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+#' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
 #' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
 #' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
 #' crs <- CRS("+init=epsg:4326")
 #' crsuk <- CRS("+init=epsg:27700")
 #' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
 #' home <- rev(RgoogleMaps::getGeoCode("LS7 3HB"))
-#' home <- sp::SpatialPoints(coords = home, proj4string = crs)
+#' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
 #' home <- sp::spTransform(x = home, CRSobj = crsuk)
 #' buf <- rgeos::gBuffer(home, width = 2000)
 #' # Check it saved the points OK
@@ -31,8 +28,9 @@
 #' plot(buf)
 #' points(cents)
 #' cents <- sp::spTransform(x = cents, CRSobj = crs)
+#' cents$geo_code <- as.character(cents$geo_code)
 #' library(devtools)
-#' use_data(cents)
+#' # use_data(cents, overwrite = TRUE)
 #' }
 #'
 #' @docType data
@@ -81,7 +79,7 @@ NULL
 #'
 #' # Convert flows to SpatialLinesDataFrame
 #' flowlines <- od2line(flow = flow, zones = cents)
-#' use_data(flowlines)
+#' # use_data(flowlines, overwrite = TRUE)
 #'
 #' # Convert flows to routes
 #' routes_fast <- line2route(l = flowlines, plan = "fastest")
@@ -154,4 +152,29 @@ NULL
 #' @name wb
 #' @usage data(wb)
 #' @format A list of 47 dataframes
+NULL
+
+#' SpatialPolygonsDataFrame of home locations for flow analysis.
+#'
+#'  These correspond to the \code{\link{cents}} data.
+#'
+#' \itemize{
+#'   \item geo_code. the official code of the zone
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
+#' proj4string(zones) <- proj4string(cents)
+#' zones <- zones[cents,]
+#' plot(zones)
+#' points(cents)
+#' # use_data(zones, overwrite = TRUE)
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name zones
+#' @usage data(zones)
+#' @format A SpatialPolygonsDataFrame
 NULL
