@@ -12,9 +12,6 @@ data(cents)
 These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
 }
 \details{
-A dataset containing the prices and other attributes of almost 54,000
- diamonds. The variables are as follows:
-
 \itemize{
   \item geo_code. the official code of the zone
   \item MSOA11NM. name zone name
@@ -26,7 +23,7 @@ Cents was generated from the data repository pct-data: https://github.com/npct/p
 }
 \examples{
 \dontrun{
-cents <- rgdal::readOGR(dsn = "~/repos/pct/pct-data/national/cents.geojson", layer = "OGRGeoJSON")
+cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
 # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
 # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
 crs <- CRS("+init=epsg:4326")

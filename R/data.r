@@ -2,9 +2,6 @@
 #'
 #'  These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#'  diamonds. The variables are as follows:
-#'
 #' \itemize{
 #'   \item geo_code. the official code of the zone
 #'   \item MSOA11NM. name zone name
@@ -155,4 +152,29 @@ NULL
 #' @name wb
 #' @usage data(wb)
 #' @format A list of 47 dataframes
+NULL
+
+#' SpatialPolygonsDataFrame of home locations for flow analysis.
+#'
+#'  These correspond to the \code{\link{cents}} data.
+#'
+#' \itemize{
+#'   \item geo_code. the official code of the zone
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
+#' proj4string(zones) <- proj4string(cents)
+#' zones <- zones[cents,]
+#' plot(zones)
+#' points(cents)
+#' # use_data(zones, overwrite = TRUE)
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name zones
+#' @usage data(zones)
+#' @format A SpatialPolygonsDataFrame
 NULL
