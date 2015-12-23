@@ -50,7 +50,6 @@ toptail <- function(l, toptail_dist, ...){
   }
   out
 }
-
 #' Create a buffer of n metres for non-projected 'geographical' spatial data
 #'
 #' Solves the problem that buffers will not be circular when used on
@@ -127,4 +126,51 @@ toptailgs <- function(l, toptail_dist) {
     i <- i + 1
   }
   return(l)
+}
+
+#' Clip the beginning and ends SpatialLines to the edge of SpatialPolygon borders
+#'
+#' Takes lines and removes the start and end point, to a distance determined
+#' by the nearest polygon border.
+#'
+#'
+#' @param l A SpatialLines object
+#' @param buff A SpatialPolygons object to act as the buffer
+#' @param ... Arguments passed to rgeos::gBuffer()
+#' @export
+#' @examples
+#' data("routes_fast")
+#' data("zones")
+#' r_toptail <- toptail_buff(routes_fast, zones)
+#' sel <- row.names(routes_fast) %in% row.names(r_toptail)
+#' rf_cross_poly <- routes_fast[sel,]
+#' plot(zones)
+#' plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
+#' # note adjacent lines removed
+#' plot(rf_cross_poly, add = TRUE, lwd = 2)
+#' plot(r_toptail, col = "red", add = TRUE)
+toptail_buff <- function(l, buff, ...){
+  # force same crs
+  if(!identicalCRS(l, buff)){
+    proj4string(buff) <- proj4string(l)
+  }
+  for(i in 1:length(l)){
+    l1 <- l[i,]
+    lpoints <- line2points(l1)
+    # Select zones per line
+    sel <- buff[lpoints,]
+    l2 <- rgeos::gDifference(l1, sel)
+    if(is.null(l2)){
+      next
+    }else{
+      row.names(l2) <- row.names(l1)
+    }
+    if(!exists("out")){
+      out <- l2
+    } else {
+      out <- maptools::spRbind(out, l2)
+    }
+  }
+  proj4string(out) <- proj4string(l)
+  out
 }
