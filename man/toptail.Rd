@@ -9,7 +9,9 @@ toptail(l, toptail_dist, ...)
 \arguments{
 \item{l}{A SpatialLines object}
 
-\item{toptail_dist}{The distance (in metres) to top and tail the line by}
+\item{toptail_dist}{The distance (in metres) to top and tail the line by.
+Can either be a single value or a vector of the same length as the
+SpatialLines object.}
 
 \item{...}{Arguments passed to rgeos::gBuffer()}
 }
