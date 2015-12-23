@@ -8,7 +8,9 @@
 #' package.
 #'
 #' @param l A SpatialLines object
-#' @param toptail_dist The distance (in metres) to top and tail the line by
+#' @param toptail_dist The distance (in metres) to top and tail the line by.
+#' Can either be a single value or a vector of the same length as the
+#' SpatialLines object.
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @export
 #' @examples
@@ -25,7 +27,16 @@
 #' plot(routes_fast, lwd = 3)
 #' plot(r_toptail, col = "red", add = TRUE)
 toptail <- function(l, toptail_dist, ...){
+
+  if (length(toptail_dist) > 1) {
+    if (length(toptail_dist) != length(l)) {
+      stop("toptail_dist is vector but not of equal length to SpatialLines object")
+    }
+  }
+  toptail_disto <- toptail_dist
+
   for(i in 1:length(l)){
+    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
     l1 <- l[i,]
     lpoints <- line2points(l1)
 
@@ -90,7 +101,12 @@ buff_geo <- function(sp_obj, width, ..., silent = TRUE){
 #' coordinates in WGS84 (lng/lat).
 #'
 #' @param l A SpatialLines object
-#' @param toptail_dist The distance (in metres) to top and tail the line by
+#' @param toptail_dist The distance (in metres) to top the line by.
+#' Can be either a single value or a vector of the same length as the
+#' SpatialLines object. If tail_dist is missing, is used as the tail distnce.
+#' @param tail_dist The distance (in metres) to tail the line by. Can be
+#' either a single value or a vector of the same length as the SpatialLines
+#' object.
 #' @export
 #' @examples
 #' data("routes_fast")
@@ -98,10 +114,30 @@ buff_geo <- function(sp_obj, width, ..., silent = TRUE){
 #' plot(routes_fast, lwd = 3)
 #' plot(r_toptail, col = "red", add = TRUE)
 #' plot(cents, add = TRUE)
-toptailgs <- function(l, toptail_dist) {
+toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
+
+  if (length(toptail_dist) > 1) {
+    if (length(toptail_dist) != length(l)) {
+      stop("toptail_dist is vector but not of equal length to SpatialLines object")
+    }
+  }
+  if (!missing(tail_dist)) {
+    if (length(tail_dist) > 1) {
+      if (length(tail_dist) != length(l)) {
+        stop("tail_dist is vector but not of equal length to SpatialLines object")
+      }
+    }
+  }
+  else {
+    tail_dist <- toptail_dist
+  }
+
+  toptail_disto <- toptail_dist
+  tail_disto <- tail_dist
 
   i <- 1
   while(i <= length(l)) {
+    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
     linecoords <- coordinates(l@lines[[i]])[[1]]
     topdists <- geosphere::distHaversine(linecoords[1,],linecoords)
     linecoords <- rbind(
@@ -114,14 +150,15 @@ toptailgs <- function(l, toptail_dist) {
       linecoords[which(topdists >= toptail_dist),,drop=FALSE]
     )
     bottomdists <- geosphere::distHaversine(linecoords[nrow(linecoords),],linecoords)
+    tail_dist <- ifelse(length(tail_disto) == 1, tail_disto, tail_disto[i])
 
     linecoords <- rbind(
-      linecoords[which(bottomdists >= toptail_dist),,drop=FALSE],
-      tail(linecoords[which(bottomdists >= toptail_dist),,drop=FALSE],n=1)+(
-        linecoords[which(bottomdists < toptail_dist),,drop=FALSE][1,]-
-          tail(linecoords[which(bottomdists >= toptail_dist),,drop=FALSE],n=1)
+      linecoords[which(bottomdists >= tail_dist),,drop=FALSE],
+      tail(linecoords[which(bottomdists >= tail_dist),,drop=FALSE],n=1)+(
+        linecoords[which(bottomdists < tail_dist),,drop=FALSE][1,]-
+          tail(linecoords[which(bottomdists >= tail_dist),,drop=FALSE],n=1)
       )*
-        ((tail(bottomdists[which(bottomdists >= toptail_dist)],n=1)-toptail_dist)/(tail(bottomdists[which(bottomdists >= toptail_dist)],n=1)-bottomdists[which(bottomdists < toptail_dist)][1]))
+        ((tail(bottomdists[which(bottomdists >= tail_dist)],n=1)-tail_dist)/(tail(bottomdists[which(bottomdists >= tail_dist)],n=1)-bottomdists[which(bottomdists < tail_dist)][1]))
     )
     l@lines[[i]]@Lines[[1]]@coords <- unname(linecoords)
     i <- i + 1

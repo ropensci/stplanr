@@ -4,12 +4,18 @@
 \alias{toptailgs}
 \title{Clip the first and last n metres of SpatialLines}
 \usage{
-toptailgs(l, toptail_dist)
+toptailgs(l, toptail_dist, tail_dist = NULL)
 }
 \arguments{
 \item{l}{A SpatialLines object}
 
-\item{toptail_dist}{The distance (in metres) to top and tail the line by}
+\item{toptail_dist}{The distance (in metres) to top the line by.
+Can be either a single value or a vector of the same length as the
+SpatialLines object. If tail_dist is missing, is used as the tail distnce.}
+
+\item{tail_dist}{The distance (in metres) to tail the line by. Can be
+either a single value or a vector of the same length as the SpatialLines
+object.}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
