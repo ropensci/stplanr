@@ -142,18 +142,6 @@ NULL
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
 NULL
 
-#' list of data labels associated with UK 'Stats19' road casualty data, used to clean
-#' the raw data
-#'
-#' These labels originate from this project: \url{https://github.com/Robinlovelace/bikeR}
-#'
-#' @docType data
-#' @keywords datasets
-#' @name wb
-#' @usage data(wb)
-#' @format A list of 47 dataframes
-NULL
-
 #' SpatialPolygonsDataFrame of home locations for flow analysis.
 #'
 #'  These correspond to the \code{\link{cents}} data.
