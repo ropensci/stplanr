@@ -5,7 +5,7 @@ coord_matches <- function(sldf) {
     .Call('stplanr_coord_matches', PACKAGE = 'stplanr', sldf)
 }
 
-join_spatiallines_coords <- function(sldf) {
-    .Call('stplanr_join_spatiallines_coords', PACKAGE = 'stplanr', sldf)
+join_spatiallines_coords <- function(sldf, startx, starty) {
+    .Call('stplanr_join_spatiallines_coords', PACKAGE = 'stplanr', sldf, startx, starty)
 }
 

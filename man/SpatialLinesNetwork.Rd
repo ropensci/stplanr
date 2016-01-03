@@ -21,15 +21,24 @@ analysis within R.
 \section{Details}{
 
 This function is used to create a new SpatialLinesNetwork from an existing
-SpatialLines or SpatialLinesDataFrame object representing a (typically)
-transport network that is intended to be used for routing and other
-network analysis. This function and the corresponding SpatialLinesNetwork
+SpatialLines or SpatialLinesDataFrame object. A typical use case is to
+represent a transport network for routing and other network analysis
+functions. This function and the corresponding SpatialLinesNetwork
 class is an implementation of the SpatialLinesNetwork developed by
 Edzer Pebesma and presented on \href{http://rpubs.com/edzer/6767}{RPubs}.
 The original implementation has been rewritten to better support large
 (i.e., detailed city-size) networks and to provide additional methods
 useful for conducting transport research following on from the initial
 examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
+}
+\examples{
+data(routes_fast)
+rnet <- overline(sldf = routes_fast, attrib = "length")
+SLN <- SpatialLinesNetwork(rnet)
+weightfield(SLN) # field used to determine shortest path
+shortpath <- calc_network_routes(SLN, 1, 50, sumvars = "length")
+plot(shortpath, col = "red", lwd = 4)
+plot(SLN, add = T)
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.

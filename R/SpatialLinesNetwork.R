@@ -13,11 +13,11 @@ setClass("igraph")
 #' @slot weightfield A character vector containing the variable (column) name
 #' from the SpatialLinesDataFrame to be used for weighting the network.
 setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
-   g = "igraph", nb = "list", weightfield = "character"),
-   validity = function(object) {
-     stopifnot(length(object@sl) == length(igraph::E(object@g)))
-     stopifnot(length(object@nb) == length(igraph::V(object@g)))
-   })
+                                               g = "igraph", nb = "list", weightfield = "character"),
+         validity = function(object) {
+           stopifnot(length(object@sl) == length(igraph::E(object@g)))
+           stopifnot(length(object@nb) == length(igraph::V(object@g)))
+         })
 
 #' Create object of class SpatialLinesNetwork from SpatialLinesDataFrame
 #'
@@ -26,9 +26,9 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #'
 #' @section Details:
 #' This function is used to create a new SpatialLinesNetwork from an existing
-#' SpatialLines or SpatialLinesDataFrame object representing a (typically)
-#' transport network that is intended to be used for routing and other
-#' network analysis. This function and the corresponding SpatialLinesNetwork
+#' SpatialLines or SpatialLinesDataFrame object. A typical use case is to
+#' represent a transport network for routing and other network analysis
+#' functions. This function and the corresponding SpatialLinesNetwork
 #' class is an implementation of the SpatialLinesNetwork developed by
 #' Edzer Pebesma and presented on \href{http://rpubs.com/edzer/6767}{RPubs}.
 #' The original implementation has been rewritten to better support large
@@ -47,8 +47,15 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #'
 #' Janoska, Z. (2013). Find shortest path in spatial network,
 #' URL:http://rpubs.com/janoskaz/10396.
-#'
 #' @export
+#' @examples
+#' data(routes_fast)
+#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' SLN <- SpatialLinesNetwork(rnet)
+#' weightfield(SLN) # field used to determine shortest path
+#' shortpath <- calc_network_routes(SLN, 1, 50, sumvars = "length")
+#' plot(shortpath, col = "red", lwd = 4)
+#' plot(SLN, add = T)
 SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   stopifnot(is(sl, "SpatialLines"))
   if (!is(sl, "SpatialLinesDataFrame"))
@@ -134,28 +141,28 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "AN
 #' @rdname weightfield
 setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "character", value = "ANY"),
                  definition = function(x, varname, value) {
-  if (class(value) == "data.frame") {
-    if (sum(varname %in% colnames(value)) > 0) {
-      value <- value[,varname]
-    }
-    else {
-      value <- value[,1]
-    }
-  }
-  if (length(value) != nrow(x@sl@data)) {
-    stop("Length of value is not the same as the number of rows in the SpatialLinesDataFrame.")
-  }
-  x@sl@data[,varname] <- value
-  x@weightfield <- varname
-  igraph::E(x@g)$weight <- x@sl@data[,varname]
-  x
-})
+                   if (class(value) == "data.frame") {
+                     if (sum(varname %in% colnames(value)) > 0) {
+                       value <- value[,varname]
+                     }
+                     else {
+                       value <- value[,1]
+                     }
+                   }
+                   if (length(value) != nrow(x@sl@data)) {
+                     stop("Length of value is not the same as the number of rows in the SpatialLinesDataFrame.")
+                   }
+                   x@sl@data[,varname] <- value
+                   x@weightfield <- varname
+                   igraph::E(x@g)$weight <- x@sl@data[,varname]
+                   x
+                 })
 
 #' @export
 summary.SpatialLinesNetwork <- function(sln) {
-    cat(paste0("Weight attribute field: ",sln@weightfield))
-    summary(sln@g)
-    sp::summary(sln@sl)
+  cat(paste0("Weight attribute field: ",sln@weightfield))
+  summary(sln@g)
+  sp::summary(sln@sl)
 }
 
 #' Find graph node ID of closest node to given coordinates
@@ -268,8 +275,10 @@ calc_network_routes <- function(sln, start, end, sumvars) {
   }
 
   if (length(start) == 1) {
-    routesegs <- unlist(igraph::get.shortest.paths(sln@g, start, end, output="both")$epath)
-    routecoords <- join_spatiallines_coords(sln@sl[routesegs,])
+    routesegs <- unlist(igraph::get.shortest.paths(sln@g, start, end, output="epath")$epath)
+    routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
+                                            sln@g$x[start],
+                                            sln@g$y[start])
     routedata <- data.frame(ID=1)
     for (j in sumvars) {
       routedata[paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])
@@ -277,8 +286,8 @@ calc_network_routes <- function(sln, start, end, sumvars) {
     row.names(routedata) <- c(1)
 
     sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(list(sp::Lines(sp::Line(routecoords), ID = 1)),
-                                               sln@sl@proj4string),
-                              routedata)
+                                      sln@sl@proj4string),
+                                      routedata)
 
   }
   else {
@@ -289,8 +298,10 @@ calc_network_routes <- function(sln, start, end, sumvars) {
       routedata[paste0('sum','_',j)] <- 0.000
     }
     while (i <= length(start)) {
-      routesegs <- unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="both")$epath)
-      routecoords <- join_spatiallines_coords(sln@sl[routesegs,])
+      routesegs <- unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
+      routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
+                                              sln@g$x[start[i]],
+                                              sln@g$y[start[i]])
       routedata[i,'ID'] <- i
       # for (j in sumvars) {
       #   routedata[i,paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])

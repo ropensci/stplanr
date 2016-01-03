@@ -18,13 +18,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // join_spatiallines_coords
-arma::mat join_spatiallines_coords(SEXP sldf);
-RcppExport SEXP stplanr_join_spatiallines_coords(SEXP sldfSEXP) {
+arma::mat join_spatiallines_coords(SEXP sldf, double startx, double starty);
+RcppExport SEXP stplanr_join_spatiallines_coords(SEXP sldfSEXP, SEXP startxSEXP, SEXP startySEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< SEXP >::type sldf(sldfSEXP);
-    __result = Rcpp::wrap(join_spatiallines_coords(sldf));
+    Rcpp::traits::input_parameter< double >::type startx(startxSEXP);
+    Rcpp::traits::input_parameter< double >::type starty(startySEXP);
+    __result = Rcpp::wrap(join_spatiallines_coords(sldf, startx, starty));
     return __result;
 END_RCPP
 }
