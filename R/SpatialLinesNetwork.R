@@ -130,7 +130,7 @@ setMethod("weightfield", signature(x = "SpatialLinesNetwork"), definition = func
 #' @rdname weightfield
 # @aliases <-
 setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "ANY"), definition = function(x, value) {
-  if (class(x) != "SpatialLinesNetwork") {
+  if (!is(x,"SpatialLinesNetwork")) {
     stop("x not SpatialLinesNetwork")
   }
   x@weightfield <- value
@@ -141,7 +141,7 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "AN
 #' @rdname weightfield
 setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "character", value = "ANY"),
                  definition = function(x, varname, value) {
-                   if (class(value) == "data.frame") {
+                   if (is(value,"data.frame")) {
                      if (sum(varname %in% colnames(value)) > 0) {
                        value <- value[,varname]
                      }
@@ -188,22 +188,22 @@ summary.SpatialLinesNetwork <- function(sln) {
 #' from \code{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
 #' @export
 find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
-  if(class(sln) != "SpatialLinesNetwork") {
+  if(!is(sln, "SpatialLinesNetwork")) {
     stop("sln is not a SpatialLinesNetwork.")
   }
-  if(class(x) == "numeric") {
+  if(is(x,"numeric")) {
     if(length(x) == 2 & sum(c('lat','lon') %in% names(x)) == 2) {
       y=x['lat']
       x=x['lon']
     }
   }
-  if(class(x) != "data.frame" & class(x) != "matrix") {
+  if(is(x,"data.frame") == FALSE & is(x,"matrix") == FALSE) {
     if (missing(y)) {
       stop("x is not a data.frame and y is missing.")
     }
   }
   else {
-    if (sum(c('lat','lon') %in% colnames(x)) == 2) {
+    if (all(c('lat','lon') %in% colnames(x))) {
       y = x[,'lat']
       x = x[,'lon']
     }
@@ -274,51 +274,23 @@ calc_network_routes <- function(sln, start, end, sumvars) {
     stop("start and end not the same length.")
   }
 
-  if (length(start) == 1) {
-    routesegs <- unlist(igraph::get.shortest.paths(sln@g, start, end, output="epath")$epath)
-    routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
-                                            sln@g$x[start],
-                                            sln@g$y[start])
-    routedata <- data.frame(ID=1)
-    for (j in sumvars) {
-      routedata[paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])
-    }
-    row.names(routedata) <- c(1)
+  routesegs <- lapply(1:length(start), function(i) {
+      unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
+    })
+  routecoords <- mapply(function(routesegs, start) {
+      join_spatiallines_coords(sln@sl[routesegs,],sln@g$x[start],sln@g$y[start])
+    },
+    routesegs, start, SIMPLIFY = FALSE)
+  routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {matrix(
+    sapply(
+      1:length(sumvars), FUN=function(j) {
+        sum(sln@sl[routesegs,]@data[sumvars[j]])
+      }),nrow=1)}, sumvars)))), c('ID',paste0('sum_',sumvars)))
+  routelines <- mapply(function(x, i){sp::Lines(sp::Line(x), ID=i)}, routecoords, 1:length(routecoords))
 
-    sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(list(sp::Lines(sp::Line(routecoords), ID = 1)),
-                                      sln@sl@proj4string),
-                                      routedata)
-
-  }
-  else {
-    i <- 1
-    routelines <- list()
-    routedata <- data.frame(ID=1)
-    for (j in sumvars) {
-      routedata[paste0('sum','_',j)] <- 0.000
-    }
-    while (i <= length(start)) {
-      routesegs <- unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
-      routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
-                                              sln@g$x[start[i]],
-                                              sln@g$y[start[i]])
-      routedata[i,'ID'] <- i
-      # for (j in sumvars) {
-      #   routedata[i,paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])
-      # }
-      if (length(sumvars) > 1) {
-        routedata[i,paste0('sum_',sumvars)] <- colSums(sln@sl[routesegs,]@data[,sumvars])
-      }
-      else {
-        routedata[i,paste0('sum_',sumvars)] <- sum(sln@sl[routesegs,]@data[,sumvars])
-      }
-      routelines[i] <- sp::Lines(sp::Line(routecoords), ID=i)
-      i <- i + 1
-    }
-    row.names(routedata) <- 1:nrow(routedata)
-    sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(routelines, sln@sl@proj4string),
-                                      routedata)
-  }
+  row.names(routedata) <- 1:nrow(routedata)
+  sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(routelines, sln@sl@proj4string),
+                                    routedata)
 
   return(sldf)
 
