@@ -16,25 +16,19 @@
 #' ac <- read_stats19_ac()
 #' ca <- read_stats19_ca()
 #' ve <- read_stats19_ve()
-#'
-#' # merge all stats 19 data at the (lowest) vehicle level
-#' all_stats19 <- dplyr::inner_join(ve, ca)
-#' all_stats19 <- dplyr::inner_join(all_stats19, ac)
-#' # now you can analyse the UK's stats19 data in a single table!
+#' # now you can analyse the UK's stats19 data in a single table
 #' }
 dl_stats19 <- function(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
-  "road-accidents-safety-data/Stats19_Data_2005-2014.zip")){
+  "road-accidents-safety-data/Stats19_Data_2005-2014.zip"), data_dir = tempdir()){
 
   # download and unzip the data if it's not present
-  if(!"Accidents0514.csv" %in% list.files(tempdir())){
-    data_dir <- tempdir()
+  if(!"Accidents0514.csv" %in% list.files(data_dir)){
     destfile <- file.path(data_dir, "Stats19_Data_2005-2014.zip")
-    downloader::download(zip_url, destfile)
+    download.file(zip_url, destfile)
     unzip(destfile, exdir = data_dir)
   }
 
-  list.files(tempdir())
-  print(paste0("Data saved at: ", list.files(tempdir(),
+  print(paste0("Data saved at: ", list.files(data_dir,
               pattern = "csv", full.names = TRUE)))
 
 }

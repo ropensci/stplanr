@@ -37,7 +37,6 @@ Imports:
     stringr,
     readr,
     lubridate,
-    downloader,
     RCurl,
     geosphere
 Suggests:
