@@ -30,6 +30,9 @@ within the catchment area will be included in the returned
 SpatialPolygonsDataFrame but will not be adjusted for the proportion within
 the catchment area.}
 
+\item{maximpedance}{The maximum value of the network's weight attribute in
+the units of the weight (default = 1000).}
+
 \item{distance}{Defines the additional catchment area around the network
 in the units of the projection.
 (default = 100 metres)}

@@ -55,7 +55,7 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' weightfield(SLN) # field used to determine shortest path
 #' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
-#' plot(SLN, add = T)
+#' plot(SLN, add = TRUE)
 SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   stopifnot(is(sl, "SpatialLines"))
   if (!is(sl, "SpatialLinesDataFrame"))
