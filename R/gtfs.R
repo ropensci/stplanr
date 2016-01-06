@@ -17,7 +17,7 @@
 #' plot(gtfs[gtfs$route_long_name == "Central Campus",])
 #' \dontrun{
 #' # An example of a larger gtfs feed
-#' downloader::download("http://www.yrt.ca/google/google_transit.zip",
+#' download.file("http://www.yrt.ca/google/google_transit.zip",
 #'                      paste0(tempdir(),"/gtfsfeed.zip"))
 #' yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
 #' sp::plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))

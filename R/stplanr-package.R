@@ -22,7 +22,6 @@
 #' @import httr
 #' @import readr
 #' @import dplyr
-#' @import downloader
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
 #' @importFrom leaflet addTiles leaflet addPolylines
