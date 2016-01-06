@@ -53,7 +53,7 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' rnet <- overline(sldf = routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' weightfield(SLN) # field used to determine shortest path
-#' shortpath <- calc_network_routes(SLN, 1, 50, sumvars = "length")
+#' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
 #' plot(SLN, add = T)
 SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
@@ -219,42 +219,53 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
   longlat <- ifelse(is.projected(sln@sl) == TRUE, FALSE, TRUE)
   maxdist <- ifelse(longlat == TRUE, maxdist/1000, maxdist)
 
-  if (length(x) == 1) {
-    # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x,y))
-    nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                            y = matrix(c(x,y),ncol=2),
-                            longlat = longlat)
-    nodeid = which(nodedists == min(nodedists))[1]
-    mindist = nodedists[nodeid]
-    nodeid = ifelse(mindist <= maxdist,nodeid,NA)
-  }
-  else {
-    nodeid = c()
-    mindist = c()
-    i <- 1
-    while (i <= length(x)) {
-      # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x[i],y[i]))
-      nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                              y = matrix(c(x[i],y[i]),ncol=2),
-                              longlat = longlat)
-      nodeid[i] = which(nodedists == min(nodedists))[1]
-      mindist[i] = nodedists[nodeid[i]]
-      i <- i + 1
-    }
-    nodeid <- ifelse(mindist <= maxdist, nodeid, NA)
-  }
+  # if (length(x) == 1) {
+  #   # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x,y))
+  #   nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+  #                           y = matrix(c(x,y),ncol=2),
+  #                           longlat = longlat)
+  #   nodeid = which(nodedists == min(nodedists))[1]
+  #   mindist = nodedists[nodeid]
+  #   nodeid = ifelse(mindist <= maxdist,nodeid,NA)
+  # }
+  # else {
+    # nodeid = c()
+    # mindist = c()
+    # i <- 1
+    # while (i <= length(x)) {
+    #   # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x[i],y[i]))
+    #   nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+    #                           y = matrix(c(x[i],y[i]),ncol=2),
+    #                           longlat = longlat)
+    #   nodeid[i] = which(nodedists == min(nodedists))[1]
+    #   mindist[i] = nodedists[nodeid[i]]
+    #   i <- i + 1
+    # }
+    distlist <- lapply(1:length(x), function(i, gxy){
+      sp::spDists(x = gxy,
+                  y = matrix(c(x[i],y[i]),ncol=2),
+                  longlat = longlat)
+      }, as.matrix(data.frame(x=sln@g$x, y=sln@g$y)))
+    nodeid <- sapply(distlist,
+                     function(x, maxdist){
+                       ifelse(min(x) > maxdist, NA, which(x == min(x))[1])
+                     },
+                     maxdist)
+
+    # nodeid <- ifelse(mindist <= maxdist, nodeid, NA)
+  # }
 
 
   return(nodeid)
 
 }
 
-#' Find shortest path between nodes on network
+#' Summarise shortest path between nodes on network
 #'
 #' @section Details:
 #' Find the shortest path on the network between specified nodes and returns
-#' a SpatialLinesdataFrame containing the path(s) and summary statistics of the
-#' route.
+#' a SpatialLinesdataFrame containing the path(s) and summary statistics of
+#' each one.
 #'
 #' @param sln The SpatialLinesNetwork to use.
 #' @param start Node ID(s) of route starts.
@@ -262,7 +273,7 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @param sumvars Character vector of variables for which to calculate
 #' summary statistics.
 #' @export
-calc_network_routes <- function(sln, start, end, sumvars) {
+sum_network_routes <- function(sln, start, end, sumvars) {
 
   if (class(sln) != "SpatialLinesNetwork") {
     stop("sln is not a SpatialLinesNetwork.")
