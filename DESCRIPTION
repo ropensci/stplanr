@@ -38,7 +38,13 @@ Imports:
     readr,
     lubridate,
     RCurl,
-    geosphere
+    geosphere,
+    Rcpp (>= 0.12.1),
+    RcppArmadillo,
+    igraph
+LinkingTo:
+    RcppArmadillo,
+    Rcpp
 Suggests:
     testthat,
     knitr,
@@ -46,4 +52,5 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
+SystemRequirements: GNU make
 RoxygenNote: 5.0.1
