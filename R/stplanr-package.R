@@ -39,4 +39,8 @@
 #' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
 #' @importFrom stringr str_split
+#' @importFrom Rcpp evalCpp
+#' @importFrom igraph graph E
+#'
+#' @useDynLib stplanr
 NULL
