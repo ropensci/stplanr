@@ -16,6 +16,10 @@ writeGeoJSON <- function(shp, filename){
 #' Simplify geometry of spatial objects with the mapshaper library
 #'
 #' @section Details:
+#'
+#' Note: more advance R/mapshaper tools are provided by the rmapshaper
+#' package: \url{https://github.com/ateucher/rmapshaper}.
+#'
 #' Calls the JavaScript command-line GIS application mapshaper
 #' (\url{https://github.com/mbloch/mapshaper}) from the system
 #' to simplify geographic features, and then tidies up.
