@@ -84,14 +84,8 @@ mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", sile
 #' @export
 #' @examples
 #' mapshape_available()
-mapshape_available <- function(shp = routes_fast, dsn = "mapshape_test"){
-  raster::shapefile(shp, dsn)
-  cmd <- paste0("mapshaper ", dsn, ".shp -simplify 10% -o")
-  system(cmd, ignore.stderr = TRUE)
-  res <- file.exists(paste0(dsn, "-ms.shp"))
-  to_remove <- list.files(pattern = dsn)
-  file.remove(to_remove)
-  res
+mapshape_available <- function() {
+  suppressWarnings(system("mapshaper --version")) != 127
 }
 
 #' Crops spatial object x to the bounding box of spatial object (or matrix) b
