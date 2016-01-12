@@ -381,7 +381,8 @@ calc_network_catchment <- function(
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
                       " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
                       " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
-  retainAreaProportion = FALSE
+  retainAreaProportion = FALSE,
+  dissolve = FALSE
 ){
 
   longlat <- ifelse(is.projected(sln@sl) == TRUE, FALSE, TRUE)
@@ -446,7 +447,7 @@ calc_network_catchment <- function(
     distance = distance,
     projection = projection,
     retainAreaProportion = retainAreaProportion,
-    dissolve = FALSE
+    dissolve = dissolve
   )
 
 }

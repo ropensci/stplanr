@@ -78,6 +78,12 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield="length")
 }
 
+#' Plot a SpatialLinesNetwork
+#'
+#' @param sln The SpatialLinesNetwork to plot
+#' @param component The component of the network to plot. Valid values are "sl"
+#' for the geographic (SpatialLines) representation or "graph" for the graph
+#' representation.
 #' @export
 plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
   if (component == "sl") {
@@ -110,14 +116,17 @@ plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
 #' @name weightfield
 NULL
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield",
            function(x) standardGeneric("weightfield"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, value) standardGeneric("weightfield<-"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, varname, value) standardGeneric("weightfield<-"))
@@ -158,8 +167,11 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "
                    x
                  })
 
+#' Print a summary of a SpatialLinesNetwork
+#'
+#' @param sln The SpatialLinesNetwork
 #' @export
-summary.SpatialLinesNetwork <- function(sln) {
+summary.SpatialLinesNetwork <- function(sln, ... ) {
   cat(paste0("Weight attribute field: ",sln@weightfield))
   summary(sln@g)
   sp::summary(sln@sl)
