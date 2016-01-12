@@ -4,7 +4,7 @@
 \alias{mapshape_available}
 \title{Does the computer have mapshaper available?}
 \usage{
-mapshape_available(shp = routes_fast, dsn = "mapshape_test")
+mapshape_available()
 }
 \arguments{
 \item{shp}{The spatial object to use to test mapshaper (\code{routes_fast} is default)}
