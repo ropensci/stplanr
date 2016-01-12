@@ -3,6 +3,11 @@ stplanr 0.0.3
 
 NEW FEATURES
 
+* Addition of new class definition `SpatialLinesNetwork` and functions
+  (including `plot.SpatialLinesNetwork`, `sum_network_routes`, `find_network_nodes`)
+  allowing fastest route calculations via igraph and other network analysis
+  functions.
+
 * Functions for removing beginning and end of lines: `toptail` and
   `toptailgs` (@richardellison). Helper functions `buff_geo`,
   `crs_select_aeq` and `line2points` added.
