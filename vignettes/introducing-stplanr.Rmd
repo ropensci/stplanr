@@ -275,18 +275,6 @@ lines(l2$d_euclidean, exp(lm2p), col = "green")
 lines(l2$d_euclidean, exp(lm3p), col = "red")
 ```
 
-The purpose of the `dd*` functions is to provide easy-to-remember commands for
-operationalising the formulae used in regression models of distance decay.
-Taking the final model, for example, we can reproduce the curve
-presented in the figure above using `dd_logsqrt()`:
-
-```{r}
-(coefs <- coef(lm3))
-p <- dd_logsqrt(1:5000, a = exp(coefs[1]), b1 = coefs[2], b2 = coefs[3])
-plot(1:5000, p)
-lines(l2$d_euclidean, exp(lm3p), col = "red")
-```
-
 ## Future plans
 
 The final thing to say about this package is that it is work-in-progress
