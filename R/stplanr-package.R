@@ -41,6 +41,8 @@
 #' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
+#' @importFrom methods is new
+#' @importFrom utils download.file tail unzip
 #'
 #' @useDynLib stplanr
 NULL
