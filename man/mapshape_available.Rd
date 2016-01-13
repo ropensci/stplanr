@@ -6,19 +6,10 @@
 \usage{
 mapshape_available()
 }
-\arguments{
-\item{shp}{The spatial object to use to test mapshaper (\code{routes_fast} is default)}
-
-\item{dsn}{The name of the file to write to (\code{mapshape_test} is default)}
-}
 \description{
 This helper function for \code{\link{mapshape}}
 determines whether or not the JavaScript library
 mapshaper is available.
-}
-\details{
-It does this by attempting to save
-(\link{routes_fast}) as a shapefile in the current working directory.
 }
 \examples{
 mapshape_available()
