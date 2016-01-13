@@ -9,7 +9,7 @@ calc_network_catchment(sln, polygonlayer, targetlayer, calccols,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
   " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
   " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
-  retainAreaProportion = FALSE)
+  retainAreaProportion = FALSE, dissolve = FALSE)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork to use.}
@@ -69,15 +69,20 @@ distributed throughout the zone. Returns a SpatialPolygonsDataFrame.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'))
-unzip(file.path(data_dir, 'testcycleway.zip'))
-sa1income <- readOGR(".","smallsa1")
-testcycleway <- readOGR(".","testcycleway")
-calc_catchment(
+unzip(file.path(data_dir, 'smallsa1.zip'), exdir=tempdir())
+unzip(file.path(data_dir, 'testcycleway.zip'), exdir=tempdir())
+unzip(file.path(data_dir, 'sydroads.zip'), exdir=tempdir())
+sa1income <- readOGR(tempdir(),"smallsa1")
+testcycleway <- readOGR(tempdir(),"testcycleway")
+sydroads <- readOGR(tempdir(),"roads")
+sydnetwork <- SpatialLinesNetwork(sydroads)
+calc_network_catchment(
+   sln = sydnetwork,
    polygonlayer = sa1income,
    targetlayer = testcycleway,
    calccols = c('Total'),
-   distance = 800,
+   maximpedance = 800
+   distance = 200,
    projection = 'austalbers',
    dissolve = TRUE
 )

@@ -10,6 +10,8 @@ dl_stats19(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
 }
 \arguments{
 \item{zip_url}{The url where the data is stored}
+
+\item{data_dir}{Directory to which to download the file}
 }
 \description{
 Download Stats19 data

@@ -4,10 +4,17 @@
 \name{weightfield}
 \alias{weightfield}
 \alias{weightfield,SpatialLinesNetwork-method}
+\alias{weightfield<-}
 \alias{weightfield<-,SpatialLinesNetwork,ANY-method}
 \alias{weightfield<-,SpatialLinesNetwork,character-method}
 \title{Get or set weight field in SpatialLinesNetwork}
 \usage{
+weightfield(x)
+
+weightfield(x, varname) <- value
+
+weightfield(x, varname) <- value
+
 \S4method{weightfield}{SpatialLinesNetwork}(x)
 
 \S4method{weightfield}{SpatialLinesNetwork,ANY}(x) <- value
@@ -17,13 +24,13 @@
 \arguments{
 \item{x}{SpatialLinesNetwork to use}
 
+\item{varname}{The name of the variable to set/use.}
+
 \item{value}{Either the name of the variable to use as the weight field or
 a dataframe or vector containing the weights to use if \code{varname} is
 passed to the replacement function. If the dataframe contains multiple
 columns, the column with the same name as \code{varname} is used,
 otherwise the first column is used.}
-
-\item{varname}{The name of the variable to set/use.}
 }
 \description{
 Get or set value of weight field in SpatialLinesNetwork
