@@ -76,7 +76,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README_files/figure-html/plot1-1.png) 
+![](README_files/figure-html/plot1-1.png)\
 
 The package can also allocate flows to the road network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
@@ -103,7 +103,7 @@ tm_shape(osm_tiles) +
   tm_lines(lwd = 3)
 ```
 
-![](README_files/figure-html/cycle-trip-1.png) 
+![](README_files/figure-html/cycle-trip-1.png)\
 
 We can replicate this call to CycleStreets.net multiple times
 using `line2route`.
@@ -117,7 +117,7 @@ t_routes <- line2route(travel_network)
 plot(t_routes)
 ```
 
-![](README_files/figure-html/plot2-1.png) 
+![](README_files/figure-html/plot2-1.png)\
 
 Another way to visualise this is with the leaflet package (not shown):
 
@@ -150,7 +150,7 @@ tm_shape(cents) +
     tm_bubbles()
 ```
 
-![](README_files/figure-html/rnet-1.png) 
+![](README_files/figure-html/rnet-1.png)\
 
 ## Installation
 
