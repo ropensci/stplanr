@@ -79,12 +79,6 @@ mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", sile
 #' determines whether or not the JavaScript library
 #' mapshaper is available.
 #'
-#' It does this by attempting to save
-#' (\link{routes_fast}) as a shapefile in the current working directory.
-#'
-#' @param shp The spatial object to use to test mapshaper (\code{routes_fast} is default)
-#' @param dsn The name of the file to write to (\code{mapshape_test} is default)
-#'
 #' @export
 #' @examples
 #' mapshape_available()

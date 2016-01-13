@@ -78,18 +78,26 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield="length")
 }
 
+#' Plot a SpatialLinesNetwork
+#'
+#' @param x The SpatialLinesNetwork to plot
+#' @param component The component of the network to plot. Valid values are "sl"
+#' for the geographic (SpatialLines) representation or "graph" for the graph
+#' representation.
+#' @param ... Arguments to pass to relevant plot function.
 #' @export
-plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
-  if (component == "sl") {
-    sp::plot(sln@sl, ...)
-  }
-  else if (component == "graph") {
-    igraph::plot.igraph(sln@g, ...)
-  }
-  else {
-    stop("Value of component not valid")
-  }
-}
+setMethod("plot", signature = c(x="SpatialLinesNetwork"),
+          definition = function(x, component = "sl", ...){
+            if (component == "sl") {
+              sp::plot(x@sl, ...)
+            }
+            else if (component == "graph") {
+              igraph::plot.igraph(x@g, ...)
+            }
+            else {
+              stop("Value of component not valid")
+            }
+          })
 
 #' Get or set weight field in SpatialLinesNetwork
 #'
@@ -110,14 +118,17 @@ plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
 #' @name weightfield
 NULL
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield",
            function(x) standardGeneric("weightfield"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, value) standardGeneric("weightfield<-"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, varname, value) standardGeneric("weightfield<-"))
@@ -158,12 +169,17 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "
                    x
                  })
 
+#' Print a summary of a SpatialLinesNetwork
+#'
+#' @param object The SpatialLinesNetwork
+#' @param ... Arguments to pass to relevant plot function.
 #' @export
-summary.SpatialLinesNetwork <- function(sln) {
-  cat(paste0("Weight attribute field: ",sln@weightfield))
-  summary(sln@g)
-  sp::summary(sln@sl)
-}
+setMethod("summary", signature = c(object="SpatialLinesNetwork"),
+        definition = function(object, ...){
+        cat(paste0("Weight attribute field: ",object@weightfield))
+        summary(object@g)
+        sp::summary(object@sl)
+})
 
 #' Find graph node ID of closest node to given coordinates
 #'

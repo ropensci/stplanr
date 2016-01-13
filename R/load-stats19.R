@@ -7,6 +7,7 @@
 #' Ensure you have a fast internet connection and at least 100 Mb space
 #'
 #' @param zip_url The url where the data is stored
+#' @param data_dir Directory to which to download the file
 #' @export
 #' @examples
 #' \dontrun{
