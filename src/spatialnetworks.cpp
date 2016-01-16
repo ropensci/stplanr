@@ -16,7 +16,7 @@ List coord_matches(SEXP sldf) {
   arma::mat x(lines.length()*2,3);
 
   unsigned int counti = 0;
-  for (unsigned int i; i < sllength; i++) {
+  for (unsigned int i = 0; i < sllength; i++) {
     List Lines = Rcpp::S4(lines(i)).slot("Lines");
     arma::mat thiscoords = as<arma::mat>(Rcpp::S4(Lines(0)).slot("coords"));
     x(counti, 0) = thiscoords(0,0);
