@@ -53,9 +53,9 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' rnet <- overline(sldf = routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' weightfield(SLN) # field used to determine shortest path
-#' shortpath <- calc_network_routes(SLN, 1, 50, sumvars = "length")
+#' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
-#' plot(SLN, add = T)
+#' plot(SLN, add = TRUE)
 SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   stopifnot(is(sl, "SpatialLines"))
   if (!is(sl, "SpatialLinesDataFrame"))
@@ -78,18 +78,26 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
   new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield="length")
 }
 
+#' Plot a SpatialLinesNetwork
+#'
+#' @param x The SpatialLinesNetwork to plot
+#' @param component The component of the network to plot. Valid values are "sl"
+#' for the geographic (SpatialLines) representation or "graph" for the graph
+#' representation.
+#' @param ... Arguments to pass to relevant plot function.
 #' @export
-plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
-  if (component == "sl") {
-    sp::plot(sln@sl, ...)
-  }
-  else if (component == "graph") {
-    igraph::plot.igraph(sln@g, ...)
-  }
-  else {
-    stop("Value of component not valid")
-  }
-}
+setMethod("plot", signature = c(x="SpatialLinesNetwork"),
+          definition = function(x, component = "sl", ...){
+            if (component == "sl") {
+              sp::plot(x@sl, ...)
+            }
+            else if (component == "graph") {
+              igraph::plot.igraph(x@g, ...)
+            }
+            else {
+              stop("Value of component not valid")
+            }
+          })
 
 #' Get or set weight field in SpatialLinesNetwork
 #'
@@ -110,14 +118,17 @@ plot.SpatialLinesNetwork <- function(sln, component = "sl", ... ) {
 #' @name weightfield
 NULL
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield",
            function(x) standardGeneric("weightfield"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, value) standardGeneric("weightfield<-"))
 
+#' @rdname weightfield
 #' @export
 setGeneric("weightfield<-",
            function(x, varname, value) standardGeneric("weightfield<-"))
@@ -130,7 +141,7 @@ setMethod("weightfield", signature(x = "SpatialLinesNetwork"), definition = func
 #' @rdname weightfield
 # @aliases <-
 setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "ANY"), definition = function(x, value) {
-  if (class(x) != "SpatialLinesNetwork") {
+  if (!is(x,"SpatialLinesNetwork")) {
     stop("x not SpatialLinesNetwork")
   }
   x@weightfield <- value
@@ -141,7 +152,7 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "AN
 #' @rdname weightfield
 setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "character", value = "ANY"),
                  definition = function(x, varname, value) {
-                   if (class(value) == "data.frame") {
+                   if (is(value,"data.frame")) {
                      if (sum(varname %in% colnames(value)) > 0) {
                        value <- value[,varname]
                      }
@@ -158,12 +169,17 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "
                    x
                  })
 
+#' Print a summary of a SpatialLinesNetwork
+#'
+#' @param object The SpatialLinesNetwork
+#' @param ... Arguments to pass to relevant plot function.
 #' @export
-summary.SpatialLinesNetwork <- function(sln) {
-  cat(paste0("Weight attribute field: ",sln@weightfield))
-  summary(sln@g)
-  sp::summary(sln@sl)
-}
+setMethod("summary", signature = c(object="SpatialLinesNetwork"),
+        definition = function(object, ...){
+        cat(paste0("Weight attribute field: ",object@weightfield))
+        summary(object@g)
+        sp::summary(object@sl)
+})
 
 #' Find graph node ID of closest node to given coordinates
 #'
@@ -188,22 +204,22 @@ summary.SpatialLinesNetwork <- function(sln) {
 #' from \code{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
 #' @export
 find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
-  if(class(sln) != "SpatialLinesNetwork") {
+  if(!is(sln, "SpatialLinesNetwork")) {
     stop("sln is not a SpatialLinesNetwork.")
   }
-  if(class(x) == "numeric") {
+  if(is(x,"numeric")) {
     if(length(x) == 2 & sum(c('lat','lon') %in% names(x)) == 2) {
       y=x['lat']
       x=x['lon']
     }
   }
-  if(class(x) != "data.frame" & class(x) != "matrix") {
+  if(is(x,"data.frame") == FALSE & is(x,"matrix") == FALSE) {
     if (missing(y)) {
       stop("x is not a data.frame and y is missing.")
     }
   }
   else {
-    if (sum(c('lat','lon') %in% colnames(x)) == 2) {
+    if (all(c('lat','lon') %in% colnames(x))) {
       y = x[,'lat']
       x = x[,'lon']
     }
@@ -219,42 +235,53 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
   longlat <- ifelse(is.projected(sln@sl) == TRUE, FALSE, TRUE)
   maxdist <- ifelse(longlat == TRUE, maxdist/1000, maxdist)
 
-  if (length(x) == 1) {
-    # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x,y))
-    nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                            y = matrix(c(x,y),ncol=2),
-                            longlat = longlat)
-    nodeid = which(nodedists == min(nodedists))[1]
-    mindist = nodedists[nodeid]
-    nodeid = ifelse(mindist <= maxdist,nodeid,NA)
-  }
-  else {
-    nodeid = c()
-    mindist = c()
-    i <- 1
-    while (i <= length(x)) {
-      # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x[i],y[i]))
-      nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                              y = matrix(c(x[i],y[i]),ncol=2),
-                              longlat = longlat)
-      nodeid[i] = which(nodedists == min(nodedists))[1]
-      mindist[i] = nodedists[nodeid[i]]
-      i <- i + 1
-    }
-    nodeid <- ifelse(mindist <= maxdist, nodeid, NA)
-  }
+  # if (length(x) == 1) {
+  #   # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x,y))
+  #   nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+  #                           y = matrix(c(x,y),ncol=2),
+  #                           longlat = longlat)
+  #   nodeid = which(nodedists == min(nodedists))[1]
+  #   mindist = nodedists[nodeid]
+  #   nodeid = ifelse(mindist <= maxdist,nodeid,NA)
+  # }
+  # else {
+    # nodeid = c()
+    # mindist = c()
+    # i <- 1
+    # while (i <= length(x)) {
+    #   # nodedists = geosphere::distHaversine(data.frame(x=sln@g$x, y=sln@g$y),c(x[i],y[i]))
+    #   nodedists = sp::spDists(x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+    #                           y = matrix(c(x[i],y[i]),ncol=2),
+    #                           longlat = longlat)
+    #   nodeid[i] = which(nodedists == min(nodedists))[1]
+    #   mindist[i] = nodedists[nodeid[i]]
+    #   i <- i + 1
+    # }
+    distlist <- lapply(1:length(x), function(i, gxy){
+      sp::spDists(x = gxy,
+                  y = matrix(c(x[i],y[i]),ncol=2),
+                  longlat = longlat)
+      }, as.matrix(data.frame(x=sln@g$x, y=sln@g$y)))
+    nodeid <- sapply(distlist,
+                     function(x, maxdist){
+                       ifelse(min(x) > maxdist, NA, which(x == min(x))[1])
+                     },
+                     maxdist)
+
+    # nodeid <- ifelse(mindist <= maxdist, nodeid, NA)
+  # }
 
 
   return(nodeid)
 
 }
 
-#' Find shortest path between nodes on network
+#' Summarise shortest path between nodes on network
 #'
 #' @section Details:
 #' Find the shortest path on the network between specified nodes and returns
-#' a SpatialLinesdataFrame containing the path(s) and summary statistics of the
-#' route.
+#' a SpatialLinesdataFrame containing the path(s) and summary statistics of
+#' each one.
 #'
 #' @param sln The SpatialLinesNetwork to use.
 #' @param start Node ID(s) of route starts.
@@ -262,7 +289,7 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @param sumvars Character vector of variables for which to calculate
 #' summary statistics.
 #' @export
-calc_network_routes <- function(sln, start, end, sumvars) {
+sum_network_routes <- function(sln, start, end, sumvars) {
 
   if (class(sln) != "SpatialLinesNetwork") {
     stop("sln is not a SpatialLinesNetwork.")
@@ -274,51 +301,23 @@ calc_network_routes <- function(sln, start, end, sumvars) {
     stop("start and end not the same length.")
   }
 
-  if (length(start) == 1) {
-    routesegs <- unlist(igraph::get.shortest.paths(sln@g, start, end, output="epath")$epath)
-    routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
-                                            sln@g$x[start],
-                                            sln@g$y[start])
-    routedata <- data.frame(ID=1)
-    for (j in sumvars) {
-      routedata[paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])
-    }
-    row.names(routedata) <- c(1)
+  routesegs <- lapply(1:length(start), function(i) {
+      unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
+    })
+  routecoords <- mapply(function(routesegs, start) {
+      join_spatiallines_coords(sln@sl[routesegs,],sln@g$x[start],sln@g$y[start])
+    },
+    routesegs, start, SIMPLIFY = FALSE)
+  routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {matrix(
+    sapply(
+      1:length(sumvars), FUN=function(j) {
+        sum(sln@sl[routesegs,]@data[sumvars[j]])
+      }),nrow=1)}, sumvars)))), c('ID',paste0('sum_',sumvars)))
+  routelines <- mapply(function(x, i){sp::Lines(sp::Line(x), ID=i)}, routecoords, 1:length(routecoords))
 
-    sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(list(sp::Lines(sp::Line(routecoords), ID = 1)),
-                                      sln@sl@proj4string),
-                                      routedata)
-
-  }
-  else {
-    i <- 1
-    routelines <- list()
-    routedata <- data.frame(ID=1)
-    for (j in sumvars) {
-      routedata[paste0('sum','_',j)] <- 0.000
-    }
-    while (i <= length(start)) {
-      routesegs <- unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
-      routecoords <- join_spatiallines_coords(sln@sl[routesegs,],
-                                              sln@g$x[start[i]],
-                                              sln@g$y[start[i]])
-      routedata[i,'ID'] <- i
-      # for (j in sumvars) {
-      #   routedata[i,paste0('sum','_',j)] <- sum(sln@sl[routesegs,]@data[j])
-      # }
-      if (length(sumvars) > 1) {
-        routedata[i,paste0('sum_',sumvars)] <- colSums(sln@sl[routesegs,]@data[,sumvars])
-      }
-      else {
-        routedata[i,paste0('sum_',sumvars)] <- sum(sln@sl[routesegs,]@data[,sumvars])
-      }
-      routelines[i] <- sp::Lines(sp::Line(routecoords), ID=i)
-      i <- i + 1
-    }
-    row.names(routedata) <- 1:nrow(routedata)
-    sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(routelines, sln@sl@proj4string),
-                                      routedata)
-  }
+  row.names(routedata) <- 1:nrow(routedata)
+  sldf <- sp::SpatialLinesDataFrame(sp::SpatialLines(routelines, sln@sl@proj4string),
+                                    routedata)
 
   return(sldf)
 

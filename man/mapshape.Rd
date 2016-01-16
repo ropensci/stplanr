@@ -2,29 +2,64 @@
 % Please edit documentation in R/geo-functions.R
 \name{mapshape}
 \alias{mapshape}
-\title{Simplify geometry file of a shapfile.}
+\title{Simplify geometry of spatial objects with the mapshaper library}
 \usage{
-mapshape(dsn, percent)
+mapshape(shp, percent = 10, ms_options = "", dsn = "mapshape",
+  silent = FALSE)
 }
 \arguments{
-\item{dsn}{A character string providing the absolute path to the shapefile to simplify.}
+\item{shp}{A spatial object to be simplified.}
 
-\item{percent}{A number between 0 and 100 stating how aggressively to simplify
- the object
-Percentage of removable points to retain.
+\item{percent}{A number between 1 and 100 stating how aggressively to simplify
+the object (1 is a very aggressive simplification)}
+
+\item{ms_options}{Text string of options passed to mapshaper such as}
+
+\item{dsn}{The name of the temporary file to write to (deleted after use)}
+
+\item{silent}{Logical determining whether the function call is printed to screen
+\code{no-topology} (a flag) and \code{snap-interval=1} (a key value pair).
+See the mapshaper documentation for details:
+\url{https://github.com/mbloch/mapshaper/wiki/Command-Reference}.
+
+The percent argument refers to the percentage of removable points to retain.
 So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 hard-disk space.}
 }
 \description{
-Simplify geometry file of a shapfile.
+Simplify geometry of spatial objects with the mapshaper library
 }
 \section{Details}{
 
-This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: \url{https://github.com/mbloch/mapshaper} . mapshaper which must be installed locally for mapshaper to work. Writes \code{mapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
+
+Note: more advance R/mapshaper tools are provided by the rmapshaper
+package: \url{https://github.com/ateucher/rmapshaper}.
+
+Calls the JavaScript command-line GIS application mapshaper
+(\url{https://github.com/mbloch/mapshaper}) from the system
+to simplify geographic features, and then tidies up.
+mapshaper must be installed and available to \code{\link{system}}.
+\code{mapshape} writes new a file to disk.
+Thanks to Richard and Adrian Ellison for demonstrating this in R.
 }
 \examples{
 \dontrun{
-mapshape("~/geodata/myShapefile.shp", 5)
+data(routes_fast)
+shp <- routes_fast[1,]
+rfs10 <- mapshape(shp)
+rfs5 <- mapshape(shp, percent = 5)
+rfs1 <- mapshape(shp, percent = 1)
+plot(shp)
+plot(rfs10, add = TRUE, col ="red")
+plot(rfs5, add = TRUE, col ="blue")
+plot(rfs1, add = TRUE, col = "grey")
+# snap the lines to the nearest interval
+rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
+plot(shp)
+plot(rfs_int, add = TRUE)
 }
+}
+\seealso{
+\code{\link[rgeos]{gSimplify}}
 }
 

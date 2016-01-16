@@ -22,7 +22,6 @@
 #' @import httr
 #' @import readr
 #' @import dplyr
-#' @import downloader
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
 #' @importFrom leaflet addTiles leaflet addPolylines
@@ -42,6 +41,8 @@
 #' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
+#' @importFrom methods is new
+#' @importFrom utils download.file tail unzip
 #'
 #' @useDynLib stplanr
 NULL

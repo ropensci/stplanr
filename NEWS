@@ -1,24 +1,26 @@
-stplanr 0.0.3
+stplanr 0.1.0
 ----------------------------------------------------------------
 
 NEW FEATURES
 
+* Addition of new class definition `SpatialLinesNetwork`, methods for `plot`
+  and `summary` and functions `calc_network_routes` and `find_network_nodes`
+  allowing fast route calculations via igraph and other network analysis
+  functions.
+
 * Functions for removing beginning and end of lines: `toptail` and
-  `toptailgs` (@richardellison). Helper functions `buff_geo`,
+  `toptailgs`. Helper functions `buff_geo`,
   `crs_select_aeq` and `line2points` added.
 
 * Functionality for reading in the UK's stats19 data: `read_stats19_*`
   functions download, unzip and re-categorise the data.
 
-* `read_table` functions added for reading Australian OD data
-  (@richardellison).
+* `read_table` functions added for reading Australian OD data.
 
-* `decode_gl` added to decode Google polylines (@richardellison)
-  and other functions for querying and reading data from OSRM
-  services.
+* `decode_gl` added to decode Google polylines and other functions for
+  querying and reading data from OSRM services.
 
-* `gtfs2sldf` added to import GTFS routes as SpatialLinesDataFrames
-  (@richardellison).
+* `gtfs2sldf` added to import GTFS routes as SpatialLinesDataFrames.
 
 stplanr 0.0.2
 ----------------------------------------------------------------

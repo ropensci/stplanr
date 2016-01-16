@@ -5,10 +5,13 @@
 \title{Download Stats19 data}
 \usage{
 dl_stats19(zip_url = paste0("http://data.dft.gov.uk.s3.amazonaws.com/",
-  "road-accidents-safety-data/Stats19_Data_2005-2014.zip"))
+  "road-accidents-safety-data/Stats19_Data_2005-2014.zip"),
+  data_dir = tempdir())
 }
 \arguments{
 \item{zip_url}{The url where the data is stored}
+
+\item{data_dir}{Directory to which to download the file}
 }
 \description{
 Download Stats19 data
@@ -28,11 +31,7 @@ dl_stats19()
 ac <- read_stats19_ac()
 ca <- read_stats19_ca()
 ve <- read_stats19_ve()
-
-# merge all stats 19 data at the (lowest) vehicle level
-all_stats19 <- dplyr::inner_join(ve, ca)
-all_stats19 <- dplyr::inner_join(all_stats19, ac)
-# now you can analyse the UK's stats19 data in a single table!
+# now you can analyse the UK's stats19 data in a single table
 }
 }
 

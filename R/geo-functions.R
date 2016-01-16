@@ -13,28 +13,77 @@ writeGeoJSON <- function(shp, filename){
   file.rename(filename, newname)
 }
 
-#' Simplify geometry file of a shapfile.
+#' Simplify geometry of spatial objects with the mapshaper library
 #'
 #' @section Details:
-#' This is a wrapper funtion for the open source JavaScript command-line GIS application mapshaper: \url{https://github.com/mbloch/mapshaper} . mapshaper which must be installed locally for mapshaper to work. Writes \code{mapshape} writes new file to disk. Thanks to Richard and Adrian Ellison for demonstrating this in R.
 #'
-#' @param dsn A character string providing the absolute path to the shapefile to simplify.
-#' @param percent A number between 0 and 100 stating how aggressively to simplify
-#'  the object
-#' Percentage of removable points to retain.
+#' Note: more advance R/mapshaper tools are provided by the rmapshaper
+#' package: \url{https://github.com/ateucher/rmapshaper}.
+#'
+#' Calls the JavaScript command-line GIS application mapshaper
+#' (\url{https://github.com/mbloch/mapshaper}) from the system
+#' to simplify geographic features, and then tidies up.
+#' mapshaper must be installed and available to \code{\link{system}}.
+#' \code{mapshape} writes new a file to disk.
+#' Thanks to Richard and Adrian Ellison for demonstrating this in R.
+#'
+#' @param shp A spatial object to be simplified.
+#' @param percent A number between 1 and 100 stating how aggressively to simplify
+#'  the object (1 is a very aggressive simplification)
+#' @param ms_options Text string of options passed to mapshaper such as
+#' @param dsn The name of the temporary file to write to (deleted after use)
+#' @param silent Logical determining whether the function call is printed to screen
+#' \code{no-topology} (a flag) and \code{snap-interval=1} (a key value pair).
+#' See the mapshaper documentation for details:
+#' \url{https://github.com/mbloch/mapshaper/wiki/Command-Reference}.
+#'
+#' The percent argument refers to the percentage of removable points to retain.
 #' So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
+#' @seealso
+#' \code{\link[rgeos]{gSimplify}}
 #' @export
 #' @examples
 #' \dontrun{
-#' mapshape("~/geodata/myShapefile.shp", 5)
+#' data(routes_fast)
+#' shp <- routes_fast[1,]
+#' rfs10 <- mapshape(shp)
+#' rfs5 <- mapshape(shp, percent = 5)
+#' rfs1 <- mapshape(shp, percent = 1)
+#' plot(shp)
+#' plot(rfs10, add = TRUE, col ="red")
+#' plot(rfs5, add = TRUE, col ="blue")
+#' plot(rfs1, add = TRUE, col = "grey")
+#' # snap the lines to the nearest interval
+#' rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
+#' plot(shp)
+#' plot(rfs_int, add = TRUE)
 #' }
-mapshape <- function(dsn, percent){
-  from_layer <- gsub(".shp", replacement = "", dsn)
-  to_layer <- paste0(from_layer, "mapshaped_", percent, "%.shp")
-  cmd <- paste0("mapshaper ", dsn, " auto-snap -simplify keep-shapes ", percent, "% -o force ", to_layer)
-  print(paste0("Attempting to run the following command from the system (requires mapshaper JavaScript library): ", cmd))
-  system(cmd, wait = TRUE)
+mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", silent = FALSE){
+  if(!mapshape_available()) stop("mapshaper not available on this system")
+  raster::shapefile(shp, dsn, overwrite = TRUE)
+  cmd <- paste0("mapshaper ", ms_options, " ", dsn, ".shp -simplify ", percent, "% -o")
+  if(!silent)  print(paste0("Running the following command from the system: ", cmd))
+  system(cmd, ignore.stderr = TRUE)
+  suppressWarnings(new_shp <- raster::shapefile(paste0(dsn, "-ms.shp")))
+  new_shp@data <- shp@data
+  proj4string(new_shp) <- proj4string(shp)
+  to_remove <- list.files(pattern = dsn)
+  file.remove(to_remove)
+  new_shp
+}
+
+#' Does the computer have mapshaper available?
+#'
+#' This helper function for \code{\link{mapshape}}
+#' determines whether or not the JavaScript library
+#' mapshaper is available.
+#'
+#' @export
+#' @examples
+#' mapshape_available()
+mapshape_available <- function() {
+  suppressWarnings(system("mapshaper --version")) != 127
 }
 
 #' Crops spatial object x to the bounding box of spatial object (or matrix) b
