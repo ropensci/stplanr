@@ -95,81 +95,52 @@ line2points <- function(l){
 #'
 #' See \code{\link{route_cyclestreet}} and other route functions for details
 
-#' @param ldf A SpatialLinesDataFrame or data.frame of coordinates produced by
-#' \code{\link{line2df}}
+#' @param l A SpatialLinesDataFrame, such as that produced by
+#' \code{\link{od2line}}
 #'
+#' @param n_print A number specifying how frequently progress updates
+#' should be shown
 #' @param ... Arguements passed to \code{\link{route_cyclestreet}}
 #'
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
 #'
-#' data(flowlines) # load demo flowlines dataset
 #' \dontrun{
-#' # Don't run as requires gdal dependency, can cause issues
-#' library(rgdal)
-#' flowlines <- spTransform(flowlines, CRS("+init=epsg:27700"))
-#' flowlines <- flowlines[rgeos::gLength(flowlines, byid = TRUE) > 0,]
-#' flowlines <- spTransform(flowlines, CRS("+init=epsg:4326"))
 #' plot(flowlines)
-#'
-#' cckey <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-#' Sys.setenv(CYCLESTREET = cckey)
-#' routes_fast <- line2route(l = flowlines, plan = "fastest")
-#' routes_slow <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
-#' }
-#'
-#' flowlines <- flowlines[flowlines$Area.of.residence != flowlines$Area.of.workplace,]
-#' # Save the route data (uncomment if this changes)
-#' # devtools::use_data(routes_fast, overwrite = TRUE)
-#' # devtools::use_data(routes_slow, overwrite = TRUE)
-#'
-#' if(!exists("routes_fast")){
-#'   data(routes_fast, routes_slow) # load routes
-#' }
-#'
-#' plot(flowlines)
-#' lines(routes_fast, col = "red")
-#' lines(routes_slow, col = "green")
-#'
+#' rf <- line2route(l = flowlines, plan = "fastest")
+#' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
+#' plot(rf, col = "red", add = T)
+#' plot(rq, col = "green", add = T)
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
-#' n = 18
+#' n = 21
 #' plot(flowlines[n,])
-#' lines(routes_fast[n,], col = "red")
-#' lines(routes_slow[n,], col = "green")
+#' lines(rf[n,], col = "red")
+#' lines(rq[n,], col = "green")
+#' }
+line2route <- function(l, n_print = 10, ...){
+  ldf <- line2df(l)
+  r <- l
+  rdata <- data.frame(matrix(nrow = nrow(l), ncol = 11))
+  r@data <- rdata
+  names(r) <- c("plan", "start", "finish", "length", "time", "waypoint", "change_elev",
+                "av_incline", "co2_saving", "calories", "busyness")
 
-line2route <- function(ldf, ...){
-  l <- ldf # save spatial data and row numbers
-  if(class(ldf) == "SpatialLinesDataFrame"){
-    ldf <- line2df(l)
-  }
+  for(i in 1:nrow(ldf)){
 
-  # Save the first line - catch it if it's an error
-  tryCatch({
-    rf1 <- route_cyclestreet(from = ldf[1,1:2], to = ldf[1, 3:4], ...)
-    rf <- rf1
-    row.names(rf) <- row.names(l[1,])
-  }, error = function(e){warning(paste0("Fail for line number ", 1))})
-
-  for(i in 2:nrow(ldf)){
     tryCatch({
-      if(!exists("rf1")){
-        rf1 <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
-        rf <- rf1
-        row.names(rf) <- row.names(l[i,])
-      }else{
-        rfnew <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
-        row.names(rfnew) <- row.names(l[i,])
-        rf <- maptools::spRbind(rf, rfnew)
-      }
+        rc <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+        rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
+        r@lines[[i]] <- rcl
+        r@data[i,] <- rc@data
     }, error = function(e){warning(paste0("Fail for line number ", i))})
 
     # Status bar
-    perc_temp <- i %% round(nrow(ldf) / 10)
+    perc_temp <- i %% round(nrow(ldf) / n_print)
     if(!is.na(perc_temp) & perc_temp == 0){
       message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
                    " distances calculated")) # print % of distances calculated
     }
-  }
-  rf
+    }
+  r
 }
