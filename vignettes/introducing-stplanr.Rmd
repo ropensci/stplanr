@@ -17,12 +17,15 @@ library(leaflet) # needed for plotting data
 
 ## Introduction
 
-Common tasks in transportation research and planning include:
+Common computational tasks in transportation research and planning include:
 
-- Access and processing of data on transport infrastructure and behaviour
+- Access to and processing of data on transport infrastructure and behaviour
 - Analysis and visualisation of origin-destination flow data
 - Allocation of flows to the transport (road) network
 - Development of models to estimate transport behaviour
+- The calculation of 'catchment areas' affected by transport infrastructure
+
+the automation of such tasks (and there are many others) can assist researchers and practitioners create evidence for design and decision making, as part of the analyse, plan, design workflow.
 
 **stplanr** facilitates each of these tasks with an integrated 
 series of tools and example datasets. The 'sustainable' in the
