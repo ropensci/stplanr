@@ -170,3 +170,22 @@ bbox_scale <- function(bb, scale_factor){
   b <- (bb - rowMeans(bb)) * scale_factor + rowMeans(bb)
   b
 }
+
+#' Convert a bounding box to a SpatialPolygonsDataFrame
+#'
+#' Takes a bounding box as an input and outputs a box in the form of a polygon
+#'
+#' @inheritParams gclip
+#' @export
+#' @examples
+#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
+#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
+#'   "coords.x2"), c("min", "max")))
+#' bb1 <- bb2poly(bb)
+#' plot(bb1)
+bb2poly <- function(bb){
+  if(class(bb) == "matrix")
+    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons") else
+      b_poly <- as(raster::extent(bb), "SpatialPolygons")
+}
+

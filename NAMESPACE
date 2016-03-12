@@ -2,6 +2,7 @@
 
 export("weightfield<-")
 export(SpatialLinesNetwork)
+export(bb2poly)
 export(bbox_scale)
 export(buff_geo)
 export(calc_catchment)
