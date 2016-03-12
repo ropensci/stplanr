@@ -97,7 +97,6 @@ line2points <- function(l){
 
 #' @param l A SpatialLinesDataFrame, such as that produced by
 #' \code{\link{od2line}}
-#'
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
 #' @param ... Arguements passed to \code{\link{route_cyclestreet}}
