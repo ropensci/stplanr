@@ -36,6 +36,7 @@
 #' # Plan the 'public' route from Hereford to Leeds
 #' rqh <- route_transportapi_public(from = "Hereford", to = "Leeds")
 #' plot(rq_hfd)
+#' }
 #'
 # Aim plan public transport routes with transportAPI
 

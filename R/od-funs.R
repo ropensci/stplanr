@@ -27,7 +27,11 @@ od2line <- function(flow, zones){
   l <- vector("list", nrow(flow))
   for(i in 1:nrow(flow)){
     from <- zones@data[,1] %in% flow[i, 1]
+    if(sum(from) == 0)
+      warning(paste0("No match for line ", i))
     to <- zones@data[,1] %in% flow[i, 2]
+    if(sum(to) == 0 & sum(from) == 1)
+      warning(paste0("No match for line ", i))
     x <- sp::coordinates(zones[from, ])
     y <- sp::coordinates(zones[to, ])
     l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
