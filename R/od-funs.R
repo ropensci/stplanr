@@ -103,15 +103,14 @@ line2points <- function(l){
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
-#' @param ... Arguements passed to \code{\link{route_cyclestreet}}
-#'
+#' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
 #'
 #' \dontrun{
 #' plot(flowlines)
-#' rf <- line2route(l = flowlines, plan = "fastest")
+#' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
 #' plot(rf, col = "red", add = T)
 #' plot(rq, col = "green", add = T)
@@ -121,23 +120,25 @@ line2points <- function(l){
 #' lines(rf[n,], col = "red")
 #' lines(rq[n,], col = "green")
 #' }
-line2route <- function(l, n_print = 10, ...){
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
+  FUN <- match.fun(route_fun)
   ldf <- line2df(l)
   r <- l
-  rdata <- data.frame(matrix(nrow = nrow(l), ncol = 11))
+
+  # test for the second od pair (the first often fails)
+  rc2 <- FUN(from = ldf[2,1:2], to = ldf[2, 3:4], ...)
+
+  rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
+  names(rdata) <- names(rc2)
   r@data <- rdata
-  names(r) <- c("plan", "start", "finish", "length", "time", "waypoint", "change_elev",
-                "av_incline", "co2_saving", "calories", "busyness")
-
-  for(i in 1:nrow(ldf)){
-
+      # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
+    for(i in 1:nrow(ldf)){
     tryCatch({
-        rc <- route_cyclestreet(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+        rc <- FUN(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
         rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
         r@lines[[i]] <- rcl
         r@data[i,] <- rc@data
     }, error = function(e){warning(paste0("Fail for line number ", i))})
-
     # Status bar
     perc_temp <- i %% round(nrow(ldf) / n_print)
     if(!is.na(perc_temp) & perc_temp == 0){
@@ -146,4 +147,5 @@ line2route <- function(l, n_print = 10, ...){
     }
     }
   r
+}
 }
