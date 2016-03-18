@@ -77,7 +77,6 @@ line2df <- function(l){
 #' data(flowlines) # load demo flowlines dataset
 #' lpoints <- line2points(flowlines) # for many lines
 #' plot(lpoints) # note overlapping points
-#'
 line2points <- function(l){
   for(i in 1:length(l)){
     l1 <- l[i,]
@@ -92,13 +91,11 @@ line2points <- function(l){
   }
   out
 }
-
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
 #' @section Details:
 #'
 #' See \code{\link{route_cyclestreet}} and other route functions for details
-
 #' @param l A SpatialLinesDataFrame, such as that produced by
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
@@ -148,4 +145,29 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
     }
   r
 }
+#' Convert a series of points into a dataframe of origins and destinations
+#' @examples
+#' df <- points2odf(cents)
+#'
+points2odf <- function(p){
+  if(grepl(pattern = "DataFrame", class(p))){
+    geo_code <- p@data[,1]
+  } else {
+    geo_code <- p[,1]
+  }
+  df = data.frame(
+    expand.grid(geo_code, geo_code)[2:1]
+  )
+  names(df) <- c("O", "D")
+  df
+}
+#' Convert a series of points into geographical flows
+#'
+#' @examples
+#' plot(cents)
+#' flow <-points2flow(cents)
+#' plot(flow, add = T)
+points2flow <- function(p){
+  df <- points2odf(p)
+  flow <- od2line(flow = df, zones = p)
 }
