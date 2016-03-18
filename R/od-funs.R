@@ -97,6 +97,7 @@ line2points <- function(l){
 #'
 #' See \code{\link{route_cyclestreet}} and other route functions for details
 #' @param l A SpatialLinesDataFrame, such as that produced by
+#' @param route_fun A routing function to be used for converting the straight lines to routes
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
@@ -146,6 +147,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
   r
 }
 #' Convert a series of points into a dataframe of origins and destinations
+#' @export
 #' @examples
 #' df <- points2odf(cents)
 #'
@@ -162,11 +164,11 @@ points2odf <- function(p){
   df
 }
 #' Convert a series of points into geographical flows
-#'
+#' @export
 #' @examples
 #' plot(cents)
 #' flow <-points2flow(cents)
-#' plot(flow, add = T)
+#' plot(flow, add = TRUE)
 points2flow <- function(p){
   df <- points2odf(p)
   flow <- od2line(flow = df, zones = p)
