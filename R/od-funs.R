@@ -147,6 +147,12 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
   r
 }
 #' Convert a series of points into a dataframe of origins and destinations
+#'
+#' Takes a series of geographical points and converts them into a data.frame
+#' representing the potential flows, or 'spatial interaction', between every combination
+#' of points.
+#'
+#' @param p SpatialPointsDataFrame or data.frame
 #' @export
 #' @examples
 #' df <- points2odf(cents)
@@ -164,6 +170,13 @@ points2odf <- function(p){
   df
 }
 #' Convert a series of points into geographical flows
+#'
+#' Takes a series of geographical points and converts them into a SpatialLinesDataFrame
+#' representing the potential flows, or 'spatial interaction', between every combination
+#' of points.
+#'
+#' @param p SpatialPointsDataFrame
+#'
 #' @export
 #' @examples
 #' plot(cents)
