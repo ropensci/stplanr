@@ -1,3 +1,14 @@
+stplanr 0.1.2
+----------------------------------------------------------------
+
+NEW FEATURES
+
+* New transport planning API added, with `route_transportapi_public` (for testing).
+
+* Update to `line2route`, allowing it to accept different routing funtions via the new argument `route_fun` (for testing - tested with `route_fun = route_cyclestreet`).
+
+* New functions for creating origin-destination data frames (`point2odf`) and SpatialLinesDataFrames (`points2flow`).
+
 stplanr 0.1.0
 ----------------------------------------------------------------
 
