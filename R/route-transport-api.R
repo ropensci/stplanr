@@ -76,34 +76,3 @@ route_transportapi_public <- function(from, to, silent = FALSE){
   # for the future: add summary data on the route
   route
 }
-
-#   h <-  obj$marker$`@attributes`$elevations # hilliness
-#   h <- stringr::str_split(h, pattern = ",")
-#   h <- as.numeric(unlist(h)[-1])
-#   htot <- sum(abs(diff(h)))
-#
-#   # busyness overall
-#   bseg <- obj$marker$`@attributes`$busynance
-#   bseg <- stringr::str_split(bseg, pattern = ",")
-#   bseg <- as.numeric(unlist(bseg)[-1])
-#   bseg <- sum(bseg)
-#
-#   df <- data.frame(
-#     plan = obj$marker$`@attributes`$plan[1],
-#     start = obj$marker$`@attributes`$start[1],
-#     finish = obj$marker$`@attributes`$finish[1],
-#     length = as.numeric(obj$marker$`@attributes`$length[1]),
-#     time = sum(as.numeric(obj$marker$`@attributes`$time)),
-#     waypoint = nrow(coords),
-#     change_elev = htot,
-#     av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
-#     co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
-#     calories = as.numeric(obj$marker$`@attributes`$calories[1]),
-#     busyness = bseg
-#   )
-#
-#   row.names(df) <- route@lines[[1]]@ID
-#   route <- sp::SpatialLinesDataFrame(route, df)
-#   proj4string(route) <- CRS("+init=epsg:4326")
-#   route
-# }
