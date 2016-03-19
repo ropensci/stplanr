@@ -5,13 +5,18 @@
 #' to the population of the zone/point
 #' @export
 #' @examples
+#' # load some points data
 #' data(cents)
+#' # plot the points to check they make sense
 #' plot(cents)
 #' class(cents)
 #' # Create test population to model flows
 #' set.seed(2050)
 #' cents$population <- runif(n = nrow(cents), min = 100, max = 1000)
+#' # estimate
 #' flowlines_radiation <- od_radiation(cents, pop_var = "population")
+#' flowlines_radiation$flow
+#' sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
 #' plot(flowlines_radiation, lwd = flowlines_radiation$flow * 10)
 od_radiation <- function(p, pop_var = "population"){
   l <- points2flow(p)
