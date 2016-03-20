@@ -9,6 +9,8 @@ NEW FEATURES
 
 * New functions for creating origin-destination data frames (`point2odf`) and SpatialLinesDataFrames (`points2flow`).
 
+* Addition of `n_vertices` and `is_linepoint` for identifying the number of vertices in spatial objects and whether the 'line' is really a point.
+
 BUG FIXES
 
 * `line2route` refactored, with 10 fold speed increases on large (1000+) batches of lines.
