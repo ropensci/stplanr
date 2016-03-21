@@ -96,7 +96,7 @@ line2points <- function(l){
 #' @section Details:
 #'
 #' See \code{\link{route_cyclestreet}} and other route functions for details
-#' @param l A SpatialLinesDataFrame, such as that produced by
+#' @param l A SpatialLinesDataFrame
 #' @param route_fun A routing function to be used for converting the straight lines to routes
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
@@ -185,4 +185,32 @@ points2odf <- function(p){
 points2flow <- function(p){
   df <- points2odf(p)
   flow <- od2line(flow = df, zones = p)
+}
+
+#' Update line geometry
+#'
+#' Take two SpatialLines objects and update the geometry of the former with that of the latter,
+#' retaining the data of the former.
+#'
+#' @param l A SpatialLines object, whose geometry is to be modified
+#' @param nl A SpatialLines object of the same length as \code{l} to provide the new geometry
+#'
+#' @export
+#' @examples
+#' l <- flowlines
+#' nl <- routes_fast
+#' nrow(l)
+#' nrow(nl)
+#' l <- l[!is_linepoint(l),]
+#' names(l)
+#' names(routes_fast)
+#' l_newgeom <- update_line_geometry(l, nl)
+#' plot(l, lwd = l$All / mean(l$All))
+#' plot(l_newgeom, lwd = l$All / mean(l$All))
+#' names(l_newgeom)
+update_line_geometry <- function(l, nl){
+  for(i in 1:nrow(l)){
+    l@lines[[i]] <- Lines(nl@lines[[i]]@Lines, row.names(l[i,]))
+  }
+  l
 }
