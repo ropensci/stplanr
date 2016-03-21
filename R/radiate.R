@@ -1,8 +1,17 @@
-#' Function which estimates the flow between points/zones using the 'radiation model'
+#' Function that estimates flow between points or zones using the radiation model
 #'
-#' @param p A SpatialPoints dataframe, the first column of which contains it's unique ID
+#' This is an implementation of the radiation model proposed in a paper
+#' by Simini et al. (2012).
+#'
+#' @param p A SpatialPoints dataframe, the first column of which contains a unique ID
 #' @param pop_var A character string representing the variable that corresponds
-#' to the population of the zone/point
+#' to the population of the zone or point
+#' @param proportion A number representing the proportion of the population who
+#' commute (1, the default, means 100 percent of the population commute to work)
+#' @references
+#' Simini, F., Gonzalez, M.C., Maritan, A., Barabasi, A.L., 2012. A universal model for
+#' mobility and migration patterns. Nature. doi:10.1038/nature10856
+#'
 #' @export
 #' @examples
 #' # load some points data
@@ -17,8 +26,10 @@
 #' flowlines_radiation <- od_radiation(cents, pop_var = "population")
 #' flowlines_radiation$flow
 #' sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
+#' sum(cents$population) # the total inter-zonal flow
+#' sum(flowlines_radiation$flow, na.rm = TRUE)
 #' plot(flowlines_radiation, lwd = flowlines_radiation$flow * 10)
-od_radiation <- function(p, pop_var = "population"){
+od_radiation <- function(p, pop_var = "population", proportion = 1){
   l <- points2flow(p)
   l$flow <- NA
   for(i in 1:nrow(p)){
@@ -28,11 +39,10 @@ od_radiation <- function(p, pop_var = "population"){
       n <- p[[pop_var]][j]
       # create circle the radius of which is the distance between i and j centered on i
       s_circle <- stplanr::buff_geo(p[i,], width = geosphere::distHaversine(p[i,], p[j,]))
-      # select all points within the circle
-      ps <- p[s_circle,]
+      ps <- p[-c(i, j),][s_circle,]
       s <- sum(ps[[pop_var]])
-      l$flow[l$O == p@data[i,1] & l$D == p@data[j,1]] <- # next: simini's famous 'flux' formula
-        m * n / ((m + s) * (m + n + s))
+      l$flow[l$O == p@data[i,1] & l$D == p@data[j,1]] <-
+        p$population[i] * proportion * m * n / ((m + s) * (m + n + s))
     }
   }
   l
