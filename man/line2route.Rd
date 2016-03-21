@@ -7,7 +7,7 @@
 line2route(l, route_fun = "route_cyclestreet", n_print = 10, ...)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame, such as that produced by}
+\item{l}{A SpatialLinesDataFrame}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link{od2line}}}
