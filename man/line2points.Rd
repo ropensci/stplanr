@@ -18,6 +18,5 @@ lpoints <- line2points(routes_fast[2,]) # for a single line
 data(flowlines) # load demo flowlines dataset
 lpoints <- line2points(flowlines) # for many lines
 plot(lpoints) # note overlapping points
-
 }
 

@@ -4,16 +4,18 @@
 \alias{line2route}
 \title{Convert straight SpatialLinesDataFrame from flow data into routes}
 \usage{
-line2route(l, n_print = 10, ...)
+line2route(l, route_fun = "route_cyclestreet", n_print = 10, ...)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame, such as that produced by
+\item{l}{A SpatialLinesDataFrame}
+
+\item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link{od2line}}}
 
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{...}{Arguements passed to \code{\link{route_cyclestreet}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
 \description{
 Convert straight SpatialLinesDataFrame from flow data into routes
@@ -27,7 +29,7 @@ See \code{\link{route_cyclestreet}} and other route functions for details
 
 \dontrun{
 plot(flowlines)
-rf <- line2route(l = flowlines, plan = "fastest")
+rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
 plot(rf, col = "red", add = T)
 plot(rq, col = "green", add = T)
