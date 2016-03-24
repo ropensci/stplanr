@@ -27,8 +27,8 @@
 #' flowlines_radiation$flow
 #' sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
 #' sum(cents$population) # the total inter-zonal flow
-#' sum(flowlines_radiation$flow, na.rm = TRUE)
-#' plot(flowlines_radiation, lwd = flowlines_radiation$flow * 10)
+#' plot(flowlines_radiation, lwd = flowlines_radiation$flow / 100)
+#' points(cents, cex = cents$population / 100)
 od_radiation <- function(p, pop_var = "population", proportion = 1){
   l <- points2flow(p)
   l$flow <- NA
@@ -42,7 +42,7 @@ od_radiation <- function(p, pop_var = "population", proportion = 1){
       ps <- p[-c(i, j),][s_circle,]
       s <- sum(ps[[pop_var]])
       l$flow[l$O == p@data[i,1] & l$D == p@data[j,1]] <-
-        p$population[i] * proportion * m * n / ((m + s) * (m + n + s))
+        p$population[i] * proportion * ((m * n) / ((m + s) * (m + n + s)))
     }
   }
   l
