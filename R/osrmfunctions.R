@@ -361,13 +361,13 @@ locate2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org")
 #'  )
 #' }
 #'
-nearest2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org") {
+nearest2spdf <- function(lat, lng = NA, osrmurl = "http://router.project-osrm.org") {
 
-  return(getlocnear(lat=lat,lng=lng,osrmurl=osrmurl,"nearest"))
+  return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
 
 }
 
-getlocnear <- function(lat,lng = NA, osrmurl = "http://router.project-osrm.org", service="locate") {
+getlocnear <- function(lat, lng = NA, osrmurl = "http://router.project-osrm.org", service = "locate") {
   if(class(lat) == "data.frame") {
     lng <- lat[,2]
     lat <- lat[,1]
@@ -418,6 +418,7 @@ getlocnear <- function(lat,lng = NA, osrmurl = "http://router.project-osrm.org",
   )
 
   return(osrmspdf)
+
 }
 
 #' Return SpatialPointsDataFrame with nearest street from OSRM nearest service
