@@ -314,7 +314,6 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 
 }
 
-
 #' Return SpatialPointsDataFrame with located points from OSRM locate service
 #'
 #' @section Details:
@@ -335,9 +334,9 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 #'  )
 #' }
 #'
-locate2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org") {
+locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org") {
 
-  return(getlocnear(lat=lat,lng=lng,osrmurl=osrmurl,"locate"))
+  return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate"))
 
 }
 
@@ -361,13 +360,13 @@ locate2spdf <- function(lat,lng = NA,osrmurl = "http://router.project-osrm.org")
 #'  )
 #' }
 #'
-nearest2spdf <- function(lat, lng = NA, osrmurl = "http://router.project-osrm.org") {
+nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org") {
 
   return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
 
 }
 
-getlocnear <- function(lat, lng = NA, osrmurl = "http://router.project-osrm.org", service = "locate") {
+getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", service = "locate") {
   if(class(lat) == "data.frame") {
     lng <- lat[,2]
     lat <- lat[,1]
@@ -438,7 +437,7 @@ getlocnear <- function(lat, lng = NA, osrmurl = "http://router.project-osrm.org"
 #'  table2matrix(seq(from=50,to=52,by=0.1),seq(from=12,to=14,by=0.1))
 #' }
 #'
-table2matrix <- function(lat, lng=NA, osrmurl="http://router.project-osrm.org") {
+table2matrix <- function(lat, lng, osrmurl="http://router.project-osrm.org") {
 
   if(class(lat) == "data.frame") {
     lng <- lat[,2]
