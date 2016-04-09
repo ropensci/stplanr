@@ -4,7 +4,7 @@
 \alias{locate2spdf}
 \title{Return SpatialPointsDataFrame with located points from OSRM locate service}
 \usage{
-locate2spdf(lat, lng = NA, osrmurl = "http://router.project-osrm.org")
+locate2spdf(lat, lng = lng, osrmurl = "http://router.project-osrm.org")
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate

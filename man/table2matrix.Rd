@@ -4,7 +4,7 @@
 \alias{table2matrix}
 \title{Return SpatialPointsDataFrame with nearest street from OSRM nearest service}
 \usage{
-table2matrix(lat, lng = NA, osrmurl = "http://router.project-osrm.org")
+table2matrix(lat, lng, osrmurl = "http://router.project-osrm.org")
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
