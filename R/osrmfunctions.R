@@ -314,6 +314,32 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 
 }
 
+#' Generate nearest point on the route network of a point from OSRM locate service
+#'
+#' @section Details:
+#' Retrieve coordinates of the node(s) on the network mapped from coordinates
+#' passed to functions.
+#'
+#' @param lat Numeric vector containing latitude coordinate for each coordinate
+#' to map. Also accepts dataframe with latitude in the first column and
+#' longitude in the second column.
+#' @param lng Numeric vector containing longitude coordinate for each
+#' coordinate to map.
+#' @param osrmurl Base URL of the OSRM service
+#' @export
+#' @examples \dontrun{
+#'  nearest_osm(
+#'    lat = 50.3,
+#'    lng = 13.2
+#'  )
+#' }
+nearest_osm <- function(lat, lng, osrmurl = "http://router.project-osrm.org"){
+  url = paste0(osrmurl, "/nearest?loc=", lat, ",", lng)
+  obj = jsonlite::fromJSON(url)
+  SpatialPointsDataFrame(coords = matrix(obj$mapped_coordinate, ncol = 2),
+                         data = data.frame(orig_lat = lat, orig_lng = lng))
+}
+
 #' Return SpatialPointsDataFrame with located points from OSRM locate service
 #'
 #' @section Details:
