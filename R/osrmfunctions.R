@@ -417,7 +417,7 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
                                        ",",
                                        coorddf[i,]$origlng))
     locatedata2 <- jsonlite::fromJSON(locatedata)
-    if (locatedata2$status == 0) {
+    if (locatedata2$status == 0 | locatedata2$status == 200) {
       if (service == "locate") {
         coorddf[i,c("mappedlat","mappedlng","status")] <- c(locatedata2$mapped_coordinate,0)
       }
