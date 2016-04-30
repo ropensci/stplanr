@@ -33,8 +33,8 @@ flowlines_radiation <- od_radiation(cents, pop_var = "population")
 flowlines_radiation$flow
 sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
 sum(cents$population) # the total inter-zonal flow
-sum(flowlines_radiation$flow, na.rm = TRUE)
-plot(flowlines_radiation, lwd = flowlines_radiation$flow * 10)
+plot(flowlines_radiation, lwd = flowlines_radiation$flow / 100)
+points(cents, cex = cents$population / 100)
 }
 \references{
 Simini, F., Gonzalez, M.C., Maritan, A., Barabasi, A.L., 2012. A universal model for
