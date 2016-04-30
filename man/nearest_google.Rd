@@ -14,7 +14,7 @@ longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to map.}
 
-\item{osrmurl}{Base URL of the OSRM service}
+\item{google_api}{String value containing the Google API key to use.}
 }
 \description{
 Generate nearest point on the route network of a point using the Google Maps API
