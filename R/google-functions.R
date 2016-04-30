@@ -9,7 +9,7 @@
 #' longitude in the second column.
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
-#' @param osrmurl Base URL of the OSRM service
+#' @param google_api String value containing the Google API key to use.
 #' @export
 #' @examples \dontrun{
 #'  nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
