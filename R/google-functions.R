@@ -27,30 +27,29 @@ nearest_google <- function(lat, lng, google_api){
 #' @section Details:
 #' Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
 #' Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
-#'
-#' @param lat Numeric vector containing latitude coordinate for each coordinate
-#' to map. Also accepts dataframe with latitude in the first column and
-#' longitude in the second column.
-#' @param lng Numeric vector containing longitude coordinate for each
-#' coordinate to map.
+#' @inheritParams route_cyclestreet
 #' @param google_api String value containing the Google API key to use.
-#' @param units Text string, either metric (default) or imperial.
+#' @param g_units Text string, either metric (default) or imperial.
 #' @export
 #' @examples \dontrun{
-#'  nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
+#'  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
 #' }
-dist_google <- function(lat, lng, google_api = "", units = 'metric'){
+dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
-  # url =
+  # Convert sp object to lat/lon vector
+  if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
+    from <- coordinates(from)
+  if(class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame" )
+    to <- coordinates(to)
   if (google_api == "") {
     google_api_param <- ""
   } else {
     google_api_param <- "&key="
   }
-  url <- paste0(base_url, units, "&origins=",
-          paste0(paste0(lat,",",lng),collapse = "|"),
-          "&destinations=",
-          paste0(paste0(lat,",",lng),collapse = "|"),
+  from = paste0(rev(from), collapse = ",")
+  to = paste0(rev(to), collapse = ",")
+  url <- paste0(base_url, g_units, "&origins=", from,
+          "&destinations=", to,
           google_api_param,
           google_api)
   obj <- jsonlite::fromJSON(url)
