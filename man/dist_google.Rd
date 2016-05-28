@@ -4,19 +4,20 @@
 \alias{dist_google}
 \title{Return travel network distances and time using the Google Maps API}
 \usage{
-dist_google(lat, lng, google_api = "", units = "metric")
+dist_google(from, to, google_api = "", g_units = "metric")
 }
 \arguments{
-\item{lat}{Numeric vector containing latitude coordinate for each coordinate
-to map. Also accepts dataframe with latitude in the first column and
-longitude in the second column.}
+\item{from}{Text string or coordinates (a numeric vector of
+\code{length = 2} representing latitude and longitude) representing a point
+on Earth.}
 
-\item{lng}{Numeric vector containing longitude coordinate for each
-coordinate to map.}
+\item{to}{Text string or coordinates (a numeric vector of
+\code{length = 2} representing latitude and longitude) representing a point
+on Earth. This represents the destination of the trip.}
 
 \item{google_api}{String value containing the Google API key to use.}
 
-\item{units}{Text string, either metric (default) or imperial.}
+\item{g_units}{Text string, either metric (default) or imperial.}
 }
 \description{
 Return travel network distances and time using the Google Maps API
@@ -28,7 +29,7 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 }
 \examples{
 \dontrun{
- nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
+ dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
 }
 }
 
