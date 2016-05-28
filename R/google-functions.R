@@ -26,6 +26,7 @@ nearest_google <- function(lat, lng, google_api){
 #'
 #' @section Details:
 #' Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
+#' Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
 #'
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to map. Also accepts dataframe with latitude in the first column and
@@ -33,23 +34,31 @@ nearest_google <- function(lat, lng, google_api){
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param google_api String value containing the Google API key to use.
-#' @param google_api Text string, either metric (default) or imperial.
+#' @param units Text string, either metric (default) or imperial.
 #' @export
 #' @examples \dontrun{
 #'  nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
 #' }
-dist_google <- function(lat, lng, google_api, units = 'metric'){
-  base_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units="
+dist_google <- function(lat, lng, google_api = "", units = 'metric'){
+  base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # url =
-   paste0(base_url, units, "&origins=", lat, "&", lng, "&key=", google_api)
-  # obj = jsonlite::fromJSON(url)
+  if (google_api == "") {
+    google_api_param <- ""
+  } else {
+    google_api_param <- "&key="
+  }
+  url <- paste0(base_url, units, "&origins=",
+          paste0(paste0(lat,",",lng),collapse = "|"),
+          "&destinations=",
+          paste0(paste0(lat,",",lng),collapse = "|"),
+          google_api_param,
+          google_api)
+  obj <- jsonlite::fromJSON(url)
+  return(obj)
   # coords = c(obj$snappedPoints$location$longitude, obj$snappedPoints$location$latitude)
   # SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
                         # data = data.frame(orig_lat = lat, orig_lng = lng))
 }
-
-
-https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=Washington,DC&destinations=New+York+City,NY&key=YOUR_API_KEY
 
 
 
