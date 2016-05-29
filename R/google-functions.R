@@ -30,6 +30,8 @@ nearest_google <- function(lat, lng, google_api){
 #' @inheritParams route_cyclestreet
 #' @param google_api String value containing the Google API key to use.
 #' @param g_units Text string, either metric (default) or imperial.
+#' @param mode Text string specifying the mode of transport. Can be
+#' bicycling (default), walking, driving or transit
 #' @export
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
@@ -45,7 +47,8 @@ nearest_google <- function(lat, lng, google_api){
 #'  plot(flow, lwd = mean(odf$duration) / odf$duration)
 #'  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
 #' }
-dist_google <- function(from, to, google_api = "", g_units = 'metric'){
+dist_google <- function(from, to, google_api = "", g_units = 'metric',
+                        mode = 'bicycling', arrival_time = ""){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -67,8 +70,12 @@ dist_google <- function(from, to, google_api = "", g_units = 'metric'){
     to = paste(to[2], to[1], sep = ",")
   from = paste0(from, collapse = "|")
   to = paste0(to, collapse = "|")
-  url <- paste0(base_url, g_units, "&origins=", from,
+  url_travel <- paste0(base_url, g_units, "&origins=", from,
           "&destinations=", to,
+          paste0("&mode=", mode))
+  if(arrival_time != "")
+    url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
+  url = paste0(url_travel,
           google_api_param,
           google_api)
   obj <- jsonlite::fromJSON(url)
