@@ -33,21 +33,66 @@ nearest_google <- function(lat, lng, google_api){
 #' @export
 #' @examples \dontrun{
 #'  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
+#'  dist_google(from = data.frame(
+#'    lat = c(-33.1,-33.2,-33.3,-33.4,-33.5),
+#'    lng = c(150.0,150.1,150.2,150.3,150.4)
+#'  ), to = data.frame(
+#'    lat = c(-33.1,-33.2,-33.3,-33.4,-33.5),
+#'    lng = c(150.0,150.1,150.2,150.3,150.4)
+#'  ))
 #' }
 dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
-    from <- coordinates(from)
+    from <- coordinates(from)[,c(2,1)]
   if(class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame" )
-    to <- coordinates(to)
+    to <- coordinates(to)[,c(2,1)]
   if (google_api == "") {
     google_api_param <- ""
   } else {
     google_api_param <- "&key="
   }
-  from = paste0(rev(from), collapse = ",")
-  to = paste0(rev(to), collapse = ",")
+  if (is(from, "data.frame") == TRUE | is(from, "matrix") == TRUE) {
+    if (is(from, "data.frame") == TRUE) {
+      if (length(which(colnames(from) %in% c("lat","latitude","Latitude","y"))) > 0) {
+        latcol = which(colnames(from) %in% c("lat","latitude","Latitude","y"))[1]
+      } else {
+        latcol = 1
+      }
+      if (length(which(colnames(from) %in% c("lng","long","longitude","Longitude","x"))) > 0) {
+        lngcol = which(colnames(from) %in% c("lng","long","longitude","Longitude","x"))[1]
+      } else {
+        lngcol = 2
+      }
+    } else if (is(from, "matrix")) {
+      latcol = 1
+      lngcol = 2
+    }
+    from = paste(paste(from[,latcol], from[,lngcol], sep=','), collapse='|')
+  } else {
+    from = paste0(rev(from), collapse = ",")
+  }
+  if (is(to, "data.frame") == TRUE | is(to, "matrix") == TRUE) {
+    if (is(to, "data.frame") == TRUE) {
+      if (length(which(colnames(to) %in% c("lat","latitude","Latitude","y"))) > 0) {
+        latcol = which(colnames(to) %in% c("lat","latitude","Latitude","y"))[1]
+      } else {
+        latcol = 1
+      }
+      if (length(which(colnames(to) %in% c("lng","long","longitude","Longitude","x"))) > 0) {
+        lngcol = which(colnames(to) %in% c("lng","long","longitude","Longitude","x"))[1]
+      } else {
+        lngcol = 2
+      }
+    } else if (is(to, "matrix")) {
+      latcol = 1
+      lngcol = 2
+    }
+    to = paste(paste(to[,latcol], to[,lngcol], sep=','), collapse='|')
+  } else {
+    to = paste0(rev(to), collapse = ",")
+  }
   url <- paste0(base_url, g_units, "&origins=", from,
           "&destinations=", to,
           google_api_param,

@@ -30,6 +30,13 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 \examples{
 \dontrun{
  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
+ dist_google(from = data.frame(
+   lat = c(-33.1,-33.2,-33.3,-33.4,-33.5),
+   lng = c(150.0,150.1,150.2,150.3,150.4)
+ ), to = data.frame(
+   lat = c(-33.1,-33.2,-33.3,-33.4,-33.5),
+   lng = c(150.0,150.1,150.2,150.3,150.4)
+ ))
 }
 }
 
