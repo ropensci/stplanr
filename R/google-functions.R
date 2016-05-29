@@ -32,7 +32,10 @@ nearest_google <- function(lat, lng, google_api){
 #' @param g_units Text string, either metric (default) or imperial.
 #' @export
 #' @examples \dontrun{
+#'  # Distances from one origin to one destination
 #'  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
+#'  data("cents")
+#'  dist_google(from = cents, to = cents, google_api = Sys.getenv("GOOGLEDIST"))
 #' }
 dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
@@ -46,8 +49,16 @@ dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   } else {
     google_api_param <- "&key="
   }
-  from = paste0(rev(from), collapse = ",")
-  to = paste0(rev(to), collapse = ",")
+  if(class(from) == "matrix")
+    from = paste(from[,2], from[,1], sep = ",")
+  if(class(from) == "numeric")
+    from = paste(from[2], from[1], sep = ",")
+  if(class(to) == "matrix")
+    to = paste(to[,2], to[,1], sep = ",")
+  if(class(to) == "numeric")
+    to = paste(to[2], to[1], sep = ",")
+  from = paste0(from, collapse = "|")
+  to = paste0(to, collapse = "|")
   url <- paste0(base_url, g_units, "&origins=", from,
           "&destinations=", to,
           google_api_param,
@@ -58,6 +69,3 @@ dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   # SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
                         # data = data.frame(orig_lat = lat, orig_lng = lng))
 }
-
-
-
