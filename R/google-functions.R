@@ -35,10 +35,13 @@ nearest_google <- function(lat, lng, google_api){
 #' @export
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
-#'  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
+#'  dist_google(from = c(0, 52), to = c(0, 53))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
-#'  dists = dist_google(from = cents, to = cents, google_api = Sys.getenv("GOOGLEDIST"))
+#'  dists_cycle = dist_google(from = cents, to = cents)
+#'  dists_drive = dist_google(cents, cents, mode = "driving")
+#'  # Find out how much longer (or shorter) cycling takes than walking
+#'  summary(dists_cycle$duration / dists_drive$duration)
 #'  odf = points2odf(cents)
 #'  odf = cbind(odf, dists)
 #'  head(odf)
