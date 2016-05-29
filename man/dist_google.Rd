@@ -29,7 +29,18 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 }
 \examples{
 \dontrun{
+ # Distances from one origin to one destination
  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
+ data("cents")
+ # Distances from between all origins and destinations
+ dists = dist_google(from = cents, to = cents, google_api = Sys.getenv("GOOGLEDIST"))
+ odf = points2odf(cents)
+ odf = cbind(odf, dists)
+ head(odf)
+ flow = points2flow(cents)
+ # show the results for duration (thicker line = shorter)
+ plot(flow, lwd = mean(odf$duration) / odf$duration)
+ dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
 }
 }
 
