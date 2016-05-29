@@ -32,8 +32,7 @@ nearest_google <- function(lat, lng, google_api){
 #' @param g_units Text string, either metric (default) or imperial.
 #' @param mode Text string specifying the mode of transport. Can be
 #' bicycling (default), walking, driving or transit
-#' @param arrival_time Time of arrival in date format or standard character
-#' format \code{"%Y-%m-%d %H:%M:%S"} such as \code{"2016-05-27 09:00"}.
+#' @param arrival_time Time of arrival in date format.
 #' @export
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
@@ -44,7 +43,8 @@ nearest_google <- function(lat, lng, google_api){
 #'  dists_drive = dist_google(cents, cents, mode = "driving")
 #'  dists_trans = dist_google(cents, cents, mode = "transit")
 #'  dists_trans_am = dist_google(cents, cents, mode = "transit",
-#'   arrival_time = "0900")
+#'   arrival_time = strptime("2016-05-27 09:00:00",
+#'    format = "%Y-%m-%d %H:%M:%S", tz = "BST"))
 #'  # Find out how much longer (or shorter) cycling takes than walking
 #'  summary(dists_cycle$duration / dists_trans$duration)
 #'  # Difference between travelling now and for 9am arrival
@@ -86,9 +86,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url_travel <- paste0(base_url, g_units, "&origins=", from,
           "&destinations=", to,
           paste0("&mode=", mode))
-  if(arrival_time != ""){
-    if(class(arrival_time) == "character")
-      arrival_time <- strptime("2016-05-27 09:00:00", format = "%Y-%m-%d %H:%M:%S")
+  if(class(arrival_time)[1] == "POSIXlt"){
     arrival_time <- as.numeric(arrival_time)
     url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
   }
