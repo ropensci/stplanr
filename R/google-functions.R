@@ -32,6 +32,8 @@ nearest_google <- function(lat, lng, google_api){
 #' @param g_units Text string, either metric (default) or imperial.
 #' @param mode Text string specifying the mode of transport. Can be
 #' bicycling (default), walking, driving or transit
+#' @param arrival_time Time of arrival in date format or standard character
+#' format \code{"%Y-%m-%d %H:%M:%S"} such as \code{"2016-05-27 09:00"}.
 #' @export
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
@@ -40,8 +42,13 @@ nearest_google <- function(lat, lng, google_api){
 #'  # Distances from between all origins and destinations
 #'  dists_cycle = dist_google(from = cents, to = cents)
 #'  dists_drive = dist_google(cents, cents, mode = "driving")
+#'  dists_trans = dist_google(cents, cents, mode = "transit")
+#'  dists_trans_am = dist_google(cents, cents, mode = "transit",
+#'   arrival_time = "0900")
 #'  # Find out how much longer (or shorter) cycling takes than walking
-#'  summary(dists_cycle$duration / dists_drive$duration)
+#'  summary(dists_cycle$duration / dists_trans$duration)
+#'  # Difference between travelling now and for 9am arrival
+#'  summary(dists_trans_am$duration / dists_trans$duration)
 #'  odf = points2odf(cents)
 #'  odf = cbind(odf, dists)
 #'  head(odf)
@@ -49,8 +56,11 @@ nearest_google <- function(lat, lng, google_api){
 #'  # show the results for duration (thicker line = shorter)
 #'  plot(flow, lwd = mean(odf$duration) / odf$duration)
 #'  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
+#'  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
+#'   mode = "transit", arrival_time = "0900")
 #' }
-dist_google <- function(from, to, google_api = "", g_units = 'metric',
+dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
+                        g_units = 'metric',
                         mode = 'bicycling', arrival_time = ""){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
@@ -76,11 +86,16 @@ dist_google <- function(from, to, google_api = "", g_units = 'metric',
   url_travel <- paste0(base_url, g_units, "&origins=", from,
           "&destinations=", to,
           paste0("&mode=", mode))
-  if(arrival_time != "")
+  if(arrival_time != ""){
+    if(class(arrival_time) == "character")
+      arrival_time <- strptime("2016-05-27 09:00:00", format = "%Y-%m-%d %H:%M:%S")
+    arrival_time <- as.numeric(arrival_time)
     url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
+  }
   url = paste0(url_travel,
           google_api_param,
           google_api)
+  message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
