@@ -43,6 +43,7 @@ nearest_google <- function(lat, lng, google_api){
 #'  flow = points2flow(cents)
 #'  # show the results for duration (thicker line = shorter)
 #'  plot(flow, lwd = mean(odf$duration) / odf$duration)
+#'  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
 #' }
 dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
