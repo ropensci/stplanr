@@ -36,7 +36,13 @@ nearest_google <- function(lat, lng, google_api){
 #'  dist_google(from = c(0, 52), to = c(0, 53), google_api = Sys.getenv("GOOGLEDIST"))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
-#'  dist_google(from = cents, to = cents, google_api = Sys.getenv("GOOGLEDIST"))
+#'  dists = dist_google(from = cents, to = cents, google_api = Sys.getenv("GOOGLEDIST"))
+#'  odf = points2odf(cents)
+#'  odf = cbind(odf, dists)
+#'  head(odf)
+#'  flow = points2flow(cents)
+#'  # show the results for duration (thicker line = shorter)
+#'  plot(flow, lwd = mean(odf$duration) / odf$duration)
 #' }
 dist_google <- function(from, to, google_api = "", g_units = 'metric'){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
