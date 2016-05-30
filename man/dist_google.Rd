@@ -57,7 +57,8 @@ Note: Currently returns the json object returned by the Google Maps API and uses
  plot(flow, lwd = mean(odf$duration) / odf$duration)
  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
  dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
-  mode = "transit", arrival_time = "0900")
+  mode = "transit", arrival_time = strptime("2016-05-27 17:30:00",
+  format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"))
 }
 }
 
