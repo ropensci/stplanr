@@ -110,8 +110,8 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   from_addresses = rep(obj$origin_addresses, each = length(obj$origin_addresses))
   to_addresses = rep(obj$destination_addresses, length(obj$origin_addresses))
   res_df = data.frame(from_addresses, to_addresses, distances, duration)
-  class(res_df$from_addresses) = "character"
-  class(res_df$to_addresses) = "character"
+  res_df$from_addresses <- as.character(res_df$from_addresses)
+  res_df$to_addresses <- as.character(res_df$to_addresses)
   return(res_df)
 }
 
