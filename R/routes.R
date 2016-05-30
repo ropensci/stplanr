@@ -183,7 +183,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' \code{obj <- jsonlite::fromJSON(url)}
 #'
 #' Where \code{url} is an example api request from
-#'  \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
+#'  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 #'
 #' @inheritParams route_cyclestreet
 #' @export
