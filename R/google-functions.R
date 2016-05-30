@@ -73,13 +73,13 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   } else {
     google_api_param <- "&key="
   }
-  if(class(from) == "matrix")
+  if(is(from, "matrix") | is(from, "data.frame"))
     from = paste(from[,2], from[,1], sep = ",")
-  if(class(from) == "numeric")
+  if(is(from, "numeric"))
     from = paste(from[2], from[1], sep = ",")
-  if(class(to) == "matrix")
+  if(is(to, "matrix") | is(to, "data.frame"))
     to = paste(to[,2], to[,1], sep = ",")
-  if(class(to) == "numeric")
+  if(is(from, "numeric"))
     to = paste(to[2], to[1], sep = ",")
   from = paste0(from, collapse = "|")
   to = paste0(to, collapse = "|")
