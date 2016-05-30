@@ -51,7 +51,7 @@ for more on this):
 \code{obj <- jsonlite::fromJSON(url)}
 
 Where \code{url} is an example api request from
- \url{https://github.com/graphhopper/directions-api/blob/master/docs-routing.md}.
+ \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
 
