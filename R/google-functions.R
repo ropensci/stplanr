@@ -106,11 +106,21 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   duration = lapply(obj$rows$elements,
                      function(x) x[2]$duration$value)
   duration = unlist(duration)
+  currency = NA
+  fare = NA
+  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare)){
+    currency = lapply(obj$rows$elements,
+                      function(x) x$fare$currency)
+    currency = unlist(currency)
+    fare = lapply(obj$rows$elements,
+                  function(x) x$fare$value)
+    fare = unlist(fare)
+  }
   # is_ok = lapply(obj$rows$elements,
   #                   function(x) x$status)
   from_addresses = rep(obj$origin_addresses, each = length(obj$origin_addresses))
   to_addresses = rep(obj$destination_addresses, length(obj$origin_addresses))
-  res_df = data.frame(from_addresses, to_addresses, distances, duration)
+  res_df = data.frame(from_addresses, to_addresses, distances, duration, currency, fare)
   res_df$from_addresses <- as.character(res_df$from_addresses)
   res_df$to_addresses <- as.character(res_df$to_addresses)
   return(res_df)
