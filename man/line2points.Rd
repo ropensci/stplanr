@@ -10,13 +10,19 @@ line2points(l)
 \item{l}{A SpatialLinesDataFrame}
 }
 \description{
-Convert a SpatialLinesDataFrame to points at the origin and destination
+The number of points will be double the number of lines.
+The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}
 }
 \examples{
 data(routes_fast)
 lpoints <- line2points(routes_fast[2,]) # for a single line
+plot(lpoints)
 data(flowlines) # load demo flowlines dataset
 lpoints <- line2points(flowlines) # for many lines
 plot(lpoints) # note overlapping points
+i = 3
+j = (2*i):((2*i)+1)
+plot(flowlines[i,])
+plot(lpoints[j,], add = TRUE)
 }
 

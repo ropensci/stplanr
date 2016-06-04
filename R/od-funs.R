@@ -1,3 +1,60 @@
+#' Extract coordinates from OD data
+#'
+#' @section Details:
+#' Origin-destination ('OD') flow data is often provided
+#' in the form of 1 line per flow with zone codes of origin and destination
+#' centroids. This can be tricky to plot and link-up with geographical data.
+#' This function makes the task easier.
+#'
+#' @param flow A data frame representing the flow between two points
+#' or zones. The first two columns of this data frame should correspond
+#' to the first column of the data in the zones. Thus in \code{\link{cents}},
+#' the first column is geo_code. This corresponds to the first two columns
+#' of \code{\link{flow}}.
+#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+#' representing origins and destinations of travel flows.
+#' @references
+#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+#' @export
+#' @examples \dontrun{
+#' od2odf(flow, zones)
+#' }
+od2odf <- function(flow, zones){
+
+  coords = dplyr::data_frame(code = as.character(zones[[1]]),
+                      fx = coordinates(zones)[,1], fy = coordinates(zones)[,2])
+  flowcode = dplyr::data_frame(code_o = as.character(flow[[1]]), code_d = as.character(flow[[2]]))
+  odf = dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
+  coords = dplyr::rename(coords, tx = fx, ty = fy)
+  odf = dplyr::left_join(odf, coords, by = c("code_d" = "code"))
+
+  odf
+
+}
+
+#' Extract coordinates from OD data
+#'
+#' An alternative, faster version of \code{\link{od2line}}
+#'
+#' @inheritParams od2line
+#' @references
+#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+#' @export
+#' @examples \dontrun{
+#' od2odf(flow, zones)
+#' }
+od2line2 <- function(flow, zones){
+
+  odf = od2odf(flow, zones)
+  l <- vector("list", nrow(odf))
+  for(i in 1:nrow(odf)){
+    o = c(odf$fx[i], odf$fy[i])
+    d = c(odf$tx[i], odf$ty[i])
+    l[[i]] <- sp::Lines(list(sp::Line(rbind(o, d))), as.character(i))
+  }
+  l <- sp::SpatialLines(l)
+}
+
 #' Convert flow data to SpatialLinesDataFrame
 #'
 #' @section Details:
@@ -42,6 +99,7 @@ od2line <- function(flow, zones){
   l
 }
 
+
 #' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
 #'
 #'
@@ -69,14 +127,22 @@ line2df <- function(l){
 
 #' Convert a SpatialLinesDataFrame to points at the origin and destination
 #'
+#' The number of points will be double the number of lines.
+#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}
+#'
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
 #' data(routes_fast)
 #' lpoints <- line2points(routes_fast[2,]) # for a single line
+#' plot(lpoints)
 #' data(flowlines) # load demo flowlines dataset
 #' lpoints <- line2points(flowlines) # for many lines
 #' plot(lpoints) # note overlapping points
+#' i = 3
+#' j = (2*i):((2*i)+1)
+#' plot(flowlines[i,])
+#' plot(lpoints[j,], add = TRUE)
 line2points <- function(l){
   for(i in 1:length(l)){
     l1 <- l[i,]
