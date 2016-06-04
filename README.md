@@ -5,18 +5,21 @@
 
 
 
-This is a package for sustainable transport planning with R (stplanr).
+This package is for sustainable transport planning with R (hence the name **stplanr**).
 
 It brings together a range of tools for transport planning practitioners and
 researchers to better understand transport systems and inform policy.
 
 The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
-as part of the National Propensity to Cycle Tool
-([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
-identify where bicycle paths are most urgently needed.
+as part of the Propensity to Cycle Tool
+([PCT](http://pct.bike/)) project to
+identify where bicycle paths are most urgently needed. Please see
+the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html)
+or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425)
+for more information on how it can be used. This README gives some basics.
 
-stplanr aims to be of use to researchers everywhere.
+**stplanr** should be useful to researchers everywhere.
 The function `route_graphhopper()`, for example, works anywhere in the world
 using the [graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome contributions that make
@@ -76,7 +79,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README_files/figure-html/plot1-1.png)\
+![](README_files/figure-html/plot1-1.png)<!-- -->
 
 The package can also allocate flows to the road network, for example through
 a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
@@ -103,7 +106,7 @@ tm_shape(osm_tiles) +
   tm_lines(lwd = 3)
 ```
 
-![](README_files/figure-html/cycle-trip-1.png)\
+![](README_files/figure-html/cycle-trip-1.png)<!-- -->
 
 We can replicate this call to CycleStreets.net multiple times
 using `line2route`.
@@ -117,7 +120,7 @@ t_routes <- line2route(travel_network)
 plot(t_routes)
 ```
 
-![](README_files/figure-html/plot2-1.png)\
+![](README_files/figure-html/plot2-1.png)<!-- -->
 
 Another way to visualise this is with the leaflet package (not shown):
 
@@ -150,7 +153,7 @@ tm_shape(cents) +
     tm_bubbles()
 ```
 
-![](README_files/figure-html/rnet-1.png)\
+![](README_files/figure-html/rnet-1.png)<!-- -->
 
 ## Installation
 
