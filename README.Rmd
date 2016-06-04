@@ -1,10 +1,16 @@
 ---
-title: "stplanr"
-bibliography: vignettes/Transport-r-flows.bib
-output:
-  html_document:
-    keep_md: yes
+output: github_document
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
 
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/package=stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
@@ -13,18 +19,21 @@ output:
 library(stplanr)
 ```
 
-This is a package for sustainable transport planning with R (stplanr).
+This package is for sustainable transport planning with R (hence the name **stplanr**).
 
 It brings together a range of tools for transport planning practitioners and
 researchers to better understand transport systems and inform policy.
 
 The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
-as part of the National Propensity to Cycle Tool
-([NPCT](http://www.ecf.com/news/national-propensity-to-cycle-tool-project-summary-report/)) project to
-identify where bicycle paths are most urgently needed.
+as part of the Propensity to Cycle Tool
+([PCT](http://pct.bike/)) project to
+identify where bicycle paths are most urgently needed. Please see
+the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html)
+or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425)
+for more information on how it can be used. This README gives some basics.
 
-stplanr aims to be of use to researchers everywhere.
+**stplanr** should be useful to researchers everywhere.
 The function `route_graphhopper()`, for example, works anywhere in the world
 using the [graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome contributions that make
@@ -116,11 +125,11 @@ rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
 osm_tiles <- read_osm(bb(rnet, ext = 1.05))
 rnet$lwd <- rnet$All / mean(rnet$All)
 tm_shape(osm_tiles) +
-    tm_raster(saturation = .25) +
-tm_shape(rnet) +
-    tm_lines(lwd = "lwd", scale = 5, legend.lwd.show = FALSE)  +
-tm_shape(cents) +
-    tm_bubbles()
+  tm_raster(saturation = .25) +
+  tm_shape(rnet) +
+  tm_lines(lwd = "lwd", scale = 5, legend.lwd.show = FALSE)  +
+  tm_shape(cents) +
+  tm_bubbles()
 ```
 
 ## Installation
