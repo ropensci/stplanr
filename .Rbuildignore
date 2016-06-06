@@ -8,3 +8,5 @@ log-latest
 .travis.yml
 ^revdep$
 ^CONDUCT\.md$
+^README\.Rmd$
+^README-.*\.png$

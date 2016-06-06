@@ -28,33 +28,9 @@ od2odf <- function(flow, zones){
   coords = dplyr::rename(coords, tx = fx, ty = fy)
   odf = dplyr::left_join(odf, coords, by = c("code_d" = "code"))
 
-  odf
+  data.frame(odf) # return data.frame as more compatible with spatial data
 
 }
-
-#' Extract coordinates from OD data
-#'
-#' An alternative, faster version of \code{\link{od2line}}
-#'
-#' @inheritParams od2line
-#' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
-#' @export
-#' @examples \dontrun{
-#' od2odf(flow, zones)
-#' }
-od2line2 <- function(flow, zones){
-
-  odf = od2odf(flow, zones)
-  l <- vector("list", nrow(odf))
-  for(i in 1:nrow(odf)){
-    o = c(odf$fx[i], odf$fy[i])
-    d = c(odf$tx[i], odf$ty[i])
-    l[[i]] <- sp::Lines(list(sp::Line(rbind(o, d))), as.character(i))
-  }
-  l <- sp::SpatialLines(l)
-}
-
 #' Convert flow data to SpatialLinesDataFrame
 #'
 #' @section Details:
@@ -62,6 +38,8 @@ od2line2 <- function(flow, zones){
 #' in the form of 1 line per flow with zone codes of origin and destination
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
+#' \code{\link{od2line2}} is a faster implementation
+#' (around 2 times faster).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
@@ -80,6 +58,11 @@ od2line2 <- function(flow, zones){
 #' plot(cents)
 #' lines(newflowlines)
 #' }
+#' @name od2line
+NULL
+
+#' @rdname od2line
+#' @export
 od2line <- function(flow, zones){
   l <- vector("list", nrow(flow))
   for(i in 1:nrow(flow)){
@@ -99,6 +82,17 @@ od2line <- function(flow, zones){
   l
 }
 
+#' @rdname od2line
+#' @export
+od2line2 <- function(flow, zones){
+
+  odf = od2odf(flow, zones)
+  l <- vector("list", nrow(odf))
+  for(i in 1:nrow(odf)){
+    l[[i]] <- sp::Lines(list(sp::Line(rbind(c(odf$fx[i], odf$fy[i]), c(odf$tx[i], odf$ty[i])))), as.character(i))
+  }
+  l <- sp::SpatialLines(l)
+}
 
 #' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
 #'
@@ -222,10 +216,13 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
 #' @export
 #' @examples
 #' df <- points2odf(cents)
-#'
+#' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
+#' df2 <- points2odf(cents_centroids)
 points2odf <- function(p){
   if(grepl(pattern = "DataFrame", class(p))){
     geo_code <- p@data[,1]
+  } else if(is(p, "SpatialPoints")){
+    geo_code <- 1:length(p)
   } else {
     geo_code <- p[,1]
   }

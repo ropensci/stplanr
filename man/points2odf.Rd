@@ -16,6 +16,7 @@ of points.
 }
 \examples{
 df <- points2odf(cents)
-
+cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
+df2 <- points2odf(cents_centroids)
 }
 

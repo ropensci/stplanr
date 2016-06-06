@@ -2,9 +2,12 @@
 % Please edit documentation in R/od-funs.R
 \name{od2line}
 \alias{od2line}
+\alias{od2line2}
 \title{Convert flow data to SpatialLinesDataFrame}
 \usage{
 od2line(flow, zones)
+
+od2line2(flow, zones)
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -25,6 +28,8 @@ Origin-destination ('OD') flow data is often provided
 in the form of 1 line per flow with zone codes of origin and destination
 centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
+\code{\link{od2line2}} is a faster implementation
+(around 2 times faster).
 }
 \examples{
 \dontrun{
