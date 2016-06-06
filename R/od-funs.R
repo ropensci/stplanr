@@ -221,8 +221,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
 points2odf <- function(p){
   if(grepl(pattern = "DataFrame", class(p))){
     geo_code <- p@data[,1]
-  }
-  if(is(p, "SpatialPoints")){
+  } else if(is(p, "SpatialPoints")){
     geo_code <- 1:length(p)
   } else {
     geo_code <- p[,1]
