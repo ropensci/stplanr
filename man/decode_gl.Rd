@@ -4,7 +4,7 @@
 \alias{decode_gl}
 \title{Decode Google polyline compressed string}
 \usage{
-decode_gl(polyline, precision = 6)
+decode_gl(polyline, precision = 6, forceline = TRUE)
 }
 \arguments{
 \item{polyline}{A character string or vector of character strings containing
@@ -12,6 +12,9 @@ the encoded polyline to be decoded.}
 
 \item{precision}{An integer indicating the number of decimals in the
 initial encoded coordinates. Default is 6 (for OSRM default).}
+
+\item{forceline}{Boolean value indicating if the returned coordinates should
+be a line (i.e., minimum two points) Default is TRUE.}
 }
 \description{
 Decode Google polyline compressed string

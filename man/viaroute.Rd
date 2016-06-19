@@ -5,8 +5,9 @@
 \title{Query OSRM service and return json string result}
 \usage{
 viaroute(startlat = NULL, startlng = NULL, endlat = NULL, endlng = NULL,
-  viapoints = NULL, osrmurl = "http://router.project-osrm.org", zoom = 18,
-  instructions = TRUE, alt = TRUE, geometry = TRUE, uturns = TRUE)
+  viapoints = NULL, api = 5, profile = "driving", protocol = "v1",
+  osrmurl = "http://router.project-osrm.org", zoom = 18,
+  instructions = TRUE, alt = TRUE, geometry = TRUE, uturns = "default")
 }
 \arguments{
 \item{startlat}{A single value or vector containing latitude(s) of the start
@@ -26,9 +27,18 @@ longitude (second) column for points to use for each route. Optionally a
 third column containing a boolean value indicating if u-turns are allowed
 at each viapoint.}
 
-\item{osrmurl}{URL for OSRM sservice, e.g. an osrm instance running on localhost. By default this is \code{"http://router.project-osrm.org"}.}
+\item{api}{An integer value containing the OSRM API version (either 4 or 5).
+Default is 5.}
 
-\item{zoom}{Zoom level for route geometry (0 to 18) (default = 18). Higher values are more detailed.}
+\item{profile}{OSRM profile to use (for API v5), defaults to "driving".}
+
+\item{protocol}{The protocol to use for the API (for v5), defaults to "v1".}
+
+\item{osrmurl}{URL for OSRM sservice, e.g. an osrm instance running on
+localhost. By default this is \code{"http://router.project-osrm.org"}.}
+
+\item{zoom}{Zoom level for route geometry (0 to 18) for API v4
+(default = 18). Higher values are more detailed.}
 
 \item{instructions}{Boolean value to return instructions (default = TRUE).}
 
