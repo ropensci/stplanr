@@ -40,7 +40,8 @@ Imports:
     RCurl,
     geosphere,
     Rcpp (>= 0.12.1),
-    igraph
+    igraph,
+    data.table
 LinkingTo:
     RcppArmadillo,
     Rcpp

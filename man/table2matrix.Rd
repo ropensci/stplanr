@@ -2,9 +2,11 @@
 % Please edit documentation in R/osrmfunctions.R
 \name{table2matrix}
 \alias{table2matrix}
-\title{Return SpatialPointsDataFrame with nearest street from OSRM nearest service}
+\title{Return Matrix containing travel times between origins and destinations}
 \usage{
-table2matrix(lat, lng, osrmurl = "http://router.project-osrm.org")
+table2matrix(lat, lng, destlat = NA, destlng = NA, api = 5,
+  profile = "driving", protocol = "v1",
+  osrmurl = "http://router.project-osrm.org")
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
@@ -14,15 +16,29 @@ column and longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to calculate travel times.}
 
+\item{destlat}{Numeric vector containing destination latitude coordinate
+for each coordinate to calculate travel times. Also accepts dataframe with
+latitude in the first column and longitude in the second column. Default
+is value of lat.}
+
+\item{destlng}{Numeric vector containing longitude coordinate for each
+destination coordinate to calculate travel times. Default is value of lng.}
+
+\item{api}{An integer value containing the OSRM API version (either 4 or 5).
+Default is 5.}
+
+\item{profile}{OSRM profile to use (for API v5), defaults to "driving".}
+
+\item{protocol}{The protocol to use for the API (for v5), defaults to "v1".}
+
 \item{osrmurl}{Base URL of the OSRM service}
 }
 \description{
-Return SpatialPointsDataFrame with nearest street from OSRM nearest service
+Return Matrix containing travel times between origins and destinations
 }
 \section{Details}{
 
-Retrieve coordinates and name of the node(s) on the network mapped from
-coordinates passed to functions.
+Return a matrix containing travel times between origins and destinations
 }
 \examples{
 \dontrun{

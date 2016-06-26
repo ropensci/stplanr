@@ -43,6 +43,7 @@
 #' @importFrom igraph graph E
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
+#' @importFrom data.table rbindlist
 #'
 #' @useDynLib stplanr
 NULL
