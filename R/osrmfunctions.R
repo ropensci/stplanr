@@ -620,6 +620,12 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
 #' column and longitude in the second column.
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to calculate travel times.
+#' @param destlat Numeric vector containing destination latitude coordinate
+#' for each coordinate to calculate travel times. Also accepts dataframe with
+#' latitude in the first column and longitude in the second column. Default
+#' is value of lat.
+#' @param destlng Numeric vector containing longitude coordinate for each
+#' destination coordinate to calculate travel times. Default is value of lng.
 #' @param api An integer value containing the OSRM API version (either 4 or 5).
 #' Default is 5.
 #' @param profile OSRM profile to use (for API v5), defaults to "driving".

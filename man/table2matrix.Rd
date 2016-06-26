@@ -16,6 +16,14 @@ column and longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to calculate travel times.}
 
+\item{destlat}{Numeric vector containing destination latitude coordinate
+for each coordinate to calculate travel times. Also accepts dataframe with
+latitude in the first column and longitude in the second column. Default
+is value of lat.}
+
+\item{destlng}{Numeric vector containing longitude coordinate for each
+destination coordinate to calculate travel times. Default is value of lng.}
+
 \item{api}{An integer value containing the OSRM API version (either 4 or 5).
 Default is 5.}
 
