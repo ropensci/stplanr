@@ -486,12 +486,19 @@ nearest_osm <- function(lat, lng, number = 1,
       stop("number must be greater than 0")
     }
     url = paste0(osrmurl,"/nearest/",protocol,"/",profile,"/",lng,",",lat,"?number=",number)
+    jsondata <- lapply(url, function(x){
+      jsonlite::fromJSON(x)
+    })
 
     SpatialPointsDataFrame(coords = matrix(unlist(lapply(
-      url, function(x){
-        matrix(jsonlite::fromJSON(x)$waypoints$location[[1]], ncol=2)}
+      jsondata, function(x){
+        matrix(x$waypoints$location[[1]], ncol=2)}
       ),recursive = FALSE),ncol=2,byrow = TRUE),
-        data = data.frame(orig_lat = lat, orig_lng = lng),
+        data = cbind(data.frame(orig_lat = lat, orig_lng = lng),
+        data.table::rbindlist(lapply(jsondata, function(x){
+          data.frame(distance = x$waypoints$distance,
+                     name = x$waypoints$name)
+        }),idcol = "locnum")),
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
   }
 }
@@ -500,7 +507,7 @@ nearest_osm <- function(lat, lng, number = 1,
 #'
 #' @section Details:
 #' Retrieve coordinates of the node(s) on the network mapped from coordinates
-#' passed to functions.
+#' passed to functions using OSRM API v4 only. For API v5, use nearest_osm.
 #'
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to map. Also accepts dataframe with latitude in the first column and
@@ -526,7 +533,8 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #'
 #' @section Details:
 #' Retrieve coordinates and name of the node(s) on the network mapped from
-#' coordinates passed to functions.
+#' coordinates passed to functions using OSRM API v4 only. For API v5,
+#' use nearest_osm.
 #'
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to map. Also accepts dataframe with latitude in the first column and
@@ -602,26 +610,31 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
 
 }
 
-#' Return SpatialPointsDataFrame with nearest street from OSRM nearest service
+#' Return Matrix containing travel times between origins and destinations
 #'
 #' @section Details:
-#' Retrieve coordinates and name of the node(s) on the network mapped from
-#' coordinates passed to functions.
+#' Return a matrix containing travel times between origins and destinations
 #'
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to calculate travel times. Also accepts dataframe with latitude in the first
 #' column and longitude in the second column.
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to calculate travel times.
+#' @param api An integer value containing the OSRM API version (either 4 or 5).
+#' Default is 5.
+#' @param profile OSRM profile to use (for API v5), defaults to "driving".
+#' @param protocol The protocol to use for the API (for v5), defaults to "v1".
 #' @param osrmurl Base URL of the OSRM service
 #' @export
 #' @examples \dontrun{
 #'  table2matrix(seq(from=50,to=52,by=0.1),seq(from=12,to=14,by=0.1))
 #' }
 #'
-table2matrix <- function(lat, lng, osrmurl="http://router.project-osrm.org") {
+table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
+                         api = 5, profile="driving", protocol = "v1",
+                         osrmurl="http://router.project-osrm.org") {
 
-  if(class(lat) == "data.frame") {
+  if(is(lat,"data.frame")) {
     lng <- lat[,2]
     lat <- lat[,1]
   }
@@ -629,11 +642,44 @@ table2matrix <- function(lat, lng, osrmurl="http://router.project-osrm.org") {
     stop("Error - Lengths of vectors not equal.")
   }
 
-  tabledata <- RCurl::getURL(paste0(osrmurl,
+  if(is.na(destlat[1]) == TRUE) {
+    destlat <- lat
+    destlng <- lng
+  } else {
+    if (is(destlat,"data.frame")) {
+      destlng <- destlat[,2]
+      destlat <- destlat[,1]
+    }
+    if (length(destlat) != length(destlng)) {
+      stop("Error - Length of destination vectors not equal")
+    }
+  }
+
+  if (api == 5) {
+
+    locations <- rbind(
+      data.frame(lng=lng,lat=lat),
+      data.frame(lng=destlng,lat=destlat)
+    )
+    locations <- unique(locations)
+    sources <- which(locations$lng %in% lng & locations$lat %in% lat)-1
+    destinations <- which(locations$lng %in% destlng & locations$lat %in% destlat)-1
+
+    tabledata <- RCurl::getURL(paste0(
+      osrmurl,"/table/",protocol,"/",profile,"/",
+      paste0(paste(locations$lng, locations$lat, sep=','), collapse=';'),
+      "?sources=",paste0(sources,collapse=';'),
+      "&destinations=",paste0(destinations,collapse=';')
+    ))
+    tabledata2 <- jsonlite::fromJSON(tabledata)
+    return(tabledata2$durations)
+  } else {
+    tabledata <- RCurl::getURL(paste0(osrmurl,
                "/table?loc=",
                paste0(apply(data.frame(lat=lat,lng=lng),1,function(x){paste0(x,collapse=',')}),collapse='&loc=')
                ))
-  tabledata2 <- jsonlite::fromJSON(tabledata)
-  return(tabledata2$distance_table)
+    tabledata2 <- jsonlite::fromJSON(tabledata)
+    return(tabledata2$distance_table)
+  }
 
 }

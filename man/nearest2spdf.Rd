@@ -22,7 +22,8 @@ Return SpatialPointsDataFrame with nearest street from OSRM nearest service
 \section{Details}{
 
 Retrieve coordinates and name of the node(s) on the network mapped from
-coordinates passed to functions.
+coordinates passed to functions using OSRM API v4 only. For API v5,
+use nearest_osm.
 }
 \examples{
 \dontrun{
