@@ -15,6 +15,10 @@ library(sp) # needed for geographical objects
 library(leaflet) # needed for plotting data
 ```
 
+## Abstract
+
+**stplanr** was developed to solve a real world problem: how to convert official data on travel patterns into geographic objects that could be plotted on a map and analysed using GIS? Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This paper traces the development of these capabilities with a focus on applied case studies and reproducible examples.
+
 ## Introduction
 
 Common computational tasks in transportation research and planning include:
