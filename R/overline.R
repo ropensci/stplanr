@@ -200,7 +200,7 @@ onewaygeo <- function(x, attrib){
   singlelines
 }
 
-#' Aggregate flows so they become non-directional (by id - the faster way)
+#' Aggregate ods so they become non-directional, e.g. by summing travel in both directions.
 #'
 #' Flow data often contains movement in two directions: from point A to point B
 #' and then from B to A. This can be problematic for transport planning, because
@@ -216,56 +216,82 @@ onewaygeo <- function(x, attrib){
 #' potentially halving the number of lines objects and reducing the number
 #' of overlapping lines to zero.
 #'
-#' @param x A SpatialLinesDataFrame
-#' @param attrib A text string containing the name of the line's attribute to
-#' aggregate or a numeric vector of the columns to be aggregated
-#' @param id1 A text string referring to the name of the variable containing the unique id of the origin
-#' @param id2 A text string referring to the name of the variable containing the unique id of the destination
+#' @param x A data frame, representing an OD matrix
+#' @param attrib A vector of column numbers or names
+#' for deciding which attribute(s) of class numeric to
+#' aggregate
+#' @param id1 Optional (it is assumed to be the first column)
+#' text string referring to the name of the variable containing
+#' the unique id of the origin
+#' @param id2 Optional (it is assumed to be the second column)
+#' text string referring to the name of the variable containing
+#' the unique id of the destination
 #'
-#' @return \code{onewayid} outputs a SpatialLinesDataFrame with single lines
-#' and user-selected attribute values that have been aggregated. Only lines
-#' with a distance (i.e. not intra-zone flows) are included.
+#' @return \code{onewayid} outputs a data.frame with rows containing
+#' results for the user-selected attribute values that have been aggregated.
 #' @export
 #' @examples
-#' data("flowlines")
-#' id1 <- names(flowlines)[1]
-#' id2 <- names(flowlines)[2]
-#' plot(flowlines)
-#' singlelines <- onewayid(flowlines, attrib = 3:14, id1, id2)
-#' lines(singlelines) # check we've got the right lines
-#' sum(singlelines$All)
-#' nrow(singlelines)
-#' sl2 <- onewaygeo(flowlines, attrib = 3:14)
-#' # Demonstrate the results from onewayid and onewaygeo are identical
-#` identical(singlelines, sl2)
+#' data("flow")
+#' flow_oneway = onewayid(flow, attrib = 3)
+#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # using names instead of index for attribute
+#' onewayid(flow, attrib = "All")
+#' # using many attributes to aggregate
+#' attrib = which(vapply(flow, is.numeric, T))
+#' flow_oneway = onewayid(flow, attrib = attrib)
+#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+#' # Demonstrate the results from onewayid and onewaygeo are identical (wip)
+#' # identical(singlelines, sl2)
 onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
-  ids <- cbind(x[[id1]], x[[id2]])
-  idsort <- t(apply(ids, 1, sort))
-  # duplicate pairs - see http://stackoverflow.com/questions/9028369/
-  sel <- !duplicated(idsort) & rgeos::gLength(x, byid = TRUE) > 0
 
-  singlelines <- x[sel,]
-  if(sum(sel) != nrow(x)) otherlines <- x[!sel, ] # the lines that are duplicated
-
-  for(i in 1:nrow(singlelines)){
-    # select matching lines
-    idp1 <- paste0(x[[id1]], x[[id2]])
-    idp2 <- paste0(x[[id2]], x[[id1]])
-    l2 <- which(idp2 %in% idp1[sel][i])
-
-    # only perform aggregation on flows that have a return flow
-    if(length(l2) > 0){
-      if(class(attrib) == "character"){
-        # aggregate the data for reverse flows
-        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
-      } else {
-        # aggregate the data for reverse flows
-        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-          as.numeric(x@data[l2, attrib])
-      }
-    }
-
+  if(is.numeric(attrib)){
+    attrib_names = names(x)[attrib]
+  } else {
+    attrib_names = attrib
+    attrib = which(names(x) %in% attrib)
   }
-  singlelines
+
+  x_res = cbind(x[c(id1, id2)], x[attrib]) # create copy of data
+  x_res$ids1 = paste(x_res[[id1]], x_res[[id2]])
+  ids2 = paste(x[[id2]], x[[id1]])
+  x_res$is_intrazonal = x[[id1]] == x[[id2]]
+  x_res$is_two_way = x_res$ids1 %in% ids2 & !x_res$is_intrazonal # identify the 2 way flows
+  # save the 1 way flows
+  x_oneway = x[!x_res$is_two_way,]
+  # x_twoway = x[x$is_two_way,]
+  u = unique(x_res$ids1[x_res$is_two_way])
+
+  # sort out ids
+  for(i in u){
+    sel_id = x_res$ids1 == i
+    if(sum(sel_id) == 1)
+      x_res$ids1[sel_id] = ids2[sel_id]
+  }
+
+  x_grouped = dplyr::group_by(x_res, ids1)
+  x_oneway = x_grouped %>%
+    dplyr::summarise_each(funs(sum), vars = attrib)
+  names(x_oneway)[2:ncol(x_oneway)] = attrib_names
+
+  # add ids to result
+  idvar1 = paste0("first(", id1, ")")
+  idvar2 = paste0("first(", id2, ")")
+  x_oneway_ids = x_grouped %>% dplyr::summarise_(
+    id1 = idvar1,
+    id2 = idvar2
+  )
+  x_oneway = x_oneway[c(2:ncol(x_oneway), 1)]
+  names(x_oneway)[1:length(attrib_names)] = attrib_names
+  x_oneway = bind_cols(x_oneway_ids[-1], x_oneway)
+  # add is two way variable to result
+  x_oneway_is_two_way = x_grouped %>% dplyr::summarise_(
+    onewayvar = "first(is_two_way)"
+  )
+  x_oneway = bind_cols(x_oneway, x_oneway_is_two_way[-1])
+  names(x_oneway)[1:2] = c(id1, id2)
+
+  return(x_oneway)
+
 }
 
