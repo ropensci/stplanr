@@ -189,3 +189,22 @@ bb2poly <- function(bb){
       b_poly <- as(raster::extent(bb), "SpatialPolygons")
 }
 
+#' Return information about a spatial object using a temporary, projected CRS
+#'
+#' This function performs geographic queries on objects not in their native CRS
+#' (which is assumed to be lat/lon, or geographic) but in a projected CRS.
+#' @inheritParams buff_geo
+#' @param fun A geographic function such as rgeos::gArea or rgeos::gLength (the default)
+#' @param ... Additional arguments passed to the function \code{fun}.
+#' @examples
+#' sp_obj = flowlines
+#' proj4string(sp_obj) = CRS("+init=epsg:4326")
+#' gprojected(sp_obj) # the total length of of the lines
+#' gprojected(sp_obj, byid = TRUE)
+#' buff = buff_geo(sp_obj, width = 25)
+#' gprojected(buff, fun = rgeos::gArea) # area in m2
+gprojected <- function(sp_obj, fun = rgeos::gLength, new_proj = crs_select_aeq(sp_obj), ...){
+  old_proj <- CRS(proj4string(sp_obj))
+  sp_obj <- sp::spTransform(sp_obj, new_proj)
+  fun(sp_obj, ...)
+}
