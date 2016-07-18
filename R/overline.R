@@ -238,7 +238,7 @@ onewaygeo <- function(x, attrib){
 #' # using names instead of index for attribute
 #' onewayid(flow, attrib = "All")
 #' # using many attributes to aggregate
-#' attrib = which(vapply(flow, is.numeric, T))
+#' attrib = which(vapply(flow, is.numeric, TRUE))
 #' flow_oneway = onewayid(flow, attrib = attrib)
 #' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 #' # Demonstrate the results from onewayid and onewaygeo are identical (wip)

@@ -4,12 +4,12 @@
 \alias{gclip}
 \title{Crops spatial object x to the bounding box of spatial object (or matrix) b}
 \usage{
-gclip(shp, bb)
+gclip(sp_obj, bb)
 }
 \arguments{
-\item{shp}{The spatial object a to be cropped}
+\item{sp_obj}{The spatial object a to be cropped}
 
-\item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
+\item{bb}{the bounding box or spatial object that will be used to crop \code{sp_obj}}
 }
 \description{
 This function is a cross between the spatial subsetting funtions such as

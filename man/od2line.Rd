@@ -35,6 +35,7 @@ This function makes the task easier.
 \dontrun{
 data(flow) # load data frame of od flows between zones
 data(cents) # load centroids data
+
 newflowlines <- od2line(flow = flow, zones = cents)
 plot(cents)
 lines(newflowlines)

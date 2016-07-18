@@ -4,7 +4,8 @@
 \alias{buff_geo}
 \title{Create a buffer of n metres for non-projected 'geographical' spatial data}
 \usage{
-buff_geo(sp_obj, width, ..., silent = TRUE)
+buff_geo(sp_obj, width, ..., silent = TRUE,
+  new_proj = crs_select_aeq(sp_obj))
 }
 \arguments{
 \item{sp_obj}{A spatial object with a geographic CRS (WGS84)
@@ -15,6 +16,9 @@ around which a buffer should be drawn}
 \item{...}{Arguments passed to rgeos::gBuffer()}
 
 \item{silent}{A binary value for printing the CRS details (default: FALSE)}
+
+\item{new_proj}{The new projection to use - by default selected by
+\code{\link{crs_select_aeq}}}
 }
 \description{
 Solves the problem that buffers will not be circular when used on

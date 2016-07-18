@@ -82,7 +82,7 @@ toptail <- function(l, toptail_dist, ...){
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
-buff_geo <- function(sp_obj, width, ..., silent = TRUE, new_proj = crs_select_aeq(shp)){
+buff_geo <- function(sp_obj, width, ..., silent = TRUE, new_proj = crs_select_aeq(sp_obj)){
   old_proj <- CRS(proj4string(sp_obj))
   if(silent == FALSE){
     message(paste0("The new Azimuthal equidistant projection",

@@ -7,7 +7,7 @@
 bbox_scale(bb, scale_factor)
 }
 \arguments{
-\item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
+\item{bb}{the bounding box or spatial object that will be used to crop \code{sp_obj}}
 
 \item{scale_factor}{Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.}
 }
