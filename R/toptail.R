@@ -73,6 +73,8 @@ toptail <- function(l, toptail_dist, ...){
 #' @param width The distance (in metres) of the buffer
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @param silent A binary value for printing the CRS details (default: FALSE)
+#' @param new_proj The new projection to use - by default selected by
+#' \code{\link{crs_select_aeq}}
 #' @export
 #' @examples
 #' data("routes_fast")
@@ -80,9 +82,8 @@ toptail <- function(l, toptail_dist, ...){
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
-buff_geo <- function(sp_obj, width, ..., silent = TRUE){
+buff_geo <- function(sp_obj, width, ..., silent = TRUE, new_proj = crs_select_aeq(shp)){
   old_proj <- CRS(proj4string(sp_obj))
-  new_proj <- crs_select_aeq(sp_obj)
   if(silent == FALSE){
     message(paste0("The new Azimuthal equidistant projection",
     "used to create the buffer was ", new_proj))
