@@ -39,7 +39,7 @@ od2odf <- function(flow, zones){
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #' \code{\link{od2line2}} is a faster implementation
-#' (around 2 times faster) that returns a \code{SpatialLines} object (omitting the data).
+#' (around 2 times faster).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
@@ -51,16 +51,14 @@ od2odf <- function(flow, zones){
 #' @references
 #' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
 #' data(cents) # load centroids data
+#'
 #' newflowlines <- od2line(flow = flow, zones = cents)
-#' newflowlines2 <- od2line2(flow = flow, zones = cents)
-#' sp::plot(cents)
-#' lines(newflowlines, lwd = 3)
-#' lines(newflowlines2, col = "white")
-#' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = F)
-#' identical(nfl_sldf, newflowlines)
+#' plot(cents)
+#' lines(newflowlines)
+#' }
 #' @name od2line
 NULL
 
@@ -88,12 +86,14 @@ od2line <- function(flow, zones){
 #' @rdname od2line
 #' @export
 od2line2 <- function(flow, zones){
+
   odf = od2odf(flow, zones)
   l <- vector("list", nrow(odf))
   for(i in 1:nrow(odf)){
     l[[i]] <- sp::Lines(list(sp::Line(rbind(c(odf$fx[i], odf$fy[i]), c(odf$tx[i], odf$ty[i])))), as.character(i))
   }
-  sp::SpatialLines(l)
+  l <- sp::SpatialLines(l)
+  l
 }
 
 #' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
