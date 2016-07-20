@@ -54,7 +54,6 @@ od2odf <- function(flow, zones){
 #' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
 #' data(cents) # load centroids data
-#'
 #' newflowlines <- od2line(flow = flow, zones = cents)
 #' plot(cents)
 #' lines(newflowlines)
@@ -93,7 +92,6 @@ od2line2 <- function(flow, zones){
     l[[i]] <- sp::Lines(list(sp::Line(rbind(c(odf$fx[i], odf$fy[i]), c(odf$tx[i], odf$ty[i])))), as.character(i))
   }
   l <- sp::SpatialLines(l)
-  l
 }
 
 #' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
