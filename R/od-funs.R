@@ -39,8 +39,7 @@ od2odf <- function(flow, zones){
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #' \code{\link{od2line2}} is a faster implementation
-#' (around 6 times faster on large datasets)
-#' that returns a \code{SpatialLines} object (omitting the data).
+#' (around 2 times faster) that returns a \code{SpatialLines} object (omitting the data).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
