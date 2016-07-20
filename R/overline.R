@@ -172,32 +172,23 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 #' sum(singlelines$All)
 #' nrow(singlelines)
 onewaygeo <- function(x, attrib){
-  geq <- rgeos::gEquals(x, x, byid = T)
+  geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
   sel1 <- !duplicated(geq) # repeated rows
-  sel2 <- rowSums(geq) > 1 # all features with an overlap
-  sel3 <- rgeos::gLength(x, byid = TRUE) > 0 # remove points
-  sel4 <- sel1 & sel2 & sel3
-  singlelines <- x[sel4,]
-  otherlines <- x[!sel4, ] # the lines that are duplicated
+  singlelines <- x[sel1,]
 
-  for(i in 1:nrow(singlelines)){
-    # select matching line
-    l2 <- which(rgeos::gEquals(singlelines[i, ], x, byid = TRUE))[2]
+  singlelines@data[,attrib] <- (matrix(
+    unlist(
+      lapply(
+        apply(geq, 1, function(x){
+          which(x == TRUE)
+        }),
+        function(y,x) {
+          colSums(x[y,3:14]@data)
+        }, x)),
+    nrow=49,
+    byrow=TRUE))[sel1,]
 
-    # only perform aggregation on flows that have a return flow
-    if(length(l2) > 0){
-      if(class(attrib) == "character"){
-        # aggregate the data for reverse flows
-        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
-      } else {
-        # aggregate the data for reverse flows
-        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-          as.numeric(x@data[l2, attrib])
-      }
-    }
-
-  }
-  singlelines
+  return(singlelines)
 }
 
 #' Aggregate ods so they become non-directional, e.g. by summing travel in both directions.
@@ -252,46 +243,15 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
     attrib = which(names(x) %in% attrib)
   }
 
-  x_res = cbind(x[c(id1, id2)], x[attrib]) # create copy of data
-  x_res$ids1 = paste(x_res[[id1]], x_res[[id2]])
-  x_res$ids2 = paste(x_res[[id2]], x_res[[id1]])
-  x_res$is_intrazonal = x_res[[id1]] == x_res[[id2]]
-  # identify the 2 way flows
-  x_res$is_two_way = x_res$ids1 %in% x_res$ids2 & !x_res$is_intrazonal
-  # save the 1 way flows
-  # x_oneway = x[!x_res$is_two_way,]
-  # x_twoway = x[x_res$is_two_way,]
-  u = unique(x_res$ids1[x_res$is_two_way])
-
-  # switch duplicated ids
-  for(i in u){
-    sel_id1 = x_res$ids1 == i
-    sel_id2 = x_res$ids2 == i
-    if(sum(sel_id1 == 1))
-      x_res$ids1[sel_id2] = i
-  }
-
-  x_grouped = dplyr::group_by(x_res, ids1)
-  x_oneway = x_grouped %>%
-    dplyr::summarise_each(funs(sum), vars = attrib)
-  names(x_oneway)[2:ncol(x_oneway)] = attrib_names
-
-  # add ids to result
-  idvar1 = paste0("first(`", id1, "`)")
-  idvar2 = paste0("first(`", id2, "`)")
-  x_oneway_ids = x_grouped %>% dplyr::summarise_(
-    id1 = idvar1,
-    id2 = idvar2
-  )
-  x_oneway = x_oneway[c(2:ncol(x_oneway), 1)]
-  names(x_oneway)[1:length(attrib_names)] = attrib_names
-  x_oneway = bind_cols(x_oneway_ids[-1], x_oneway)
-  # add is two way variable to result
-  x_oneway_is_two_way = x_grouped %>% dplyr::summarise_(
-    is_two_way = "first(is_two_way)"
-  )
-  x_oneway = bind_cols(x_oneway, x_oneway_is_two_way[-1])
-  names(x_oneway)[1:2] = c(id1, id2)
+  x_oneway <- x %>%
+    dplyr::mutate_(stplanr.id1 = id1,
+                   stplanr.id2 = id2,
+                   stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
+    dplyr::mutate_each("sum", attrib) %>%
+    dplyr::summarise_each_(~"first",c(id1, id2, attrib, ~is_two_way)) %>%
+    dplyr::select(-stplanr.key)
 
   return(x_oneway)
 
