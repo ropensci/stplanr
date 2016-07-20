@@ -254,21 +254,19 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
 
   x_res = cbind(x[c(id1, id2)], x[attrib]) # create copy of data
   x_res$ids1 = paste(x_res[[id1]], x_res[[id2]])
-  x_res$ids2 = paste(x_res[[id2]], x_res[[id1]])
-  x_res$is_intrazonal = x_res[[id1]] == x_res[[id2]]
-  # identify the 2 way flows
-  x_res$is_two_way = x_res$ids1 %in% x_res$ids2 & !x_res$is_intrazonal
+  ids2 = paste(x[[id2]], x[[id1]])
+  x_res$is_intrazonal = x[[id1]] == x[[id2]]
+  x_res$is_two_way = x_res$ids1 %in% ids2 & !x_res$is_intrazonal # identify the 2 way flows
   # save the 1 way flows
-  # x_oneway = x[!x_res$is_two_way,]
-  # x_twoway = x[x_res$is_two_way,]
+  x_oneway = x[!x_res$is_two_way,]
+  # x_twoway = x[x$is_two_way,]
   u = unique(x_res$ids1[x_res$is_two_way])
 
-  # switch duplicated ids
+  # sort out ids
   for(i in u){
-    sel_id1 = x_res$ids1 == i
-    sel_id2 = x_res$ids2 == i
-    if(sum(sel_id1 == 1))
-      x_res$ids1[sel_id2] = i
+    sel_id = x_res$ids1 == i
+    if(sum(sel_id) == 1)
+      x_res$ids1[sel_id] = ids2[sel_id]
   }
 
   x_grouped = dplyr::group_by(x_res, ids1)
@@ -277,8 +275,8 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   names(x_oneway)[2:ncol(x_oneway)] = attrib_names
 
   # add ids to result
-  idvar1 = paste0("first(`", id1, "`)")
-  idvar2 = paste0("first(`", id2, "`)")
+  idvar1 = paste0("first(", id1, ")")
+  idvar2 = paste0("first(", id2, ")")
   x_oneway_ids = x_grouped %>% dplyr::summarise_(
     id1 = idvar1,
     id2 = idvar2
