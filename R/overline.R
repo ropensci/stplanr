@@ -288,7 +288,7 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   x_oneway = bind_cols(x_oneway_ids[-1], x_oneway)
   # add is two way variable to result
   x_oneway_is_two_way = x_grouped %>% dplyr::summarise_(
-    is_two_way = "first(is_two_way)"
+    onewayvar = "first(is_two_way)"
   )
   x_oneway = bind_cols(x_oneway, x_oneway_is_two_way[-1])
   names(x_oneway)[1:2] = c(id1, id2)
