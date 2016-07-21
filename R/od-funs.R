@@ -39,7 +39,8 @@ od2odf <- function(flow, zones){
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #' \code{\link{od2line2}} is a faster implementation
-#' (around 2 times faster).
+#' (around 6 times faster on large datasets)
+#' that returns a \code{SpatialLines} object (omitting the data).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
@@ -55,8 +56,12 @@ od2odf <- function(flow, zones){
 #' data(flow) # load data frame of od flows between zones
 #' data(cents) # load centroids data
 #' newflowlines <- od2line(flow = flow, zones = cents)
-#' plot(cents)
-#' lines(newflowlines)
+#' newflowlines2 <- od2line2(flow = flow, zones = cents)
+#' sp::plot(cents)
+#' lines(newflowlines, lwd = 3)
+#' lines(newflowlines2, col = "white")
+#' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
+#' identical(nfl_sldf, newflowlines)
 #' }
 #' @name od2line
 NULL
@@ -77,7 +82,7 @@ od2line <- function(flow, zones){
     l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
   }
   l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
+  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
   sp::proj4string(l) <- sp::proj4string(zones)
   l
 }
@@ -276,4 +281,28 @@ update_line_geometry <- function(l, nl){
     l@lines[[i]] <- Lines(nl@lines[[i]]@Lines, row.names(l[i,]))
   }
   l
+}
+
+#' Quickly calculate Euclidean distances of od pairs
+#'
+#' It is common to want to know the Euclidean distance between origins and destinations
+#' in OD data. You can calculate this by first converting OD data to SpatialLines data,
+#' e.g. with \code{\link{od2line}}. However this can be slow and overkill if you just
+#' want to know the distance. This function is a few orders of magnitude faster.
+#'
+#' Note: this function assumes that the zones or centroids in \code{cents} have a geographic
+#' (lat/lon) CRS.
+#'
+#' @inheritParams od2line
+#' @export
+#' @examples
+#' data(flow)
+#' data(cents)
+#' od_dist(flow, cents)
+od_dist <- function(flow, zones){
+  omatch = match(flow[,1], cents@data[,1])
+  dmatch = match(flow[,2], cents@data[,1])
+  cents_o = cents@coords[omatch,]
+  cents_d = cents@coords[dmatch,]
+  geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
 }

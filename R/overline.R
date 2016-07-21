@@ -172,35 +172,26 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
 #' sum(singlelines$All)
 #' nrow(singlelines)
 onewaygeo <- function(x, attrib){
-  geq <- rgeos::gEquals(x, x, byid = T)
+  geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
   sel1 <- !duplicated(geq) # repeated rows
-  sel2 <- rowSums(geq) > 1 # all features with an overlap
-  sel3 <- rgeos::gLength(x, byid = TRUE) > 0 # remove points
-  sel4 <- sel1 & sel2 & sel3
-  singlelines <- x[sel4,]
-  otherlines <- x[!sel4, ] # the lines that are duplicated
+  singlelines <- x[sel1,]
 
-  for(i in 1:nrow(singlelines)){
-    # select matching line
-    l2 <- which(rgeos::gEquals(singlelines[i, ], x, byid = TRUE))[2]
+  singlelines@data[,attrib] <- (matrix(
+    unlist(
+      lapply(
+        apply(geq, 1, function(x){
+          which(x == TRUE)
+        }),
+        function(y,x) {
+          colSums(x[y,3:14]@data)
+        }, x)),
+    nrow=49,
+    byrow=TRUE))[sel1,]
 
-    # only perform aggregation on flows that have a return flow
-    if(length(l2) > 0){
-      if(class(attrib) == "character"){
-        # aggregate the data for reverse flows
-        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
-      } else {
-        # aggregate the data for reverse flows
-        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-          as.numeric(x@data[l2, attrib])
-      }
-    }
-
-  }
-  singlelines
+  return(singlelines)
 }
 
-#' Aggregate flows so they become non-directional (by id - the faster way)
+#' Aggregate ods so they become non-directional, e.g. by summing travel in both directions.
 #'
 #' Flow data often contains movement in two directions: from point A to point B
 #' and then from B to A. This can be problematic for transport planning, because
@@ -216,56 +207,57 @@ onewaygeo <- function(x, attrib){
 #' potentially halving the number of lines objects and reducing the number
 #' of overlapping lines to zero.
 #'
-#' @param x A SpatialLinesDataFrame
-#' @param attrib A text string containing the name of the line's attribute to
-#' aggregate or a numeric vector of the columns to be aggregated
-#' @param id1 A text string referring to the name of the variable containing the unique id of the origin
-#' @param id2 A text string referring to the name of the variable containing the unique id of the destination
+#' @param x A data frame, representing an OD matrix
+#' @param attrib A vector of column numbers or names
+#' for deciding which attribute(s) of class numeric to
+#' aggregate
+#' @param id1 Optional (it is assumed to be the first column)
+#' text string referring to the name of the variable containing
+#' the unique id of the origin
+#' @param id2 Optional (it is assumed to be the second column)
+#' text string referring to the name of the variable containing
+#' the unique id of the destination
 #'
-#' @return \code{onewayid} outputs a SpatialLinesDataFrame with single lines
-#' and user-selected attribute values that have been aggregated. Only lines
-#' with a distance (i.e. not intra-zone flows) are included.
+#' @return \code{onewayid} outputs a data.frame with rows containing
+#' results for the user-selected attribute values that have been aggregated.
 #' @export
 #' @examples
-#' data("flowlines")
-#' id1 <- names(flowlines)[1]
-#' id2 <- names(flowlines)[2]
-#' plot(flowlines)
-#' singlelines <- onewayid(flowlines, attrib = 3:14, id1, id2)
-#' lines(singlelines) # check we've got the right lines
-#' sum(singlelines$All)
-#' nrow(singlelines)
-#' sl2 <- onewaygeo(flowlines, attrib = 3:14)
+#' data("flow")
+#' flow_oneway = onewayid(flow, attrib = 3)
+#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # using names instead of index for attribute
+#' onewayid(flow, attrib = "All")
+#' # using many attributes to aggregate
+#' attrib = which(vapply(flow, is.numeric, TRUE))
+#' flow_oneway = onewayid(flow, attrib = attrib)
+#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 #' # Demonstrate the results from onewayid and onewaygeo are identical
-#` identical(singlelines, sl2)
+#' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
+#' plot(flow_oneway$All, flow_oneway_geo$All)
 onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
-  ids <- cbind(x[[id1]], x[[id2]])
-  idsort <- t(apply(ids, 1, sort))
-  # duplicate pairs - see http://stackoverflow.com/questions/9028369/
-  sel <- !duplicated(idsort) & rgeos::gLength(x, byid = TRUE) > 0
 
-  singlelines <- x[sel,]
-  if(sum(sel) != nrow(x)) otherlines <- x[!sel, ] # the lines that are duplicated
-
-  for(i in 1:nrow(singlelines)){
-    # select matching lines
-    idp1 <- paste0(x[[id1]], x[[id2]])
-    idp2 <- paste0(x[[id2]], x[[id1]])
-    l2 <- which(idp2 %in% idp1[sel][i])
-
-    # only perform aggregation on flows that have a return flow
-    if(length(l2) > 0){
-      if(class(attrib) == "character"){
-        # aggregate the data for reverse flows
-        singlelines[[attrib]][i] <- singlelines[[attrib]][i] + x[[attrib]][l2]
-      } else {
-        # aggregate the data for reverse flows
-        singlelines@data[i, attrib] <- singlelines@data[i, attrib] +
-          as.numeric(x@data[l2, attrib])
-      }
-    }
-
+  if(is.numeric(attrib)){
+    attrib_names = names(x)[attrib]
+  } else {
+    attrib_names = attrib
+    attrib = which(names(x) %in% attrib)
   }
-  singlelines
+
+  x_oneway <- x %>%
+    dplyr::mutate_(stplanr.id1 = id1,
+                   stplanr.id2 = id2,
+                   stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
+    dplyr::mutate_each("sum", attrib) %>%
+    dplyr::summarise_each_(funs("stplanr.first"),c(id1, id2, attrib, ~is_two_way)) %>%
+    dplyr::select(-stplanr.key)
+
+  return(x_oneway)
+
 }
 
+stplanr.first <- function(...) {
+  dplyr::first(...)
+}

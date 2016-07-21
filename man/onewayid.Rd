@@ -2,24 +2,28 @@
 % Please edit documentation in R/overline.R
 \name{onewayid}
 \alias{onewayid}
-\title{Aggregate flows so they become non-directional (by id - the faster way)}
+\title{Aggregate ods so they become non-directional, e.g. by summing travel in both directions.}
 \usage{
 onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 }
 \arguments{
-\item{x}{A SpatialLinesDataFrame}
+\item{x}{A data frame, representing an OD matrix}
 
-\item{attrib}{A text string containing the name of the line's attribute to
-aggregate or a numeric vector of the columns to be aggregated}
+\item{attrib}{A vector of column numbers or names
+for deciding which attribute(s) of class numeric to
+aggregate}
 
-\item{id1}{A text string referring to the name of the variable containing the unique id of the origin}
+\item{id1}{Optional (it is assumed to be the first column)
+text string referring to the name of the variable containing
+the unique id of the origin}
 
-\item{id2}{A text string referring to the name of the variable containing the unique id of the destination}
+\item{id2}{Optional (it is assumed to be the second column)
+text string referring to the name of the variable containing
+the unique id of the destination}
 }
 \value{
-\code{onewayid} outputs a SpatialLinesDataFrame with single lines
-and user-selected attribute values that have been aggregated. Only lines
-with a distance (i.e. not intra-zone flows) are included.
+\code{onewayid} outputs a data.frame with rows containing
+results for the user-selected attribute values that have been aggregated.
 }
 \description{
 Flow data often contains movement in two directions: from point A to point B
@@ -38,15 +42,18 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-data("flowlines")
-id1 <- names(flowlines)[1]
-id2 <- names(flowlines)[2]
-plot(flowlines)
-singlelines <- onewayid(flowlines, attrib = 3:14, id1, id2)
-lines(singlelines) # check we've got the right lines
-sum(singlelines$All)
-nrow(singlelines)
-sl2 <- onewaygeo(flowlines, attrib = 3:14)
+data("flow")
+flow_oneway = onewayid(flow, attrib = 3)
+nrow(flow_oneway) < nrow(flow) # result has fewer rows
+sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+# using names instead of index for attribute
+onewayid(flow, attrib = "All")
+# using many attributes to aggregate
+attrib = which(vapply(flow, is.numeric, TRUE))
+flow_oneway = onewayid(flow, attrib = attrib)
+colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 # Demonstrate the results from onewayid and onewaygeo are identical
+flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
+plot(flow_oneway$All, flow_oneway_geo$All)
 }
 
