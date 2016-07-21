@@ -29,17 +29,19 @@ in the form of 1 line per flow with zone codes of origin and destination
 centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
 \code{\link{od2line2}} is a faster implementation
-(around 2 times faster).
+(around 6 times faster on large datasets)
+that returns a \code{SpatialLines} object (omitting the data).
 }
 \examples{
-\dontrun{
 data(flow) # load data frame of od flows between zones
 data(cents) # load centroids data
-
 newflowlines <- od2line(flow = flow, zones = cents)
-plot(cents)
-lines(newflowlines)
-}
+newflowlines2 <- od2line2(flow = flow, zones = cents)
+sp::plot(cents)
+lines(newflowlines, lwd = 3)
+lines(newflowlines2, col = "white")
+nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
+identical(nfl_sldf, newflowlines)
 }
 \references{
 Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007

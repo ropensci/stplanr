@@ -250,7 +250,7 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
     dplyr::group_by(stplanr.key) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
-    dplyr::summarise_each_(~"first",c(id1, id2, attrib, ~is_two_way)) %>%
+    dplyr::summarise_each_("first",c(id1, id2, attrib, ~is_two_way)) %>%
     dplyr::select(-stplanr.key)
 
   return(x_oneway)
