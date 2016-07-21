@@ -60,7 +60,7 @@ od2odf <- function(flow, zones){
 #' sp::plot(cents)
 #' lines(newflowlines, lwd = 3)
 #' lines(newflowlines2, col = "white")
-#' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = F)
+#' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
 #' @name od2line
 NULL
@@ -81,7 +81,7 @@ od2line <- function(flow, zones){
     l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
   }
   l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
+  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
   sp::proj4string(l) <- sp::proj4string(zones)
   l
 }
@@ -291,6 +291,7 @@ update_line_geometry <- function(l, nl){
 #' Note: this function assumes that the zones or centroids in \code{cents} have a geographic
 #' (lat/lon) CRS.
 #'
+#' @inheritParams od2line
 #' @export
 #' @examples
 #' data(flow)
@@ -302,23 +303,4 @@ od_dist <- function(flow, zones){
   cents_o = cents@coords[omatch,]
   cents_d = cents@coords[dmatch,]
   geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
-}
-
-od2line <- function(flow, zones){
-  l <- vector("list", nrow(flow))
-  for(i in 1:nrow(flow)){
-    from <- zones@data[,1] %in% flow[i, 1]
-    if(sum(from) == 0)
-      warning(paste0("No match for line ", i))
-    to <- zones@data[,1] %in% flow[i, 2]
-    if(sum(to) == 0 & sum(from) == 1)
-      warning(paste0("No match for line ", i))
-    x <- sp::coordinates(zones[from, ])
-    y <- sp::coordinates(zones[to, ])
-    l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-  }
-  l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = F)
-  sp::proj4string(l) <- sp::proj4string(zones)
-  l
 }
