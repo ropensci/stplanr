@@ -7,7 +7,7 @@
 bb2poly(bb)
 }
 \arguments{
-\item{bb}{the bounding box or spatial object that will be used to crop \code{sp_obj}}
+\item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
 }
 \description{
 Takes a bounding box as an input and outputs a box in the form of a polygon

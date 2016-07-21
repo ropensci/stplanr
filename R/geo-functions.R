@@ -6,9 +6,9 @@
 #'
 #' @inheritParams gclip
 #' @param filename File name of the output geojson
-writeGeoJSON <- function(sp_obj, filename){
-  name <- nm <-deparse(substitute(sp_obj))
-  rgdal::writeOGR(obj = sp_obj, layer = name, dsn = filename, driver = "GeoJSON")
+writeGeoJSON <- function(shp, filename){
+  name <- nm <-deparse(substitute(shp))
+  rgdal::writeOGR(obj = shp, layer = name, dsn = filename, driver = "GeoJSON")
   newname <- paste0(filename, ".geojson")
   file.rename(filename, newname)
 }
@@ -27,7 +27,7 @@ writeGeoJSON <- function(sp_obj, filename){
 #' \code{mapshape} writes new a file to disk.
 #' Thanks to Richard and Adrian Ellison for demonstrating this in R.
 #'
-#' @param sp_obj A spatial object to be simplified.
+#' @param shp A spatial object to be simplified.
 #' @param percent A number between 1 and 100 stating how aggressively to simplify
 #'  the object (1 is a very aggressive simplification)
 #' @param ms_options Text string of options passed to mapshaper such as
@@ -46,28 +46,28 @@ writeGeoJSON <- function(sp_obj, filename){
 #' @examples
 #' \dontrun{
 #' data(routes_fast)
-#' sp_obj <- routes_fast[1,]
-#' rfs10 <- mapshape(sp_obj)
-#' rfs5 <- mapshape(sp_obj, percent = 5)
-#' rfs1 <- mapshape(sp_obj, percent = 1)
-#' plot(sp_obj)
+#' shp <- routes_fast[1,]
+#' rfs10 <- mapshape(shp)
+#' rfs5 <- mapshape(shp, percent = 5)
+#' rfs1 <- mapshape(shp, percent = 1)
+#' plot(shp)
 #' plot(rfs10, add = TRUE, col ="red")
 #' plot(rfs5, add = TRUE, col ="blue")
 #' plot(rfs1, add = TRUE, col = "grey")
 #' # snap the lines to the nearest interval
-#' rfs_int <- mapshape(sp_obj, ms_options = "snap-interval=0.001")
-#' plot(sp_obj)
+#' rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
+#' plot(shp)
 #' plot(rfs_int, add = TRUE)
 #' }
-mapshape <- function(sp_obj, percent = 10, ms_options = "",  dsn = "mapshape", silent = FALSE){
+mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", silent = FALSE){
   if(!mapshape_available()) stop("mapshaper not available on this system")
-  raster::shapefile(sp_obj, dsn, overwrite = TRUE)
+  raster::shapefile(shp, dsn, overwrite = TRUE)
   cmd <- paste0("mapshaper ", ms_options, " ", dsn, ".shp -simplify ", percent, "% -o")
   if(!silent)  print(paste0("Running the following command from the system: ", cmd))
   system(cmd, ignore.stderr = TRUE)
   suppressWarnings(new_shp <- raster::shapefile(paste0(dsn, "-ms.shp")))
-  new_shp@data <- sp_obj@data
-  proj4string(new_shp) <- proj4string(sp_obj)
+  new_shp@data <- shp@data
+  proj4string(new_shp) <- proj4string(shp)
   to_remove <- list.files(pattern = dsn)
   file.remove(to_remove)
   new_shp
@@ -94,8 +94,8 @@ mapshape_available <- function() {
 #' spatial object a with an outline described by a square bounding box.
 #' The utility of such a function is illustrated in the following question:
 #' \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
-#' @param sp_obj The spatial object a to be cropped
-#' @param bb the bounding box or spatial object that will be used to crop \code{sp_obj}
+#' @param shp The spatial object a to be cropped
+#' @param bb the bounding box or spatial object that will be used to crop \code{shp}
 #'
 #' @export
 #' @examples
@@ -110,31 +110,31 @@ mapshape_available <- function() {
 #' clipped$avslope # gclip also returns the data attribute
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
-gclip <- function(sp_obj, bb){
+gclip <- function(shp, bb){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
   else{
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
   }
-  clipped <- rgeos::gIntersection(sp_obj, b_poly, byid = TRUE, id = row.names(sp_obj))
-  if(grepl("DataFrame", class(sp_obj))){
-    if(grepl("SpatialLines", class(sp_obj)) & grepl("SpatialCollections",class(clipped))) {
+  clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
+  if(grepl("DataFrame", class(shp))){
+    if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
       geodata <- data.frame(gclip_id = row.names(clipped@lineobj))
     }
     else {
       geodata <- data.frame(gclip_id = row.names(clipped))
     }
-    joindata <- cbind(gclip_id = row.names(sp_obj), sp_obj@data)
+    joindata <- cbind(gclip_id = row.names(shp), shp@data)
     geodata <- dplyr::left_join(geodata, joindata)
     row.names(geodata) <- geodata$gclip_id
     #if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
-    if(grepl("SpatialPolygons", class(sp_obj))){
+    if(grepl("SpatialPolygons", class(shp))){
       #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
-      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(sp_obj[row.names(clipped),], "data.frame"))
-    } else if(grepl("SpatialLines", class(sp_obj)) & grepl("SpatialCollections",class(clipped))) {
+      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped),], "data.frame"))
+    } else if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
       clipped <- sp::SpatialLinesDataFrame(clipped@lineobj, geodata)
-    } else if(grepl("SpatialLines", class(sp_obj))) {
+    } else if(grepl("SpatialLines", class(shp))) {
       clipped <- sp::SpatialLinesDataFrame(clipped, geodata)
     } else { #assumes the data is a SpatialPointsDataFrame
       clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
@@ -189,23 +189,3 @@ bb2poly <- function(bb){
       b_poly <- as(raster::extent(bb), "SpatialPolygons")
 }
 
-#' Return information about a spatial object using a temporary, projected CRS
-#'
-#' This function performs geographic queries on objects not in their native CRS
-#' (which is assumed to be lat/lon, or geographic) but in a projected CRS.
-#' @inheritParams buff_geo
-#' @param fun A geographic function such as rgeos::gArea or rgeos::gLength (the default)
-#' @param ... Additional arguments passed to the function \code{fun}.
-#' @export
-#' @examples
-#' sp_obj = flowlines
-#' proj4string(sp_obj) = CRS("+init=epsg:4326")
-#' gprojected(sp_obj) # the total length of of the lines
-#' gprojected(sp_obj, byid = TRUE)
-#' buff = buff_geo(sp_obj, width = 25)
-#' gprojected(buff, fun = rgeos::gArea) # area in m2
-gprojected <- function(sp_obj, fun = rgeos::gLength, new_proj = crs_select_aeq(sp_obj), ...){
-  old_proj <- CRS(proj4string(sp_obj))
-  sp_obj <- sp::spTransform(sp_obj, new_proj)
-  fun(sp_obj, ...)
-}

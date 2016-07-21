@@ -33,6 +33,7 @@ This function makes the task easier.
 that returns a \code{SpatialLines} object (omitting the data).
 }
 \examples{
+\dontrun{
 data(flow) # load data frame of od flows between zones
 data(cents) # load centroids data
 newflowlines <- od2line(flow = flow, zones = cents)
@@ -42,6 +43,7 @@ lines(newflowlines, lwd = 3)
 lines(newflowlines2, col = "white")
 nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 identical(nfl_sldf, newflowlines)
+}
 }
 \references{
 Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007

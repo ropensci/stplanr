@@ -4,11 +4,11 @@
 \alias{mapshape}
 \title{Simplify geometry of spatial objects with the mapshaper library}
 \usage{
-mapshape(sp_obj, percent = 10, ms_options = "", dsn = "mapshape",
+mapshape(shp, percent = 10, ms_options = "", dsn = "mapshape",
   silent = FALSE)
 }
 \arguments{
-\item{sp_obj}{A spatial object to be simplified.}
+\item{shp}{A spatial object to be simplified.}
 
 \item{percent}{A number between 1 and 100 stating how aggressively to simplify
 the object (1 is a very aggressive simplification)}
@@ -45,17 +45,17 @@ Thanks to Richard and Adrian Ellison for demonstrating this in R.
 \examples{
 \dontrun{
 data(routes_fast)
-sp_obj <- routes_fast[1,]
-rfs10 <- mapshape(sp_obj)
-rfs5 <- mapshape(sp_obj, percent = 5)
-rfs1 <- mapshape(sp_obj, percent = 1)
-plot(sp_obj)
+shp <- routes_fast[1,]
+rfs10 <- mapshape(shp)
+rfs5 <- mapshape(shp, percent = 5)
+rfs1 <- mapshape(shp, percent = 1)
+plot(shp)
 plot(rfs10, add = TRUE, col ="red")
 plot(rfs5, add = TRUE, col ="blue")
 plot(rfs1, add = TRUE, col = "grey")
 # snap the lines to the nearest interval
-rfs_int <- mapshape(sp_obj, ms_options = "snap-interval=0.001")
-plot(sp_obj)
+rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
+plot(shp)
 plot(rfs_int, add = TRUE)
 }
 }
