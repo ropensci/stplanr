@@ -52,7 +52,8 @@ onewayid(flow, attrib = "All")
 attrib = which(vapply(flow, is.numeric, TRUE))
 flow_oneway = onewayid(flow, attrib = attrib)
 colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
-# Demonstrate the results from onewayid and onewaygeo are identical (wip)
-# identical(singlelines, sl2)
+# Demonstrate the results from onewayid and onewaygeo are identical
+flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
+plot(flow_oneway$All, flow_oneway_geo$All)
 }
 
