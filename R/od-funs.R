@@ -300,8 +300,8 @@ update_line_geometry <- function(l, nl){
 #' data(cents)
 #' od_dist(flow, cents)
 od_dist <- function(flow, zones){
-  omatch = match(flow[,1], cents@data[,1])
-  dmatch = match(flow[,2], cents@data[,1])
+  omatch = match(flow[[1]], cents@data[[1]])
+  dmatch = match(flow[[2]], cents@data[[1]])
   cents_o = cents@coords[omatch,]
   cents_d = cents@coords[dmatch,]
   geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
