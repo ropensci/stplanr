@@ -4,10 +4,10 @@
 \alias{buff_geo}
 \title{Create a buffer of n metres for non-projected 'geographical' spatial data}
 \usage{
-buff_geo(sp_obj, width, ..., silent = TRUE)
+buff_geo(shp, width, ..., silent = TRUE)
 }
 \arguments{
-\item{sp_obj}{A spatial object with a geographic CRS (WGS84)
+\item{shp}{A spatial object with a geographic CRS (WGS84)
 around which a buffer should be drawn}
 
 \item{width}{The distance (in metres) of the buffer}
