@@ -68,7 +68,7 @@ toptail <- function(l, toptail_dist, ...){
 #'
 #' Returns a
 #'
-#' @param sp_obj A spatial object with a geographic CRS (WGS84)
+#' @param shp A spatial object with a geographic CRS (WGS84)
 #' around which a buffer should be drawn
 #' @param width The distance (in metres) of the buffer
 #' @param ... Arguments passed to rgeos::gBuffer()
@@ -80,16 +80,16 @@ toptail <- function(l, toptail_dist, ...){
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
-buff_geo <- function(sp_obj, width, ..., silent = TRUE){
-  old_proj <- CRS(proj4string(sp_obj))
-  new_proj <- crs_select_aeq(sp_obj)
+buff_geo <- function(shp, width, ..., silent = TRUE){
+  old_proj <- CRS(proj4string(shp))
+  new_proj <- crs_select_aeq(shp)
   if(silent == FALSE){
     message(paste0("The new Azimuthal equidistant projection",
     "used to create the buffer was ", new_proj))
     message(paste0("The original projection was ", old_proj))
   }
-  sp_obj <- sp::spTransform(sp_obj, new_proj)
-  buff <- rgeos::gBuffer(sp_obj, width = width, ...)
+  shp <- sp::spTransform(shp, new_proj)
+  buff <- rgeos::gBuffer(shp, width = width, ...)
   sp::spTransform(buff, old_proj)
 }
 

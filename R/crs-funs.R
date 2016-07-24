@@ -8,7 +8,7 @@
 #' The function is based on this stackexchange answer:
 #' \url{http://gis.stackexchange.com/questions/121489}
 #'
-#' @param sp_obj A spatial object with a geographic (WGS84) coordinate system
+#' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @export
 #' @examples
 #' data("routes_fast")
@@ -21,8 +21,8 @@
 #' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 #' plot(line_length, rf_projected$length)
 #' cor(line_length, rf_projected$length)
-crs_select_aeq <- function(sp_obj){
-  cent <- rgeos::gCentroid(sp_obj)
+crs_select_aeq <- function(shp){
+  cent <- rgeos::gCentroid(shp)
   aeqd <- sprintf("+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
           cent@coords[[2]], cent@coords[[1]])
   CRS(aeqd)

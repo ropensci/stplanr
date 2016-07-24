@@ -4,10 +4,10 @@
 \alias{crs_select_aeq}
 \title{Select a custom projected CRS for the area of interest}
 \usage{
-crs_select_aeq(sp_obj)
+crs_select_aeq(shp)
 }
 \arguments{
-\item{sp_obj}{A spatial object with a geographic (WGS84) coordinate system}
+\item{shp}{A spatial object with a geographic (WGS84) coordinate system}
 }
 \description{
 This function takes a spatial object with a geographic (WGS84)
