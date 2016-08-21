@@ -79,6 +79,7 @@ lineLabels <- function(sldf, attrib){
 #' which the function will operate.
 #' @param fun The function used to aggregate the grouped values (default: sum)
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
+#' @param byvars Character vector containing the column names to use for grouping
 #'
 #' @author Barry Rowlingson
 #' @references
@@ -111,25 +112,59 @@ lineLabels <- function(sldf, attrib){
 #' overlaps <- over()
 #' nrow(overlaps)
 #' }
-overline <- function(sldf, attrib, fun = sum, na.zero = FALSE){
-  ## simplify down to SpatialLines
-  sl = as(sldf, "SpatialLines")
-  ## get the line sections that make the network
-  slu = gsection(sl)
-  ## overlay network with routes
-  overs = sp::over(slu, sl, returnList=TRUE)
-  ## overlay is true if end points overlay, so filter them out:
-  overs = lapply(1:length(overs), function(islu){
-    Filter(function(isl){
-      islines(sl[isl,],slu[islu,])
-    }, overs[[islu]])
-  })
-  ## now aggregate the required attribibute using fun():
-  aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
-  ## make a SLDF with the named attribibute:
-  sldf = sp::SpatialLinesDataFrame(slu, data.frame(Z=aggs))
-  names(sldf) = attrib
+  if (is.na(byvars[1]) == TRUE) {
+    ## simplify down to SpatialLines
+    sl = as(sldf, "SpatialLines")
+    ## get the line sections that make the network
+    slu = gsection(sl)
+    ## overlay network with routes
+    overs = sp::over(slu, sl, returnList=TRUE)
+    ## overlay is true if end points overlay, so filter them out:
+    overs = lapply(1:length(overs), function(islu){
+      Filter(function(isl){
+        islines(sl[isl,],slu[islu,])
+      }, overs[[islu]])
+    })
+    ## now aggregate the required attribibute using fun():
+    aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+
+    ## make a SLDF with the named attribibute:
+    sldf = sp::SpatialLinesDataFrame(slu, data.frame(Z=aggs))
+    names(sldf) = attrib
+  } else {
+
+    splitlines <- lapply(
+      split(sldf, sldf@data[,c('ts_typ_cd','route_var_id')]),
+      function(x, attrib, gvar){
+        groupingcat <- unname(unlist(unique(x@data[,gvar])))
+        sl = as(x, "SpatialLines")
+        slu = gsection(sl)
+        overs = sp::over(slu, sl, returnList = TRUE)
+        overs = lapply(1:length(overs), function(islu) {
+          Filter(function(isl){islines(sl[isl,],slu[islu,])}, overs[[islu]])
+        })
+        aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+        sldf = sp::SpatialLinesDataFrame(slu, cbind(data.frame(Z=aggs),as.data.frame(matrix(groupingcat,nrow=1))))
+        names(sldf) = c(attrib,gvar)
+        sldf <- spChFIDs(sldf, paste(paste(groupingcat,collapse='.'),row.names(sldf@data),sep='.'))
+        sldf
+      },
+      attrib,
+      c('ts_typ_cd','route_var_id')
+    )
+
+    splitlinesdf <- data.frame(data.table::rbindlist(lapply(splitlines, function(x){x@data})))
+    row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x){row.names(x@data)})))
+
+    sldf <- SpatialLinesDataFrame(
+      SpatialLines(unlist(lapply(splitlines, function(x){x@lines}), recursive = FALSE),
+                   proj4string = splitlines[[1]]@proj4string),
+      splitlinesdf
+    )
+
+  }
 
   ## remove lines with attribute values of zero
   if(na.zero == TRUE){
