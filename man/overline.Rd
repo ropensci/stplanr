@@ -4,7 +4,7 @@
 \alias{overline}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sldf, attrib, fun = sum, na.zero = FALSE)
+overline(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA)
 }
 \arguments{
 \item{sldf}{A SpatialLinesDataFrame with overlapping elements}
@@ -15,6 +15,8 @@ which the function will operate.}
 \item{fun}{The function used to aggregate the grouped values (default: sum)}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
+
+\item{byvars}{Character vector containing the column names to use for grouping}
 }
 \description{
 This function takes a series of Lines stored in a

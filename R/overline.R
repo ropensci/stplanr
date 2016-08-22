@@ -136,7 +136,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
   } else {
 
     splitlines <- lapply(
-      split(sldf, sldf@data[,c('ts_typ_cd','route_var_id')]),
+      split(sldf, sldf@data[,byvars]),
       function(x, attrib, gvar){
         groupingcat <- unname(unlist(unique(x@data[,gvar])))
         sl = as(x, "SpatialLines")
@@ -152,7 +152,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
         sldf
       },
       attrib,
-      c('ts_typ_cd','route_var_id')
+      c(byvars)
     )
 
     splitlinesdf <- data.frame(data.table::rbindlist(lapply(splitlines, function(x){x@data})))
