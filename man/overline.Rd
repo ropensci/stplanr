@@ -9,10 +9,12 @@ overline(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA)
 \arguments{
 \item{sldf}{A SpatialLinesDataFrame with overlapping elements}
 
-\item{attrib}{A text string corresponding to the variable in \code{sldf$} on
-which the function will operate.}
+\item{attrib}{A character vector corresponding to the variables in
+\code{sldf$} on which the function(s) will operate.}
 
-\item{fun}{The function used to aggregate the grouped values (default: sum)}
+\item{fun}{The function(s) used to aggregate the grouped values (default: sum).
+If length of \code{fun} is smaller than \code{attrib} then the functions are
+repeated for subsequent attributes.}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
 

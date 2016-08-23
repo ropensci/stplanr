@@ -75,9 +75,11 @@ lineLabels <- function(sldf, attrib){
 #' and converts these into a single route network.
 #'
 #' @param sldf A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to the variable in \code{sldf$} on
-#' which the function will operate.
-#' @param fun The function used to aggregate the grouped values (default: sum)
+#' @param attrib A character vector corresponding to the variables in
+#' \code{sldf$} on which the function(s) will operate.
+#' @param fun The function(s) used to aggregate the grouped values (default: sum).
+#' If length of \code{fun} is smaller than \code{attrib} then the functions are
+#' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #' @param byvars Character vector containing the column names to use for grouping
 #'
@@ -116,6 +118,10 @@ lineLabels <- function(sldf, attrib){
 #' }
 overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
+  if (length(fun) < length(attrib)) {
+    fun <- rep(c(fun),length.out=length(attrib))
+  }
+
   if (is.na(byvars[1]) == TRUE) {
     ## simplify down to SpatialLines
     sl = as(sldf, "SpatialLines")
@@ -130,11 +136,24 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       }, overs[[islu]])
     })
     ## now aggregate the required attribibute using fun():
-    aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+    #aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+    aggs <- setNames(
+      as.data.frame(
+        lapply(1:length(attrib),
+               function(y, overs, attribs, aggfuns){
+                 sapply(overs, function(os,attrib,fun2){
+                   fun2(sldf[[attrib]][os])},
+                   attrib=attribs[y],
+                   fun2=aggfuns[[y]])
+                 },
+               overs,
+               attrib,
+               fun)),
+      attrib)
 
     ## make a SLDF with the named attribibute:
-    sldf = sp::SpatialLinesDataFrame(slu, data.frame(Z=aggs))
-    names(sldf) = attrib
+    sldf = sp::SpatialLinesDataFrame(slu, aggs)
+    #names(sldf) = attrib
   } else {
 
     splitlines <- lapply(
@@ -147,8 +166,22 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
         overs = lapply(1:length(overs), function(islu) {
           Filter(function(isl){islines(sl[isl,],slu[islu,])}, overs[[islu]])
         })
-        aggs = sapply(overs, function(os){fun(x[[attrib]][os])})
-        sldf = sp::SpatialLinesDataFrame(slu, cbind(data.frame(Z=aggs),as.data.frame(matrix(groupingcat,nrow=1))))
+        #aggs = sapply(overs, function(os){fun(x[[attrib]][os])})
+        aggs <- setNames(
+          as.data.frame(
+            lapply(1:length(attrib),
+                   function(y, overs, attribs, aggfuns){
+                     sapply(overs, function(os,attrib,fun2){
+                       fun2(x[[attrib]][os])},
+                       attrib=attribs[y],
+                       fun2=aggfuns[[y]])
+                   },
+                   overs,
+                   attrib,
+                   fun)
+            ),
+          attrib)
+        sldf = sp::SpatialLinesDataFrame(slu, cbind(aggs,as.data.frame(matrix(groupingcat,nrow=1))))
         names(sldf) = c(attrib,gvar)
         sldf <- spChFIDs(sldf, paste(paste(groupingcat,collapse='.'),row.names(sldf@data),sep='.'))
         sldf
