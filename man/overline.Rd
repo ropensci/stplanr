@@ -4,17 +4,21 @@
 \alias{overline}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sldf, attrib, fun = sum, na.zero = FALSE)
+overline(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA)
 }
 \arguments{
 \item{sldf}{A SpatialLinesDataFrame with overlapping elements}
 
-\item{attrib}{A text string corresponding to the variable in \code{sldf$} on
-which the function will operate.}
+\item{attrib}{A character vector corresponding to the variables in
+\code{sldf$} on which the function(s) will operate.}
 
-\item{fun}{The function used to aggregate the grouped values (default: sum)}
+\item{fun}{The function(s) used to aggregate the grouped values (default: sum).
+If length of \code{fun} is smaller than \code{attrib} then the functions are
+repeated for subsequent attributes.}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
+
+\item{byvars}{Character vector containing the column names to use for grouping}
 }
 \description{
 This function takes a series of Lines stored in a
@@ -45,6 +49,8 @@ flowlines_2way <- spChFIDs(flowlines_2way, as.character(100001:(nrow(flowlines_2
 flowlines_1way <- maptools::spRbind(flowlines_sub, flowlines_2way)
 overlaps <- over()
 nrow(overlaps)
+routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
+rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
 }
 }
 \author{
