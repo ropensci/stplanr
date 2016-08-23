@@ -5,6 +5,8 @@ NEW FEATURES
 
 * Update to OSRM functions to support API v5.
 
+* New parameter `byvars` in the `overline()` function, to allow disaggregation of results by a grouping variable (see `example(overline)`)
+
 BUG FIXES
 
 * Various
