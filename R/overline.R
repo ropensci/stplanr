@@ -118,6 +118,7 @@ lineLabels <- function(sldf, attrib){
 #' }
 overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
+  fun <- c(fun)
   if (length(fun) < length(attrib)) {
     fun <- rep(c(fun),length.out=length(attrib))
   }
