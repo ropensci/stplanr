@@ -115,6 +115,9 @@ lineLabels <- function(sldf, attrib){
 #' nrow(overlaps)
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
+#' plot(rnet_grouped[rnet_grouped$group == 1,])
+#' plot(rnet_grouped[rnet_grouped$group == 2,])
+#' plot(rnet_grouped[rnet_grouped$group == 3,])
 #' }
 overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
