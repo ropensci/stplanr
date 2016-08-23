@@ -147,7 +147,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
         overs = lapply(1:length(overs), function(islu) {
           Filter(function(isl){islines(sl[isl,],slu[islu,])}, overs[[islu]])
         })
-        aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+        aggs = sapply(overs, function(os){fun(x[[attrib]][os])})
         sldf = sp::SpatialLinesDataFrame(slu, cbind(data.frame(Z=aggs),as.data.frame(matrix(groupingcat,nrow=1))))
         names(sldf) = c(attrib,gvar)
         sldf <- spChFIDs(sldf, paste(paste(groupingcat,collapse='.'),row.names(sldf@data),sep='.'))
