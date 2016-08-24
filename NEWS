@@ -5,11 +5,23 @@ NEW FEATURES
 
 * Update to OSRM functions to support API v5.
 
-* New parameter `byvars` in the `overline()` function, to allow disaggregation of results by a grouping variable (see `example(overline)`)
+* New parameter `byvars` in the `overline()` function, to allow disaggregation of results by a grouping variable (see `example(overline)`).
+
+* Faster implementation of `od2line()`: `od2line2()`. Plan is to replace the original if no issues are found with new implementation.
+
+* New function `od2odf()` which converts OD data into a dataframe of origins and destinations (feeds `od2line2()` but also useful as self-standing function).
+
+* New argument `new_proj` in `buff_geo()` allows the results to be exported to any coordinate reference system (CRS).
+
+* New function `gprojected()` generalises concept of `buff_geo()`, building on `crs_select_aeq()` to allow any GIS query to be conducted on a temporary projected version of spatial objects with geographical CRSs.
+
+* New function `od_dist()` can quickly calculate Euclidean distances of OD pairs without converting to spatial objects.
 
 BUG FIXES
 
-* Various
+* Bug fix in `onewayid()` so it captures all lines.
+
+* Various improvements to documentation and code.
 
 stplanr 0.1.2
 ----------------------------------------------------------------
