@@ -4,10 +4,13 @@
 \alias{line_bearing}
 \title{Find the bearing of straight lines}
 \usage{
-line_bearing(l)
+line_bearing(l, bidirectional = FALSE)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
+
+\item{bidirectional}{Should the result be returned in a bidirectional format?
+Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing.}
 }
 \description{
 This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
@@ -19,5 +22,6 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 }
 \examples{
 line_bearing(flowlines)
+line_bearing(flowlines, bidirectional = TRUE)
 }
 

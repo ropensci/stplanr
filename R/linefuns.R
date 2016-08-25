@@ -50,10 +50,18 @@ is_linepoint <- function(l){
 #' (has no distance). This can be useful for removing data that will not be plotted.
 #'
 #' @inheritParams line2df
+#' @param bidirectional Should the result be returned in a bidirectional format?
+#' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing.
 #' @export
 #' @examples
 #' line_bearing(flowlines)
-line_bearing = function(l){
+#' line_bearing(flowlines, bidirectional = TRUE)
+line_bearing = function(l, bidirectional = FALSE){
   ldf = line2df(l)
-  geosphere::bearing(as.matrix(ldf[,1:2]), as.matrix(ldf[,3:4]))
+  bearing = geosphere::bearing(as.matrix(ldf[,1:2]), as.matrix(ldf[,3:4]))
+  if(bidirectional){
+    bearing[bearing > 90] = bearing[bearing > 90] - 90
+    bearing[bearing < -90] = bearing[bearing < -90] + 90
+  }
+  bearing
 }
