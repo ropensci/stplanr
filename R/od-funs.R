@@ -143,18 +143,8 @@ line2df <- function(l){
 #' plot(flowlines[i,])
 #' plot(lpoints[j,], add = TRUE)
 line2points <- function(l){
-  for(i in 1:length(l)){
-    l1 <- l[i,]
-    lcoords <- sp::coordinates(l1)[[1]][[1]]
-    lpoints <- sp::SpatialPoints(matrix(lcoords[c(1, nrow(lcoords)),], nrow = 2))
-    sp::proj4string(lpoints) <- sp::proj4string(l)
-    if(i == 1){
-      out <- lpoints
-    } else {
-      out <- tmap::sbind(out, lpoints)
-    }
-  }
-  out
+  spdf = raster::geom(l)
+  sp::SpatialPoints(coords = spdf[,c("x", "y")])
 }
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
