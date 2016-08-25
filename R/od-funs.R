@@ -296,3 +296,23 @@ od_dist <- function(flow, zones){
   cents_d = cents@coords[dmatch,]
   geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
 }
+
+#' Convert a series of points, or a matrix of coordinates, into a line
+#'
+#' This is a simple wrapper around \code{\link{spLines}} that makes the creation of
+#' \code{SpatialLines} objects easy and intuitive
+#'
+#' @param p A SpatialPoints obect or matrix representing the coordinates of points.
+#' @export
+#' @examples
+#' points2line(cents)
+points2line = function(p){
+  if(is(p, "SpatialPoints")){
+    p_proj = sp::proj4string(p)
+    p = sp::coordinates(p)
+  }
+  l = raster::spLines(p)
+  if(exists("p_proj"))
+    proj4string(l) = p_proj
+  l
+}
