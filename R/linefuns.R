@@ -40,3 +40,20 @@ is_linepoint <- function(l){
   ldf <- line2df(l)
   ldf$fx == ldf$tx & ldf$fy & ldf$ty & sel
 }
+#' Find the bearing of straight lines
+#'
+#' This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
+#' bearing (in degrees relative to north) of lines
+#'
+#' @details
+#' Returns a boolean vector. TRUE means that the associated line is in fact a point
+#' (has no distance). This can be useful for removing data that will not be plotted.
+#'
+#' @inheritParams line2df
+#' @export
+#' @examples
+#' line_bearing(flowlines)
+line_bearing = function(l){
+  ldf = line2df(l)
+  geosphere::bearing(as.matrix(ldf[,1:2]), as.matrix(ldf[,3:4]))
+}
