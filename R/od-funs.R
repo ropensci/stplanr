@@ -135,8 +135,11 @@ line2df <- function(l){
 #' data(routes_fast)
 #' lpoints <- line2points(routes_fast[2,]) # for a single line
 #' plot(lpoints)
+#' lpoints = line2points(routes_fast) # for many lines
+#' plot(lpoints)
 #' data(flowlines) # load demo flowlines dataset
 #' lpoints <- line2points(flowlines) # for many lines
+#' sp::proj4string(lpoints) # maintains CRS info
 #' plot(lpoints) # note overlapping points
 #' i = 3
 #' j = (2*i):((2*i)+1)
@@ -144,7 +147,9 @@ line2df <- function(l){
 #' plot(lpoints[j,], add = TRUE)
 line2points <- function(l){
   spdf = raster::geom(l)
-  sp::SpatialPoints(coords = spdf[,c("x", "y")])
+  p = sp::SpatialPoints(coords = spdf[,c("x", "y")])
+  raster::crs(p) = raster::crs(l)
+  p
 }
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
