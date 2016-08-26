@@ -2,7 +2,7 @@
 % Please edit documentation in R/od-funs.R
 \name{line2points}
 \alias{line2points}
-\title{Convert a SpatialLinesDataFrame to points at the origin and destination}
+\title{Convert a SpatialLinesDataFrame to points}
 \usage{
 line2points(l)
 }
@@ -10,15 +10,21 @@ line2points(l)
 \item{l}{A SpatialLinesDataFrame}
 }
 \description{
-The number of points will be double the number of lines.
-The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}
+The number of points will be double the number of lines with \code{line2points}.
+A closely related function, \code{line2pointsn} returns all the points that were line vertices.
+The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
 }
 \examples{
 data(routes_fast)
-lpoints <- line2points(routes_fast[2,]) # for a single line
+lpoints <- line2pointsn(routes_fast[2,]) # for a single line
+lpoints2 = line2points(routes_fast[2,])
+plot(lpoints)
+plot(lpoints2)
+lpoints = line2pointsn(routes_fast) # for many lines
 plot(lpoints)
 data(flowlines) # load demo flowlines dataset
 lpoints <- line2points(flowlines) # for many lines
+sp::proj4string(lpoints) # maintains CRS info
 plot(lpoints) # note overlapping points
 i = 3
 j = (2*i):((2*i)+1)

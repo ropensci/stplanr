@@ -41,7 +41,7 @@ d <- flow$Area.of.workplace \%in\% cents$geo_code[-1]
 flow <- flow[o & d, ] # subset flows with o and d in study area
 library(devtools)
 flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
-use_data(flow, overwrite = T)
+use_data(flow, overwrite = TRUE)
 
 # Convert flows to SpatialLinesDataFrame
 flowlines <- od2line(flow = flow, zones = cents)
