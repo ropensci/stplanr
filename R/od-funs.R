@@ -124,18 +124,21 @@ line2df <- function(l){
 
 }
 
-#' Convert a SpatialLinesDataFrame to points at the origin and destination
+#' Convert a SpatialLinesDataFrame to points
 #'
-#' The number of points will be double the number of lines.
-#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}
+#' The number of points will be double the number of lines with \code{line2points}.
+#' A closely related function, \code{line2pointsn} returns all the points that were line vertices.
+#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
 #'
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
 #' data(routes_fast)
-#' lpoints <- line2points(routes_fast[2,]) # for a single line
+#' lpoints <- line2pointsn(routes_fast[2,]) # for a single line
+#' lpoints2 = line2points(routes_fast[2,])
 #' plot(lpoints)
-#' lpoints = line2points(routes_fast) # for many lines
+#' plot(lpoints2)
+#' lpoints = line2pointsn(routes_fast) # for many lines
 #' plot(lpoints)
 #' data(flowlines) # load demo flowlines dataset
 #' lpoints <- line2points(flowlines) # for many lines
@@ -146,6 +149,22 @@ line2df <- function(l){
 #' plot(flowlines[i,])
 #' plot(lpoints[j,], add = TRUE)
 line2points <- function(l){
+  for(i in 1:length(l)){
+    l1 <- l[i,]
+    lcoords <- sp::coordinates(l1)[[1]][[1]]
+    lpoints <- sp::SpatialPoints(matrix(lcoords[c(1, nrow(lcoords)),], nrow = 2))
+    sp::proj4string(lpoints) <- sp::proj4string(l)
+    if(i == 1){
+      out <- lpoints
+    } else {
+      out <- tmap::sbind(out, lpoints)
+    }
+  }
+  out
+}
+#' rdname line2points
+#' @export
+line2pointsn <- function(l){
   spdf = raster::geom(l)
   p = sp::SpatialPoints(coords = spdf[,c("x", "y")])
   raster::crs(p) = raster::crs(l)
@@ -170,8 +189,8 @@ line2points <- function(l){
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
-#' plot(rf, col = "red", add = T)
-#' plot(rq, col = "green", add = T)
+#' plot(rf, col = "red", add = TRUE
+#' plot(rq, col = "green", add = TRUE
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
 #' n = 21
 #' plot(flowlines[n,])
