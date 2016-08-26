@@ -2,7 +2,7 @@
 % Please edit documentation in R/od-funs.R
 \name{line2df}
 \alias{line2df}
-\title{Convert straight SpatialLinesDataFrame to a data.frame with from and to coords}
+\title{Convert SpatialLinesDataFrame objects to a data.frame with from and to coords}
 \usage{
 line2df(l)
 }
@@ -10,12 +10,12 @@ line2df(l)
 \item{l}{A SpatialLinesDataFrame}
 }
 \description{
-Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
+This function returns a data frame with fx and fy and tx and ty variables
+representing the beginning and end points of spatial line features respectively.
 }
 \examples{
-\dontrun{
-data(flowlines) # load demo flowlines dataset
-ldf <- line2df(flowlines)
-}
+line2df(flowlines[5,]) # beginning and end of a single straight line
+line2df(flowlines) # on multiple lines
+line2df(routes_fast[5:6,]) # beginning and end of routes
 }
 

@@ -99,29 +99,21 @@ od2line2 <- function(flow, zones){
   l <- sp::SpatialLines(l)
 }
 
-#' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
+#' Convert SpatialLinesDataFrame objects to a data.frame with from and to coords
 #'
+#' This function returns a data frame with fx and fy and tx and ty variables
+#' representing the beginning and end points of spatial line features respectively.
 #'
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
-#' \dontrun{
-#' data(flowlines) # load demo flowlines dataset
-#' ldf <- line2df(flowlines)
-#' }
+#' line2df(flowlines[5,]) # beginning and end of a single straight line
+#' line2df(flowlines) # on multiple lines
+#' line2df(routes_fast[5:6,]) # beginning and end of routes
 line2df <- function(l){
-  l_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
-  function(y) slot(y, "coords")))
-  from_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[1,])
-  to_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[2,])
-  from_mat <- do.call(rbind, from_list)
-  to_mat <- do.call(rbind, to_list)
-
-  output <- as.data.frame(cbind(from_mat, to_mat))
-  names(output) <- c("fx", "fy", "tx", "ty")
-
-  output
-
+  ldf_geom = raster::geom(l)
+  dplyr::group_by(as_data_frame(ldf_geom), object) %>%
+    summarise(fx = first(x), fy = first(y), tx = last(x), ty = last(y))
 }
 
 #' Convert a SpatialLinesDataFrame to points
