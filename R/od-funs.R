@@ -14,7 +14,9 @@
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
 #' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+#' Rae, A. (2009). From spatial interaction data to spatial interaction information?
+#' Geovisualisation and spatial structures of migration from the 2001 UK census.
+#'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples \dontrun{
 #' od2odf(flow, zones)
@@ -49,8 +51,6 @@ od2odf <- function(flow, zones){
 #' of \code{\link{flow}}.
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
-#' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
