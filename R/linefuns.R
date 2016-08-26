@@ -65,3 +65,14 @@ line_bearing = function(l, bidirectional = FALSE){
   }
   bearing
 }
+#' Find the mid-point of lines
+#'
+#' This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to find the midpoint
+#' of lines that are not projected, which have a lat/long CRS.
+#' @inheritParams line2df
+#' @export
+#' @examples
+#' l = routes_fast
+line_midpoint = function(l){
+  stplanr::crs_select_aeq
+}
