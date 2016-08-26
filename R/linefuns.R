@@ -51,19 +51,38 @@ is_linepoint <- function(l){
 #'
 #' @inheritParams line2df
 #' @param bidirectional Should the result be returned in a bidirectional format?
-#' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing.
+#' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing
+#' @param north An angle in degrees representing the mid-point from which the uni-directional angle is relative to
 #' @export
 #' @examples
 #' line_bearing(flowlines)
 #' line_bearing(flowlines, bidirectional = TRUE)
-line_bearing = function(l, bidirectional = FALSE){
+line_bearing = function(l, bidirectional = FALSE, north = 0){
   ldf = line2df(l)
-  bearing = geosphere::bearing(as.matrix(ldf[,1:2]), as.matrix(ldf[,3:4]))
-  if(bidirectional){
-    bearing[bearing > 90] = bearing[bearing > 90] - 90
-    bearing[bearing < -90] = bearing[bearing < -90] + 90
+  bearing = geosphere::bearing(as.matrix(ldf[,c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
+    if(bidirectional){
+    new_bearing = bearing + 180
+    new_bearing[new_bearing >= 180] = new_bearing[new_bearing >= 180] - 180
   }
   bearing
+}
+
+angle_diff = function(l, angle, absolute = TRUE, bidirectional = FALSE){
+  if(is(object = l, "Spatial")){
+    line_angles = line_bearing(l)
+  } else {
+    line_angles = l
+  }
+  angle_diff = angle - line_angles
+  angle_diff[angle_diff <= -180] = angle_diff[angle_diff <= -180] + 180
+  angle_diff[angle_diff >= 180] = angle_diff[angle_diff >= 180] - 180
+  if(bidirectional){
+    angle_diff[angle_diff <= -90] = 180 + angle_diff[angle_diff <= -90]
+    angle_diff[angle_diff >= 90] = 180 - angle_diff[angle_diff >= 90]
+  }
+  if(absolute)
+    angle_diff = abs(angle_diff)
+  angle_diff
 }
 #' Find the mid-point of lines
 #'
