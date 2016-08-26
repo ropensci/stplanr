@@ -10,11 +10,11 @@ line_bearing(l, bidirectional = FALSE)
 \item{l}{A SpatialLinesDataFrame}
 
 \item{bidirectional}{Should the result be returned in a bidirectional format?
-Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing.}
+Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing}
 }
 \description{
 This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
-bearing (in degrees relative to north) of lines
+bearing (in degrees relative to north) of lines.
 }
 \details{
 Returns a boolean vector. TRUE means that the associated line is in fact a point

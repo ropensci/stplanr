@@ -43,7 +43,7 @@ is_linepoint <- function(l){
 #' Find the bearing of straight lines
 #'
 #' This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
-#' bearing (in degrees relative to north) of lines
+#' bearing (in degrees relative to north) of lines.
 #'
 #' @details
 #' Returns a boolean vector. TRUE means that the associated line is in fact a point
@@ -52,12 +52,11 @@ is_linepoint <- function(l){
 #' @inheritParams line2df
 #' @param bidirectional Should the result be returned in a bidirectional format?
 #' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing
-#' @param north An angle in degrees representing the mid-point from which the uni-directional angle is relative to
 #' @export
 #' @examples
 #' line_bearing(flowlines)
 #' line_bearing(flowlines, bidirectional = TRUE)
-line_bearing = function(l, bidirectional = FALSE, north = 0){
+line_bearing = function(l, bidirectional = FALSE){
   ldf = line2df(l)
   bearing = geosphere::bearing(as.matrix(ldf[,c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
     if(bidirectional){
@@ -67,7 +66,30 @@ line_bearing = function(l, bidirectional = FALSE, north = 0){
   bearing
 }
 
-angle_diff = function(l, angle, absolute = TRUE, bidirectional = FALSE){
+#' Calculate the angular difference between lines and a predefined bearing
+#'
+#' This function was designed to find lines that are close to parallel and perpendicular
+#' to some pre-defined route. It can return results that are absolute (contain information
+#' on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
+#' bidirectional (which mean values greater than +/- 90 are impossible).
+#'
+#' Building on the convention used in \code{\link{bearing}} and in many applications,
+#' North is definied as 0, East as 90 and West as -90.
+#'
+#' @inheritParams line_bearing
+#' @param absolute If TRUE (the default) only positive values can be returned
+#'  (direction of rotation is ignored).
+#'
+#' @author Malcolm Morgan
+#' @export
+#' @examples
+#' # find all routes going North-South
+#' a = angle_diff(flowlines, angle = 0, bidirectional = T)
+#' plot(flowlines)
+#' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
+#' # East-West
+#' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
   if(is(object = l, "Spatial")){
     line_angles = line_bearing(l)
   } else {

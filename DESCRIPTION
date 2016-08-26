@@ -7,7 +7,8 @@ Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of overline"),
-    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip")
+    person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip"),
+    person("Malcolm", "Morgan", role = c("aut"), comment = "Co-author of angle_diff")
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
 Description: Functionality and data access tools for transport planning,
