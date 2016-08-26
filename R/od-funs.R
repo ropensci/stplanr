@@ -305,14 +305,22 @@ od_dist <- function(flow, zones){
 #' @param p A SpatialPoints obect or matrix representing the coordinates of points.
 #' @export
 #' @examples
-#' points2line(cents)
+#' p = matrix(1:4, ncol = 2)
+#' l = points2line(p)
+#' plot(l)
+#' l = points2line(cents)
+#' plot(l)
+#' p = line2points(routes_fast)
+#' l = points2line(p)
+#' plot(l)
 points2line = function(p){
   if(is(p, "SpatialPoints")){
     p_proj = sp::proj4string(p)
     p = sp::coordinates(p)
+  } else {
+    p_proj = NA
   }
   l = raster::spLines(p)
-  if(exists("p_proj"))
-    proj4string(l) = p_proj
+  raster::crs(l) = p_proj
   l
 }
