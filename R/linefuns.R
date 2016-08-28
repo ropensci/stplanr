@@ -65,7 +65,6 @@ line_bearing = function(l, bidirectional = FALSE){
   }
   bearing
 }
-
 #' Calculate the angular difference between lines and a predefined bearing
 #'
 #' This function was designed to find lines that are close to parallel and perpendicular
@@ -78,9 +77,10 @@ line_bearing = function(l, bidirectional = FALSE){
 #'
 #' @inheritParams line_bearing
 #' @param absolute If TRUE (the default) only positive values can be returned
+#' @param angle an angle in degrees relative to North, with 90 being East and -90 being West.
 #'  (direction of rotation is ignored).
 #'
-#' @author Malcolm Morgan
+#' @author Robin Lovelace and Malcolm Morgan
 #' @export
 #' @examples
 #' # find all routes going North-South
