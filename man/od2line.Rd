@@ -33,16 +33,12 @@ This function makes the task easier.
 that returns a \code{SpatialLines} object (omitting the data).
 }
 \examples{
-\dontrun{
-data(flow) # load data frame of od flows between zones
-data(cents) # load centroids data
 newflowlines <- od2line(flow = flow, zones = cents)
 newflowlines2 <- od2line2(flow = flow, zones = cents)
-sp::plot(cents)
+plot(cents)
 lines(newflowlines, lwd = 3)
 lines(newflowlines2, col = "white")
 nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 identical(nfl_sldf, newflowlines)
-}
 }
 
