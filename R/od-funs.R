@@ -27,7 +27,7 @@ od2odf <- function(flow, zones){
                       fx = coordinates(zones)[,1], fy = coordinates(zones)[,2])
   flowcode = dplyr::data_frame(code_o = as.character(flow[[1]]), code_d = as.character(flow[[2]]))
   odf = dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
-  coords = dplyr::rename(coords, tx = fx, ty = fy)
+  coords = dplyr::rename_(coords, tx = quote(fx), ty = quote(fy))
   odf = dplyr::left_join(odf, coords, by = c("code_d" = "code"))
 
   data.frame(odf) # return data.frame as more compatible with spatial data
@@ -112,8 +112,8 @@ od2line2 <- function(flow, zones){
 #' line2df(routes_fast[5:6,]) # beginning and end of routes
 line2df <- function(l){
   ldf_geom = raster::geom(l)
-  dplyr::group_by(as_data_frame(ldf_geom), object) %>%
-    summarise(fx = first(x), fy = first(y), tx = last(x), ty = last(y))
+  dplyr::group_by_(dplyr::as_data_frame(ldf_geom), 'object') %>%
+    summarise_(fx = quote(first(x)), fy = quote(first(y)), tx = quote(last(x)), ty = quote(last(y)))
 }
 
 #' Convert a SpatialLinesDataFrame to points
@@ -140,6 +140,11 @@ line2df <- function(l){
 #' j = (2*i):((2*i)+1)
 #' plot(flowlines[i,])
 #' plot(lpoints[j,], add = TRUE)
+#' @name line2points
+NULL
+
+#' @rdname line2points
+#' @export
 line2points <- function(l){
   for(i in 1:length(l)){
     l1 <- l[i,]
@@ -154,7 +159,8 @@ line2points <- function(l){
   }
   out
 }
-#' rdname line2points
+
+#' @rdname line2points
 #' @export
 line2pointsn <- function(l){
   spdf = raster::geom(l)
@@ -306,10 +312,10 @@ update_line_geometry <- function(l, nl){
 #' data(cents)
 #' od_dist(flow, cents)
 od_dist <- function(flow, zones){
-  omatch = match(flow[[1]], cents@data[[1]])
-  dmatch = match(flow[[2]], cents@data[[1]])
-  cents_o = cents@coords[omatch,]
-  cents_d = cents@coords[dmatch,]
+  omatch = match(flow[[1]], zones@data[[1]])
+  dmatch = match(flow[[2]], zones@data[[1]])
+  cents_o = zones@coords[omatch,]
+  cents_d = zones@coords[dmatch,]
   geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
 }
 

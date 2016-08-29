@@ -9,11 +9,13 @@ angle_diff(l, angle, bidirectional = FALSE, absolute = TRUE)
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
 
+\item{angle}{an angle in degrees relative to North, with 90 being East and -90 being West.
+(direction of rotation is ignored).}
+
 \item{bidirectional}{Should the result be returned in a bidirectional format?
 Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing}
 
-\item{absolute}{If TRUE (the default) only positive values can be returned
-(direction of rotation is ignored).}
+\item{absolute}{If TRUE (the default) only positive values can be returned}
 }
 \description{
 This function was designed to find lines that are close to parallel and perpendicular
@@ -27,13 +29,13 @@ North is definied as 0, East as 90 and West as -90.
 }
 \examples{
 # find all routes going North-South
-a = angle_diff(flowlines, angle = 0, bidirectional = T)
+a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 plot(flowlines)
 plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 # East-West
 plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
 }
 \author{
-Malcolm Morgan
+Robin Lovelace and Malcolm Morgan
 }
 

@@ -321,11 +321,11 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
     dplyr::mutate_(stplanr.id1 = id1,
                    stplanr.id2 = id2,
                    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
-    dplyr::group_by(stplanr.key) %>%
+    dplyr::group_by_(quote(stplanr.key)) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
     dplyr::summarise_each_(funs("stplanr.first"),c(id1, id2, attrib, ~is_two_way)) %>%
-    dplyr::select(-stplanr.key)
+    dplyr::select_(quote(-stplanr.key))
 
   return(x_oneway)
 

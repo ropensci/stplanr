@@ -2,9 +2,12 @@
 % Please edit documentation in R/od-funs.R
 \name{line2points}
 \alias{line2points}
+\alias{line2pointsn}
 \title{Convert a SpatialLinesDataFrame to points}
 \usage{
 line2points(l)
+
+line2pointsn(l)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
