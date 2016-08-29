@@ -31,8 +31,8 @@ See \code{\link{route_cyclestreet}} and other route functions for details
 plot(flowlines)
 rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
-plot(rf, col = "red", add = T)
-plot(rq, col = "green", add = T)
+plot(rf, col = "red", add = TRUE
+plot(rq, col = "green", add = TRUE
 # Plot for a single line to compare 'fastest' and 'quietest' route
 n = 21
 plot(flowlines[n,])

@@ -14,7 +14,9 @@
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
 #' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+#' Rae, A. (2009). From spatial interaction data to spatial interaction information?
+#' Geovisualisation and spatial structures of migration from the 2001 UK census.
+#'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples \dontrun{
 #' od2odf(flow, zones)
@@ -49,8 +51,6 @@ od2odf <- function(flow, zones){
 #' of \code{\link{flow}}.
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
-#' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples \dontrun{
 #' data(flow) # load data frame of od flows between zones
@@ -99,44 +99,42 @@ od2line2 <- function(flow, zones){
   l <- sp::SpatialLines(l)
 }
 
-#' Convert straight SpatialLinesDataFrame to a data.frame with from and to coords
+#' Convert SpatialLinesDataFrame objects to a data.frame with from and to coords
 #'
+#' This function returns a data frame with fx and fy and tx and ty variables
+#' representing the beginning and end points of spatial line features respectively.
 #'
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
-#' \dontrun{
-#' data(flowlines) # load demo flowlines dataset
-#' ldf <- line2df(flowlines)
-#' }
+#' line2df(flowlines[5,]) # beginning and end of a single straight line
+#' line2df(flowlines) # on multiple lines
+#' line2df(routes_fast[5:6,]) # beginning and end of routes
 line2df <- function(l){
-  l_list <- lapply(slot(l, "lines"), function(x) lapply(slot(x, "Lines"),
-  function(y) slot(y, "coords")))
-  from_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[1,])
-  to_list <- lapply(l@lines, function(x) x@Lines[[1]]@coords[2,])
-  from_mat <- do.call(rbind, from_list)
-  to_mat <- do.call(rbind, to_list)
-
-  output <- as.data.frame(cbind(from_mat, to_mat))
-  names(output) <- c("fx", "fy", "tx", "ty")
-
-  output
-
+  ldf_geom = raster::geom(l)
+  dplyr::group_by(as_data_frame(ldf_geom), object) %>%
+    summarise(fx = first(x), fy = first(y), tx = last(x), ty = last(y))
 }
 
-#' Convert a SpatialLinesDataFrame to points at the origin and destination
+#' Convert a SpatialLinesDataFrame to points
 #'
-#' The number of points will be double the number of lines.
-#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}
+#' The number of points will be double the number of lines with \code{line2points}.
+#' A closely related function, \code{line2pointsn} returns all the points that were line vertices.
+#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
 #'
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
 #' data(routes_fast)
-#' lpoints <- line2points(routes_fast[2,]) # for a single line
+#' lpoints <- line2pointsn(routes_fast[2,]) # for a single line
+#' lpoints2 = line2points(routes_fast[2,])
+#' plot(lpoints)
+#' plot(lpoints2)
+#' lpoints = line2pointsn(routes_fast) # for many lines
 #' plot(lpoints)
 #' data(flowlines) # load demo flowlines dataset
 #' lpoints <- line2points(flowlines) # for many lines
+#' sp::proj4string(lpoints) # maintains CRS info
 #' plot(lpoints) # note overlapping points
 #' i = 3
 #' j = (2*i):((2*i)+1)
@@ -155,6 +153,14 @@ line2points <- function(l){
     }
   }
   out
+}
+#' rdname line2points
+#' @export
+line2pointsn <- function(l){
+  spdf = raster::geom(l)
+  p = sp::SpatialPoints(coords = spdf[,c("x", "y")])
+  raster::crs(p) = raster::crs(l)
+  p
 }
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
@@ -175,8 +181,8 @@ line2points <- function(l){
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
-#' plot(rf, col = "red", add = T)
-#' plot(rq, col = "green", add = T)
+#' plot(rf, col = "red", add = TRUE
+#' plot(rq, col = "green", add = TRUE
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
 #' n = 21
 #' plot(flowlines[n,])
@@ -305,4 +311,32 @@ od_dist <- function(flow, zones){
   cents_o = cents@coords[omatch,]
   cents_d = cents@coords[dmatch,]
   geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
+}
+
+#' Convert a series of points, or a matrix of coordinates, into a line
+#'
+#' This is a simple wrapper around \code{\link{spLines}} that makes the creation of
+#' \code{SpatialLines} objects easy and intuitive
+#'
+#' @param p A SpatialPoints obect or matrix representing the coordinates of points.
+#' @export
+#' @examples
+#' p = matrix(1:4, ncol = 2)
+#' l = points2line(p)
+#' plot(l)
+#' l = points2line(cents)
+#' plot(l)
+#' p = line2points(routes_fast)
+#' l = points2line(p)
+#' plot(l)
+points2line = function(p){
+  if(is(p, "SpatialPoints")){
+    p_proj = sp::proj4string(p)
+    p = sp::coordinates(p)
+  } else {
+    p_proj = NA
+  }
+  l = raster::spLines(p)
+  raster::crs(l) = p_proj
+  l
 }

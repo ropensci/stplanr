@@ -43,17 +43,77 @@ is_linepoint <- function(l){
 #' Find the bearing of straight lines
 #'
 #' This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
-#' bearing (in degrees relative to north) of lines
+#' bearing (in degrees relative to north) of lines.
 #'
 #' @details
 #' Returns a boolean vector. TRUE means that the associated line is in fact a point
 #' (has no distance). This can be useful for removing data that will not be plotted.
 #'
 #' @inheritParams line2df
+#' @param bidirectional Should the result be returned in a bidirectional format?
+#' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing
 #' @export
 #' @examples
 #' line_bearing(flowlines)
-line_bearing = function(l){
+#' line_bearing(flowlines, bidirectional = TRUE)
+line_bearing = function(l, bidirectional = FALSE){
   ldf = line2df(l)
-  geosphere::bearing(as.matrix(ldf[,1:2]), as.matrix(ldf[,3:4]))
+  bearing = geosphere::bearing(as.matrix(ldf[,c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
+    if(bidirectional){
+    new_bearing = bearing + 180
+    new_bearing[new_bearing >= 180] = new_bearing[new_bearing >= 180] - 180
+  }
+  bearing
+}
+#' Calculate the angular difference between lines and a predefined bearing
+#'
+#' This function was designed to find lines that are close to parallel and perpendicular
+#' to some pre-defined route. It can return results that are absolute (contain information
+#' on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
+#' bidirectional (which mean values greater than +/- 90 are impossible).
+#'
+#' Building on the convention used in \code{\link{bearing}} and in many applications,
+#' North is definied as 0, East as 90 and West as -90.
+#'
+#' @inheritParams line_bearing
+#' @param absolute If TRUE (the default) only positive values can be returned
+#' @param angle an angle in degrees relative to North, with 90 being East and -90 being West.
+#'  (direction of rotation is ignored).
+#'
+#' @author Robin Lovelace and Malcolm Morgan
+#' @export
+#' @examples
+#' # find all routes going North-South
+#' a = angle_diff(flowlines, angle = 0, bidirectional = T)
+#' plot(flowlines)
+#' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
+#' # East-West
+#' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
+  if(is(object = l, "Spatial")){
+    line_angles = line_bearing(l)
+  } else {
+    line_angles = l
+  }
+  angle_diff = angle - line_angles
+  angle_diff[angle_diff <= -180] = angle_diff[angle_diff <= -180] + 180
+  angle_diff[angle_diff >= 180] = angle_diff[angle_diff >= 180] - 180
+  if(bidirectional){
+    angle_diff[angle_diff <= -90] = 180 + angle_diff[angle_diff <= -90]
+    angle_diff[angle_diff >= 90] = 180 - angle_diff[angle_diff >= 90]
+  }
+  if(absolute)
+    angle_diff = abs(angle_diff)
+  angle_diff
+}
+#' Find the mid-point of lines
+#'
+#' This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to find the midpoint
+#' of lines that are not projected, which have a lat/long CRS.
+#' @inheritParams line2df
+#' @export
+#' @examples
+#' l = routes_fast
+line_midpoint = function(l){
+  stplanr::crs_select_aeq
 }
