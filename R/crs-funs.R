@@ -50,8 +50,8 @@ reproject = function(shp, crs = crs_select_aeq(shp)){
   }
   if(is.numeric(crs)) # test if it's an epsg code
     crs = CRS(paste0("+init=epsg:", crs))
-  message(paste0("Running the function "))
   res = spTransform(shp, crs)
+  res
 }
 
 #' Perform GIS functions on a temporary, projected version of a spatial object
