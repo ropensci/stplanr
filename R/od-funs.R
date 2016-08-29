@@ -50,17 +50,14 @@ od2odf <- function(flow, zones){
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
 #' @export
-#' @examples \dontrun{
-#' data(flow) # load data frame of od flows between zones
-#' data(cents) # load centroids data
+#' @examples
 #' newflowlines <- od2line(flow = flow, zones = cents)
 #' newflowlines2 <- od2line2(flow = flow, zones = cents)
-#' sp::plot(cents)
+#' plot(cents)
 #' lines(newflowlines, lwd = 3)
 #' lines(newflowlines2, col = "white")
 #' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
-#' }
 #' @name od2line
 NULL
 
