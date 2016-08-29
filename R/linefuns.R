@@ -84,7 +84,7 @@ line_bearing = function(l, bidirectional = FALSE){
 #' @export
 #' @examples
 #' # find all routes going North-South
-#' a = angle_diff(flowlines, angle = 0, bidirectional = T)
+#' a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 #' plot(flowlines)
 #' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 #' # East-West
