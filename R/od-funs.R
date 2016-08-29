@@ -18,9 +18,7 @@
 #' Geovisualisation and spatial structures of migration from the 2001 UK census.
 #'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
-#' @examples \dontrun{
 #' od2odf(flow, zones)
-#' }
 od2odf <- function(flow, zones){
 
   coords = dplyr::data_frame(code = as.character(zones[[1]]),
@@ -182,7 +180,6 @@ line2pointsn <- function(l){
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
-#'
 #' \dontrun{
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
