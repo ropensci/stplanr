@@ -30,19 +30,16 @@ Imports:
     magrittr,
     RgoogleMaps,
     openxlsx,
-    leaflet,
     methods,
     httr,
     R.utils,
     stringi,
-    stringr,
     readr,
     lubridate,
     RCurl,
     geosphere,
     Rcpp (>= 0.12.1),
-    igraph,
-    data.table
+    igraph
 LinkingTo:
     RcppArmadillo,
     Rcpp
@@ -50,6 +47,7 @@ Suggests:
     testthat,
     knitr,
     tmap,
+    leaflet,
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr

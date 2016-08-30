@@ -57,10 +57,7 @@ Where \code{url} is an example api request from
 
 \dontrun{
 r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-library(leaflet)
-
-leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)
+plot(r)
 }
 }
 \seealso{

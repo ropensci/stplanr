@@ -24,7 +24,6 @@
 #' @import dplyr
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
-#' @importFrom leaflet addTiles leaflet addPolylines
 #' @importFrom graphics text
 #' @importFrom maptools spRbind
 #' @importFrom methods as slot
@@ -38,12 +37,10 @@
 #' @importFrom R.utils intToBin
 #' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
-#' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
-#' @importFrom data.table rbindlist
 #'
 #' @useDynLib stplanr
 NULL

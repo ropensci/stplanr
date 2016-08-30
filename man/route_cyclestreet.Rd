@@ -67,31 +67,20 @@ Read more about the .Renviron here: \code{?.Renviron}
 \dontrun{
 # Plan the 'fastest' route between two points in Manchester
 rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
+rf_mcr@data
 plot(rf_mcr)
-
+(rf_mcr$length / (1000 * 1.61)) / # distance in miles
+  (rf_mcr$time / (60 * 60)) # time in hours - average speed here: ~8mph
 # Plan the 'quietest' route from Hereford to Leeds
 rqh <- route_cyclestreet(from = "Hereford", to = "Leeds", plan = "quietest")
 plot(rq_hfd)
-
-# Plan a 'balanced' route from Pedaller's Arms in Leeds
-to the University of Leeds
-
+# Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
 rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
-
-library(leaflet) # requires the leaflet CRAN package
-# display the route on an interactive map
-leaflet() \%>\% addTiles() \%>\%
-  addPolylines(data = rb_pa)
-
+# A long distance route (max = 500 km)
 woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
-
 # Plan a route between two lat/lon pairs in the UK
-
-p1 <- c(-2, 52)
-p2 <- p1 + 1 # add a degree!
-route_cyclestreet(p1, p2, "fastest")
+route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 }
-
 }
 \seealso{
 line2route
