@@ -107,18 +107,18 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   # obj$marker$`@attributes`$elevations
   # obj$marker$`@attributes`$points
   coords <- obj$marker$`@attributes`$coordinates[1]
-  coords <- stringr::str_split(coords, pattern = " |,")[[1]]
+  coords <- stringi::stri_split_regex(str = coords, " |,")[[1]]
   coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
 
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
   h <-  obj$marker$`@attributes`$elevations # hilliness
-  h <- stringr::str_split(h, pattern = ",")
+  h <- stringi::stri_split_regex(h, pattern = ",")
   h <- as.numeric(unlist(h)[-1])
   htot <- sum(abs(diff(h)))
 
   # busyness overall
   bseg <- obj$marker$`@attributes`$busynance
-  bseg <- stringr::str_split(bseg, pattern = ",")
+  bseg <- stringi::stri_split_regex(bseg, pattern = ",")
   bseg <- as.numeric(unlist(bseg)[-1])
   bseg <- sum(bseg)
 

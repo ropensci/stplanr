@@ -34,7 +34,6 @@ Imports:
     httr,
     R.utils,
     stringi,
-    stringr,
     readr,
     lubridate,
     RCurl,

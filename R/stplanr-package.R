@@ -37,7 +37,6 @@
 #' @importFrom R.utils intToBin
 #' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
-#' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
 #' @importFrom methods is new
