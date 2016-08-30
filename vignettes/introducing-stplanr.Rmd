@@ -10,9 +10,8 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
-library(stplanr)
-library(sp) # needed for geographical objects
-library(leaflet) # needed for plotting data
+library(stplanr) # also loads the sp package
+library(leaflet)
 ```
 
 ## Abstract
