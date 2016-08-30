@@ -138,7 +138,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
     start = obj$marker$`@attributes`$start[1],
     finish = obj$marker$`@attributes`$finish[1],
     length = as.numeric(obj$marker$`@attributes`$length[1]),
-    time = sum(as.numeric(obj$marker$`@attributes`$time)),
+    time = sum(as.numeric(obj$marker$`@attributes`$time[1])),
     waypoint = nrow(coords),
     change_elev = htot,
     av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
