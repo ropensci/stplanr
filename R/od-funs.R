@@ -18,9 +18,8 @@
 #' Geovisualisation and spatial structures of migration from the 2001 UK census.
 #'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
-#' @examples \dontrun{
+#' @examples
 #' od2odf(flow, zones)
-#' }
 od2odf <- function(flow, zones){
 
   coords = dplyr::data_frame(code = as.character(zones[[1]]),
@@ -52,17 +51,14 @@ od2odf <- function(flow, zones){
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
 #' @export
-#' @examples \dontrun{
-#' data(flow) # load data frame of od flows between zones
-#' data(cents) # load centroids data
+#' @examples
 #' newflowlines <- od2line(flow = flow, zones = cents)
 #' newflowlines2 <- od2line2(flow = flow, zones = cents)
-#' sp::plot(cents)
+#' plot(cents)
 #' lines(newflowlines, lwd = 3)
 #' lines(newflowlines2, col = "white")
 #' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
-#' }
 #' @name od2line
 NULL
 
@@ -182,7 +178,6 @@ line2pointsn <- function(l){
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
-#'
 #' \dontrun{
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")

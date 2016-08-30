@@ -1,3 +1,26 @@
+stplanr 0.1.4
+----------------------------------------------------------------
+
+NEW FEATURES
+
+* New function `reproject()` is a simple wrapper around `spTransform()` that uses
+  `crs_select_aeq()` to convert a spatial object in geographic (lat/lon) coordinates
+  into on with projected coordinates, with units of 1 m. This is useful for various
+  spatial operations, such as finding the length and area of an object.
+
+* Implement `gprojected()`, a function for performing GIS operations on a temporary, projected, version
+  of spatial objects.
+
+* Addition of `line_bearing()` to return the bearing of lines based on start and end points.
+
+* Addition of `angle_diff()` for finding the angular difference between lines: are they roughly parallel or perpendicular?
+
+BUG FIXES
+
+* `line2df()` now works on lines with multiple vertices and is faster.
+
+* Fixes in the examples used to illustrate how `od_dist()` works.
+
 stplanr 0.1.3
 ----------------------------------------------------------------
 

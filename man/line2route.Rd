@@ -26,7 +26,6 @@ Convert straight SpatialLinesDataFrame from flow data into routes
 See \code{\link{route_cyclestreet}} and other route functions for details
 }
 \examples{
-
 \dontrun{
 plot(flowlines)
 rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
