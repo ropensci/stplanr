@@ -24,7 +24,6 @@
 #' @import dplyr
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
-#' @importFrom leaflet addTiles leaflet addPolylines
 #' @importFrom graphics text
 #' @importFrom maptools spRbind
 #' @importFrom methods as slot

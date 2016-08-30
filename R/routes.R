@@ -181,10 +181,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #'
 #' \dontrun{
 #' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-#' r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-#' library(leaflet)
-#'
-#' leaflet() %>% addTiles() %>% addPolylines(data = r)
+#' plot(r)
 #' }
 
 route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat()){
