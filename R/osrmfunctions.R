@@ -126,25 +126,47 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 
   if (missing(viapoints) == FALSE) {
 
-    if (is(viapoints,"list")) {
+    if (!is(viapoints,"list")) {
       stop("viapoints is not a list.")
     }
 
     i <- 1
     while (i <= length(viapoints)) {
       if(ncol(viapoints[[i]]) == 3) {
-        returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
-                             paste0(paste0(
-                             c("z","instructions","alt","geometry","uturns"),'=',
-                             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))))
+        if (api == 4) {
+          returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
+                               paste0(paste0(
+                               c("z","instructions","alt","geometry","uturns"),'=',
+                               c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+          ))))
+        } else {
+          returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
+            paste0(qryurl,
+                   paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';'),
+                   "?overview=full&",
+                   paste0(paste0(c("steps","alternatives","continue_straight"),'=',
+                                 c(instructions,alt,uturns)), collapse='&')
+            )
+          ))
+        }
       }
       else {
-        returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
-           paste0(paste0(
-             c("z","instructions","alt","geometry","uturns"),'=',
-             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))))
+        if (api == 4) {
+          returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
+             paste0(paste0(
+               c("z","instructions","alt","geometry","uturns"),'=',
+               c(zoom,instructions,alt,geometry,uturns)),collapse='&')
+          ))))
+        } else {
+          returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
+            paste0(qryurl,
+                   paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';'),
+                   "?overview=full&",
+                   paste0(paste0(c("steps","alternatives","continue_straight"),'=',
+                                 c(instructions,alt,uturns)), collapse='&')
+            )
+          ))
+        }
       }
       i <- i + 1
     }
