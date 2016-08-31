@@ -171,6 +171,6 @@ line_segment = function(l, n_segments, segment_length = NA){
     }
   }
   l_seg = SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
-  proj4string(l_seg) = proj4string(l)
+  raster::crs(l_seg) = raster::crs(l)
   l_seg
 }
