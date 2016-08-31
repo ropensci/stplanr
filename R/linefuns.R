@@ -117,3 +117,29 @@ angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
 line_midpoint = function(l){
   stplanr::crs_select_aeq
 }
+line_length = function(l){
+
+}
+#' Divide SpatialLines dataset into regular segments
+#'
+#' @export
+#' @examples
+#' line_seg(l =routes_fast[1,], length = 100)
+line_seg = function(l, length, number){
+  line_length = NA
+  nabor::knn_res = knn(data = coordinates(ldfp), query = coordinates(pseg), k = 1)
+  sel_nearest = c(knn_res$nn.idx)
+  points(ldfp[sel_nearest,]) # check they are close by
+  for(i in 1:(length(sel_nearest) + 1)){
+    ids = c(1, sel_nearest, nrow(ldfp))
+    if(i == 1){
+      l = points_to_line(ldf[ids[i]:ids[(i + 1)],], "long", "lat")
+      spChFIDs(l) = i
+    } else {
+      l_temp = points_to_line(ldf[ids[i]:ids[(i + 1)],], "long", "lat")
+      spChFIDs(l_temp) = i
+      l = maptools::spRbind(l, l_temp)
+    }
+  }
+  l = SpatialLinesDataFrame(l, data.frame(group = 1:i))
+}
