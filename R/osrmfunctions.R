@@ -218,6 +218,24 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
   else {
     stop("Missing viapoints coordinates")
   }
+  if (length(returnval) > 1) {
+    removerowlist <- c()
+    for (i in 1:length(returnval)) {
+      if (returnval[i] == "") {
+        removerowlist <- c(removerowlist,i)
+      }
+    }
+    if (length(removerowlist) == length(returnval)) {
+      stop("OSRM server retruned empty result for all routes")
+    } else {
+      warning(paste0("Routes ",paste0(removerowlist, collapse=', '), " returned empty result, removing from result"))
+      returnval <- returnval[-removerowlist]
+    }
+  } else {
+    if (returnval == "") {
+      stop("OSRM server returned empty result")
+    }
+  }
 
   return(returnval)
 
