@@ -170,5 +170,7 @@ line_segment = function(l, n_segments, segment_length = NA){
       l_seg = maptools::spRbind(l_seg, l_temp)
     }
   }
-  SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
+  l_seg = SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
+  proj4string(l_seg) = proj4string(l)
+  l_seg
 }
