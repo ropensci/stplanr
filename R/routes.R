@@ -195,10 +195,10 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  base_url <- "https://graphhopper.com/api/1/route?"
+  base_url <- "https://graphhopper.com/api/1/"
   orig <- paste0(from[2:1], collapse = "%2C")
   dest <- paste0(to[2:1], collapse = "%2C")
-  ft_string <- paste0("point=", orig, "&point=", dest)
+  ft_string <- paste0("route?point=", orig, "&point=", dest)
   veh <- paste0("&vehicle=", vehicle)
 
   request <- paste0(base_url, ft_string, veh,
