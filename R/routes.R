@@ -75,7 +75,7 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat()){
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(), ){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -91,11 +91,11 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
-  api_base <- sprintf("http://www.cyclestreets.net/api/")
+  base_url <- "http://www.cyclestreets.net/api/"
   ft_string <- paste(orig, dest, sep = "|")
   journey_plan <- sprintf("journey.json?key=%s&itinerarypoints=%s&plan=%s",
                           pat, ft_string, plan)
-  request <- paste0(api_base, journey_plan)
+  request <- paste0(base_url, journey_plan)
   request <- paste0(request, "&key=", pat)
   if (silent == FALSE) {
     print(paste0("The request sent to cyclestreets.net was: ",
@@ -195,13 +195,13 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  api_base <- "https://graphhopper.com/api/1/route?"
+  base_url <- "https://graphhopper.com/api/1/route?"
   orig <- paste0(from[2:1], collapse = "%2C")
   dest <- paste0(to[2:1], collapse = "%2C")
   ft_string <- paste0("point=", orig, "&point=", dest)
   veh <- paste0("&vehicle=", vehicle)
 
-  request <- paste0(api_base, ft_string, veh,
+  request <- paste0(base_url, ft_string, veh,
                     "&locale=en-US&debug=true&points_encoded=false&key=", pat)
 
   if(vehicle == "bike"){
