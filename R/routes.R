@@ -141,7 +141,6 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   proj4string(route) <- CRS("+init=epsg:4326")
   route
 }
-
 #' Plan a route with the graphhopper routing engine
 #'
 #' Provides an R interface to the graphhopper routing engine,
@@ -178,15 +177,12 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
-#'
 #' \dontrun{
 #' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-#' r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-#' library(leaflet)
-#'
-#' leaflet() %>% addTiles() %>% addPolylines(data = r)
+#' plot(r)
+#' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
+#' plot(r)
 #' }
-
 route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat(), base_url = "https://graphhopper.com/api/1/"){
 
   # Convert character strings to lon/lat if needs be
