@@ -42,6 +42,7 @@ Imports:
     geosphere,
     Rcpp (>= 0.12.1),
     igraph,
+    nabor,
     data.table
 LinkingTo:
     RcppArmadillo,
