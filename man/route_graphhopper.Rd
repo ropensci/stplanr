@@ -5,7 +5,7 @@
 \title{Plan a route with the graphhopper routing engine}
 \usage{
 route_graphhopper(from, to, vehicle = "bike", silent = TRUE,
-  pat = graphhopper_pat())
+  pat = graphhopper_pat(), base_url = "https://graphhopper.com/api/1/")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -23,6 +23,8 @@ or foot.}
 
 \item{pat}{The API key used - this is usually aquired automatically through a helper
 function}
+
+\item{base_url}{The base url from which to construct API requests (with default set to main server)}
 }
 \description{
 Provides an R interface to the graphhopper routing engine,
