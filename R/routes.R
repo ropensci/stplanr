@@ -210,6 +210,9 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
   txt <- httr::content(httr::GET(request), as = "text")
   obj <- jsonlite::fromJSON(txt)
 
+  if (grepl("Wrong credentials", obj$message) == TRUE) {
+    stop("Invalid API key")
+  }
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
