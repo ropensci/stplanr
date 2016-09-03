@@ -54,7 +54,10 @@
 #'
 #'
 #' @inheritParams line2route
-#' @param base_url The base url from which to construct API requests (with default set to main server)
+#' @param base_url The base url from which to construct API requests
+#' (with default set to main server)
+#' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets
+#' should report errors.
 #' @export
 #' @seealso line2route
 #' @examples
@@ -76,7 +79,8 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(), base_url = "http://www.cyclestreets.net/api/"){
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(),
+                              base_url = "http://www.cyclestreets.net/api/", reporterrors = FALSE){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -98,7 +102,8 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
                        query = list(
                          key = pat,
                          itinerarypoints = ft_string,
-                         plan = plan
+                         plan = plan,
+                         reporterrors = ifelse(reporterrors == TRUE, 1, 0)
                        ))
 
   if (silent == FALSE) {
@@ -117,6 +122,10 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   }
 
   obj <- jsonlite::fromJSON(txt)
+
+  if (is.element("error", names(obj))) {
+    stop(paste0("Error: ", obj$error))
+  }
 
   # obj$marker$`@attributes`$elevations
   # obj$marker$`@attributes`$points
