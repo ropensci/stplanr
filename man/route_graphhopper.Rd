@@ -56,13 +56,11 @@ Where \code{url} is an example api request from
  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
-
 \dontrun{
 r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-library(leaflet)
-
-leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)
+plot(r)
+r <- route_graphhopper("New York", "Washington", vehicle = "foot")
+plot(r)
 }
 }
 \seealso{

@@ -93,15 +93,29 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
   ft_string <- paste(orig, dest, sep = "|")
-  journey_plan <- sprintf("journey.json?key=%s&itinerarypoints=%s&plan=%s",
-                          pat, ft_string, plan)
-  request <- paste0(base_url, journey_plan)
-  request <- paste0(request, "&key=", pat)
+
+  httrreq <- httr::GET(paste0(base_url, 'journey.json'),
+                       query = list(
+                         key = pat,
+                         itinerarypoints = ft_string,
+                         plan = plan
+                       ))
+
   if (silent == FALSE) {
-    print(paste0("The request sent to cyclestreets.net was: ",
-                 request))
+    print(paste0("The request sent to cyclestreets.net was: ", httrreq$request$url))
   }
-  txt <- httr::content(httr::GET(request), as = "text")
+
+  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE) {
+    stop("Error: Cyclestreets did not return a valid result")
+  }
+
+  stop_for_status(res)
+
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+  if (txt == "") {
+    stop("Error: Cyclestreets did not return a valid result")
+  }
+
   obj <- jsonlite::fromJSON(txt)
 
   # obj$marker$`@attributes`$elevations
@@ -191,23 +205,37 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  orig <- paste0(from[2:1], collapse = "%2C")
-  dest <- paste0(to[2:1], collapse = "%2C")
-  ft_string <- paste0("route?point=", orig, "&point=", dest)
-  veh <- paste0("&vehicle=", vehicle)
-
-  request <- paste0(base_url, ft_string, veh,
-                    "&locale=en-US&debug=true&points_encoded=false&key=", pat)
+  args <- list(
+    point = paste0(from[2:1], collapse = ","),
+    point = paste0(to[2:1], collapse = ","),
+    vehicle = vehicle,
+    locale = "en-US",
+    debug = 'true',
+    points_encoded = 'false',
+    key = pat
+  )
 
   if(vehicle == "bike"){
-    request <- paste0(request, "&elevation=true")
+    args[['elevation']] <- 'true'
   }
+
+  res <- httr::GET(paste0(base_url, "route"), query = args)
 
   if(silent == FALSE){
-    print(paste0("The request sent was: ", request))
+    print(paste0("The request sent was: ", res$request$url))
   }
 
-  txt <- httr::content(httr::GET(request), as = "text")
+  if (grepl('application/json',res$headers$`content-type`) == FALSE) {
+    stop("Error: Graphhopper did not return a valid result")
+  }
+
+  stop_for_status(res)
+
+  txt <- httr::content(res, as = "text", encoding = "UTF-8")
+  if (txt == "") {
+    stop("Error: Graphhopper did not return a valid result")
+  }
+
   obj <- jsonlite::fromJSON(txt)
 
   if (is.element("message", names(obj))) {
