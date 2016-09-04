@@ -24,7 +24,8 @@ or foot.}
 \item{pat}{The API key used - this is usually aquired automatically through a helper
 function}
 
-\item{base_url}{The base url from which to construct API requests (with default set to main server)}
+\item{base_url}{The base url from which to construct API requests
+(with default set to main server)}
 }
 \description{
 Provides an R interface to the graphhopper routing engine,
@@ -56,13 +57,11 @@ Where \code{url} is an example api request from
  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
-
 \dontrun{
 r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-library(leaflet)
-
-leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)
+plot(r)
+r <- route_graphhopper("New York", "Washington", vehicle = "foot")
+plot(r)
 }
 }
 \seealso{
