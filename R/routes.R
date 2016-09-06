@@ -301,7 +301,7 @@ cyclestreet_pat <- function(force = FALSE) {
     stop("Personal access token entry failed", call. = FALSE)
   }
 
-  message("Updating GRAPHHOPPER env var to API key. Save this to your .Renviron")
+  message("Updating CYCLESTREET environment variable. Save this to .Renviron for future use.")
   Sys.setenv(CYCLESTREET = pat)
 
   pat
@@ -331,7 +331,7 @@ graphhopper_pat <- function(force = FALSE) {
     stop("Personal access token entry failed", call. = FALSE)
   }
 
-  message("Updating GRAPHHOPPER env var to API key")
+  message("Updating GRAPHHOPPER environment variable. Save this to .Renviron for future use.")
   Sys.setenv(GRAPHHOPPER = pat)
 
   pat
