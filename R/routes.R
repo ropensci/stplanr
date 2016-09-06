@@ -114,7 +114,6 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = a
   }
 
   httrreq <- httr::GET(httrmsg)
-  # stop_for_status(res)
 
   if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Cyclestreets did not return a valid result")
@@ -241,8 +240,6 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = a
   if (grepl('application/json',res$headers$`content-type`) == FALSE) {
     stop("Error: Graphhopper did not return a valid result")
   }
-
-  stop_for_status(res)
 
   txt <- httr::content(res, as = "text", encoding = "UTF-8")
   if (txt == "") {
