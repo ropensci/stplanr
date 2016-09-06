@@ -80,7 +80,7 @@
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(),
-                              base_url = "http://www.cyclestreets.net/api/", reporterrors = FALSE){
+                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -97,6 +97,17 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
   ft_string <- paste(orig, dest, sep = "|")
+
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "api",
+    query = list(
+      key = pat,
+      itinerarypoints = ft_string,
+      plan = plan,
+      reporterrors = ifelse(reporterrors == TRUE, 1, 0)
+    )
+  )
 
   httrreq <- httr::GET(paste0(base_url, 'journey.json'),
                        query = list(
