@@ -120,7 +120,6 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
     stop("Error: Cyclestreets did not return a valid result")
   }
 
-
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
     stop("Error: Cyclestreets did not return a valid result")
