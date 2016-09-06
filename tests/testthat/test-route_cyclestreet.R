@@ -6,7 +6,7 @@ test_that(
     if(!Sys.getenv("CYCLESTREET") == ""){ # only run test if user has set an api key
       p1 <- c(-2, 52)
       p2 <- p1 + 1
-      rf <- route_cyclestreet(p1, p2, "fastest")
+      rf <- route_cyclestreet(p1, p2, "fastest", base_url = "http://pct.cyclestreets.net")
       expect_is(rf, "SpatialLinesDataFrame")
     }
   })
