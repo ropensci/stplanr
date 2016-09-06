@@ -13,7 +13,7 @@
 #' @examples \dontrun{
 #'  nearest_cyclestreets(lat = 53, lng = 0.02, google_api = "api_key_here")
 #' }
-nearest_cyclestreets <- function(lat, lng, pat = cyclestreet_pat()){
+nearest_cyclestreets <- function(lat, lng, pat = api_pat("cyclestreet")){
   url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj = jsonlite::fromJSON(url)
   coords = obj$features$geometry$coordinates[[1]]
