@@ -114,12 +114,12 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   }
 
   httrreq <- httr::GET(httrmsg)
+  # stop_for_status(res)
 
   if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Cyclestreets did not return a valid result")
   }
 
-  stop_for_status(res)
 
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
