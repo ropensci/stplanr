@@ -100,7 +100,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 
   httrmsg = httr::modify_url(
     base_url,
-    path = "api",
+    path = "api/journey.json",
     query = list(
       key = pat,
       itinerarypoints = ft_string,
@@ -109,19 +109,13 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
     )
   )
 
-  httrreq <- httr::GET(paste0(base_url, 'journey.json'),
-                       query = list(
-                         key = pat,
-                         itinerarypoints = ft_string,
-                         plan = plan,
-                         reporterrors = ifelse(reporterrors == TRUE, 1, 0)
-                       ))
-
   if (silent == FALSE) {
-    print(paste0("The request sent to cyclestreets.net was: ", httrreq$request$url))
+    print(paste0("The request sent to cyclestreets.net was: ", httrmsg))
   }
 
-  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE) {
+  httrreq <- httr::GET(httrmsg)
+
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Cyclestreets did not return a valid result")
   }
 
