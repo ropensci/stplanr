@@ -79,7 +79,7 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(),
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = api_pat("cyclestreet"),
                               base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
 
   # Convert sp object to lat/lon vector
@@ -210,7 +210,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat(), base_url = "https://graphhopper.com/api/1/"){
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = api_pat("graphhopper"), base_url = "https://graphhopper.com/api/1/"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -284,59 +284,33 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
 #' Retrieve personal access token.
 #'
-#' A personal access token.
+#' @param api_name Text string of the name of the API you are calling, e.g.
+#' cyclestreet, graphhopper etc.
 #'
 #' @keywords internal
 #' @export
-cyclestreet_pat <- function(force = FALSE) {
-  env <- Sys.getenv('CYCLESTREET')
+#' @examples
+#' api_pat(api_name = "cyclestreet")
+api_pat <- function(api_name, force = FALSE) {
+  api_name_caps = toupper(api_name)
+  env <- Sys.getenv(api_name_caps)
   if (!identical(env, "") && !force) return(env)
 
   if (!interactive()) {
-    stop("Please set env var CYCLESTREET to your github personal access token",
+    stop(paste0("Set the environment variable ",  api_name_caps, " e.g. with .Renviron or Sys.setenv()"),
          call. = FALSE)
   }
 
-  message("Couldn't find env var CYCLESTREET. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key you requested from https://www.cyclestreets.net/api/apply/,  and press enter:")
+  message("Couldn't find the environment variable ",  api_name_caps, ". See documentation, e.g. ?route_cyclestreet, for more details.")
+  message("Please enter your API key to access the ", api_name, "and press enter:")
   pat <- readline(": ")
 
   if (identical(pat, "")) {
     stop("Personal access token entry failed", call. = FALSE)
   }
 
-  message("Updating CYCLESTREET environment variable. Save this to .Renviron for future use.")
-  Sys.setenv(CYCLESTREET = pat)
-
-  pat
-
-}
-
-#' Retrieve personal access token.
-#'
-#' A personal access token.
-#'
-#' @keywords internal
-#' @export
-graphhopper_pat <- function(force = FALSE) {
-  env <- Sys.getenv('GRAPHHOPPER')
-  if (!identical(env, "") && !force) return(env)
-
-  if (!interactive()) {
-    stop("Please set env var GRAPHHOPPER to your github personal access token",
-         call. = FALSE)
-  }
-
-  message("Couldn't find env var GRAPHHOPPER. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key, e.g. from https://graphhopper.com/dashboard/#/api-keys , and press enter:")
-  pat <- readline(": ")
-
-  if (identical(pat, "")) {
-    stop("Personal access token entry failed", call. = FALSE)
-  }
-
-  message("Updating GRAPHHOPPER environment variable. Save this to .Renviron for future use.")
-  Sys.setenv(GRAPHHOPPER = pat)
+  message("Updating ",  api_name_caps, " environment variable. Save this to .Renviron for future use.")
+  Sys.setenv(api_name_caps = pat)
 
   pat
 

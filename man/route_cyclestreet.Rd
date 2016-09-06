@@ -5,7 +5,7 @@
 \title{Plan a single route with CycleStreets.net}
 \usage{
 route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
-  pat = cyclestreet_pat(), base_url = "http://www.cyclestreets.net",
+  pat = api_pat("cyclestreet"), base_url = "http://www.cyclestreets.net",
   reporterrors = FALSE)
 }
 \arguments{

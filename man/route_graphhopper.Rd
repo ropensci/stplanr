@@ -5,7 +5,7 @@
 \title{Plan a route with the graphhopper routing engine}
 \usage{
 route_graphhopper(from, to, vehicle = "bike", silent = TRUE,
-  pat = graphhopper_pat(), base_url = "https://graphhopper.com/api/1/")
+  pat = api_pat("graphhopper"), base_url = "https://graphhopper.com/api/1/")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
