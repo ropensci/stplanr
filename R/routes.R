@@ -221,10 +221,6 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  if(vehicle == "bike"){
-    args[['elevation']] <- 'true'
-  }
-
   if(is.null(pat))
     pat = api_pat("graphhopper")
 
@@ -232,9 +228,6 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     base_url,
     path = "/api/1/route",
     query = list(
-      itinerarypoints = ft_string,
-      plan = plan,
-      reporterrors = ifelse(reporterrors == TRUE, 1, 0),
       point = paste0(from[2:1], collapse = ","),
       point = paste0(to[2:1], collapse = ","),
       vehicle = vehicle,
@@ -245,12 +238,12 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     )
   )
   if(silent == FALSE){
-    print(paste0("The request sent was: ", res$request$url))
+    print(paste0("The request sent was: ", httrmsg))
   }
   httrreq <- httr::GET(httrmsg)
   httr::stop_for_status(httrreq)
 
-  if (grepl('application/json',res$headers$`content-type`) == FALSE) {
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Graphhopper did not return a valid result")
   }
 
@@ -273,6 +266,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
   # get elevation data if it was a bike trip
   if(vehicle == "bike"){
     change_elev <- obj$path$descend + obj$paths$ascend
+  }else{
+    change_elev <- NA
   }
 
   # Attribute data for the route
