@@ -91,8 +91,6 @@ route_transportapi_public <- function(from, to, silent = FALSE,
     stop("Error: Transportapi did not return a valid result")
   }
 
-  stop_for_status(res)
-
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
 
   if (txt == "") {

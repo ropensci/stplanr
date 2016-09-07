@@ -17,8 +17,8 @@
 #'
 #' @param plan Text strong of either "fastest", "quietest" or "balanced"
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
-#' @param pat The API key used - this is usually aquired automatically through a helper
-#' function
+#' @param pat The API key used. By default this is set to NULL and
+#' this is usually aquired automatically through a helper, api_pat().
 #'
 #' @details
 #'
@@ -79,8 +79,8 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat(),
-                              base_url = "http://www.cyclestreets.net/api/", reporterrors = FALSE){
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -98,23 +98,29 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
   dest <- paste0(to, collapse = ",")
   ft_string <- paste(orig, dest, sep = "|")
 
-  httrreq <- httr::GET(paste0(base_url, 'journey.json'),
-                       query = list(
-                         key = pat,
-                         itinerarypoints = ft_string,
-                         plan = plan,
-                         reporterrors = ifelse(reporterrors == TRUE, 1, 0)
-                       ))
+  if(is.null(pat))
+    pat = api_pat("cyclestreet")
+
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "api/journey.json",
+    query = list(
+      key = pat,
+      itinerarypoints = ft_string,
+      plan = plan,
+      reporterrors = ifelse(reporterrors == TRUE, 1, 0)
+    )
+  )
 
   if (silent == FALSE) {
-    print(paste0("The request sent to cyclestreets.net was: ", httrreq$request$url))
+    print(paste0("The request sent to cyclestreets.net was: ", httrmsg))
   }
 
-  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE) {
+  httrreq <- httr::GET(httrmsg)
+
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Cyclestreets did not return a valid result")
   }
-
-  stop_for_status(res)
 
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
@@ -201,12 +207,13 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
+#' r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
+#' r@data
 #' plot(r)
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat(), base_url = "https://graphhopper.com/api/1/"){
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -214,33 +221,33 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  args <- list(
-    point = paste0(from[2:1], collapse = ","),
-    point = paste0(to[2:1], collapse = ","),
-    vehicle = vehicle,
-    locale = "en-US",
-    debug = 'true',
-    points_encoded = 'false',
-    key = pat
+  if(is.null(pat))
+    pat = api_pat("graphhopper")
+
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "/api/1/route",
+    query = list(
+      point = paste0(from[2:1], collapse = ","),
+      point = paste0(to[2:1], collapse = ","),
+      vehicle = vehicle,
+      locale = "en-US",
+      debug = 'true',
+      points_encoded = 'false',
+      key = pat
+    )
   )
-
-  if(vehicle == "bike"){
-    args[['elevation']] <- 'true'
-  }
-
-  res <- httr::GET(paste0(base_url, "route"), query = args)
-
   if(silent == FALSE){
-    print(paste0("The request sent was: ", res$request$url))
+    print(paste0("The request sent was: ", httrmsg))
   }
+  httrreq <- httr::GET(httrmsg)
+  httr::stop_for_status(httrreq)
 
-  if (grepl('application/json',res$headers$`content-type`) == FALSE) {
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Graphhopper did not return a valid result")
   }
 
-  stop_for_status(res)
-
-  txt <- httr::content(res, as = "text", encoding = "UTF-8")
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
     stop("Error: Graphhopper did not return a valid result")
   }
@@ -258,18 +265,16 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
   # get elevation data if it was a bike trip
   if(vehicle == "bike"){
-    elevs <- obj$paths$points[[1]][[1]][,3]
-    climb <- elevs[-1] - elevs[-length(elevs)]
-    climb <- sum(climb[climb > 0])
+    change_elev <- obj$path$descend + obj$paths$ascend
+  }else{
+    change_elev <- NA
   }
 
   # Attribute data for the route
   df <- data.frame(
-
     time = obj$paths$time / (1000 * 60),
     dist = obj$paths$distance,
-    climb = climb
-
+    change_elev = change_elev
   )
 
   route <- sp::SpatialLinesDataFrame(route, df)
@@ -280,59 +285,35 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
 #' Retrieve personal access token.
 #'
-#' A personal access token.
+#' @param api_name Text string of the name of the API you are calling, e.g.
+#' cyclestreet, graphhopper etc.
 #'
 #' @keywords internal
 #' @export
-cyclestreet_pat <- function(force = FALSE) {
-  env <- Sys.getenv('CYCLESTREET')
+#' @examples
+#' \dontrun{
+#' api_pat(api_name = "cyclestreet")
+#' }
+api_pat <- function(api_name, force = FALSE) {
+  api_name_caps = toupper(api_name)
+  env <- Sys.getenv(api_name_caps)
   if (!identical(env, "") && !force) return(env)
 
   if (!interactive()) {
-    stop("Please set env var CYCLESTREET to your github personal access token",
+    stop(paste0("Set the environment variable ",  api_name_caps, " e.g. with .Renviron or Sys.setenv()"),
          call. = FALSE)
   }
 
-  message("Couldn't find env var CYCLESTREET. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key you requested from https://www.cyclestreets.net/api/apply/,  and press enter:")
+  message("Couldn't find the environment variable ",  api_name_caps, ". See documentation, e.g. ?route_cyclestreet, for more details.")
+  message("Please enter your API key to access the ", api_name, "and press enter:")
   pat <- readline(": ")
 
   if (identical(pat, "")) {
     stop("Personal access token entry failed", call. = FALSE)
   }
 
-  message("Updating GRAPHHOPPER env var to API key. Save this to your .Renviron")
-  Sys.setenv(CYCLESTREET = pat)
-
-  pat
-
-}
-
-#' Retrieve personal access token.
-#'
-#' A personal access token.
-#'
-#' @keywords internal
-#' @export
-graphhopper_pat <- function(force = FALSE) {
-  env <- Sys.getenv('GRAPHHOPPER')
-  if (!identical(env, "") && !force) return(env)
-
-  if (!interactive()) {
-    stop("Please set env var GRAPHHOPPER to your github personal access token",
-         call. = FALSE)
-  }
-
-  message("Couldn't find env var GRAPHHOPPER. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key, e.g. from https://graphhopper.com/dashboard/#/api-keys , and press enter:")
-  pat <- readline(": ")
-
-  if (identical(pat, "")) {
-    stop("Personal access token entry failed", call. = FALSE)
-  }
-
-  message("Updating GRAPHHOPPER env var to API key")
-  Sys.setenv(GRAPHHOPPER = pat)
+  message("Updating ",  api_name_caps, " environment variable. Save this to .Renviron for future use.")
+  Sys.setenv(api_name_caps = pat)
 
   pat
 
