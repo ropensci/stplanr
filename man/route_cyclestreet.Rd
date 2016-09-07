@@ -4,9 +4,8 @@
 \alias{route_cyclestreet}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
-  pat = api_pat("cyclestreet"), base_url = "http://www.cyclestreets.net",
-  reporterrors = FALSE)
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+  base_url = "http://www.cyclestreets.net", reporterrors = FALSE)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -21,8 +20,8 @@ on Earth. This represents the destination of the trip.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
 
 \item{base_url}{The base url from which to construct API requests
 (with default set to main server)}

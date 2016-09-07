@@ -17,8 +17,8 @@
 #'
 #' @param plan Text strong of either "fastest", "quietest" or "balanced"
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
-#' @param pat The API key used - this is usually aquired automatically through a helper
-#' function
+#' @param pat The API key used. By default this is set to NULL and
+#' this is usually aquired automatically through a helper, api_pat().
 #'
 #' @details
 #'
@@ -79,7 +79,7 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = api_pat("cyclestreet"),
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                               base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
 
   # Convert sp object to lat/lon vector
@@ -97,6 +97,9 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = a
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
   ft_string <- paste(orig, dest, sep = "|")
+
+  if(is.null(pat))
+    pat = api_pat("cyclestreet")
 
   httrmsg = httr::modify_url(
     base_url,
@@ -209,7 +212,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = a
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = api_pat("graphhopper"), base_url = "https://graphhopper.com/api/1/"){
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com/api/1/"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -230,6 +233,9 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = a
   if(vehicle == "bike"){
     args[['elevation']] <- 'true'
   }
+
+  if(is.null(pat))
+    pat = api_pat("graphhopper")
 
   res <- httr::GET(paste0(base_url, "route"), query = args)
 

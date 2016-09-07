@@ -4,8 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, vehicle = "bike", silent = TRUE,
-  pat = api_pat("graphhopper"), base_url = "https://graphhopper.com/api/1/")
+route_graphhopper(from, to, vehicle = "bike", silent = TRUE, pat = NULL,
+  base_url = "https://graphhopper.com/api/1/")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -21,8 +21,8 @@ or foot.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
 
 \item{base_url}{The base url from which to construct API requests
 (with default set to main server)}
