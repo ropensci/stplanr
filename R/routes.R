@@ -297,7 +297,9 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
 #' @keywords internal
 #' @export
 #' @examples
+#' \dontrun{
 #' api_pat(api_name = "cyclestreet")
+#' }
 api_pat <- function(api_name, force = FALSE) {
   api_name_caps = toupper(api_name)
   env <- Sys.getenv(api_name_caps)

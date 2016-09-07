@@ -14,7 +14,9 @@ cyclestreet, graphhopper etc.}
 Retrieve personal access token.
 }
 \examples{
+\dontrun{
 api_pat(api_name = "cyclestreet")
+}
 }
 \keyword{internal}
 
