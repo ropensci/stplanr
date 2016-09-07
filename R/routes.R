@@ -208,6 +208,7 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
 #' @examples
 #' \dontrun{
 #' r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
+#' r@data
 #' plot(r)
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
@@ -229,7 +230,7 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
 
   httrmsg = httr::modify_url(
     base_url,
-    path = "/api/1/route?",
+    path = "/api/1/route",
     query = list(
       itinerarypoints = ft_string,
       plan = plan,
@@ -243,13 +244,11 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
       key = pat
     )
   )
-
-  httrreq <- httr::GET(httrmsg)
-  httr::stop_for_status(httrreq)
-
   if(silent == FALSE){
     print(paste0("The request sent was: ", res$request$url))
   }
+  httrreq <- httr::GET(httrmsg)
+  httr::stop_for_status(httrreq)
 
   if (grepl('application/json',res$headers$`content-type`) == FALSE) {
     stop("Error: Graphhopper did not return a valid result")
