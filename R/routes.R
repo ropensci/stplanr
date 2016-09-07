@@ -207,28 +207,18 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
+#' r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
 #' plot(r)
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com/api/1/"){
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
     from <- rev(RgoogleMaps::getGeoCode(from))
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
-
-  args <- list(
-    point = paste0(from[2:1], collapse = ","),
-    point = paste0(to[2:1], collapse = ","),
-    vehicle = vehicle,
-    locale = "en-US",
-    debug = 'true',
-    points_encoded = 'false',
-    key = pat
-  )
 
   if(vehicle == "bike"){
     args[['elevation']] <- 'true'
@@ -237,7 +227,25 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
   if(is.null(pat))
     pat = api_pat("graphhopper")
 
-  res <- httr::GET(paste0(base_url, "route"), query = args)
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "/api/1/route?",
+    query = list(
+      itinerarypoints = ft_string,
+      plan = plan,
+      reporterrors = ifelse(reporterrors == TRUE, 1, 0),
+      point = paste0(from[2:1], collapse = ","),
+      point = paste0(to[2:1], collapse = ","),
+      vehicle = vehicle,
+      locale = "en-US",
+      debug = 'true',
+      points_encoded = 'false',
+      key = pat
+    )
+  )
+
+  httrreq <- httr::GET(httrmsg)
+  httr::stop_for_status(httrreq)
 
   if(silent == FALSE){
     print(paste0("The request sent was: ", res$request$url))
@@ -247,7 +255,7 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     stop("Error: Graphhopper did not return a valid result")
   }
 
-  txt <- httr::content(res, as = "text", encoding = "UTF-8")
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
     stop("Error: Graphhopper did not return a valid result")
   }
@@ -265,18 +273,14 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
 
   # get elevation data if it was a bike trip
   if(vehicle == "bike"){
-    elevs <- obj$paths$points[[1]][[1]][,3]
-    climb <- elevs[-1] - elevs[-length(elevs)]
-    climb <- sum(climb[climb > 0])
+    change_elev <- obj$path$descend + obj$paths$ascend
   }
 
   # Attribute data for the route
   df <- data.frame(
-
     time = obj$paths$time / (1000 * 60),
     dist = obj$paths$distance,
-    climb = climb
-
+    change_elev = change_elev
   )
 
   route <- sp::SpatialLinesDataFrame(route, df)

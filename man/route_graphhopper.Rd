@@ -5,7 +5,7 @@
 \title{Plan a route with the graphhopper routing engine}
 \usage{
 route_graphhopper(from, to, vehicle = "bike", silent = TRUE, pat = NULL,
-  base_url = "https://graphhopper.com/api/1/")
+  base_url = "https://graphhopper.com")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -58,7 +58,7 @@ Where \code{url} is an example api request from
 }
 \examples{
 \dontrun{
-r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
+r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
 plot(r)
 r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 plot(r)
