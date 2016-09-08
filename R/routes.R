@@ -57,7 +57,8 @@
 #' @param base_url The base url from which to construct API requests
 #' (with default set to main server)
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets
-#' should report errors.
+#' should report errors (FALSE by default).
+#' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
 #' @examples
