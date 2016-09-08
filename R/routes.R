@@ -80,7 +80,8 @@
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
+                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
+                              save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -133,42 +134,46 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
     stop(paste0("Error: ", obj$error))
   }
 
-  # obj$marker$`@attributes`$elevations
-  # obj$marker$`@attributes`$points
-  coords <- obj$marker$`@attributes`$coordinates[1]
-  coords <- stringr::str_split(coords, pattern = " |,")[[1]]
-  coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
+  if(save_raw){
+    return((obj))
+  }else{
+    # obj$marker$`@attributes`$elevations
+    # obj$marker$`@attributes`$points
+    coords <- obj$marker$`@attributes`$coordinates[1]
+    coords <- stringr::str_split(coords, pattern = " |,")[[1]]
+    coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
 
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
-  h <-  obj$marker$`@attributes`$elevations # hilliness
-  h <- stringr::str_split(h, pattern = ",")
-  h <- as.numeric(unlist(h)[-1])
-  htot <- sum(abs(diff(h)))
+    route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
+    h <-  obj$marker$`@attributes`$elevations # hilliness
+    h <- stringr::str_split(h, pattern = ",")
+    h <- as.numeric(unlist(h)[-1])
+    htot <- sum(abs(diff(h)))
 
-  # busyness overall
-  bseg <- obj$marker$`@attributes`$busynance
-  bseg <- stringr::str_split(bseg, pattern = ",")
-  bseg <- as.numeric(unlist(bseg)[-1])
-  bseg <- sum(bseg)
+    # busyness overall
+    bseg <- obj$marker$`@attributes`$busynance
+    bseg <- stringr::str_split(bseg, pattern = ",")
+    bseg <- as.numeric(unlist(bseg)[-1])
+    bseg <- sum(bseg)
 
-  df <- data.frame(
-    plan = obj$marker$`@attributes`$plan[1],
-    start = obj$marker$`@attributes`$start[1],
-    finish = obj$marker$`@attributes`$finish[1],
-    length = as.numeric(obj$marker$`@attributes`$length[1]),
-    time = as.numeric(obj$marker$`@attributes`$time[1]),
-    waypoint = nrow(coords),
-    change_elev = htot,
-    av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
-    co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
-    calories = as.numeric(obj$marker$`@attributes`$calories[1]),
-    busyness = bseg
-  )
+    df <- data.frame(
+      plan = obj$marker$`@attributes`$plan[1],
+      start = obj$marker$`@attributes`$start[1],
+      finish = obj$marker$`@attributes`$finish[1],
+      length = as.numeric(obj$marker$`@attributes`$length[1]),
+      time = as.numeric(obj$marker$`@attributes`$time[1]),
+      waypoint = nrow(coords),
+      change_elev = htot,
+      av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
+      co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
+      calories = as.numeric(obj$marker$`@attributes`$calories[1]),
+      busyness = bseg
+    )
 
-  row.names(df) <- route@lines[[1]]@ID
-  route <- sp::SpatialLinesDataFrame(route, df)
-  proj4string(route) <- CRS("+init=epsg:4326")
-  route
+    row.names(df) <- route@lines[[1]]@ID
+    route <- sp::SpatialLinesDataFrame(route, df)
+    proj4string(route) <- CRS("+init=epsg:4326")
+    route
+  }
 }
 #' Plan a route with the graphhopper routing engine
 #'
