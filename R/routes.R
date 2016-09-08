@@ -90,7 +90,6 @@
 #' woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
-#' raw_output = route_cyclestreet(0.117950,52.205302,City+Centre|0.131402,52.221046,Mulberry+Close|0.147324,52.199650)
 #' }
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                               base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
