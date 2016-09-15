@@ -37,12 +37,14 @@ od_radiation <- function(p, pop_var = "population", proportion = 1){
       if(i == j) next()
       m <- p[[pop_var]][i]
       n <- p[[pop_var]][j]
+      sel_flow = which(l$O == p@data[i,1] & l$D == p@data[j,1])
       # create circle the radius of which is the distance between i and j centered on i
-      s_circle <- stplanr::buff_geo(p[i,], width = geosphere::distHaversine(p[i,], p[j,]))
+      radius = gprojected(shp = l[sel_flow,], fun = rgeos::gLength)
+      s_circle <- buff_geo(shp = p[i,], width = radius)
       ps <- p[-c(i, j),][s_circle,]
       s <- sum(ps[[pop_var]])
-      l$flow[l$O == p@data[i,1] & l$D == p@data[j,1]] <-
-        p$population[i] * proportion * ((m * n) / ((m + s) * (m + n + s)))
+      l$flow[sel_flow] <-
+        p[[pop_var]][i] * proportion * ((m * n) / ((m + s) * (m + n + s)))
     }
   }
   l

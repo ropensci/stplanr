@@ -57,12 +57,24 @@
 #' @param base_url The base url from which to construct API requests
 #' (with default set to main server)
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets
-#' should report errors.
+#' should report errors (FALSE by default).
+#' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
 #' @examples
 #'
 #' \dontrun{
+#' # Example from
+#' from = c(0.117950, 52.205302); to = c(0.131402, 52.221046)
+#' json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+#' str(json_output) # what does cyclestreets give you?
+#' names(json_output$marker$`@attributes`)
+#' json_output$marker$`@attributes`$start[1] # starting point
+#' json_output$marker$`@attributes`$finish[1] # end point
+#' json_output$marker$`@attributes`$speed[1] # assumed speed (km/hr)
+#' json_output$marker$`@attributes`$busynance # busyness of each section
+#' json_output$marker$`@attributes`$elevations # list of elevations
+#' # jsonlite::toJSON(json_output, pretty = TRUE) # complete json output (long!)
 #' # Plan the 'fastest' route between two points in Manchester
 #' rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
 #' rf_mcr@data
@@ -80,7 +92,8 @@
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE){
+                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
+                              save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -133,42 +146,46 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
     stop(paste0("Error: ", obj$error))
   }
 
-  # obj$marker$`@attributes`$elevations
-  # obj$marker$`@attributes`$points
-  coords <- obj$marker$`@attributes`$coordinates[1]
-  coords <- stringr::str_split(coords, pattern = " |,")[[1]]
-  coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
+  if(save_raw){
+    return((obj))
+  }else{
+    # obj$marker$`@attributes`$elevations
+    # obj$marker$`@attributes`$points
+    coords <- obj$marker$`@attributes`$coordinates[1]
+    coords <- stringr::str_split(coords, pattern = " |,")[[1]]
+    coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
 
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
-  h <-  obj$marker$`@attributes`$elevations # hilliness
-  h <- stringr::str_split(h, pattern = ",")
-  h <- as.numeric(unlist(h)[-1])
-  htot <- sum(abs(diff(h)))
+    route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
+    h <-  obj$marker$`@attributes`$elevations # hilliness
+    h <- stringr::str_split(h, pattern = ",")
+    h <- as.numeric(unlist(h)[-1])
+    htot <- sum(abs(diff(h)))
 
-  # busyness overall
-  bseg <- obj$marker$`@attributes`$busynance
-  bseg <- stringr::str_split(bseg, pattern = ",")
-  bseg <- as.numeric(unlist(bseg)[-1])
-  bseg <- sum(bseg)
+    # busyness overall
+    bseg <- obj$marker$`@attributes`$busynance
+    bseg <- stringr::str_split(bseg, pattern = ",")
+    bseg <- as.numeric(unlist(bseg)[-1])
+    bseg <- sum(bseg)
 
-  df <- data.frame(
-    plan = obj$marker$`@attributes`$plan[1],
-    start = obj$marker$`@attributes`$start[1],
-    finish = obj$marker$`@attributes`$finish[1],
-    length = as.numeric(obj$marker$`@attributes`$length[1]),
-    time = as.numeric(obj$marker$`@attributes`$time[1]),
-    waypoint = nrow(coords),
-    change_elev = htot,
-    av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
-    co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
-    calories = as.numeric(obj$marker$`@attributes`$calories[1]),
-    busyness = bseg
-  )
+    df <- data.frame(
+      plan = obj$marker$`@attributes`$plan[1],
+      start = obj$marker$`@attributes`$start[1],
+      finish = obj$marker$`@attributes`$finish[1],
+      length = as.numeric(obj$marker$`@attributes`$length[1]),
+      time = as.numeric(obj$marker$`@attributes`$time[1]),
+      waypoint = nrow(coords),
+      change_elev = htot,
+      av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
+      co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
+      calories = as.numeric(obj$marker$`@attributes`$calories[1]),
+      busyness = bseg
+    )
 
-  row.names(df) <- route@lines[[1]]@ID
-  route <- sp::SpatialLinesDataFrame(route, df)
-  proj4string(route) <- CRS("+init=epsg:4326")
-  route
+    row.names(df) <- route@lines[[1]]@ID
+    route <- sp::SpatialLinesDataFrame(route, df)
+    proj4string(route) <- CRS("+init=epsg:4326")
+    route
+  }
 }
 #' Plan a route with the graphhopper routing engine
 #'
