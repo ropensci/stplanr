@@ -341,6 +341,3 @@ points2line = function(p){
   raster::crs(l) = p_proj
   l
 }
-geo_dist = function(p1, p2){
-  gprojected(points2line(p1, p2), fun = rgeos::gDistance)
-}
