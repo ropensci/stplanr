@@ -150,7 +150,7 @@ line2points <- function(l){
     if(i == 1){
       out <- lpoints
     } else {
-      out <- tmap::sbind(out, lpoints)
+      out <- raster::bind(out, lpoints)
     }
   }
   out
