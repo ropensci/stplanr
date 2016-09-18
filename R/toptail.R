@@ -17,34 +17,27 @@
 #' data("routes_fast")
 #' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 #' r_toptail <- toptail(routes_fast, toptail_dist = 300)
-#' plot(routes_fast, lwd = 3)
+#' plot(routes_fast, lwd = 3, col = "yellow")
+#' points(cents)
 #' plot(r_toptail, col = "red", add = TRUE)
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
 #' r_toptail <- toptail(routes_fast, toptail_dist = 1000)
 #' length(r_toptail) # note short routes have been removed
 #' length(routes_fast)
-#' plot(routes_fast, lwd = 3)
+#' plot(routes_fast, lwd = 3, col = "yellow")
 #' plot(r_toptail, col = "red", add = TRUE)
 toptail <- function(l, toptail_dist, ...){
-
-  if (length(toptail_dist) > 1) {
-    if (length(toptail_dist) != length(l)) {
-      stop("toptail_dist is vector but not of equal length to SpatialLines object")
-    }
-  }
-  toptail_disto <- toptail_dist
-
+  if(length(toptail_dist) == 1) toptail_dist = rep(toptail_dist, length(l))
   for(i in 1:length(l)){
-    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
     l1 <- l[i,]
     lpoints <- line2points(l1)
 
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, width = toptail_dist, ...)
+      sel <- buff_geo(lpoints, width = toptail_dist[i], ...)
     } else {
-      sel <- rgeos::gBuffer(lpoints, width = toptail_dist, ...)
+      sel <- rgeos::gBuffer(lpoints, width = toptail_dist[i], ...)
     }
 
     if(rgeos::gContainsProperly(sel, l1)){
@@ -56,7 +49,7 @@ toptail <- function(l, toptail_dist, ...){
     if(!exists("out")){
       out <- l2
     } else {
-      out <- tmap::sbind(out, l2)
+      out <- raster::bind(out, l2)
     }
   }
   out
@@ -114,49 +107,33 @@ buff_geo <- function(shp, width, ..., silent = TRUE){
 #' plot(cents, add = TRUE)
 toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 
-  if (length(toptail_dist) > 1) {
-    if (length(toptail_dist) != length(l)) {
-      stop("toptail_dist is vector but not of equal length to SpatialLines object")
-    }
-  }
+  if(length(toptail_dist) == 1) toptail_dist = rep(toptail_dist, length(l))
   if (!missing(tail_dist)) {
-    if (length(tail_dist) > 1) {
-      if (length(tail_dist) != length(l)) {
-        stop("tail_dist is vector but not of equal length to SpatialLines object")
-      }
-    }
-  }
-  else {
+    if(length(tail_dist) == 1) tail_dist = rep(tail_dist, length(l))
+  } else {
     tail_dist <- toptail_dist
   }
-
-  toptail_disto <- toptail_dist
-  tail_disto <- tail_dist
-
   i <- 1
   while(i <= length(l)) {
-    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
     linecoords <- coordinates(l@lines[[i]])[[1]]
     topdists <- geosphere::distHaversine(linecoords[1,],linecoords)
     linecoords <- rbind(
-      tail(linecoords[which(topdists < toptail_dist),,drop=FALSE],n=1)+(
-        linecoords[which(topdists >= toptail_dist),,drop=FALSE][1,]-
-          tail(linecoords[which(topdists < toptail_dist),,drop=FALSE],n=1)
+      tail(linecoords[which(topdists < toptail_dist[i]),,drop=FALSE],n=1)+(
+        linecoords[which(topdists >= toptail_dist[i]),,drop=FALSE][1,]-
+          tail(linecoords[which(topdists < toptail_dist[i]),,drop=FALSE],n=1)
       )*(
-        (toptail_dist-tail(topdists[which(topdists < toptail_dist)],n=1))/(topdists[which(topdists >= toptail_dist)][1]-tail(topdists[which(topdists < toptail_dist)],n=1))
+        (toptail_dist[i]-tail(topdists[which(topdists < toptail_dist[i])],n=1))/(topdists[which(topdists >= toptail_dist[i])][1]-tail(topdists[which(topdists < toptail_dist[i])],n=1))
       ),
-      linecoords[which(topdists >= toptail_dist),,drop=FALSE]
+      linecoords[which(topdists >= toptail_dist[i]),,drop=FALSE]
     )
     bottomdists <- geosphere::distHaversine(linecoords[nrow(linecoords),],linecoords)
-    tail_dist <- ifelse(length(tail_disto) == 1, tail_disto, tail_disto[i])
-
     linecoords <- rbind(
-      linecoords[which(bottomdists >= tail_dist),,drop=FALSE],
-      tail(linecoords[which(bottomdists >= tail_dist),,drop=FALSE],n=1)+(
-        linecoords[which(bottomdists < tail_dist),,drop=FALSE][1,]-
-          tail(linecoords[which(bottomdists >= tail_dist),,drop=FALSE],n=1)
+      linecoords[which(bottomdists >= tail_dist[i]),,drop=FALSE],
+      tail(linecoords[which(bottomdists >= tail_dist[i]),,drop=FALSE],n=1)+(
+        linecoords[which(bottomdists < tail_dist[i]),,drop=FALSE][1,]-
+          tail(linecoords[which(bottomdists >= tail_dist[i]),,drop=FALSE],n=1)
       )*
-        ((tail(bottomdists[which(bottomdists >= tail_dist)],n=1)-tail_dist)/(tail(bottomdists[which(bottomdists >= tail_dist)],n=1)-bottomdists[which(bottomdists < tail_dist)][1]))
+        ((tail(bottomdists[which(bottomdists >= tail_dist[i])],n=1)-tail_dist[i])/(tail(bottomdists[which(bottomdists >= tail_dist[i])],n=1)-bottomdists[which(bottomdists < tail_dist[i])][1]))
     )
     l@lines[[i]]@Lines[[1]]@coords <- unname(linecoords)
     i <- i + 1
