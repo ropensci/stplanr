@@ -15,6 +15,12 @@
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
+#' @param region String for the active region to use for journey plans.
+#' Possible values are 'southeast' (default) or 'tfl'.
+#' @param modes Vector of character strings containing modes to use. Default is
+#' to use all modes.
+#' @param not_modes Vector of character strings containing modes not to use.
+#' Not used if \code{modes} is set.
 #'
 #' @details
 #'
@@ -40,7 +46,8 @@
 #'
 # Aim plan public transport routes with transportAPI
 
-route_transportapi_public <- function(from, to, silent = FALSE){
+route_transportapi_public <- function(from, to, silent = FALSE,
+                                      region = 'southeast', modes = NA, not_modes = NA){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -56,17 +63,41 @@ route_transportapi_public <- function(from, to, silent = FALSE){
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
-  api_base = "http://fcc.transportapi.com/v3/uk/public/journey"
+
+  api_base = "http://fcc.transportapi.com"
   ft_string <- paste0("/from/lonlat:", orig, "/to/lonlat:", dest)
-  request <- paste0(api_base, ft_string,
-                    ".json?region=southeast&")
-  if (silent == FALSE) {
-    print(paste0("The request sent to transportapi was: ",
-                 request))
+
+  queryattrs <- list(region = region)
+  if (is.na(modes) == FALSE) {
+    queryattrs[['modes']] = paste0(modes, collapse = "-")
+  } else {
+    if (is.na(not_modes) == FALSE) {
+      queryattrs[['not_modes']] = paste0(not_modes, collapse = "-")
+    }
   }
 
-  txt <- httr::content(httr::GET(request), as = "text")
-  obj <- jsonlite::fromJSON(txt)#
+  httrreq <- httr::GET(
+    url = api_base,
+    path = paste0("/v3/uk/public/journey",ft_string, ".json"),
+    query = queryattrs
+  )
+
+  if (silent == FALSE) {
+    print(paste0("The request sent to transportapi was: ", httrreq$request$url))
+  }
+
+  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+      grepl('js',httrreq$headers$`content-type`) == FALSE) {
+    stop("Error: Transportapi did not return a valid result")
+  }
+
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+
+  if (txt == "") {
+    stop("Error: Transportapi did not return a valid result")
+  }
+
+  obj <- jsonlite::fromJSON(txt)
 
   coords <- obj$routes$route_parts[[1]]$coordinates
   coords <- do.call(rbind, coords)

@@ -80,17 +80,16 @@ toptail <- function(l, toptail_dist, ...){
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
+#' # Test it works the same on projected data
+#' shp <- spTransform(routes_fast, CRS("+init=epsg:27700"))
+#' buff2 = buff_geo(shp, 50) # test if it works the same on projected data
+#' plot(buff2)
+#' plot(routes_fast, add = TRUE) # note they do not show
+#' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
+#' plot(buff)
+#' plot(buff3, add = TRUE, col = "black")
 buff_geo <- function(shp, width, ..., silent = TRUE){
-  old_proj <- CRS(proj4string(shp))
-  new_proj <- crs_select_aeq(shp)
-  if(silent == FALSE){
-    message(paste0("The new Azimuthal equidistant projection",
-    "used to create the buffer was ", new_proj))
-    message(paste0("The original projection was ", old_proj))
-  }
-  shp <- sp::spTransform(shp, new_proj)
-  buff <- rgeos::gBuffer(shp, width = width, ...)
-  sp::spTransform(buff, old_proj)
+  gprojected(shp = shp, fun = rgeos::gBuffer, width = width)
 }
 
 #' Clip the first and last n metres of SpatialLines

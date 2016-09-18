@@ -29,5 +29,13 @@ sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 buff <- buff_geo(routes_fast, width = 100)
 plot(buff)
 plot(routes_fast, add = TRUE)
+# Test it works the same on projected data
+shp <- spTransform(routes_fast, CRS("+init=epsg:27700"))
+buff2 = buff_geo(shp, 50) # test if it works the same on projected data
+plot(buff2)
+plot(routes_fast, add = TRUE) # note they do not show
+buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
+plot(buff)
+plot(buff3, add = TRUE, col = "black")
 }
 

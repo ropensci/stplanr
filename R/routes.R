@@ -54,11 +54,27 @@
 #'
 #'
 #' @inheritParams line2route
+#' @param base_url The base url from which to construct API requests
+#' (with default set to main server)
+#' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets
+#' should report errors (FALSE by default).
+#' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
 #' @examples
 #'
 #' \dontrun{
+#' # Example from
+#' from = c(0.117950, 52.205302); to = c(0.131402, 52.221046)
+#' json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+#' str(json_output) # what does cyclestreets give you?
+#' names(json_output$marker$`@attributes`)
+#' json_output$marker$`@attributes`$start[1] # starting point
+#' json_output$marker$`@attributes`$finish[1] # end point
+#' json_output$marker$`@attributes`$speed[1] # assumed speed (km/hr)
+#' json_output$marker$`@attributes`$busynance # busyness of each section
+#' json_output$marker$`@attributes`$elevations # list of elevations
+#' # jsonlite::toJSON(json_output, pretty = TRUE) # complete json output (long!)
 #' # Plan the 'fastest' route between two points in Manchester
 #' rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
 #' rf_mcr@data
@@ -75,7 +91,9 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = cyclestreet_pat()){
+route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+                              base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
+                              save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -91,57 +109,84 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
-  api_base <- sprintf("http://www.cyclestreets.net/api/")
   ft_string <- paste(orig, dest, sep = "|")
-  journey_plan <- sprintf("journey.json?key=%s&itinerarypoints=%s&plan=%s",
-                          pat, ft_string, plan)
-  request <- paste0(api_base, journey_plan)
-  request <- paste0(request, "&key=", pat)
-  if (silent == FALSE) {
-    print(paste0("The request sent to cyclestreets.net was: ",
-                 request))
-  }
-  txt <- httr::content(httr::GET(request), as = "text")
-  obj <- jsonlite::fromJSON(txt)
 
-  # obj$marker$`@attributes`$elevations
-  # obj$marker$`@attributes`$points
-  coords <- obj$marker$`@attributes`$coordinates[1]
-  coords <- stringi::stri_split_regex(str = coords, " |,")[[1]]
-  coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
+  if(is.null(pat))
+    pat = api_pat("cyclestreet")
 
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
-  h <-  obj$marker$`@attributes`$elevations # hilliness
-  h <- stringi::stri_split_regex(h, pattern = ",")
-  h <- as.numeric(unlist(h)[-1])
-  htot <- sum(abs(diff(h)))
-
-  # busyness overall
-  bseg <- obj$marker$`@attributes`$busynance
-  bseg <- stringi::stri_split_regex(bseg, pattern = ",")
-  bseg <- as.numeric(unlist(bseg)[-1])
-  bseg <- sum(bseg)
-
-  df <- data.frame(
-    plan = obj$marker$`@attributes`$plan[1],
-    start = obj$marker$`@attributes`$start[1],
-    finish = obj$marker$`@attributes`$finish[1],
-    length = as.numeric(obj$marker$`@attributes`$length[1]),
-    time = as.numeric(obj$marker$`@attributes`$time[1]),
-    waypoint = nrow(coords),
-    change_elev = htot,
-    av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
-    co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
-    calories = as.numeric(obj$marker$`@attributes`$calories[1]),
-    busyness = bseg
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "api/journey.json",
+    query = list(
+      key = pat,
+      itinerarypoints = ft_string,
+      plan = plan,
+      reporterrors = ifelse(reporterrors == TRUE, 1, 0)
+    )
   )
 
-  row.names(df) <- route@lines[[1]]@ID
-  route <- sp::SpatialLinesDataFrame(route, df)
-  proj4string(route) <- CRS("+init=epsg:4326")
-  route
-}
+  if (silent == FALSE) {
+    print(paste0("The request sent to cyclestreets.net was: ", httrmsg))
+  }
 
+  httrreq <- httr::GET(httrmsg)
+
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
+    stop("Error: Cyclestreets did not return a valid result")
+  }
+
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+  if (txt == "") {
+    stop("Error: Cyclestreets did not return a valid result")
+  }
+
+  obj <- jsonlite::fromJSON(txt)
+
+  if (is.element("error", names(obj))) {
+    stop(paste0("Error: ", obj$error))
+  }
+
+  if(save_raw){
+    return((obj))
+  }else{
+    # obj$marker$`@attributes`$elevations
+    # obj$marker$`@attributes`$points
+    coords <- obj$marker$`@attributes`$coordinates[1]
+    coords <- stringr::str_split(coords, pattern = " |,")[[1]]
+    coords <- matrix(as.numeric(coords), ncol = 2, byrow = TRUE)
+
+    route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
+    h <-  obj$marker$`@attributes`$elevations # hilliness
+    h <- stringr::str_split(h, pattern = ",")
+    h <- as.numeric(unlist(h)[-1])
+    htot <- sum(abs(diff(h)))
+
+    # busyness overall
+    bseg <- obj$marker$`@attributes`$busynance
+    bseg <- stringr::str_split(bseg, pattern = ",")
+    bseg <- as.numeric(unlist(bseg)[-1])
+    bseg <- sum(bseg)
+
+    df <- data.frame(
+      plan = obj$marker$`@attributes`$plan[1],
+      start = obj$marker$`@attributes`$start[1],
+      finish = obj$marker$`@attributes`$finish[1],
+      length = as.numeric(obj$marker$`@attributes`$length[1]),
+      time = as.numeric(obj$marker$`@attributes`$time[1]),
+      waypoint = nrow(coords),
+      change_elev = htot,
+      av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
+      co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
+      calories = as.numeric(obj$marker$`@attributes`$calories[1]),
+      busyness = bseg
+    )
+
+    row.names(df) <- route@lines[[1]]@ID
+    route <- sp::SpatialLinesDataFrame(route, df)
+    proj4string(route) <- CRS("+init=epsg:4326")
+    route
+  }
+}
 #' Plan a route with the graphhopper routing engine
 #'
 #' Provides an R interface to the graphhopper routing engine,
@@ -178,13 +223,14 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = c
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
-#'
 #' \dontrun{
-#' r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
+#' r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
+#' r@data
+#' plot(r)
+#' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = graphhopper_pat()){
+route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
@@ -192,44 +238,60 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
     to <- rev(RgoogleMaps::getGeoCode(to))
   }
 
-  api_base <- "https://graphhopper.com/api/1/route?"
-  orig <- paste0(from[2:1], collapse = "%2C")
-  dest <- paste0(to[2:1], collapse = "%2C")
-  ft_string <- paste0("point=", orig, "&point=", dest)
-  veh <- paste0("&vehicle=", vehicle)
+  if(is.null(pat))
+    pat = api_pat("graphhopper")
 
-  request <- paste0(api_base, ft_string, veh,
-                    "&locale=en-US&debug=true&points_encoded=false&key=", pat)
-
-  if(vehicle == "bike"){
-    request <- paste0(request, "&elevation=true")
-  }
-
+  httrmsg = httr::modify_url(
+    base_url,
+    path = "/api/1/route",
+    query = list(
+      point = paste0(from[2:1], collapse = ","),
+      point = paste0(to[2:1], collapse = ","),
+      vehicle = vehicle,
+      locale = "en-US",
+      debug = 'true',
+      points_encoded = 'false',
+      key = pat
+    )
+  )
   if(silent == FALSE){
-    print(paste0("The request sent was: ", request))
+    print(paste0("The request sent was: ", httrmsg))
+  }
+  httrreq <- httr::GET(httrmsg)
+  httr::stop_for_status(httrreq)
+
+  if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
+    stop("Error: Graphhopper did not return a valid result")
   }
 
-  txt <- httr::content(httr::GET(request), as = "text")
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+  if (txt == "") {
+    stop("Error: Graphhopper did not return a valid result")
+  }
+
   obj <- jsonlite::fromJSON(txt)
 
+  if (is.element("message", names(obj))) {
+    if (grepl("Wrong credentials", obj$message) == TRUE) {
+      stop("Invalid API key")
+    }
+  }
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][,1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
 
   # get elevation data if it was a bike trip
   if(vehicle == "bike"){
-    elevs <- obj$paths$points[[1]][[1]][,3]
-    climb <- elevs[-1] - elevs[-length(elevs)]
-    climb <- sum(climb[climb > 0])
+    change_elev <- obj$path$descend + obj$paths$ascend
+  }else{
+    change_elev <- NA
   }
 
   # Attribute data for the route
   df <- data.frame(
-
     time = obj$paths$time / (1000 * 60),
     dist = obj$paths$distance,
-    climb = climb
-
+    change_elev = change_elev
   )
 
   route <- sp::SpatialLinesDataFrame(route, df)
@@ -240,59 +302,35 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = g
 
 #' Retrieve personal access token.
 #'
-#' A personal access token.
+#' @param api_name Text string of the name of the API you are calling, e.g.
+#' cyclestreet, graphhopper etc.
 #'
 #' @keywords internal
 #' @export
-cyclestreet_pat <- function(force = FALSE) {
-  env <- Sys.getenv('CYCLESTREET')
+#' @examples
+#' \dontrun{
+#' api_pat(api_name = "cyclestreet")
+#' }
+api_pat <- function(api_name, force = FALSE) {
+  api_name_caps = toupper(api_name)
+  env <- Sys.getenv(api_name_caps)
   if (!identical(env, "") && !force) return(env)
 
   if (!interactive()) {
-    stop("Please set env var CYCLESTREET to your github personal access token",
+    stop(paste0("Set the environment variable ",  api_name_caps, " e.g. with .Renviron or Sys.setenv()"),
          call. = FALSE)
   }
 
-  message("Couldn't find env var CYCLESTREET. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key you requested from https://www.cyclestreets.net/api/apply/,  and press enter:")
+  message("Couldn't find the environment variable ",  api_name_caps, ". See documentation, e.g. ?route_cyclestreet, for more details.")
+  message("Please enter your API key to access the ", api_name, "and press enter:")
   pat <- readline(": ")
 
   if (identical(pat, "")) {
     stop("Personal access token entry failed", call. = FALSE)
   }
 
-  message("Updating GRAPHHOPPER env var to API key. Save this to your .Renviron")
-  Sys.setenv(CYCLESTREET = pat)
-
-  pat
-
-}
-
-#' Retrieve personal access token.
-#'
-#' A personal access token.
-#'
-#' @keywords internal
-#' @export
-graphhopper_pat <- function(force = FALSE) {
-  env <- Sys.getenv('GRAPHHOPPER')
-  if (!identical(env, "") && !force) return(env)
-
-  if (!interactive()) {
-    stop("Please set env var GRAPHHOPPER to your github personal access token",
-         call. = FALSE)
-  }
-
-  message("Couldn't find env var GRAPHHOPPER. See ?cyclestreet_pat for more details.")
-  message("Please enter your API key, e.g. from https://graphhopper.com/dashboard/#/api-keys , and press enter:")
-  pat <- readline(": ")
-
-  if (identical(pat, "")) {
-    stop("Personal access token entry failed", call. = FALSE)
-  }
-
-  message("Updating GRAPHHOPPER env var to API key")
-  Sys.setenv(GRAPHHOPPER = pat)
+  message("Updating ",  api_name_caps, " environment variable. Save this to .Renviron for future use.")
+  Sys.setenv(api_name_caps = pat)
 
   pat
 

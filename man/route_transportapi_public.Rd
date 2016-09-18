@@ -4,7 +4,8 @@
 \alias{route_transportapi_public}
 \title{Plan a single route with TransportAPI.com}
 \usage{
-route_transportapi_public(from, to, silent = FALSE)
+route_transportapi_public(from, to, silent = FALSE, region = "southeast",
+  modes = NA, not_modes = NA)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -16,6 +17,15 @@ on Earth.}
 on Earth. This represents the destination of the trip.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
+
+\item{region}{String for the active region to use for journey plans.
+Possible values are 'southeast' (default) or 'tfl'.}
+
+\item{modes}{Vector of character strings containing modes to use. Default is
+to use all modes.}
+
+\item{not_modes}{Vector of character strings containing modes not to use.
+Not used if \code{modes} is set.}
 }
 \description{
 Provides an R interface to the TransportAPI.com public transport API.

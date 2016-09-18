@@ -4,7 +4,7 @@
 \alias{nearest_cyclestreets}
 \title{Generate nearest point on the route network of a point using the CycleStreets.net}
 \usage{
-nearest_cyclestreets(lat, lng, pat = cyclestreet_pat())
+nearest_cyclestreets(lat, lng, pat = api_pat("cyclestreet"))
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
@@ -14,8 +14,8 @@ longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to map.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
 }
 \description{
 Generate nearest point on the route network of a point using the CycleStreets.net

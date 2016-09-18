@@ -60,13 +60,8 @@ conjunction with the viaroute2sldf function.
 \examples{
 \dontrun{
   exroutes <- viaroute(50, 0, 51, 1)
-  r1 <- viaroute2sldf(exroutes)
-  exroutes <- viaroute(50, 0, 51, 1, zoom = 4)
-  r2 <- viaroute2sldf(exroutes)
-  # Requires mapview to be installed
-  # Show the difference between outputs with different zoom levels
-  mapview::mapview(r1) +
-   mapview::mapview(r2, color = "blue")
+  r <- viaroute2sldf(exroutes)
+  plot(r)
   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
   r <- viaroute2sldf(exroutes)
   plot(r)

@@ -34,20 +34,18 @@ Imports:
     httr,
     R.utils,
     stringi,
+    stringr,
     readr,
     lubridate,
     RCurl,
     geosphere,
-    Rcpp (>= 0.12.1),
-    igraph
+    Rcpp (>= 0.12.1)
 LinkingTo:
     RcppArmadillo,
     Rcpp
 Suggests:
     testthat,
     knitr,
-    tmap,
-    leaflet,
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr

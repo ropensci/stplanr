@@ -17,4 +17,6 @@ test_that(
       dissolve = TRUE
     )
     expect_is(t1, "SpatialPolygonsDataFrame")
+    files_to_remove = list.files(pattern = "smallsa|testcycleway")
+    file.remove(files_to_remove)  # tidy up
   })

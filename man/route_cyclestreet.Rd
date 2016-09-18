@@ -4,8 +4,9 @@
 \alias{route_cyclestreet}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
-  pat = cyclestreet_pat())
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+  base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
+  save_raw = "FALSE")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -20,8 +21,16 @@ on Earth. This represents the destination of the trip.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
+
+\item{base_url}{The base url from which to construct API requests
+(with default set to main server)}
+
+\item{reporterrors}{Boolean value (TRUE/FALSE) indicating if cyclestreets
+should report errors (FALSE by default).}
+
+\item{save_raw}{Boolean value which returns raw list from the json if TRUE (FALSE by default).}
 }
 \description{
 Provides an R interface to the CycleStreets.net cycle planning API,
@@ -65,6 +74,17 @@ Read more about the .Renviron here: \code{?.Renviron}
 \examples{
 
 \dontrun{
+# Example from
+from = c(0.117950, 52.205302); to = c(0.131402, 52.221046)
+json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+str(json_output) # what does cyclestreets give you?
+names(json_output$marker$`@attributes`)
+json_output$marker$`@attributes`$start[1] # starting point
+json_output$marker$`@attributes`$finish[1] # end point
+json_output$marker$`@attributes`$speed[1] # assumed speed (km/hr)
+json_output$marker$`@attributes`$busynance # busyness of each section
+json_output$marker$`@attributes`$elevations # list of elevations
+# jsonlite::toJSON(json_output, pretty = TRUE) # complete json output (long!)
 # Plan the 'fastest' route between two points in Manchester
 rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
 rf_mcr@data

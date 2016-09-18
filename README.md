@@ -1,13 +1,12 @@
-# stplanr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/package=stplanr) [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
 
-This package is for sustainable transport planning with R (hence the name **stplanr**).
+**stplanr** is a package for sustainable transport planning with R.
 
-It brings together a range of tools for transport planning practitioners and researchers to better understand transport systems and inform policy.
+It provides functions for solving common problems in transport planning and modelling, such as how to best get from point A to point B. The overall aim is to provide a reproducible, transparent and accessible toolkit to help people better understand transport systems and inform policy.
 
-The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the Propensity to Cycle Tool ([PCT](http://pct.bike/)) project to identify where bicycle paths are most urgently needed. Please see the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425) for more information on how it can be used. This README gives some basics.
+The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the development of the Propensity to Cycle Tool ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis and modelling work toidentify where bicycle paths are most needed. See the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425) for more information on how it can be used. This README gives some basics.
 
 **stplanr** should be useful to researchers everywhere. The function `route_graphhopper()`, for example, works anywhere in the world using the [graphhopper](https://graphhopper.com/) routing API and `read_table_builder()` reads-in Australian data. We welcome contributions that make transport research easier worldwide.
 
@@ -62,25 +61,28 @@ trip <-
 and place names, found using the Google Map API:
 
 ``` r
-trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
-# devtools::install_github("mtennekes/tmap", subdir = "pkg")
 library(tmap)
-osm_tiles <- read_osm(bb(bbox(trip), ext = 1.5))
-tm_shape(osm_tiles) +
-  tm_raster() +
-  tm_shape(trip) +
-  tm_lines(lwd = 3)
+if(!Sys.getenv("CYCLESTREET") == ""){
+  trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
+  # devtools::install_github("mtennekes/tmap", subdir = "pkg")
+  osm_tiles <- read_osm(bb(bbox(trip), ext = 1.5))
+  tm_shape(osm_tiles) +
+    tm_raster() +
+    tm_shape(trip) +
+    tm_lines(lwd = 3)
+}
 ```
-
-![](README-cycle-trip-1.png)
 
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
 ``` r
-# Remove intra-zone flow
 intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
 travel_network <- travel_network[!intrazone,]
-t_routes <- line2route(travel_network)
+if(Sys.getenv("CYCLESTREET") == ""){
+  t_routes = routes_fast
+} else {
+  t_routes <- line2route(travel_network)
+}
 plot(t_routes)
 ```
 
