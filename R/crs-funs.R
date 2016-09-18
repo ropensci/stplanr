@@ -71,8 +71,17 @@ reproject = function(shp, crs = crs_select_aeq(shp)){
 #' raster::crs(rbuf)
 #' plot(routes_fast, col = "green", add = TRUE)
 gprojected = function(shp, fun, crs = crs_select_aeq(shp), ...){
-  if(is.projected(shp)){
-    res = fun(shp, ...)
+  # assume it's not projected  (i.e. lat/lon) if there is no CRS
+  if(!is.na(is.projected(shp))){
+    if(is.projected(shp)){
+      res = fun(shp, ...)
+    } else {
+      shp_projected = reproject(shp, crs = crs)
+      message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))
+      res = fun(shp_projected, ...)
+      if(is(res, "Spatial"))
+        res = spTransform(res, CRS("+init=epsg:4326"))
+    }
   } else {
     shp_projected = reproject(shp, crs = crs)
     message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))

@@ -196,7 +196,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
   r <- l
 
   # test for the second od pair (the first often fails)
-  rc2 <- FUN(from = ldf[2,1:2], to = ldf[2, 3:4], ...)
+  rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
 
   rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
   names(rdata) <- names(rc2)
@@ -204,7 +204,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
       # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
     for(i in 1:nrow(ldf)){
     tryCatch({
-        rc <- FUN(from = ldf[i,1:2], to = ldf[i, 3:4], ...)
+        rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
         rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
         r@lines[[i]] <- rcl
         r@data[i,] <- rc@data
@@ -340,7 +340,4 @@ points2line = function(p){
   l = raster::spLines(p)
   raster::crs(l) = p_proj
   l
-}
-geo_dist = function(p1, p2){
-  gprojected(points2line(p1, p2), fun = rgeos::gDistance)
 }
