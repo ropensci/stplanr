@@ -21,8 +21,8 @@ on Earth. This represents the destination of the trip.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used. By default this is set to NULL and
-this is usually aquired automatically through a helper, api_pat().}
+\item{pat}{The API key used - this is usually aquired automatically through a helper
+function}
 
 \item{base_url}{The base url from which to construct API requests
 (with default set to main server)}

@@ -14,8 +14,8 @@ longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to map.}
 
-\item{pat}{The API key used. By default this is set to NULL and
-this is usually aquired automatically through a helper, api_pat().}
+\item{pat}{The API key used - this is usually aquired automatically through a helper
+function}
 }
 \description{
 Generate nearest point on the route network of a point using the CycleStreets.net
