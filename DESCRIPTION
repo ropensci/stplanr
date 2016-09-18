@@ -39,6 +39,8 @@ Imports:
     lubridate,
     RCurl,
     geosphere,
+    igraph,
+    nabor,
     Rcpp (>= 0.12.1)
 LinkingTo:
     RcppArmadillo,
