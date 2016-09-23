@@ -174,6 +174,7 @@ line2pointsn <- function(l){
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
+#' @param list_output If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
@@ -189,33 +190,64 @@ line2pointsn <- function(l){
 #' plot(flowlines[n,])
 #' lines(rf[n,], col = "red")
 #' lines(rq[n,], col = "green")
+#' # Example with list output
+#' l <- flowlines[1:3,]
+#' rf_list <- line2route(l = l, list_output = TRUE)
+#' class(rf_list)       # list output
+#' class(rf_list[[2]])  # but individual elements are spatial
+#' rf_list_of_lists <- line2route(l = l, list_output = TRUE, save_raw = TRUE)
+#' class(rf_list_of_lists)       # list output
+#' class(rf_list_of_lists[[2]])  # but individual elements are spatial
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, ...){
+
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
-  r <- l
 
-  # test for the second od pair (the first often fails)
-  rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+  if(list_output){
+    r <- as.list(rep(NA, length(l)))
 
-  rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
-  names(rdata) <- names(rc2)
-  r@data <- rdata
-      # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
+    # test for the second od pair (the first often fails)
+    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+
+    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
     for(i in 1:nrow(ldf)){
-    tryCatch({
+      tryCatch({
+        r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+      }, error = function(e){warning(paste0("Fail for line number ", i))})
+      # Status bar
+      perc_temp <- i %% round(nrow(ldf) / n_print)
+      if(!is.na(perc_temp) & perc_temp == 0){
+        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+                       " distances calculated")) # print % of distances calculated
+      }
+    }
+  } else {
+
+    r <- l
+
+    # test for the second od pair (the first often fails)
+    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+
+    rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
+    names(rdata) <- names(rc2)
+    r@data <- rdata
+    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
+    for(i in 1:nrow(ldf)){
+      tryCatch({
         rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
         rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
         r@lines[[i]] <- rcl
         r@data[i,] <- rc@data
-    }, error = function(e){warning(paste0("Fail for line number ", i))})
-    # Status bar
-    perc_temp <- i %% round(nrow(ldf) / n_print)
-    if(!is.na(perc_temp) & perc_temp == 0){
-      message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
-                   " distances calculated")) # print % of distances calculated
+      }, error = function(e){warning(paste0("Fail for line number ", i))})
+      # Status bar
+      perc_temp <- i %% round(nrow(ldf) / n_print)
+      if(!is.na(perc_temp) & perc_temp == 0){
+        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+                       " distances calculated")) # print % of distances calculated
+      }
     }
-    }
+  }
   r
 }
 #' Convert a series of points into a dataframe of origins and destinations

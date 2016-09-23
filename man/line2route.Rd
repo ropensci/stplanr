@@ -4,7 +4,8 @@
 \alias{line2route}
 \title{Convert straight SpatialLinesDataFrame from flow data into routes}
 \usage{
-line2route(l, route_fun = "route_cyclestreet", n_print = 10, ...)
+line2route(l, route_fun = "route_cyclestreet", n_print = 10,
+  list_output = FALSE, ...)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
@@ -14,6 +15,8 @@ line2route(l, route_fun = "route_cyclestreet", n_print = 10, ...)
 
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
+
+\item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
@@ -37,6 +40,14 @@ n = 21
 plot(flowlines[n,])
 lines(rf[n,], col = "red")
 lines(rq[n,], col = "green")
+# Example with list output
+l <- flowlines[1:3,]
+rf_list <- line2route(l = l, list_output = TRUE)
+class(rf_list)       # list output
+class(rf_list[[2]])  # but individual elements are spatial
+rf_list_of_lists <- line2route(l = l, list_output = TRUE, save_raw = TRUE)
+class(rf_list_of_lists)       # list output
+class(rf_list_of_lists[[2]])  # but individual elements are spatial
 }
 }
 
