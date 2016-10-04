@@ -59,23 +59,72 @@ od2odf <- function(flow, zones){
 #' lines(newflowlines2, col = "white")
 #' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
+#' # When destinations are different
+#' head(flow_dests) # check data
+#' flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
+#' plot(flowlines_with_dests)
+#'
 #' @name od2line
 NULL
 
 #' @rdname od2line
 #' @export
-od2line <- function(flow, zones){
+od2line <- function(flow, zones, destinations = NA){
   l <- vector("list", nrow(flow))
-  for(i in 1:nrow(flow)){
-    from <- zones@data[,1] %in% flow[i, 1]
-    if(sum(from) == 0)
-      warning(paste0("No match for line ", i))
-    to <- zones@data[,1] %in% flow[i, 2]
-    if(sum(to) == 0 & sum(from) == 1)
-      warning(paste0("No match for line ", i))
-    x <- sp::coordinates(zones[from, ])
-    y <- sp::coordinates(zones[to, ])
-    l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+  name_match_origin = names(flow) %in% names(zones)
+  if(sum(name_match_origin) > 0){
+    id_var_origin <- names(flow)[name_match_origin][1] # first matching name
+    origin_id_var <- id_var_origin
+  } else {
+    id_var_origin <- names(flow)[1]
+    origin_id_var <- names(zones)[1]
+    wmsg <- paste0("No matching column names: matching by first column in flow data and first column in zones data by default")
+    warning(wmsg)
+  }
+  if(is.na(destinations)){
+    name_match_destination = names(flow) %in% names(zones)
+    if(sum(name_match_destination) > 1){
+      id_var_destination <- names(flow)[name_match_destination][2] # first matching name
+      dest_id_var <- id_var_destination
+    } else {
+      id_var_destination <- names(flow)[2]
+      dest_id_var <- names(zones)[1]
+      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in zones data by default")
+      warning(wmsg)
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- zones@data[[origin_id_var]] %in% flow[[id_var_destination]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(zones[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
+    } else {
+    name_match_destination = names(flow) %in% names(destinations)
+    if(sum(name_match_destination) > 0){
+      id_var_destination <- names(flow)[name_match_destination][1] # first matching name
+      dest_id_var <- id_var_destination
+    } else {
+      id_var_destination <- names(flow)[1]
+      dest_id_var <- names(destinations)[1]
+      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in destinations data by default")
+      warning(wmsg)
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- destinations@data[[dest_id_var]] %in% flow[[id_var_destination]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(destinations[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)

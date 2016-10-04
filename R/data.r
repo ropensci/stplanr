@@ -93,6 +93,26 @@ NULL
 #' @usage data(flow)
 #' @format A data frame with 49 rows and 15 columns
 NULL
+#' data frame of invented
+#' commuter flows with destinations in a different layer than the origins
+#'
+# @family example flow data
+#'
+#' @examples
+#' \dontrun{
+#' # This is how the dataset was constructed
+#' flow_dests = flow
+#' flow_dests$Area.of.workplace = sample(x = destinations$WZ11CD, size = nrow(flow))
+#' flow_dests = dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
+#' devtools::use_data(flow_dests)
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @name flow_dests
+#' @usage data(flow_dests)
+#' @format A data frame with 49 rows and 15 columns
+NULL
 #' example destinations data
 #'
 # @family example destinations
@@ -115,10 +135,14 @@ NULL
 #' plot(destination_zones)
 #' devtools::use_data(destination_zones)
 #' head(destination_zones@data)
+#' destinations = rgeos::gCentroid(destinations, byid = TRUE)
+#' destinations = SpatialPointsDataFrame(destinations, destination_zones@data)
+#' devtools::use_data(destinations, overwrite = TRUE)
 #' }
 #' @docType data
 #' @keywords datasets
 #' @name destination_zones
+#' @aliases destinations
 #' @usage data(destination_zones)
 #' @format A SpatialPolygonsDataFrame with 87 features
 NULL
