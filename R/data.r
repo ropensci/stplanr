@@ -58,12 +58,10 @@ NULL
 #'   \item [,4:15]. Flows for different modes
 #'   \item id. unique id of flow
 #' }
-#'
 #' Although these variable names are unique to UK data, the data
 #' structure is generalisable and typical of flow data from any source.
 #' The key variables are the origin and destination ids, which link to
 #' the \code{cents} georeferenced spatial objects.
-#'
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed - see
@@ -95,7 +93,35 @@ NULL
 #' @usage data(flow)
 #' @format A data frame with 49 rows and 15 columns
 NULL
-
+#' example destinations data
+#'
+# @family example destinations
+#'
+#' This dataset represents trip destinations on a different geographic
+#' level than the origins stored in the \code{cents}.
+#' @examples
+#' \dontrun{
+#' # This is how the dataset was constructed - see
+#' # http://cowz.geodata.soton.ac.uk/download/
+#' download.file("http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
+#'   "COWZ_EW_2011_BFC.zip")
+#' unzip("COWZ_EW_2011_BFC.zip")
+#' wz = raster::shapefile("COWZ_EW_2011_BFC.shp")
+#' to_remove = list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
+#' file.remove(to_remove)
+#' proj4string(wz)
+#' wz = spTransform(wz, proj4string(zones))
+#' destination_zones = wz[zones,]
+#' plot(destination_zones)
+#' devtools::use_data(destination_zones)
+#' head(destination_zones@data)
+#' }
+#' @docType data
+#' @keywords datasets
+#' @name destination_zones
+#' @usage data(destination_zones)
+#' @format A SpatialPolygonsDataFrame with 87 features
+NULL
 #' SpatialLinesDataFrame of commuter flows
 #'
 # @family example flow data
