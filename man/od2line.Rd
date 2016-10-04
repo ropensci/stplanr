@@ -5,7 +5,7 @@
 \alias{od2line2}
 \title{Convert flow data to SpatialLinesDataFrame}
 \usage{
-od2line(flow, zones)
+od2line(flow, zones, destinations = NA)
 
 od2line2(flow, zones)
 }
@@ -40,5 +40,10 @@ lines(newflowlines, lwd = 3)
 lines(newflowlines2, col = "white")
 nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 identical(nfl_sldf, newflowlines)
+# When destinations are different
+head(flow_dests) # check data
+flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
+plot(flowlines_with_dests)
+
 }
 
