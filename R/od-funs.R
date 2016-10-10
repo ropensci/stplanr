@@ -247,6 +247,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
                        " distances calculated")) # print % of distances calculated
       }
     }
+    r@data$ID <- row.names(r@data)
   }
   r
 }
