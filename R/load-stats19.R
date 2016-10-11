@@ -214,7 +214,7 @@ ve$Vehicle_Type <- factor(ve$Vehicle_Type,
                              labels =
                                c("Data missing or out of range", "Male", "Female", "Not known"
                              ))
-  levels(ve$Sex_Driver)[1] <- levels(ve$Sex_Driver)[4]
+  levels(ve$Sex_of_Driver)[1] <- levels(ve$Sex_of_Driver)[4]
   # summary(ve$Sex_of_Driver)
 
   ve$Age_Band_of_Driver <- factor(ve$Age_Band_of_Driver,
