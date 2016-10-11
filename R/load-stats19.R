@@ -214,8 +214,12 @@ ve$Vehicle_Type <- factor(ve$Vehicle_Type,
                              labels =
                                c("Data missing or out of range", "Male", "Female", "Not known"
                              ))
-  levels(ve$Sex_Driver_f)[1] <- levels(ve$Sex_Driver_f)[4]
-  summary(ve$Sex_of_Driver)
+  levels(ve$Sex_Driver)[1] <- levels(ve$Sex_Driver)[4]
+  # summary(ve$Sex_of_Driver)
+
+  ve$Age_Band_of_Driver_test <- factor(ve$Age_Band_of_Driver,
+                                       labels = c("na", "0 - 5", "6 - 10", "11 - 15", "16 - 20", "21 - 25", "26 - 35",
+                                                  "37 - 45", "46 - 55", "56 - 65", "66 - 75", "Over 75"))
 
   ve$Driver_IMD_Decile <- factor(dplyr::inner_join(ve, structure(list(Driver_IMD_Decile = c(1, 2, 3, 4, 5, 6, 7, 8,
                                                                                             9, 10, -1), IMD_Decile = c("Most deprived 10%", "More deprived 10-20%",
