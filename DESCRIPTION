@@ -50,7 +50,6 @@ LinkingTo:
 Suggests:
     testthat,
     knitr,
-    tmap,
     rmarkdown
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
