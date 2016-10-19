@@ -37,6 +37,8 @@ This function makes the task easier.
 that returns a \code{SpatialLines} object (omitting the data).
 }
 \examples{
+data(flow) # load example data - see ?flow for mor information
+data(cents)
 newflowlines <- od2line(flow = flow, zones = cents)
 newflowlines2 <- od2line2(flow = flow, zones = cents)
 plot(cents)
