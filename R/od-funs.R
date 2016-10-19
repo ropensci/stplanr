@@ -52,6 +52,8 @@ od2odf <- function(flow, zones){
 #' representing origins and destinations of travel flows.
 #' @export
 #' @examples
+#' data(flow) # load example data - see ?flow for mor information
+#' data(cents)
 #' newflowlines <- od2line(flow = flow, zones = cents)
 #' newflowlines2 <- od2line2(flow = flow, zones = cents)
 #' plot(cents)
