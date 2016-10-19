@@ -14,7 +14,8 @@ the first column is geo_code. This corresponds to the first two columns
 of \code{\link{flow}}.}
 
 \item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins and destinations of travel flows.}
+representing origins (and destinations if no separate destinations object is provided)
+of travel flows.}
 }
 \description{
 It is common to want to know the Euclidean distance between origins and destinations
