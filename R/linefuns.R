@@ -11,6 +11,7 @@
 #'
 #' @export
 #' @examples
+#' data(routes_fast)
 #' n_vertices(routes_fast)
 n_vertices <- function(l){
   sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
@@ -29,6 +30,7 @@ n_vertices <- function(l){
 #' @inheritParams line2df
 #' @export
 #' @examples
+#' data(flowlines)
 #' islp <- is_linepoint(flowlines)
 #' nrow(flowlines)
 #' sum(islp)
@@ -54,6 +56,7 @@ is_linepoint <- function(l){
 #' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing
 #' @export
 #' @examples
+#' data(flowlines)
 #' line_bearing(flowlines)
 #' line_bearing(flowlines, bidirectional = TRUE)
 line_bearing = function(l, bidirectional = FALSE){
@@ -83,7 +86,8 @@ line_bearing = function(l, bidirectional = FALSE){
 #' @author Robin Lovelace and Malcolm Morgan
 #' @export
 #' @examples
-#' # find all routes going North-South
+#' data(flowlines)
+#' # Find all routes going North-South
 #' a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 #' plot(flowlines)
 #' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
@@ -113,7 +117,8 @@ angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
 #' @inheritParams line2df
 #' @export
 #' @examples
-#' l = routes_fast
+#' data(routes_fast)
+#' line_midpoint(routes_fast)
 line_midpoint = function(l){
   gprojected(l, maptools::SpatialLinesMidPoints)
 }
@@ -132,6 +137,7 @@ line_length = function(l, byid = TRUE){
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
 #' @export
 #' @examples
+#' data(routes_fast)
 #' l = routes_fast[1,]
 #' l_seg2 = line_segment(l = l, n_segments = 2)
 #' plot(l_seg2, col = l_seg2$group, lwd = 50)

@@ -16,6 +16,7 @@ automatically by \code{\link{crs_select_aeq}}).}
 Many GIS functions (e.g. finding the area)
 }
 \examples{
+data(routes_fast)
 rf_aeq = reproject(routes_fast)
 rf_osgb = reproject(routes_fast, 27700)
 cor(rgeos::gLength(rf_aeq, byid = TRUE), rgeos::gLength(rf_osgb, byid = TRUE))
