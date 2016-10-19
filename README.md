@@ -61,17 +61,13 @@ trip <-
 and place names, found using the Google Map API:
 
 ``` r
-library(tmap)
 if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
-  # devtools::install_github("mtennekes/tmap", subdir = "pkg")
-  osm_tiles <- read_osm(bb(bbox(trip), ext = 1.5))
-  tm_shape(osm_tiles) +
-    tm_raster() +
-    tm_shape(trip) +
-    tm_lines(lwd = 3)
+  trip <- route_cyclestreet("Bradford", "Leeds", plan = "balanced")
+  plot(trip)
 }
 ```
+
+![](README-cycle-trip-1.png)
 
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
@@ -97,20 +93,15 @@ leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
 
 For more examples, `example("line2route")`.
 
-`overline` is a function which takes a series of route-allocated lines, splits them into unique segmentes and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below using the [tmap](https://github.com/mtennekes/tmap) package.
+`overline` is a function which takes a series of route-allocated lines, splits them into unique segmentes and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below.
 
 ``` r
 t_routes$All <- travel_network$All
 rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
 
-osm_tiles <- read_osm(bb(rnet, ext = 1.05))
-rnet$lwd <- rnet$All / mean(rnet$All)
-tm_shape(osm_tiles) +
-  tm_raster(saturation = .25) +
-  tm_shape(rnet) +
-  tm_lines(lwd = "lwd", scale = 5, legend.lwd.show = FALSE)  +
-  tm_shape(cents) +
-  tm_bubbles()
+lwd <- rnet$All / mean(rnet$All)
+plot(rnet, lwd = lwd)
+points(cents)
 ```
 
 ![](README-rnet-1.png)

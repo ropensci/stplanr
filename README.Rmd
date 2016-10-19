@@ -62,7 +62,7 @@ cents[1:3,] # points representing origins and destinations
 
 These datasets can be combined as follows:
 
-```{r plot1}
+```{r plot1, warning=FALSE}
 travel_network <- od2line(flow = flow, zones = cents)
 w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
