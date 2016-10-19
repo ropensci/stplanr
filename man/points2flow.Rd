@@ -15,6 +15,7 @@ representing the potential flows, or 'spatial interaction', between every combin
 of points.
 }
 \examples{
+data(cents)
 plot(cents)
 flow <-points2flow(cents)
 plot(flow, add = TRUE)

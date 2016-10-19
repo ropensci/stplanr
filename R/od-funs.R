@@ -19,6 +19,8 @@
 #'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples
+#' data(flow)
+#' data(zones)
 #' od2odf(flow, zones)
 od2odf <- function(flow, zones){
 
@@ -157,6 +159,7 @@ od2line2 <- function(flow, zones){
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
+#' data(flowlines)
 #' line2df(flowlines[5,]) # beginning and end of a single straight line
 #' line2df(flowlines) # on multiple lines
 #' line2df(routes_fast[5:6,]) # beginning and end of routes
@@ -234,6 +237,7 @@ line2pointsn <- function(l){
 #' @export
 #' @examples
 #' \dontrun{
+#' data(flowlines)
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
@@ -314,6 +318,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
 #' @param p SpatialPointsDataFrame or data.frame
 #' @export
 #' @examples
+#' data(cents)
 #' df <- points2odf(cents)
 #' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
 #' df2 <- points2odf(cents_centroids)
@@ -341,6 +346,7 @@ points2odf <- function(p){
 #'
 #' @export
 #' @examples
+#' data(cents)
 #' plot(cents)
 #' flow <-points2flow(cents)
 #' plot(flow, add = TRUE)
@@ -359,6 +365,7 @@ points2flow <- function(p){
 #'
 #' @export
 #' @examples
+#' data(flowlines)
 #' l <- flowlines
 #' nl <- routes_fast
 #' nrow(l)

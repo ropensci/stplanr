@@ -30,6 +30,7 @@ See \code{\link{route_cyclestreet}} and other route functions for details
 }
 \examples{
 \dontrun{
+data(flowlines)
 plot(flowlines)
 rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
