@@ -1,10 +1,13 @@
 language: r
 sudo: true
 
-r_binary_packages:
-  - rgdal
+before_install:
+  - sudo apt-get install libproj-dev libgeos++-dev libgdal-dev
 
-# r_packages:
+r_packages:
+  - rgdal
+  - roxygen2
+  - rmarkdown
 
 notifications:
     email:
