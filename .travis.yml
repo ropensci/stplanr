@@ -1,10 +1,9 @@
 language: r
 sudo: true
 
-r_binary_packages:
-  - rgdal
-
-# r_packages:
+before_script:
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev libproj-dev
 
 notifications:
     email:
