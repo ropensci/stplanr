@@ -5,7 +5,7 @@
 \alias{od2line2}
 \title{Convert flow data to SpatialLinesDataFrame}
 \usage{
-od2line(flow, zones)
+od2line(flow, zones, destinations = NA)
 
 od2line2(flow, zones)
 }
@@ -17,7 +17,11 @@ the first column is geo_code. This corresponds to the first two columns
 of \code{\link{flow}}.}
 
 \item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins and destinations of travel flows.}
+representing origins (and destinations if no separate destinations object is provided)
+of travel flows.}
+
+\item{destinations}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+representing destinations of travel flows.}
 }
 \description{
 Convert flow data to SpatialLinesDataFrame
@@ -33,6 +37,8 @@ This function makes the task easier.
 that returns a \code{SpatialLines} object (omitting the data).
 }
 \examples{
+data(flow) # load example data - see ?flow for mor information
+data(cents)
 newflowlines <- od2line(flow = flow, zones = cents)
 newflowlines2 <- od2line2(flow = flow, zones = cents)
 plot(cents)
@@ -40,5 +46,10 @@ lines(newflowlines, lwd = 3)
 lines(newflowlines2, col = "white")
 nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 identical(nfl_sldf, newflowlines)
+# When destinations are different
+head(flow_dests) # check data
+flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
+plot(flowlines_with_dests)
+
 }
 

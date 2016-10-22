@@ -27,6 +27,8 @@ centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
 }
 \examples{
+data(flow)
+data(zones)
 od2odf(flow, zones)
 }
 \references{

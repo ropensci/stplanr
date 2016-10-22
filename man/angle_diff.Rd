@@ -28,7 +28,8 @@ Building on the convention used in \code{\link{bearing}} and in many application
 North is definied as 0, East as 90 and West as -90.
 }
 \examples{
-# find all routes going North-South
+data(flowlines)
+# Find all routes going North-South
 a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 plot(flowlines)
 plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")

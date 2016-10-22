@@ -36,6 +36,7 @@ crs_select_aeq <- function(shp){
 #' automatically by \code{\link{crs_select_aeq}}).
 #' @export
 #' @examples
+#' data(routes_fast)
 #' rf_aeq = reproject(routes_fast)
 #' rf_osgb = reproject(routes_fast, 27700)
 #' cor(rgeos::gLength(rf_aeq, byid = TRUE), rgeos::gLength(rf_osgb, byid = TRUE))
@@ -63,6 +64,7 @@ reproject = function(shp, crs = crs_select_aeq(shp)){
 #' @export
 #' @examples
 #' # Find the length of routes that are in lat/long format
+#' data(routes_fast)
 #' rlength = gprojected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 #' plot(routes_fast$length, rlength)
 #' cor(routes_fast$length, rlength)

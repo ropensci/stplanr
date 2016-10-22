@@ -14,6 +14,7 @@ This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to f
 of lines that are not projected, which have a lat/long CRS.
 }
 \examples{
-l = routes_fast
+data(routes_fast)
+line_midpoint(routes_fast)
 }
 

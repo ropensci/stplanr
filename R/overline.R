@@ -237,7 +237,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 #' with a distance (i.e. not intra-zone flows) are included
 #' @export
 #' @examples
-#' data("flowlines")
+#' data(flowlines)
 #' plot(flowlines)
 #' singlelines <- onewaygeo(flowlines, attrib = 3:14)
 #' plot(singlelines, lwd = 3, col = "red")
@@ -295,7 +295,7 @@ onewaygeo <- function(x, attrib){
 #' results for the user-selected attribute values that have been aggregated.
 #' @export
 #' @examples
-#' data("flow")
+#' data(flow)
 #' flow_oneway = onewayid(flow, attrib = 3)
 #' nrow(flow_oneway) < nrow(flow) # result has fewer rows
 #' sum(flow$All) == sum(flow_oneway$All) # but the same total flow

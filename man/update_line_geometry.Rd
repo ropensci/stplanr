@@ -16,6 +16,7 @@ Take two SpatialLines objects and update the geometry of the former with that of
 retaining the data of the former.
 }
 \examples{
+data(flowlines)
 l <- flowlines
 nl <- routes_fast
 nrow(l)

@@ -19,6 +19,8 @@
 #'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples
+#' data(flow)
+#' data(zones)
 #' od2odf(flow, zones)
 od2odf <- function(flow, zones){
 
@@ -49,9 +51,14 @@ od2odf <- function(flow, zones){
 #' the first column is geo_code. This corresponds to the first two columns
 #' of \code{\link{flow}}.
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-#' representing origins and destinations of travel flows.
+#' representing origins (and destinations if no separate destinations object is provided)
+#' of travel flows.
+#' @param destinations A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+#' representing destinations of travel flows.
 #' @export
 #' @examples
+#' data(flow) # load example data - see ?flow for mor information
+#' data(cents)
 #' newflowlines <- od2line(flow = flow, zones = cents)
 #' newflowlines2 <- od2line2(flow = flow, zones = cents)
 #' plot(cents)
@@ -59,23 +66,72 @@ od2odf <- function(flow, zones){
 #' lines(newflowlines2, col = "white")
 #' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
+#' # When destinations are different
+#' head(flow_dests) # check data
+#' flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
+#' plot(flowlines_with_dests)
+#'
 #' @name od2line
 NULL
 
 #' @rdname od2line
 #' @export
-od2line <- function(flow, zones){
+od2line <- function(flow, zones, destinations = NA){
   l <- vector("list", nrow(flow))
-  for(i in 1:nrow(flow)){
-    from <- zones@data[,1] %in% flow[i, 1]
-    if(sum(from) == 0)
-      warning(paste0("No match for line ", i))
-    to <- zones@data[,1] %in% flow[i, 2]
-    if(sum(to) == 0 & sum(from) == 1)
-      warning(paste0("No match for line ", i))
-    x <- sp::coordinates(zones[from, ])
-    y <- sp::coordinates(zones[to, ])
-    l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+  name_match_origin = names(flow) %in% names(zones)
+  if(sum(name_match_origin) > 0){
+    id_var_origin <- names(flow)[name_match_origin][1] # first matching name
+    origin_id_var <- id_var_origin
+  } else {
+    id_var_origin <- names(flow)[1]
+    origin_id_var <- names(zones)[1]
+    wmsg <- paste0("No matching column names: matching by first column in flow data and first column in zones data by default")
+    warning(wmsg)
+  }
+  if(is.na(destinations)){
+    name_match_destination = names(flow) %in% names(zones)
+    if(sum(name_match_destination) > 1){
+      id_var_destination <- names(flow)[name_match_destination][2] # first matching name
+      dest_id_var <- id_var_destination
+    } else {
+      id_var_destination <- names(flow)[2]
+      dest_id_var <- names(zones)[1]
+      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in zones data by default")
+      warning(wmsg)
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- zones@data[[origin_id_var]] %in% flow[[id_var_destination]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(zones[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
+    } else {
+    name_match_destination = names(flow) %in% names(destinations)
+    if(sum(name_match_destination) > 0){
+      id_var_destination <- names(flow)[name_match_destination][1] # first matching name
+      dest_id_var <- id_var_destination
+    } else {
+      id_var_destination <- names(flow)[1]
+      dest_id_var <- names(destinations)[1]
+      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in destinations data by default")
+      warning(wmsg)
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- destinations@data[[dest_id_var]] %in% flow[[id_var_destination]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(destinations[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
   }
   l <- sp::SpatialLines(l)
   l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
@@ -103,6 +159,7 @@ od2line2 <- function(flow, zones){
 #' @param l A SpatialLinesDataFrame
 #' @export
 #' @examples
+#' data(flowlines)
 #' line2df(flowlines[5,]) # beginning and end of a single straight line
 #' line2df(flowlines) # on multiple lines
 #' line2df(routes_fast[5:6,]) # beginning and end of routes
@@ -174,11 +231,13 @@ line2pointsn <- function(l){
 #' \code{\link{od2line}}
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
+#' @param list_output If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
 #' \dontrun{
+#' data(flowlines)
 #' plot(flowlines)
 #' rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
@@ -189,33 +248,65 @@ line2pointsn <- function(l){
 #' plot(flowlines[n,])
 #' lines(rf[n,], col = "red")
 #' lines(rq[n,], col = "green")
+#' # Example with list output
+#' l <- flowlines[1:3,]
+#' rf_list <- line2route(l = l, list_output = TRUE)
+#' class(rf_list)       # list output
+#' class(rf_list[[2]])  # but individual elements are spatial
+#' rf_list_of_lists <- line2route(l = l, list_output = TRUE, save_raw = TRUE)
+#' class(rf_list_of_lists)       # list output
+#' class(rf_list_of_lists[[2]])  # but individual elements are spatial
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, ...){
+
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
-  r <- l
 
-  # test for the second od pair (the first often fails)
-  rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+  if(list_output){
+    r <- as.list(rep(NA, length(l)))
 
-  rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
-  names(rdata) <- names(rc2)
-  r@data <- rdata
-      # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
+    # test for the second od pair (the first often fails)
+    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+
+    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
     for(i in 1:nrow(ldf)){
-    tryCatch({
+      tryCatch({
+        r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+      }, error = function(e){warning(paste0("Fail for line number ", i))})
+      # Status bar
+      perc_temp <- i %% round(nrow(ldf) / n_print)
+      if(!is.na(perc_temp) & perc_temp == 0){
+        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+                       " distances calculated")) # print % of distances calculated
+      }
+    }
+  } else {
+
+    r <- l
+
+    # test for the second od pair (the first often fails)
+    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
+
+    rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
+    names(rdata) <- names(rc2)
+    r@data <- rdata
+    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
+    for(i in 1:nrow(ldf)){
+      tryCatch({
         rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
         rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
         r@lines[[i]] <- rcl
         r@data[i,] <- rc@data
-    }, error = function(e){warning(paste0("Fail for line number ", i))})
-    # Status bar
-    perc_temp <- i %% round(nrow(ldf) / n_print)
-    if(!is.na(perc_temp) & perc_temp == 0){
-      message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
-                   " distances calculated")) # print % of distances calculated
+      }, error = function(e){warning(paste0("Fail for line number ", i))})
+      # Status bar
+      perc_temp <- i %% round(nrow(ldf) / n_print)
+      if(!is.na(perc_temp) & perc_temp == 0){
+        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
+                       " distances calculated")) # print % of distances calculated
+      }
     }
-    }
+    r@data$ID <- row.names(r@data)
+  }
   r
 }
 #' Convert a series of points into a dataframe of origins and destinations
@@ -227,6 +318,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, ...){
 #' @param p SpatialPointsDataFrame or data.frame
 #' @export
 #' @examples
+#' data(cents)
 #' df <- points2odf(cents)
 #' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
 #' df2 <- points2odf(cents_centroids)
@@ -254,6 +346,7 @@ points2odf <- function(p){
 #'
 #' @export
 #' @examples
+#' data(cents)
 #' plot(cents)
 #' flow <-points2flow(cents)
 #' plot(flow, add = TRUE)
@@ -272,6 +365,7 @@ points2flow <- function(p){
 #'
 #' @export
 #' @examples
+#' data(flowlines)
 #' l <- flowlines
 #' nl <- routes_fast
 #' nrow(l)
