@@ -294,7 +294,7 @@ viaroute2sldf <- function(osrmresult) {
                            existrow = nrow(osrmsldf@data),
                            routeid = 1+i)
 
-        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+        osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
 
         i <- i + 1
       }
