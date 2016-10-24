@@ -34,7 +34,7 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-data("flowlines")
+data(flowlines)
 plot(flowlines)
 singlelines <- onewaygeo(flowlines, attrib = 3:14)
 plot(singlelines, lwd = 3, col = "red")

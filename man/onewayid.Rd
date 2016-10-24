@@ -42,7 +42,7 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-data("flow")
+data(flow)
 flow_oneway = onewayid(flow, attrib = 3)
 nrow(flow_oneway) < nrow(flow) # result has fewer rows
 sum(flow$All) == sum(flow_oneway$All) # but the same total flow

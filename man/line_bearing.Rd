@@ -21,6 +21,7 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 (has no distance). This can be useful for removing data that will not be plotted.
 }
 \examples{
+data(flowlines)
 line_bearing(flowlines)
 line_bearing(flowlines, bidirectional = TRUE)
 }

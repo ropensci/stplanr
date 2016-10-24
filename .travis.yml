@@ -1,10 +1,10 @@
 language: r
 sudo: true
+dist: xenial
 
-r_binary_packages:
-  - rgdal
-
-# r_packages:
+before_install:
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install -y gdal-bin libgdal-dev libgdal1-dev libproj-dev libgeos++-dev
 
 notifications:
     email:

@@ -21,6 +21,7 @@ Perform GIS functions on a temporary, projected version of a spatial object
 }
 \examples{
 # Find the length of routes that are in lat/long format
+data(routes_fast)
 rlength = gprojected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 plot(routes_fast$length, rlength)
 cor(routes_fast$length, rlength)

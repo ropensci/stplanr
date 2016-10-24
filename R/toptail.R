@@ -56,7 +56,7 @@ toptail <- function(l, toptail_dist, ...){
     if(!exists("out")){
       out <- l2
     } else {
-      out <- tmap::sbind(out, l2)
+      out <- raster::bind(out, l2)
     }
   }
   out

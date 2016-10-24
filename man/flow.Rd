@@ -24,7 +24,6 @@ The variables are as follows:
   \item [,4:15]. Flows for different modes
   \item id. unique id of flow
 }
-
 Although these variable names are unique to UK data, the data
 structure is generalisable and typical of flow data from any source.
 The key variables are the origin and destination ids, which link to

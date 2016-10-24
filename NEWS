@@ -1,3 +1,18 @@
+stplanr 0.1.5
+----------------------------------------------------------------
+
+NEW FEATURES
+
+* New argument destinations added to `od2line()`. See `example(od2line)` for an example.
+* New dataset `destinations` for showing how OD matrix with destinations can be converted to spatial data
+* New argument `list_output` allows the route information to be saved as a list, allowing `save_raw = TRUE` (which does not return a `Spatial` object) to be passed to the `route_` function.
+* tmap dependency removed for faster installs
+
+BUG FIXES
+
+* Bug with `line2route()` (#124) fixed
+* Various improvements to documentation
+
 stplanr 0.1.4
 ----------------------------------------------------------------
 
