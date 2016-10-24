@@ -10,9 +10,7 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
-library(stplanr)
-library(sp) # needed for geographical objects
-library(leaflet) # needed for plotting data
+library(stplanr) # also loads the sp package
 ```
 
 ## Abstract
@@ -201,10 +199,17 @@ divides up line geometries into unique segments then aggregates the overlapping
 values. The results, plotted on the map, can be used to estimate where there is
 most need to improve the transport network, for example informing the decision of
 where to build new bicycle paths.
-(The leaflet package was used to generate the basemap).
+
+```{r}
+routes_fast$All <- l$All
+rnet <- overline(routes_fast, "All", fun = sum)
+w <- rnet$All / mean(rnet$All) * 3
+plot(rnet, lwd = w)
+```
 
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
 routes_fast$All <- l$All
 rnet <- overline(routes_fast, "All", fun = sum)
 w <- rnet$All / mean(rnet$All) * 3

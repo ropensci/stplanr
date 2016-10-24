@@ -30,7 +30,6 @@ Imports:
     magrittr,
     RgoogleMaps,
     openxlsx,
-    leaflet,
     methods,
     httr,
     R.utils,
@@ -40,10 +39,9 @@ Imports:
     lubridate,
     RCurl,
     geosphere,
-    Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    data.table
+    Rcpp (>= 0.12.1)
 LinkingTo:
     RcppArmadillo,
     Rcpp

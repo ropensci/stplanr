@@ -17,8 +17,8 @@
 #'
 #' @param plan Text strong of either "fastest", "quietest" or "balanced"
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
-#' @param pat The API key used. By default this is set to NULL and
-#' this is usually aquired automatically through a helper, api_pat().
+#' @param pat The API key used - this is usually aquired automatically through a helper
+#' function
 #'
 #' @details
 #'

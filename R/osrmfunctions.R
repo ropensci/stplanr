@@ -294,7 +294,7 @@ viaroute2sldf <- function(osrmresult) {
                            existrow = nrow(osrmsldf@data),
                            routeid = 1+i)
 
-        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+        osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
 
         i <- i + 1
       }
@@ -418,7 +418,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
           sp::Lines(sp::Line(coords = decode_gl(x$routes$geometry[i], 5)),ID = i)
         },routeinst),
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      data.table::rbindlist(lapply(1:length(routeinst$routes$geometry), function(i,x){
+      dplyr::bind_rows(lapply(1:length(routeinst$routes$geometry), function(i,x){
         data.frame(routenum = i,
                    origin = x$waypoints$name[1],
                    dest = x$waypoints$name[2],
@@ -442,7 +442,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
                )},
                routeinst),recursive = FALSE),
                proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      data.table::rbindlist(lapply(1:length(routeinst$routes$legs), function(i,x){
+      dplyr::bind_rows(lapply(1:length(routeinst$routes$legs), function(i,x){
         prevrows <- ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x))))
         if (length(x$routes$legs[[i]]$steps[[1]]$maneuver$exit) > 0) {
           exitvals <- x$routes$legs[[i]]$steps[[1]]$maneuver$exit
@@ -530,7 +530,7 @@ nearest_osm <- function(lat, lng, number = 1,
         matrix(x$waypoints$location[[1]], ncol=2)}
       ),recursive = FALSE),ncol=2,byrow = TRUE),
         data = cbind(data.frame(orig_lat = lat, orig_lng = lng),
-        data.table::rbindlist(lapply(jsondata, function(x){
+        dplyr::bind_rows(lapply(jsondata, function(x){
           data.frame(distance = x$waypoints$distance,
                      name = x$waypoints$name)
         }),idcol = "locnum")),

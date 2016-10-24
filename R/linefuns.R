@@ -169,11 +169,11 @@ line_segment = function(l, n_segments, segment_length = NA){
     } else if(i == length(sel_nearest) + 1){
       l_temp = points2line(l_coords[ids[i]:nrow(l_coords),])
       spChFIDs(l_temp) = i
-      l_seg = maptools::spRbind(l_seg, l_temp)
+      l_seg = raster::bind(l_seg, l_temp)
     } else {
       l_temp = points2line(l_coords[ids[i]:ids[(i + 1)],])
       spChFIDs(l_temp) = i
-      l_seg = maptools::spRbind(l_seg, l_temp)
+      l_seg = raster::bind(l_seg, l_temp)
     }
   }
   l_seg = SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
