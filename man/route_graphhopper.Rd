@@ -44,7 +44,7 @@ To use this function you will need to obtain an API key from
 It is assumed that you have set your api key as a system environment
 for security reasons (so you avoid typing the API key in your code).
 Do this by adding the following to your .Renviron file (see \code{?.Renviron}
-or \url{https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html}
+or the 'api-packages' vignette at \url{https://cran.r-project.org/package=httr}
 for more on this):
 
 \code{GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'}.
