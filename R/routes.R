@@ -160,7 +160,6 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
     h <-  obj$marker$`@attributes`$elevations # hilliness
     h <- stringr::str_split(h[[1]], pattern = ",") #only take first set of data
     h <- as.numeric(unlist(h)[-1])
-    plot(h)
     hdif <- diff(h)
     htot <- sum(abs(hdif))
     hchng <- h[length(h)] - h[1]
