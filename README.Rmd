@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/package=stplanr)
+[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
 
 ```{r, echo=FALSE, message=FALSE}
@@ -28,8 +28,8 @@ The initial work on the project was funded by the Department of Transport
 as part of the development of the Propensity to Cycle Tool
 ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis
 and modelling work toidentify where bicycle paths are most needed. See
-the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html)
-or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425)
+the package vignette (e.g. via `vignette("introducing-stplanr")`) 
+or an [academic paper on the Propensity to Cycle Tool (PCT)](http://arxiv.org/abs/1509.04425)
 for more information on how it can be used. This README gives some basics.
 
 **stplanr** should be useful to researchers everywhere.
