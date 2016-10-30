@@ -91,6 +91,7 @@
 #' # Plan a route between two lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
+#'
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                               base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
                               save_raw = "FALSE"){
@@ -157,9 +158,14 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
 
     route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
     h <-  obj$marker$`@attributes`$elevations # hilliness
-    h <- stringr::str_split(h, pattern = ",")
+    h <- stringr::str_split(h[[1]], pattern = ",") #only take first set of data
     h <- as.numeric(unlist(h)[-1])
-    htot <- sum(abs(diff(h)))
+    hdif <- diff(h)
+    htot <- sum(abs(hdif))
+    hchng <- h[length(h)] - h[1]
+    hmxmn <- max(h) - min(h)
+    hup <- sum(hdif[which(hdif>0)])
+    hdown <- -1* sum(hdif[which(hdif<0)])
 
     # busyness overall
     bseg <- obj$marker$`@attributes`$busynance
@@ -174,7 +180,11 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
       length = as.numeric(obj$marker$`@attributes`$length[1]),
       time = as.numeric(obj$marker$`@attributes`$time[1]),
       waypoint = nrow(coords),
-      change_elev = htot,
+      cum_hill = htot, #total up and down
+      change_elev = hchng, # diff between start and end
+      dif_max_min = hmxmn, # diff between highest and lowest
+      up_tot = hup, # total climbing
+      down_tot = hdown, # total descending
       av_incline = htot / as.numeric(obj$marker$`@attributes`$length[1]),
       co2_saving = as.numeric(obj$marker$`@attributes`$grammesCO2saved[1]),
       calories = as.numeric(obj$marker$`@attributes`$calories[1]),
