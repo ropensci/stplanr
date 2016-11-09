@@ -68,5 +68,9 @@ data(flowlines)
 fo <- onewayid(flowlines, "All")
 plot(fo)
 sum(fo$All) == sum(flowlines$All)
+# test results for one line
+n <- 3
+plot(fo[3,], lwd = 5, add = TRUE)
+f_over_3 <- over(x = flowlines, y = fo[3,], fn = sum)
 }
 

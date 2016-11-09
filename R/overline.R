@@ -264,7 +264,9 @@ onewaygeo <- function(x, attrib){
   return(singlelines)
 }
 
-#' Aggregate ods so they become non-directional, e.g. by summing travel in both directions.
+#' Aggregate ods so they become non-directional
+#'
+#' For example, sum total travel in both directions.
 #'
 #' Flow data often contains movement in two directions: from point A to point B
 #' and then from B to A. This can be problematic for transport planning, because
@@ -317,9 +319,7 @@ onewaygeo <- function(x, attrib){
 #' n <- 3
 #' plot(fo[3,], lwd = 5, add = TRUE)
 #' f_over_3 <- over(x = flowlines, y = fo[3,], fn = sum)
-onewayid <- function(x, ...) {
-  UseMethod(generic = "onewayid")
-}
+onewayid <- function(x) UseMethod("onewayid")
 
 #' @name onewayid
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
