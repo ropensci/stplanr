@@ -313,6 +313,10 @@ onewaygeo <- function(x, attrib){
 #' fo <- onewayid(flowlines, "All")
 #' plot(fo)
 #' sum(fo$All) == sum(flowlines$All)
+#' # test results for one line
+#' n <- 3
+#' plot(fo[3,], lwd = 5, add = TRUE)
+#' f_over_3 <- over(x = flowlines, y = fo[3,], fn = sum)
 onewayid <- function(x, ...) {
   UseMethod(generic = "onewayid")
 }
@@ -343,8 +347,8 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 #' @name onewayid
 onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
 
-  x_geom = sp::SpatialLines(x@lines)
-  x = x@data
+  x_geom <- sp::SpatialLines(x@lines, proj4string = proj4string(x))
+  x <- x@data
 
   if(is.numeric(attrib)){
     attrib_names = names(x)[attrib]
