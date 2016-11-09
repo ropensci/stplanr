@@ -268,10 +268,6 @@ onewaygeo <- function(x, attrib){
 #'
 #' For example, sum total travel in both directions.
 #' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
-#' @export
-onewayid <- function(x) UseMethod("onewayid")
-
-#' @name onewayid
 #' @param attrib A vector of column numbers or names
 #' for deciding which attribute(s) of class numeric to
 #' aggregate
@@ -283,6 +279,10 @@ onewayid <- function(x) UseMethod("onewayid")
 #' the unique id of the destination
 #' @return \code{onewayid} outputs a data.frame with rows containing
 #' results for the user-selected attribute values that have been aggregated.
+#' @export
+onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) UseMethod("onewayid")
+
+#' @name onewayid
 #' @details
 #' Flow data often contains movement in two directions: from point A to point B
 #' and then from B to A. This can be problematic for transport planning, because
@@ -342,8 +342,8 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 #' plot(fo[n,], lwd = 20, add = TRUE)
 #' f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
 #' sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
-#' plot(flowlines[which(f_over_n)[1],], add = T, col = "white", lwd = 10)
-#' plot(flowlines[which(f_over_n)[2],], add = T, lwd = 5)
+#' plot(flowlines[which(f_over_n)[1],], add = TRUE, col = "white", lwd = 10)
+#' plot(flowlines[which(f_over_n)[2],], add = TRUE, lwd = 5)
 #' @export
 onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
 

@@ -6,7 +6,7 @@
 \alias{onewayid.data.frame}
 \title{Aggregate ods so they become non-directional}
 \usage{
-onewayid(x)
+onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 
 \method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
   id2 = names(x)[2])
@@ -71,7 +71,7 @@ n <- 3
 plot(fo[n,], lwd = 20, add = TRUE)
 f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
 sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
-plot(flowlines[which(f_over_n)[1],], add = T, col = "white", lwd = 10)
-plot(flowlines[which(f_over_n)[2],], add = T, lwd = 5)
+plot(flowlines[which(f_over_n)[1],], add = TRUE, col = "white", lwd = 10)
+plot(flowlines[which(f_over_n)[2],], add = TRUE, lwd = 5)
 }
 
