@@ -365,7 +365,7 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
   stplanr.key <- x_oneway$stplanr.key
   x_oneway <- x_oneway[-1]
 
-  if(length(geom) != nrow(x_oneway)) {
+  if(length(x_geom) != nrow(x_oneway)) {
     id_old <- paste(x[[id1]], x[[id2]])
     sel <- id_old %in% stplanr.key
     x_geom <- x_geom[sel,]
