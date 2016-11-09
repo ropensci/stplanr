@@ -4,9 +4,9 @@
 \alias{onewayid}
 \alias{onewayid.SpatialLines}
 \alias{onewayid.data.frame}
-\title{Aggregate ods so they become non-directional, e.g. by summing travel in both directions.}
+\title{Aggregate ods so they become non-directional}
 \usage{
-onewayid(x, ...)
+onewayid(x)
 
 \method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
   id2 = names(x)[2])
@@ -34,6 +34,9 @@ the unique id of the destination}
 results for the user-selected attribute values that have been aggregated.
 }
 \description{
+For example, sum total travel in both directions.
+}
+\details{
 Flow data often contains movement in two directions: from point A to point B
 and then from B to A. This can be problematic for transport planning, because
 the magnitude of flow along a route can be masked by flows the other direction.
@@ -43,11 +46,6 @@ OD pairs which have similar amounts of travel in both directions.
 Flows in both direction are often represented by overlapping lines with
 identical geometries (see \code{\link{flowlines}}) which can be confusing
 for users and are difficult to plot.
-}
-\details{
-This function aggregates directional flows into non-directional flows,
-potentially halving the number of lines objects and reducing the number
-of overlapping lines to zero.
 }
 \examples{
 data(flow)
@@ -70,7 +68,10 @@ plot(fo)
 sum(fo$All) == sum(flowlines$All)
 # test results for one line
 n <- 3
-plot(fo[3,], lwd = 5, add = TRUE)
-f_over_3 <- over(x = flowlines, y = fo[3,], fn = sum)
+plot(fo[n,], lwd = 20, add = TRUE)
+f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
+sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
+plot(flowlines[which(f_over_n)[1],], add = T, col = "white", lwd = 10)
+plot(flowlines[which(f_over_n)[2],], add = T, lwd = 5)
 }
 
