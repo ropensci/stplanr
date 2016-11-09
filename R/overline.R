@@ -280,7 +280,7 @@ onewaygeo <- function(x, attrib){
 #' potentially halving the number of lines objects and reducing the number
 #' of overlapping lines to zero.
 #'
-#' @param x A data frame, representing an OD matrix
+#' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
 #' @param attrib A vector of column numbers or names
 #' for deciding which attribute(s) of class numeric to
 #' aggregate
@@ -308,8 +308,17 @@ onewaygeo <- function(x, attrib){
 #' # Demonstrate the results from onewayid and onewaygeo are identical
 #' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
-onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
+#' # with spatial data
+#' data(flowlines)
+#' fo <- onewayid(flowlines, "All")
+#' plot(fo)
+#' sum(fo$All) == sum(flowlines$All)
+onewayid <- function(x, ...) {
+  UseMethod(generic = "onewayid")
+}
 
+#' @name onewayid
+onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   if(is.numeric(attrib)){
     attrib_names = names(x)[attrib]
   } else {
@@ -326,6 +335,43 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
     dplyr::mutate_each("sum", attrib) %>%
     dplyr::summarise_each_(funs("stplanr.first"),c(id1, id2, attrib, ~is_two_way)) %>%
     dplyr::select_(quote(-stplanr.key))
+
+  return(x_oneway)
+
+}
+
+#' @name onewayid
+onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
+
+  x_geom = sp::SpatialLines(x@lines)
+  x = x@data
+
+  if(is.numeric(attrib)){
+    attrib_names = names(x)[attrib]
+  } else {
+    attrib_names = attrib
+    attrib = which(names(x) %in% attrib)
+  }
+
+  x_oneway <- x %>%
+    dplyr::mutate_(stplanr.id1 = id1,
+                   stplanr.id2 = id2,
+                   stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
+    dplyr::group_by_(quote(stplanr.key)) %>%
+    dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
+    dplyr::mutate_each("sum", attrib) %>%
+    dplyr::summarise_each_(funs("first"), c(id1, id2, attrib, ~is_two_way))
+
+  stplanr.key <- x_oneway$stplanr.key
+  x_oneway <- x_oneway[-1]
+
+  if(length(geom) != nrow(x_oneway)) {
+    id_old <- paste(x[[id1]], x[[id2]])
+    sel <- id_old %in% stplanr.key
+    x_geom <- x_geom[sel,]
+  }
+
+  x_oneway <- sp::SpatialLinesDataFrame(sl = x_geom, data = x_oneway, match.ID = FALSE)
 
   return(x_oneway)
 
