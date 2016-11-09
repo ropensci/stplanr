@@ -101,6 +101,7 @@ woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Lee
 # Plan a route between two lat/lon pairs in the UK
 route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 }
+
 }
 \seealso{
 line2route
