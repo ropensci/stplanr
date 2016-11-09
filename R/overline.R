@@ -267,22 +267,11 @@ onewaygeo <- function(x, attrib){
 #' Aggregate ods so they become non-directional
 #'
 #' For example, sum total travel in both directions.
-#'
-#' Flow data often contains movement in two directions: from point A to point B
-#' and then from B to A. This can be problematic for transport planning, because
-#' the magnitude of flow along a route can be masked by flows the other direction.
-#' If only the largest flow in either direction is captured in an analysis, for
-#' example, the true extent of travel will by heavily under-estimated for
-#' OD pairs which have similar amounts of travel in both directions.
-#' Flows in both direction are often represented by overlapping lines with
-#' identical geometries (see \code{\link{flowlines}}) which can be confusing
-#' for users and are difficult to plot.
-#'
-#' This function aggregates directional flows into non-directional flows,
-#' potentially halving the number of lines objects and reducing the number
-#' of overlapping lines to zero.
-#'
 #' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
+#' @export
+onewayid <- function(x) UseMethod("onewayid")
+
+#' @name onewayid
 #' @param attrib A vector of column numbers or names
 #' for deciding which attribute(s) of class numeric to
 #' aggregate
@@ -292,10 +281,18 @@ onewaygeo <- function(x, attrib){
 #' @param id2 Optional (it is assumed to be the second column)
 #' text string referring to the name of the variable containing
 #' the unique id of the destination
-#'
 #' @return \code{onewayid} outputs a data.frame with rows containing
 #' results for the user-selected attribute values that have been aggregated.
-#' @export
+#' @details
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see \code{\link{flowlines}}) which can be confusing
+#' for users and are difficult to plot.
 #' @examples
 #' data(flow)
 #' flow_oneway = onewayid(flow, attrib = 3)
@@ -310,18 +307,7 @@ onewaygeo <- function(x, attrib){
 #' # Demonstrate the results from onewayid and onewaygeo are identical
 #' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
-#' # with spatial data
-#' data(flowlines)
-#' fo <- onewayid(flowlines, "All")
-#' plot(fo)
-#' sum(fo$All) == sum(flowlines$All)
-#' # test results for one line
-#' n <- 3
-#' plot(fo[3,], lwd = 5, add = TRUE)
-#' f_over_3 <- over(x = flowlines, y = fo[3,], fn = sum)
-onewayid <- function(x) UseMethod("onewayid")
-
-#' @name onewayid
+#' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   if(is.numeric(attrib)){
     attrib_names = names(x)[attrib]
@@ -345,9 +331,23 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 }
 
 #' @name onewayid
+#' @examples
+#' # with spatial data
+#' data(flowlines)
+#' fo <- onewayid(flowlines, "All")
+#' plot(fo)
+#' sum(fo$All) == sum(flowlines$All)
+#' # test results for one line
+#' n <- 3
+#' plot(fo[n,], lwd = 20, add = TRUE)
+#' f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
+#' sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
+#' plot(flowlines[which(f_over_n)[1],], add = T, col = "white", lwd = 10)
+#' plot(flowlines[which(f_over_n)[2],], add = T, lwd = 5)
+#' @export
 onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
 
-  x_geom <- sp::SpatialLines(x@lines, proj4string = proj4string(x))
+  x_geom <- sp::SpatialLines(x@lines, proj4string = CRS(proj4string(x)))
   x <- x@data
 
   if(is.numeric(attrib)){
