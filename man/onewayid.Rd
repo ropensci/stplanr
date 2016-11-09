@@ -6,7 +6,7 @@
 \alias{onewayid.data.frame}
 \title{Aggregate ods so they become non-directional, e.g. by summing travel in both directions.}
 \usage{
-onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
+onewayid(x, ...)
 
 \method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
   id2 = names(x)[2])
@@ -65,6 +65,8 @@ flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
 # with spatial data
 data(flowlines)
-onewayid(flowlines, "All")
+fo <- onewayid(flowlines, "All")
+plot(fo)
+sum(fo$All) == sum(flowlines$All)
 }
 
