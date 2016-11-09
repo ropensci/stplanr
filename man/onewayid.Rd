@@ -2,12 +2,20 @@
 % Please edit documentation in R/overline.R
 \name{onewayid}
 \alias{onewayid}
+\alias{onewayid.SpatialLines}
+\alias{onewayid.data.frame}
 \title{Aggregate ods so they become non-directional, e.g. by summing travel in both directions.}
 \usage{
 onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
+
+\method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
+  id2 = names(x)[2])
+
+\method{onewayid}{SpatialLines}(x, attrib, id1 = names(x)[1],
+  id2 = names(x)[2])
 }
 \arguments{
-\item{x}{A data frame, representing an OD matrix}
+\item{x}{A data frame or SpatialLinesDataFrame, representing an OD matrix}
 
 \item{attrib}{A vector of column numbers or names
 for deciding which attribute(s) of class numeric to
@@ -55,5 +63,8 @@ colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are 
 # Demonstrate the results from onewayid and onewaygeo are identical
 flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
+# with spatial data
+data(flowlines)
+onewayid(flowlines, "All")
 }
 
