@@ -308,7 +308,7 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) UseMethod(
 #' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
 #' # With spaces in id names
-#' names(flow)[1] = "Area of workplace"
+#' names(flow)[1] = "Area of residence"
 #' onewayid(flow, attrib = 3)
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
@@ -386,3 +386,5 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
 stplanr.first <- function(...) {
   dplyr::first(...)
 }
+
+`%>%` <- dplyr::`%>%`
