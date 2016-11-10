@@ -42,8 +42,7 @@ transport research easier worldwide.
 
 Data frames representing flows between origins and destinations
 must be combined with geo-referenced zones or points to generate meaningful
-analyses and visualisations of 'flows' or origin-destination (OD) data
-([Caceres 2007](https://www.researchgate.net/profile/Francisco_Benitez/publication/3480996_Deriving_origin_destination_data_from_a_mobile_phone_network/links/0f31753ad7db9e7ece000000.pdf)).
+analyses and visualisations of 'flows' or origin-destination (OD) data.
 **stplanr** facilitates this with
 `od2line()`, which takes flow and geographical data as inputs and
 outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:

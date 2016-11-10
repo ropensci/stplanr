@@ -13,7 +13,7 @@ The initial work on the project was funded by the Department of Transport ([DfT]
 Key functions
 -------------
 
-Data frames representing flows between origins and destinations must be combined with geo-referenced zones or points to generate meaningful analyses and visualisations of 'flows' or origin-destination (OD) data ([Caceres 2007](https://www.researchgate.net/profile/Francisco_Benitez/publication/3480996_Deriving_origin_destination_data_from_a_mobile_phone_network/links/0f31753ad7db9e7ece000000.pdf)). **stplanr** facilitates this with `od2line()`, which takes flow and geographical data as inputs and outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
+Data frames representing flows between origins and destinations must be combined with geo-referenced zones or points to generate meaningful analyses and visualisations of 'flows' or origin-destination (OD) data. **stplanr** facilitates this with `od2line()`, which takes flow and geographical data as inputs and outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
 
 ``` r
 library(stplanr)
@@ -66,8 +66,6 @@ if(!Sys.getenv("CYCLESTREET") == ""){
   plot(trip)
 }
 ```
-
-![](README-cycle-trip-1.png)
 
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
