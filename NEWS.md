@@ -4,6 +4,7 @@
 
 * `onewayid()` is now a generic function, meaning it can handle spatial and non-spatial data
 * New arguments provided for `line2route()` allow you to specify variables to join-by - also has updated and more sensible defaults
+* New function `od_id_order()` to put origin-destination ids in order, to identify 2 way duplicates (split out from `onewayid()`)
 
 ## BUG FIXES
 
