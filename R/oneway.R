@@ -73,7 +73,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 #' @examples
 #' # with spatial data
 #' data(flowlines)
-#' fo <- onewayid(flowlines, "All")
+#' fo <- onewayid(flowlines, attrib = "All")
 #' head(fo@data)
 #' plot(fo)
 #' sum(fo$All) == sum(flowlines$All)
@@ -92,7 +92,7 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
 
   x_oneway = onewayid(x, id1, id2, attrib = attrib)
 
-  stplanr.key <- od_id_order(x[c(id1, id2)])$stplanr.key
+  stplanr.key <- od_id_order(x_oneway[c(id1, id2)])$stplanr.key
 
   if(length(x_geom) != nrow(x_oneway)) {
     id_old <- paste(x[[id1]], x[[id2]])
