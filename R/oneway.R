@@ -55,7 +55,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
     attrib = which(names(x) %in% attrib)
   }
 
-  stplanr.ids <- od_id_order(x)
+  stplanr.ids <- od_id_order(x, id1, id2)
   x <- cbind(x, stplanr.ids)
 
   x_oneway <- dplyr::group_by_(x, quote(stplanr.key)) %>%
@@ -90,23 +90,9 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
   x_geom <- sp::SpatialLines(x@lines, proj4string = CRS(proj4string(x)))
   x <- x@data
 
-  if(is.numeric(attrib)){
-    attrib_names = names(x)[attrib]
-  } else {
-    attrib_names = attrib
-    attrib = which(names(x) %in% attrib)
-  }
+  x_oneway = onewayid(x, id1, id2, attrib = attrib)
 
-  stplanr.ids <- od_id_order(x)
-  x <- cbind(x, stplanr.ids)
-
-  x_oneway <- dplyr::group_by_(x, quote(stplanr.key)) %>%
-    dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
-    dplyr::mutate_each("sum", attrib) %>%
-    dplyr::summarise_each_(funs("first"), c(as.name(id1), as.name(id2), attrib, ~is_two_way))
-
-  stplanr.key <- x_oneway$stplanr.key
-  x_oneway$stplanr.key <- NULL
+  stplanr.key <- od_id_order(x[c(id1, id2)])$stplanr.key
 
   if(length(x_geom) != nrow(x_oneway)) {
     id_old <- paste(x[[id1]], x[[id2]])
