@@ -307,6 +307,9 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) UseMethod(
 #' # Demonstrate the results from onewayid and onewaygeo are identical
 #' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
+#' # With spaces in id names
+#' names(flow)[1] = "Area of workplace"
+#' onewayid(flow, attrib = 3)
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
   if(is.numeric(attrib)){
@@ -317,13 +320,13 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
   }
 
   x_oneway <- x %>%
-    dplyr::mutate_(stplanr.id1 = id1,
-                   stplanr.id2 = id2,
+    dplyr::mutate_(stplanr.id1 = as.name(id1),
+                   stplanr.id2 = as.name(id2),
                    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
     dplyr::group_by_(quote(stplanr.key)) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
-    dplyr::summarise_each_(funs("stplanr.first"),c(id1, id2, attrib, ~is_two_way)) %>%
+    dplyr::summarise_each_(funs("stplanr.first"),c(as.name(id2), as.name(id2), attrib, ~is_two_way)) %>%
     dplyr::select_(quote(-stplanr.key))
 
   return(x_oneway)
@@ -358,13 +361,13 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
   }
 
   x_oneway <- x %>%
-    dplyr::mutate_(stplanr.id1 = id1,
-                   stplanr.id2 = id2,
+    dplyr::mutate_(stplanr.id1 = as.name(id1),
+                   stplanr.id2 = as.name(id2),
                    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
     dplyr::group_by_(quote(stplanr.key)) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
-    dplyr::summarise_each_(funs("first"), c(id1, id2, attrib, ~is_two_way))
+    dplyr::summarise_each_(funs("first"), c(as.name(id1), as.name(id2), attrib, ~is_two_way))
 
   stplanr.key <- x_oneway$stplanr.key
   x_oneway <- x_oneway[-1]
