@@ -66,7 +66,7 @@ names(flow)[1] = "Area of residence"
 onewayid(flow, attrib = 3)
 # with spatial data
 data(flowlines)
-fo <- onewayid(flowlines, "All")
+fo <- onewayid(flowlines, attrib = "All")
 head(fo@data)
 plot(fo)
 sum(fo$All) == sum(flowlines$All)
