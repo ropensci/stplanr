@@ -5,7 +5,9 @@
 \alias{od2line2}
 \title{Convert flow data to SpatialLinesDataFrame}
 \usage{
-od2line(flow, zones, destinations = NA)
+od2line(flow, zones, destinations = NULL, zone_code = names(zones)[1],
+  origin_code = names(flow)[1], dest_code = names(flow)[2],
+  zone_code_d = NA, silent = TRUE)
 
 od2line2(flow, zones)
 }
@@ -22,19 +24,37 @@ of travel flows.}
 
 \item{destinations}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 representing destinations of travel flows.}
+
+\item{zone_code}{Name of the variable in \code{zones} containing the ids of the zone.
+By default this is the first column names in the zones.}
+
+\item{origin_code}{Name of the variable in \code{flow} containing the ids of the zone of origin.
+By default this is the first column name in the flow input dataset.}
+
+\item{dest_code}{Name of the variable in \code{flow} containing the ids of the zone of destination.
+By default this is the second column name in the flow input dataset or the first column name in the
+destinations if that is set.}
+
+\item{zone_code_d}{Name of the variable in \code{destinations} containing the ids of the zone.
+By default this is the first column names in the destinations.}
+
+\item{silent}{TRUE by default, setting it to TRUE will show you the matching columns}
 }
 \description{
-Convert flow data to SpatialLinesDataFrame
-}
-\section{Details}{
-
 Origin-destination ('OD') flow data is often provided
 in the form of 1 line per flow with zone codes of origin and destination
 centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
+}
+\details{
+The function expects zone codes to be in the 1st column of the zones/destinations
+datasets and the 1st and 2nd columns of the flow data, respectively.
+
 \code{\link{od2line2}} is a faster implementation
 (around 6 times faster on large datasets)
-that returns a \code{SpatialLines} object (omitting the data).
+that returns a \code{SpatialLines} object, omitting the data and working
+only when there is no destinations dataset (i.e. when the geography of
+origins is the same as that of destinations).
 }
 \examples{
 data(flow) # load example data - see ?flow for mor information
@@ -47,9 +67,10 @@ lines(newflowlines2, col = "white")
 nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 identical(nfl_sldf, newflowlines)
 # When destinations are different
-head(flow_dests) # check data
-flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
-plot(flowlines_with_dests)
-
+data(destinations)
+head(flow_dests[1:5]) # check data
+head(destinations@data[1:5])
+flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
+plot(flowlines_dests)
 }
 

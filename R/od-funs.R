@@ -36,14 +36,20 @@ od2odf <- function(flow, zones){
 }
 #' Convert flow data to SpatialLinesDataFrame
 #'
-#' @section Details:
 #' Origin-destination ('OD') flow data is often provided
 #' in the form of 1 line per flow with zone codes of origin and destination
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
+#'
+#' @details
+#' The function expects zone codes to be in the 1st column of the zones/destinations
+#' datasets and the 1st and 2nd columns of the flow data, respectively.
+#'
 #' \code{\link{od2line2}} is a faster implementation
 #' (around 6 times faster on large datasets)
-#' that returns a \code{SpatialLines} object (omitting the data).
+#' that returns a \code{SpatialLines} object, omitting the data and working
+#' only when there is no destinations dataset (i.e. when the geography of
+#' origins is the same as that of destinations).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
@@ -55,6 +61,16 @@ od2odf <- function(flow, zones){
 #' of travel flows.
 #' @param destinations A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing destinations of travel flows.
+#' @param zone_code Name of the variable in \code{zones} containing the ids of the zone.
+#' By default this is the first column names in the zones.
+#' @param origin_code Name of the variable in \code{flow} containing the ids of the zone of origin.
+#' By default this is the first column name in the flow input dataset.
+#' @param dest_code Name of the variable in \code{flow} containing the ids of the zone of destination.
+#' By default this is the second column name in the flow input dataset or the first column name in the
+#' destinations if that is set.
+#' @param zone_code_d Name of the variable in \code{destinations} containing the ids of the zone.
+#' By default this is the first column names in the destinations.
+#' @param silent TRUE by default, setting it to TRUE will show you the matching columns
 #' @export
 #' @examples
 #' data(flow) # load example data - see ?flow for mor information
@@ -67,65 +83,53 @@ od2odf <- function(flow, zones){
 #' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
 #' # When destinations are different
-#' head(flow_dests) # check data
-#' flowlines_with_dests = od2line(flow = flow_dests, zones = cents, destinations = destinations)
-#' plot(flowlines_with_dests)
-#'
+#' data(destinations)
+#' head(flow_dests[1:5]) # check data
+#' head(destinations@data[1:5])
+#' flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
+#' plot(flowlines_dests)
 #' @name od2line
 NULL
 
 #' @rdname od2line
 #' @export
-od2line <- function(flow, zones, destinations = NA){
+od2line <- function(flow, zones, destinations = NULL,
+                    zone_code = names(zones)[1],
+                    origin_code = names(flow)[1],
+                    dest_code = names(flow)[2],
+                    zone_code_d = NA, silent = TRUE){
   l <- vector("list", nrow(flow))
-  name_match_origin = names(flow) %in% names(zones)
-  if(sum(name_match_origin) > 0){
-    id_var_origin <- names(flow)[name_match_origin][1] # first matching name
-    origin_id_var <- id_var_origin
-  } else {
-    id_var_origin <- names(flow)[1]
-    origin_id_var <- names(zones)[1]
-    wmsg <- paste0("No matching column names: matching by first column in flow data and first column in zones data by default")
-    warning(wmsg)
-  }
-  if(is.na(destinations)){
-    name_match_destination = names(flow) %in% names(zones)
-    if(sum(name_match_destination) > 1){
-      id_var_destination <- names(flow)[name_match_destination][2] # first matching name
-      dest_id_var <- id_var_destination
-    } else {
-      id_var_destination <- names(flow)[2]
-      dest_id_var <- names(zones)[1]
-      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in zones data by default")
-      warning(wmsg)
+
+  if(is.null(destinations)){
+    if(!silent){
+      message(paste("Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
+                    "for origins and destinations respectively"))
     }
     for(i in 1:nrow(flow)){
-      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
       if(sum(from) == 0)
         warning(paste0("No match for line ", i))
-      to <- zones@data[[origin_id_var]] %in% flow[[id_var_destination]][i]
+      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
       if(sum(to) == 0 & sum(from) == 1)
         warning(paste0("No match for line ", i))
       x <- sp::coordinates(zones[from, ])
       y <- sp::coordinates(zones[to, ])
       l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
     }
-    } else {
-    name_match_destination = names(flow) %in% names(destinations)
-    if(sum(name_match_destination) > 0){
-      id_var_destination <- names(flow)[name_match_destination][1] # first matching name
-      dest_id_var <- id_var_destination
-    } else {
-      id_var_destination <- names(flow)[1]
-      dest_id_var <- names(destinations)[1]
-      wmsg <- paste0("No matching column names: matching by second column in flow data and first column in destinations data by default")
-      warning(wmsg)
+  } else {
+    if(is.na(zone_code_d)){
+      zone_code_d <- names(destinations)[1]
+    }
+    if(!silent){
+      message(paste("Matching", zone_code, "in the zones and", zone_code_d,  "in the destinations,\nto",
+                    origin_code, "and", dest_code,
+                    "for origins and destinations respectively"))
     }
     for(i in 1:nrow(flow)){
-      from <- zones@data[[origin_id_var]] %in% flow[[id_var_origin]][i]
+      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
       if(sum(from) == 0)
         warning(paste0("No match for line ", i))
-      to <- destinations@data[[dest_id_var]] %in% flow[[id_var_destination]][i]
+      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
       if(sum(to) == 0 & sum(from) == 1)
         warning(paste0("No match for line ", i))
       x <- sp::coordinates(zones[from, ])

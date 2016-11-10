@@ -1,3 +1,17 @@
+# stplanr 0.1.6
+
+## NEW FEATURES
+
+* `onewayid()` is now a generic function, meaning it can handle spatial and non-spatial data
+* New arguments provided for `line2route()` allow you to specify variables to join-by - also has updated and more sensible defaults
+* New function `od_id_order()` to put origin-destination ids in order, to identify 2 way duplicates (split out from `onewayid()`)
+
+## BUG FIXES
+
+* See the [issue tracker](https://github.com/ropensci/stplanr/issues?q=is%3Aissue+is%3Aclosed)
+* Bug in `route_cyclestreet()` leading `change_elev` and `av_incline` being wrong now fixed
+* Bug making variable names with spaces in the id columns failed - now fixed [#138](https://github.com/ropensci/stplanr/issues/138)
+
 stplanr 0.1.5
 ----------------------------------------------------------------
 

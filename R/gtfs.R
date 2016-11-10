@@ -31,7 +31,6 @@ gtfs2sldf <- function(gtfszip = "") {
     stop("Specified zip file does not exist")
   }
 
-  `%>%` <- magrittr::`%>%`
   gtfsfiles <- unzip(gtfszip, exdir = tempdir())
 
   gtfstrips <- read.csv(paste0(tempdir(),"/trips.txt"))
