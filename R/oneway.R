@@ -47,6 +47,7 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) UseMethod(
 #' onewayid(flow, attrib = 3)
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
+
   if(is.numeric(attrib)){
     attrib_names = names(x)[attrib]
   } else {
@@ -54,11 +55,10 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
     attrib = which(names(x) %in% attrib)
   }
 
-  x_oneway <- x %>%
-    dplyr::mutate_(stplanr.id1 = as.name(id1),
-                   stplanr.id2 = as.name(id2),
-                   stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
-    dplyr::group_by_(quote(stplanr.key)) %>%
+  stplanr.ids <- od_id_order(x)
+  x <- cbind(x, stplanr.ids)
+
+  x_oneway <- dplyr::group_by_(x, quote(stplanr.key)) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
     dplyr::summarise_each_(funs("stplanr.first"), c(as.name(id1), as.name(id2), attrib, ~is_two_way))
@@ -97,11 +97,10 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
     attrib = which(names(x) %in% attrib)
   }
 
-  x_oneway <- x %>%
-    dplyr::mutate_(stplanr.id1 = as.name(id1),
-                   stplanr.id2 = as.name(id2),
-                   stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))) %>%
-    dplyr::group_by_(quote(stplanr.key)) %>%
+  stplanr.ids <- od_id_order(x)
+  x <- cbind(x, stplanr.ids)
+
+  x_oneway <- dplyr::group_by_(x, quote(stplanr.key)) %>%
     dplyr::mutate(is_two_way = ifelse(n() > 1, TRUE, FALSE)) %>%
     dplyr::mutate_each("sum", attrib) %>%
     dplyr::summarise_each_(funs("first"), c(as.name(id1), as.name(id2), attrib, ~is_two_way))
@@ -119,4 +118,18 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
 
   return(x_oneway)
 
+}
+
+#' Generate ordered ids of OD pairs so lowest is always first
+#'
+#' @inheritParams onewayid
+#'
+#' @examples
+#' x = data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
+#' od_id_order(x) # 4th line switches id1 and id2 so stplanr.key is in order
+#' @export
+od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]){
+  dplyr::transmute_(x, stplanr.id1 = as.name(id1),
+                    stplanr.id2 = as.name(id2),
+                    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2)))
 }
