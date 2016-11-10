@@ -338,6 +338,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
 #' # with spatial data
 #' data(flowlines)
 #' fo <- onewayid(flowlines, "All")
+#' head(fo@data)
 #' plot(fo)
 #' sum(fo$All) == sum(flowlines$All)
 #' # test results for one line
