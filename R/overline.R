@@ -264,8 +264,4 @@ onewaygeo <- function(x, attrib){
   return(singlelines)
 }
 
-stplanr.first <- function(...) {
-  dplyr::first(...)
-}
-
 `%>%` <- dplyr::`%>%`
