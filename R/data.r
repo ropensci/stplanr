@@ -216,3 +216,21 @@ NULL
 #' @usage data(zones)
 #' @format A SpatialPolygonsDataFrame
 NULL
+
+#' SpatialLinesDataFrame representing a route network
+#'
+#' @family example of route network data (sometimes called flow data)
+#'
+#' The flow of commuters using different segments of the road network represented in the
+#' \code{\link{flowlines}} and \code{\link{routes_fast}} datasets
+#'
+#' @docType data
+#' @keywords datasets
+#' @name route_network
+#' @usage data(route_network)
+#' @format A SpatialLinesDataFrame 80 rows and 1 column
+#' @examples \dontrun{
+#' # Generate route network
+#' route_network = overline(routes_fast, "All", fun = sum)
+#' }
+NULL
