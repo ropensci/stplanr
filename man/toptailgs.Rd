@@ -24,7 +24,8 @@ coordinates in WGS84 (lng/lat).
 }
 \examples{
 data("routes_fast")
-r_toptail <- toptailgs(routes_fast, toptail_dist = 300)
+rf = routes_fast[!is.na(routes_fast$length),]
+r_toptail <- toptailgs(rf, toptail_dist = 300)
 plot(routes_fast, lwd = 3)
 plot(r_toptail, col = "red", add = TRUE)
 plot(cents, add = TRUE)
