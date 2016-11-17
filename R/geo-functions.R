@@ -184,8 +184,12 @@ bbox_scale <- function(bb, scale_factor){
 #' bb1 <- bb2poly(bb)
 #' plot(bb1)
 bb2poly <- function(bb){
-  if(class(bb) == "matrix")
-    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons") else
-      b_poly <- as(raster::extent(bb), "SpatialPolygons")
+  if(class(bb) == "matrix"){
+    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
+  } else {
+    b_poly <- as(raster::extent(bb), "SpatialPolygons")
+    proj4string(b_poly) <- proj4string(bb)
+  }
+  b_poly
 }
 
