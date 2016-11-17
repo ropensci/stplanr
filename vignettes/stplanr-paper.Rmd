@@ -31,10 +31,6 @@ Warning: knitting this paper from the RStudio project can lead the build to fail
 
 # Introduction
 
-<!-- As settlements worldwide have grown and become more complex, the process of planning has had to adapt. Planners today are specialists, in sub-fields such as Emergency, Logistics, Healthcare, Urban and Transport Planning. And the 'art' of planning has become more of a science, with its own array of specialist hardware and software. -->
-
-<!-- The process of Transport Planning has undergone a particularly dramatic revolution. Transport interventions such as new bridges, ports and active travel routes are no longer decided based on the intuition of public sector or political authorities. Decisions are now the result of a long socio-technical process involving public consultation, cost-benefit analyses and computer modelling and visualisation. With the ongoing digital revolution, the importance of this last stage has grown, to the point where transport planning is now a highly technical process, employing dozens of software developers in large planning organisations. There is now a multi-billion pound global transport planning consultancy industry, to support the decision-making process. Yet the fruits of all this labour are unavailable to the vast majority of citizens worldwide, and transport planning decisions which go against the best available evidence keep getting made. -->
-
 Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software in the transport planner's toolkit should be flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
 
 R can provide a solid basis for a transport planning workflow that meets each of these criteria. Packages such as \CRANpkg{sp} \citep{pebesma_classes_2005} and \CRANpkg{rgeos} \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and modelling capabilities \citep{bivand_applied_2013}. Packages building on the **sp** class system have been developed for specific domains, including \CRANpkg{SpatialEpi} \citep{kim_spatialepi:_2016}, \CRANpkg{diseasemapping} \citep{brown_diseasemapping:_2016} and the **adehabitat** family of packages \citep{calenge_package_2006}.
@@ -82,14 +78,6 @@ The technical advantages of using modern, interpreted, and open source languages
 
 <!-- includes trip flows and calculations of catchments for transport services. -->
 <!--  combined with R's increasing use in academic research, industry and the public sector, suggests there could be substantial latent demand for transport planning functionality in R.  -->
-
-
-<!-- This is the context which motivated the development of **stplanr**. Its aim is simple: to provide an accessible toolbox for transport planning. It is hoped that it will be useful for practitioners and researchers alike as part of the transition to open source software taking place in the tech industry, which is gradually filtering down into other sectors of the economy, notably 'Big Data' in -->
-<!-- consultancy.^[Comments -->
-<!-- in support of this statement were made by a McKinsey manager during the European R Users Meeting (eRum), Poznan, 2016. -->
-<!-- ] -->
-<!-- A further motivation is that the best available evidence suggests the future of civilisation depends on our ability to transition away from fossile fuels.  -->
-<!-- The transport sector is the fastest growing source of emissions by sector, and represents a major roadblock in the path towards a zero-carbon economy. Transport systems are also a major cause of ill health, by enabling sedentary lifestyles and causing numerous road traffic casualties. Knowledge of these impacts motivated the word 'sustainable' in the package's name: by focussing on active travel and public transport modes, **stplanr** encourages the design of transport interventions that reduce dependence on fossil fuels.  -->
 
 # Package structure and functionality
 

@@ -18,7 +18,6 @@ library(stplanr)
 
 **stplanr** was developed to solve a real world problem: how to convert official data on travel patterns into geographic objects that could be plotted on a map and analysed using GIS? Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This vignette introduces the basics of the package including its dependencies, and how to get started with travel data overall. It can be seen as an introductory tutorial to handling spatial transport data and will evolve over time as such.
 
-<!-- ## Context -->
 
 <!-- ## Dependencies -->
 
@@ -31,6 +30,16 @@ The focus of **stplanr** is on spatial transport data. It therefore makes sense 
 <!-- ## Funding -->
 
 <!-- ## Other projects and links -->
+
+## Context and discussion
+
+This is not just a technical project. This section outlines some of the wider motivations underlying the package.
+
+As settlements worldwide have grown and become more complex, the process of planning has had to adapt. Planners today are specialists, in sub-fields such as Emergency, Logistics, Healthcare, Urban and Transport Planning. And the 'art' of planning has become more of a science, with its own array of specialist hardware and software.
+
+The process of Transport Planning has undergone a particularly dramatic revolution. Transport interventions such as new bridges, ports and active travel routes are no longer decided based on the intuition of public sector or political authorities. Decisions are now the result of a long socio-technical process involving public consultation, cost-benefit analyses and computer modelling and visualisation. With the ongoing digital revolution, the importance of this last stage has grown, to the point where transport planning is now a highly technical process, employing dozens of software developers in large planning organisations. There is now a multi-billion pound global transport planning consultancy industry, to support the decision-making process. Yet the fruits of all this labour are unavailable to the vast majority of citizens worldwide, and transport planning decisions which go against the best available evidence keep getting made.
+
+
 
 ## References
 
