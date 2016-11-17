@@ -113,9 +113,9 @@ For ease of use, functions focussed on each data type have been developed with n
 library(xtable)
 options(xtable.comment = FALSE)
 options(xtable.booktabs = TRUE)
-fun_table = readr::read_csv("fun_table.csv")
+fun_table <- readr::read_csv("fun_table.csv")
 # knitr::kable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.") # failed
-xt = xtable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.")
+xt <- xtable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.")
 xtable::print.xtable(xt, include.rownames = FALSE)
 ```
 
@@ -132,18 +132,67 @@ Gaining access to data is often the first stage in transport research. This ofte
 **stplanr** provides a variety of different functions that facilitate importing common data formats used for transport analysis into R.
 Although transport analysis generally requires some transport-specific datasets, it also typically relies heavily on common sources of data including census data.
 This being the case, **stplanr** also includes functions that may be useful to those not involved in transport research.
-This includes the `read_table_builder` function for importing data from the Australian Bureau of Statistics (ABS) and the `dl_stats19` and `format_stats19_*` functions for downloading and importing road traffic casualty data, a brief example of which is illustrated below.
+This includes the `read_table_builder` function for importing data from the Australian Bureau of Statistics (ABS) and the UK's Stats19 road traffic casualty dataset. A brief example of the latter is demonstrated below, which begins with downloading the data (warning this downloads ~100 MB of data):
 
 ```{r, eval=FALSE}
-dl_stats19() # automatically downloads and extracts stats19 data
+dl_stats19() # download and extract stats19 road traffic casualty data
 ```
 
 ```
-#> [1] "Data saved at: /tmp/Accidents0514.csv"  "Data saved at: /tmp/Casualties0514.csv"
-#> [3] "Data saved at: /tmp/Vehicles0514.csv"  
-
+#> [1] "Data saved at: /tmp/RtmpppF3E2/Accidents0514.csv"
+#> [2] "Data saved at: /tmp/RtmpppF3E2/Casualties0514.csv"
+#> [3] "Data saved at: /tmp/RtmpppF3E2/Vehicles0514.csv"  
 ```
 
+Once the data has been saved in the default directory, determined by `tempdir()`, it can be read-in and cleaned with the `read_stats19_` functions (note these call `format_stats19_` functions internally to clean the datasets and add correct labels to the variables):
+
+```{r, eval=FALSE}
+ac <- read_stats19_ac()
+ca <- read_stats19_ca()
+ve <- read_stats19_ve()
+```
+
+The resulting datasets (representing accident, casualty and vehicle level data, respectively) can be merged and made geographic, as illustrated below:
+
+```{r, eval=FALSE}
+library(dplyr)
+ca_ac <- inner_join(ca, ac)
+ca_cycle <- ca_ac %>%
+  filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) %>%
+  select(Age = Age_of_Casualty, Mode = Casualty_Type, Longitude, Latitude)
+ca_sp <- SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
+```
+
+Now that this casualty data has been cleaned, subsetted (to only include serious cycle crashes) and converted into a spatial class system, we can analyse them using geographical datasets of the type commonly used by **stplanr**.
+The following code, for example, geographically subsets the dataset to include only crashes that occured within the bounding box of a route network dataset provided by **stplanr**, using the function `bb2poly`, which converts a spatial dataset into a box, represented as a rectangular `SpatialPolygonsDataFrame`:
+
+```{r, eval=FALSE}
+data("route_network")
+proj4string(ca_sp) <- proj4string(route_network)
+bb <- bb2poly(route_network)
+ca_local <- ca_sp[bb,]
+```
+
+The above code chunk shows the importance of understanding geographical data when working with transport data.
+It is only by converting the casualty data into a spatial data class, and adding a coordinate reference system (CRS), that transport planners and researchers can link this importnat dataset back to the road network.
+We can now perform GIS operations on the results.
+The next code chunk, for example, finds all the fatalities that took place within 100 m of the route network, using the function `buff_geo`:
+
+```{r}
+rnet_buff_100 <- buff_geo(route_network, width = 100)
+ca_buff <- ca_local[rnet_buff_100,]
+```
+
+These can be visualised using base R graphics, extended by \CRANpkg{sp}, as illustrated below. This provides a good start for analysis but for publication-quality plots and interactive plots, designed for public engagement, we recommend using dedicated visualisation packages that work with spatial data such as \CRANpkg{tmap}:
+
+```{r, fig.cap="Road traffic fatalities in the study area downloaded with with stplanr (crosses). Deaths that happened within 100 m of the road network are represented by circles."}
+plot(bb, lty = 4)
+plot(rnet_buff_100, col = "grey", add = TRUE)
+points(ca_local, pch = 4)
+points(ca_buff, cex = 3)
+```
+
+## Creating geographic desire lines
 
 Perhaps the most common type of aggregate-level transport information is origin-destination ('OD') data.
 This can be presented either as a matrix or (more commonly) a long table
