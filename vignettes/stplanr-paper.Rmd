@@ -332,6 +332,10 @@ Cycle & 17493.25 & 4884360.99 & 87429.74 \\
 \label{tab:xtnyoa}
 \end{table}
 
+## Calculating geographic attributes of transport routes
+
+
+
 ## Modelling mode choice
 
 Route-allocated lines allow estimation of *route distance* and 
@@ -444,7 +448,7 @@ lines(l2$d_euclidean, exp(lm2p), col = "green")
 lines(l2$d_euclidean, exp(lm3p), col = "red")
 ```
 
-# Modelling accessibility
+## Modelling travel catchment areas
 
 Accessibility to transport services is a particularly important topic when considering public transport or active travel because of the frequent steep reduction in use as distances to access services (or infrastructure) increase, as evidenced by the exploration of distance decay above.
 As a result, the planning for transport services and infrastructure frequently focuses on several measures of accessibility including distance, but also travel times and frequencies and weighted by population.
@@ -464,6 +468,7 @@ To illustrate how catchment areas can be calculated, **stplanr** contains some s
 One of these datasets (`smallsa1`) contains population data for Statistical Area 1 (SA1) zones in Sydney, Australia.
 The second contains hypothetical cycleways aligned to streets in Sydney.
 The code below unzips the datasets and reads in the shapefiles using the `readOGR` function of \CRANpkg{rgdal}.
+
 ```{r loadshapefiles, results='hide',message='hide'}
 data_dir <- system.file("extdata", package="stplanr")
 unzip(file.path(data_dir, 'smallsa1.zip'))
@@ -477,6 +482,7 @@ file.remove(list.files(pattern="^(smallsa1|testcycleway).*"))
 Calculating the catchment area is straightforward and in addition to specifying the required datasets, only a vector containing column names to calculate statistics and a distance.
 Since proportioning the areas assumes projected data, unprojected data are automatically projected to either a common projection (if one is already projected) or a specified projection.
 It should be emphasised that the choice of projection is important and has an effect on the results meaning setting a local projection is best to achieve the most accurate results.
+
 ```{r calccatchment, results='hide'}
 catch800m <- calc_catchment(
   polygonlayer = sa1income,
@@ -490,6 +496,7 @@ catch800m <- calc_catchment(
 
 By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be `r as.character(round(sum(catch800m@data$Total),0))` people.
 The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \vref{fig:catchmentplot}.
+
 ```{r catchmentplot, fig.cap='400 metre catchment area using straight-line distance'}
 plot(sa1income, col="light grey")
 plot(catch800m, col=rgb(1, 0, 0, 0.5), add=TRUE)
@@ -506,6 +513,7 @@ Preparation of the dataset involves using the `SpatialLinesNetwork` function to 
 This function combines a `SpatialLinesDataFrame` with a graph network (using the \CRANpkg{igraph} package) to provide basic routing functionality.
 The network is used to calculate the shortest actual paths within the specific catchment distance.
 This process involves the following code:
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 unzip(file.path(data_dir, 'sydroads.zip'))
 sydroads <- rgdal::readOGR(".","roads")
@@ -517,6 +525,7 @@ The network catchment is then calculated using a similar method as with `calc_ca
 Specifically these are including the `SpatialLinesNetwork`, and using the `maximpedance` parameter to define the distance, with distance being the additional distance from the network.
 In contrast to the distance parameter that is based on the straight-line distance in both the `calc_catchment` and `calc_network_catchment` functions, the maximpedance parameter is the maximum value in the units of the network's weight attribute.
 In practice this is generally distance in metres but can also be travel times, risk or other measures.
+
 ```{r, warning=FALSE}
 netcatch800m <- calc_network_catchment(
   sln = sydnetwork,
@@ -531,6 +540,7 @@ netcatch800m <- calc_network_catchment(
 
 Once calculated, the network catchment area can be used just as the straight-line network catchment.
 This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \vref{fig:netcatchplot}:
+
 ```{r netcatchplot, fig.cap='Network catchment'}
 plot(sa1income, col="light grey")
 plot(catch800m, col=rgb(1, 0, 0, 0.5), add=TRUE)
