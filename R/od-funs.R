@@ -236,7 +236,9 @@ line2pointsn <- function(l){
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
 #' @param list_output If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.
-#' @param l_id Character string naming the id field from the input lines data
+#' @param l_id Character string naming the id field from the input lines data,
+#' typically the origin and destination ids pasted together. If absent, the row name of the
+#' straight lines will be used.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export

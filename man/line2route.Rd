@@ -18,7 +18,9 @@ should be shown}
 
 \item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
 
-\item{l_id}{Character string naming the id field from the input lines data}
+\item{l_id}{Character string naming the id field from the input lines data,
+typically the origin and destination ids pasted together. If absent, the row name of the
+straight lines will be used.}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
