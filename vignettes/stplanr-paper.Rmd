@@ -48,10 +48,10 @@ R's aptitude for handling transport data (including spatial and travel survey da
 and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in the type of organisations --- academic, public sector and privately owned --- that undertake the majority of transport planning research. In this context a major motivation driving **stplanr** is the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
 
 R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems.
-For instance, \citeauthor{Efthymiou2012} (\citeyear{Efthymiou2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
-\citeauthor{Efthymiou2012} (\citeyear{Efthymiou2012}) also used R to collect and analyse transport-related data from Twitter using packages including \CRANpkg{XML}, \CRANpkg{twitteR} and \CRANpkg{ggplot2}.
+For instance, \citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
+\citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) also used R to collect and analyse transport-related data from Twitter using packages including \CRANpkg{XML}, \CRANpkg{twitteR} and \CRANpkg{ggplot2}.
 These packages were used to download, parse and plot the Twitter data using a method that can be repeated and the results reproduced or updated.
-More general statistical analyses have also been conducted on transport-related datasets using packages including \CRANpkg{muStat} and \CRANpkg{mgcv} \citep{Diana2012,Cerin2013}.
+More general statistical analyses have also been conducted on transport-related datasets using packages including \CRANpkg{muStat} and \CRANpkg{mgcv} \citep{diana_studying_2012,cerin_walking_2013}.
 <!-- Peter and bronsall, for example, use the xxx package to do this. -->
 <!-- Alfred et al, to provide another example, use the package to do that. -->
 Despite the rising use of R for transport research, there has yet been to be a package for transport planning.
@@ -295,6 +295,9 @@ rnet$flow <- rnet$All / mean(rnet$All) * 3
 plot(rnet, lwd = rnet$flow / mean(rnet$flow))
 ```
 
+To estimate the amount of capacity needed at each segment on the transport network, the `overline` function demonstrated above, is used to divide line geometries into unique segments and aggregate the overlapping values.
+The results, illustrated in the right-hand panel of Figure \ref{fig:lines_routes}, can be used to estimate where there is most need to improve the transport network, for example informing the decision of where to build new bicycle paths.
+
 Limitations with the `route_cyclestreet` routing API include its specificity, to one mode (cycling) and a single region (the UK and part of Europe). To overcome these limitations, additional routing APIs were added with the functions `route_graphhopper`, `route_transportapi_public` and `viaroute`. These interface to Graphhopper, TransportAPI and the OpenStreetMap Routing Machine (OSRM) routing services, respectively. The great advantage of OSM is that it allows you to run your own routing services on a local server, greatly increasing the rate of route generation.
 
 A short example of finding the route by car and bike between New York and Oaxaca demonstrates how `route_graphhopper` can collect geographical and other data on routes by various modes, anywhere in the world. The output, shown in Table \ref{tab:xtnyoa}, shows that the function also saves time, distance and (for bike trips)
@@ -341,8 +344,8 @@ As a result, the planning for transport services and infrastructure frequently f
 The functions in **stplanr** are intended to provide a method of estimating these accessibility measures as well as calculating the population that can access specific services (i.e., estimating the catchment area).
 
 Catchment areas in particular are a widely used measure of accessibility that attempts to both quantify the likely target group for a particular service, and visualise the geographic area that is covered by the service.
-For instance, passengers are often said to be willing to walk up to 400 metres to a bus stop, or 800 metres to a railway station \citep{El-Geneidy2014}.
-Although these distances may appear relatively arbitrary and have been found to underestimate the true catchment area of bus stops and railway stations \citep{El-Geneidy2014,Daniels2013} they nonetheless represent a good, albeit somewhat conservative, starting point from which catchment areas can be determined.
+For instance, passengers are often said to be willing to walk up to 400 metres to a bus stop, or 800 metres to a railway station \citep{el-geneidy_new_2014}.
+Although these distances may appear relatively arbitrary and have been found to underestimate the true catchment area of bus stops and railway stations  \citep{el-geneidy_new_2014,daniels_explaining_2013} they nonetheless represent a good, albeit somewhat conservative, starting point from which catchment areas can be determined.
 
 In many cases, catchment areas are calculated on the basis of straight-line (or "as the crow flies") distances.
 This is a simplistic, but relatively appealing approach because it requires little additional data and is straight-forward to understand.
@@ -443,12 +446,12 @@ Route-allocated lines allow estimation of *route distance* and
 These variables can help model the rate of flow between origins and
 destination, as illustrated in the right-hand panel of Figure \ref{fig:euclidfastest}.
 The code below demonstrates
-how objects generated by **stplanr** can be used to undertake such analysis.
+how objects generated by **stplanr** can be used to undertake such analysis, with the `line_length` function used to find the distance, in meters, of lat/lon data.
 
 ```
 l$d_euclidean <- line_length(l)
-l$d_fastroute <- routes_fast@data$length
-plot(l$d_euclidean, l$d_fastroute,
+l$d_rf <- routes_fast@data$length
+plot(l$d_euclidean, l$d_rf,
   xlab = "Euclidean distance", ylab = "Route distance")
 abline(a = 0, b = 1)
 abline(a = 0, b = 1.2, col = "green")
@@ -457,21 +460,47 @@ abline(a = 0, b = 1.5, col = "red")
 
 ```{r, echo=FALSE, message=FALSE}
 l$d_euclidean <- line_length(l)
-l$d_fastroute <- routes_fast@data$length
+l$d_rf <- routes_fast$length
 ```
 
-The plot (Figure \ref{fig:euclidfastest}) illustrates the expected strong correlation between
-Euclidean and fastest route distance. However, some OD pairs
-have a proportionally higher route distance than others.
-This is illustrated
-by distance from the black line in the above plot, which represents circuity. 
+The left hand panel of Figure \ref{fig:euclidfastest} shows the expected strong correlation between
+Euclidean ($d_E$) and fastest route ($d_{Rf}$) distance. However, some OD pairs
+have a proportionally higher route distance than others, as illustrated
+by distance from the black line in the above plot: this represents \emph{Circuity ($Q$)}: the ratio of network distance to Euclidean distance \citep{levinson_minimum_2009}:
 
-To estimate the amount of capacity needed at each segment on the transport
-network, the `overline` function, written by Barry Rowlingson can be used. This
-divides up line geometries into unique segments then aggregates the overlapping
-values. The results, illustrated in the right-hand panel of Figure \ref{fig:lines_routes}, can be used to estimate where there is
-most need to improve the transport network, for example informing the decision of
-where to build new bicycle paths.
+$$
+ Q = \frac{d_{Rf}}{d_E}
+$$
+
+An extension to the concept of cirquity is the 'quietness diversion factor' ($QDF$) of a desire line, the ratio of the route distance of a quiet route option ($d_{Rq}$) to that of the fastest:
+
+$$
+ QDF = \frac{d_{Rq}}{d_{Rf}}
+$$
+
+Thanks to the 'quietest' route option provided by `route_cyclestreet`, we can estimate average values for both metrics as follows:
+
+```{r, eval=FALSE}
+routes_slow <- line2route(l, route_cyclestreet, plan = "quietest")
+```
+
+```{r}
+l$d_rq <- routes_slow$length # quietest route distance
+Q <- mean(l$d_rf / l$d_euclidean, na.rm = TRUE)
+QDF <- mean(l$d_rq / l$d_rf, na.rm = TRUE)
+Q
+QDF
+```
+
+The results show that cycle paths are not particularly direct in the study region by international standards \citep{crow_design_2007}.
+This is hardly surprisingly given the small size of the sample and the short distances covered: $Q$ tends to decrease at a decaying rate with distance.
+What is surprising is that $QDF$ is close to unity, which could imply that the quiet routes are constructed along direct, and therefore sensible routes.
+We should caution against such assumptions, however:
+It is a small sample of desire lines and, we time is explored, we find that the 'quietness diversion factor with respect to time' ($QDF_t$) is slightly larger:
+
+```{r}
+(QDFt <- mean(routes_slow$time / routes_fast$time, na.rm = TRUE))
+```
 
 ## Models of travel behaviour
 
@@ -499,8 +528,8 @@ plot(l$d_euclidean, l$pwalk, cex = l$All / 50,
 par(mfrow = c(1, 2))
 lgb <- spTransform(l, CRSobj = CRS("+init=epsg:27700"))
 l$d_euclidean <- rgeos::gLength(lgb, byid = T)
-l$d_fastroute <- routes_fast@data$length
-plot(l$d_euclidean, l$d_fastroute,
+l$d_rf <- routes_fast@data$length
+plot(l$d_euclidean, l$d_rf,
   xlab = "Euclidean distance", ylab = "Route distance")
 abline(a = 0, b = 1)
 abline(a = 0, b = 1.2, col = "green")
@@ -510,11 +539,10 @@ plot(l$d_euclidean, l$pwalk, cex = l$All / 50,
   xlab = "Euclidean distance (m)", ylab = "Proportion of trips by foot")
 ```
 
-Based on Figure \ref{fig:euclidwalking1} there is a clear negative relationship
+Based on the right-hand panel in Figure \ref{fig:euclidfastest}, there is a clear negative relationship
 between distance of trips and the proportion of those trips made by walking.
 This is unsurprising: beyond a certain distance (around 1.5km according
-the the data presented in the figure above) walking may be rather slow and
-many people would consider travelling by bike instead!
+the the data presented in the figure above) walking is usually seen as too slow and other modes are considered.
 According to the academic literature, this 'distance decay' is non-linear
 and there have been a number of functions proposed to fit to distance decay
 curves \citep{martinez_new_2013}. From the range of options we test below just two forms.
@@ -523,8 +551,8 @@ to fit the data contained in `l` for walking.
 
 ```{r}
 lm1 <- lm(pwalk ~ d_euclidean, data = l@data, weights = All)
-lm2 <- lm(pwalk ~ d_fastroute, data = l@data, weights = All)
-lm3 <- glm(pwalk ~ d_fastroute + I(d_fastroute^0.5), 
+lm2 <- lm(pwalk ~ d_rf, data = l@data, weights = All)
+lm3 <- glm(pwalk ~ d_rf + I(d_rf^0.5), 
            data = l@data, weights = All, family = quasipoisson(link = "log"))
 ```
 
@@ -542,7 +570,7 @@ summary(lm3)
 ```{r euclidwalking2, fig.cap='Relationship between euclidean distance and walking', out.width="75%", fig.align="center"}
 plot(l$d_euclidean, l$pwalk, cex = l$All / 50,
   xlab = "Euclidean distance (m)", ylab = "Proportion of trips by foot")
-l2 <- data.frame(d_euclidean = 1:5000, d_fastroute = 1:5000)
+l2 <- data.frame(d_euclidean = 1:5000, d_rf = 1:5000)
 lm1p <- predict(lm1, l2)
 lm2p <- predict(lm2, l2)
 lm3p <- predict(lm3, l2)
