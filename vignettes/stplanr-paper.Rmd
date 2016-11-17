@@ -45,7 +45,7 @@ people can identify interventions that they think would make the transport syste
 about the paths and roads you travel on, for example: what interventions would you prioritise to improve non-motorised access, for walking, cycling and wheel-chairs? What quantitative evidence would you need to communicate this to the relevant authorities?
 ]
 R's aptitude for handling transport data (including spatial and travel survey data),
-and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in the type of organisations --- academic, public sector and privately owned --- that undertake the majority of transport planning research. In this context a major motivation driving **stplanr** is the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
+and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in the type of organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
 
 R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems.
 For instance, \citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
@@ -335,7 +335,7 @@ Cycle & 17493.25 & 4884360.99 & 87429.74 \\
 \label{tab:xtnyoa}
 \end{table}
 
-## Calculating geographic attributes of transport routes
+<!-- ## Calculating geographic attributes of transport routes -->
 
 ## Modelling travel catchment areas
 
@@ -384,7 +384,7 @@ catch800m <- calc_catchment(
 ```
 
 By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be `r as.character(round(sum(catch800m@data$Total),0))` people.
-The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \vref{fig:catchmentplot}.
+The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \ref{fig:catchmentplot}.
 
 ```{r catchmentplot, fig.cap='400 metre catchment area using straight-line distance'}
 plot(sa1income, col="light grey")
@@ -394,7 +394,7 @@ plot(testcycleway, col="green", add=TRUE)
 
 This simplistic catchment area is useful when the straight-line distance is a reasonable approxmiation of the route taken to walk (or cycle) to a transport facility.
 However, this is often not the case.
-The catchment area in Figure \vref{fig:catchmentplot} initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to reach from the (green-coloured) cycleway.
+The catchment area in Figure \ref{fig:catchmentplot} initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to reach from the (green-coloured) cycleway.
 To allow for more realistic catchment areas for most situations, **stplanr** provides the `calc_network_catchment` function that uses the same principle as `calc_catchment` but also takes into account the transport network.
 
 To use `calc_network_catchment`, a transport network needs to be prepared that can be used in conjunction with the previous datasets.
@@ -428,7 +428,7 @@ netcatch800m <- calc_network_catchment(
 ```
 
 Once calculated, the network catchment area can be used just as the straight-line network catchment.
-This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \vref{fig:netcatchplot}:
+This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
 
 ```{r netcatchplot, fig.cap='Network catchment'}
 plot(sa1income, col="light grey")
@@ -472,7 +472,7 @@ $$
  Q = \frac{d_{Rf}}{d_E}
 $$
 
-An extension to the concept of cirquity is the 'quietness diversion factor' ($QDF$) of a desire line, the ratio of the route distance of a quiet route option ($d_{Rq}$) to that of the fastest:
+An extension to the concept of cirquity is the 'quietness diversion factor' ($QDF$) of a desire line \citep{lovelace_propensity_2016}, the ratio of the route distance of a quiet route option ($d_{Rq}$) to that of the fastest:
 
 $$
  QDF = \frac{d_{Rq}}{d_{Rf}}
@@ -509,8 +509,7 @@ including spatial interaction models, the four-stage transport model
 and gravity models ('distance decay'). **stplanr** aims eventually to facilitate
 creation of many types of flow model. 
 
-At present (May 2015) the only functions to assist with this are
-the `dd_*` functions, simple commands to create distance decay curves.
+At present there are no functions for modelling distance decay, but this is something we would like to add in future versions of **stplanr**.
 Distance decay is an especially important concept for sustainable transport
 planning due to physical limitations on the ability of people to walk and
 cycle large distances \citep{iacono_measuring_2010}.
@@ -539,8 +538,7 @@ plot(l$d_euclidean, l$pwalk, cex = l$All / 50,
   xlab = "Euclidean distance (m)", ylab = "Proportion of trips by foot")
 ```
 
-Based on the right-hand panel in Figure \ref{fig:euclidfastest}, there is a clear negative relationship
-between distance of trips and the proportion of those trips made by walking.
+Based on the right-hand panel in Figure \ref{fig:euclidfastest}, there is a clear negative relationship between distance of trips and the proportion of those trips made by walking.
 This is unsurprising: beyond a certain distance (around 1.5km according
 the the data presented in the figure above) walking is usually seen as too slow and other modes are considered.
 According to the academic literature, this 'distance decay' is non-linear
@@ -557,9 +555,8 @@ lm3 <- glm(pwalk ~ d_rf + I(d_rf^0.5),
 ```
 
 The results of these regression models can be seen using `summary()`.
-The results for such a small dataset are not particularly interesting and,
-surprisingly, Euclidean distance seems to be a better predictor of
-walking than route distance. The results are displayed in Figure \vref{fig:euclidwalking2}.
+Surprisingly, Euclidean distance was a better predictor of
+walking than route distance, but no strong conclusions can be drawn from this finding, with such a small sample of desire lines (n = 42). The results are purely illustrative, of the kind of the possibilities created by using **stplanr** in conjuction with R's modelling capabilities (see Figure \vref{fig:euclidwalking2}).
 
 ```{r, echo=FALSE, eval=FALSE}
 summary(lm1)
@@ -610,18 +607,3 @@ Like much open source software **stplanr** is an open-end project, a work-in-pro
 <!-- https://github.com/Robinlovelace/stplanr -->
 
 \bibliography{references}
-
-```{r, echo=FALSE, eval=FALSE}
-# copy paper into the stplanr vignette
-p = readLines("stplanr-paper/stplanr-paper.Rmd")
-p = gsub(pattern = "\\CRANpkg", "\\textbf", p)
-p = gsub(pattern = "../ref", "ref", p)
-start_line = grep(pattern = "---", x = p)[2] + 1
-p = p[start_line:length(p)]
-b_yaml = readLines("../stplanr/vignettes/introducing-stplanr.Rmd")
-end_yaml = grep(pattern = "---", x = b_yaml)[2] 
-b_yaml = b_yaml[1:end_yaml]
-writeLines(c(b_yaml, p), "../stplanr/vignettes/introducing-stplanr.Rmd")
-file.copy("references.bib", "../stplanr/vignettes/", overwrite = T)
-```
-
