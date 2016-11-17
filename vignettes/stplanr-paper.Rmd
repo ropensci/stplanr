@@ -132,7 +132,18 @@ Gaining access to data is often the first stage in transport research. This ofte
 **stplanr** provides a variety of different functions that facilitate importing common data formats used for transport analysis into R.
 Although transport analysis generally requires some transport-specific datasets, it also typically relies heavily on common sources of data including census data.
 This being the case, **stplanr** also includes functions that may be useful to those not involved in transport research.
-This includes the `read_table_builder` function for importing data from the Australian Bureau of Statistics (ABS) and the `dl_stats19` and `format_stats19_*` functions for downloading and importing road traffic casualty data.
+This includes the `read_table_builder` function for importing data from the Australian Bureau of Statistics (ABS) and the `dl_stats19` and `format_stats19_*` functions for downloading and importing road traffic casualty data, a brief example of which is illustrated below.
+
+```{r, eval=FALSE}
+dl_stats19() # automatically downloads and extracts stats19 data
+```
+
+```
+#> [1] "Data saved at: /tmp/Accidents0514.csv"  "Data saved at: /tmp/Casualties0514.csv"
+#> [3] "Data saved at: /tmp/Vehicles0514.csv"  
+
+```
+
 
 Perhaps the most common type of aggregate-level transport information is origin-destination ('OD') data.
 This can be presented either as a matrix or (more commonly) a long table
