@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Introducing stplanr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 ```{r, include=FALSE}
@@ -15,11 +16,21 @@ library(stplanr)
 
 ## Abstract
 
-**stplanr** was developed to solve a real world problem: how to convert official data on travel patterns into geographic objects that could be plotted on a map and analysed using GIS? Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This paper traces the development of these capabilities with a focus on applied case studies and reproducible examples.
+**stplanr** was developed to solve a real world problem: how to convert official data on travel patterns into geographic objects that could be plotted on a map and analysed using GIS? Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This vignette introduces the basics of the package including its dependencies, and how to get started with travel data overall. It can be seen as an introductory tutorial to handling spatial transport data and will evolve over time as such.
 
-## Context
+<!-- ## Context -->
 
-## Funding
+<!-- ## Dependencies -->
 
-## Other projects and links
+## Getting started with transport data
+
+The focus of **stplanr** is on spatial transport data. It therefore makes sense to have a good understanding of spatial data in R before progressing. The following resources are recommended in increasing order of difficulty:
+
+- @lovelace_introduction_2014 provides a basic introduction to spatial data in R - it is aimed at new R users.
+
+<!-- ## Funding -->
+
+<!-- ## Other projects and links -->
+
+## References
 
