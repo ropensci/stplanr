@@ -178,14 +178,19 @@ It is only by converting the casualty data into a spatial data class, and adding
 We can now perform GIS operations on the results.
 The next code chunk, for example, finds all the fatalities that took place within 100 m of the route network, using the function `buff_geo`:
 
-```{r}
+```{r, echo=FALSE}
+bb <- bb2poly(route_network)
+```
+
+
+```{r, message=FALSE}
 rnet_buff_100 <- buff_geo(route_network, width = 100)
 ca_buff <- ca_local[rnet_buff_100,]
 ```
 
-These can be visualised using base R graphics, extended by \CRANpkg{sp}, as illustrated below. This provides a good start for analysis but for publication-quality plots and interactive plots, designed for public engagement, we recommend using dedicated visualisation packages that work with spatial data such as \CRANpkg{tmap}:
+These can be visualised using base R graphics, extended by \CRANpkg{sp}, as illustrated in Figure \ref{fig:fats}. This provides a good start for analysis but for publication-quality plots and interactive plots, designed for public engagement, we recommend using dedicated visualisation packages that work with spatial data such as \CRANpkg{tmap}.
 
-```{r, fig.cap="Road traffic fatalities in the study area downloaded with with stplanr (crosses). Deaths that happened within 100 m of the road network are represented by circles."}
+```{r fats, fig.cap="Road traffic fatalities in the study area downloaded with with stplanr (crosses). Deaths that happened within 100 m of the road network are represented by circles.", out.width="50%", fig.align="center"}
 plot(bb, lty = 4)
 plot(rnet_buff_100, col = "grey", add = TRUE)
 points(ca_local, pch = 4)
