@@ -24,6 +24,11 @@ output: rticles::rjournal_article
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(dev = 'pdf', out.width='\\textwidth')
 ```
+
+## Build warning
+
+Warning: knitting this paper from the RStudio project can lead the build to fail. Please build this file from a different or no project if this happens.
+
 # Introduction
 
 <!-- As settlements worldwide have grown and become more complex, the process of planning has had to adapt. Planners today are specialists, in sub-fields such as Emergency, Logistics, Healthcare, Urban and Transport Planning. And the 'art' of planning has become more of a science, with its own array of specialist hardware and software. -->
@@ -501,7 +506,10 @@ Like much open source software **stplanr** is an open-end project, a work-in-pro
 
 <!-- This creates the opportunity for extending existing modelling and data analysis data to better handle typical travel survey formats, e.g. by creating a system to represent travel surveys worldwide by merging trip, individual and household level data. Such non-spatial extensions of R for transport planning could build on the fast grouping and processing functions provided by \CRANpkg{dplyr}. This is an interesting potential direction of travel for **stplanr** or future packages for transport research. -->
 
-\bibliography{../references}
+<!-- If you would like to contribute or request new features, see -->
+<!-- https://github.com/Robinlovelace/stplanr -->
+
+\bibliography{references}
 
 ```{r, echo=FALSE, eval=FALSE}
 # copy paper into the stplanr vignette
