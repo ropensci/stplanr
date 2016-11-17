@@ -4,8 +4,8 @@ author:
   - name: Robin Lovelace
     affiliation: University of Leeds
     address:
-    - line 1
-    - line 2
+    - 34-40 University Road
+    - LS2 9JT, UK
     email:  r.lovelace@leeds.ac.uk
   - name: Richard Ellison
     affiliation: University of Sydney
