@@ -42,7 +42,7 @@ the same applies to scientific research into transport systems
 
 **stplanr** seeks to address these issues. After the package
 has been installed (see the package's
-[README](https://github.com/Robinlovelace/stplanr) for details),
+[README](https://github.com/ropensci/stplanr) for details),
 it can be loaded in with `library()`:
 
 ```{r, message=FALSE}
@@ -279,7 +279,7 @@ spatial interaction models, more functions to access routing APIs and
 improved functionality for accessing OpenStreetMap data.
 
 If you would like to contribute or request new features, see
-https://github.com/Robinlovelace/stplanr
+https://github.com/ropensci/stplanr
 
 ## References
 
