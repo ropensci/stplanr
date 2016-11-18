@@ -17,7 +17,7 @@ retaining the data of the former.
 }
 \examples{
 data(flowlines)
-l <- flowlines
+l <- flowlines[2:5,]
 nl <- routes_fast
 nrow(l)
 nrow(nl)

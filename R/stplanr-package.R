@@ -5,7 +5,7 @@
 #' @docType package
 #' @author Robin Lovelace \email{rob00x@@gmail.com}
 #' @keywords package
-#' @seealso \url{https://github.com/Robinlovelace/stplanr}
+#' @seealso \url{https://github.com/ropensci/stplanr}
 #' @description The stplanr package provides functions to access
 #' and analyse data for transportation research, including origin-destination analysis,
 #' route allocation and modelling travel patterns.

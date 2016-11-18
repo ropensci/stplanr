@@ -5,7 +5,7 @@
 \title{Convert straight SpatialLinesDataFrame from flow data into routes}
 \usage{
 line2route(l, route_fun = "route_cyclestreet", n_print = 10,
-  list_output = FALSE, ...)
+  list_output = FALSE, l_id = NA, ...)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
@@ -17,6 +17,10 @@ line2route(l, route_fun = "route_cyclestreet", n_print = 10,
 should be shown}
 
 \item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
+
+\item{l_id}{Character string naming the id field from the input lines data,
+typically the origin and destination ids pasted together. If absent, the row name of the
+straight lines will be used.}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
@@ -31,24 +35,32 @@ See \code{\link{route_cyclestreet}} and other route functions for details
 \examples{
 \dontrun{
 data(flowlines)
-plot(flowlines)
-rf <- line2route(l = flowlines, "route_cyclestreet", plan = "fastest")
-rq <- line2route(l = flowlines, plan = "quietest", silent = TRUE)
-plot(rf, col = "red", add = TRUE
-plot(rq, col = "green", add = TRUE
+l = flowlines[2:5,]
+rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
+rq <- line2route(l = l, plan = "quietest", silent = TRUE)
+plot(rf, col = "red")
+plot(rq, col = "green", add = TRUE)
+plot(l, add = T)
 # Plot for a single line to compare 'fastest' and 'quietest' route
-n = 21
-plot(flowlines[n,])
+n = 2
+plot(l[n,])
 lines(rf[n,], col = "red")
 lines(rq[n,], col = "green")
 # Example with list output
-l <- flowlines[1:3,]
+l <- l[1:3,]
 rf_list <- line2route(l = l, list_output = TRUE)
 class(rf_list)       # list output
 class(rf_list[[2]])  # but individual elements are spatial
 rf_list_of_lists <- line2route(l = l, list_output = TRUE, save_raw = TRUE)
 class(rf_list_of_lists)       # list output
 class(rf_list_of_lists[[2]])  # but individual elements are spatial
+# illustration of how the l_id argument works:
+rf$id # has id as l has "id" field
+l$id <- NULL # remove id field for testing
+rf_no_id <- line2route(l)
+rf_no_id$id # [1] "1" "2" "3" "4"
+rf_with_id = line2route(l, l_id = "All")
+rf_with_id$id # [1] 38 10 44
 }
 }
 
