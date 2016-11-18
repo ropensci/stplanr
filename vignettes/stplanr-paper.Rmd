@@ -10,8 +10,8 @@ author:
   - name: Richard Ellison
     affiliation: University of Sydney
     address:
-    - line 1
-    - line 2
+    - 378 Abercrombie Street
+    - Darlington, NSW 2008, Australia
     email:  richard.ellison@sydney.edu.au
 abstract: >
   Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analyis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
@@ -45,7 +45,7 @@ people can identify interventions that they think would make the transport syste
 about the paths and roads you travel on, for example: what interventions would you prioritise to improve non-motorised access, for walking, cycling and wheel-chairs? What quantitative evidence would you need to communicate this to the relevant authorities?
 ]
 R's aptitude for handling transport data (including spatial and travel survey data),
-and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in the type of organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
+and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in many organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
 
 R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems.
 For instance, \citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
@@ -127,7 +127,7 @@ Transport datasets are very diverse. There are therefore many other functions wh
 
 ## Accessing and processing transport data
 
-Gaining access to data is often the first stage in transport research. This often a long and protracted process which is thankfully becoming easier thanks to the 'open data' movement and packages such as **tigris** for making data access from within R easier \citep{walker_tigris:_2016}.
+Gaining access to data is often the first stage in transport research. This is often a long and protracted process which is thankfully becoming easier thanks to the 'open data' movement and packages such as **tigris** for making data access from within R easier \citep{walker_tigris:_2016}.
 
 **stplanr** provides a variety of different functions that facilitate importing common data formats used for transport analysis into R.
 Although transport analysis generally requires some transport-specific datasets, it also typically relies heavily on common sources of data including census data.
@@ -170,6 +170,7 @@ The following code, for example, geographically subsets the dataset to include o
 data("route_network")
 proj4string(ca_sp) <- proj4string(route_network)
 bb <- bb2poly(route_network)
+proj4string(bb) <- proj4string(route_network)
 ca_local <- ca_sp[bb,]
 ```
 
@@ -180,8 +181,8 @@ The next code chunk, for example, finds all the fatalities that took place withi
 
 ```{r, echo=FALSE}
 bb <- bb2poly(route_network)
+load("reqfiles.RData")
 ```
-
 
 ```{r, message=FALSE}
 rnet_buff_100 <- buff_geo(route_network, width = 100)
@@ -269,7 +270,7 @@ route_bl <- route_cyclestreet(from = "Bradford", to = "Leeds")
 route_c1_c2 <- route_cyclestreet(cents[1,], cents[2,])
 ```
 
-The raw output from routing APIs is usually provided as a JSON or GeoJSON text string. By default, `route_cyclestreet` saves a number of key variables (including length, time, hilliness and business variables generated by CycleStreets.net) from the attribute data provided by the API. If the user wants to save the raw output, the `save_raw` argument can be used:
+The raw output from routing APIs is usually provided as a JSON or GeoJSON text string. By default, `route_cyclestreet` saves a number of key variables (including length, time, hilliness and busyness variables generated by CycleStreets.net) from the attribute data provided by the API. If the user wants to save the raw output, the `save_raw` argument can be used:
 
 ```{r, eval=FALSE}
 route_bl_raw <- route_cyclestreet(from = "Bradford", to = "Leeds", save_raw = TRUE)
@@ -298,7 +299,7 @@ plot(rnet, lwd = rnet$flow / mean(rnet$flow))
 To estimate the amount of capacity needed at each segment on the transport network, the `overline` function demonstrated above, is used to divide line geometries into unique segments and aggregate the overlapping values.
 The results, illustrated in the right-hand panel of Figure \ref{fig:lines_routes}, can be used to estimate where there is most need to improve the transport network, for example informing the decision of where to build new bicycle paths.
 
-Limitations with the `route_cyclestreet` routing API include its specificity, to one mode (cycling) and a single region (the UK and part of Europe). To overcome these limitations, additional routing APIs were added with the functions `route_graphhopper`, `route_transportapi_public` and `viaroute`. These interface to Graphhopper, TransportAPI and the OpenStreetMap Routing Machine (OSRM) routing services, respectively. The great advantage of OSM is that it allows you to run your own routing services on a local server, greatly increasing the rate of route generation.
+Limitations with the `route_cyclestreet` routing API include its specificity, to one mode (cycling) and a single region (the UK and part of Europe). To overcome these limitations, additional routing APIs were added with the functions `route_graphhopper`, `route_transportapi_public` and `viaroute`. These interface to Graphhopper, TransportAPI and the Open Source Routing Machine (OSRM) routing services, respectively. The great advantage of OSRM is that it allows you to run your own routing services on a local server, greatly increasing the rate of route generation.
 
 A short example of finding the route by car and bike between New York and Oaxaca demonstrates how `route_graphhopper` can collect geographical and other data on routes by various modes, anywhere in the world. The output, shown in Table \ref{tab:xtnyoa}, shows that the function also saves time, distance and (for bike trips)
 vertical distance climbed for the trips.
@@ -339,7 +340,7 @@ Cycle & 17493.25 & 4884360.99 & 87429.74 \\
 
 ## Modelling travel catchment areas
 
-Accessibility to transport services is a particularly important topic when considering public transport or active travel because of the frequent steep reduction in use as distances to access services (or infrastructure) increase, as evidenced by the exploration of distance decay above.
+Accessibility to transport services is a particularly important topic when considering public transport or active travel because of the frequent steep reduction in use as distances to access services (or infrastructure) increase.
 As a result, the planning for transport services and infrastructure frequently focuses on several measures of accessibility including distance, but also travel times and frequencies and weighted by population.
 The functions in **stplanr** are intended to provide a method of estimating these accessibility measures as well as calculating the population that can access specific services (i.e., estimating the catchment area).
 
@@ -368,9 +369,9 @@ testcycleway <- rgdal::readOGR(".","testcycleway")
 file.remove(list.files(pattern="^(smallsa1|testcycleway).*"))
 ```
 
-Calculating the catchment area is straightforward and in addition to specifying the required datasets, only a vector containing column names to calculate statistics and a distance.
+Calculating the catchment area is straightforward and in addition to specifying the required datasets, only a vector containing column names to calculate statistics and a distance is required.
 Since proportioning the areas assumes projected data, unprojected data are automatically projected to either a common projection (if one is already projected) or a specified projection.
-It should be emphasised that the choice of projection is important and has an effect on the results meaning setting a local projection is best to achieve the most accurate results.
+It should be emphasised that the choice of projection is important and has an effect on the results meaning setting a local projection is recommended to achieve the most accurate results.
 
 ```{r calccatchment, results='hide'}
 catch800m <- calc_catchment(
@@ -394,7 +395,7 @@ plot(testcycleway, col="green", add=TRUE)
 
 This simplistic catchment area is useful when the straight-line distance is a reasonable approxmiation of the route taken to walk (or cycle) to a transport facility.
 However, this is often not the case.
-The catchment area in Figure \ref{fig:catchmentplot} initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to reach from the (green-coloured) cycleway.
+The catchment area in Figure \ref{fig:catchmentplot} initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to access from the (green-coloured) cycleway.
 To allow for more realistic catchment areas for most situations, **stplanr** provides the `calc_network_catchment` function that uses the same principle as `calc_catchment` but also takes into account the transport network.
 
 To use `calc_network_catchment`, a transport network needs to be prepared that can be used in conjunction with the previous datasets.
@@ -403,7 +404,7 @@ This function combines a `SpatialLinesDataFrame` with a graph network (using the
 The network is used to calculate the shortest actual paths within the specific catchment distance.
 This process involves the following code:
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 unzip(file.path(data_dir, 'sydroads.zip'))
 sydroads <- rgdal::readOGR(".","roads")
 file.remove(list.files(pattern="^(roads).*"))
@@ -496,7 +497,7 @@ The results show that cycle paths are not particularly direct in the study regio
 This is hardly surprisingly given the small size of the sample and the short distances covered: $Q$ tends to decrease at a decaying rate with distance.
 What is surprising is that $QDF$ is close to unity, which could imply that the quiet routes are constructed along direct, and therefore sensible routes.
 We should caution against such assumptions, however:
-It is a small sample of desire lines and, we time is explored, we find that the 'quietness diversion factor with respect to time' ($QDF_t$) is slightly larger:
+It is a small sample of desire lines and, when time is explored, we find that the 'quietness diversion factor with respect to time' ($QDF_t$) is slightly larger:
 
 ```{r}
 (QDFt <- mean(routes_slow$time / routes_fast$time, na.rm = TRUE))
@@ -586,7 +587,7 @@ Furthermore, with the development of online application frameworks such as **shi
 
 This paper has demonstrated the great potential for R to be used for transport planning. R's flexibility, powerful GIS capabilities \citep{bivand_applied_2013} and free accessibility makes it well-suited to the needs of transport planners and researchers, especially those wanting to avoid the high costs of market-leading products. Rather than 'reinvent the wheel' (e.g. with a new class system), **stplanr** builds on existing packages and \CRANpkg{sp} classes to work with common transport data formats.
 
-It is useful to see **stplanr**, and R for transport planning in general, as an addition tool in the transport planner's cabinet. It can be understood as one part of a wider movement that is making transport planning a more open and democratic process. Other developments in this movements include the increasing availability of open data \citep{naumova_building_2016} and the rise of open source products for transport modelling, such as [SUMO](http://www.dlr.de/ts/en/desktopdefault.aspx/tabid-9883/16931_read-41000/), [MATSim](http://www.matsim.org/) and [MITSIMLAB](https://its.mit.edu/software/mitsimlab) \citep{saidallah_comparative_2016}. **stplanr**, with its focus on GIS operations rather than microscopic vehicle-level behaviour, can complement such software and help make better use of new open data sources.
+It is useful to see **stplanr**, and R for transport planning in general, as an addition tool in the transport planner's cabinet. It can be understood as one part of a wider movement that is making transport planning a more open and democratic process. Other developments in this movement include the increasing availability of open data \citep{naumova_building_2016} and the rise of open source products for transport modelling, such as [SUMO](http://www.dlr.de/ts/en/desktopdefault.aspx/tabid-9883/16931_read-41000/), [MATSim](http://www.matsim.org/) and [MITSIMLAB](https://its.mit.edu/software/mitsimlab) \citep{saidallah_comparative_2016}. **stplanr**, with its focus on GIS operations rather than microscopic vehicle-level behaviour, can complement such software and help make better use of new open data sources.
 
 Because transport planning is an inherently spatial activity, **stplanr** occupies an important niche in the transport planning software landscape, with its focus on spatial transport data. There is great potential for development of **stplanr** in many directions.
 Our priority for **stplanr** however, is to keep the focus on geographic functions for transport planning. There are many opportunities in this direction, including:
@@ -599,7 +600,7 @@ Our priority for **stplanr** however, is to keep the focus on geographic functio
 
 Such spatial data processing capabilities would increase the range of transport planning tasks that **stplanr** can facilitate. For all this planned development activity to be useful, it is vital that new functionality is intuitive. R has a famously steep learning curve. Implementing simple concepts such as consistent naming systems \citep{baath_state_2012} and ensuring 'type stability' can greatly improve the usability of the package. For this reason, much future work in **stplanr** will go into improving documentation and user-friendliness. 
 
-Like much open source software **stplanr** is an open-end project, a work-in-progress. We have set out clear motivations for developing transport planning capabilities in R and believe that the current version of **stplanr** (0.1.6) provides a major step in that direction compared with what was available a couple of years ago. But there is much more to do. We therefore welcome input on where the package's priorities should lie, how it should evolve in the future and how to ensure it is well-developed and sustained.
+Like much open source software **stplanr** is an open-ended project, a work-in-progress. We have set out clear motivations for developing transport planning capabilities in R and believe that the current version of **stplanr** (0.1.6) provides a major step in that direction compared with what was available a couple of years ago. But there is much more to do. We therefore welcome input on where the package's priorities should lie, how it should evolve in the future and how to ensure it is well-developed and sustained.
 
 <!-- This creates the opportunity for extending existing modelling and data analysis data to better handle typical travel survey formats, e.g. by creating a system to represent travel surveys worldwide by merging trip, individual and household level data. Such non-spatial extensions of R for transport planning could build on the fast grouping and processing functions provided by \CRANpkg{dplyr}. This is an interesting potential direction of travel for **stplanr** or future packages for transport research. -->
 
