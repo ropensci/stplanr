@@ -266,7 +266,7 @@ This is illustrated below with `route_cyclestreet`, which uses the
 [CycleStreets.net API](http://www.cyclestreets.net/api/), a routing service "by cyclists for cyclists" that offers a range route strategies (primarily 'fastest', 'quietest' and 'balanced') that are based on a
 detailed analysis of cyclist
 wayfinding:^[An
-API key is needed for this function to work. This can be requested (or purchased for large scale routing) from [cyclestreets.net/api/apply](https://www.cyclestreets.net/api/apply/).
+API key is needed for this function to work. This can be requested (or purchased for large scale routing) from [cyclestreets.net/api/apply](https://www.cyclestreets.net/api/apply/). See `?route_cyclestreet` for details.
 Thanks to Martin Lucas-Smith and Simon Nuttall for making this possible.]
 
 ```{r, eval=FALSE}
