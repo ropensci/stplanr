@@ -17,7 +17,7 @@ on Earth.}
 \code{length = 2} representing latitude and longitude) representing a point
 on Earth. This represents the destination of the trip.}
 
-\item{plan}{Text strong of either "fastest", "quietest" or "balanced"}
+\item{plan}{Text strong of either "fastest" (default), "quietest" or "balanced"}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
