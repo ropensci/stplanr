@@ -390,7 +390,7 @@ catch800m <- calc_catchment(
 By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be `r as.character(round(sum(catch800m@data$Total),0))` people.
 The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \ref{fig:catchmentplot}.
 
-```{r catchmentplot, fig.cap='400 metre catchment area using straight-line distance'}
+```{r catchmentplot, fig.cap='An 800 metre catchment area (red) associated with a cycle path (green) using straight-line distance in Sydney.'}
 plot(sa1income, col = "light grey")
 plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(testcycleway, col = "green", add = TRUE)
@@ -434,7 +434,7 @@ netcatch800m <- calc_network_catchment(
 Once calculated, the network catchment area can be used just as the straight-line network catchment.
 This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
 
-```{r netcatchplot, fig.cap='Network catchment'}
+```{r netcatchplot, fig.cap='A 800 metre network catchment are (blue) compared with a catchment area based on Euclidean distance (red) associated with a cycle path (green).'}
 plot(sa1income, col = "light grey")
 plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
