@@ -15,7 +15,7 @@
 #'  \code{length = 2} representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
-#' @param plan Text strong of either "fastest", "quietest" or "balanced"
+#' @param plan Text strong of either "fastest" (default), "quietest" or "balanced"
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
 #' @param pat The API key used. By default this is set to NULL and
 #' this is usually aquired automatically through a helper, api_pat().
