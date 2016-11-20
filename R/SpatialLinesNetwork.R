@@ -308,11 +308,22 @@ sum_network_routes <- function(sln, start, end, sumvars) {
       join_spatiallines_coords(sln@sl[routesegs,],sln@g$x[start],sln@g$y[start])
     },
     routesegs, start, SIMPLIFY = FALSE)
-  routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {matrix(
-    sapply(
-      1:length(sumvars), FUN=function(j) {
-        sum(sln@sl[routesegs,]@data[sumvars[j]])
-      }),nrow=1)}, sumvars)))), c('ID',paste0('sum_',sumvars)))
+  routecoords <- lapply(1:length(start), function(i) {
+    if(nrow(routecoords[[i]]) > 0){
+      routecoords[[i]]
+    } else {
+      matrix(c(sln@g$x[start[i]], sln@g$y[start[i]], sln@g$x[end[i]], sln@g$y[end[i]]), byrow=TRUE, nrow=2)
+    }
+  })
+  routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {
+    matrix(
+      sapply(1:length(sumvars),
+             FUN=function(j) {
+               if(length(routesegs) == 0) { NA } else { sum(sln@sl[routesegs,]@data[sumvars[j]]) }
+             }
+      ), nrow=1)
+    }, sumvars)))), c('ID',paste0('sum_',sumvars)))
+  routedata$pathfound <- ifelse(unlist(lapply(routesegs, function(x){length(x)})) == 0, FALSE, TRUE)
   routelines <- mapply(function(x, i){sp::Lines(sp::Line(x), ID=i)}, routecoords, 1:length(routecoords))
 
   row.names(routedata) <- 1:nrow(routedata)
