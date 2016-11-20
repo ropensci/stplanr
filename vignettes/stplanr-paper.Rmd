@@ -14,7 +14,7 @@ author:
     - Darlington, NSW 2008, Australia
     email:  richard.ellison@sydney.edu.au
 abstract: >
-  Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analysis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
+  Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analyis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
 preamble: >
   \usepackage{varioref}
   % Any extra latex you need in the preamble
@@ -101,7 +101,7 @@ The package's core functions are structured around 3 common types of spatial tra
 
 - Origin-destination (OD) data, which report the number of people travelling between origin-destination pairs. This type of data is not explicitly spatial (OD datasets are usually represented as data frames) but represents movement over space between points in geographical space. An example is provided in the `flow` dataset.
 - Line data, one dimensional linear features on the surface of the Earth. These are typically stored as a `SpatialLinesDataFrame`.
-- Route data are special types of lines which have been allocated to the transport network. Routes typically result from the allocation of a straight 'desire line' allocated to the route network with a `route_` function. Route network represent many overlapping routes. All are typically stored as `SpatialLinesDataFrame`.
+- Route and data are special types of lines which have been allocated to the transport network. Routes typically result from the allocation of a straight 'desire line' allocated to the route network with a `route_` function. Route network represent many overlapping routes. All are typically stored as `SpatialLinesDataFrame`.
 
 For ease of use, functions focussed on each data type have been developed with names prefixed with `od_`, `line_` and `route_` respectively. A selection of these is presented in Table 1. Additional 'core functions' could be developed, such as those prefixed with `rn_` (for working with route network data) and `g_` functions for geographic operations such as buffer creation on lat/lon projected data (this function is currently named `buff_geo`). We plan to elicit feedback on such changes before implementing them.
 
@@ -123,7 +123,7 @@ With a tip of the hat to the concept of type stability (e.g. as implemented in \
 
 A class system has not been developed for each data type (this option is discussed in the final section). The most common data types used in **stplanr** are assumed to be data frames and spatial datasets.
 
-Transport datasets are very diverse. There are therefore many other functions which have more ad-hock names. Rather attempt a systematic description of each of **stplanr**'s functions (which can be gleaned from the online manual) it is more illuminating to see how they work together, as part of a transport planning workflow. As with most workflows, this begins with data access and ends with visualisation.
+Transport datasets are very diverse. There are therefore many other functions which have more ad-hock names. Rather attempt a systematic description of each of **stplanr**'s functions (which can be gleaned from the online manual) it is more illuminating to see how they work together, as part of a transport planning workflow. As with most workflow, this begins with data access and ends with visualisation.
 
 ## Accessing and processing transport data
 
@@ -175,7 +175,7 @@ ca_local <- ca_sp[bb,]
 ```
 
 The above code chunk shows the importance of understanding geographical data when working with transport data.
-It is only by converting the casualty data into a spatial data class, and adding a coordinate reference system (CRS), that transport planners and researchers can link this important dataset back to the route network.
+It is only by converting the casualty data into a spatial data class, and adding a coordinate reference system (CRS), that transport planners and researchers can link this importnat dataset back to the route network.
 We can now perform GIS operations on the results.
 The next code chunk, for example, finds all the fatalities that took place within 100 m of the route network, using the function `buff_geo`:
 
@@ -226,7 +226,7 @@ defines the `S4` spatial object system.
 
 ```{r}
 data("cents", package = "stplanr")
-as.data.frame(cents[1:3, -c(3,4)])
+as.data.frame(cents[1:3,-c(3,4)])
 ```
 
 We use `od2line` to combine `flow` and `cents`, to join
@@ -288,9 +288,9 @@ To automate the creation of route-allocated lines over many desire lines, the `l
 routes_fast <- line2route(l = l, route_fun = route_cyclestreet)
 ```
 
-The result of this 'batch routing' exercise is illustrated in Figure \ref{fig:lines_routes}. The red lines in the left hand panel are very different from the hypothetical straight 'desire lines' often used in transport research, highlighting the importance of this route-allocation functionality. 
+The result of this 'batch routing' exercise is illustrated in Figure \ref{fig:lines_routes}. The red lines in the right hand panel are very different from the hypothetical straight 'desire lines' often used in transport research, highlighting the importance of this route-allocation functionality. 
 
-```{r lines_routes, out.width='50%', fig.cap='Visualisation of travel desire lines, with width proportional to number of trips between origin and destination (black) and routes allocated to network  (red) in the left-hand panel. The right hand panel shows the route network dataset generated by overline().', fig.show='hold'}
+```{r lines_routes, out.width='50%', fig.cap='Visualisation of travel desire lines, with width proportional to number of trips between origin and destination (black) and routes allocated to network  (red) in the left-hand panel. The left hand panel shows the route network dataset generated by overline().', fig.show='hold'}
 plot(route_network, lwd=0)
 plot(l, lwd = l$All / 10, add = TRUE)
 lines(routes_fast, col = "red")
@@ -318,7 +318,7 @@ rbind(ny2oaxaca1@data, ny2oaxaca2@data)
 nytab = rbind(ny2oaxaca1@data, ny2oaxaca2@data)
 nytab = cbind(Mode = c("Cycle", "Car"), nytab)
 xtnyoa = xtable(nytab, caption = "Attribute data from the route\\_graphhopper function, from New York to Oaxaca, by cycle and car.", label = "tab:xtnyoa")
-print.xtable(xtnyoa, include.rownames = FALSE)
+print.xtable(xtnyoa, include.rownames = F)
 plot(ny2oaxaca1)
 plot(ny2oaxaca2, add = TRUE, col = "red")
 
@@ -360,16 +360,17 @@ These two layers are overlayed to calculate statistics for the desired catchment
 
 To illustrate how catchment areas can be calculated, **stplanr** contains some sample datasets stored in ESRI Shapefile format (a commonly used format for distributing GIS layers) that can together be used to calculate sample catchment areas.
 One of these datasets (`smallsa1`) contains population data for Statistical Area 1 (SA1) zones in Sydney, Australia.
-The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles using the `readOGR` function of \CRANpkg{rgdal}.
+The second contains hypothetical cycleways aligned to streets in Sydney.
+The code below unzips the datasets and reads in the shapefiles using the `readOGR` function of \CRANpkg{rgdal}.
 
 ```{r loadshapefiles, results='hide',message='hide'}
-data_dir <- system.file("extdata", package = "stplanr")
+data_dir <- system.file("extdata", package="stplanr")
 unzip(file.path(data_dir, 'smallsa1.zip'))
 unzip(file.path(data_dir, 'testcycleway.zip'))
 sa1income <- rgdal::readOGR(".", "smallsa1")
-testcycleway <- rgdal::readOGR(".", "testcycleway")
+testcycleway <- rgdal::readOGR(".","testcycleway")
 # Remove unzipped files
-file.remove(list.files(pattern = "^(smallsa1|testcycleway).*"))
+file.remove(list.files(pattern="^(smallsa1|testcycleway).*"))
 ```
 
 Calculating the catchment area is straightforward and in addition to specifying the required datasets, only a vector containing column names to calculate statistics and a distance is required.
@@ -391,12 +392,12 @@ By looking at the data.frame associated with the SpatialPolygonsDataFrame that i
 The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \ref{fig:catchmentplot}.
 
 ```{r catchmentplot, fig.cap='400 metre catchment area using straight-line distance'}
-plot(sa1income, col = "light grey")
-plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
-plot(testcycleway, col = "green", add = TRUE)
+plot(sa1income, col="light grey")
+plot(catch800m, col=rgb(1, 0, 0, 0.5), add=TRUE)
+plot(testcycleway, col="green", add=TRUE)
 ```
 
-This simplistic catchment area is useful when the straight-line distance is a reasonable approximation of the route taken to walk (or cycle) to a transport facility.
+This simplistic catchment area is useful when the straight-line distance is a reasonable approxmiation of the route taken to walk (or cycle) to a transport facility.
 However, this is often not the case.
 The catchment area in Figure \ref{fig:catchmentplot} initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to access from the (green-coloured) cycleway.
 To allow for more realistic catchment areas for most situations, **stplanr** provides the `calc_network_catchment` function that uses the same principle as `calc_catchment` but also takes into account the transport network.
@@ -409,14 +410,14 @@ This process involves the following code:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 unzip(file.path(data_dir, 'sydroads.zip'))
-sydroads <- rgdal::readOGR(".", "roads")
-file.remove(list.files(pattern = "^(roads).*"))
+sydroads <- rgdal::readOGR(".","roads")
+file.remove(list.files(pattern="^(roads).*"))
 sydnetwork <- SpatialLinesNetwork(sydroads)
 ```
 
 The network catchment is then calculated using a similar method as with `calc_catchment` but with a few minor changes.
 Specifically these are including the `SpatialLinesNetwork`, and using the `maximpedance` parameter to define the distance, with distance being the additional distance from the network.
-In contrast to the distance parameter that is based on the straight-line distance in both the `calc_catchment` and `calc_network_catchment` functions, the `maximpedance` parameter is the maximum value in the units of the network's weight attribute.
+In contrast to the distance parameter that is based on the straight-line distance in both the `calc_catchment` and `calc_network_catchment` functions, the maximpedance parameter is the maximum value in the units of the network's weight attribute.
 In practice this is generally distance in metres but can also be travel times, risk or other measures.
 
 ```{r, warning=FALSE}
@@ -435,10 +436,10 @@ Once calculated, the network catchment area can be used just as the straight-lin
 This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
 
 ```{r netcatchplot, fig.cap='Network catchment'}
-plot(sa1income, col = "light grey")
-plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
-plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
-plot(testcycleway, col = "green", add = TRUE)
+plot(sa1income, col="light grey")
+plot(catch800m, col=rgb(1, 0, 0, 0.5), add=TRUE)
+plot(netcatch800m, col=rgb(0, 0, 1, 0.5), add=TRUE)
+plot(testcycleway, col="green", add=TRUE)
 ```
 
 # Modelling and visualisation
@@ -448,7 +449,7 @@ plot(testcycleway, col = "green", add = TRUE)
 Route-allocated lines allow estimation of *route distance* and 
 *cirquity* (route distance divided by Euclidean distance).
 These variables can help model the rate of flow between origins and
-destination, as illustrated in the left-hand panel of Figure \ref{fig:euclidfastest}.
+destination, as illustrated in the right-hand panel of Figure \ref{fig:euclidfastest}.
 The code below demonstrates
 how objects generated by **stplanr** can be used to undertake such analysis, with the `line_length` function used to find the distance, in meters, of lat/lon data.
 
