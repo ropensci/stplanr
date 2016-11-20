@@ -430,46 +430,59 @@ viaroute2sldf_instructv5 <- function(routeinst) {
     )
   } else {
     osrmsldf <- sp::SpatialLinesDataFrame(
-        sp::SpatialLines(unlist(lapply(1:length(routeinst$routes$legs),
-               function(i,x){
-                 lapply(
-                   1:length(x$routes$legs[[i]]$steps[[1]]$geometry),
-                   function(j,x,i,k) {
-                     sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[1]]$geometry[j],5)[,c(2,1)]),ID = k+j)
-                  },
-               x,i,
-                 ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x))))
-               )},
-               routeinst),recursive = FALSE),
-               proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      data.table::rbindlist(lapply(1:length(routeinst$routes$legs), function(i,x){
-        prevrows <- ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x))))
-        if (length(x$routes$legs[[i]]$steps[[1]]$maneuver$exit) > 0) {
-          exitvals <- x$routes$legs[[i]]$steps[[1]]$maneuver$exit
-        } else {
-          exitvals <- NA
-        }
-        if (length(x$routes$legs[[i]]$steps[[1]]$mode) > 0) {
-          modevals <- x$routes$legs[[i]]$steps[[1]]$mode
-        } else {
-          modevals <- NA
-        }
-        data.frame(
-          routenum = i,
-          routedesc = rep(x$routes$legs[[i]]$summary,times=length(x$routes$legs[[i]]$steps[[1]]$distance)),
-          streetname = x$routes$legs[[i]]$steps[[1]]$name,
-          bearing_after = x$routes$legs[[i]]$steps[[1]]$maneuver$bearing_after,
-          bearing_before = x$routes$legs[[i]]$steps[[1]]$maneuver$bearing_before,
-          type = x$routes$legs[[i]]$steps[[1]]$maneuver$type,
-          modifier = x$routes$legs[[i]]$steps[[1]]$maneuver$modifier,
-          exit = exitvals,
-          duration = x$routes$legs[[i]]$steps[[1]]$duration,
-          distance = x$routes$legs[[i]]$steps[[1]]$distance,
-          destination = x$routes$legs[[i]]$steps[[1]]$destination,
-          mode = modevals,
-          row.names = (1:length(x$routes$legs[[i]]$steps[[1]]$distance))+prevrows
-        )
-      },routeinst))
+      sp::SpatialLines(unlist(unlist(lapply(1:length(routeinst$routes$legs),
+                                            function(i,x){
+                                              lapply(1:length(x$routes$legs[[i]]$steps), function(j,x,i){
+                                                lapply(
+                                                  1:length(x$routes$legs[[i]]$steps[[j]]$geometry),
+                                                  function(k,x,i,j,prevrows) {
+                                                    sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[j]]$geometry[k],5)[,c(2,1)]),ID = prevrows+k)
+                                                  },
+                                                  x,i,j,
+                                                  ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x)))) +
+                                                    ifelse(j == 1, 0, sum(unlist(lapply(1:(j-1), function(j,x,i){length(x$routes$legs[[i]]$steps[[j]]$geometry)},x,i))))
+                                                )
+                                              },x,i)
+                                            },
+                                            routeinst),recursive = FALSE), recursive = FALSE),
+                       proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
+      dplyr::bind_rows(lapply(1:length(routeinst$routes$legs), function(i,x){
+        dplyr::bind_rows(
+          lapply(1:length(x$routes$legs[[i]]$summary), function(j,x,i){
+
+            prevrows <- ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x)))) +
+              ifelse(j == 1, 0, sum(unlist(lapply(1:(j-1), function(i, x){length(x[[i]]$geometry)}, x = x$routes$legs[[i]]$steps))))
+
+            if (length(x$routes$legs[[i]]$steps[[j]]$maneuver$exit) > 0) {
+              exitvals <- x$routes$legs[[i]]$steps[[j]]$maneuver$exit
+            } else {
+              exitvals <- NA
+            }
+            if (length(x$routes$legs[[i]]$steps[[j]]$mode) > 0) {
+              modevals <- x$routes$legs[[i]]$steps[[j]]$mode
+            } else {
+              modevals <- NA
+            }
+
+            data.frame(
+              routenum = i,
+              legnum = j,
+              routedesc = rep(x$routes$legs[[i]]$summary[j],times=length(x$routes$legs[[i]]$steps[[j]]$distance)),
+              streetname = x$routes$legs[[i]]$steps[[j]]$name,
+              bearing_after = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_after,
+              bearing_before = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_before,
+              type = x$routes$legs[[i]]$steps[[j]]$maneuver$type,
+              modifier = x$routes$legs[[i]]$steps[[j]]$maneuver$modifier,
+              exit = exitvals,
+              duration = x$routes$legs[[i]]$steps[[j]]$duration,
+              distance = x$routes$legs[[i]]$steps[[j]]$distance,
+              destination = ifelse(is.null(x$routes$legs[[i]]$steps[[j]]$destination), NA, x$routes$legs[[i]]$steps[[j]]$destination),
+              mode = modevals,
+              row.names = (1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows
+            )
+
+          }, x, i)
+        )},routeinst))
     )
   }
 
