@@ -312,18 +312,9 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
                        " distances calculated")) # print % of distances calculated
       }
     }
-
-    if(is.na(l_id)){
-      sel_id_name = names(l) %in% "id"
-      if(sum(sel_id_name) > 0){
-        l_id = "id"
-      }
-    }
-    if(is.na(l_id)){
-      r$id <- row.names(l)
-    } else {
-      r$id <- l@data[[l_id]]
-    }
+    l_ids <- c(l_id, "id")
+    l_id <- l_ids[!is.na(l_ids)][1]
+    r$id <- ifelse(l_id %in% names(l), l@data[[l_id]], row.names(l))
   }
   r
 }
