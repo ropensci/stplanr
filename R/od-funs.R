@@ -280,10 +280,6 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   if(list_output){
     r <- as.list(rep(NA, length(l)))
 
-    # test for the second od pair (the first often fails)
-    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
-
-    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
     for(i in 1:nrow(ldf)){
       tryCatch({
         r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
@@ -296,16 +292,12 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
       }
     }
   } else {
-
     r <- l
-
-    # test for the second od pair (the first often fails)
-    rc2 <- FUN(from = c(ldf$fx[2], ldf$fy[2]), to = c(ldf$tx[2], ldf$ty[2]), ...)
-
+    test_line <- ifelse(nrow(ldf) > 1, 2, 1) # test for the second od pair (the first often fails)
+    rc2 <- FUN(from = c(ldf$fx[test_line], ldf$fy[test_line]), to = c(ldf$tx[test_line], ldf$ty[test_line]), ...)
     rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
     names(rdata) <- names(rc2)
     r@data <- rdata
-    # stop(paste0("Sorry, the function ", route_fun, " cannot be used with line2route at present")
     for(i in 1:nrow(ldf)){
       tryCatch({
         rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
@@ -320,18 +312,9 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
                        " distances calculated")) # print % of distances calculated
       }
     }
-
-    if(is.na(l_id)){
-      sel_id_name = names(l) %in% "id"
-      if(sum(sel_id_name) > 0){
-        l_id = "id"
-      }
-    }
-    if(is.na(l_id)){
-      r$id <- row.names(l)
-    } else {
-      r$id <- l@data[[l_id]]
-    }
+    l_ids <- c(l_id, "id")
+    l_id <- l_ids[!is.na(l_ids)][1]
+    r$id <- ifelse(l_id %in% names(l), l@data[[l_id]], row.names(l))
   }
   r
 }
