@@ -27,7 +27,7 @@ knitr::opts_chunk$set(dev = 'pdf', out.width='\\textwidth')
 
 ## Build warning
 
-Warning: knitting this paper from the RStudio project can lead the build to fail. Please build this file from a different or no project if this happens.
+Warning: knitting this paper from the RStudio project can lead the build to fail. Please build this file from a different or no project if this happens. It also requires the latest version of pandoc for all the code chunks to compile correctly.
 
 # Introduction
 
@@ -164,10 +164,10 @@ ca_sp <- SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
 ```
 
 Now that this casualty data has been cleaned, subsetted (to only include serious cycle crashes) and converted into a spatial class system, we can analyse them using geographical datasets of the type commonly used by **stplanr**.
-The following code, for example, geographically subsets the dataset to include only crashes that occured within the bounding box of a route network dataset provided by **stplanr**, using the function `bb2poly`, which converts a spatial dataset into a box, represented as a rectangular `SpatialPolygonsDataFrame`:
+The following code, for example, geographically subsets the dataset to include only crashes that occured within the bounding box of a [route network dataset](https://github.com/ropensci/stplanr/blob/master/data/route_network.rda?raw=true) provided by **stplanr** (from version 0.1.7 and beyond) using the function `bb2poly`, which converts a spatial dataset into a box, represented as a rectangular `SpatialPolygonsDataFrame`:
 
 ```{r, eval=FALSE}
-data("route_network")
+data("route_network") # devtools::install_github("ropensci/splanr")version 0.1.7
 proj4string(ca_sp) <- proj4string(route_network)
 bb <- bb2poly(route_network)
 proj4string(bb) <- proj4string(route_network)
@@ -390,7 +390,7 @@ catch800m <- calc_catchment(
 By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be `r as.character(round(sum(catch800m@data$Total),0))` people.
 The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \ref{fig:catchmentplot}.
 
-```{r catchmentplot, fig.cap='400 metre catchment area using straight-line distance'}
+```{r catchmentplot, fig.cap='An 800 metre catchment area (red) associated with a cycle path (green) using straight-line distance in Sydney.'}
 plot(sa1income, col = "light grey")
 plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(testcycleway, col = "green", add = TRUE)
@@ -434,7 +434,7 @@ netcatch800m <- calc_network_catchment(
 Once calculated, the network catchment area can be used just as the straight-line network catchment.
 This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
 
-```{r netcatchplot, fig.cap='Network catchment'}
+```{r netcatchplot, fig.cap='A 800 metre network catchment are (blue) compared with a catchment area based on Euclidean distance (red) associated with a cycle path (green).'}
 plot(sa1income, col = "light grey")
 plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
