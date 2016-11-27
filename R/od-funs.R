@@ -225,7 +225,6 @@ line2pointsn <- function(l){
   raster::crs(p) = raster::crs(l)
   p
 }
-
 #' Convert straight SpatialLinesDataFrame from flow data into routes
 #'
 #' @section Details:
@@ -273,8 +272,8 @@ line2pointsn <- function(l){
 #' rf_no_id$id # [1] "1" "2" "3" "4"
 #' rf_with_id = line2route(l, l_id = "All")
 #' rf_with_id$id # [1] 38 10 44
-#' # demo with parallel version
-#' rf_list <- line2route(l = l, list_output = TRUE)
+#' # demo with parallel version spliting route API requests over multiple CPU processes
+#' rf_parr <- line2route(l = l, parallel = TRUE)
 #' }
 line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, parallel = FALSE, ...){
   FUN <- match.fun(route_fun)
@@ -284,7 +283,8 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   error_fun <- function(e){ warning(paste("Fail for line number", i)) }
 
   if(parallel){
-    cl <- parallel::makeCluster(parallel:::detectCores())
+    threads <- min(c(parallel:::detectCores() * 10, n_ldf))
+    cl <- parallel::makeCluster(threads, type="FORK")
     doParallel::registerDoParallel(cl)
   }
 
@@ -300,12 +300,17 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
 
   if(parallel){
-    foreach::foreach(i = 1:n_ldf) %dopar%
+    rc <- foreach::foreach(i = 1:n_ldf) %dopar% {
       tryCatch({
-        rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        r@lines[[i]] <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
-        r@data[i,] <- rc@data
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
       }, error = error_fun)
+    }
+    parallel::stopCluster(cl)
+    for(i in 1:n_ldf){
+      if (class(rc[[i]]) != "SpatialPointsDataFrame") next()
+      r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i,]))
+      r@data[i,] <- rc[[i]]@data
+    }
   } else {
     for(i in 1:n_ldf){
       tryCatch({
