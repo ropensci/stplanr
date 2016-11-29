@@ -43,7 +43,8 @@ Imports:
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    data.table
+    data.table,
+    foreach
 LinkingTo:
     RcppArmadillo,
     Rcpp

@@ -5,7 +5,7 @@
 \title{Convert straight SpatialLinesDataFrame from flow data into routes}
 \usage{
 line2route(l, route_fun = "route_cyclestreet", n_print = 10,
-  list_output = FALSE, l_id = NA, ...)
+  list_output = FALSE, l_id = NA, parallel = FALSE, ...)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
@@ -21,6 +21,8 @@ should be shown}
 \item{l_id}{Character string naming the id field from the input lines data,
 typically the origin and destination ids pasted together. If absent, the row name of the
 straight lines will be used.}
+
+\item{parallel}{If TRUE calls the routing function in parallel, default FALSE.}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
@@ -61,6 +63,8 @@ rf_no_id <- line2route(l)
 rf_no_id$id # [1] "1" "2" "3" "4"
 rf_with_id = line2route(l, l_id = "All")
 rf_with_id$id # [1] 38 10 44
+# demo with parallel version spliting route API requests over multiple CPU processes
+rf_parr <- line2route(l = l, parallel = TRUE)
 }
 }
 
