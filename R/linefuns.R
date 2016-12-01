@@ -59,7 +59,7 @@ is_linepoint <- function(l){
 #' data(flowlines)
 #' line_bearing(flowlines)
 #' line_bearing(flowlines, bidirectional = TRUE)
-line_bearing = function(l, bidirectional = FALSE){
+line_bearing <- function(l, bidirectional = FALSE){
   ldf = line2df(l)
   bearing = geosphere::bearing(as.matrix(ldf[,c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
     if(bidirectional){
