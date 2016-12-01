@@ -22,7 +22,7 @@ route allocation and modelling travel patterns.
 Robin Lovelace \email{rob00x@gmail.com}
 }
 \seealso{
-\url{https://github.com/Robinlovelace/stplanr}
+\url{https://github.com/ropensci/stplanr}
 }
 \keyword{package}
 
