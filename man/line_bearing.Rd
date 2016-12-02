@@ -22,7 +22,8 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 }
 \examples{
 data(flowlines)
-line_bearing(flowlines)
-line_bearing(flowlines, bidirectional = TRUE)
+b1 <- line_bearing(flowlines)
+b2 <- line_bearing(flowlines, bidirectional = TRUE)
+plot(b1, b2)
 }
 
