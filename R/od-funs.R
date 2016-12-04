@@ -344,6 +344,38 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
   r
 }
+
+#' Convert straight SpatialLinesDataFrame from flow data into routes retrying
+#' on connection (or other) intermittent failures
+#'
+#' @section Details:
+#'
+#' See \code{\link{line2route}} for the version that is not retried on errors.
+#' @param lines A SpatialLinesDataFrame
+#' @param pattern A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "
+#' @param n_retry Number of times to retry
+line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
+  routes <- line2route(lines, reporterrors = T, ...)
+
+  # When the time is NA then the routing failed,
+  # if there is no error message or the message matches the pattern select line to be retried
+  failed_to_route <- lines[is.na(routes$time) & (is.na(routes$error) | !grepl(pattern, routes$error)),]
+  if (nrow(failed_to_route) > 0 && n_retry > 0){
+    ids <- routes$ids
+    routes_retry <- line2routeRetry(failed_to_route, pattern = pattern, n_retry = n_retry-1,  ...)
+    for (idx_retry in 1:nrow(routes_retry)) {
+      # Merge in retried routes if they are Spatial DataFrames
+      if(grepl("Spatial.*DataFrame", class(routes_retry[[idx_retry]]))) {
+        idx_to_replace <- which(routes$id == routes_retry$id[idx_retry])
+
+        routes@data[idx_to_replace,] <- routes_retry@data[idx_retry,]
+        routes@lines[[idx_to_replace]] <- Lines(routes_retry@lines[[idx_retry]]@Lines, row.names(routes_retry[idx_retry,]))
+      }
+    }
+  }
+  routes
+}
+
 #' Convert a series of points into a dataframe of origins and destinations
 #'
 #' Takes a series of geographical points and converts them into a data.frame
