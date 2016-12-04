@@ -44,7 +44,8 @@ Imports:
     igraph,
     nabor,
     data.table,
-    foreach
+    foreach,
+    doParallel
 LinkingTo:
     RcppArmadillo,
     Rcpp

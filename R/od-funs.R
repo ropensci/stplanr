@@ -239,7 +239,7 @@ line2pointsn <- function(l){
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
-#' @param parallel If TRUE calls the routing function in parallel, default FALSE.
+#' @param n_processes The number of processes the routing requests should be made from, default 1.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
@@ -273,22 +273,22 @@ line2pointsn <- function(l){
 #' rf_with_id = line2route(l, l_id = "All")
 #' rf_with_id$id # [1] 38 10 44
 #' # demo with parallel version spliting route API requests over multiple CPU processes
-#' rf_parr <- line2route(l = l, parallel = TRUE)
+#' rf_parr <- line2route(l = l, n_processes = 4)
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, parallel = FALSE, ...){
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, n_processes = 1, ...){
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
   n_ldf <- nrow(ldf)
 
   error_fun <- function(e){ warning(paste("Fail for line number", i)) }
 
-  if(parallel){
-    threads <- min(c(parallel:::detectCores() * 10, n_ldf))
-    cl <- parallel::makeCluster(threads, type="FORK")
+  if(n_processes > 1){
+    n_processes <- min(c(n_processes, n_ldf))
+    cl <- parallel::makeCluster(n_processes)
     doParallel::registerDoParallel(cl)
   }
 
-  if(list_output && !parallel){
+  if(list_output && n_processes == 1){
     r <- as.list(rep(NA, length(l)))
   } else {
     r <- l
@@ -299,7 +299,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     r@data <- rdata
   }
 
-  if(parallel){
+  if(n_processes > 1){
     rc <- foreach::foreach(i = 1:n_ldf) %dopar% {
       tryCatch({
         FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)

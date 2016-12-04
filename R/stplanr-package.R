@@ -45,6 +45,7 @@
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
 #' @importFrom data.table rbindlist
+#' @importFrom doParallel registerDoParallel
 #'
 #' @useDynLib stplanr
 NULL
