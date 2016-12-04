@@ -274,29 +274,24 @@ line2pointsn <- function(l){
 #' rf_with_id$id # [1] 38 10 44
 #' # demo with parallel version spliting route API requests over multiple CPU processes
 #' rf_parr <- line2route(l = l, n_processes = 4)
+#' l = flowlines[1:2,]
+#' rf_with_err = line2route(l,  reporterrors = T)
+#' # Now rf_with_err$error[2] has the correct error message
 #' }
 line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, n_processes = 1, ...){
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
   n_ldf <- nrow(ldf)
 
-  error_fun <- function(e){ warning(paste("Fail for line number", i)) }
+  error_fun <- function(e){
+    warning(paste("Fail for line number", i))
+    e
+  }
 
   if(n_processes > 1){
     n_processes <- min(c(n_processes, n_ldf))
     cl <- parallel::makeCluster(n_processes)
     doParallel::registerDoParallel(cl)
-  }
-
-  if(list_output && n_processes == 1){
-    r <- as.list(rep(NA, length(l)))
-  } else {
-    r <- l
-    test_line <- ifelse(nrow(ldf) > 1, 2, 1) # test for the second od pair (the first often fails)
-    rc2 <- FUN(from = c(ldf$fx[test_line], ldf$fy[test_line]), to = c(ldf$tx[test_line], ldf$ty[test_line]), ...)
-    rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
-    names(rdata) <- names(rc2)
-    r@data <- rdata
   }
 
   if(n_processes > 1){
@@ -306,21 +301,11 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
       }, error = error_fun)
     }
     parallel::stopCluster(cl)
-    for(i in 1:n_ldf){
-      if (!grepl("Spatial.*DataFrame", class(rc[[i]]))) next()
-      r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i,]))
-      r@data[i,] <- rc[[i]]@data
-    }
   } else {
+    rc <- as.list(rep(NA, length(l)))
     for(i in 1:n_ldf){
-      tryCatch({
-        if(list_output){
-          r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        } else {
-          rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-          r@lines[[i]] <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
-          r@data[i,] <- rc@data
-        }
+      rc[[i]] <- tryCatch({
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
       }, error = error_fun)
       perc_temp <- i %% round(n_ldf / n_print)
       # print % of distances calculated
@@ -331,6 +316,28 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
 
   if(!list_output){
+    # Set the names based on the first non failing line (then exit loop)
+    for(i in 1:n_ldf){
+      if(grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
+        rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc[[i]]) + 1))
+        names(rdata) <- c(names(rc[[i]]), "error")
+        r <- l
+        r@data <- rdata
+        break
+      }
+    }
+
+    # Copy rc into r including the data or copy the error into r
+    for(i in 1:n_ldf){
+      if(grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
+        r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i,]))
+        r@data[i,] <- c(rc[[i]]@data, error = NA)
+      } else {
+        r@data[i, "error"] <- rc[[i]][1]
+      }
+    }
+
+    # Set the id in r
     l_ids <- c(l_id, "id")
     l_id <- l_ids[!is.na(l_ids)][1]
     r$id <- ifelse(l_id %in% names(l), l@data[[l_id]], row.names(l))
