@@ -5,7 +5,7 @@
 \title{Plan a single route with CycleStreets.net}
 \usage{
 route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-  base_url = "http://www.cyclestreets.net", reporterrors = FALSE,
+  base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
   save_raw = "FALSE")
 }
 \arguments{
@@ -27,7 +27,7 @@ this is usually aquired automatically through a helper, api_pat().}
 \item{base_url}{The base url from which to construct API requests
 (with default set to main server)}
 
-\item{reporterrors}{Boolean value (TRUE/FALSE) indicating if cyclestreets
+\item{reporterrors}{Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).
 should report errors (FALSE by default).}
 
 \item{save_raw}{Boolean value which returns raw list from the json if TRUE (FALSE by default).}
