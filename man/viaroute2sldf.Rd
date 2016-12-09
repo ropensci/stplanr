@@ -7,8 +7,8 @@
 viaroute2sldf(osrmresult)
 }
 \arguments{
-\item{osrmresult}{String containing encoded json result of OSRM routing
-query.}
+\item{osrmresult}{Single character string or character vector containing
+encoded json result(s) of OSRM routing queries.}
 }
 \description{
 Convert json result of OSRM routing query to SpatialLinesDataFrame

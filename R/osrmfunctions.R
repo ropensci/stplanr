@@ -242,8 +242,8 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #' Converts the result of a (successful) OSRM routing query and returns a
 #' SpatialLinesDataFrame containing the route, route summary and instructions.
 #'
-#' @param osrmresult String containing encoded json result of OSRM routing
-#' query.
+#' @param osrmresult Single character string or character vector containing
+#' encoded json result(s) of OSRM routing queries.
 #' @export
 #' @examples \dontrun{
 #' library(RCurl)
