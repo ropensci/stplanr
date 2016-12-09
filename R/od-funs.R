@@ -239,6 +239,7 @@ line2pointsn <- function(l){
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
+#' @param n_processes The number of processes the routing requests should be made from, default 1.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
@@ -271,26 +272,24 @@ line2pointsn <- function(l){
 #' rf_no_id$id # [1] "1" "2" "3" "4"
 #' rf_with_id = line2route(l, l_id = "All")
 #' rf_with_id$id # [1] 38 10 44
+#' # demo with parallel version spliting route API requests over multiple CPU processes
+#' rf_parr <- line2route(l = l, n_processes = 4)
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, ...){
-
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, n_processes = 1, ...){
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
+  n_ldf <- nrow(ldf)
 
-  if(list_output){
+  error_fun <- function(e){ warning(paste("Fail for line number", i)) }
+
+  if(n_processes > 1){
+    n_processes <- min(c(n_processes, n_ldf))
+    cl <- parallel::makeCluster(n_processes)
+    doParallel::registerDoParallel(cl)
+  }
+
+  if(list_output && n_processes == 1){
     r <- as.list(rep(NA, length(l)))
-
-    for(i in 1:nrow(ldf)){
-      tryCatch({
-        r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = function(e){warning(paste0("Fail for line number ", i))})
-      # Status bar
-      perc_temp <- i %% round(nrow(ldf) / n_print)
-      if(!is.na(perc_temp) & perc_temp == 0){
-        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
-                       " distances calculated")) # print % of distances calculated
-      }
-    }
   } else {
     r <- l
     test_line <- ifelse(nrow(ldf) > 1, 2, 1) # test for the second od pair (the first often fails)
@@ -298,20 +297,40 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc2)))
     names(rdata) <- names(rc2)
     r@data <- rdata
-    for(i in 1:nrow(ldf)){
+  }
+
+  if(n_processes > 1){
+    rc <- foreach::foreach(i = 1:n_ldf) %dopar% {
       tryCatch({
-        rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        rcl <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
-        r@lines[[i]] <- rcl
-        r@data[i,] <- rc@data
-      }, error = function(e){warning(paste0("Fail for line number ", i))})
-      # Status bar
-      perc_temp <- i %% round(nrow(ldf) / n_print)
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+      }, error = error_fun)
+    }
+    parallel::stopCluster(cl)
+    for(i in 1:n_ldf){
+      if (!grepl("Spatial.*DataFrame", class(rc[[i]]))) next()
+      r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i,]))
+      r@data[i,] <- rc[[i]]@data
+    }
+  } else {
+    for(i in 1:n_ldf){
+      tryCatch({
+        if(list_output){
+          r[[i]] <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+        } else {
+          rc <- FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+          r@lines[[i]] <- Lines(rc@lines[[1]]@Lines, row.names(l[i,]))
+          r@data[i,] <- rc@data
+        }
+      }, error = error_fun)
+      perc_temp <- i %% round(n_ldf / n_print)
+      # print % of distances calculated
       if(!is.na(perc_temp) & perc_temp == 0){
-        message(paste0(round(100 * i/nrow(ldf)), " % out of ", nrow(ldf),
-                       " distances calculated")) # print % of distances calculated
+        message(paste0(round(100 * i/n_ldf), " % out of ", n_ldf, " distances calculated"))
       }
     }
+  }
+
+  if(!list_output){
     l_ids <- c(l_id, "id")
     l_id <- l_ids[!is.na(l_ids)][1]
     r$id <- ifelse(l_id %in% names(l), l@data[[l_id]], row.names(l))
