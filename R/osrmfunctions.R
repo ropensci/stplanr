@@ -255,63 +255,78 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #' }
 viaroute2sldf <- function(osrmresult) {
 
-  osrmjson <- jsonlite::fromJSON(osrmresult)
+  osrmsldf <- c()
+  for (curroute in 1:length(osrmresult)) {
+    osrmjson <- jsonlite::fromJSON(osrmresult[curroute])
 
-  if (is(osrmjson$code,"character")) {
-    api <- 5
-  }
-  else {
-    api <- 4
-  }
+    if (is(osrmjson$code,"character")) {
+      api <- 5
+    }
+    else {
+      api <- 4
+    }
 
-  if (api == 4) {
-    routecoords <- decode_gl(osrmjson$route_geometry)
+    if (api == 4) {
+      routecoords <- decode_gl(osrmjson$route_geometry)
 
-    osrmsldf <- viaroute2sldf_instruct(
-                           ifelse(exists("route_instructions",osrmjson) == TRUE,
-                                  list(osrmjson$route_instructions),
-                                  FALSE),
-                           osrmjson$route_summary,
-                           routecoords,
-                           routename = osrmjson$route_name,
-                           existrow = 0,
-                           routeid = 1)
+      osrmsldfalt <- viaroute2sldf_instruct(
+                             ifelse(exists("route_instructions",osrmjson) == TRUE,
+                                    list(osrmjson$route_instructions),
+                                    FALSE),
+                             osrmjson$route_summary,
+                             routecoords,
+                             routename = osrmjson$route_name,
+                             existrow = 0,
+                             routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1))
 
-    if (osrmjson$found_alternative == TRUE) {
-
-      i <- 1
-      while (i <= length(osrmjson$alternative_geometries)) {
-
-        routecoords <- decode_gl(osrmjson$alternative_geometries[i])
-
-        osrmsldfalt <- viaroute2sldf_instruct(
-                           ifelse(exists("alternative_instructions",osrmjson) == TRUE,
-                                  list(osrmjson$alternative_instructions[[i]]),
-                                  FALSE),
-                           osrmjson$alternative_summaries[i,],
-                           routecoords,
-                           routename = osrmjson$alternative_names[[i]],
-                           existrow = nrow(osrmsldf@data),
-                           routeid = 1+i)
-
+      if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
+        osrmsldf <- osrmsldfalt
+      } else {
         osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+      }
 
-        i <- i + 1
+      if (osrmjson$found_alternative == TRUE) {
+
+        i <- 1
+        while (i <= length(osrmjson$alternative_geometries)) {
+
+          routecoords <- decode_gl(osrmjson$alternative_geometries[i])
+
+          osrmsldfalt <- viaroute2sldf_instruct(
+                             ifelse(exists("alternative_instructions",osrmjson) == TRUE,
+                                    list(osrmjson$alternative_instructions[[i]]),
+                                    FALSE),
+                             osrmjson$alternative_summaries[i,],
+                             routecoords,
+                             routename = osrmjson$alternative_names[[i]],
+                             existrow = nrow(osrmsldf@data),
+                             routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1)+i)
+
+          osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+
+          i <- i + 1
+        }
+
+      }
+
+    } else {
+
+      for (i in 1:length(osrmjson$routes$geometry)) {
+        osrmjson$routes$geometry[i] <- gsub('\\\\\\\\','\\\\',osrmjson$routes$geometry[i])
+      }
+      for (i in 1:length(osrmjson$routes$legs)) {
+        for (j in 1:length(osrmjson$routes$legs[[i]]$steps)) {
+          osrmjson$routes$legs[[i]]$steps[[j]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[j]]$geometry)
+        }
+      }
+      osrmsldfalt <- viaroute2sldf_instructv5(osrmjson, ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1))
+      if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
+        osrmsldf <- osrmsldfalt
+      } else {
+        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
       }
 
     }
-
-  } else {
-
-    for (i in 1:length(osrmjson$routes$geometry)) {
-      osrmjson$routes$geometry[i] <- gsub('\\\\\\\\','\\\\',osrmjson$routes$geometry[i])
-    }
-    for (i in 1:length(osrmjson$routes$legs)) {
-      for (j in 1:length(osrmjson$routes$legs[[i]]$steps)) {
-        osrmjson$routes$legs[[i]]$steps[[j]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[j]]$geometry)
-      }
-    }
-    osrmsldf <- viaroute2sldf_instructv5(osrmjson)
 
   }
 
@@ -413,7 +428,7 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 
 }
 
-viaroute2sldf_instructv5 <- function(routeinst) {
+viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1) {
 
   if (length(routeinst$routes$legs[[1]]$steps[[1]]$geometry) == 0) {
     osrmsldf <- sp::SpatialLinesDataFrame(
@@ -440,7 +455,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
                                                 lapply(
                                                   1:length(x$routes$legs[[i]]$steps[[j]]$geometry),
                                                   function(k,x,i,j,prevrows) {
-                                                    sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[j]]$geometry[k],5)[,c(2,1)]),ID = prevrows+k)
+                                                    sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[j]]$geometry[k],5)[,c(2,1)]),ID = startrouteid-1+prevrows+k)
                                                   },
                                                   x,i,j,
                                                   ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x)))) +
@@ -450,7 +465,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
                                             },
                                             routeinst),recursive = FALSE), recursive = FALSE),
                        proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      dplyr::bind_rows(lapply(1:length(routeinst$routes$legs), function(i,x){
+      data.frame(dplyr::bind_rows(lapply(1:length(routeinst$routes$legs), function(i,x){
         dplyr::bind_rows(
           lapply(1:length(x$routes$legs[[i]]$summary), function(j,x,i){
 
@@ -469,7 +484,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
             }
 
             data.frame(
-              routenum = i,
+              routenum = startrouteid-1+i,
               legnum = j,
               routedesc = as.character(rep(x$routes$legs[[i]]$summary[j],times=length(x$routes$legs[[i]]$steps[[j]]$distance))),
               streetname = as.character(x$routes$legs[[i]]$steps[[j]]$name),
@@ -482,13 +497,14 @@ viaroute2sldf_instructv5 <- function(routeinst) {
               distance = x$routes$legs[[i]]$steps[[j]]$distance,
               destination = as.character(ifelse(is.null(x$routes$legs[[i]]$steps[[j]]$destination), NA, x$routes$legs[[i]]$steps[[j]]$destination)),
               mode = as.character(modevals),
-              row.names = (1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows,
+              rowid = startrouteid-1+(1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows,
               stringsAsFactors = FALSE
             )
 
           }, x, i)
-        )},routeinst))
+        )},routeinst)),row.names = "rowid")
     )
+    osrmsldf@data <- osrmsldf@data[,-ncol(osrmsldf@data)]
   }
 
   return(osrmsldf)
