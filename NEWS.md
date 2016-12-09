@@ -1,3 +1,17 @@
+# stplanr 0.1.7
+
+## NEW FEATURES
+
+* There is a new vignette! See [vignettes/stplanr-paper.Rmd](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) and `vignette("stplanr-paper")` for details.
+* `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
+* `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
+
+## BUG FIXES
+
+* #141 fixed: `viaroute()` works again.
+* [#153](https://github.com/ropensci/stplanr/issues/153) fixed: `bidirectional = TRUE` returns a different result in `line_bearing()` now.
+
+
 # stplanr 0.1.6
 
 ## NEW FEATURES
