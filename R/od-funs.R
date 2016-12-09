@@ -354,6 +354,13 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
 #' @param lines A SpatialLinesDataFrame
 #' @param pattern A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "
 #' @param n_retry Number of times to retry
+#' @inheritParams line2route
+#' @export
+#' @examples
+#' \dontrun{
+#' data(flowlines)
+#' rf_list <- line2routeRetry(flowlines[1:2,], pattern = "nonexistanceerror", silent = F)
+#' }
 line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
   routes <- line2route(lines, reporterrors = T, ...)
 
