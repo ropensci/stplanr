@@ -22,6 +22,7 @@
 #' @import httr
 #' @import readr
 #' @import dplyr
+#' @import foreach
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
 #' @importFrom leaflet addTiles leaflet addPolylines
@@ -44,6 +45,7 @@
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
 #' @importFrom data.table rbindlist
+#' @importFrom doParallel registerDoParallel
 #'
 #' @useDynLib stplanr
 NULL
