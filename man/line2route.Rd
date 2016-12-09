@@ -65,6 +65,9 @@ rf_with_id = line2route(l, l_id = "All")
 rf_with_id$id # [1] 38 10 44
 # demo with parallel version spliting route API requests over multiple CPU processes
 rf_parr <- line2route(l = l, n_processes = 4)
+l = flowlines[1:2,]
+rf_with_err = line2route(l,  reporterrors = T)
+# Now rf_with_err$error[2] has the correct error message
 }
 }
 
