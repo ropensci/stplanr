@@ -45,7 +45,7 @@ decode_gl <- function(polyline, precision=6, forceline=TRUE) {
   if (forceline == TRUE) {
     latlngsets <- lapply(latlngsets, function(x, forceline){
       if (forceline == TRUE & nrow(x) == 1) {
-        x <- rbind(x,x)
+        x <- rbind(x,x+0.0000000001)
       }
       return(x)
     }, forceline)
@@ -221,8 +221,8 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
       }
     }
     if (length(removerowlist) == length(returnval)) {
-      stop("OSRM server retruned empty result for all routes")
-    } else {
+      stop("OSRM server returned empty result for all routes")
+    } else if(length(removerowlist) > 0) {
       warning(paste0("Routes ",paste0(removerowlist, collapse=', '), " returned empty result, removing from result"))
       returnval <- returnval[-removerowlist]
     }
@@ -305,7 +305,11 @@ viaroute2sldf <- function(osrmresult) {
 
     for (i in 1:length(osrmjson$routes$geometry)) {
       osrmjson$routes$geometry[i] <- gsub('\\\\\\\\','\\\\',osrmjson$routes$geometry[i])
-      osrmjson$routes$legs[[i]]$steps[[1]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[1]]$geometry)
+    }
+    for (i in 1:length(osrmjson$routes$legs)) {
+      for (j in 1:length(osrmjson$routes$legs[[i]]$steps)) {
+        osrmjson$routes$legs[[i]]$steps[[j]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[j]]$geometry)
+      }
     }
     osrmsldf <- viaroute2sldf_instructv5(osrmjson)
 
@@ -467,18 +471,19 @@ viaroute2sldf_instructv5 <- function(routeinst) {
             data.frame(
               routenum = i,
               legnum = j,
-              routedesc = rep(x$routes$legs[[i]]$summary[j],times=length(x$routes$legs[[i]]$steps[[j]]$distance)),
-              streetname = x$routes$legs[[i]]$steps[[j]]$name,
+              routedesc = as.character(rep(x$routes$legs[[i]]$summary[j],times=length(x$routes$legs[[i]]$steps[[j]]$distance))),
+              streetname = as.character(x$routes$legs[[i]]$steps[[j]]$name),
               bearing_after = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_after,
               bearing_before = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_before,
-              type = x$routes$legs[[i]]$steps[[j]]$maneuver$type,
-              modifier = x$routes$legs[[i]]$steps[[j]]$maneuver$modifier,
-              exit = exitvals,
+              type = as.character(x$routes$legs[[i]]$steps[[j]]$maneuver$type),
+              modifier = as.character(x$routes$legs[[i]]$steps[[j]]$maneuver$modifier),
+              exit = as.character(exitvals),
               duration = x$routes$legs[[i]]$steps[[j]]$duration,
               distance = x$routes$legs[[i]]$steps[[j]]$distance,
-              destination = ifelse(is.null(x$routes$legs[[i]]$steps[[j]]$destination), NA, x$routes$legs[[i]]$steps[[j]]$destination),
-              mode = modevals,
-              row.names = (1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows
+              destination = as.character(ifelse(is.null(x$routes$legs[[i]]$steps[[j]]$destination), NA, x$routes$legs[[i]]$steps[[j]]$destination)),
+              mode = as.character(modevals),
+              row.names = (1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows,
+              stringsAsFactors = FALSE
             )
 
           }, x, i)
