@@ -307,7 +307,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     }
     parallel::stopCluster(cl)
     for(i in 1:n_ldf){
-      if (class(rc[[i]]) != "SpatialPointsDataFrame") next()
+      if (!grepl("Spatial.*DataFrame", class(rc[[i]]))) next()
       r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i,]))
       r@data[i,] <- rc[[i]]@data
     }
