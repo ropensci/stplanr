@@ -295,10 +295,8 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
 
   if(n_processes > 1){
-    rc <- foreach::foreach(i = 1:n_ldf) %dopar% {
-      tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = error_fun)
+    rc <- foreach::foreach(i = 1:n_ldf, .errorhandling = "pass") %dopar% {
+      FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
     }
     parallel::stopCluster(cl)
   } else {
@@ -340,7 +338,11 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     # Set the id in r
     l_ids <- c(l_id, "id")
     l_id <- l_ids[!is.na(l_ids)][1]
-    r$id <- ifelse(l_id %in% names(l), l@data[[l_id]], row.names(l))
+    r$id <- if(l_id %in% names(l)){
+      l@data[[l_id]]
+    } else {
+      row.names(l)
+    }
   }
   r
 }
