@@ -21,7 +21,7 @@ Note that in the case of a SpatialPointsDataFrame, the entirety of the flow
 will be allocated to the polygon in which the point is located rather than
 being distributed by area.}
 
-\item{aggzones}{A SpatialPolygonsDataFrame containing the new (larger)
+\item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}
 
 \item{cols}{A character vector containing the names of columns on which to
@@ -63,6 +63,6 @@ aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
  id = zones@data$region),data.frame(region=c(1,2))
 )
 zones@data$region <- NULL
-#od2odf(flow, zones)
+od_aggregate(flow, zones, aggzones)
 }
 
