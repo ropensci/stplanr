@@ -28,6 +28,11 @@ before_install:
 
 sudo: required
 
+r_packages:
+  - rgdal
+  - roxygen2
+  - rmarkdown
+
 notifications:
     email:
       on_success: change
