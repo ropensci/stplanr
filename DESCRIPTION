@@ -45,7 +45,8 @@ Imports:
     nabor,
     data.table,
     foreach,
-    doParallel
+    doParallel,
+    sf
 LinkingTo:
     RcppArmadillo,
     Rcpp
