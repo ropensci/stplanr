@@ -64,17 +64,17 @@ aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
 )
 zones@data$region <- NULL
 od_aggregate(flow, zones, aggzones)
-
 # another example with more zones and plots
-zones$region = quadrant(zones, number_out = TRUE)
+zones$quadrant = quadrant(zones, number_out = TRUE)
 aggzones <- SpatialPolygonsDataFrame(
 rgeos::gUnaryUnion(
  zones,
- id = zones@data$region), data.frame(region = c(1:4))
+ id = zones@data$quadrant), data.frame(region = c(1:4))
 )
 od = od_aggregate(flow, zones, aggzones)
 od_sp = od2line(flow, zones)
-od_sp_agg = od2line(od, aggzones)
+zones@data = cbind(1:nrow(zones), zones@data)
+od_sp_agg = od2line(od, zones, aggzones)
 # plot results
 plot(aggzones, lwd = 5)
 plot(zones, border = "red", add = TRUE)
@@ -82,3 +82,4 @@ plot(od_sp, add = TRUE, col = "yellow")
 lwd = od_sp_agg$All / 50
 plot(od_sp_agg, lwd = lwd, add = TRUE)
 }
+
