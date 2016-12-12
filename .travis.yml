@@ -1,6 +1,7 @@
 language: r
 sudo: true
 dist: xenial
+cache: packages
 
 before_install:
   - sudo apt-get --yes --force-yes update -qq
