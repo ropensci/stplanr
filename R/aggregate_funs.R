@@ -19,9 +19,9 @@
 #' @param aggzones A SpatialPolygonsDataFrame containing the new
 #' boundaries to aggregate to.
 #' @param cols A character vector containing the names of columns on which to
-#' apply \code{\link{FUN}}. By default, all numeric columns are aggregated.
+#' apply FUN. By default, all numeric columns are aggregated.
 #' @param aggcols A character vector containing the names of columns in
-#' \code{\link{aggzones}} to retain in the aggregated data.frame. By default,
+#' aggzones to retain in the aggregated data.frame. By default,
 #' only the first column is retained. These columns are renamed with a prefix
 #' of "o_" and "d_".
 #' @param FUN Function to use on aggregation. Default is sum.
@@ -84,8 +84,8 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
                                                     row.names=sapply(zoneintersect@polygons, function(x) x@ID)
                                                   ))
   zoneintersect@data$od_aggregate_interarea <- rgeos::gArea(zoneintersect, byid = TRUE)
-  zoneintersect@data$od_aggregate_zone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", 2, simplify = TRUE)[,1]
-  zoneintersect@data$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", 2, simplify = TRUE)[,2]
+  zoneintersect@data$od_aggregate_zone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,1]
+  zoneintersect@data$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,2]
 
   zoneintersect <- merge(zoneintersect, zones@data, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
   zoneintersect@data$od_aggregate_proparea <- zoneintersect@data$od_aggregate_interarea/zoneintersect@data$stplanr_area
@@ -103,12 +103,12 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
   if (prop_by_area == TRUE & is(zones, "SpatialPolygonsDataFrame") == TRUE) {
     intersectdf <- intersectdf %>%
       dplyr::mutate_at(
-        cols, dplyr::funs(round(. * o_od_aggregate_proparea * d_od_aggregate_proparea, digits))
+        cols, dplyr::funs_('round(.*o_od_aggregate_proparea*d_od_aggregate_proparea)',args = list('digits'=digits))
       )
   }
 
   intersectdf <- intersectdf %>%
-    dplyr::group_by(o_od_aggregate_aggzone_charid, d_od_aggregate_aggzone_charid) %>%
+    dplyr::group_by_('o_od_aggregate_aggzone_charid', 'd_od_aggregate_aggzone_charid') %>%
     dplyr::select(dplyr::one_of(c('o_od_aggregate_aggzone_charid','d_od_aggregate_aggzone_charid',cols))) %>%
     dplyr::summarise_at(cols,.funs = FUN) %>%
     dplyr::left_join(setNames(aggzones@data[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('o_',aggcols))),
@@ -140,7 +140,7 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
 #' @param aggzones A SpatialPolygonsDataFrame containing the new
 #' boundaries to aggregate to.
 #' @param cols A character vector containing the names of columns on which to
-#' apply \code{\link{FUN}}. By default, all numeric columns are aggregated.
+#' apply FUN. By default, all numeric columns are aggregated.
 #' @param FUN Function to use on aggregation. Default is sum.
 #' @param prop_by_area Boolean value indicating if the values should be
 #' proportionally adjusted based on area. Default is TRUE unless FUN = mean.
@@ -201,8 +201,8 @@ sp_aggregate <- function(zones, aggzones, cols = FALSE,
                                                   row.names=sapply(zoneintersect@polygons, function(x) x@ID)
                                                 ))
   zoneintersect@data$od_aggregate_interarea <- rgeos::gArea(zoneintersect, byid = TRUE)
-  zoneintersect@data$od_aggregate_zone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", 2, simplify = TRUE)[,1]
-  zoneintersect@data$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", 2, simplify = TRUE)[,2]
+  zoneintersect@data$od_aggregate_zone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,1]
+  zoneintersect@data$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,2]
 
   zoneintersect <- merge(zoneintersect, zones@data, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
   zoneintersect@data$od_aggregate_proparea <- zoneintersect@data$od_aggregate_interarea/zoneintersect@data$stplanr_area
@@ -212,12 +212,12 @@ sp_aggregate <- function(zones, aggzones, cols = FALSE,
   if (prop_by_area == TRUE & is(zones, "SpatialPolygonsDataFrame") == TRUE) {
     intersectdf <- intersectdf %>%
       dplyr::mutate_at(
-        cols, dplyr::funs(round(. * od_aggregate_proparea, digits))
+        cols, dplyr::funs_('round(.*od_aggregate_proparea)',args = list('digits'=digits))
       )
   }
 
   intersectdf <- intersectdf %>%
-    dplyr::group_by(od_aggregate_aggzone_charid) %>%
+    dplyr::group_by_('od_aggregate_aggzone_charid') %>%
     dplyr::select(dplyr::one_of(c('od_aggregate_aggzone_charid',cols))) %>%
     dplyr::summarise_at(cols,.funs = FUN) %>%
     dplyr::left_join(setNames(aggzones@data[,c('od_aggregate_charid', aggcols)],c('od_aggregate_aggzone_charid', aggcols)),

@@ -25,10 +25,10 @@ being distributed by area.}
 boundaries to aggregate to.}
 
 \item{cols}{A character vector containing the names of columns on which to
-apply \code{\link{FUN}}. By default, all numeric columns are aggregated.}
+apply FUN. By default, all numeric columns are aggregated.}
 
 \item{aggcols}{A character vector containing the names of columns in
-\code{\link{aggzones}} to retain in the aggregated data.frame. By default,
+aggzones to retain in the aggregated data.frame. By default,
 only the first column is retained. These columns are renamed with a prefix
 of "o_" and "d_".}
 

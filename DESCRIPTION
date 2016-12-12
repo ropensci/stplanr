@@ -27,7 +27,6 @@ Imports:
     rgdal,
     rgeos,
     dplyr,
-    magrittr,
     RgoogleMaps,
     openxlsx,
     leaflet,

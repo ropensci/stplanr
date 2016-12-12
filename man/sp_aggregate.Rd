@@ -19,7 +19,7 @@ being distributed by area.}
 boundaries to aggregate to.}
 
 \item{cols}{A character vector containing the names of columns on which to
-apply \code{\link{FUN}}. By default, all numeric columns are aggregated.}
+apply FUN. By default, all numeric columns are aggregated.}
 
 \item{FUN}{Function to use on aggregation. Default is sum.}
 
