@@ -21,7 +21,7 @@ quadrants respectively. If number_out is TRUE, returns numbers from 1:4, respect
 \examples{
 data(zones)
 sp_obj = zones
-(quads = quadrants(sp_obj))
+(quads = quadrant(sp_obj))
 plot(sp_obj, col = factor(quads))
 points(rgeos::gCentroid(sp_obj), col = "white")
 }

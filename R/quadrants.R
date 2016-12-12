@@ -12,7 +12,7 @@
 #' @examples
 #' data(zones)
 #' sp_obj = zones
-#' (quads = quadrants(sp_obj))
+#' (quads = quadrant(sp_obj))
 #' plot(sp_obj, col = factor(quads))
 #' points(rgeos::gCentroid(sp_obj), col = "white")
 quadrant <- function(sp_obj, number_out = FALSE) {
