@@ -82,4 +82,3 @@ plot(od_sp, add = TRUE, col = "yellow")
 lwd = od_sp_agg$All / 50
 plot(od_sp_agg, lwd = lwd, add = TRUE)
 }
-
