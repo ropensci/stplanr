@@ -3,6 +3,7 @@
 #' @param n Sum of integer values returned
 #' @param l_lengths Numeric vector of line lengths
 #' @param weights Relative probabilities of samples on lines
+#' @export
 #' @examples
 #' n = 10
 #' l_lengths = 1:5
