@@ -44,10 +44,10 @@ different geometry specified by another SpatialPolygons object.
 data(flow)
 data(zones)
 zones@data$region <- 1
-zones@data[c(2,5),c('region')] <- 2
+zones@data[c(2, 5), c('region')] <- 2
 aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
  zones,
- id = zones@data$region),data.frame(region=c(1,2))
+ id = zones@data$region), data.frame(region=c(1, 2))
 )
 zones@data$region <- NULL
 zones@data$exdata <- 5
