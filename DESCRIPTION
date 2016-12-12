@@ -1,14 +1,15 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.6
+Version: 0.1.7
 Date: 2016-11-10
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
     person("Barry", "Rowlingson", role = c("aut"), comment = "Author of overline"),
     person("Nick", "Bearman", role = c("aut"), comment = "Co-author of gclip"),
-    person("Malcolm", "Morgan", role = c("aut"), comment = "Co-author of angle_diff")
+    person("Malcolm", "Morgan", role = c("aut"), comment = "Co-author of angle_diff"),
+    person("Nikolai", "Berkoff", role = c("aut"), comment = "Co-author of line2route")
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
 Description: Functionality and data access tools for transport planning,
@@ -27,7 +28,6 @@ Imports:
     rgdal,
     rgeos,
     dplyr,
-    magrittr,
     RgoogleMaps,
     openxlsx,
     leaflet,
