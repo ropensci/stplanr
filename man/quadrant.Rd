@@ -24,5 +24,9 @@ sp_obj = zones
 (quads = quadrant(sp_obj))
 plot(sp_obj, col = factor(quads))
 points(rgeos::gCentroid(sp_obj), col = "white")
+# edge cases (e.g. when using rasters) lead to NAs
+sp_obj = raster::rasterToPolygons(raster::raster(ncol = 3, nrow = 3))
+(quads = quadrant(sp_obj))
+plot(sp_obj, col = factor(quads))
 }
 
