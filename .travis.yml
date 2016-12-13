@@ -28,6 +28,8 @@ before_install:
 
 sudo: required
 
+r_github_packages: edzer/sfr
+
 r_packages:
   - rgdal
   - roxygen2
