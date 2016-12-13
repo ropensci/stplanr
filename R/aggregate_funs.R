@@ -37,13 +37,30 @@
 #' data(flow)
 #' data(zones)
 #' zones@data$region <- 1
-#' zones@data[c(2,5),c('region')] <- 2
+#' zones@data[c(2, 5), c('region')] <- 2
 #' aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
 #'  zones,
-#'  id = zones@data$region),data.frame(region=c(1,2))
+#'  id = zones@data$region), data.frame(region=c(1, 2))
 #' )
 #' zones@data$region <- NULL
 #' od_aggregate(flow, zones, aggzones)
+#' # another example with more zones and plots
+#' zones$quadrant = quadrant(zones, number_out = TRUE)
+#' aggzones <- SpatialPolygonsDataFrame(
+#' rgeos::gUnaryUnion(
+#'  zones,
+#'  id = zones@data$quadrant), data.frame(region = c(1:4))
+#' )
+#' od = od_aggregate(flow, zones, aggzones)
+#' od_sp = od2line(flow, zones)
+#' zones@data = cbind(1:nrow(zones), zones@data)
+#' od_sp_agg = od2line(od, zones, aggzones)
+#' # plot results
+#' plot(aggzones, lwd = 5)
+#' plot(zones, border = "red", add = TRUE)
+#' plot(od_sp, add = TRUE, col = "yellow")
+#' lwd = od_sp_agg$All / 50
+#' plot(od_sp_agg, lwd = lwd, add = TRUE)
 od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
@@ -125,7 +142,6 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
 
 }
 
-
 #' Aggregate SpatialPolygonsDataFrame to new geometry.
 #'
 #' @section Details:
@@ -154,10 +170,10 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
 #' data(flow)
 #' data(zones)
 #' zones@data$region <- 1
-#' zones@data[c(2,5),c('region')] <- 2
+#' zones@data[c(2, 5), c('region')] <- 2
 #' aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
 #'  zones,
-#'  id = zones@data$region),data.frame(region=c(1,2))
+#'  id = zones@data$region), data.frame(region=c(1, 2))
 #' )
 #' zones@data$region <- NULL
 #' zones@data$exdata <- 5
