@@ -193,7 +193,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       c(byvars)
     )
 
-    splitlinesdf <- data.frame(data.table::rbindlist(lapply(splitlines, function(x){x@data})))
+    splitlinesdf <- data.frame(dplyr::bind_rows(lapply(splitlines, function(x){x@data})))
     row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x){row.names(x@data)})))
 
     sldf <- SpatialLinesDataFrame(

@@ -43,7 +43,6 @@ Imports:
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    data.table,
     foreach,
     doParallel
 LinkingTo:
