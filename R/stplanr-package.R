@@ -37,7 +37,6 @@
 #' @importFrom raster extent crop
 #' @importFrom stringi stri_enc_toutf32
 #' @importFrom R.utils intToBin
-#' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
 #' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp

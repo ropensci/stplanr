@@ -106,9 +106,9 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
                      instructions=TRUE, alt=TRUE, geometry=TRUE, uturns="default") {
 
   if (api == 4) {
-    qryurl <- paste0(osrmurl,"/viaroute?")
+    path <- "/viaroute"
   } else {
-    qryurl <- paste0(osrmurl,"/route/",protocol,"/",profile,"/")
+    path <- paste0("/route/",protocol,"/",profile,"/")
   }
   returnval <- c()
 
@@ -129,38 +129,94 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
     while (i <= length(viapoints)) {
       if(ncol(viapoints[[i]]) == 3) {
         if (api == 4) {
-          returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
-                               paste0(paste0(
-                               c("z","instructions","alt","geometry","uturns"),'=',
-                               c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-          ))))
+
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = path,
+            query =
+              c(unlist(
+                apply(viapoints[[1]], 1, function(x){
+                  list("loc"=paste0(x[1],",",x[2]), "u"=x[3])
+                }),recursive=FALSE),
+              list(
+              "z"=zoom,
+              "instructions"=instructions,
+              "alt"=alt,
+              "geometry"=geometry,
+              "uturns"=uturns
+            ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                  httr::content(httrreq, as = "text", encoding = "UTF-8")))
+          }
         } else {
-          returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-            paste0(qryurl,
-                   paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';'),
-                   "?overview=full&",
-                   paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                 c(instructions,alt,uturns)), collapse='&')
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = paste0(path,paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';')),
+            query = list(
+              "overview"="full",
+              "steps"=instructions,
+              "alternatives"=alt,
+              "continue_straight"=uturns
             )
-          ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\','\\\\\\\\',
+              httr::content(httrreq, as = "text", encoding = "UTF-8"))
+          }
         }
       }
       else {
         if (api == 4) {
-          returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
-             paste0(paste0(
-               c("z","instructions","alt","geometry","uturns"),'=',
-               c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-          ))))
+
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = path,
+            query =
+              c(unlist(
+                apply(viapoints[[1]], 1, function(x){
+                  list("loc"=paste0(x[1],",",x[2]))
+                }),recursive=FALSE),
+                list(
+                  "z"=zoom,
+                  "instructions"=instructions,
+                  "alt"=alt,
+                  "geometry"=geometry,
+                  "uturns"=uturns
+                ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                                             httr::content(httrreq, as = "text", encoding = "UTF-8")))
+          }
         } else {
-          returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-            paste0(qryurl,
-                   paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';'),
-                   "?overview=full&",
-                   paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                 c(instructions,alt,uturns)), collapse='&')
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = paste0(path,paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';')),
+            query = list(
+              "overview"="full",
+              "steps"=instructions,
+              "alternatives"=alt,
+              "continue_straight"=uturns
             )
-          ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\','\\\\\\\\',
+                                 httr::content(httrreq, as = "text", encoding = "UTF-8"))
+          }
         }
       }
       i <- i + 1
@@ -176,34 +232,88 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 
           if (length(startlat) == 1) {
             if (api == 4) {
-            returnval <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat,",",startlng,"&loc=",endlat,",",endlng,"&",
-                                              paste0(paste0(c("z","instructions","alt","geometry","uturns"),'=',
-                                                            c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-            ))))
+              httrreq <- httr::GET(
+                url = osrmurl,
+                path = path,
+                query = list(
+                      "loc"=paste0(startlat,",",startlng),
+                      "loc"=paste0(endlat,",",endlng),
+                      "z"=zoom,
+                      "instructions"=instructions,
+                      "alt"=alt,
+                      "geometry"=geometry,
+                      "uturns"=uturns
+                    )
+              )
+              if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                  grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                returnval <- ''
+              } else {
+                returnval <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                     httr::content(httrreq, as = "text", encoding = "UTF-8")))
+              }
             } else {
-              returnval <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-                paste0(qryurl,startlng,",",startlat,";",endlng,",",endlat,"?overview=full&",
-                       paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                     c(instructions,alt,uturns)), collapse='&')
-                       )
-              ))
+              httrreq <- httr::GET(
+                url = osrmurl,
+                path = paste0(path,startlng,',',startlat,';',endlng,',',endlat),
+                query = list(
+                  "overview"="full",
+                  "steps"=instructions,
+                  "alternatives"=alt,
+                  "continue_straight"=uturns
+                )
+              )
+              if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                  grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                returnval <- ''
+              } else {
+                returnval <- gsub('\\\\','\\\\\\\\',
+                                     httr::content(httrreq, as = "text", encoding = "UTF-8"))
+              }
             }
           }
           else {
             i <- 1
             while (i <= length(startlat)) {
               if (api == 4) {
-              returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat[i],",",startlng[i],"&loc=",endlat[i],",",endlng[i],"&",
-                                                   paste(paste0(c("z","instructions","alt","geometry","uturns"),'=',
-                                                                c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-              ))))
-              } else {
-                returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-                  paste0(qryurl,startlng[i],",",startlat[i],";",endlng[i],",",endlat[i],"?overview=full&",
-                         paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                       c(instructions,alt,uturns)), collapse='&')
+                httrreq <- httr::GET(
+                  url = osrmurl,
+                  path = path,
+                  query = list(
+                    "loc"=paste0(startlat[i],",",startlng[i]),
+                    "loc"=paste0(endlat[i],",",endlng[i]),
+                    "z"=zoom,
+                    "instructions"=instructions,
+                    "alt"=alt,
+                    "geometry"=geometry,
+                    "uturns"=uturns
                   )
-                ))
+                )
+                if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                    grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                  returnval[i] <- ''
+                } else {
+                  returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                                                httr::content(httrreq, as = "text", encoding = "UTF-8")))
+                }
+              } else {
+                httrreq <- httr::GET(
+                  url = osrmurl,
+                  path = paste0(path,startlng[i],',',startlat[i],';',endlng[i],',',endlat[i]),
+                  query = list(
+                    "overview"="full",
+                    "steps"=instructions,
+                    "alternatives"=alt,
+                    "continue_straight"=uturns
+                  )
+                )
+                if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                    grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                  returnval[i] <- ''
+                } else {
+                  returnval[i] <- gsub('\\\\','\\\\\\\\',
+                                    httr::content(httrreq, as = "text", encoding = "UTF-8"))
+                }
               }
               i <- i + 1
             }
@@ -246,11 +356,11 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #' encoded json result(s) of OSRM routing queries.
 #' @export
 #' @examples \dontrun{
-#' library(RCurl)
 #'  viaroute2sldf(
-#'    RCurl::getURL(paste0(
-#'    "http://router.project-osrm.org/viaroute?loc=52.503033,13.420526&",
-#'    "loc=52.516582,13.429290&instructions=true"))
+#'    viaroute(startlat = 52.503033,
+#'             startlng = 13.420526,
+#'             endlat = 52.516582,
+#'             endlng = 13.429290)
 #'  )
 #' }
 viaroute2sldf <- function(osrmresult) {
@@ -644,12 +754,12 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
   i <- 1
   p <- dplyr::progress_estimated(length(lat), min_time = 5)
   while (i <= length(lat)) {
-    locatedata <- RCurl::getURL(paste0(osrmurl,
-                                       "/",service,"?loc=",
-                                       coorddf[i,]$origlat,
-                                       ",",
-                                       coorddf[i,]$origlng))
-    locatedata2 <- jsonlite::fromJSON(locatedata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = service,
+      query = list("loc"=paste0(coorddf[i,]$origlat,',',coorddf[i,]$origlng))
+    )
+    locatedata2 <- jsonlite::fromJSON(httr::content(httrreq, as = "text"))
     if (locatedata2$status == 0 | locatedata2$status == 200) {
       if (service == "locate") {
         coorddf[i,c("mappedlat","mappedlng","status")] <- c(locatedata2$mapped_coordinate,0)
@@ -740,20 +850,28 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
     sources <- which(locations$lng %in% lng & locations$lat %in% lat)-1
     destinations <- which(locations$lng %in% destlng & locations$lat %in% destlat)-1
 
-    tabledata <- RCurl::getURL(paste0(
-      osrmurl,"/table/",protocol,"/",profile,"/",
-      paste0(paste(locations$lng, locations$lat, sep=','), collapse=';'),
-      "?sources=",paste0(sources,collapse=';'),
-      "&destinations=",paste0(destinations,collapse=';')
-    ))
-    tabledata2 <- jsonlite::fromJSON(tabledata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = paste0("table/",protocol,"/",profile,"/",
+                    paste0(paste(locations$lng, locations$lat, sep=','), collapse=';')),
+      query = list(
+        "sources" = paste0(sources, collapse = ";"),
+        "destinations" = paste0(destinations, collapse = ";")
+      )
+    )
+    tabledata2 <- jsonlite::fromJSON(httr::content(httrreq, "text"))
     return(tabledata2$durations)
   } else {
-    tabledata <- RCurl::getURL(paste0(osrmurl,
-               "/table?loc=",
-               paste0(apply(data.frame(lat=lat,lng=lng),1,function(x){paste0(x,collapse=',')}),collapse='&loc=')
-               ))
-    tabledata2 <- jsonlite::fromJSON(tabledata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = "table",
+      query = unlist(
+        apply(data.frame(lat = lat, lng = lng), 1, function(x){
+          list("loc" = paste0(x, collapse = ","))
+        }), recursive = FALSE
+      )
+    )
+    tabledata2 <- jsonlite::fromJSON(httr::content(httrreq, "text"))
     return(tabledata2$distance_table)
   }
 
