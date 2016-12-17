@@ -27,7 +27,6 @@
 #' @importFrom lubridate dmy hm wday
 #' @importFrom leaflet addTiles leaflet addPolylines
 #' @importFrom graphics text
-#' @importFrom maptools spRbind
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv

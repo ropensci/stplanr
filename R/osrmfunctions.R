@@ -392,7 +392,7 @@ viaroute2sldf <- function(osrmresult) {
       if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
         osrmsldf <- osrmsldfalt
       } else {
-        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+        osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
       }
 
       if (osrmjson$found_alternative == TRUE) {
@@ -412,7 +412,7 @@ viaroute2sldf <- function(osrmresult) {
                              existrow = nrow(osrmsldf@data),
                              routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1)+i)
 
-          osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+          osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
 
           i <- i + 1
         }
@@ -433,7 +433,7 @@ viaroute2sldf <- function(osrmresult) {
       if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
         osrmsldf <- osrmsldfalt
       } else {
-        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+        osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
       }
 
     }
