@@ -43,6 +43,7 @@
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
 #' @importFrom doParallel registerDoParallel
+#' @importFrom maptools SpatialLinesMidPoints
 #'
 #' @useDynLib stplanr
 NULL

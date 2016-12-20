@@ -23,6 +23,7 @@ Depends:
     R (>= 3.0)
 Imports:
     jsonlite,
+    maptools,
     raster,
     rgdal,
     rgeos,
