@@ -110,7 +110,7 @@ lineLabels <- function(sldf, attrib){
 #' flowlines_2way <- flowlines[sel,]
 #' library(maptools)
 #' flowlines_2way <- spChFIDs(flowlines_2way, as.character(100001:(nrow(flowlines_2way) + 100000)))
-#' flowlines_1way <- maptools::spRbind(flowlines_sub, flowlines_2way)
+#' flowlines_1way <- raster::bind(flowlines_sub, flowlines_2way)
 #' overlaps <- over()
 #' nrow(overlaps)
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
@@ -193,7 +193,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       c(byvars)
     )
 
-    splitlinesdf <- data.frame(data.table::rbindlist(lapply(splitlines, function(x){x@data})))
+    splitlinesdf <- data.frame(dplyr::bind_rows(lapply(splitlines, function(x){x@data})))
     row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x){row.names(x@data)})))
 
     sldf <- SpatialLinesDataFrame(

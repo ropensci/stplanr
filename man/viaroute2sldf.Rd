@@ -20,11 +20,11 @@ SpatialLinesDataFrame containing the route, route summary and instructions.
 }
 \examples{
 \dontrun{
-library(RCurl)
  viaroute2sldf(
-   RCurl::getURL(paste0(
-   "http://router.project-osrm.org/viaroute?loc=52.503033,13.420526&",
-   "loc=52.516582,13.429290&instructions=true"))
+   viaroute(startlat = 52.503033,
+            startlng = 13.420526,
+            endlat = 52.516582,
+            endlng = 13.429290)
  )
 }
 }
