@@ -205,7 +205,7 @@ toptail_buff <- function(l, buff, ...){
     if(!exists("out")){
       out <- l2
     } else {
-      out <- maptools::spRbind(out, l2)
+      out <- raster::bind(out, l2)
     }
   }
   proj4string(out) <- proj4string(l)

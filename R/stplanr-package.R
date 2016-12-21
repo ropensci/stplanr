@@ -27,7 +27,6 @@
 #' @importFrom lubridate dmy hm wday
 #' @importFrom leaflet addTiles leaflet addPolylines
 #' @importFrom graphics text
-#' @importFrom maptools spRbind
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv
@@ -37,15 +36,14 @@
 #' @importFrom raster extent crop
 #' @importFrom stringi stri_enc_toutf32
 #' @importFrom R.utils intToBin
-#' @importFrom RCurl getURL
 #' @importFrom geosphere distHaversine
 #' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
-#' @importFrom data.table rbindlist
 #' @importFrom doParallel registerDoParallel
+#' @importFrom maptools SpatialLinesMidPoints
 #'
 #' @useDynLib stplanr
 NULL

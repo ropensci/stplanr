@@ -6,7 +6,7 @@
 
 It provides functions for solving common problems in transport planning and modelling, such as how to best get from point A to point B. The overall aim is to provide a reproducible, transparent and accessible toolkit to help people better understand transport systems and inform policy.
 
-The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the development of the Propensity to Cycle Tool ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis and modelling work toidentify where bicycle paths are most needed. See the package vignette (e.g. via `vignette("introducing-stplanr")`) or an [academic paper on the Propensity to Cycle Tool (PCT)](http://arxiv.org/abs/1509.04425) for more information on how it can be used. This README gives some basics.
+The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the development of the Propensity to Cycle Tool ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis and modelling work to identify where bicycle paths are most needed. See the package vignette (e.g. via `vignette("introducing-stplanr")`) or an [academic paper on the Propensity to Cycle Tool (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on how it can be used. This README gives some basics.
 
 **stplanr** should be useful to researchers everywhere. The function `route_graphhopper()`, for example, works anywhere in the world using the [graphhopper](https://graphhopper.com/) routing API and `read_table_builder()` reads-in Australian data. We welcome contributions that make transport research easier worldwide.
 
@@ -67,6 +67,8 @@ if(!Sys.getenv("CYCLESTREET") == ""){
 }
 ```
 
+![](README-cycle-trip-1.png)
+
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
 ``` r
@@ -91,7 +93,7 @@ leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
 
 For more examples, `example("line2route")`.
 
-`overline` is a function which takes a series of route-allocated lines, splits them into unique segmentes and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below.
+`overline` is a function which takes a series of route-allocated lines, splits them into unique segments and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below.
 
 ``` r
 t_routes$All <- travel_network$All
@@ -113,7 +115,7 @@ To install the stable version, use:
 install.packages("stplanr")
 ```
 
-The development version can be installed using devtools:
+The development version can be installed using **devtools**:
 
 ``` r
 # install.packages("devtools") # if not already installed
@@ -147,6 +149,20 @@ To get internal help on a specific function, use the standard way.
 ``` r
 ?od2line
 ```
+
+Dependencies
+------------
+
+**stplanr** many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
+
+Its dependencies are plotted below using the [**minCRAN** package](https://cran.r-project.org/web/packages/miniCRAN/vignettes/miniCRAN-dependency-graph.html):
+
+``` r
+dg <- miniCRAN::makeDepGraph("stplanr")
+plot(dg)
+```
+
+![](README-unnamed-chunk-11-1.png)
 
 Meta
 ----

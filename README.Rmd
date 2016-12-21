@@ -27,9 +27,9 @@ The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
 as part of the development of the Propensity to Cycle Tool
 ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis
-and modelling work toidentify where bicycle paths are most needed. See
+and modelling work to identify where bicycle paths are most needed. See
 the package vignette (e.g. via `vignette("introducing-stplanr")`) 
-or an [academic paper on the Propensity to Cycle Tool (PCT)](http://arxiv.org/abs/1509.04425)
+or an [academic paper on the Propensity to Cycle Tool (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862)
 for more information on how it can be used. This README gives some basics.
 
 **stplanr** should be useful to researchers everywhere.
@@ -110,7 +110,7 @@ leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
 For more examples, `example("line2route")`.
 
 `overline` is a function which takes a series of route-allocated lines,
-splits them into unique segmentes and aggregates
+splits them into unique segments and aggregates
 the values of overlapping lines. This can represent where there will be
 most traffic on the transport system, as illustrated
 below. 
@@ -132,7 +132,7 @@ To install the stable version, use:
 install.packages("stplanr")
 ```
 
-The development version can be installed using devtools:
+The development version can be installed using **devtools**:
 
 ```{r, eval=FALSE}
 # install.packages("devtools") # if not already installed
@@ -170,6 +170,18 @@ To get internal help on a specific function, use the standard way.
 ```{r, eval=FALSE}
 ?od2line
 ```
+
+## Dependencies
+
+**stplanr** has many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
+
+Its dependencies are plotted below using the [**minCRAN** package](https://cran.r-project.org/web/packages/miniCRAN/vignettes/miniCRAN-dependency-graph.html):
+
+```{r}
+dg <- miniCRAN::makeDepGraph("stplanr")
+plot(dg)
+```
+
 
 ## Meta
 
