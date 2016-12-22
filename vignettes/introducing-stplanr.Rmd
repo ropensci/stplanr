@@ -14,9 +14,16 @@ bibliography: references.bib
 library(stplanr)
 ```
 
-## Abstract
+## Introduction
 
-**stplanr** was developed to solve a real world problem: how to convert official data on travel patterns into geographic objects that could be plotted on a map and analysed using GIS? Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This vignette introduces the basics of the package including its dependencies, and how to get started with travel data overall. It can be seen as an introductory tutorial to handling spatial transport data and will evolve over time as such.
+**stplanr** was developed to solve a real world problem: how to convert official data on travel behaviour into geographic objects that can be plotted on a map and analysed using methods from geographical information systems (GIS)?
+Specifically, we wanted to visualise and investigate the spatial distribution origin-destination (OD) data such as the open datasets provided by the UK Data Services WICID portal (see [wicid.ukdataservice.ac.uk/](http://wicid.ukdataservice.ac.uk/)).
+Since this basic functionality has been implemented (with the function `od2line()`) there have been many further developments in **stplanr**, some of which are described in a [longer vignette](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd).
+The purpose of this vignette is to get you up-to-speed with the basics and provide useful links for doing transport research with R.
+
+Transport data can take many forms but we will start with this OD data to illustrate **stplanr** can be used to understand transport systems. A sample o
+
+Over time the package has evolved to include a number of other functions. Analysis of road traffic casualty data, various routing algorithms, 'travel watershed' analyis and access to Google's Travel Matrix are all possible. This vignette introduces the basics of the package including its dependencies, and how to get started with travel data overall. It can be seen as an introductory tutorial to handling spatial transport data and will evolve over time as such.
 
 
 <!-- ## Dependencies -->
