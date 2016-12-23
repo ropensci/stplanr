@@ -43,7 +43,7 @@ library(stplanr)
 
 # Links to related packages
 
-The message printed when **stplanr** is loaded tells us that it also loads **sp**. This means that **stplanr** *depends* on on **sp**.
+The message printed when **stplanr** is loaded tells us that it also loads **sp**. This means that **stplanr** *depends* on **sp**.
 
 The reason for this is that almost all transport data, from the spatial distribution of bus stops to the routes that pedestrians take between home and work, contains a spatial element. Representing this spatial data in a formal *class system* has many advantages, including sensible defaults for plotting the spatial data on a map.
 
