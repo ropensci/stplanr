@@ -3,14 +3,20 @@
 ## NEW FEATURES
 
 * There is a new vignette! See [vignettes/stplanr-paper.Rmd](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) and `vignette("stplanr-paper")` for details.
+* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/introducing-stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
 * `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
 * `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
+* **RCurl** and **data.table** dependencies have been [removed](https://github.com/ropensci/stplanr/pull/169)
+* New functions `od_aggregate()` and `sp_aggregate()` have been [added](https://github.com/ropensci/stplanr/pull/165), to enable OD data to be aggregated to new geographic levels.
 
 ## BUG FIXES
 
-* #141 fixed: `viaroute()` works again.
+* `#141` fixed: `viaroute()` works again.
 * [#153](https://github.com/ropensci/stplanr/issues/153) fixed: `bidirectional = TRUE` returns a different result in `line_bearing()` now.
 
+## FUTURE PLANS
+
+* A new branch that uses **sf** is being [tested](https://github.com/ropensci/stplanr/pull/164). We may eventually transition to using simple features classes instead of **sp** classes.
 
 # stplanr 0.1.6
 
