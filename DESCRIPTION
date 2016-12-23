@@ -51,7 +51,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    tmap
+    tmap,
+    OpenStreetMap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
