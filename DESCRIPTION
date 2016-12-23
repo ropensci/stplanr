@@ -50,7 +50,9 @@ LinkingTo:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tmap,
+    OpenStreetMap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
