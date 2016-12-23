@@ -84,7 +84,7 @@ plot(t_routes)
 
 ![](README-plot2-1.png)
 
-Another way to visualise this is with the leaflet package (not shown):
+Another way to visualise this is with the leaflet package:
 
 ``` r
 library(leaflet)
@@ -153,9 +153,9 @@ To get internal help on a specific function, use the standard way.
 Dependencies
 ------------
 
-**stplanr** many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
+**stplanr** has many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
 
-Its dependencies are plotted below using the [**minCRAN** package](https://cran.r-project.org/web/packages/miniCRAN/vignettes/miniCRAN-dependency-graph.html):
+Its dependencies are plotted below using the **minCRAN** package:
 
 ``` r
 dg <- miniCRAN::makeDepGraph("stplanr")
