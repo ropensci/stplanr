@@ -19,6 +19,10 @@ preamble: >
   \usepackage{varioref}
   % Any extra latex you need in the preamble
 output: rticles::rjournal_article
+vignette: >
+  %\VignetteIndexEntry{Introducing stplanr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
