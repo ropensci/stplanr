@@ -1,6 +1,6 @@
 language: r
 r:
-  - oldrel
+  - release
 sudo: true
 dist: xenial
 
