@@ -23,9 +23,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Build warning
+```{r, echo=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
+```
 
-Warning: knitting this paper from the RStudio project can lead the build to fail. Please build this file from a different or no project if this happens. It also requires the latest version of pandoc for all the code chunks to compile correctly.
+## Note
+
+This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions.
 
 # Introduction
 
@@ -319,19 +323,10 @@ ny2oaxaca1@data
 ny2oaxaca2@data
 ```
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lrrr}
-  \toprule
-Mode & time & dist & change\_elev \\ 
-  \midrule
-Cycle & 17493.25 & 4884360.99 & 87429.74 \\ 
-  Car & 2755.66 & 4753582.07 &  \\ 
-   \bottomrule
-\end{tabular}
-\caption{Attribute data from the route\_graphhopper function, from New York to Oaxaca, by cycle and car.} 
-\label{tab:xtnyoa}
-\end{table}
+|     time|    dist| change_elev|
+|--------:|-------:|-----------:|
+| 17522.73| 4885663|    87388.13|
+|  2759.89| 4754772|          NA|
 
 <!-- ## Calculating geographic attributes of transport routes -->
 
