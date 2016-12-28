@@ -1,19 +1,15 @@
 ## Test environments
-* local OS X install, R 3.3.1
-* ubuntu 12.04 (on travis-ci), R 3.3.1
-* local windows 7 install
+* local Ubuntu 16.04 install, R 3.3.2
+* ubuntu 14.04.5 (on travis-ci), R 3.3.2
+* rhub checks on:
+    * Ubuntu Linux 16.04 LTS, R-devel, GCC - error due to rhub deps:
+    `Packages required but not available: ‘rgdal’ ‘rgeos’ ‘httr’`
+    * Windows Server 2008 R2 SP1, R-devel, 32/64 bit (windows-x86_64-devel)
+    `0 errors 0 warnings 0 notes`
 
 ## R CMD check results
-There were no ERRORs, WARNINGs.
 
-There were 2 notes: 
-* checking top-level files ... NOTE
-Files ‘README.md’ or ‘NEWS.md’ cannot be checked without ‘pandoc’ being installed.
+`0 errors | 0 warnings | 0 notes`
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: ‘Robin Lovelace <rob00x@gmail.com>’
-
-## Test environments
-* Ubuntu 16.04
-* Ubuntu 12.04 (on travis-ci), R 3.3.1
-* devtools build_win()
