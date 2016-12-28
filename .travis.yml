@@ -1,4 +1,6 @@
 language: r
+r:
+  - devel
 sudo: true
 dist: xenial
 cache: packages
