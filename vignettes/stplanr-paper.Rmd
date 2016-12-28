@@ -18,7 +18,7 @@ abstract: >
   
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introducing stplanr}
+  %\VignetteIndexEntry{stplanr A Package for Transport Planning}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
