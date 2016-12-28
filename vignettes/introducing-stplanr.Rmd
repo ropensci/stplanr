@@ -83,9 +83,7 @@ To extract useful information from this OD dataset, we need to be able to place 
 
 One problem with OD data is that the rows do not tend to have geography inherently built in. They could contain a variables called `lat_origin`, `lon_origin`, `lat_destination` and `lon_destination`. But generally they only contain the IDs of geographic zones.
 
-Work is needed to convert the OD data into 'desire lines'. Desire lines are straight lines between the origin and destination and represent where people would go if they were not constrained by the route network (see the Figure below, from [this paper](https://www.jtlu.org/index.php/jtlu/article/view/862)):
-
-![](https://github.com/npct/pct/blob/master/flow-model/od-data-leeds.png?raw=true)
+Work is needed to convert the OD data into 'desire lines'. Desire lines are straight lines between the origin and destination and represent where people would go if they were not constrained by the route network (see Figure 3 from [this paper](https://www.jtlu.org/index.php/jtlu/article/download/862/826)).
 
 To show how these desire lines are created, we'll switch to using real OD data provided by **stplanr**. The first three of these is shown below:
 
