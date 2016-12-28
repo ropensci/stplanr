@@ -30,7 +30,6 @@ Imports:
     dplyr,
     RgoogleMaps,
     openxlsx,
-    leaflet,
     methods,
     httr,
     R.utils,
