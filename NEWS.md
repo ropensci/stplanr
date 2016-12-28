@@ -7,7 +7,9 @@
 * `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
 * `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
 * **RCurl** and **data.table** dependencies have been [removed](https://github.com/ropensci/stplanr/pull/169)
+* **leaflet** has been demoted from an import to a suggest. This should reduce install times.
 * New functions `od_aggregate()` and `sp_aggregate()` have been [added](https://github.com/ropensci/stplanr/pull/165), to enable OD data to be aggregated to new geographic levels.
+
 
 ## BUG FIXES
 

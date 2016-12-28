@@ -9,7 +9,11 @@
 
 ## R CMD check results
 
-`0 errors | 0 warnings | 0 notes`
+`0 errors | 0 warnings | 1 notes`
 
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Robin Lovelace <rob00x@gmail.com>’
+```
+Days since last update: 2
+```
+
+* This is a minor patch aimed at updating the vignettes
+* It also demotes **leaflet** from an import to a suggest, reducing installation time
