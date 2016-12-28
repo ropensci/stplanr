@@ -1,6 +1,6 @@
 language: r
 r:
-  - release
+  - devel
 sudo: true
 dist: xenial
 
