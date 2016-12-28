@@ -1,8 +1,8 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.7-1
-Date: 2016-12-23
+Version: 0.1.7-2
+Date: 2016-12-28
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
@@ -30,7 +30,6 @@ Imports:
     dplyr,
     RgoogleMaps,
     openxlsx,
-    leaflet,
     methods,
     httr,
     R.utils,
@@ -52,7 +51,8 @@ Suggests:
     knitr,
     rmarkdown,
     tmap,
-    OpenStreetMap
+    OpenStreetMap,
+    leaflet
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make

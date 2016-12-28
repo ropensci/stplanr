@@ -25,7 +25,6 @@
 #' @import foreach
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom lubridate dmy hm wday
-#' @importFrom leaflet addTiles leaflet addPolylines
 #' @importFrom graphics text
 #' @importFrom methods as slot
 #' @importFrom stats setNames

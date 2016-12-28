@@ -15,19 +15,21 @@ author:
     email:  richard.ellison@sydney.edu.au
 abstract: >
   Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analysis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
-preamble: >
-  \usepackage{varioref}
-  % Any extra latex you need in the preamble
-output: rticles::rjournal_article
+  
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing stplanr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(dev = 'pdf', out.width='\\textwidth')
+```{r, echo=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 ```
 
-## Build warning
+## Note
 
-Warning: knitting this paper from the RStudio project can lead the build to fail. Please build this file from a different or no project if this happens. It also requires the latest version of pandoc for all the code chunks to compile correctly.
+This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions.
 
 # Introduction
 
@@ -110,13 +112,8 @@ For ease of use, functions focussed on each data type have been developed with n
 # sel_core = grep(pattern = "od_|^line_|route_", x = stplanr_funs)
 # core_funs = stplanr_funs[sel_core]
 # args(name = core_funs[1])
-library(xtable)
-options(xtable.comment = FALSE)
-options(xtable.booktabs = TRUE)
 fun_table <- readr::read_csv("fun_table.csv")
-# knitr::kable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.") # failed
-xt <- xtable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.")
-xtable::print.xtable(xt, include.rownames = FALSE)
+knitr::kable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.") 
 ```
 
 With a tip of the hat to the concept of type stability (e.g. as implemented in \CRANpkg{dplyr}), we also plan to make the core functions of **stplanr** more type-stable in future releases.  Core functions, which begin with the prefixes listed above, could follow \CRANpkg{dplyr}'s lead and return only objects with the same class as that of the input. However there are limitations to this approach: it will break existing functionality and mean that output objects have a larger size than necessary (`line_bearing`, for example, does not need to duplicate the spatial data contained in its input). Instead, we plan to continue to name functions around the type of *input* data they take, but are open minded about function input-output data class conventions, especially in the context of the new class system implemented in \CRANpkg{sf}.
@@ -326,19 +323,10 @@ ny2oaxaca1@data
 ny2oaxaca2@data
 ```
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lrrr}
-  \toprule
-Mode & time & dist & change\_elev \\ 
-  \midrule
-Cycle & 17493.25 & 4884360.99 & 87429.74 \\ 
-  Car & 2755.66 & 4753582.07 &  \\ 
-   \bottomrule
-\end{tabular}
-\caption{Attribute data from the route\_graphhopper function, from New York to Oaxaca, by cycle and car.} 
-\label{tab:xtnyoa}
-\end{table}
+|     time|    dist| change_elev|
+|--------:|-------:|-----------:|
+| 17522.73| 4885663|    87388.13|
+|  2759.89| 4754772|          NA|
 
 <!-- ## Calculating geographic attributes of transport routes -->
 
