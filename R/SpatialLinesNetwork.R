@@ -288,8 +288,12 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @param end Node ID(s) of route ends.
 #' @param sumvars Character vector of variables for which to calculate
 #' summary statistics.
+#' @param combinations Boolean value indicating if all combinations of start
+#' and ends should be calculated. If TRUE then every start Node ID will be routed
+#' to every end Node ID. This is faster than passing every combination to start
+#' and end. Default is FALSE.
 #' @export
-sum_network_routes <- function(sln, start, end, sumvars) {
+sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 
   if (class(sln) != "SpatialLinesNetwork") {
     stop("sln is not a SpatialLinesNetwork.")
@@ -297,24 +301,41 @@ sum_network_routes <- function(sln, start, end, sumvars) {
   if (missing(start) | missing(end)) {
     stop("start or end is missing")
   }
-  if (length(start) != length(end)) {
+  if (length(start) != length(end) && combinations == FALSE) {
     stop("start and end not the same length.")
   }
 
-  routesegs <- lapply(1:length(start), function(i) {
-      unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
+  if (combinations == FALSE) {
+    routesegs <- lapply(1:length(start), function(i) {
+        unlist(igraph::get.shortest.paths(sln@g, start[i], end[i], output="epath")$epath)
+      })
+    routecoords <- mapply(function(routesegs, start) {
+        join_spatiallines_coords(sln@sl[routesegs,],sln@g$x[start],sln@g$y[start])
+      },
+    routesegs, start, SIMPLIFY = FALSE)
+    routecoords <- lapply(1:length(start), function(i) {
+      if(nrow(routecoords[[i]]) > 0){
+        routecoords[[i]]
+      } else {
+        matrix(c(sln@g$x[start[i]], sln@g$y[start[i]], sln@g$x[end[i]], sln@g$y[end[i]]), byrow=TRUE, nrow=2)
+      }
     })
-  routecoords <- mapply(function(routesegs, start) {
+  } else {
+    routesegs <- unlist(lapply(1:length(start), function(i) {
+      lapply(igraph::get.shortest.paths(sln@g, start[i], end, output="epath")$epath, function(x){as.vector(x)})
+    }), recursive = FALSE)
+    routecoords <- mapply(function(routesegs, start) {
       join_spatiallines_coords(sln@sl[routesegs,],sln@g$x[start],sln@g$y[start])
     },
-    routesegs, start, SIMPLIFY = FALSE)
-  routecoords <- lapply(1:length(start), function(i) {
-    if(nrow(routecoords[[i]]) > 0){
-      routecoords[[i]]
-    } else {
-      matrix(c(sln@g$x[start[i]], sln@g$y[start[i]], sln@g$x[end[i]], sln@g$y[end[i]]), byrow=TRUE, nrow=2)
-    }
-  })
+    routesegs, rep(start, each = length(end)), SIMPLIFY = FALSE)
+    routecoords <- lapply(1:(length(start)*length(end)), function(i, start, end) {
+      if(nrow(routecoords[[i]]) > 0){
+        routecoords[[i]]
+      } else {
+        matrix(c(sln@g$x[start[i]], sln@g$y[start[i]], sln@g$x[end[i]], sln@g$y[end[i]]), byrow=TRUE, nrow=2)
+      }
+    }, rep(start, each = length(end)), rep(end, times = length(start)))
+  }
   routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {
     matrix(
       sapply(1:length(sumvars),
