@@ -52,6 +52,7 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' data(routes_fast)
 #' rnet <- overline(sldf = routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
+#' class(SLN)
 #' weightfield(SLN) # field used to determine shortest path
 #' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
@@ -360,4 +361,20 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 
   return(sldf)
 
+}
+
+#' Generate spatial points representing nodes on a SpatialLinesNetwork
+#'
+#' @inheritParams sum_network_routes
+#' @export
+#' @examples
+#' data(routes_fast)
+#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' SLN <- SpatialLinesNetwork(rnet)
+#' (sln_nodes = sln2points(SLN))
+#' plot(SLN)
+#' plot(sln_nodes, add = T)
+sln2points <- function(sln){
+  coords <- cbind(sln@g$x, sln@g$y)
+  sp::SpatialPoints(coords)
 }

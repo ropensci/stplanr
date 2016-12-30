@@ -35,6 +35,7 @@ examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
+class(SLN)
 weightfield(SLN) # field used to determine shortest path
 shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4)
