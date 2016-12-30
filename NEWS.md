@@ -1,3 +1,10 @@
+# stplanr 0.1.8
+
+## NEW FEATURES
+
+* New argument `combinations` added to `sum_network_routes()` so it runs quicker - see [pull/177](https://github.com/ropensci/stplanr/pull/177).
+* New examples added to `sum_network_routes()`, `weightfield()` and `find_network_nodes()` - see e.g. `example(sum_network_routes)` for details.
+
 # stplanr 0.1.7
 
 ## NEW FEATURES
