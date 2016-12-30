@@ -19,4 +19,10 @@ representation.}
 \description{
 Plot a SpatialLinesNetwork
 }
+\examples{
+data(routes_fast)
+rnet <- overline(sldf = routes_fast, attrib = "length")
+SLN <- SpatialLinesNetwork(rnet)
+plot(SLN)
+}
 

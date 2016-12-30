@@ -4,7 +4,7 @@
 \alias{sum_network_routes}
 \title{Summarise shortest path between nodes on network}
 \usage{
-sum_network_routes(sln, start, end, sumvars)
+sum_network_routes(sln, start, end, sumvars, combinations = FALSE)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork to use.}
@@ -15,6 +15,11 @@ sum_network_routes(sln, start, end, sumvars)
 
 \item{sumvars}{Character vector of variables for which to calculate
 summary statistics.}
+
+\item{combinations}{Boolean value indicating if all combinations of start
+and ends should be calculated. If TRUE then every start Node ID will be routed
+to every end Node ID. This is faster than passing every combination to start
+and end. Default is FALSE.}
 }
 \description{
 Summarise shortest path between nodes on network
@@ -24,5 +29,15 @@ Summarise shortest path between nodes on network
 Find the shortest path on the network between specified nodes and returns
 a SpatialLinesdataFrame containing the path(s) and summary statistics of
 each one.
+}
+\examples{
+data(routes_fast)
+rnet <- overline(sldf = routes_fast, attrib = "length")
+SLN <- SpatialLinesNetwork(rnet)
+weightfield(SLN) # field used to determine shortest path
+shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
+plot(shortpath, col = "red", lwd = 4)
+plot(SLN, add = TRUE)
+
 }
 
