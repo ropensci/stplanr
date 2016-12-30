@@ -10,9 +10,15 @@
 \arguments{
 \item{object}{The SpatialLinesNetwork}
 
-\item{...}{Arguments to pass to relevant plot function.}
+\item{...}{Arguments to pass to relevant summary function.}
 }
 \description{
 Print a summary of a SpatialLinesNetwork
+}
+\examples{
+data(routes_fast)
+rnet <- overline(sldf = routes_fast, attrib = "length")
+SLN <- SpatialLinesNetwork(rnet)
+summary(SLN)
 }
 
