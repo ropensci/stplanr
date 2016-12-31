@@ -41,6 +41,8 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' @param uselonglat A boolean value indicating if the data should be assumed
 #' to be using WGS84 latitude/longitude coordinates. If \code{FALSE} or not
 #' set, uses the coordinate system specified by the SpatialLines object.
+#' @param tolerance A numeric value indicating the tolerance (in the units of
+#' the coordinate system) to use as a tolerance with which to match nodes.
 #'
 #' @references
 #' Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
@@ -56,14 +58,14 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
 #' plot(SLN, add = TRUE)
-SpatialLinesNetwork = function(sl, uselonglat = FALSE) {
+SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
   stopifnot(is(sl, "SpatialLines"))
   if (!is(sl, "SpatialLinesDataFrame"))
     sl = new("SpatialLinesDataFrame", sl, data = data.frame(id = 1:length(sl)))
   if (!all(sapply(sl@lines, length) == 1))
     stop("SpatialLines is not simple: each Lines element should have only a single Line")
   # Generate graph data
-  gdata = coord_matches(sl)
+  gdata = coord_matches(sl, tolerance)
   s = gdata$s
   g = igraph::graph(gdata$pts0, directed = FALSE)  # edges
   nodes = s[gdata$upts, ]

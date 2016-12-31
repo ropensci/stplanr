@@ -81,7 +81,7 @@ calc_network_catchment(
    polygonlayer = sa1income,
    targetlayer = testcycleway,
    calccols = c('Total'),
-   maximpedance = 800
+   maximpedance = 800,
    distance = 200,
    projection = 'austalbers',
    dissolve = TRUE

@@ -4,7 +4,7 @@
 \alias{SpatialLinesNetwork}
 \title{Create object of class SpatialLinesNetwork from SpatialLinesDataFrame}
 \usage{
-SpatialLinesNetwork(sl, uselonglat = FALSE)
+SpatialLinesNetwork(sl, uselonglat = FALSE, tolerance = 0)
 }
 \arguments{
 \item{sl}{A SpatialLines or SpatialLinesDataFrame containing the lines to
@@ -13,6 +13,9 @@ use to create the network.}
 \item{uselonglat}{A boolean value indicating if the data should be assumed
 to be using WGS84 latitude/longitude coordinates. If \code{FALSE} or not
 set, uses the coordinate system specified by the SpatialLines object.}
+
+\item{tolerance}{A numeric value indicating the tolerance (in the units of
+the coordinate system) to use as a tolerance with which to match nodes.}
 }
 \description{
 Creates a new SpatialLinesNetwork object that can be used for routing

@@ -7,13 +7,14 @@
 using namespace Rcpp;
 
 // coord_matches
-List coord_matches(SEXP sldf);
-RcppExport SEXP stplanr_coord_matches(SEXP sldfSEXP) {
+List coord_matches(SEXP sldf, double tolval);
+RcppExport SEXP stplanr_coord_matches(SEXP sldfSEXP, SEXP tolvalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type sldf(sldfSEXP);
-    rcpp_result_gen = Rcpp::wrap(coord_matches(sldf));
+    Rcpp::traits::input_parameter< double >::type tolval(tolvalSEXP);
+    rcpp_result_gen = Rcpp::wrap(coord_matches(sldf, tolval));
     return rcpp_result_gen;
 END_RCPP
 }
