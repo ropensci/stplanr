@@ -373,7 +373,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 #' SLN <- SpatialLinesNetwork(rnet)
 #' (sln_nodes = sln2points(SLN))
 #' plot(SLN)
-#' plot(sln_nodes, add = T)
+#' plot(sln_nodes, add = TRUE)
 sln2points <- function(sln){
   coords <- cbind(sln@g$x, sln@g$y)
   sp::SpatialPoints(coords)

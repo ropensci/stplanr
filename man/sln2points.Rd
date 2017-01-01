@@ -18,6 +18,6 @@ rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 (sln_nodes = sln2points(SLN))
 plot(SLN)
-plot(sln_nodes, add = T)
+plot(sln_nodes, add = TRUE)
 }
 
