@@ -12,7 +12,6 @@ bibliography: references.bib
 
 ```{r, include=FALSE}
 library(stplanr)
-library(tmap)
 ```
 
 # Introduction
@@ -107,6 +106,7 @@ Because **stplanr** loads **sp**, the dataset will be plotted as a map by defaul
 
 ```{r}
 library(tmap)
+library(tmaptools)
 osm_tiles = read_osm(bb(cents, 1.4))
 (map = qtm(osm_tiles) +
   qtm(cents, symbols.size = 5) )
