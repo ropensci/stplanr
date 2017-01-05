@@ -12,6 +12,7 @@ bibliography: references.bib
 
 ```{r, include=FALSE}
 library(stplanr)
+library(tmap)
 ```
 
 # Introduction
