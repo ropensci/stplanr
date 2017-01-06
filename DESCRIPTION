@@ -51,6 +51,7 @@ Suggests:
     knitr,
     rmarkdown,
     tmap,
+    tmaptools,
     OpenStreetMap,
     leaflet
 VignetteBuilder: knitr
