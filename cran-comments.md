@@ -7,13 +7,17 @@
     * Windows Server 2008 R2 SP1, R-devel, 32/64 bit (windows-x86_64-devel)
     `0 errors 0 warnings 0 notes`
 
-## R CMD check results
-
-`0 errors | 0 warnings | 1 notes`
+* This is a minor patch aimed at fixing this issue (due to splitting of tmap into 2 packages):
 
 ```
-Days since last update: 2
+Version: 0.1.7-2
+Check: re-building of vignette outputs
+Result: WARN
+    Error in re-building vignettes:
+     ...
+    Quitting from lines 108-112 (introducing-stplanr.Rmd)
+    Error: processing vignette ‘introducing-stplanr.Rmd’ failed with diagnostics:
+    could not find function "read_osm"
+    Execution halted
+Flavors: r-devel-linux-x86_64-debian-clang, r-devel-windows-ix86+x86_64, r-patched-linux-x86_64, r-release-linux-x86_64, r-release-windows-ix86+x86_64
 ```
-
-* This is a minor patch aimed at updating the vignettes
-* It also demotes **leaflet** from an import to a suggest, reducing installation time
