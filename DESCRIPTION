@@ -1,8 +1,8 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.7-2
-Date: 2016-12-28
+Version: 0.1.7-3
+Date: 2017-01-06
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
