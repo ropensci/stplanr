@@ -380,3 +380,98 @@ sln2points <- function(sln){
   coords <- cbind(sln@g$x, sln@g$y)
   sp::SpatialPoints(coords)
 }
+
+#' Summarise links from shortest paths data
+#'
+#' @section Details:
+#' Find the shortest path on the network between specified nodes and returns
+#' a SpatialLinesdataFrame containing the path(s) and summary statistics of
+#' each one.
+#'
+#' @param sln The SpatialLinesNetwork to use.
+#' @param routedata A dataframe where the first column contains the Node ID(s)
+#' of the start of the routes, the second column indicates the Node ID(s) of
+#' the end of the routes, and any additional columns are summarised by link.
+#' If there are no additional colums, then overlapping routes are counted.
+#' @examples
+#' data(routes_fast)
+#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' SLN <- SpatialLinesNetwork(rnet)
+#' weightfield(SLN) # field used to determine shortest path
+#' shortpath <- sum_network_links(
+#'     SLN,
+#'     data.frame(
+#'         start=rep(c(1,2,3,4,5),each=4),
+#'         end=rep(c(50,51,52,33),times=5)
+#'     )
+#' )
+#' plot(shortpath, lwd=shortpath$count)
+#'
+#' @export
+sum_network_links <- function(sln, routedata) {
+
+  if (class(sln) != "SpatialLinesNetwork") {
+    stop("sln is not a SpatialLinesNetwork.")
+  }
+  if (missing(routedata)) {
+    stop("routedata is missing")
+  }
+  if (is(routedata,"data.frame") == FALSE) {
+    stop("routedata is not a dataframe")
+  }
+  if (ncol(routedata) < 2) {
+    stop("routedata has fewer than 2 columns.")
+  }
+
+  if(ncol(routedata) < 3) {
+    routedata$count <- 1
+  }
+
+  if(nrow(routedata[which(is.na(routedata[,1]) == TRUE | is.na(routedata[,2]) == TRUE),]) > 0) {
+    warning("Some node IDs are missing, removing missing rows")
+    routedata <- routedata[which(is.na(routedata[,1]) == FALSE & is.na(routedata[,2]) == FALSE),]
+  }
+
+  routeends <- lapply(unique(routedata[,1]), function(x, routedata) {
+    unique(routedata[which(routedata[,1] == x),2])
+  }, routedata)
+  routesegs <- lapply(1:length(unique(routedata[,1])), function(x,start,routeends) {
+    igraph::get.shortest.paths(sln@g, start[x], routeends[[x]], output="epath")$epath
+  }, unique(routedata[,1]), routeends)
+  routesegs <- lapply(routesegs, function(x){lapply(x, function(x){as.vector(x)})})
+
+  routesegs <- dplyr::bind_rows(
+    unlist(
+      lapply(1:length(unique(routedata[,1])),
+             function(x, start, routeends, routesegs){
+               lapply(1:length(routeends[[x]]),
+                      function(y, start, routeends, routesegs){
+                        if (length(routesegs[[y]]) == 0) {} else{
+                          data.frame(
+                            stplanr_start = start,
+                            stplanr_end = routeends[y],
+                            stplanr_linkid = routesegs[[y]]
+                          )
+                        }
+                      }, start[x], routeends[[x]], routesegs[[x]]
+                )
+              }, unique(routedata[,1]), routeends, routesegs),
+      recursive = FALSE)
+    ) %>%
+    dplyr::inner_join(
+      routedata,
+      by=c("stplanr_start"=colnames(routedata)[1], "stplanr_end"=colnames(routedata)[2])
+    ) %>%
+    dplyr::select(-stplanr_start,-stplanr_end) %>%
+    dplyr::group_by(stplanr_linkid) %>%
+    dplyr::summarise_each(c("sum")) %>%
+    dplyr::ungroup()
+
+  sln@sl@data$stplanr_linkid <- 1:nrow(sln@sl@data)
+  routelinks <- sln@sl[routesegs$stplanr_linkid,]
+  routelinks <- merge(routelinks, routesegs, by='stplanr_linkid')
+  routelinks$stplanr_linkid <- NULL
+
+  return(routelinks)
+
+}
