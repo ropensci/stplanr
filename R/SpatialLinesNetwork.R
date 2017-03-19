@@ -63,6 +63,10 @@ setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
 #' points(sln2points(SLN)[to_id,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
+#' to_id = 35
+#' points(sln2points(SLN)[to_id,], cex = 5)
+#' shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
+#' plot(shortpath, col = "red", lwd = 4, add = TRUE)
 SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
   stopifnot(is(sl, "SpatialLines"))
   if (!is(sl, "SpatialLinesDataFrame"))
