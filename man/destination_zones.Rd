@@ -35,4 +35,3 @@ devtools::use_data(destinations, overwrite = TRUE)
 }
 }
 \keyword{datasets}
-

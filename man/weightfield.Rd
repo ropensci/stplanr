@@ -3,8 +3,10 @@
 \docType{methods}
 \name{weightfield}
 \alias{weightfield}
-\alias{weightfield,SpatialLinesNetwork-method}
+\alias{weightfield}
 \alias{weightfield<-}
+\alias{weightfield<-}
+\alias{weightfield,SpatialLinesNetwork-method}
 \alias{weightfield<-,SpatialLinesNetwork,ANY-method}
 \alias{weightfield<-,SpatialLinesNetwork,character-method}
 \title{Get or set weight field in SpatialLinesNetwork}
@@ -42,6 +44,7 @@ SpatialLinesNetwork. When changing the value of weightfield, the weights
 of the graph network are updated with the values of the corresponding
 variables.
 }
+
 \examples{
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
@@ -50,4 +53,3 @@ weightfield(SLN) <- 'length'
 weightfield(SLN, 'randomnum') <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
 
 }
-

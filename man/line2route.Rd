@@ -34,6 +34,7 @@ Convert straight SpatialLinesDataFrame from flow data into routes
 
 See \code{\link{route_cyclestreet}} and other route functions for details
 }
+
 \examples{
 \dontrun{
 data(flowlines)
@@ -70,4 +71,3 @@ rf_with_err = line2route(l,  reporterrors = T)
 # Now rf_with_err$error[2] has the correct error message
 }
 }
-

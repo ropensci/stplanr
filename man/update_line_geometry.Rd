@@ -29,4 +29,3 @@ plot(l, lwd = l$All / mean(l$All))
 plot(l_newgeom, lwd = l$All / mean(l$All))
 names(l_newgeom)
 }
-

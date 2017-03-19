@@ -18,6 +18,7 @@ Convert json result of OSRM routing query to SpatialLinesDataFrame
 Converts the result of a (successful) OSRM routing query and returns a
 SpatialLinesDataFrame containing the route, route summary and instructions.
 }
+
 \examples{
 \dontrun{
  viaroute2sldf(
@@ -28,4 +29,3 @@ SpatialLinesDataFrame containing the route, route summary and instructions.
  )
 }
 }
-

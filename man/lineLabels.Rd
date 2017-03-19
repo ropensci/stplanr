@@ -19,4 +19,3 @@ graphics.
 \author{
 Barry Rowlingson
 }
-

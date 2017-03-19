@@ -25,9 +25,9 @@ Generate nearest point on the route network of a point using the CycleStreets.ne
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
 }
+
 \examples{
 \dontrun{
  nearest_cyclestreets(lat = 53, lng = 0.02, google_api = "api_key_here")
 }
 }
-

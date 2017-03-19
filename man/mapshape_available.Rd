@@ -14,4 +14,3 @@ mapshaper is available.
 \examples{
 mapshape_available()
 }
-

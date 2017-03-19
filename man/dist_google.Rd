@@ -33,6 +33,7 @@ Return travel network distances and time using the Google Maps API
 Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
 Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
 }
+
 \examples{
 \dontrun{
  # Distances from one origin to one destination
@@ -61,4 +62,3 @@ Note: Currently returns the json object returned by the Google Maps API and uses
   format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"))
 }
 }
-

@@ -21,4 +21,3 @@ rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 summary(SLN)
 }
-

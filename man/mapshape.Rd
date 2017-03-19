@@ -42,6 +42,7 @@ mapshaper must be installed and available to \code{\link{system}}.
 \code{mapshape} writes new a file to disk.
 Thanks to Richard and Adrian Ellison for demonstrating this in R.
 }
+
 \examples{
 \dontrun{
 data(routes_fast)
@@ -62,4 +63,3 @@ plot(rfs_int, add = TRUE)
 \seealso{
 \code{\link[rgeos]{gSimplify}}
 }
-

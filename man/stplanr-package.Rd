@@ -2,8 +2,8 @@
 % Please edit documentation in R/stplanr-package.R
 \docType{package}
 \name{stplanr-package}
-\alias{stplanr}
 \alias{stplanr-package}
+\alias{stplanr}
 \title{\strong{stplanr: Sustainable Transport Planning with R}}
 \description{
 The stplanr package provides functions to access
@@ -18,11 +18,11 @@ route allocation and modelling travel patterns.
  \item \code{\link{route_cyclestreet}} - Finds the fastest routes for cyclists between two places.
 }
 }
-\author{
-Robin Lovelace \email{rob00x@gmail.com}
-}
+
 \seealso{
 \url{https://github.com/ropensci/stplanr}
 }
+\author{
+Robin Lovelace \email{rob00x@gmail.com}
+}
 \keyword{package}
-

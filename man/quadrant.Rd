@@ -29,4 +29,3 @@ sp_obj = raster::rasterToPolygons(raster::raster(ncol = 3, nrow = 3))
 (quads = quadrant(sp_obj))
 plot(sp_obj, col = factor(quads))
 }
-

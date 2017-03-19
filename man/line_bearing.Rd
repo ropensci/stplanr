@@ -26,4 +26,3 @@ b1 <- line_bearing(flowlines)
 b2 <- line_bearing(flowlines, bidirectional = TRUE)
 plot(b1, b2)
 }
-

@@ -106,4 +106,3 @@ route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 \seealso{
 line2route
 }
-

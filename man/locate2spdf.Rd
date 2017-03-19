@@ -24,6 +24,7 @@ Return SpatialPointsDataFrame with located points from OSRM locate service
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions using OSRM API v4 only. For API v5, use nearest_osm.
 }
+
 \examples{
 \dontrun{
  locate2spdf(
@@ -33,4 +34,3 @@ passed to functions using OSRM API v4 only. For API v5, use nearest_osm.
 }
 
 }
-

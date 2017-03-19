@@ -34,4 +34,3 @@ identical(l2matched, l2matched2)
 # decreasing the match likelihood via the threshold
 line_match(l1, l2, threshold = 0.003)
 }
-

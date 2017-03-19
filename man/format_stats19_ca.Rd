@@ -16,9 +16,9 @@ Format UK 'Stats19' road traffic casualty data
 
 This is a helper function to format raw stats19 data
 }
+
 \examples{
 \dontrun{
 ca <- format_stats19_ca(ca)
 }
 }
-

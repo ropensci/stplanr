@@ -12,8 +12,7 @@ sum_network_links(sln, routedata)
 \item{routedata}{A dataframe where the first column contains the Node ID(s)
 of the start of the routes, the second column indicates the Node ID(s) of
 the end of the routes, and any additional columns are summarised by link.
-If there are no additional colums, then a value of "1" is used for all
-routes.}
+If there are no additional colums, then overlapping routes are counted.}
 }
 \description{
 Summarise links from shortest paths data
@@ -24,14 +23,19 @@ Find the shortest path on the network between specified nodes and returns
 a SpatialLinesdataFrame containing the path(s) and summary statistics of
 each one.
 }
+
 \examples{
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 weightfield(SLN) # field used to determine shortest path
-shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
-plot(shortpath, col = "red", lwd = 4)
-plot(SLN, add = TRUE)
+shortpath <- sum_network_links(
+    SLN,
+    data.frame(
+        start=rep(c(1,2,3,4,5),each=4),
+        end=rep(c(50,51,52,33),times=5)
+    )
+)
+plot(shortpath, lwd=shortpath$count)
 
 }
-

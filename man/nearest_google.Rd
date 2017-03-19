@@ -24,9 +24,9 @@ Generate nearest point on the route network of a point using the Google Maps API
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
 }
+
 \examples{
 \dontrun{
  nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
 }
 }
-

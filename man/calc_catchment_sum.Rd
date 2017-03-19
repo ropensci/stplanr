@@ -56,6 +56,7 @@ zones. Assumes that the frequency of the variable is evenly distributed
 throughout the zone. Returns either a single value if calccols is of
 length = 1, or a named vector otherwise.
 }
+
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
@@ -80,4 +81,3 @@ projection = 'austalbers'
 )
 }
 }
-

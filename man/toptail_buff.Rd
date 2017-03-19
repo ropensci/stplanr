@@ -29,4 +29,3 @@ plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
 plot(rf_cross_poly, add = TRUE, lwd = 2)
 plot(r_toptail, col = "red", add = TRUE)
 }
-

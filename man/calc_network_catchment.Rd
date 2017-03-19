@@ -66,6 +66,7 @@ from variables available in a SpatialPolygonsDataFrame with census tracts
 or other zones. Assumes that the frequency of the variable is evenly
 distributed throughout the zone. Returns a SpatialPolygonsDataFrame.
 }
+
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
@@ -88,4 +89,3 @@ calc_network_catchment(
 )
 }
 }
-

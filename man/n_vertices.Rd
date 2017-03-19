@@ -20,4 +20,3 @@ See \url{http://gis.stackexchange.com/questions/58147/} for more information.
 data(routes_fast)
 n_vertices(routes_fast)
 }
-

@@ -28,4 +28,3 @@ points(cents)
 
 }
 \keyword{datasets}
-

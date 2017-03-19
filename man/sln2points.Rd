@@ -20,4 +20,3 @@ SLN <- SpatialLinesNetwork(rnet)
 plot(SLN)
 plot(sln_nodes, add = TRUE)
 }
-

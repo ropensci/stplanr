@@ -17,8 +17,4 @@ SpatialLinesDataFrame representing a route network
 route_network = overline(routes_fast, "All", fun = sum)
 }
 }
-\seealso{
-Other res: \code{\link{routes_slow}}
-}
 \keyword{datasets}
-

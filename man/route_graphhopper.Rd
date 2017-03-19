@@ -68,4 +68,3 @@ plot(r)
 \seealso{
 route_cyclestreet
 }
-

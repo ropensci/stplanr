@@ -56,4 +56,3 @@ plot(rq_hfd)
 \seealso{
 line2route
 }
-

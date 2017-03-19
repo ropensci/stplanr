@@ -40,6 +40,7 @@ Aggregate SpatialPolygonsDataFrame to new geometry.
 This function performs aggregation on a SpatialPolygonsDataFrame to a
 different geometry specified by another SpatialPolygons object.
 }
+
 \examples{
 data(flow)
 data(zones)
@@ -53,4 +54,3 @@ zones@data$region <- NULL
 zones@data$exdata <- 5
 sp_aggregate(zones, aggzones)
 }
-

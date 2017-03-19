@@ -31,4 +31,3 @@ line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 plot(line_length, rf_projected$length)
 cor(line_length, rf_projected$length)
 }
-

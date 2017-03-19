@@ -23,4 +23,3 @@ p = line2points(routes_fast)
 l = points2line(p)
 plot(l)
 }
-

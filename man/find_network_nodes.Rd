@@ -36,10 +36,10 @@ Find graph node ID of closest node to given coordinates
 Finds the node ID of the closest point to a single coordinate pair (or a
 set of coordinates) from a SpatialLinesNetwork.
 }
+
 \examples{
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 find_network_nodes(SLN, -1.516734, 53.828)
 }
-

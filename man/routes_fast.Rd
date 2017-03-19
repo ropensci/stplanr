@@ -15,4 +15,3 @@ objects
 with \code{\link{od2line}} (see \code{\link{flow}}).
 }
 \keyword{datasets}
-

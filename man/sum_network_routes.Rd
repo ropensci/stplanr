@@ -30,6 +30,7 @@ Find the shortest path on the network between specified nodes and returns
 a SpatialLinesdataFrame containing the path(s) and summary statistics of
 each one.
 }
+
 \examples{
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
@@ -40,4 +41,3 @@ plot(shortpath, col = "red", lwd = 4)
 plot(SLN, add = TRUE)
 
 }
-

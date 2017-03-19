@@ -2,8 +2,10 @@
 % Please edit documentation in R/oneway.R
 \name{onewayid}
 \alias{onewayid}
-\alias{onewayid.SpatialLines}
+\alias{onewayid}
 \alias{onewayid.data.frame}
+\alias{onewayid}
+\alias{onewayid.SpatialLines}
 \title{Aggregate ods so they become non-directional}
 \usage{
 onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
@@ -78,4 +80,3 @@ sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
 plot(flowlines[which(f_over_n)[1],], add = TRUE, col = "white", lwd = 10)
 plot(flowlines[which(f_over_n)[2],], add = TRUE, lwd = 5)
 }
-
