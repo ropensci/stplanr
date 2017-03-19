@@ -69,7 +69,7 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
   gdata = coord_matches(sl, tolerance)
   s = gdata$s
   g = igraph::graph(gdata$pts0, directed = FALSE)  # edges
-  nodes = s[gdata$upts, ]
+  nodes = s[gdata$upts + 1, ]
   g$x = nodes[, 1]  # x-coordinate vertex
   g$y = nodes[, 2]  # y-coordinate vertex
   g$n = as.vector(table(gdata$pts0))  # nr of edges
