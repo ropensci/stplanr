@@ -15,15 +15,3 @@ Divides SpatialLinesDataFrame objects into separate Lines.
 Each new Lines object is the aggregate of a single number
 of aggregated lines.
 }
-\examples{
-\dontrun{
-data(routes_fast)
-rsec <- gsection(routes_fast)
-plot(routes_fast)
-lines(rsec, col = "red", lwd = 3)
-length(rsec)
-set.seed(5)
-sel <- sample(length(rsec), 20)
-plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
-}
-}
