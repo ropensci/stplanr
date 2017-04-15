@@ -263,3 +263,22 @@ NULL
 #' ca_local = ca_sp[bb,]
 #' }
 NULL
+
+#' Line polygon
+#'
+#' This dataset represents road width for testing.
+#' @docType data
+#' @keywords datasets
+#' @name l_poly
+#' @usage data(l_poly)
+#' @format A SpatialPolygon
+#'
+#' @examples \dontrun{
+#' l = routes_fast[13,]
+#' l_poly = buff_geo(l, 8)
+#' plot(l_poly)
+#' plot(routes_fast, add = TRUE)
+#' # allocate road width to relevant line
+#' devtools::use_data(l_poly)
+#' }
+NULL
