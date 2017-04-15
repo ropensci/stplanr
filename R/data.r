@@ -267,6 +267,11 @@ NULL
 #' Line polygon
 #'
 #' This dataset represents road width for testing.
+#' @docType data
+#' @keywords datasets
+#' @name l_poly
+#' @usage data(l_poly)
+#' @format A SpatialPolygon
 #'
 #' @examples \dontrun{
 #' l = routes_fast[13,]
@@ -276,3 +281,4 @@ NULL
 #' # allocate road width to relevant line
 #' devtools::use_data(l_poly)
 #' }
+NULL
