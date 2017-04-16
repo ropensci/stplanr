@@ -21,21 +21,21 @@ reproducible and flexible transport planning workflow. We conclude with
 a brief discussion of desirable directions of future development.
 }
 
-\subsection{Note}\label{note}
-
-This vignette is under peer review and was submitted in pdf form to the
-\href{https://journal.r-project.org/}{R Journal}. Please see its
-\href{https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd}{source
-code} for comments and suggestions.
-
 \section{Introduction}\label{introduction}
 
-Transport planning is a diverse field requiring a wide range of
-computational tasks \citep{boyce_forecasting_2015}. Software in the
-transport planner's toolkit should be flexible, able to handle a wide
-range of data formats; robust, able to generate reproducible results for
-transparent decision-making; and scalable, able to work at multiple
-geographic levels from single streets to large cities and regions.
+The practice of transport planning can been defined as
+"preparing, assessing and implementing policies, plans and projects to
+improve and manage our transport systems"
+\citep{jones_road_2014}.
+Clearly this will involve some judgements based on intuition, experience and political considerations.
+However, with the push for measurable improvements in terms of `sustainability' (e.g. reduced energy use),
+the pressure on transport planners to adopt scientific methods, including computating, has grown
+\citep{balmer_matsim-t:_2009}.
+Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}.
+Software for transport planning should therefore be:
+flexible, able to handle a wide range of data formats;
+robust, able to generate reproducible results for transparent decision-making;
+and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
 
 R can provide a solid basis for a transport planning workflow that meets
 each of these criteria. Packages such as \CRANpkg{sp}
