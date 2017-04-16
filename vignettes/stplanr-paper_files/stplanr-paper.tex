@@ -641,15 +641,17 @@ cycleways aligned to streets in Sydney. The code below unzips the
 datasets and reads in the shapefiles using the \texttt{readOGR} function
 of \CRANpkg{rgdal}.
 
-\textbackslash{}begin\{Schunk\} \textbackslash{}begin\{Sinput\}
-data\_dir \textless{}- system.file(``extdata'', package = ``stplanr'')
-unzip(file.path(data\_dir, `smallsa1.zip')) unzip(file.path(data\_dir,
-`testcycleway.zip')) sa1income \textless{}- rgdal::readOGR(``.'',
-``smallsa1'') testcycleway \textless{}- rgdal::readOGR(``.'',
-``testcycleway'') \# Remove unzipped files
-file.remove(list.files(pattern =
-``\^{}(smallsa1\textbar{}testcycleway).*``))
-\textbackslash{}end\{Sinput\} \textbackslash{}end\{Schunk\}
+\begin{Schunk}
+\begin{Sinput}
+data_dir <- system.file("extdata", package = "stplanr")
+unzip(file.path(data_dir, 'smallsa1.zip'))
+unzip(file.path(data_dir, 'testcycleway.zip'))
+sa1income <- rgdal::readOGR(".", "smallsa1")
+testcycleway <- rgdal::readOGR(".", "testcycleway")
+# Remove unzipped files
+file.remove(list.files(pattern = "^(smallsa1|testcycleway).*"))
+\end{Sinput}
+\end{Schunk}
 
 Calculating the catchment area is straightforward and in addition to
 specifying the required datasets, only a vector containing column names
@@ -713,12 +715,14 @@ Preparation of the dataset involves using the
 network is used to calculate the shortest actual paths within the
 specific catchment distance. This process involves the following code:
 
-\textbackslash{}begin\{Schunk\} \textbackslash{}begin\{Sinput\}
-unzip(file.path(data\_dir, `sydroads.zip')) sydroads \textless{}-
-rgdal::readOGR(``.'', ``roads'') file.remove(list.files(pattern =
-``\^{}(roads).*``)) sydnetwork \textless{}-
-SpatialLinesNetwork(sydroads) \textbackslash{}end\{Sinput\}
-\textbackslash{}end\{Schunk\}
+\begin{Schunk}
+\begin{Sinput}
+unzip(file.path(data_dir, 'sydroads.zip'))
+sydroads <- rgdal::readOGR(".", "roads")
+file.remove(list.files(pattern = "^(roads).*"))
+sydnetwork <- SpatialLinesNetwork(sydroads)
+\end{Sinput}
+\end{Schunk}
 
 The network catchment is then calculated using a similar method as with
 \texttt{calc\_catchment} but with a few minor changes. Specifically
@@ -901,15 +905,14 @@ options we test below just two forms. We will compare the ability of
 linear and log-square-root functions to fit the data contained in
 \texttt{l} for walking.
 
-\textbackslash{}begin\{Schunk\} \textbackslash{}begin\{Sinput\} lm1
-\textless{}- lm(pwalk \textasciitilde{} d\_euclidean, data =
-\href{mailto:l@data}{\nolinkurl{l@data}}, weights = All) lm2
-\textless{}- lm(pwalk \textasciitilde{} d\_rf, data =
-\href{mailto:l@data}{\nolinkurl{l@data}}, weights = All) lm3
-\textless{}- glm(pwalk \textasciitilde{} d\_rf + I(d\_rf\^{}0.5), data =
-\href{mailto:l@data}{\nolinkurl{l@data}}, weights = All, family =
-quasipoisson(link = ``log'')) \textbackslash{}end\{Sinput\}
-\textbackslash{}end\{Schunk\}
+\begin{Schunk}
+\begin{Sinput}
+lm1 <- lm(pwalk ~ d_euclidean, data = l@data, weights = All)
+lm2 <- lm(pwalk ~ d_rf, data = l@data, weights = All)
+lm3 <- glm(pwalk ~ d_rf + I(d_rf^0.5),
+           data = l@data, weights = All, family = quasipoisson(link = "log"))
+\end{Sinput}
+\end{Schunk}
 
 The results of these regression models can be seen using
 \texttt{summary()}. Surprisingly, Euclidean distance was a better
