@@ -16,11 +16,9 @@ author:
 abstract: >
   Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analysis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
   
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{stplanr A Package for Transport Planning}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  rticles::rjournal_article:
+    keep_tex: yes
 ---
 
 ```{r, echo=FALSE}
