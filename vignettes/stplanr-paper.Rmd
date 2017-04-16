@@ -25,13 +25,20 @@ output:
 knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 ```
 
-## Note
+<!-- ## Note -->
 
-This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions.
+<!-- This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions. -->
 
 # Introduction
 
-Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software in the transport planner's toolkit should be flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
+The practice of transport planning can been defined as
+"preparing, assessing and implementing policies, plans and projects to improve and manage our transport systems"
+\citep{jones_road_2014}.
+Clearly this will involve some judgements based on intuition, experience and political considerations.
+However, with the push for measurable improvements in terms of `sustainability' (e.g. reduced energy use),
+the pressure on transport planners to adopt scientific methods, including computating, has grown 
+\citep{balmer_matsim-t:_2009}.
+Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software for transport planning should therefore be: flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
 
 R can provide a solid basis for a transport planning workflow that meets each of these criteria. Packages such as \CRANpkg{sp} \citep{pebesma_classes_2005} and \CRANpkg{rgeos} \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and modelling capabilities \citep{bivand_applied_2013}. Packages building on the **sp** class system have been developed for specific domains, including \CRANpkg{SpatialEpi} \citep{kim_spatialepi:_2016}, \CRANpkg{diseasemapping} \citep{brown_diseasemapping:_2016} and the **adehabitat** family of packages \citep{calenge_package_2006}.
 
