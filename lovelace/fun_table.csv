@@ -1,0 +1,7 @@
+Function,Input data type(s),Output data type
+od_dist,Data frame,Numeric vector
+od_id_order,Data frame,Data frame
+line_bearing,Spatial line,Numeric vector
+line_midpoint,Spatial line,Spatial points
+route_cyclestreet,"Coordinates, spatial point or text",Spatial lines
+route_graphhopper,"Coordinates, spatial point or text",Spatial lines
