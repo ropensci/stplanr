@@ -79,9 +79,10 @@ r = route_cyclestreet("Leeds, UK", "Manchester")
 mapview(r)
 ```
 
-```{r, fig.cap="The route to GISRUK.", echo=FALSE, out.width="100%"}
-knitr::include_graphics("leeds-to-man.png")
-```
+<!-- ```{r, fig.cap="The route to GISRUK.", echo=FALSE, out.width="100%"} -->
+<!-- download.file("https://cloud.githubusercontent.com/assets/1825120/25223541/8ef633d0-25b3-11e7-920a-933e2ba5b83f.png", "leeds-to-man.png") -->
+<!-- knitr::include_graphics("leeds-to-man.png") -->
+<!-- ``` -->
 
 # Use in policy
 
@@ -89,11 +90,11 @@ knitr::include_graphics("leeds-to-man.png")
 This is the UK's first open source, publicly accessible transport model that provides results at area, line and route network levels.
 The PCT estimates cycling potential along all major cyclable roads in England (Figure 4).
 
-```{r, fig.cap="The Propensity to Cycle Tool in action. This shows the shift in cycling uptake in Leeds from a 'Go Dutch' scenario", echo=FALSE, out.width="100%"}
-download.file("https://github.com/npct/pct/blob/master/flow-model/leeds-rnet-gov-go.png?raw=true", destfile = "leeds-rnet-gov-go.png")
-knitr::include_graphics("leeds-rnet-gov-go.png")
-
-```
+<!-- ```{r, fig.cap="The Propensity to Cycle Tool in action. This shows the shift in cycling uptake in Leeds from a 'Go Dutch' scenario", echo=FALSE, out.width="100%"} -->
+<!-- download.file("https://github.com/npct/pct/blob/master/flow-model/leeds-rnet-gov-go.png?raw=true", destfile = "leeds-rnet-gov-go.png") -->
+<!-- knitr::include_graphics("leeds-rnet-gov-go.png") -->
+<!-- file.remove("leeds-rnet-gov-go.png") -->
+<!-- ``` -->
 
 
 
