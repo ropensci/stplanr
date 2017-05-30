@@ -22,7 +22,15 @@ Depends:
     sp,
     R (>= 3.0)
 Imports:
-    tidyverse,
+    curl,
+    readr,
+    dplyr,
+    httr,
+    jsonlite,
+    stringi,
+    stringr,
+    foreach,
+    lubridate,
     maptools,
     raster,
     rgdal,

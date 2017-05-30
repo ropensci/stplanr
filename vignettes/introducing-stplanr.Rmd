@@ -122,8 +122,7 @@ desire_line_single = od2line(flow = flow_single_line, zones = cents)
 This can be plotted as follows:
 
 ```{r}
-map +
-  qtm(desire_line_single, lines.lwd = 5)
+qtm(desire_line_single, lines.lwd = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
@@ -137,22 +136,19 @@ l = l[! l$Area.of.residence == l$Area.of.workplace,]
 This creates the geographic data object `l`, which can be visualised as follows:
 
 ```{r, eval=FALSE}
-map +
-  qtm(l)
+qtm(l)
 ```
 
 Now the data is set-up, we can change the visual appearance of the desire lines with a single extra argument passed to the plotting function. Let's make width depend on the total number of people travelling along the desire line:
 
 ```{r}
-map +
-  qtm(l, lines.lwd = "All", scale = 10)
+qtm(l, lines.lwd = "All", scale = 10)
 ```
 
 Another useful visulisation involves setting the colour relative to the number of people cycling:
 
 ```{r}
-map +
-  tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
 Finally, we can convert these desire lines into routes as follows:
@@ -171,8 +167,7 @@ These routes contain the same information on origin and destination, but have ad
 
 ```{r}
 r@data = cbind(r@data, l@data)
-map +
-  tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
 The next stage is to aggregate these lines together to create a 'route network'.
