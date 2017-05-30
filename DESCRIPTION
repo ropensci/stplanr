@@ -22,26 +22,19 @@ Depends:
     sp,
     R (>= 3.0)
 Imports:
-    jsonlite,
+    tidyverse,
     maptools,
     raster,
     rgdal,
     rgeos,
-    dplyr,
     RgoogleMaps,
     openxlsx,
     methods,
-    httr,
     R.utils,
-    stringi,
-    stringr,
-    readr,
-    lubridate,
     geosphere,
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    foreach,
     doParallel
 LinkingTo:
     RcppArmadillo,
