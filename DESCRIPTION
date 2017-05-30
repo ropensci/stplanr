@@ -50,8 +50,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    tmap,
-    tmaptools,
     OpenStreetMap,
     leaflet
 VignetteBuilder: knitr
