@@ -470,9 +470,9 @@ sum_network_links <- function(sln, routedata) {
       routedata,
       by=c("stplanr_start"=colnames(routedata)[1], "stplanr_end"=colnames(routedata)[2])
     ) %>%
-    dplyr::select(-stplanr_start,-stplanr_end) %>%
+    dplyr::select(-stplanr_start, -stplanr_end) %>%
     dplyr::group_by(stplanr_linkid) %>%
-    dplyr::summarise_each(c("sum")) %>%
+    dplyr::summarise_all(.funs = c("sum")) %>%
     dplyr::ungroup()
 
   sln@sl@data$stplanr_linkid <- 1:nrow(sln@sl@data)

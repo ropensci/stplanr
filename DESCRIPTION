@@ -1,8 +1,8 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.7-3
-Date: 2017-01-06
+Version: 0.1.8
+Date: 2017-05-30
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
@@ -22,26 +22,27 @@ Depends:
     sp,
     R (>= 3.0)
 Imports:
+    curl,
+    readr,
+    dplyr,
+    httr,
     jsonlite,
+    stringi,
+    stringr,
+    foreach,
+    lubridate,
     maptools,
     raster,
     rgdal,
     rgeos,
-    dplyr,
     RgoogleMaps,
     openxlsx,
     methods,
-    httr,
     R.utils,
-    stringi,
-    stringr,
-    readr,
-    lubridate,
     geosphere,
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    foreach,
     doParallel
 LinkingTo:
     RcppArmadillo,
@@ -50,10 +51,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    tmap,
-    tmaptools,
-    OpenStreetMap,
-    leaflet
+    tmap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make

@@ -19,24 +19,17 @@
 #'
 #' @import sp
 #' @import rgdal
-#' @import httr
-#' @import readr
-#' @import dplyr
 #' @import foreach
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
-#' @importFrom lubridate dmy hm wday
 #' @importFrom graphics text
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv
 #' @importFrom openxlsx readWorkbook
 #' @importFrom RgoogleMaps getGeoCode
-#' @importFrom jsonlite fromJSON
 #' @importFrom raster extent crop
-#' @importFrom stringi stri_enc_toutf32
 #' @importFrom R.utils intToBin
 #' @importFrom geosphere distHaversine
-#' @importFrom stringr str_split
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
 #' @importFrom methods is new
