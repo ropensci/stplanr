@@ -35,7 +35,6 @@ Imports:
     raster,
     rgdal,
     rgeos,
-    RgoogleMaps,
     openxlsx,
     methods,
     R.utils,
