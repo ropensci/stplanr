@@ -47,7 +47,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README-plot1-1.png)
+![](vignettes/README-plot1-1.png)
 
 The package can also allocate flows to the road network, for example through a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
 
@@ -67,7 +67,7 @@ if(!Sys.getenv("CYCLESTREET") == ""){
 }
 ```
 
-![](README-cycle-trip-1.png)
+![](vignettes/README-cycle-trip-1.png)
 
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
@@ -82,7 +82,7 @@ if(Sys.getenv("CYCLESTREET") == ""){
 plot(t_routes)
 ```
 
-![](README-plot2-1.png)
+![](vignettes/README-plot2-1.png)
 
 Another way to visualise this is with the leaflet package:
 
@@ -104,7 +104,7 @@ plot(rnet, lwd = lwd)
 points(cents)
 ```
 
-![](README-rnet-1.png)
+![](vignettes/README-rnet-1.png)
 
 Installation
 ------------
@@ -162,7 +162,7 @@ dg <- miniCRAN::makeDepGraph("stplanr")
 plot(dg)
 ```
 
-![](README-unnamed-chunk-11-1.png)
+![](vignettes/README-unnamed-chunk-11-1.png)
 
 Meta
 ----
@@ -172,4 +172,4 @@ Meta
 -   Get citation information for `stplanr` in R doing `citation(package = 'stplanr')`
 -   This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+<!-- [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org) -->
