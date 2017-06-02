@@ -24,7 +24,7 @@
 #' @importFrom graphics text
 #' @importFrom methods as slot
 #' @importFrom stats setNames
-#' @importFrom utils read.csv URLencode
+#' @importFrom utils read.csv
 #' @importFrom openxlsx readWorkbook
 #' @importFrom RgoogleMaps getGeoCode
 #' @importFrom raster extent crop
