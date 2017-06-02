@@ -104,9 +104,9 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from))
-    from <- rev(geo_code(from))
+    from <- geo_code(from)
   if(is.character(to))
-    to <- rev(geo_code(to))
+    to <- geo_code(to)
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
@@ -244,8 +244,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
-    from <- rev(geo_code(from))
-    to <- rev(geo_code(to))
+    from <- geo_code(from)
+    to <- geo_code(to)
   }
 
   if(is.null(pat))

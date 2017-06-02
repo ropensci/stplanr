@@ -57,9 +57,9 @@ route_transportapi_public <- function(from, to, silent = FALSE,
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from))
-    from <- rev(geo_code(from))
+    from <- geo_code(from)
   if(is.character(to))
-    to <- rev(geo_code(to))
+    to <- geo_code(to)
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")

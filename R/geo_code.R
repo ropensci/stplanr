@@ -20,8 +20,8 @@ geo_code = function(address,
   res <- jsonlite::fromJSON(u)
   res_df <- jsonlite::flatten(res$results)
   lat_lon <- c(
-    lat = res_df$geometry.location.lat,
-    lon = res_df$geometry.location.lng
+    lon = res_df$geometry.location.lng,
+    lat = res_df$geometry.location.lat
     )
 
   if(return_all) {
