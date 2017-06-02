@@ -220,7 +220,7 @@ setMethod("summary", signature = c(object="SpatialLinesNetwork"),
 #' a dataframe or matrix with (at least) two columns, the first for coordinate
 #' for x (longitude) values and a second for y (latitude) values, or a named
 #' vector of length two with values of 'lat' and 'lon'. The output of
-#' RgoogleMaps::getGeoCode() either as a single result or as multiple (using
+#' geo_code() either as a single result or as multiple (using
 #' rbind() ) can also be used.
 #' @param y Either the y (latitude) coordinate value or a vector of y values.
 #' @param maxdist The maximum distance within which to match the nodes to
