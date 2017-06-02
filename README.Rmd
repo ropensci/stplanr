@@ -82,7 +82,7 @@ and place names, found using the Google Map API:
 
 ```{r cycle-trip, message=FALSE, warning=FALSE}
 if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("Bradford", "Leeds", plan = "balanced")
+  trip <- route_cyclestreet("Bradford, UK", "Leeds, UK", plan = "balanced")
   plot(trip)
 }
 ```
