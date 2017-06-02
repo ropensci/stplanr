@@ -103,7 +103,7 @@ arma::mat join_spatiallines_coords(SEXP sldf, double startx, double starty) {
   double prevx = startx;
   double prevy = starty;
 
-  for (unsigned int i = 0; i < lines.length(); i++) {
+  for (int i = 0; i < lines.length(); i++) {
     List Lines = Rcpp::S4(lines(i)).slot("Lines");
     arma::mat thiscoords = as<arma::mat>(Rcpp::S4(Lines(0)).slot("coords"));
     if (thiscoords(0,0) == prevx && thiscoords(0,1) == prevy) {
