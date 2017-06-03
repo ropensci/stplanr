@@ -19,7 +19,7 @@
 #' crs <- CRS("+init=epsg:4326")
 #' crsuk <- CRS("+init=epsg:27700")
 #' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
-#' home <- rev(RgoogleMaps::getGeoCode("LS7 3HB"))
+#' home <- geo_code("LS7 3HB")
 #' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
 #' home <- sp::spTransform(x = home, CRSobj = crsuk)
 #' buf <- rgeos::gBuffer(home, width = 2000)

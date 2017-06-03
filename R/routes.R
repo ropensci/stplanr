@@ -30,7 +30,7 @@
 #'
 #' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
+#' geo-coding services are used via \code{geo_code()}.
 #'
 #' You need to have an api key for this code to run.
 #' Loading a locally saved copy of the api key text string
@@ -104,9 +104,9 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from))
-    from <- rev(RgoogleMaps::getGeoCode(from))
+    from <- geo_code(from)
   if(is.character(to))
-    to <- rev(RgoogleMaps::getGeoCode(to))
+    to <- geo_code(to)
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
@@ -244,8 +244,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from) | is.character(to)){
-    from <- rev(RgoogleMaps::getGeoCode(from))
-    to <- rev(RgoogleMaps::getGeoCode(to))
+    from <- geo_code(from)
+    to <- geo_code(to)
   }
 
   if(is.null(pat))

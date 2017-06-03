@@ -1,8 +1,7 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.8
-Date: 2017-06-02
+Version: 0.1.8.9000
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
@@ -35,7 +34,6 @@ Imports:
     raster,
     rgdal,
     rgeos,
-    RgoogleMaps,
     openxlsx,
     methods,
     R.utils,
