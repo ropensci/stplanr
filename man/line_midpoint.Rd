@@ -17,4 +17,3 @@ of lines that are not projected, which have a lat/long CRS.
 data(routes_fast)
 line_midpoint(routes_fast[2:5,])
 }
-

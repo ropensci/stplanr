@@ -2,6 +2,7 @@
 % Please edit documentation in R/od-funs.R
 \name{line2points}
 \alias{line2points}
+\alias{line2points}
 \alias{line2pointsn}
 \title{Convert a SpatialLinesDataFrame to points}
 \usage{
@@ -34,4 +35,3 @@ j = (2*i):((2*i)+1)
 plot(flowlines[i,])
 plot(lpoints[j,], add = TRUE)
 }
-

@@ -14,4 +14,3 @@ line_length(l, byid = TRUE)
 \description{
 Calculate length of lines in geographic CRS
 }
-

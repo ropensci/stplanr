@@ -27,4 +27,3 @@ sel <- sample(length(rsec), 20)
 plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
 }
 }
-

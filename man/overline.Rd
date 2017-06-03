@@ -55,12 +55,11 @@ plot(rnet_grouped, col = rnet_grouped$group, lwd =
   rnet_grouped$length / mean(rnet_grouped$length) * 3)
 }
 }
-\author{
-Barry Rowlingson
-}
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
  overlapping segments. Reproducible question from
  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
-
+\author{
+Barry Rowlingson
+}

@@ -39,4 +39,3 @@ plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
 \author{
 Robin Lovelace and Malcolm Morgan
 }
-

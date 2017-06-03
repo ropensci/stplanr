@@ -24,4 +24,3 @@ devtools::use_data(flow_dests)
 
 }
 \keyword{datasets}
-

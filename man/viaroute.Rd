@@ -57,6 +57,7 @@ Constructs the query URL used with the OSRM HTTP API and returns a string
 or vector of strings with the json-encoded results. Can be used in
 conjunction with the viaroute2sldf function.
 }
+
 \examples{
 \dontrun{
   exroutes <- viaroute(50, 0, 51, 1)
@@ -67,4 +68,3 @@ conjunction with the viaroute2sldf function.
   plot(r)
 }
 }
-

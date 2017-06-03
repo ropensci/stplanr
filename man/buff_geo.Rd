@@ -38,4 +38,3 @@ buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
 plot(buff)
 plot(buff3, add = TRUE, col = "black")
 }
-

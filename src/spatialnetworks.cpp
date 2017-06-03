@@ -6,7 +6,7 @@ using namespace Rcpp;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export]]
-List coord_matches(SEXP sldf) {
+List coord_matches(SEXP sldf, double tolval = 0.000) {
 
   Rcpp::S4 xlines(sldf);
   List lines = xlines.slot("lines");
@@ -45,7 +45,7 @@ List coord_matches(SEXP sldf) {
    curid = sortedx(0,2);
   unsigned int curmatches = 0;
   for (unsigned int i = 1; i < sortedx.n_rows; i++) {
-    if (sortedx(i,0) == curlat && sortedx(i,1) == curlng) {
+    if (std::abs(sortedx(i,0) - curlat) <= tolval && std::abs(sortedx(i,1) - curlng) <= tolval) {
       matchedcoords(curmatches,0) = curid;
       matchedcoords(curmatches,1) = sortedx(i,2);
       curmatches += 1;
@@ -68,7 +68,7 @@ List coord_matches(SEXP sldf) {
   arma::uvec upts = unique(pts);
   arma::uvec pts0(pts.n_rows);
   for (unsigned int i = 0; i < pts.n_rows; i++) {
-    pts0(i) = arma::uvec(find(upts == pts(i),1))(0)+1;
+    pts0(i) = arma::uvec(find(abs(upts - pts(i)) <= tolval,1))(0)+1;
   }
   pts = pts+1;
 
@@ -103,7 +103,7 @@ arma::mat join_spatiallines_coords(SEXP sldf, double startx, double starty) {
   double prevx = startx;
   double prevy = starty;
 
-  for (unsigned int i = 0; i < lines.length(); i++) {
+  for (int i = 0; i < lines.length(); i++) {
     List Lines = Rcpp::S4(lines(i)).slot("Lines");
     arma::mat thiscoords = as<arma::mat>(Rcpp::S4(Lines(0)).slot("coords"));
     if (thiscoords(0,0) == prevx && thiscoords(0,1) == prevy) {

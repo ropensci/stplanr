@@ -13,4 +13,3 @@ Flow data after conversion to a spatial format
 with \code{\link{od2line}} (see \code{\link{flow}}).
 }
 \keyword{datasets}
-

@@ -25,9 +25,9 @@ An implementation of the Google Maps Encoded Polyline Algorithm for decoding
 strings. Returns a dataframe if polyline is of length 1 and a list of
 dataframes otherwise.
 }
+
 \examples{
 \dontrun{
  decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@", precision = 5)
 }
 }
-

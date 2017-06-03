@@ -170,7 +170,7 @@ od2line2 <- function(flow, zones){
 line2df <- function(l){
   ldf_geom = raster::geom(l)
   dplyr::group_by_(dplyr::as_data_frame(ldf_geom), 'object') %>%
-    summarise_(fx = quote(first(x)), fy = quote(first(y)), tx = quote(last(x)), ty = quote(last(y)))
+    dplyr::summarise_(fx = quote(first(x)), fy = quote(first(y)), tx = quote(last(x)), ty = quote(last(y)))
 }
 
 #' Convert a SpatialLinesDataFrame to points
@@ -245,7 +245,8 @@ line2pointsn <- function(l){
 #' @export
 #' @examples
 #' \dontrun{
-#' data(flowlines)
+#' l = flowlines[2,]
+#' line2route(l)
 #' l = flowlines[2:5,]
 #' rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = l, plan = "quietest", silent = TRUE)

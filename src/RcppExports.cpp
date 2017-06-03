@@ -7,13 +7,14 @@
 using namespace Rcpp;
 
 // coord_matches
-List coord_matches(SEXP sldf);
-RcppExport SEXP stplanr_coord_matches(SEXP sldfSEXP) {
+List coord_matches(SEXP sldf, double tolval);
+RcppExport SEXP stplanr_coord_matches(SEXP sldfSEXP, SEXP tolvalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type sldf(sldfSEXP);
-    rcpp_result_gen = Rcpp::wrap(coord_matches(sldf));
+    Rcpp::traits::input_parameter< double >::type tolval(tolvalSEXP);
+    rcpp_result_gen = Rcpp::wrap(coord_matches(sldf, tolval));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -29,4 +30,15 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(join_spatiallines_coords(sldf, startx, starty));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"stplanr_coord_matches", (DL_FUNC) &stplanr_coord_matches, 2},
+    {"stplanr_join_spatiallines_coords", (DL_FUNC) &stplanr_join_spatiallines_coords, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_stplanr(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

@@ -42,4 +42,3 @@ lines(singlelines) # check we've got the right lines
 sum(singlelines$All)
 nrow(singlelines)
 }
-

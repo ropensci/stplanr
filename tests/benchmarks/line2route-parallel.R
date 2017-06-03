@@ -6,7 +6,7 @@ ii = round(n / nrow(flowlines))
 for(i in 1:ii) {
   if(i == 1)
     l = flowlines else
-      l = tmap::sbind(l, flowlines)
+      l = rbind(l, flowlines)
 }
 
 devtools::install_github(repo = "ropensci/stplanr", ref = "9837766")

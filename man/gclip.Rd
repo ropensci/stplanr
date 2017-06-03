@@ -32,4 +32,3 @@ clipped$avslope # gclip also returns the data attribute
 points(clipped)
 points(cents[cb,], col = "red") # note difference
 }
-

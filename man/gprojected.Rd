@@ -30,4 +30,3 @@ plot(rbuf)
 raster::crs(rbuf)
 plot(routes_fast, col = "green", add = TRUE)
 }
-

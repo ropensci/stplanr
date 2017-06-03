@@ -19,4 +19,3 @@ api_pat(api_name = "cyclestreet")
 }
 }
 \keyword{internal}
-

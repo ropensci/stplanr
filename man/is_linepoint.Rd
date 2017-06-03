@@ -26,4 +26,3 @@ sum(islp)
 # Remove invisible 'linepoints'
 nrow(flowlines[!islp,])
 }
-

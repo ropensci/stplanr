@@ -8,12 +8,13 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "vignettes/README-"
 )
 ```
 
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+[![codecov.io](https://codecov.io/github/ropensci/stplanr/coverage.svg?branch=master)](https://codecov.io/github/ropensci/stplanr?branch=master)
 
 ```{r, echo=FALSE, message=FALSE}
 library(stplanr)
@@ -81,7 +82,7 @@ and place names, found using the Google Map API:
 
 ```{r cycle-trip, message=FALSE, warning=FALSE}
 if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("Bradford", "Leeds", plan = "balanced")
+  trip <- route_cyclestreet("Bradford, UK", "Leeds, UK", plan = "balanced")
   plot(trip)
 }
 ```
@@ -100,7 +101,7 @@ if(Sys.getenv("CYCLESTREET") == ""){
 plot(t_routes)
 ```
 
-Another way to visualise this is with the leaflet package (not shown):
+Another way to visualise this is with the leaflet package:
 
 ```{r, eval=FALSE}
 library(leaflet)
@@ -175,7 +176,7 @@ To get internal help on a specific function, use the standard way.
 
 **stplanr** has many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
 
-Its dependencies are plotted below using the [**minCRAN** package](https://cran.r-project.org/web/packages/miniCRAN/vignettes/miniCRAN-dependency-graph.html):
+Its dependencies are plotted below using the **minCRAN** package:
 
 ```{r}
 dg <- miniCRAN::makeDepGraph("stplanr")
@@ -191,4 +192,4 @@ plot(dg)
 * This project is released with a [Contributor Code of Conduct](CONDUCT.md).
 By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+<!-- [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org) -->

@@ -4,7 +4,7 @@
 \alias{SpatialLinesNetwork}
 \title{Create object of class SpatialLinesNetwork from SpatialLinesDataFrame}
 \usage{
-SpatialLinesNetwork(sl, uselonglat = FALSE)
+SpatialLinesNetwork(sl, uselonglat = FALSE, tolerance = 0)
 }
 \arguments{
 \item{sl}{A SpatialLines or SpatialLinesDataFrame containing the lines to
@@ -13,6 +13,9 @@ use to create the network.}
 \item{uselonglat}{A boolean value indicating if the data should be assumed
 to be using WGS84 latitude/longitude coordinates. If \code{FALSE} or not
 set, uses the coordinate system specified by the SpatialLines object.}
+
+\item{tolerance}{A numeric value indicating the tolerance (in the units of
+the coordinate system) to use as a tolerance with which to match nodes.}
 }
 \description{
 Creates a new SpatialLinesNetwork object that can be used for routing
@@ -31,14 +34,24 @@ The original implementation has been rewritten to better support large
 useful for conducting transport research following on from the initial
 examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 }
+
 \examples{
 data(routes_fast)
 rnet <- overline(sldf = routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
+class(SLN)
 weightfield(SLN) # field used to determine shortest path
-shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
-plot(shortpath, col = "red", lwd = 4)
-plot(SLN, add = TRUE)
+plot(SLN)
+from_id = 1
+to_id = 50
+points(sln2points(SLN)[from_id,], cex = 5)
+points(sln2points(SLN)[to_id,], cex = 5)
+shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
+plot(shortpath, col = "red", lwd = 4, add = TRUE)
+to_id = 35
+points(sln2points(SLN)[to_id,], cex = 5)
+shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
+plot(shortpath, col = "red", lwd = 4, add = TRUE)
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
@@ -46,4 +59,3 @@ Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
 Janoska, Z. (2013). Find shortest path in spatial network,
 URL:http://rpubs.com/janoskaz/10396.
 }
-

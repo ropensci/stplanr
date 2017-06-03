@@ -53,6 +53,7 @@ in the form of 1 line per flow with zone codes of origin and destination
 centroids. This function aggregates OD flows between polygon geometries
 allocating the original flows to larger zones based on area.
 }
+
 \examples{
 data(flow)
 data(zones)
@@ -82,4 +83,3 @@ plot(od_sp, add = TRUE, col = "yellow")
 lwd = od_sp_agg$All / 50
 plot(od_sp_agg, lwd = lwd, add = TRUE)
 }
-

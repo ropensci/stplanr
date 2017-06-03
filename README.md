@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr) [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr) [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app) [![codecov.io](https://codecov.io/github/ropensci/stplanr/coverage.svg?branch=master)](https://codecov.io/github/ropensci/stplanr?branch=master)
 
 **stplanr** is a package for sustainable transport planning with R.
 
@@ -47,7 +47,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README-plot1-1.png)
+![](vignettes/README-plot1-1.png)
 
 The package can also allocate flows to the road network, for example through a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
 
@@ -62,12 +62,12 @@ and place names, found using the Google Map API:
 
 ``` r
 if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("Bradford", "Leeds", plan = "balanced")
+  trip <- route_cyclestreet("Bradford, UK", "Leeds, UK", plan = "balanced")
   plot(trip)
 }
 ```
 
-![](README-cycle-trip-1.png)
+![](vignettes/README-cycle-trip-1.png)
 
 We can replicate this call to CycleStreets.net multiple times using `line2route`.
 
@@ -82,9 +82,9 @@ if(Sys.getenv("CYCLESTREET") == ""){
 plot(t_routes)
 ```
 
-![](README-plot2-1.png)
+![](vignettes/README-plot2-1.png)
 
-Another way to visualise this is with the leaflet package (not shown):
+Another way to visualise this is with the leaflet package:
 
 ``` r
 library(leaflet)
@@ -104,7 +104,7 @@ plot(rnet, lwd = lwd)
 points(cents)
 ```
 
-![](README-rnet-1.png)
+![](vignettes/README-rnet-1.png)
 
 Installation
 ------------
@@ -153,16 +153,16 @@ To get internal help on a specific function, use the standard way.
 Dependencies
 ------------
 
-**stplanr** many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
+**stplanr** has many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
 
-Its dependencies are plotted below using the [**minCRAN** package](https://cran.r-project.org/web/packages/miniCRAN/vignettes/miniCRAN-dependency-graph.html):
+Its dependencies are plotted below using the **minCRAN** package:
 
 ``` r
 dg <- miniCRAN::makeDepGraph("stplanr")
 plot(dg)
 ```
 
-![](README-unnamed-chunk-11-1.png)
+![](vignettes/README-unnamed-chunk-11-1.png)
 
 Meta
 ----
@@ -172,4 +172,4 @@ Meta
 -   Get citation information for `stplanr` in R doing `citation(package = 'stplanr')`
 -   This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+<!-- [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org) -->

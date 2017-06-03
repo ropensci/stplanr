@@ -10,3 +10,4 @@ log-latest
 ^CONDUCT\.md$
 ^README\.Rmd$
 ^README-.*\.png$
+^docs$

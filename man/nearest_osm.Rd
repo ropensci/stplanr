@@ -34,6 +34,7 @@ Generate nearest point on the route network of a point from OSRM locate service
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
 }
+
 \examples{
 \dontrun{
  nearest_osm(
@@ -42,4 +43,3 @@ passed to functions.
  )
 }
 }
-

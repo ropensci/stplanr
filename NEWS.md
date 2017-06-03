@@ -1,16 +1,38 @@
+# stplanr 0.1.8
+
+## NEW FEATURES
+
+* New argument `combinations` added to `sum_network_routes()` so it runs quicker - see [pull/177](https://github.com/ropensci/stplanr/pull/177).
+* New examples added to `sum_network_routes()`, `weightfield()` and `find_network_nodes()` - see e.g. `example(sum_network_routes)` for details.
+* New dataset `l_poly` [added](https://github.com/ropensci/stplanr/commit/7641760fbd6718352ed74142e5c339f6216afea4).
+* **stplanr** now has a website! See [ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/).
+
+## BUG FIXES
+
+* Serious bug with `SpatialLinesNetwork()` [fixed](https://github.com/ropensci/stplanr/pull/186).
+* Depreciated `_each()` **dplyr** functions replaced with equivalent `_at` or `_all` functions. See [here](https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/) for more.
+
 # stplanr 0.1.7
 
 ## NEW FEATURES
 
 * There is a new vignette! See [vignettes/stplanr-paper.Rmd](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) and `vignette("stplanr-paper")` for details.
+* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/introducing-stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
 * `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
 * `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
+* **RCurl** and **data.table** dependencies have been [removed](https://github.com/ropensci/stplanr/pull/169)
+* **leaflet** has been demoted from an import to a suggest. This should reduce install times.
+* New functions `od_aggregate()` and `sp_aggregate()` have been [added](https://github.com/ropensci/stplanr/pull/165), to enable OD data to be aggregated to new geographic levels.
+
 
 ## BUG FIXES
 
-* #141 fixed: `viaroute()` works again.
+* `#141` fixed: `viaroute()` works again.
 * [#153](https://github.com/ropensci/stplanr/issues/153) fixed: `bidirectional = TRUE` returns a different result in `line_bearing()` now.
 
+## FUTURE PLANS
+
+* A new branch that uses **sf** is being [tested](https://github.com/ropensci/stplanr/pull/164). We may eventually transition to using simple features classes instead of **sp** classes.
 
 # stplanr 0.1.6
 

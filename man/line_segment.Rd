@@ -28,4 +28,3 @@ plot(l_seg100m, col = l_seg100m$group, lwd = 10, add = TRUE)
 plot(l, col = "white", add = TRUE)
 line_segment(l = l, segment_length = 100)
 }
-

@@ -38,4 +38,3 @@ length(routes_fast)
 plot(routes_fast, lwd = 3)
 plot(r_toptail, col = "red", add = TRUE)
 }
-

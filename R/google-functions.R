@@ -94,6 +94,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url = paste0(url_travel,
           google_api_param,
           google_api)
+  url = utils::URLencode(url, repeated = FALSE, reserved = FALSE)
   message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
   # some of cols are data.frames, e.g.

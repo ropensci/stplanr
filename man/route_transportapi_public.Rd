@@ -42,7 +42,7 @@ any key to access the API.
 
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
-geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
+geo-coding services are used via \code{geo_code}.
 }
 \examples{
 
@@ -56,4 +56,3 @@ plot(rq_hfd)
 \seealso{
 line2route
 }
-

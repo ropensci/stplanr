@@ -30,4 +30,3 @@ points(bb3[1,], bb3[2,])
 points(bb[1,], bb[2,], col = "red")
 bbox_scale(bb, 0.75)
 }
-

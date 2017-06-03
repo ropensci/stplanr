@@ -1,7 +1,6 @@
 .Rproj.user
 .Rhistory
 .RData
-*.html
 inst/doc
 ggmapTemp.png
 here.osm

@@ -19,7 +19,7 @@
 #' crs <- CRS("+init=epsg:4326")
 #' crsuk <- CRS("+init=epsg:27700")
 #' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
-#' home <- rev(RgoogleMaps::getGeoCode("LS7 3HB"))
+#' home <- geo_code("LS7 3HB")
 #' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
 #' home <- sp::spTransform(x = home, CRSobj = crsuk)
 #' buf <- rgeos::gBuffer(home, width = 2000)
@@ -261,5 +261,24 @@ NULL
 #' proj4string(ca_sp) <- proj4string(route_network)
 #' bb <- bb2poly(route_network)
 #' ca_local = ca_sp[bb,]
+#' }
+NULL
+
+#' Line polygon
+#'
+#' This dataset represents road width for testing.
+#' @docType data
+#' @keywords datasets
+#' @name l_poly
+#' @usage data(l_poly)
+#' @format A SpatialPolygon
+#'
+#' @examples \dontrun{
+#' l = routes_fast[13,]
+#' l_poly = buff_geo(l, 8)
+#' plot(l_poly)
+#' plot(routes_fast, add = TRUE)
+#' # allocate road width to relevant line
+#' devtools::use_data(l_poly)
 #' }
 NULL

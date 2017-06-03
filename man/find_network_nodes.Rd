@@ -13,7 +13,7 @@ find_network_nodes(sln, x, y = NULL, maxdist = 1000)
 a dataframe or matrix with (at least) two columns, the first for coordinate
 for x (longitude) values and a second for y (latitude) values, or a named
 vector of length two with values of 'lat' and 'lon'. The output of
-RgoogleMaps::getGeoCode() either as a single result or as multiple (using
+geo_code() either as a single result or as multiple (using
 rbind() ) can also be used.}
 
 \item{y}{Either the y (latitude) coordinate value or a vector of y values.}
@@ -37,3 +37,9 @@ Finds the node ID of the closest point to a single coordinate pair (or a
 set of coordinates) from a SpatialLinesNetwork.
 }
 
+\examples{
+data(routes_fast)
+rnet <- overline(sldf = routes_fast, attrib = "length")
+SLN <- SpatialLinesNetwork(rnet)
+find_network_nodes(SLN, -1.516734, 53.828)
+}

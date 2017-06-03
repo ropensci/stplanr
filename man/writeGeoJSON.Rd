@@ -16,4 +16,3 @@ Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
 \code{geojson_write} from the geojsonio package
 provides the same functionality \url{https://github.com/ropensci/geojsonio}.
 }
-
