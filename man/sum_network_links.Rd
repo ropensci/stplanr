@@ -7,7 +7,7 @@
 sum_network_links(sln, routedata)
 }
 \arguments{
-\item{sln}{The SpatialLinesNetwork to use.}
+\item{sln}{The SpatialLinesNetwork or sfNetwork to use.}
 
 \item{routedata}{A dataframe where the first column contains the Node ID(s)
 of the start of the routes, the second column indicates the Node ID(s) of
@@ -20,8 +20,8 @@ Summarise links from shortest paths data
 \section{Details}{
 
 Find the shortest path on the network between specified nodes and returns
-a SpatialLinesdataFrame containing the path(s) and summary statistics of
-each one.
+a SpatialLinesDataFrame or sf containing the path(s) and summary statistics
+of each one.
 }
 
 \examples{

@@ -2,7 +2,8 @@
 % Please edit documentation in R/SpatialLinesNetwork.R
 \name{sln2points}
 \alias{sln2points}
-\title{Generate spatial points representing nodes on a SpatialLinesNetwork}
+\title{Generate spatial points representing nodes on a SpatialLinesNetwork
+or sfNetwork.}
 \usage{
 sln2points(sln)
 }
@@ -11,6 +12,7 @@ sln2points(sln)
 }
 \description{
 Generate spatial points representing nodes on a SpatialLinesNetwork
+or sfNetwork.
 }
 \examples{
 data(routes_fast)
