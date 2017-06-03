@@ -1,5 +1,5 @@
 setClass("igraph")
-setClass('sf')
+setOldClass('sf')
 
 #' An S4 class representing a (typically) transport network
 #'
@@ -94,17 +94,17 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
   if (is(sl, "sf")) {
 
     nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
-      group_by(L1) %>%
-      mutate(nrow = n(), rownum = row_number()) %>%
-      filter(rownum == 1 | rownum == nrow) %>% ungroup() %>%
-      mutate(allrownum = row_number())
+      dplyr::group_by(L1) %>%
+      dplyr::mutate(nrow = n(), rownum = row_number()) %>%
+      dplyr::filter(rownum == 1 | rownum == nrow) %>% dplyr::ungroup() %>%
+      dplyr::mutate(allrownum = row_number())
 
     gdata <- coord_matches_sf(
       as.matrix(nodecoords %>%
-                  select(X, Y, allrownum)),
+                  dplyr::select(X, Y, allrownum)),
       as.matrix(nodecoords %>%
-                  arrange(X, Y) %>%
-                  select(X, Y, allrownum)),
+                  dplyr::arrange(X, Y) %>%
+                  dplyr::select(X, Y, allrownum)),
       nrow(sl),
       tolerance
     )
@@ -598,7 +598,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 sln2points <- function(sln){
   coords <- cbind(sln@g$x, sln@g$y)
   if (is(sln, "sfNetwork")) {
-    st_as_sf(
+    sf::st_as_sf(
       as.data.frame(coords),
       coords = c('V1','V2'),
       crs = sf::st_crs(sln@sl)$epsg
