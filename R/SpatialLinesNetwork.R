@@ -1,4 +1,5 @@
 setClass("igraph")
+setClass('sf')
 
 #' An S4 class representing a (typically) transport network
 #'
@@ -13,7 +14,6 @@ setClass("igraph")
 #' @slot weightfield A character vector containing the variable (column) name
 #' from the SpatialLinesDataFrame to be used for weighting the network.
 
-setOldClass('sf')
 setClass("SpatialLinesNetwork", representation(sl = "SpatialLinesDataFrame",
                                                g = "igraph", nb = "list", weightfield = "character"),
          validity = function(object) {
