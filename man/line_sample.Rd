@@ -26,4 +26,3 @@ plot(p)
 p = line_sample(l, 50, weights = 1:length(l))
 plot(p)
 }
-

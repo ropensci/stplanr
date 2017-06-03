@@ -34,4 +34,3 @@ l = flowlines[2:6,]
 l_lengths = line_length(l)
 n = n_sample_length(10, l_lengths, weights = l$All)
 }
-
