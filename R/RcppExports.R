@@ -9,3 +9,11 @@ join_spatiallines_coords <- function(sldf, startx, starty) {
     .Call('stplanr_join_spatiallines_coords', PACKAGE = 'stplanr', sldf, startx, starty)
 }
 
+coord_matches_sf <- function(x, sortedx, sllength, tolval = 0.000) {
+    .Call('stplanr_coord_matches_sf', PACKAGE = 'stplanr', x, sortedx, sllength, tolval)
+}
+
+join_spatiallines_coords_sf <- function(lines, startx, starty) {
+    .Call('stplanr_join_spatiallines_coords_sf', PACKAGE = 'stplanr', lines, startx, starty)
+}
+

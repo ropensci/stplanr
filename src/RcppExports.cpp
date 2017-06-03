@@ -31,10 +31,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// coord_matches_sf
+List coord_matches_sf(arma::mat x, arma::mat sortedx, unsigned int sllength, double tolval);
+RcppExport SEXP stplanr_coord_matches_sf(SEXP xSEXP, SEXP sortedxSEXP, SEXP sllengthSEXP, SEXP tolvalSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type sortedx(sortedxSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type sllength(sllengthSEXP);
+    Rcpp::traits::input_parameter< double >::type tolval(tolvalSEXP);
+    rcpp_result_gen = Rcpp::wrap(coord_matches_sf(x, sortedx, sllength, tolval));
+    return rcpp_result_gen;
+END_RCPP
+}
+// join_spatiallines_coords_sf
+arma::mat join_spatiallines_coords_sf(List lines, double startx, double starty);
+RcppExport SEXP stplanr_join_spatiallines_coords_sf(SEXP linesSEXP, SEXP startxSEXP, SEXP startySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< double >::type startx(startxSEXP);
+    Rcpp::traits::input_parameter< double >::type starty(startySEXP);
+    rcpp_result_gen = Rcpp::wrap(join_spatiallines_coords_sf(lines, startx, starty));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"stplanr_coord_matches", (DL_FUNC) &stplanr_coord_matches, 2},
     {"stplanr_join_spatiallines_coords", (DL_FUNC) &stplanr_join_spatiallines_coords, 3},
+    {"stplanr_coord_matches_sf", (DL_FUNC) &stplanr_coord_matches_sf, 4},
+    {"stplanr_join_spatiallines_coords_sf", (DL_FUNC) &stplanr_join_spatiallines_coords_sf, 3},
     {NULL, NULL, 0}
 };
 
