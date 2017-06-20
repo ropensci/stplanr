@@ -1,0 +1,6 @@
+*.b*
+*.log
+*.pdf
+*.gz
+responses*
+*.txt
