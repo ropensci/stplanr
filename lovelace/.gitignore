@@ -1,4 +1,5 @@
-*.b*
+*.bbl
+*.brf
 *.log
 *.pdf
 *.gz
