@@ -31,3 +31,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"stplanr_coord_matches", (DL_FUNC) &stplanr_coord_matches, 2},
+    {"stplanr_join_spatiallines_coords", (DL_FUNC) &stplanr_join_spatiallines_coords, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_stplanr(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

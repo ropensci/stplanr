@@ -31,7 +31,7 @@
 #'
 #' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
+#' geo-coding services are used via \code{geo_code}.
 #'
 #' @inheritParams line2route
 #' @export
@@ -57,9 +57,9 @@ route_transportapi_public <- function(from, to, silent = FALSE,
 
   # Convert character strings to lon/lat if needs be
   if(is.character(from))
-    from <- rev(RgoogleMaps::getGeoCode(from))
+    from <- geo_code(from)
   if(is.character(to))
-    to <- rev(RgoogleMaps::getGeoCode(to))
+    to <- geo_code(to)
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")

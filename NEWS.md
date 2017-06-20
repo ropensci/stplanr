@@ -4,6 +4,13 @@
 
 * New argument `combinations` added to `sum_network_routes()` so it runs quicker - see [pull/177](https://github.com/ropensci/stplanr/pull/177).
 * New examples added to `sum_network_routes()`, `weightfield()` and `find_network_nodes()` - see e.g. `example(sum_network_routes)` for details.
+* New dataset `l_poly` [added](https://github.com/ropensci/stplanr/commit/7641760fbd6718352ed74142e5c339f6216afea4).
+* **stplanr** now has a website! See [ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/).
+
+## BUG FIXES
+
+* Serious bug with `SpatialLinesNetwork()` [fixed](https://github.com/ropensci/stplanr/pull/186).
+* Depreciated `_each()` **dplyr** functions replaced with equivalent `_at` or `_all` functions. See [here](https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/) for more.
 
 # stplanr 0.1.7
 

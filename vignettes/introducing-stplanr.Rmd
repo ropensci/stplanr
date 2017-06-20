@@ -12,12 +12,14 @@ bibliography: references.bib
 
 ```{r, include=FALSE}
 library(stplanr)
+build = require("tmap") & curl::has_internet()
+knitr::opts_chunk$set(eval = build)
 ```
 
 # Introduction
 
 **stplanr** was developed to solve a real world problem: how to convert official data on travel behaviour into geographic objects that can be plotted on a map and analysed using methods from geographical information systems (GIS)?
-Specifically, we wanted to visualise and investigate the spatial distribution origin-destination (OD) data such as the open datasets provided by the UK Data Services WICID portal (see [wicid.ukdataservice.ac.uk/](http://wicid.ukdataservice.ac.uk/)) to explore cycling potential [@lovelace_propensity_2016].
+Specifically, we wanted to visualise and investigate the spatial distribution origin-destination (OD) data such as the open datasets provided by the UK Data Services WICID portal (see [wicid.ukdataservice.ac.uk/](http://wicid.ukdataservice.ac.uk/)) to explore cycling potential [@lovelace_propensity_2017].
 Since this basic functionality has been implemented (with the function `od2line()`) there have been many further developments in **stplanr**, some of which are described in a [longer vignette](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd).
 The purpose of this vignette is to get you up-to-speed with the basics and provide useful links for doing transport research with R.
 
@@ -106,10 +108,8 @@ Because **stplanr** loads **sp**, the dataset will be plotted as a map by defaul
 
 ```{r}
 library(tmap)
-library(tmaptools)
-osm_tiles = read_osm(bb(cents, 1.4))
-(map = qtm(osm_tiles) +
-  qtm(cents, symbols.size = 5) )
+tmap_mode("view")
+qtm(cents, symbols.size = 5)
 ```
 
 **stplanr** creates desire lines using the `od2line()` function, which links geographical and non-geographical datasets together. In this case, it will join the non-geographical `flow` data with the geographical `cents` data plotted above. Let's take a single OD pair, E02002361 to E02002371, the fourth row represented in the table above, to see how this works:
@@ -122,8 +122,7 @@ desire_line_single = od2line(flow = flow_single_line, zones = cents)
 This can be plotted as follows:
 
 ```{r}
-map +
-  qtm(desire_line_single, lines.lwd = 5)
+qtm(desire_line_single, lines.lwd = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
@@ -131,27 +130,25 @@ The following command creates desire lines for all OD pairs stored in the datase
 
 ```{r}
 l = od2line(flow = flow, zones = cents)
+l = l[! l$Area.of.residence == l$Area.of.workplace,]
 ```
 
 This creates the geographic data object `l`, which can be visualised as follows:
 
 ```{r, eval=FALSE}
-map +
-  qtm(l)
+qtm(l)
 ```
 
 Now the data is set-up, we can change the visual appearance of the desire lines with a single extra argument passed to the plotting function. Let's make width depend on the total number of people travelling along the desire line:
 
 ```{r}
-map +
-  tm_shape(l) + tm_lines(lwd = "All", scale = 10)
+qtm(l, lines.lwd = "All", scale = 10)
 ```
 
 Another useful visulisation involves setting the colour relative to the number of people cycling:
 
 ```{r}
-map +
-  tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
 Finally, we can convert these desire lines into routes as follows:
@@ -162,6 +159,7 @@ r = line2route(l) # requires the a cyclestreets.net API key
 
 ```{r, echo=FALSE}
 r = routes_fast
+r = r[!is.na(r$length), ]
 ```
 
 
@@ -169,8 +167,7 @@ These routes contain the same information on origin and destination, but have ad
 
 ```{r}
 r@data = cbind(r@data, l@data)
-map +
-  tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
 The next stage is to aggregate these lines together to create a 'route network'.
