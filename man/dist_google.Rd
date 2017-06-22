@@ -8,13 +8,11 @@ dist_google(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   g_units = "metric", mode = "bicycling", arrival_time = "")
 }
 \arguments{
-\item{from}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth.}
+\item{from}{Two-column matrix or data frame of coordinates representing
+latitude and longitude of origins.}
 
-\item{to}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth. This represents the destination of the trip.}
+\item{to}{Two-column matrix or data frame of coordinates representing
+latitude and longitude of destinations.}
 
 \item{google_api}{String value containing the Google API key to use.}
 
@@ -27,6 +25,11 @@ bicycling (default), walking, driving or transit}
 }
 \description{
 Return travel network distances and time using the Google Maps API
+}
+\details{
+The google API is limited to a maximum of 100 simultaneous queries, and so
+will, for example, only returns values for up to 10 origins times 10
+destinations.
 }
 \section{Details}{
 

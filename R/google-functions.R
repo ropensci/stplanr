@@ -27,13 +27,22 @@ nearest_google <- function(lat, lng, google_api){
 #' @section Details:
 #' Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
 #' Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
-#' @inheritParams route_cyclestreet
+#' @param from Two-column matrix or data frame of coordinates representing
+#' latitude and longitude of origins.
+#' @param to Two-column matrix or data frame of coordinates representing
+#' latitude and longitude of destinations.
 #' @param google_api String value containing the Google API key to use.
 #' @param g_units Text string, either metric (default) or imperial.
 #' @param mode Text string specifying the mode of transport. Can be
 #' bicycling (default), walking, driving or transit
 #' @param arrival_time Time of arrival in date format.
 #' @export
+#'
+#' @details
+#' The google API is limited to a maximum of 100 simultaneous queries, and so
+#' will, for example, only returns values for up to 10 origins times 10
+#' destinations.
+#'
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
 #'  dist_google(from = c(0, 52), to = c(0, 53))
@@ -97,6 +106,8 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url = utils::URLencode(url, repeated = FALSE, reserved = FALSE)
   message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
+  if (obj$status != "OK" & any(grepl("error", names(obj))))
+      stop (obj[grepl("error",names(obj))],call.=FALSE)
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
   # obj$rows$elements[[1]][1]
