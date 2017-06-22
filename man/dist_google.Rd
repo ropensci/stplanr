@@ -27,9 +27,9 @@ bicycling (default), walking, driving or transit}
 Return travel network distances and time using the Google Maps API
 }
 \details{
-The google API is limited to a maximum of 100 simultaneous queries, and so
-will, for example, only returns values for up to 10 origins times 10
-destinations.
+Absent authorization, the google API is limited to a maximum of 100
+simultaneous queries, and so will, for example, only returns values for up to
+10 origins times 10 destinations.
 }
 \section{Details}{
 

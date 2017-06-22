@@ -39,9 +39,9 @@ nearest_google <- function(lat, lng, google_api){
 #' @export
 #'
 #' @details
-#' The google API is limited to a maximum of 100 simultaneous queries, and so
-#' will, for example, only returns values for up to 10 origins times 10
-#' destinations.
+#' Absent authorization, the google API is limited to a maximum of 100
+#' simultaneous queries, and so will, for example, only returns values for up to
+#' 10 origins times 10 destinations.
 #'
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
@@ -94,8 +94,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   from = paste0(from, collapse = "|")
   to = paste0(to, collapse = "|")
   url_travel <- paste0(base_url, g_units, "&origins=", from,
-          "&destinations=", to,
-          paste0("&mode=", mode))
+                       "&destinations=", to, "&mode=", mode)
   if(class(arrival_time)[1] == "POSIXlt"){
     arrival_time <- as.numeric(arrival_time)
     url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
