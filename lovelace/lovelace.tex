@@ -353,7 +353,7 @@ dataset into a box, represented as a rectangular
 
 \begin{Schunk}
 \begin{Sinput}
-data("route_network") # devtools::install_github("ropensci/splanr")version 0.1.7
+data("route_network")
 proj4string(ca_sp) <- proj4string(route_network)
 bb <- bb2poly(route_network)
 proj4string(bb) <- proj4string(route_network)
