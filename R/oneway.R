@@ -69,7 +69,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
       id2 = stringr::str_split(stplanr.key, " ", simplify = TRUE)[, 2],
       stplanr.key = stplanr.key
     ) %>%
-    group_by(stplanr.key) %>%
+    dplyr::group_by(stplanr.key) %>%
     dplyr::summarise(id1 = first(id1), id2 = first(id2)) %>%
     dplyr::select(-stplanr.key)
 
