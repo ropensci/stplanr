@@ -52,8 +52,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
     attrib = which(names(x) %in% attrib)
   }
 
-  stplanr.ids <- od_id_order(x, id1, id2)
-  x <- dplyr::bind_cols(x, stplanr.ids)
+  x <- dplyr::bind_cols(x, od_id_order(x, id1, id2))
 
   x_oneway_numeric <- dplyr::group_by(x, stplanr.key) %>%
     dplyr::summarise_at(attrib, sum)
@@ -73,7 +72,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
     dplyr::summarise(id1 = first(id1), id2 = first(id2)) %>%
     dplyr::select(-stplanr.key)
 
-  x_oneway = bind_cols(
+  x_oneway = dplyr::bind_cols(
     x_oneway_character,
     x_oneway_numeric,
     x_oneway_binary
