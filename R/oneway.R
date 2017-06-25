@@ -42,9 +42,6 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) UseMethod(
 #' # Demonstrate the results from onewayid and onewaygeo are identical
 #' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
-#' # With spaces in id names
-#' names(flow)[1] = "Area of residence"
-#' onewayid(flow, attrib = 3)
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]){
 
@@ -55,15 +52,34 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2])
     attrib = which(names(x) %in% attrib)
   }
 
-  stplanr.ids <- od_id_order(x, id1, id2)
-  x <- cbind(x, stplanr.ids)
+  x <- dplyr::bind_cols(x, od_id_order(x, id1, id2))
 
-  x_oneway <- dplyr::group_by_(x, quote(stplanr.key)) %>%
-    dplyr::mutate_(is_two_way = "ifelse(n() > 1, TRUE, FALSE)") %>%
-    dplyr::mutate_at(.cols = attrib, .funs = sum) %>%
-    dplyr::summarise_at(as.character(c(as.name(id1), as.name(id2), attrib, 'is_two_way')),dplyr::funs("first"))
+  x_oneway_numeric <- dplyr::group_by(x, stplanr.key) %>%
+    dplyr::summarise_at(attrib, sum)
+
+  x_oneway_binary <- dplyr::mutate(x, is_two_way = duplicated(stplanr.key)) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(is_two_way = last(is_two_way)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway_character = x %>%
+    dplyr::transmute(
+      id1 = stringr::str_split(stplanr.key, " ", simplify = TRUE)[, 1],
+      id2 = stringr::str_split(stplanr.key, " ", simplify = TRUE)[, 2],
+      stplanr.key = stplanr.key
+    ) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(id1 = first(id1), id2 = first(id2)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway = dplyr::bind_cols(
+    x_oneway_character,
+    x_oneway_numeric,
+    x_oneway_binary
+  )
 
   x_oneway$stplanr.key <- NULL
+  names(x_oneway)[1:2] = c(id1, id2)
 
   return(x_oneway)
 
