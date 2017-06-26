@@ -47,7 +47,8 @@ nearest_google <- function(lat, lng, google_api){
 #'  # Distances from one origin to one destination
 #'  from = c(-46.3, -23.4)
 #'  to = c(-46.4, -23.4)
-#'  dist_google(from = from, to = to)
+#'  dist_google(from = from, to = to, mode = "walking") # not supported on last test
+#'  dist_google(from = from, to = to, mode = "driving")
 #'  dist_google(from = c(0, 52), to = c(0, 53))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
@@ -111,7 +112,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   obj <- jsonlite::fromJSON(url)
   if(obj$status != "OK" & any(grepl("error", names(obj))))
       stop(obj[grepl("error", names(obj))], call. = FALSE)
-  if(obj$rows$elements[[1]] == "ZERO_RESULTS")
+  if(grepl(pattern = "ZERO_RESULTS", obj$rows$elements[[1]])[1])
     stop("No results for this request (e.g. due to lack of support for this mode between the from and to locations)", call. = FALSE)
 
   # some of cols are data.frames, e.g.
