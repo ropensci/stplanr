@@ -105,8 +105,8 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url = utils::URLencode(url, repeated = FALSE, reserved = FALSE)
   message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
-  if (obj$status != "OK" & any(grepl("error", names(obj))))
-      stop (obj[grepl("error",names(obj))],call.=FALSE)
+  if(obj$status != "OK" & any(grepl("error", names(obj))))
+      stop(obj[grepl("error", names(obj))], call. = FALSE)
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
   # obj$rows$elements[[1]][1]
