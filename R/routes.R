@@ -61,6 +61,7 @@
 #' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
+#' @aliases route_cyclestreets
 #' @examples
 #'
 #' \dontrun{
@@ -92,7 +93,8 @@
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 #'
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+route_cyclestreet <-
+  route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                               base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
                               save_raw = "FALSE"){
 
