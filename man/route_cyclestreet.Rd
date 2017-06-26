@@ -37,7 +37,8 @@ Provides an R interface to the CycleStreets.net cycle planning API,
 a route planner made by cyclists for cyclists.
 The function returns a SpatialLinesDataFrame object representing the
 an estimate of the fastest, quietest or most balance route.
-Currently only works for the United Kingdom and part of continental Europe.
+Currently only works for the United Kingdom and part of continental Europe,
+though other areas may be requested by contacting CycleStreets.
 See \url{https://www.cyclestreets.net/api/}for more information.
 }
 \details{
@@ -45,7 +46,7 @@ This function uses the online routing service
 CycleStreets.net to find routes suitable for cyclists
 between origins and destinations. Requires an
 internet connection, a CycleStreets.net API key
-and origins and destinations within the UK to run.
+and origins and destinations within the UK (and various areas beyond) to run.
 
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
