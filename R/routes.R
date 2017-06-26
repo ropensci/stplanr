@@ -4,8 +4,9 @@
 #' a route planner made by cyclists for cyclists.
 #' The function returns a SpatialLinesDataFrame object representing the
 #' an estimate of the fastest, quietest or most balance route.
-#' Currently only works for the United Kingdom and part of continental Europe.
-#' See \url{http://www.cyclestreets.net/api/}for more information.
+#' Currently only works for the United Kingdom and part of continental Europe,
+#' though other areas may be requested by contacting CycleStreets.
+#' See \url{https://www.cyclestreets.net/api/}for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
 #'  \code{length = 2} representing latitude and longitude) representing a point
@@ -26,7 +27,7 @@
 #' CycleStreets.net to find routes suitable for cyclists
 #' between origins and destinations. Requires an
 #' internet connection, a CycleStreets.net API key
-#' and origins and destinations within the UK to run.
+#' and origins and destinations within the UK (and various areas beyond) to run.
 #'
 #' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
@@ -90,7 +91,7 @@
 #'
 route_cyclestreet <-
   route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-                              base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
+                              base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                               save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
@@ -130,12 +131,12 @@ route_cyclestreet <-
   httrreq <- httr::GET(httrmsg)
 
   if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   obj <- jsonlite::fromJSON(txt)

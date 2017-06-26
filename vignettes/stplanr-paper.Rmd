@@ -260,7 +260,7 @@ functions such as \code{route\_cyclestreets}
 and \linebreak \code{route\_graphhopper}.
 These allocate a single OD pair, represented as a text string to be 'geo-coded', a pair of of coordinates, or two `SpatialPoints` objects, representing origins and destinations.
 This is illustrated below with `route_cyclestreet`, which uses the
-[CycleStreets.net API](http://www.cyclestreets.net/api/), a routing service "by cyclists for cyclists" that offers a range route strategies (primarily 'fastest', 'quietest' and 'balanced') that are based on a
+[CycleStreets.net API](https://www.cyclestreets.net/api/), a routing service "by cyclists for cyclists" that offers a range route strategies (primarily 'fastest', 'quietest' and 'balanced') that are based on a
 detailed analysis of cyclist
 wayfinding:^[An
 API key is needed for this function to work. This can be requested (or purchased for large scale routing) from [cyclestreets.net/api/apply](https://www.cyclestreets.net/api/apply/). See `?route_cyclestreet` for details.
