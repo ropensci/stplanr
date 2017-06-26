@@ -77,6 +77,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
                         g_units = 'metric',
                         mode = c("bicycling", "walking", "driving", "transit"),
                         arrival_time = ""){
+  mode = match.arg(mode)
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -127,7 +128,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   duration = unlist(duration)
   currency = NA
   fare = NA
-  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare)){
+  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare[1])){
     currency = lapply(obj$rows$elements,
                       function(x) x$fare$currency)
     currency = unlist(currency)
