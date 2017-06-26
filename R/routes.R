@@ -62,6 +62,7 @@
 #' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
+#' @aliases route_cyclestreets
 #' @examples
 #'
 #' \dontrun{
@@ -82,18 +83,14 @@
 #' plot(rf_mcr)
 #' (rf_mcr$length / (1000 * 1.61)) / # distance in miles
 #'   (rf_mcr$time / (60 * 60)) # time in hours - average speed here: ~8mph
-#' # Plan the 'quietest' route from Hereford to Leeds
-#' rqh <- route_cyclestreet(from = "Hereford", to = "Leeds", plan = "quietest")
-#' plot(rq_hfd)
 #' # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
 #' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
-#' # A long distance route (max = 500 km)
-#' woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
-#' # Plan a route between two lat/lon pairs in the UK
+#' # A long distance route (max = 500 km) - lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 #'
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+route_cyclestreet <-
+  route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                               base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                               save_raw = "FALSE"){
 

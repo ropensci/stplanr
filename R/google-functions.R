@@ -45,6 +45,10 @@ nearest_google <- function(lat, lng, google_api){
 #'
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
+#'  from = c(-46.3, -23.4)
+#'  to = c(-46.4, -23.4)
+#'  dist_google(from = from, to = to, mode = "walking") # not supported on last test
+#'  dist_google(from = from, to = to, mode = "driving")
 #'  dist_google(from = c(0, 52), to = c(0, 53))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
@@ -71,7 +75,9 @@ nearest_google <- function(lat, lng, google_api){
 #' }
 dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
                         g_units = 'metric',
-                        mode = 'bicycling', arrival_time = ""){
+                        mode = c("bicycling", "walking", "driving", "transit"),
+                        arrival_time = ""){
+  mode = match.arg(mode)
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -105,8 +111,11 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url = utils::URLencode(url, repeated = FALSE, reserved = FALSE)
   message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
-  if (obj$status != "OK" & any(grepl("error", names(obj))))
-      stop (obj[grepl("error",names(obj))],call.=FALSE)
+  if(obj$status != "OK" & any(grepl("error", names(obj))))
+      stop(obj[grepl("error", names(obj))], call. = FALSE)
+  if(grepl(pattern = "ZERO_RESULTS", obj$rows$elements[[1]])[1])
+    stop("No results for this request (e.g. due to lack of support for this mode between the from and to locations)", call. = FALSE)
+
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
   # obj$rows$elements[[1]][1]
@@ -119,7 +128,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   duration = unlist(duration)
   currency = NA
   fare = NA
-  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare)){
+  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare[1])){
     currency = lapply(obj$rows$elements,
                       function(x) x$fare$currency)
     currency = unlist(currency)
