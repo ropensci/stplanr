@@ -74,7 +74,8 @@ nearest_google <- function(lat, lng, google_api){
 #' }
 dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
                         g_units = 'metric',
-                        mode = 'bicycling', arrival_time = ""){
+                        mode = c("bicycling", "walking", "driving", "transit"),
+                        arrival_time = ""){
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -110,6 +111,9 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   obj <- jsonlite::fromJSON(url)
   if(obj$status != "OK" & any(grepl("error", names(obj))))
       stop(obj[grepl("error", names(obj))], call. = FALSE)
+  if(obj$rows$elements[[1]] == "ZERO_RESULTS")
+    stop("No results for this request (e.g. due to lack of support for this mode between the from and to locations)", call. = FALSE)
+
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
   # obj$rows$elements[[1]][1]
