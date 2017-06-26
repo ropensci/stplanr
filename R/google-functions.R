@@ -45,6 +45,9 @@ nearest_google <- function(lat, lng, google_api){
 #'
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
+#'  from = c(-46.3, -23.4)
+#'  to = c(-46.4, -23.4)
+#'  dist_google(from = from, to = to)
 #'  dist_google(from = c(0, 52), to = c(0, 53))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
