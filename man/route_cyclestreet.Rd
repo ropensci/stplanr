@@ -5,7 +5,7 @@
 \title{Plan a single route with CycleStreets.net}
 \usage{
 route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-  base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
+  base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
   save_raw = "FALSE")
 }
 \arguments{
@@ -38,7 +38,7 @@ a route planner made by cyclists for cyclists.
 The function returns a SpatialLinesDataFrame object representing the
 an estimate of the fastest, quietest or most balance route.
 Currently only works for the United Kingdom and part of continental Europe.
-See \url{http://www.cyclestreets.net/api/}for more information.
+See \url{https://www.cyclestreets.net/api/}for more information.
 }
 \details{
 This function uses the online routing service

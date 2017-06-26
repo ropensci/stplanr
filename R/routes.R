@@ -5,7 +5,7 @@
 #' The function returns a SpatialLinesDataFrame object representing the
 #' an estimate of the fastest, quietest or most balance route.
 #' Currently only works for the United Kingdom and part of continental Europe.
-#' See \url{http://www.cyclestreets.net/api/}for more information.
+#' See \url{https://www.cyclestreets.net/api/}for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
 #'  \code{length = 2} representing latitude and longitude) representing a point
@@ -93,7 +93,7 @@
 #' }
 #'
 route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-                              base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
+                              base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                               save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
