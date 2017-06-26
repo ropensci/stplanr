@@ -133,12 +133,12 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
   httrreq <- httr::GET(httrmsg)
 
   if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   obj <- jsonlite::fromJSON(txt)
