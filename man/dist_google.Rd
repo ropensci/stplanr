@@ -5,7 +5,8 @@
 \title{Return travel network distances and time using the Google Maps API}
 \usage{
 dist_google(from, to, google_api = Sys.getenv("GOOGLEDIST"),
-  g_units = "metric", mode = "bicycling", arrival_time = "")
+  g_units = "metric", mode = c("bicycling", "walking", "driving",
+  "transit"), arrival_time = "")
 }
 \arguments{
 \item{from}{Two-column matrix or data frame of coordinates representing
@@ -40,6 +41,10 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 \examples{
 \dontrun{
  # Distances from one origin to one destination
+ from = c(-46.3, -23.4)
+ to = c(-46.4, -23.4)
+ dist_google(from = from, to = to, mode = "walking") # not supported on last test
+ dist_google(from = from, to = to, mode = "driving")
  dist_google(from = c(0, 52), to = c(0, 53))
  data("cents")
  # Distances from between all origins and destinations

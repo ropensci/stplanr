@@ -2,6 +2,7 @@
 % Please edit documentation in R/routes.R
 \name{route_cyclestreet}
 \alias{route_cyclestreet}
+\alias{route_cyclestreets}
 \title{Plan a single route with CycleStreets.net}
 \usage{
 route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
