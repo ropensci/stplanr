@@ -1,0 +1,7 @@
+*.bbl
+*.brf
+*.log
+*.pdf
+*.gz
+responses*
+*.txt
