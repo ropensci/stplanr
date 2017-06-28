@@ -257,7 +257,7 @@ This is difficult (and was until recently near impossible using free software)
 because of the size and complexity of transport networks, the complexity
 of realistic routing algorithms and need for context-specificity in the routing
 engine. Inexperienced cyclists, for example, would take a very different route
-than a heavy goods vehicle. **stplanr** tackles this issue by using 3rd party APIs to provide
+than a heavy goods vehicle. **stplanr** tackles this issue by using third party APIs to provide
 route-allocation. 
 
 Route allocation is undertaken by \code{route\_}
@@ -433,6 +433,13 @@ plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
 plot(testcycleway, col = "green", add = TRUE)
 ```
+
+`calc_catchment` and `calc_network_catchment` provide complementary functions that allow for the computation of catchment areas.
+Although for many transport applications it would be better to use the `calc_network_catchment` function that uses the true network distances, it may still be useful to use the straight-line version in some cases.
+These include calculating the population that may be affected by noise levels from transport infrastructure (such as a motorway) where the effects of noise are not limited by the network.
+In situations where network data is not available it would be possible to use the `calc_catchment` function together with a fixed assumption about what straight-line distance corresponds to the desired network distance (i.e., 1km network = 700m straight-line).
+It may also be appropriate to use the straight-line distance when the network is not a reasonable constraint.
+This may be because the infrastructure of interest is accessed primarily by walking or cycling in an area where these are not limited to the road network (such as parks or shopping areas with passthroughs or overpasses available to pedestrians).
 
 # Modelling and visualisation
 
