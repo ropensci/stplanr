@@ -977,21 +977,27 @@ This paper demonstrates how R can be used for transport planning, with reference
 This is, to our knowledge, the first package aimed specifically to help practitioners and researchers design more sustainable transport systems.
 However, much more is possible in this direction.
 Indeed, transport planning is a large and highly diverse area.
-
 % Add this as a footnote?
 % Transport planning has links to areas of knowledge which are already well-served by packages have yet to receive much (if any) attention from the transport community statistical networks, activity space analysis and the development of interactive online visualisations to encourage public engagement in the process.
-
-The focus of \CRANpkg{stplanr} is on geographic transport data.
+Within this multi-disciplinarity, the focus of \CRANpkg{stplanr} is on geographic transport data.
 We decided to narrow the package's scope in this way for three main reasons, which will influence its future development:
 
 \begin{itemize}
 \tightlist
-  \item Spatial transport data have grown rapidly in recent decades, creating demand for open source software to make use of it.
-  \item The success of the `unix approach' to software development, whereby each piece of software does a limited number of things, but does them well.
-  \item Because the package authors have a particularly strong interest in and knowledge of spatial transport data for our own research.
+  \item While software for open source GIS (and sub-fields such spatial epidemiology) is mature,  proprietary software dominates GIS for transport applications.
+  \item The successful `unix approach' to software development implies that each piece of software does a limited number of things well, avoiding the pitfall of `feature creep', whereby software tries to be all things to all people.
+  \item We have a particularly strong interest in and knowledge of spatial transport data for our own research.
 \end{itemize}
 
 % This final reason is important for the package's future because it provides a strong incentive to extend the package in step with our own work.
+The fact that there is relatively little `prior art' in the area means that instead of directing \textbf{stplanr} towards more and more advanced applications we should focus on providing a solid foundation for others to build-on.
+A good example of this is the \code{SpatialLinesNetwork} class, which can be used to represent, analyse, and perform shortest path analysis on, a wide range transport networks.
+There is great potential for extending \textbf{stplanr} further in this direction.
+For example, a class representing origin-destination data could provide a useful foundation for the geographical analysis of OD data.
+Such a class could, to build on the example data presented in previous sections, represent all the data contained in \code{flowlines}, \code{routes_fast} and \code{routes_quiet} in a single object.
+The recent development of the \CRANpkg{sf} (discussed below), with its support for multiple geometry columns, makes this option more feasible.
+
+Another desirable direction of travel is towards better support for `Big Data'.
 We demonstrated functions for data access, the creation
 and visualisation of OD data allocated
 to the route network, and modelling travel catchment areas.
