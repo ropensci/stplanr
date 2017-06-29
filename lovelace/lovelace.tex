@@ -989,21 +989,22 @@ We decided to narrow the package's scope in this way for three main reasons, whi
   \item We have a particularly strong interest in and knowledge of spatial transport data for our own research.
 \end{itemize}
 
-% This final reason is important for the package's future because it provides a strong incentive to extend the package in step with our own work.
+This final reason is important for the package's future because it provides a strong incentive to extend the package in step with our own work.
 The fact that there is relatively little `prior art' in the area means that instead of directing \textbf{stplanr} towards more and more advanced applications we should focus on providing a solid foundation for others to build-on.
 A good example of this is the \code{SpatialLinesNetwork} class, which can be used to represent, analyse, and perform shortest path analysis on, a wide range transport networks.
 There is great potential for extending \textbf{stplanr} further in this direction.
 For example, a class representing origin-destination data could provide a useful foundation for the geographical analysis of OD data.
-Such a class could, to build on the example data presented in previous sections, represent all the data contained in \code{flowlines}, \code{routes_fast} and \code{routes_quiet} in a single object.
+Such a class could, to build on the example data presented in previous sections, represent all the data contained in \code{flowlines} and associated routes in a single object.
 The recent development of the \CRANpkg{sf} (discussed below), with its support for multiple geometry columns, makes this option more feasible.
 
 Another desirable direction of travel is towards better support for large datasets.
-We have demonstrated \textbf{stplnr}'s capabilities on deliberately small datasets.
-However, the third criterion of transport planning software described in the introduction --- scalability --- is vital to the future of the package's uptake in industry due to the deluge of `Big Data' sources on transport patterns.
+We have demonstrated \textbf{stplnr}'s capabilities on deliberately small datasets for ease of understanding.
+However, the third criterion of transport planning software set-out in the introduction --- \emph{scalability} --- is vital package's use in the real world due to the deluge of transport-related `Big Data'.
 Based on this, and our experience using the package on
 research projects including the nationally scalable
 projects used by the practitioner community \citep{lovelace_propensity_2017},
 we argue that there is great potential for growth of R use in the transport planning community.
+To improve the package's support for large datasets, we plan to expand the package's support for parallel processing beyond that provided by the \code{n\_processes} argument in the function \code{line2route}.
 
 and free accessibility makes it well-suited
 to the needs of transport planners and researchers, especially those
