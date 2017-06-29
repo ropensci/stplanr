@@ -52,7 +52,7 @@ people can identify interventions that they think would make the transport syste
 about the paths and roads you travel on, for example: what interventions would you prioritise to improve non-motorised access, for walking, cycling and wheel-chairs? What quantitative evidence would you need to communicate this to the relevant authorities?
 ]
 R's aptitude for handling transport data (including spatial and travel survey data),
-and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in many organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers. We welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
+and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in many organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers and welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
 
 R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems.
 For instance, \citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
@@ -257,7 +257,7 @@ This is difficult (and was until recently near impossible using free software)
 because of the size and complexity of transport networks, the complexity
 of realistic routing algorithms and need for context-specificity in the routing
 engine. Inexperienced cyclists, for example, would take a very different route
-than a heavy goods vehicle. **stplanr** tackles this issue by using 3rd party APIs to provide
+than a heavy goods vehicle. **stplanr** tackles this issue by using third party APIs to provide
 route-allocation. 
 
 Route allocation is undertaken by \code{route\_}
@@ -265,7 +265,7 @@ functions such as \code{route\_cyclestreets}
 and \linebreak \code{route\_graphhopper}.
 These allocate a single OD pair, represented as a text string to be 'geo-coded', a pair of of coordinates, or two `SpatialPoints` objects, representing origins and destinations.
 This is illustrated below with `route_cyclestreet`, which uses the
-[CycleStreets.net API](http://www.cyclestreets.net/api/), a routing service "by cyclists for cyclists" that offers a range route strategies (primarily 'fastest', 'quietest' and 'balanced') that are based on a
+[CycleStreets.net API](https://www.cyclestreets.net/api/), a routing service "by cyclists for cyclists" that offers a range route strategies (primarily 'fastest', 'quietest' and 'balanced') that are based on a
 detailed analysis of cyclist
 wayfinding:^[An
 API key is needed for this function to work. This can be requested (or purchased for large scale routing) from [cyclestreets.net/api/apply](https://www.cyclestreets.net/api/apply/). See `?route_cyclestreet` for details.
@@ -433,6 +433,13 @@ plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
 plot(testcycleway, col = "green", add = TRUE)
 ```
+
+`calc_catchment` and `calc_network_catchment` provide complementary functions that allow for the computation of catchment areas.
+Although for many transport applications it would be better to use the `calc_network_catchment` function that uses the true network distances, it may still be useful to use the straight-line version in some cases.
+These include calculating the population that may be affected by noise levels from transport infrastructure (such as a motorway) where the effects of noise are not limited by the network.
+In situations where network data is not available it would be possible to use the `calc_catchment` function together with a fixed assumption about what straight-line distance corresponds to the desired network distance (i.e., 1km network = 700m straight-line).
+It may also be appropriate to use the straight-line distance when the network is not a reasonable constraint.
+This may be because the infrastructure of interest is accessed primarily by walking or cycling in an area where these are not limited to the road network (such as parks or shopping areas with passthroughs or overpasses available to pedestrians).
 
 # Modelling and visualisation
 

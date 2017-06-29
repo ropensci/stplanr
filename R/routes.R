@@ -4,8 +4,9 @@
 #' a route planner made by cyclists for cyclists.
 #' The function returns a SpatialLinesDataFrame object representing the
 #' an estimate of the fastest, quietest or most balance route.
-#' Currently only works for the United Kingdom and part of continental Europe.
-#' See \url{http://www.cyclestreets.net/api/}for more information.
+#' Currently only works for the United Kingdom and part of continental Europe,
+#' though other areas may be requested by contacting CycleStreets.
+#' See \url{https://www.cyclestreets.net/api/}for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
 #'  \code{length = 2} representing latitude and longitude) representing a point
@@ -26,7 +27,7 @@
 #' CycleStreets.net to find routes suitable for cyclists
 #' between origins and destinations. Requires an
 #' internet connection, a CycleStreets.net API key
-#' and origins and destinations within the UK to run.
+#' and origins and destinations within the UK (and various areas beyond) to run.
 #'
 #' Note that if \code{from} and \code{to} are supplied as
 #' character strings (instead of lon/lat pairs), Google's
@@ -61,6 +62,7 @@
 #' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
 #' @export
 #' @seealso line2route
+#' @aliases route_cyclestreets
 #' @examples
 #'
 #' \dontrun{
@@ -81,19 +83,15 @@
 #' plot(rf_mcr)
 #' (rf_mcr$length / (1000 * 1.61)) / # distance in miles
 #'   (rf_mcr$time / (60 * 60)) # time in hours - average speed here: ~8mph
-#' # Plan the 'quietest' route from Hereford to Leeds
-#' rqh <- route_cyclestreet(from = "Hereford", to = "Leeds", plan = "quietest")
-#' plot(rq_hfd)
 #' # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
 #' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
-#' # A long distance route (max = 500 km)
-#' woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
-#' # Plan a route between two lat/lon pairs in the UK
+#' # A long distance route (max = 500 km) - lat/lon pairs in the UK
 #' route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 #' }
 #'
-route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-                              base_url = "http://www.cyclestreets.net", reporterrors = TRUE,
+route_cyclestreet <-
+  route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+                              base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                               save_raw = "FALSE"){
 
   # Convert sp object to lat/lon vector
@@ -133,12 +131,12 @@ route_cyclestreet <- function(from, to, plan = "fastest", silent = TRUE, pat = N
   httrreq <- httr::GET(httrmsg)
 
   if (grepl('application/json', httrreq$headers$`content-type`) == FALSE) {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
   if (txt == "") {
-    stop("Error: Cyclestreets did not return a valid result")
+    stop("Error: CycleStreets did not return a valid result")
   }
 
   obj <- jsonlite::fromJSON(txt)

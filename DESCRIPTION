@@ -41,7 +41,8 @@ Imports:
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    doParallel
+    doParallel,
+    rlang
 LinkingTo:
     RcppArmadillo,
     Rcpp

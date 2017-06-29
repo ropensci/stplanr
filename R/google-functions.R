@@ -27,15 +27,28 @@ nearest_google <- function(lat, lng, google_api){
 #' @section Details:
 #' Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
 #' Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
-#' @inheritParams route_cyclestreet
+#' @param from Two-column matrix or data frame of coordinates representing
+#' latitude and longitude of origins.
+#' @param to Two-column matrix or data frame of coordinates representing
+#' latitude and longitude of destinations.
 #' @param google_api String value containing the Google API key to use.
 #' @param g_units Text string, either metric (default) or imperial.
 #' @param mode Text string specifying the mode of transport. Can be
 #' bicycling (default), walking, driving or transit
 #' @param arrival_time Time of arrival in date format.
 #' @export
+#'
+#' @details
+#' Absent authorization, the google API is limited to a maximum of 100
+#' simultaneous queries, and so will, for example, only returns values for up to
+#' 10 origins times 10 destinations.
+#'
 #' @examples \dontrun{
 #'  # Distances from one origin to one destination
+#'  from = c(-46.3, -23.4)
+#'  to = c(-46.4, -23.4)
+#'  dist_google(from = from, to = to, mode = "walking") # not supported on last test
+#'  dist_google(from = from, to = to, mode = "driving")
 #'  dist_google(from = c(0, 52), to = c(0, 53))
 #'  data("cents")
 #'  # Distances from between all origins and destinations
@@ -62,7 +75,9 @@ nearest_google <- function(lat, lng, google_api){
 #' }
 dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
                         g_units = 'metric',
-                        mode = 'bicycling', arrival_time = ""){
+                        mode = c("bicycling", "walking", "driving", "transit"),
+                        arrival_time = ""){
+  mode = match.arg(mode)
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -85,8 +100,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   from = paste0(from, collapse = "|")
   to = paste0(to, collapse = "|")
   url_travel <- paste0(base_url, g_units, "&origins=", from,
-          "&destinations=", to,
-          paste0("&mode=", mode))
+                       "&destinations=", to, "&mode=", mode)
   if(class(arrival_time)[1] == "POSIXlt"){
     arrival_time <- as.numeric(arrival_time)
     url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
@@ -97,6 +111,11 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   url = utils::URLencode(url, repeated = FALSE, reserved = FALSE)
   message(paste0("Sent this request: ", url))
   obj <- jsonlite::fromJSON(url)
+  if(obj$status != "OK" & any(grepl("error", names(obj))))
+      stop(obj[grepl("error", names(obj))], call. = FALSE)
+  if(grepl(pattern = "ZERO_RESULTS", obj$rows$elements[[1]])[1])
+    stop("No results for this request (e.g. due to lack of support for this mode between the from and to locations)", call. = FALSE)
+
   # some of cols are data.frames, e.g.
   # lapply(obj$rows$elements[[1]], class)
   # obj$rows$elements[[1]][1]
@@ -109,7 +128,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   duration = unlist(duration)
   currency = NA
   fare = NA
-  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare)){
+  if(mode == "transit" & !is.null(obj$rows$elements[[1]]$fare[1])){
     currency = lapply(obj$rows$elements,
                       function(x) x$fare$currency)
     currency = unlist(currency)
