@@ -965,20 +965,42 @@ visualisation tools in R, such as \textbf{tmap}, \textbf{leaflet} and
 
 Furthermore, with the development of online application frameworks such
 as \textbf{shiny}, it is now easier than ever to make the results of
-transport analysis and modelling projects available to the public. An
-example is the online interface of the Propensity to Cycle Tool (PCT).
-The results of the project, generated using \textbf{stplanr}, are
-presented at zone, desire line and Route Network levels
-\citep{lovelace_propensity_2016}. There is great potential to expand on
+transport analysis and modelling projects available to the public.
+There is great potential to expand on
 the principle of publicly accessible transport planning tools via `web
 apps', perhaps through new R packages dedicated to visualising transport
 data.
 
 \section{Future directions of travel}\label{future-directions-of-travel}
 
-This paper has demonstrated the great potential for R to be used for
-transport planning. R's flexibility, powerful GIS capabilities
-\citep{bivand_applied_2013} and free accessibility makes it well-suited
+This paper demonstrates how R can be used for transport planning, with reference to functions and example datasets and use cases from our package \CRANpkg{stplanr}.
+This is, to our knowledge, the first package aimed specifically to help practitioners and researchers design more sustainable transport systems.
+However, much more is possible in this direction.
+Indeed, transport planning is a large and highly diverse area.
+
+% Add this as a footnote?
+% Transport planning has links to areas of knowledge which are already well-served by packages have yet to receive much (if any) attention from the transport community statistical networks, activity space analysis and the development of interactive online visualisations to encourage public engagement in the process.
+
+The focus of \CRANpkg{stplanr} is on geographic transport data.
+We decided to narrow the package's scope in this way for three main reasons, which will influence its future development:
+
+\begin{itemize}
+\tightlist
+  \item Spatial transport data have grown rapidly in recent decades, creating demand for open source software to make use of it.
+  \item The success of the `unix approach' to software development, whereby each piece of software does a limited number of things, but does them well.
+  \item Because the package authors have a particularly strong interest in and knowledge of spatial transport data for our own research.
+\end{itemize}
+
+% This final reason is important for the package's future because it provides a strong incentive to extend the package in step with our own work.
+We demonstrated functions for data access, the creation
+and visualisation of OD data allocated
+to the route network, and modelling travel catchment areas.
+Based on this, and our experience using the package on
+research projects including the nationally scalable
+projects used by the practitioner community \citep{lovelace_propensity_2017},
+we argue that there is great potential for growth of R use in the transport planning community.
+
+and free accessibility makes it well-suited
 to the needs of transport planners and researchers, especially those
 wanting to avoid the high costs of market-leading products. Rather than
 `reinvent the wheel' (e.g.~with a new class system), \textbf{stplanr}
