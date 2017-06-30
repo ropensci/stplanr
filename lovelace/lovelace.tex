@@ -1016,10 +1016,7 @@ For this reason we have endeavoured to use efficient programming techniques pack
 Propensity to Cycle Project, which involved generating geographic desire lines for over 700,000 routes \citep{lovelace_propensity_2017} (and in Phase 2, over 4 million).
 This experience led to a number of optimisations in the code, including an implementation a faster implementation of the \code{od2line} function (\code{od2line2}) and a commit that led to a 10 fold speed-up in the \code{line2route} function (see commit \href{https://github.com/ropensci/stplanr/commit/c834abf7d0020c6fbb33845572d6be4801f31f47}{c834abf}).
 However, there are still many opportunities for improving the package's computational efficiency.
-These include integration with transport databases that provide fast access to large international datasets (e.g. via the packages \CRANpkg{bikedata} and \CRANpkg{osmdata}, the implementation of interfaces to batch routing APIs and the refactoring of functions which are found to be slow (e.g. \code{overline}, which takes hours to run on large datasets).
-
-we argue that there is great potential for growth of R use in the transport planning community.
-To improve the package's support for large datasets, we plan to expand the package's support for parallel processing beyond that provided by the \code{n\_processes} argument in the function \code{line2route}.
+These include integration with transport databases that provide fast access to large international datasets (e.g. via the packages \CRANpkg{bikedata} and \CRANpkg{osmdata}, the implementation of interfaces to batch routing APIs, parallel implementations of time-consuming functions (building on our experience of providing an \code{n\_processes} argument in the function \code{line2route}) and the refactoring of functions which are found to be slow (e.g. \code{overline}, which takes hours to run on large datasets).
 
 and free accessibility makes it well-suited
 to the needs of transport planners and researchers, especially those
