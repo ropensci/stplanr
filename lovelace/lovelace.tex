@@ -326,7 +326,9 @@ ve <- read_stats19_ve()
 
 The resulting datasets (representing accident, casualty and vehicle
 level data, respectively) can be merged and made geographic, as
-illustrated below:
+illustrated below.\footnote{
+Note the \code{inner\_join} function from the \CRANpkg{dplyr} package was used because it is substantially faster and more effective than the equivalent function, \code{merge}, in base R.
+This is communicated in a number of places, including on the website \href{http://zevross.com/blog/2014/04/30/mini-post-for-large-tables-in-r-dplyrs-function-inner_join-is-much-faster-than-merge/}{zevross.com}. For this reason we import \CRANpkg{dplyr} and use it internally for joins.}
 
 \begin{Schunk}
 \begin{Sinput}
