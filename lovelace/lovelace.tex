@@ -989,20 +989,23 @@ We decided to narrow the package's scope in this way for three main reasons, whi
   \item We have a particularly strong interest in and knowledge of spatial transport data for our own research.
 \end{itemize}
 
-This final reason is important for the package's future because it provides a strong incentive to extend the package in step with our own work.
-The fact that there is relatively little `prior art' in the area means that instead of directing \textbf{stplanr} towards more and more advanced applications we should focus on providing a solid foundation for others to build-on.
-A good example of this is the \code{SpatialLinesNetwork} class, which can be used to represent, analyse, and perform shortest path analysis on, a wide range transport networks.
-There is great potential for extending \textbf{stplanr} further in this direction.
-For example, a class representing origin-destination data could provide a useful foundation for the geographical analysis of OD data.
-Such a class could, to build on the example data presented in previous sections, represent all the data contained in \code{flowlines} and associated routes in a single object.
+The final reason is important for the package's longevity, providing an incentive for the package's future development.
+The lack of existing packages that do the same job direct our attention towards \textbf{stplanr}'s basic functionality rather than more advanced and esoteric features.
+A good example of this is the \code{SpatialLinesNetwork} class which could provide a basis for future developments including a \code{route\_sln} function to facilitate routing in R, without recourse to external services.
+Another example is the potential development of a `\code{OD}' class to represent origin-destination data, which could ease the geographical analysis of OD data via generic methods.
+Building on the example data presented in previous sections the idea is for a single \code{OD} object to be able represent \code{flowlines}, \code{routes\_fast} and \code{routes\_quiet}.
 The recent development of the \CRANpkg{sf} (discussed below), with its support for multiple geometry columns, makes this option more feasible.
 
 Another desirable direction of travel is towards better support for large datasets.
 We have demonstrated \textbf{stplnr}'s capabilities on deliberately small datasets for ease of understanding.
-However, the third criterion of transport planning software set-out in the introduction --- \emph{scalability} --- is vital package's use in the real world due to the deluge of transport-related `Big Data'.
-Based on this, and our experience using the package on
-research projects including the nationally scalable
-projects used by the practitioner community \citep{lovelace_propensity_2017},
+However, the third criterion of transport planning software set-out in the introduction --- \emph{scalability} --- is vital package's use in the real world in the age of transport-related `Big Data'.
+For this reason we have endeavoured to use efficient programming techniques package functions and use C++ (via \CRANpkg{Rcpp}) for computationally intensive operations on \code{SpatialLinesNetwork}.
+\CRANpkg{stplanr} was first developed to generate data for the national
+Propensity to Cycle Project, which involved generating geographic desire lines for over 700,000 routes \citep{lovelace_propensity_2017} (and in Phase 2, over 4 million).
+This experience led to a number of optimisations in the code, including an implementation a faster implementation of the \code{od2line} function (\code{od2line2}) and a commit that led to a 10 fold speed-up in the \code{line2route} function (see commit \href{https://github.com/ropensci/stplanr/commit/c834abf7d0020c6fbb33845572d6be4801f31f47}{c834abf}).
+However, there are still many opportunities for improving the package's computational efficiency.
+These include integration with transport databases that provide fast access to large international datasets (e.g. via the packages \CRANpkg{bikedata} and \CRANpkg{osmdata}, the implementation of interfaces to batch routing APIs and the refactoring of functions which are found to be slow (e.g. \code{overline}, which takes hours to run on large datasets).
+
 we argue that there is great potential for growth of R use in the transport planning community.
 To improve the package's support for large datasets, we plan to expand the package's support for parallel processing beyond that provided by the \code{n\_processes} argument in the function \code{line2route}.
 
@@ -1098,4 +1101,5 @@ University of Sydney\\
 378 Abercrombie Street\\ Darlington, NSW 2008, Australia\\
 }
 \href{mailto:richard.ellison@sydney.edu.au}{\nolinkurl{richard.ellison@sydney.edu.au}}
+
 
