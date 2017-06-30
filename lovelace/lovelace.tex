@@ -484,8 +484,15 @@ software) because of the size and complexity of transport networks, the
 complexity of realistic routing algorithms and need for
 context-specificity in the routing engine. Inexperienced cyclists, for
 example, would take a very different route than a heavy goods vehicle.
-\textbf{stplanr} tackles this issue by using 3rd party APIs to provide
-route-allocation.
+\textbf{stplanr} tackles this issue in two ways: by providing routing
+functionality that can work on locally data and by using 3rd party APIs.
+Each approach has advantages: local routing functionality is fast and free,
+whereas online routing services can be more sophisticated (e.g. taking
+into account local traffic conditions) and work anywhere in the world
+without needing to download unwieldy datasets and new software libraries such
+as OSRM.
+A disadvantage of relying on online services is that they may break or change
+without warning in the future.
 
 Route allocation is undertaken by \code{route\_} functions such as
 \code{route\_cyclestreets} and \linebreak \code{route\_graphhopper}.
@@ -994,7 +1001,10 @@ We decided to narrow the package's scope in this way for three main reasons, whi
 The final reason is important for the package's longevity, providing an incentive for the package's future development.
 The lack of existing packages that do the same job direct our attention towards \textbf{stplanr}'s basic functionality rather than more advanced and esoteric features.
 A good example of this is the \code{SpatialLinesNetwork} class which could provide a basis for future developments including a \code{route\_sln} function to facilitate routing in R, without recourse to external services.
-Another example is the potential development of a `\code{OD}' class to represent origin-destination data, which could ease the geographical analysis of OD data via generic methods.
+This direction of `incremental growth' could proceed by adding interfaces to more transport planning APIs, including \href{https://www.routino.org/uk/}{Routino} and the \href{https://www.mapbox.com/directions/}{Directions} routing service provided by digital mapping company Mapbox.
+This diversity of routing options will mitigate the limitations of relying on online API services.
+
+Another example of the potential to develop basic functionality rather than new advanced features is the the possibility of creating an `\code{OD}' class to represent origin-destination data, which could ease the geographical analysis of OD data via generic methods.
 Building on the example data presented in previous sections the idea is for a single \code{OD} object to be able represent \code{flowlines}, \code{routes\_fast} and \code{routes\_quiet}.
 The recent development of the \CRANpkg{sf} (discussed below), with its support for multiple geometry columns, makes this option more feasible.
 
