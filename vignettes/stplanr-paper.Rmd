@@ -200,6 +200,31 @@ points(ca_local, pch = 4)
 points(ca_buff, cex = 3)
 ```
 
+### Reading census data:
+One common source of transport data are many country's national census.
+A census frequently includes questions on where people live and work, and ocassionally other common purposes (shopping, etc.).
+This is often accompanied by a question on what mode was taken.
+These data are generally provided in standard tables that can be downloaded for free.
+For the Australian census, both these standard tables are available as well as custom tables that can be produced using a service named TableBuilder.
+TableBuilder generates Excel or CSV files that contain additional lines that make reading these data into R difficult.
+**stplanr** provides the read_table_builder function to read in these files.
+
+Using the example `SA1Population.xlsx` file included with **stplanr** that contains the population by SA1 zone (a statistical area used for the Australian census), we can use the `read_table_builder` function to read and format the table for use in R.
+The function automatically removes the additional lines and sets the column headers and data types as appropriate.
+The result is a `data.frame` that can be used with GIS boundary files and other datasets produced for SA1 zones.
+
+```{r}
+data_dir <- system.file("extdata", package = "stplanr")
+t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
+                         filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
+```
+
+### Bicycle share data:
+**stplanr** can also be used in conjunction with complementary R packages for downloading data from Open Street Maps (OSM) using \CRANpkg{osmdata} and bicycle share data using the \CRANpkg{bikedata} package.
+
+The bicycle share data that can be accessed using the \CRANpkg{bikedata} package is particularly well suited for integration with stplanr as it produces origin-destination (OD) flows from bicycle sharing systems.
+
+
 ## Creating geographic desire lines
 
 Perhaps the most common type of aggregate-level transport information is origin-destination ('OD') data.
