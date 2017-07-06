@@ -403,6 +403,34 @@ points(ca_buff, cex = 3)
 \end{figure}
 \end{Schunk}
 
+\subsubsection{Reading census data} \label{reading-census-data}
+
+One common source of transport data are many country's national census.
+A census frequently includes questions on where people live and work, and ocassionally other common purposes (shopping, etc.).
+This is often accompanied by a question on what mode was taken.
+These data are generally provided in standard tables that can be downloaded for free.
+For the Australian census, both these standard tables are available as well as custom tables that can be produced using a service named TableBuilder.
+TableBuilder generates Excel or CSV files that contain additional lines that make reading these data into R difficult.
+\textbf{stplanr} provides the \texttt{read\_table\_builder} function to read in these files.
+
+Using the example \texttt{SA1Population.xlsx} file included with \textbf{stplanr} that contains the population by SA1 zone (a statistical area used for the Australian census), we can use the \texttt{read\_table\_builder} function to read and format the table for use in R.
+The function automatically removes the additional lines and sets the column headers and data types as appropriate.
+The result is a data.frame that can be used with GIS boundary files and other datasets produced for SA1 zones.
+
+\begin{Schunk}
+\begin{Sinput}
+data_dir <- system.file("extdata", package = "stplanr")
+t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
+                         filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
+\end{Sinput}
+\end{Schunk}
+
+\subsubsection{Bicycle share data} \label{bicycle-share-data}
+\textbf{stplanr} can also be used in conjunction with complementary R packages for downloading data from Open Street Maps (OSM) using \CRANpkg{osmdata} and bicycle share data using the \CRANpkg{bikedata} package.
+
+The bicycle share data that can be accessed using the \CRANpkg{bikedata} package is particularly well suited for integration with stplanr as it produces origin-destination (OD) flows from bicycle sharing systems.
+
+
 \subsection{Creating geographic desire
 lines}\label{creating-geographic-desire-lines}
 
@@ -485,7 +513,7 @@ complexity of realistic routing algorithms and need for
 context-specificity in the routing engine. Inexperienced cyclists, for
 example, would take a very different route than a heavy goods vehicle.
 \textbf{stplanr} tackles this issue in two ways: by providing routing
-functionality that can work on locally data and by using 3rd party APIs.
+functionality that can work on locally data and by using third party APIs.
 Each approach has advantages: local routing functionality is fast and free,
 whereas online routing services can be more sophisticated (e.g. taking
 into account local traffic conditions) and work anywhere in the world
@@ -785,6 +813,13 @@ plot(testcycleway, col = "green", add = TRUE)
 \includegraphics{netcatchplot-1} \caption[A 800 metre network catchment are (blue) compared with a catchment area based on Euclidean distance (red) associated with a cycle path (green)]{A 800 metre network catchment are (blue) compared with a catchment area based on Euclidean distance (red) associated with a cycle path (green).}\label{fig:netcatchplot}
 \end{figure}
 \end{Schunk}
+
+\texttt{calc\_catchment} and \texttt{calc\_network\_catchment} provide complementary functions that allow for the computation of catchment areas.
+Although for many transport applications it would be better to use the \texttt{calc\_network\_catchment} function that uses the true network distances, it may still be useful to use the straight-line version in some cases.
+These include calculating the population that may be affected by noise levels from transport infrastructure (such as a motorway) where the effects of noise are not limited by the network.
+In situations where network data is not available it would be possible to use the \texttt{calc\_catchment} function together with a fixed assumption about what straight-line distance corresponds to the desired network distance (i.e., 1km network = 700m straight-line).
+It may also be appropriate to use the straight-line distance when the network is not a reasonable constraint.
+This may be because the infrastructure of interest is accessed primarily by walking or cycling in an area where these are not limited to the road network (such as parks or shopping areas with passthroughs or overpasses available to pedestrians).
 
 \section{Modelling and visualisation}\label{modelling-and-visualisation}
 
