@@ -6,7 +6,7 @@
 
 \abstract{%
 Tools for transport planning should be flexible, transparent and scalable.
-The \textbf{stplanr} package provides such tools, with an emphasis on spatial transport data.
+The \textbf{stplanr} package provides such tools, with an emphasis on spatial transport data and non-motorized modes.
 \textbf{stplanr} facilitates common transport planning tasks including:
 downloading and cleaning transport datasets;
 creating geographic `desire lines' from origin-destination (OD) data;
@@ -51,10 +51,9 @@ each of these criteria. Packages such as \CRANpkg{sp}
 \citep{pebesma_classes_2005} and \CRANpkg{rgeos}
 \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and
 modelling capabilities \citep{bivand_applied_2013}. Packages building on
-the \textbf{sp} class system have been developed for specific domains,
-including \CRANpkg{SpatialEpi} \citep{kim_spatialepi:_2016},
-\CRANpkg{diseasemapping} \citep{brown_diseasemapping:_2016} and the
-\textbf{adehabitat} family of packages \citep{calenge_package_2006}.
+the \textbf{sp} class system have been developed for specific domains.
+These include: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
+and visualisation, as illustrated by \CRANpkg{leaflet}, \CRANpkg{tmap} and \CRANpkg{mapview}.
 
 Inspired by such efforts and driven by our own research needs, our
 primary aim for \textbf{stplanr} is to provide an R toolbox for
