@@ -5,20 +5,22 @@
 \maketitle
 
 \abstract{%
-Tools for transport planning should be flexible, robust and scalable.
-\textbf{stplanr} is a package that provides transport planning functionality
-in R that meets each of these criteria.
-The focus is on spatial data operations commoly required in the field,
-including: tools to import and clean transport
-datasets; the creation of geographic `desire lines' from
-origin-destination (OD) data; route assignment of desire lines to the
-transport network, e.g.~via interfaces to routing services such as
-CycleStreets.net; functions to calculate the geographic attributes of such routes,
-such as their bearing and equidistant surroundings; and `travel
-watershed' analysis. With reproducible examples and using real transport
-datasets, this article demonstrates how R can form the basis of a
-reproducible and flexible transport planning workflow. We conclude with
-a brief discussion of desirable directions of future development.
+Tools for transport planning should be flexible, transparent and scalable.
+The \textbf{stplanr} package provides such tools, with an emphasis on spatial transport data.
+\textbf{stplanr} facilitates common transport planning tasks including:
+downloading and cleaning transport datasets;
+creating geographic `desire lines' from origin-destination (OD) data;
+route assignment, via the \code{SpatialLinesNetwork} class and
+interfaces to routing services such as CycleStreets.net;
+calculation of route segment attributes such as bearing and aggregate flow;
+and `travel watershed' analysis.
+This paper demonstrates this functionality using reproducible examples on real transport
+datasets.
+More broadly, the experience shows R can form the basis of an open source and reproducible
+transport planning workflow.
+We argue that this approach is more democratically accountable and conducive
+to `citizen science' and innovation than
+the incumbent approach based on expensive, proprietary and difficult-to-use products.
 }
 
 \section{Introduction}\label{introduction}
@@ -37,8 +39,6 @@ Software for transport planning should be:
 \tightlist
 \item
   flexible, able to handle a wide range of data formats
-\item
-  robust, able to generate reproducible results for transparent decision-making
 \item
   scalable, able to work at multiple geographic levels from single streets to large cities and regions
 \item
