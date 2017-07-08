@@ -649,10 +649,11 @@ Car  &   2759.89 & 4754772 & NA\tabularnewline
 \subsection{Modelling travel catchment
 areas}\label{modelling-travel-catchment-areas}
 
-Accessibility to transport services is a particularly important topic
+Accessibility to transport services, meaning ease of access rather than
+it simply being possible to get somewhere, is an important topic
 when considering public transport or active travel because of the
-frequent steep reduction in use as distances to access services (or
-infrastructure) increase. As a result, the planning for transport
+steep reduction in use with distance to services (or
+infrastructure). As a result, the planning for transport
 services and infrastructure frequently focuses on several measures of
 accessibility including distance, but also travel times and frequencies
 and weighted by population. The functions in \textbf{stplanr} are
@@ -753,7 +754,8 @@ is a reasonable approximation of the route taken to walk (or cycle) to a
 transport facility. However, this is often not the case. The catchment
 area in Figure \ref{fig:catchmentplot} initially appears reasonable but
 the red-shaded catchment area includes an area that requires travelling
-around a bay to access from the (green-coloured) cycleway. To allow for
+around a bay to access from the (green-coloured) cycleway:
+users may have \emph{access} but that does not mean it's \emph{accessible}. To allow for
 more realistic catchment areas for most situations, \textbf{stplanr}
 provides the \texttt{calc\_network\_catchment} function that uses the
 same principle as \texttt{calc\_catchment} but also takes into account
