@@ -6,14 +6,14 @@
 
 \abstract{%
 Tools for transport planning should be flexible, robust and scalable.
-\textbf{stplanr} meets each of these criteria by providing functionality
-commonly needed for transport planning in R, with an emphasis on spatial
-transport data. This includes tools to import and clean transport
+\textbf{stplanr} is a package that provides transport planning functionality
+in R that meets each of these criteria.
+The focus is on spatial data operations commoly required in the field,
+including: tools to import and clean transport
 datasets; the creation of geographic `desire lines' from
-origin-destination data; methods to assign these desire lines to the
+origin-destination (OD) data; route assignment of desire lines to the
 transport network, e.g.~via interfaces to routing services such as
-CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine
-(OSRM); functions to calculate the geographic attributes of such routes,
+CycleStreets.net; functions to calculate the geographic attributes of such routes,
 such as their bearing and equidistant surroundings; and `travel
 watershed' analysis. With reproducible examples and using real transport
 datasets, this article demonstrates how R can form the basis of a
@@ -628,14 +628,16 @@ rbind(ny2oaxaca1@data, ny2oaxaca2@data)
 \end{Sinput}
 \end{Schunk}
 
-\begin{longtable}[]{@{}rrr@{}}
+\begin{longtable}[]{@{}lrrr@{}}
 \toprule
-time & dist & change\_elev\tabularnewline
+mode & time & dist & change\_elev\tabularnewline
 \midrule
 \endhead
-17522.73 & 4885663 & 87388.13\tabularnewline
-2759.89 & 4754772 & NA\tabularnewline
+Bike & 17522.73 & 4885663 & 87388.13\tabularnewline
+Car  &   2759.89 & 4754772 & NA\tabularnewline
 \bottomrule
+\caption[Results obtained from the Graphhopper API]{Results obtained from the Graphhopper API using the \code{route\_graphhopper} function to estimate the time taken and route distance to travel between New York and Oaxaca by cycling and driving.}
+\label{tab:xtnyoa}
 \end{longtable}
 
 \subsection{Modelling travel catchment
