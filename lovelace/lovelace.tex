@@ -149,21 +149,25 @@ focus on problems, rather than on wrestling with unwieldy datasets,
 clunky graphical user interfaces (GUIs), and ad-hoc scripts that could
 be generalised. Furthermore, if the process can be made reproducible and
 accessible (e.g.~via online visualisation packages such as
-\CRANpkg{shiny} and \CRANpkg{leaflet}), this will help transport
-planning move away from reliance on `black boxes' and become a more
-transparent and democratic activity
+\CRANpkg{shiny}), this could help transport
+planning move away from reliance on `black boxes' to become a more
+democratic activity
 \citep{waddell_urbansim:_2002,hollander_who_2015}.
 
-The technical advantages of using modern, interpreted, and open source
-languages such as R are manifold: they enable automation and sharing of
-methods between researchers, for example the application of methods
-developed for one city to another; they ease the integration with other
-software systems and the web; and they have very strong user
-communities. The advantages of using R specifically to develop the
-functionality described in this paper are that it has unparalleled
+There are further potential advantages of using scriptable, interpreted, open source
+languages such as R for transport planning:
+they enable reproducible research, the automation and sharing of
+code between researchers; and integration with other
+software systems, as illustrated by the use of \CRANpkg{leaflet}
+to share interactive maps for transport planning \citep{lovelace_propensity_2017}.
+Furthermore, R has a strong user community which can support newcomers
+(this package benefited from peer review thanks ROpenSci).
+The advantages of using R specifically to develop the
+functionality described in this paper are that it has excellent
 geo-statistical capabilities \citep{pebesma_software_2015},
-visualisation packages (e.g. \CRANpkg{tmap}, \CRANpkg{ggplot2}) and the
-ability to rapidly read-in data stored in many formats (e.g.~via the
+visualisation packages (e.g. \CRANpkg{tmap}, \CRANpkg{ggplot2}),
+support for multinomial logit models (which are useful for modelling modal shift),
+and support for the many formats that transport datasets are stored in (e.g.~via the
 \CRANpkg{haven} and \CRANpkg{rio} packages).
 
 \section{Package structure and
@@ -860,7 +864,7 @@ ratio of network distance to Euclidean distance
 \]
 
 An extension to the concept of cirquity is the `quietness diversion
-factor' (\(QDF\)) of a desire line \citep{lovelace_propensity_2016}, the
+factor' (\(QDF\)) of a desire line \citep{lovelace_propensity_2017}, the
 ratio of the route distance of a quiet route option (\(d_{Rq}\)) to that
 of the fastest:
 
