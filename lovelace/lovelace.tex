@@ -44,7 +44,7 @@ Software for transport planning should be:
   open source and reproducible, encouraging citizen science and transparent, democratic decision making based on data rather than opinion
 \end{itemize}
 
-This paper sets out to demonstrate, with numerous reproducible examples, that
+This paper sets out to demonstrate, with reproducible examples, that
 R can provide a foundation for transport planning software that meets
 each of these criteria. Packages such as \CRANpkg{sp}
 \citep{pebesma_classes_2005} and \CRANpkg{rgeos}
@@ -53,6 +53,10 @@ modelling capabilities \citep{bivand_applied_2013}. Packages building on
 the \textbf{sp} class system have been developed for specific domains.
 These include: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
 and visualisation, as illustrated by \CRANpkg{leaflet}, \CRANpkg{tmap} and \CRANpkg{mapview}.
+However there has been little prior work to develop R functionality designed
+specifically to assist with transport planning (with the notable exception of
+\href{http://r-forge.r-project.org/projects/travelr/}{TravelR}, a
+package on R-Forge last updated in 2012), to the best of our knowledge.
 
 Inspired by such efforts and driven by our own research needs, our
 primary aim for \textbf{stplanr} is to provide an R toolbox for
