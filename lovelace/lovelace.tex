@@ -446,11 +446,18 @@ The bicycle share data that can be accessed using the \CRANpkg{bikedata} package
 \subsection{Creating geographic desire
 lines}\label{creating-geographic-desire-lines}
 
-Perhaps the most common type of aggregate-level transport information is
-origin-destination (`OD') data. This can be presented either as a matrix
-or (more commonly) a long table of OD pairs. An example of this type of
-raw data is provided below (see \texttt{?flow} to see how this dataset
-was created).
+Origin-destination (`OD') data, which represent the number of people travelling between
+geographical zones, is a key input for transport planning \citep{calabrese_estimating_2011}.
+OD data usually represent an aggregate data source, and are therefore able to represent the
+travel patterns of an entire country in a file of manageable size.
+They can be stored as a (sparse) matrix or (more commonly) a long table of OD pairs.
+The long form is illustrated in the code chunk below which shows a sample of
+the \texttt{flow} object.
+\texttt{flow} is a \texttt{data.frame} representing the number
+of home-work commutes by mode between residential
+areas in the UK, provided provided in \CRANpkg{stplanr}
+for teaching and demonstration purposes
+(see \texttt{?flow} to see how this dataset was created):
 
 \begin{Schunk}
 \begin{Sinput}
