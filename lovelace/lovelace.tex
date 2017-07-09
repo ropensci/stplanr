@@ -478,15 +478,10 @@ head(flow[c(1:3, 12)])
 Although the flow data displayed above describes movement over
 geographical space, it contains no explicitly geographical information.
 Instead, the coordinates of the origins and destinations are linked to a
-separate geographical dataset which also must be loaded to analyse the
-flows. This is a common problem solved by the function \texttt{od2line}.
-The geographical data is a set of points representing centroids of the
-origin and destinations, saved as a \texttt{SpatialPointsDataFrame}.
-Geographical data in R is best represented as such \texttt{Spatial*}
-objects, which use the \texttt{S4} object engine. This explains the
-close integration of \textbf{stplanr} with R's spatial packages,
-especially \textbf{sp}, which defines the \texttt{S4} spatial object
-system.
+separate geographical dataset (represented by the \texttt{cents} dataset),
+as illustrated below:\footnote{Such geographic datasets are best represented as in a spatial class system, explaining
+\textbf{stplanr}'s close integration with R's spatial packages.}
+
 
 \begin{Schunk}
 \begin{Sinput}
@@ -501,9 +496,11 @@ as.data.frame(cents[1:3, -c(3,4)])
 \end{Soutput}
 \end{Schunk}
 
-We use \texttt{od2line} to combine \texttt{flow} and \texttt{cents}, to
-join the former to the latter. We will visualise the \texttt{l} object
-created below in the next section.
+A common task is linking an OD dataset (e.g. \texttt{flow}) to a geographic dataset
+representing zone centroids (e.g. \texttt{cents}).
+We use \texttt{od2line} to combine them, as illustrated in the code chunk below,
+which creates an object named \texttt{l} that will be visualised
+in the next section:
 
 \begin{Schunk}
 \begin{Sinput}
@@ -511,9 +508,9 @@ l <- od2line(flow = flow, zones = cents)
 \end{Sinput}
 \end{Schunk}
 
-The data is now in a form that is much easier to analyse. We can plot
-the data with the command \texttt{plot(l)}, which was not possible
-before. Because the \texttt{SpatialLinesDataFrame} object also contains
+The data is now in a form that is much easier to analyse, allowing us to visualise
+the variability of travel patterns over geographic space.
+Because the \texttt{SpatialLinesDataFrame} object also contains
 data per line, it also helps with visualisation of the flows, as
 illustrated in Figure \ref{fig:lines_routes}.
 
