@@ -258,18 +258,24 @@ lines\tabularnewline
 \end{longtable}
 
 With a tip of the hat to the concept of type stability (e.g.~as
-implemented in \CRANpkg{dplyr}), we also plan to make the core functions
-of \textbf{stplanr} more type-stable in future releases. Core functions,
-which begin with the prefixes listed above, could follow
-\CRANpkg{dplyr}'s lead and return only objects with the same class as
+implemented in \CRANpkg{dplyr}), we would like
+\textbf{stplanr} function type-stable in future releases.
+A systematic way to do this would be to define `core' functions
+as those which begin with the prefixes listed above
+and ensure that these return objects with the same class as
 that of the input. However there are limitations to this approach: it
-will break existing functionality and mean that output objects have a
-larger size than necessary (\texttt{line\_bearing}, for example, does
-not need to duplicate the spatial data contained in its input). Instead,
+risks breaking existing functionality and outputting objects with a
+larger size than necessary.
+\texttt{line\_bearing}, for example, does
+not need to duplicate the spatial data contained in its input.
+Instead,
 we plan to continue to name functions around the type of \emph{input}
-data they take, but are open minded about function input-output data
-class conventions, especially in the context of the new class system
-implemented in \CRANpkg{sf}.
+data they take, but are open minded about input-output data
+class conventions.
+The issue of breaking changes could be resolved by only applying type stability
+only to objects of class \texttt{sf} from  the new \CRANpkg{sf} package,
+which represents a paradigm in R's handling of
+spatial data in R that has many advantages over its predecessor \CRANpkg{sp}.
 
 A class system has not been developed for each data type (this option is
 discussed in the final section). The most common data types used in
