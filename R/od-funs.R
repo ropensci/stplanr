@@ -286,18 +286,17 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     e
   }
 
-    rc <- as.list(rep(NA, length(l)))
-    for(i in 1:n_ldf){
-      rc[[i]] <- tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = error_fun)
-      perc_temp <- i %% round(n_ldf / n_print)
-      # print % of distances calculated
-      if(!is.na(perc_temp) & perc_temp == 0){
-        message(paste0(round(100 * i/n_ldf), " % out of ", n_ldf, " distances calculated"))
-      }
+  rc <- as.list(rep(NA, length(l)))
+  for(i in 1:n_ldf){
+    rc[[i]] <- tryCatch({
+      FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+    }, error = error_fun)
+    perc_temp <- i %% round(n_ldf / n_print)
+    # print % of distances calculated
+    if(!is.na(perc_temp) & perc_temp == 0){
+      message(paste0(round(100 * i/n_ldf), " % out of ", n_ldf, " distances calculated"))
     }
-
+  }
 
   if(list_output) {
     r <- rc
