@@ -19,7 +19,6 @@
 #'
 #' @import sp
 #' @import rgdal
-#' @import foreach
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom graphics text
 #' @importFrom methods as slot

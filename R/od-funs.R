@@ -296,6 +296,9 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
 
   if(n_processes > 1){
+    if(!require(foreach)) {
+      stop("You must install foreach before running this code")
+    }
     rc <- foreach::foreach(i = 1:n_ldf, .errorhandling = "pass") %dopar% {
       FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
     }

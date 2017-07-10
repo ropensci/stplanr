@@ -28,7 +28,6 @@ Imports:
     jsonlite,
     stringi,
     stringr,
-    foreach,
     lubridate,
     maptools,
     raster,
@@ -50,6 +49,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
+    foreach,
     tmap
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
