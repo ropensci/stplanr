@@ -32,7 +32,6 @@
 #' @importFrom igraph graph E
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
-#' @importFrom doParallel registerDoParallel
 #' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
 #'
