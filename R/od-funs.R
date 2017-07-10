@@ -296,9 +296,6 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
   }
 
   if(n_processes > 1){
-    if(!require(foreach)) {
-      stop("You must install foreach before running this code")
-    }
     rc <- foreach::foreach(i = 1:n_ldf, .errorhandling = "pass") %dopar% {
       FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
     }
@@ -317,7 +314,9 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     }
   }
 
-  if(!list_output){
+  if(list_output) {
+    r <- rc
+  } else {
     # Set the names based on the first non failing line (then exit loop)
     for(i in 1:n_ldf){
       if(grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
