@@ -19,6 +19,7 @@
 #'
 #' @import sp
 #' @import rgdal
+#' @import curl
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify
 #' @importFrom graphics text
 #' @importFrom methods as slot
