@@ -28,7 +28,6 @@ Imports:
     jsonlite,
     stringi,
     stringr,
-    foreach,
     lubridate,
     maptools,
     raster,
@@ -41,7 +40,6 @@ Imports:
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    doParallel,
     rlang
 LinkingTo:
     RcppArmadillo,
