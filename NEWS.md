@@ -2,6 +2,18 @@
 
 ## NEW FEATURES
 
+* Dependency cull: we have removed dependencies on foreach and doParallel
+* `route_cyclestreet()` now also called (correctly) `route_cyclestreets()`
+* New `geo_code()` function replaces dependency on RGoogleMaps
+
+## BUG FIXES
+
+* See issues closed after the last release with this search term: https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&q=is%3Aissue%20closed%3A%3E2017-06-01%20
+* Bug with `google_dist()` fixed
+* Fixed fails due to breaking changes in dplyr 0.8: 
+
+## NEW FEATURES
+
 * New argument `combinations` added to `sum_network_routes()` so it runs quicker - see [pull/177](https://github.com/ropensci/stplanr/pull/177).
 * New examples added to `sum_network_routes()`, `weightfield()` and `find_network_nodes()` - see e.g. `example(sum_network_routes)` for details.
 * New dataset `l_poly` [added](https://github.com/ropensci/stplanr/commit/7641760fbd6718352ed74142e5c339f6216afea4).
