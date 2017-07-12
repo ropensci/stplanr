@@ -62,7 +62,7 @@ and place names, found using the Google Map API:
 
 ``` r
 if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("Bradford, UK", "Leeds, UK", plan = "balanced")
+  trip <- route_cyclestreet("Bradford, UK", "Leeds, Yorkshire", plan = "balanced")
   plot(trip)
 }
 ```
@@ -153,16 +153,25 @@ To get internal help on a specific function, use the standard way.
 Dependencies
 ------------
 
-**stplanr** has many dependencies. These are designed to help make it fast, but may make it slow to install for the first time.
-
-Its dependencies are plotted below using the **minCRAN** package:
+**stplanr** imports many great packages that it depends on. Many thanks to the developers of these tools:
 
 ``` r
-dg <- miniCRAN::makeDepGraph("stplanr")
-plot(dg)
+desc = read.dcf("DESCRIPTION")
+headings = dimnames(desc)[[2]]
+fields = which(headings %in% c("Depends", "Imports", "Suggests"))
+pkgs = paste(desc[fields], collapse = ", ")
+pkgs = gsub("\n", " ", pkgs)
+strsplit(pkgs, ",")[[1]]
+#>  [1] "sp"                " R (>= 3.0)"       " curl"            
+#>  [4] " readr"            " dplyr"            " httr"            
+#>  [7] " jsonlite"         " stringi"          " stringr"         
+#> [10] " lubridate"        " maptools"         " raster"          
+#> [13] " rgdal"            " rgeos"            " openxlsx"        
+#> [16] " methods"          " R.utils"          " geosphere"       
+#> [19] " Rcpp (>= 0.12.1)" " igraph"           " nabor"           
+#> [22] " rlang"            " testthat"         " knitr"           
+#> [25] " rmarkdown"        " tmap"
 ```
-
-![](vignettes/README-unnamed-chunk-11-1.png)
 
 Meta
 ----
