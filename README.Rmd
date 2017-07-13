@@ -160,7 +160,7 @@ On Mac, homebrew can install gdal. Full instructions are provided
 
 ## Funtions, help and contributing
 
-The current list of available functions can be seen with:
+The list of available functions can be seen with:
 
 ```{r, eval=FALSE}
 lsf.str("package:stplanr", all = TRUE)
