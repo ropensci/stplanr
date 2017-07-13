@@ -544,14 +544,16 @@ without warning in the future.
 
 Route allocation is undertaken by \code{route\_} functions such as
 \code{route\_cyclestreets} and \linebreak \code{route\_graphhopper}.
-These allocate a single OD pair, represented as a text string to be
-`geo-coded', a pair of of coordinates, or two spatial point
-objects, representing origins and destinations. This is illustrated
+These allocate a single OD pair (represented by \texttt{from} and \texttt{to}
+arguments as coordinates,
+spatial point objects or text strings to be
+`geo-coded') to the transport network.
+This is illustrated
 below with \texttt{route\_cyclestreet}, which uses the
 \href{http://www.cyclestreets.net/api/}{CycleStreets.net API}, a routing
 service ``by cyclists for cyclists'' that offers a range route
-strategies (primarily `fastest', `quietest' and `balanced') that are
-based on a detailed analysis of cyclist wayfinding:\footnote{An API key
+algorithms (primarily `fastest', `quietest' and `balanced'):\footnote{An
+API key
   is needed for this function to work. This can be requested (or
   purchased for large scale routing) from
   \href{https://www.cyclestreets.net/api/apply/}{cyclestreets.net/api/apply}.
@@ -560,7 +562,7 @@ based on a detailed analysis of cyclist wayfinding:\footnote{An API key
 
 \begin{Schunk}
 \begin{Sinput}
-route_bl <- route_cyclestreet(from = "Bradford", to = "Leeds")
+route_bl <- route_cyclestreet(from = "Bradford, Yorkshire", to = "Leeds, Yorkshire")
 route_c1_c2 <- route_cyclestreet(cents[1,], cents[2,])
 \end{Sinput}
 \end{Schunk}
