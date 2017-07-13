@@ -629,9 +629,11 @@ of Europe). To overcome these limitations, additional routing APIs were
 added with the functions \texttt{route\_graphhopper},
 \texttt{route\_transportapi\_public} and \texttt{viaroute}. These
 interface to Graphhopper, TransportAPI and the Open Source Routing
-Machine (OSRM) routing services, respectively. The great advantage of
-OSRM is that it allows you to run your own routing services on a local
-server, greatly increasing the rate of route generation.
+Machine (OSRM) routing services, respectively. An advantage of
+OSRM is that there many are guides (such as that provided by
+\href{https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04}{DigitalOcean}
+demonstrating how to set-up a local OSRM server, removing the performance penalty of
+routing over the internet.
 
 A short example of finding the route by car and bike between New York
 and Oaxaca demonstrates how \texttt{route\_graphhopper} can collect
@@ -849,8 +851,18 @@ This may be because the infrastructure of interest is accessed primarily by walk
 
 \subsection{Modelling mode choice}\label{modelling-mode-choice}
 
-Route-allocated lines allow estimation of \emph{route distance} and
-\emph{cirquity} (route distance divided by Euclidean distance). These
+Route-allocated lines allow estimation of \emph{route distance} and therefore
+\emph{circuity ($Q$)} (route distance divided by Euclidean distance)
+\citep{levinson_minimum_2009}:
+
+\[
+ Q = \frac{d_{Rf}}{d_E}
+\]
+
+where (\(d_E\)) and (\(d_{Rf}\)) represent
+Euclidean and fastest route distance respectively.
+
+These
 variables can help model the rate of flow between origins and
 destination, as illustrated in the left-hand panel of Figure
 \ref{fig:euclidfastest}. The code below demonstrates how objects
@@ -872,13 +884,7 @@ The left hand panel of Figure \ref{fig:euclidfastest} shows the expected
 strong correlation between Euclidean (\(d_E\)) and fastest route
 (\(d_{Rf}\)) distance. However, some OD pairs have a proportionally
 higher route distance than others, as illustrated by distance from the
-black line in the above plot: this represents \emph{Circuity ($Q$)}: the
-ratio of network distance to Euclidean distance
-\citep{levinson_minimum_2009}:
-
-\[
- Q = \frac{d_{Rf}}{d_E}
-\]
+black line in the above plot.
 
 An extension to the concept of cirquity is the `quietness diversion
 factor' (\(QDF\)) of a desire line \citep{lovelace_propensity_2017}, the
@@ -921,12 +927,15 @@ The results show that cycle paths are not particularly direct in the
 study region by international standards \citep{crow_design_2007}. This
 is hardly surprisingly given the small size of the sample and the short
 distances covered: \(Q\) tends to decrease at a decaying rate with
-distance. What is surprising is that \(QDF\) is close to unity, which
+distance, meaning longer paths tend to be more direct.
+What is surprising is that the quietness diversion factor
+\(QDF\) is close to unity, which
 could imply that the quiet routes are constructed along direct, and
-therefore sensible routes. We should caution against such assumptions,
-however: It is a small sample of desire lines and, when time is
+therefore sensible routes.
+When time is
 explored, we find that the `quietness diversion factor with respect to
-time' (\(QDF_t\)) is slightly larger:
+time' (\(QDF_t\)) is slightly larger,
+although larger datasets would be needed for any inferences to be made:
 
 \begin{Schunk}
 \begin{Sinput}
