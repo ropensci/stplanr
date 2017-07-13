@@ -1,7 +1,7 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.1.8.9000
+Version: 0.1.9
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
     person("Richard", "Ellison", role = c("aut")),
@@ -28,7 +28,6 @@ Imports:
     jsonlite,
     stringi,
     stringr,
-    foreach,
     lubridate,
     maptools,
     raster,
@@ -41,7 +40,6 @@ Imports:
     Rcpp (>= 0.12.1),
     igraph,
     nabor,
-    doParallel,
     rlang
 LinkingTo:
     RcppArmadillo,
