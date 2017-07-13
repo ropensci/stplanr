@@ -228,15 +228,16 @@ spatial transport data:
   routes. All are typically stored as \texttt{SpatialLinesDataFrame}.
 \end{itemize}
 
-For ease of use, functions focussed on each data type have been
-developed with names prefixed with \texttt{od\_}, \texttt{line\_} and
-\texttt{route\_} respectively. A selection of these is presented in
-Table 1. Additional `core functions' could be developed, such as those
+A convention has been developed whereby function names are
+prefixed depending on the the input data type
+(\texttt{od\_}, \texttt{line\_} and
+\texttt{route\_} respectively). A selection of these is presented in
+Table 1 (\texttt{lsf.str("package:stplanr")} returns a list of all functions).
+Additional `core functions' could be developed, such as those
 prefixed with \texttt{rn\_} (for working with route network data) and
-\texttt{g\_} functions for geographic operations such as buffer creation
+\texttt{geo\_} functions for geographic operations such as buffer creation
 on lat/lon projected data (this function is currently named
-\texttt{buff\_geo}). We plan to elicit feedback on such changes before
-implementing them.
+\texttt{buff\_geo}).
 
 \begin{longtable}[]{@{}lll@{}}
 \caption{Selection of functions for working with or generating OD, line
@@ -1152,6 +1153,15 @@ that direction compared with what was available a couple of years ago.
 But there is much more to do. We therefore welcome input on where the
 package's priorities should lie, how it should evolve in the future and
 how to ensure it is well-developed and sustained.
+
+\section{Acknowledgements}
+
+We would like to thank a number of people and organisations who have supported the development of \CRANpkg{stplanr}:
+the Propensity to Cycle Tool team (see \href{http://www.pct.bike/}{www.pct.bike}) and the Department for Transport which funded the research, motivating the creation of functions for handling OD data;
+Colin Gillespie, whose teaching supported the creation of the package;
+to the ROpenSci community for hosting the package (special thanks to Scott Chamberlin who reviewed the package);
+to Ma{\"e}lle Salmon, Mark Padgham, Martin Lucas-Smith and Marcus Young for commenting on early drafts of this paper;
+and to the open source software community in general for creating the countless technologies on which the software depends.
 
 \bibliography{references}
 
