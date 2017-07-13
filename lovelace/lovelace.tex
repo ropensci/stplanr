@@ -18,7 +18,7 @@ This paper demonstrates this functionality using reproducible examples on real t
 datasets.
 More broadly, the experience shows open source software can form the basis of a reproducible
 transport planning workflow.
-\CRANpkg{stplanr}, alongside other open source projects,
+\textbf{stplanr}, alongside other open source projects,
 could provide a more transparent and democratically accountable alternative to the
 current approach which is heavily reliant on proprietary and inaccessible software.
 }
@@ -50,9 +50,11 @@ R can provide a foundation for transport planning software that meets
 each of these criteria. Packages such as \CRANpkg{sp}
 \citep{pebesma_classes_2005} and \CRANpkg{rgeos}
 \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and
-modelling capabilities \citep{bivand_applied_2013}. Packages building on
-the \textbf{sp} class system have been developed for specific domains.
-These include: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
+modelling capabilities \citep{bivand_applied_2013}
+(see the \ctv{Spatial} task view for an overview).
+Packages building on
+spatial class system have been developed for specific domains,
+including: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
 and visualisation, with packages such as \CRANpkg{leaflet}, \CRANpkg{tmap}, \CRANpkg{mapview} and \CRANpkg{mapmisc} \citep{RJ-2016-005}.
 However there has been little prior work to develop R functionality designed
 specifically to assist with transport planning (with the notable exception of
@@ -448,7 +450,7 @@ t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
 
 The bicycle share data that can be accessed using the \CRANpkg{bikedata} package is particularly well suited for integration with stplanr as it produces origin-destination (OD) flows from bicycle sharing systems.
 This data can be used together with the \texttt{sum\_network\_links} function to generate the likely paths and how these overlap.
-This can be used to generate heatmaps of a road network showing the most common routes such as in Figure \ref{fig:nyc-bicycle-data} (see \href{https://github.com/ropensci/stplanr/issues/194}{issue 194} for details).
+This can be used to generate heatmaps of a road network showing the most common routes such as in Figure \ref{fig:nyc-bicycle-data} (see \href{https://github.com/ropensci/stplanr/issues/194}{#194} in the package's issue tracker for details).
 
 \begin{figure}
 
