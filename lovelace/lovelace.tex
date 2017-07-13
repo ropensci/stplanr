@@ -53,7 +53,7 @@ each of these criteria. Packages such as \CRANpkg{sp}
 modelling capabilities \citep{bivand_applied_2013}. Packages building on
 the \textbf{sp} class system have been developed for specific domains.
 These include: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
-and visualisation, as illustrated by \CRANpkg{leaflet}, \CRANpkg{tmap} and \CRANpkg{mapview}.
+and visualisation, with packages such as \CRANpkg{leaflet}, \CRANpkg{tmap}, \CRANpkg{mapview} and \CRANpkg{mapmisc} \citep{RJ-2016-005}.
 However there has been little prior work to develop R functionality designed
 specifically to assist with transport planning (with the notable exception of
 \href{http://r-forge.r-project.org/projects/travelr/}{TravelR}, a
@@ -1061,11 +1061,11 @@ and communicating transport data.
 This paper demonstrates how R can be used for transport planning, with reference to functions and example datasets and use cases from our package \CRANpkg{stplanr}.
 This is, to our knowledge, the first package aimed specifically to help practitioners and researchers design more sustainable transport systems.
 However, much more is possible in this direction.
-Indeed, transport planning is a large and highly diverse area.
+% Indeed, transport planning is a large and highly diverse area.
 % Add this as a footnote?
 % Transport planning has links to areas of knowledge which are already well-served by packages have yet to receive much (if any) attention from the transport community statistical networks, activity space analysis and the development of interactive online visualisations to encourage public engagement in the process.
-Within this multi-disciplinarity, the focus of \CRANpkg{stplanr} is on geographic transport data.
-We decided to narrow the package's scope in this way for three main reasons, which will influence its future development:
+
+\CRANpkg{stplanr} is deliberately focussed on geographic transport data for three main reasons, which will influence its future development:
 
 \begin{itemize}
 \tightlist
@@ -1077,8 +1077,7 @@ We decided to narrow the package's scope in this way for three main reasons, whi
 The final reason is important for the package's longevity, providing an incentive for the package's future development.
 The lack of existing packages that do the same job direct our attention towards \textbf{stplanr}'s basic functionality rather than more advanced and esoteric features.
 A good example of this is the \code{SpatialLinesNetwork} class which could provide a basis for future developments including a \code{route\_sln} function to facilitate routing in R, without recourse to external services.
-This direction of `incremental growth' could proceed by adding interfaces to more transport planning APIs, including \href{https://www.routino.org/uk/}{Routino} and the \href{https://www.mapbox.com/directions/}{Directions} routing service provided by digital mapping company Mapbox.
-This diversity of routing options will mitigate the limitations of relying on online API services.
+This direction of `incremental growth' could proceed by adding interfaces to more transport planning APIs, including \href{https://www.routino.org/uk/}{Routino} and \href{https://www.mapbox.com/directions/}{Directions} provided by mapping company Mapbox, mitigating the limitations of online API services.
 
 Another example of the potential to develop basic functionality rather than new advanced features is the the possibility of creating an `\code{OD}' class to represent origin-destination data, which could ease the geographical analysis of OD data via generic methods.
 Building on the example data presented in previous sections the idea is for a single \code{OD} object to be able represent \code{flowlines}, \code{routes\_fast} and \code{routes\_quiet}.
@@ -1091,8 +1090,12 @@ For this reason we have endeavoured to use efficient programming techniques pack
 \CRANpkg{stplanr} was first developed to generate data for the national
 Propensity to Cycle Project, which involved generating geographic desire lines for over 700,000 routes \citep{lovelace_propensity_2017} (and in Phase 2, over 4 million).
 This experience led to a number of optimisations in the code, including an implementation a faster implementation of the \code{od2line} function (\code{od2line2}) and a commit that led to a 10 fold speed-up in the \code{line2route} function (see commit \href{https://github.com/ropensci/stplanr/commit/c834abf7d0020c6fbb33845572d6be4801f31f47}{c834abf}).
-However, there are still many opportunities for improving the package's computational efficiency.
-These include integration with transport databases that provide fast access to large international datasets (e.g. via the packages \CRANpkg{bikedata} and \CRANpkg{osmdata}, the implementation of interfaces to batch routing APIs, parallel implementations of time-consuming functions (building on our experience of providing an \code{n\_processes} argument in the function \code{line2route}) and the refactoring of functions which are found to be slow (e.g. \code{overline}, which takes hours to run on large datasets).
+
+However, there are still opportunities for improving performance, including:
+integration with transport databases (e.g. via the \CRANpkg{bikedata} package);
+support for batch routing APIs;
+parallel implementations of time-consuming functions;
+and the refactoring of slow functions (e.g. \code{overline}, which takes hours to run on large datasets).
 
 % and free accessibility makes it well-suited
 % to the needs of transport planners and researchers, especially those
@@ -1111,10 +1114,17 @@ transport modelling, such as
 \href{http://www.dlr.de/ts/en/desktopdefault.aspx/tabid-9883/16931_read-41000/}{SUMO},
 \href{http://www.matsim.org/}{MATSim} and
 \href{https://its.mit.edu/software/mitsimlab}{MITSIMLAB}
-\citep{saidallah_comparative_2016}. \textbf{stplanr}, with its focus on
-GIS operations rather than microscopic vehicle-level behaviour, can
+\citep{saidallah_comparative_2016}.
+In this context, \textbf{stplanr}'s focus on
+GIS operations represents a nich in the market, allowing it to
 complement such software and help make better use of new open data
 sources.
+
+Furthermore \textbf{stplanr} could be used alongside other R packages that
+would benefit from spatial transport data as input.
+These include packages for activity space analysis (e.g. \CRANpkg{aspace}) and
+service location planning (e.g. \CRANpkg{MCI}) \citep{RJ-2017-020}.
+
 
 Because transport planning is an inherently spatial activity,
 \textbf{stplanr} occupies an important niche in the transport planning
