@@ -1,4 +1,4 @@
-# stplanr 0.1.8
+# stplanr 0.1.9
 
 ## NEW FEATURES
 
@@ -10,7 +10,9 @@
 
 * See issues closed after the last release with this search term: https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&q=is%3Aissue%20closed%3A%3E2017-06-01%20
 * Bug with `google_dist()` fixed
-* Fixed fails due to breaking changes in dplyr 0.8: 
+* Fixed fails due to breaking changes in dplyr
+
+# stplanr 0.1.8
 
 ## NEW FEATURES
 
