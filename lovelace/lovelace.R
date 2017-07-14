@@ -204,5 +204,21 @@ lines(l2$d_euclidean, lm1p)
 lines(l2$d_euclidean, exp(lm2p), col = "green")
 lines(l2$d_euclidean, exp(lm3p), col = "red")
 
+library(nycflights13)
+data("airports")
+crs <- CRS("+init=epsg:4326")
+coords <- cbind(airports$lon, airports$lat)
+airports_sp <- SpatialPointsDataFrame(coords, airports, proj4string = crs)
+ny_buff <- buff_geo(shp = airports_sp[airports_sp$faa == "NYC",], width = 1e6)
+airports_near <- airports_sp[ny_buff,]
+flights_near <- flights[flights$dest %in% airports_near$faa,]
+flights_agg <- group_by(flights_near, origin, dest) %>%
+  summarise(Flights = n())
+flights_sp = od2line(flow = flights_agg, zones = airports_near)
+plot(flights_sp)
 
-
+library(tmap)
+tmap_mode("view")
+pal <- viridis(n = 3, option = "C")
+tm_shape(flights_sp) +
+  tm_lines(lwd = "Flights", col = "Flights", scale = 12, n = 3, palette = "YlGnBu")
