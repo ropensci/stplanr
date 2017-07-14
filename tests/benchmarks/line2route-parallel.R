@@ -16,6 +16,8 @@ system.time({r1 = line2route(l)})
 # result2 - rl
 # user  system elapsed
 # 44.336   0.392 125.790
+# user  system elapsed
+# 36.476   2.500 186.043
 detach("package:stplanr", unload=TRUE)
 devtools::install_github(repo = "ropensci/stplanr", ref = "0.1.8")
 library(stplanr)
@@ -33,12 +35,12 @@ system.time({r2 = line2route(l = l, n_processes = 8)})
 # rl n_processes = 20
 # user  system elapsed
 # 1.564   0.332  31.438
-# rl n_processes = 15
+# rl n_processes = 4
+# user  system elapsed
+# 1.384   0.624  30.513
 identical(r1, r2) # not identical
 nrow(r1) == nrow(r2) # identical
 identical(raster::geom(r1), raster::geom(r2)) # not identical geometries
 plot(r1)
 plot(r2) # very different appearance...
-# try nikolai's non-parallel version:
-system.time({r3 = line2route(l = l)})
 
