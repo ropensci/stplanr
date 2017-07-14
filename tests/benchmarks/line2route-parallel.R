@@ -9,7 +9,6 @@ for(i in 1:ii) {
       l = rbind(l, flowlines)
 }
 
-devtools::install_github(repo = "ropensci/stplanr", ref = "9837766")
 system.time({r1 = line2route(l)})
 # result1 - rl
 # user  system elapsed
@@ -18,7 +17,7 @@ system.time({r1 = line2route(l)})
 # user  system elapsed
 # 44.336   0.392 125.790
 detach("package:stplanr", unload=TRUE)
-devtools::install_github(repo = "nikolai-b/stplanr")
+devtools::install_github(repo = "ropensci/stplanr", ref = "0.1.8")
 library(stplanr)
 system.time({r2 = line2route(l = l, n_processes = 8)})
 # result1 - rl
