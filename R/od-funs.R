@@ -225,11 +225,16 @@ line2pointsn <- function(l){
   raster::crs(p) = raster::crs(l)
   p
 }
-#' Convert straight SpatialLinesDataFrame from flow data into routes
+#' Convert straight OD data (desire lines) into routes
 #'
 #' @section Details:
 #'
-#' See \code{\link{route_cyclestreet}} and other route functions for details
+#' See \code{\link{route_cyclestreet}} and other route functions for details.
+#'
+#' A parallel implementation of this was available until version 0.1.8.
+#' See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.
+#'
+#'
 #' @param l A SpatialLinesDataFrame
 #' @param route_fun A routing function to be used for converting the straight lines to routes
 #' \code{\link{od2line}}
@@ -239,7 +244,6 @@ line2pointsn <- function(l){
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
-#' @param n_processes The number of processes the routing requests should be made from, default 1.
 #' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
 #' @inheritParams route_cyclestreet
 #' @export
@@ -273,13 +277,10 @@ line2pointsn <- function(l){
 #' rf_no_id$id # [1] "1" "2" "3" "4"
 #' rf_with_id = line2route(l, l_id = "All")
 #' rf_with_id$id # [1] 38 10 44
-#' # demo with parallel version spliting route API requests over multiple CPU processes
-#' rf_parr <- line2route(l = l, n_processes = 4)
-#' l = flowlines[1:2,]
 #' rf_with_err = line2route(l,  reporterrors = T)
-#' # Now rf_with_err$error[2] has the correct error message
+#' # rf_with_err$error[2] has the correct error message
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, n_processes = 1, ...){
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, ...){
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
   n_ldf <- nrow(ldf)
@@ -289,32 +290,21 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     e
   }
 
-  if(n_processes > 1){
-    n_processes <- min(c(n_processes, n_ldf))
-    cl <- parallel::makeCluster(n_processes)
-    doParallel::registerDoParallel(cl)
-  }
-
-  if(n_processes > 1){
-    rc <- foreach::foreach(i = 1:n_ldf, .errorhandling = "pass") %dopar% {
+  rc <- as.list(rep(NA, length(l)))
+  for(i in 1:n_ldf){
+    rc[[i]] <- tryCatch({
       FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-    }
-    parallel::stopCluster(cl)
-  } else {
-    rc <- as.list(rep(NA, length(l)))
-    for(i in 1:n_ldf){
-      rc[[i]] <- tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = error_fun)
-      perc_temp <- i %% round(n_ldf / n_print)
-      # print % of distances calculated
-      if(!is.na(perc_temp) & perc_temp == 0){
-        message(paste0(round(100 * i/n_ldf), " % out of ", n_ldf, " distances calculated"))
-      }
+    }, error = error_fun)
+    perc_temp <- i %% round(n_ldf / n_print)
+    # print % of distances calculated
+    if(!is.na(perc_temp) & perc_temp == 0){
+      message(paste0(round(100 * i/n_ldf), " % out of ", n_ldf, " distances calculated"))
     }
   }
 
-  if(!list_output){
+  if(list_output) {
+    r <- rc
+  } else {
     # Set the names based on the first non failing line (then exit loop)
     for(i in 1:n_ldf){
       if(grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {

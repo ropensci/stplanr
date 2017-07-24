@@ -5,16 +5,15 @@
 \title{Return travel network distances and time using the Google Maps API}
 \usage{
 dist_google(from, to, google_api = Sys.getenv("GOOGLEDIST"),
-  g_units = "metric", mode = "bicycling", arrival_time = "")
+  g_units = "metric", mode = c("bicycling", "walking", "driving",
+  "transit"), arrival_time = "")
 }
 \arguments{
-\item{from}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth.}
+\item{from}{Two-column matrix or data frame of coordinates representing
+latitude and longitude of origins.}
 
-\item{to}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth. This represents the destination of the trip.}
+\item{to}{Two-column matrix or data frame of coordinates representing
+latitude and longitude of destinations.}
 
 \item{google_api}{String value containing the Google API key to use.}
 
@@ -28,6 +27,11 @@ bicycling (default), walking, driving or transit}
 \description{
 Return travel network distances and time using the Google Maps API
 }
+\details{
+Absent authorization, the google API is limited to a maximum of 100
+simultaneous queries, and so will, for example, only returns values for up to
+10 origins times 10 destinations.
+}
 \section{Details}{
 
 Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
@@ -37,6 +41,10 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 \examples{
 \dontrun{
  # Distances from one origin to one destination
+ from = c(-46.3, -23.4)
+ to = c(-46.4, -23.4)
+ dist_google(from = from, to = to, mode = "walking") # not supported on last test
+ dist_google(from = from, to = to, mode = "driving")
  dist_google(from = c(0, 52), to = c(0, 53))
  data("cents")
  # Distances from between all origins and destinations

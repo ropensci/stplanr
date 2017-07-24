@@ -19,7 +19,7 @@ geo_code = function(address,
   u <- httr::modify_url(base_url, query = q)
   res <- jsonlite::fromJSON(u)
   res_df <- jsonlite::flatten(res$results)
-  lat_lon <- c(
+  lon_lat <- c(
     lon = res_df$geometry.location.lng,
     lat = res_df$geometry.location.lat
     )
@@ -27,7 +27,7 @@ geo_code = function(address,
   if(return_all) {
     return(res_df)
   } else {
-    return(lat_lon)
+    return(lon_lat)
   }
 
 }
