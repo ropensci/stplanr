@@ -2,10 +2,10 @@
 % Please edit documentation in R/od-funs.R
 \name{line2route}
 \alias{line2route}
-\title{Convert straight SpatialLinesDataFrame from flow data into routes}
+\title{Convert straight OD data (desire lines) into routes}
 \usage{
 line2route(l, route_fun = "route_cyclestreet", n_print = 10,
-  list_output = FALSE, l_id = NA, n_processes = 1, ...)
+  list_output = FALSE, l_id = NA, ...)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
@@ -22,17 +22,18 @@ should be shown}
 typically the origin and destination ids pasted together. If absent, the row name of the
 straight lines will be used.}
 
-\item{n_processes}{The number of processes the routing requests should be made from, default 1.}
-
 \item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
 }
 \description{
-Convert straight SpatialLinesDataFrame from flow data into routes
+Convert straight OD data (desire lines) into routes
 }
 \section{Details}{
 
 
-See \code{\link{route_cyclestreet}} and other route functions for details
+See \code{\link{route_cyclestreet}} and other route functions for details.
+
+A parallel implementation of this was available until version 0.1.8.
+See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.
 }
 
 \examples{
