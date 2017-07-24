@@ -23,6 +23,7 @@ geo_select_aeq <- function(shp){
 #' @examples
 #' shp = st_sf(st_sfc(st_point(c(1, 0))))
 #' geo_projected(shp, st_buffer, dist = 100)
+#' geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 geo_projected = function(x, ...) {
   UseMethod(generic = "geo_projected")
 }
@@ -37,6 +38,9 @@ geo_projected.sf = function(shp, fun, crs_temp = geo_select_aeq(shp),  ...){
   if(grepl("sf", x = class(res)[1]))
     res = st_transform(res, crs_orig)
   res
+}
+geo_projected.Spatial = function(shp, fun, crs = crs_select_aeq(shp), ...) {
+  gprojected(shp, fun, crs = crs_select_aeq(shp), ...)
 }
 #' Perform a buffer operation on a temporary projected CRS
 #'
