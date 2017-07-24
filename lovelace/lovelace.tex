@@ -163,10 +163,14 @@ planning move away from reliance on `black boxes' to become a more
 democratic activity
 \citep{waddell_urbansim:_2002,hollander_who_2015}.
 
-Other potential advantages of using a scriptable, interpreted, open source
-language such as R for transport planning include:
-it enables reproducible research; the automation and sharing of
-code between researchers; and integration with other
+There are many advantages of using a scriptable, interactive and open source
+language such as R for transport planning.
+Such an approach enables:
+reproducible research; the automation and sharing of
+code between researchers;
+reduced barriers to innovation as anyone can create new features for the benefit of all planners;
+easier interaction with non domain experts (who will lack dedicated software);
+and integration with other
 software systems, as illustrated by the use of \CRANpkg{leaflet}
 to generate JavaScript for sharing interactive maps for transport planning,
 as used in the publicly accessible Propensity to Cycle Tool \citep{lovelace_propensity_2017}.
@@ -451,7 +455,10 @@ t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
 
 The bicycle share data that can be accessed using the \CRANpkg{bikedata} package is particularly well suited for integration with stplanr as it produces origin-destination (OD) flows from bicycle sharing systems.
 This data can be used together with the \texttt{sum\_network\_links} function to generate the likely paths and how these overlap.
-This can be used to generate heatmaps of a road network showing the most common routes such as in Figure \ref{fig:nyc-bicycle-data} (see \href{https://github.com/ropensci/stplanr/issues/194}{\#194} in the package's issue tracker for details).
+This can be used to generate heatmaps of a road network showing modelled common routes such as in Figure
+\ref{fig:nyc-bicycle-data}.\footnote{The
+figure is based on the shortest path, although other criteria could be used by setting weights in the network accordingly --- see \href{https://github.com/ropensci/stplanr/issues/194}{\#194} in the package's issue tracker for
+details.}
 
 \begin{figure}
 
@@ -459,7 +466,7 @@ This can be used to generate heatmaps of a road network showing the most common 
 
 }
 
-\caption{Common routes for bicycle share trips in New York City}\label{fig:nyc-bicycle-data}
+\caption{Modelled common routes for bicycle share trips in New York City.}\label{fig:nyc-bicycle-data}
 \end{figure}
 
 \subsection{Creating geographic desire
