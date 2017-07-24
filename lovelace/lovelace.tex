@@ -5,9 +5,9 @@
 \maketitle
 
 \abstract{%
-Tools for transport planning should be flexible, transparent and scalable.
-The \textbf{stplanr} package provides such tools, with an emphasis on spatial transport data and non-motorized modes.
-\textbf{stplanr} facilitates common transport planning tasks including:
+Tools for transport planning should be flexible, scalable and transparent (open source).
+The \textbf{stplanr} package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes.
+\textbf{stplanr} facilitates some common transport planning tasks including:
 downloading and cleaning transport datasets;
 creating geographic `desire lines' from origin-destination (OD) data;
 route assignment, via the \code{SpatialLinesNetwork} class and
@@ -18,9 +18,9 @@ This paper demonstrates this functionality using reproducible examples on real t
 datasets.
 More broadly, the experience shows open source software can form the basis of a reproducible
 transport planning workflow.
-\textbf{stplanr}, alongside other open source projects,
+\textbf{stplanr}, alongside other packages and open source projects,
 could provide a more transparent and democratically accountable alternative to the
-current approach which is heavily reliant on proprietary and inaccessible software.
+current approach which is heavily reliant on proprietary and technically and financially inaccessible software.
 }
 
 \section{Introduction}\label{introduction}
@@ -42,12 +42,15 @@ Software for transport planning should be:
 \item
   scalable, able to work at multiple geographic levels from single streets to large cities and regions
 \item
-  open source and reproducible, encouraging citizen science and transparent, democratic decision making based on data rather than opinion
+  robust and reliable, tested on a range of datasets and able to work 'out of the box' in a range of real-world projects.
+\item
+  open source and reproducible. This ensures transparency and encourages citizen science and evidence-based, democratic decision making based in which many people can participate in the technical discussion and analysis.
 \end{itemize}
 
-This paper sets out to demonstrate, with reproducible examples, that
-R can provide a foundation for transport planning software that meets
-each of these criteria. Packages such as \CRANpkg{sp}
+This paper sets out to demonstrate, with reproducible examples, that open source software with a command-line interface (CLI) can provide a foundation for transport planning software that meets
+each of these criteria.
+We argue that R provides a strong basis for progress in this direction, as it contains many of the building blocks for a transport planning workflow.
+Packages such as \CRANpkg{sp}
 \citep{pebesma_classes_2005} and \CRANpkg{rgeos}
 \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and
 modelling capabilities \citep{bivand_applied_2013}
