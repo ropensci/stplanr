@@ -7,12 +7,12 @@
 buff_geo(shp, width, ..., silent = TRUE)
 }
 \arguments{
-\item{shp}{A spatial object with a geographic CRS (WGS84)
+\item{shp}{A spatial object with a geographic CRS (e.g. WGS84)
 around which a buffer should be drawn}
 
 \item{width}{The distance (in metres) of the buffer}
 
-\item{...}{Arguments passed to rgeos::gBuffer()}
+\item{...}{Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)}
 
 \item{silent}{A binary value for printing the CRS details (default: FALSE)}
 }

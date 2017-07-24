@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 coord_matches <- function(sldf, tolval = 0.000) {
-    .Call('stplanr_coord_matches', PACKAGE = 'stplanr', sldf, tolval)
+    .Call('_stplanr_coord_matches', PACKAGE = 'stplanr', sldf, tolval)
 }
 
 join_spatiallines_coords <- function(sldf, startx, starty) {
-    .Call('stplanr_join_spatiallines_coords', PACKAGE = 'stplanr', sldf, startx, starty)
+    .Call('_stplanr_join_spatiallines_coords', PACKAGE = 'stplanr', sldf, startx, starty)
 }
 

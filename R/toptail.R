@@ -68,11 +68,7 @@ toptail <- function(l, toptail_dist, ...){
 #'
 #' Returns a
 #'
-#' @param shp A spatial object with a geographic CRS (WGS84)
-#' around which a buffer should be drawn
-#' @param width The distance (in metres) of the buffer
-#' @param ... Arguments passed to rgeos::gBuffer()
-#' @param silent A binary value for printing the CRS details (default: FALSE)
+#' @inheritParams geo_buffer
 #' @export
 #' @examples
 #' data("routes_fast")
