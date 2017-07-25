@@ -2,7 +2,7 @@
 % Please edit documentation in R/SpatialLinesNetwork.R
 \name{SpatialLinesNetwork}
 \alias{SpatialLinesNetwork}
-\title{Create object of class SpatialLinesNetwork from SpatialLinesDataFrame}
+\title{Create object of class SpatialLinesNetwork or sfNetwork}
 \usage{
 SpatialLinesNetwork(sl, uselonglat = FALSE, tolerance = 0)
 }
@@ -18,8 +18,8 @@ set, uses the coordinate system specified by the SpatialLines object.}
 the coordinate system) to use as a tolerance with which to match nodes.}
 }
 \description{
-Creates a new SpatialLinesNetwork object that can be used for routing
-analysis within R.
+Creates a new SpatialLinesNetwork (for SpatialLines) or sfNetwork (for sf)
+object that can be used for routing analysis within R.
 }
 \section{Details}{
 
