@@ -288,8 +288,8 @@ Instead,
 we plan to continue to name functions around the type of \emph{input}
 data they take, but are open minded about input-output data
 class conventions.
-Generic classes could enable \textbf{stplanr} to
-handle objects of class \texttt{sf} from  the new \CRANpkg{sf} package without affecting how it handles
+Generic classes enable \textbf{stplanr} to
+handle objects of class \texttt{sf} from the new \CRANpkg{sf} package without affecting how it handles
 objects generated using \CRANpkg{sp}.
 
 A class system has not been developed for each data type (this option is
@@ -297,11 +297,10 @@ discussed in the final section). The most common data types used in
 \textbf{stplanr} are assumed to be data frames and spatial datasets.
 
 Transport datasets are very diverse. There are therefore many other
-functions which have more ad-hock names. Rather attempt a systematic
-description of each of \textbf{stplanr}'s functions (which can be
-gleaned from the online manual) it is more illuminating to see how they
-work together, as part of a transport planning workflow. As with most
-workflows, this begins with data access and ends with visualisation.
+functions which have more ad-hoc names. Rather than attempting a systematic
+description of each of \textbf{stplanr}'s functions
+(these can be found at \href{https://ropensci.github.io/stplanr/reference/index.html}{ropensci.github.io/stplanr}), the paper focuses on how some key functions can
+work together, as part of a transport planning workflow. This begins with data access and ends with visualisation.
 
 \subsection{Road traffic casualty data}\label{accessing-and-processing-transport-data}
 
