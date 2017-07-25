@@ -1104,16 +1104,13 @@ However, much more is possible in this direction.
 % Add this as a footnote?
 % Transport planning has links to areas of knowledge which are already well-served by packages have yet to receive much (if any) attention from the transport community statistical networks, activity space analysis and the development of interactive online visualisations to encourage public engagement in the process.
 
-\CRANpkg{stplanr} is deliberately focussed on geographic transport data for three main reasons, which will influence its future development:
+The focus of \CRANpkg{stplanr} on geographic transport data was originally driven by the author's research interests.
+However, we believe there are good reasons to continue this focus.
+Proprietary software such as \href{https://www.inrosoftware.com/en/products/emme/}{INRO}, \href{http://vision-traffic.ptvgroup.com/en-us/products/ptv-visum/}{PTV Visum} and  \href{http://www.caliper.com/tcovu.htm}{TransCAD} dominate geospatial methods in applied transport planning.
+This differs from other fields that use geospatial methods such spatial epidemiology and ecology, where open source software dominate.
+Furthermore, the successful `unix approach' to software development implies that each piece of software does a limited number of things well.
+To avoid the pitfall of `feature creep' it makes sense to specialise.
 
-\begin{itemize}
-\tightlist
-  \item Proprietary products such as \href{https://www.inrosoftware.com/en/products/emme/}{INRO}, \href{http://vision-traffic.ptvgroup.com/en-us/products/ptv-visum/}{PTV Visum} and  \href{http://www.caliper.com/tcovu.htm}{TransCAD} dominate transport planning software. This differs from other fields that use geospatial methods such spatial epidemiology and ecology, where open source software dominate.
-  \item The successful `unix approach' to software development implies that each piece of software does a limited number of things well, avoiding the pitfall of `feature creep', whereby software tries to be all things to all people.
-  \item We have a particularly strong interest in and knowledge of spatial transport data for our own research.
-\end{itemize}
-
-The final reason is important for the package's longevity, providing an incentive for the package's future development.
 The lack of existing packages that do the same job direct our attention towards \textbf{stplanr}'s basic functionality rather than more advanced and esoteric features.
 A good example of this is the \code{SpatialLinesNetwork} class which could provide a basis for future developments including a \code{route\_sln} function to facilitate routing in R, without recourse to external services.
 This direction of `incremental growth' could proceed by adding interfaces to more transport planning APIs, including \href{https://www.routino.org/uk/}{Routino} and \href{https://www.mapbox.com/directions/}{Directions} provided by mapping company Mapbox, mitigating the limitations of online API services.
