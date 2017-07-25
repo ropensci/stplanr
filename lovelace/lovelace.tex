@@ -59,15 +59,15 @@ Packages building on
 spatial class system have been developed for specific domains,
 including: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
 and visualisation, with packages such as \CRANpkg{leaflet}, \CRANpkg{tmap}, \CRANpkg{mapview} and \CRANpkg{mapmisc} \citep{RJ-2016-005}.
-However there has been little prior work to develop R functionality designed
-specifically to assist with transport planning (with the notable exception of
-\href{http://r-forge.r-project.org/projects/travelr/}{TravelR}, a
-package on R-Forge last updated in 2012), to the best of our knowledge.
+However, there has been little prior work to develop R functionality designed
+specifically for transport planning, with the notable exceptions of
+\href{http://r-forge.r-project.org/projects/travelr/}{TravelR} (a package on R-Forge last updated in 2012)
+and \href{https://github.com/ropensci/gtfsr}{gtfsr}
+(a package for handling  General Transit Feed Specification (GTFS) data).
 
-Inspired by such efforts and driven by our own research needs, our
-primary aim for \textbf{stplanr} is to provide an R toolbox for
-spatial transport data.
-It is intended that this feeds into the wider process of transport planning, which is undergoing a paradigm shift towards sustainability \citep{banister_sustainable_2008} and `Big Data' \citep{zheng_big_2016}.
+Inspired by such efforts and driven by our own research needs, the
+primary aim of \textbf{stplanr} is to provide an R toolbox for transport planning, with an emphasis on spatial data and active modes.
+The workflow demonstrated in this package is intended to be part of the wider process of transport planning, which is undergoing a paradigm shift towards sustainability \citep{banister_sustainable_2008} and `Big Data' \citep{zheng_big_2016}.
 % Although the focus is on spatial transport datasets
 % (and most transport problems contain a spatial component),
 % \textbf{stplanr} could be extended in non-spatial directions such as mode
@@ -77,27 +77,29 @@ It is intended that this feeds into the wider process of transport planning, whi
 
 The relative lack of R packages for transport applications
 (compared with other disciplines such as epidemiology
-and ecology) is surprising given the ubiquity of transport
-problems,\footnote{Most people can identify interventions that they
+and ecology) is surprising.
+Transport
+problems are ubiquitous,\footnote{Most people can identify interventions that they
   think would make the transport systems they interact with more
   sustainable. Think about the paths and roads you travel on, for
   example: what interventions would you prioritise to improve
   non-motorised access, for walking, cycling and wheel-chairs? What
   quantitative evidence would you need to communicate this to the
-  relevant authorities?} R's aptitude for handling transport data
-(including spatial and travel survey data), and the increasing use of R
-in applied domains \citep{jalal_overview_2017,moore_why_2017}.
-Increasingly, R is the go-to statistical software in
-many organisations: academic, public sector and privately owned. Such
-organisations undertake the majority of transport planning research.
-This paper was therefore motivated by the desire to demonstrate that R
-provides an excellent framework for transport research. If readers
-decide not to use the package, perhaps needing bespoke solutions to
-specific transport problems not covered by \textbf{stplanr}, it is hoped
-that the ideas, functions and datasets described in this paper inspire
+  relevant authorities?}; R is proficient at handling transport data
+(including spatial and travel survey data);
+and R is increasingly used in
+in applied domains \citep{jalal_overview_2017,moore_why_2017}
+and within public and private organisations that generate and use transport data.
+Despite the growth in open access datasets and open source software, transport planning is still inaccessible to most people.
+In this context \textbf{stplanr} was motivated by the desire to demonstrate the potential for open source software for transport research.
+R provides already many tools that could be useful in transport planning.
+The paper is therefore not only about showcasing new tools within \textbf{stplanr} but also about demonstrating how \emph{existing} tools in R can be used for transport planning.
+
+\textbf{stplanr} cannot cover all bases in Transport Planning and it is hoped that the ideas, functions and datasets described in this paper inspire
 parallel developments in the space of `R for transport applications'.
-Moreover, by making the package deliberately broad in its scope, we hope
-that \textbf{stplanr} can help build a nascent community of R-using
+By making the package title deliberately broad in its scope, we plan to expand
+\textbf{stplanr}'s functionality over time
+to help build community of R-using
 transport researchers. We welcome feature requests and feedback at the
 package's \href{https://github.com/ropensci/stplanr/issues}{online
 home}.
