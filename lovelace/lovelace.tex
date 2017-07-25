@@ -992,15 +992,10 @@ although larger datasets would be needed for any inferences to be made:
 
 \subsection{Analysing and estimating trip flows}\label{models-of-travel-behaviour}
 
-There are many ways of estimating flows between origins and
-destinations, including spatial interaction models, the four-step
-transport model and gravity models (`distance decay'), among others.
-It is important to emphasise that \textbf{stplanr} is not intended as a model estimation package.
-Existing packages are better suited to this.
-Instead, \textbf{stplanr} focuses on common functions for analysis of transport data, that in some cases overlap with what is required for estimating transport models.
-
-\textbf{stplanr}
-aims eventually to facilitate creation of many types of flow model.
+The second step in the four-stage transport model (after trip generation) is trip distribution.
+This involves identifying destinations for trips generated in each zone (creating OD data), which can be done with a gravity model, logit model, or other technique under the broad banner of `spatial interaction model' (SIM).
+\textbf{stplanr} is not intended primarily as a SIM package, but could be extended in this direction, as illustrated by \texttt{od\_radiation} function, which implements a SIM proposed by \citet{simini_universal_2012}.
+Further development in this direction (or integration with a package dedicated to SIMs) would complement \textbf{stplanr}'s focus on geographic functions.
 
 At present there are no functions for modelling distance decay, but this
 is something we would like to add in future versions of
