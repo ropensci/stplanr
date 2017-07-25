@@ -671,12 +671,10 @@ added with the functions \texttt{route\_graphhopper},
 \texttt{route\_transportapi\_public} and \texttt{viaroute}. These
 interface to Graphhopper, TransportAPI and the Open Source Routing
 Machine (OSRM) routing services, respectively.
-OSRM can be run locally (as demonstrated in a guide by
-\href{https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04}{DigitalOcean}), removing the performance penalty of
-routing over the internet.
-However, there are potential disadvantages of using online routing services:
-they may change, they may charge extortionate prices, and they require
-maintenance work if the API changes.
+Advanced users can set-up local routing services (as demonstrated in a guide by
+\href{https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04}{DigitalOcean}), reducing the disadvantages of using online routing services:
+their rely on on potentially slow internet connections, changeable APIs,
+and variable/high prices.
 
 A short example of finding the route by car and bike between New York
 and Oaxaca demonstrates how \texttt{route\_graphhopper} can collect
