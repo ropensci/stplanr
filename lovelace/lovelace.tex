@@ -161,9 +161,24 @@ clunky graphical user interfaces (GUIs), and ad-hoc scripts that could
 be generalised. Furthermore, if the process can be made reproducible and
 accessible (e.g.~via online visualisation packages such as
 \CRANpkg{shiny}), this could help transport
-planning move away from reliance on `black boxes' to become a more
-democratic activity
-\citep{waddell_urbansim:_2002,hollander_who_2015}.
+planning move away from reliance on `black boxes'
+\citep{waddell_urbansim:_2002} and empower citizens to
+challenge decisions made by transport planning authorities based on the evidence \citep{hollander_transport_2016}.
+% See chapters 10 - 13:
+% 13.8 to 13.10 12.10
+% Figures 79:84
+% Talk about dogma of 4 stage model - embedded?
+% Assigment to road network - chapter 9. Not allocation
+% Segment - define on 1st mention
+% OD matrix
+% Check out chapter 2 on zones
+% trips vs stages
+% network
+% On first mention of route assignment - pay respect
+% to history
+% Read-up on catchment analysis - e.g.:
+% http://content.tfl.gov.uk/connectivity-assessment-guide.pdf#page=42 ptal + 'time mapping' disagregated
+% Figure 67 + 69
 
 There are many advantages of using a scriptable, interactive and open source
 language such as R for transport planning.
@@ -250,7 +265,7 @@ prefixed with \texttt{rn\_} (for working with route network data) and
 \texttt{geo\_} functions for geographic operations such as buffer creation
 on lat/lon projected data (this function is currently named
 \texttt{buff\_geo}).
-
+% Make groups explicit
 \begin{longtable}[]{@{}lll@{}}
 \caption{Selection of functions for working with or generating OD, line
 and route data types.}\tabularnewline
@@ -472,6 +487,7 @@ details.}
 \subsection{Creating geographic desire
 lines}\label{creating-geographic-desire-lines}
 
+% Clarify that this is an OD matrix in transport lingo
 Origin-destination (`OD') data, which represent the number of people travelling between
 geographical zones, is a key input for transport planning \citep{calabrese_estimating_2011}.
 OD data usually represent an aggregate data source, and are therefore able to represent the
