@@ -288,10 +288,9 @@ Instead,
 we plan to continue to name functions around the type of \emph{input}
 data they take, but are open minded about input-output data
 class conventions.
-The issue of breaking changes could be resolved by only applying type stability
-only to objects of class \texttt{sf} from  the new \CRANpkg{sf} package,
-which represents a paradigm in R's handling of
-spatial data in R that has many advantages over its predecessor \CRANpkg{sp}.
+Generic classes could enable \textbf{stplanr} to
+handle objects of class \texttt{sf} from  the new \CRANpkg{sf} package without affecting how it handles
+objects generated using \CRANpkg{sp}.
 
 A class system has not been developed for each data type (this option is
 discussed in the final section). The most common data types used in
