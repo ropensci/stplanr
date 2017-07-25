@@ -593,8 +593,8 @@ spatial point objects or text strings to be
 This is illustrated
 below with \texttt{route\_cyclestreet}, which uses the
 \href{http://www.cyclestreets.net/api/}{CycleStreets.net API}, a routing
-service ``by cyclists for cyclists'' that offers a range route
-algorithms (primarily `fastest', `quietest' and `balanced'):\footnote{An
+service ``by cyclists for cyclists'' which provides
+`fastest', `quietest' and `balanced' routes:\footnote{An
 API key
   is needed for this function to work. This can be requested (or
   purchased for large scale routing) from
@@ -640,8 +640,7 @@ routes_fast <- line2route(l = l, route_fun = route_cyclestreet)
 
 The result of this `batch routing' exercise is illustrated in Figure
 \ref{fig:lines_routes}. The red lines in the left hand panel are very
-different from the hypothetical straight `desire lines' often used in
-transport research, highlighting the importance of this route-allocation
+different from the hypothetical straight `desire lines', highlighting the importance of this route-allocation
 functionality (see \texttt{vignette("introducing-stplanr")} and \href{http://kateto.net/network-visualization}{kateto.net} for more sophisticated visualisation methods).
 
 \begin{Schunk}
