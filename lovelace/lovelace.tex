@@ -539,11 +539,8 @@ l <- od2line(flow = flow, zones = cents)
 \includegraphics[width=\textwidth]{flights} \caption[Flights from New York]{Flights from New York to airports within 1000 km. Data from the \CRANpkg{nycflights} package converted to geographic desire lines with the \texttt{od2line} function.}\label{fig:flights}
 \end{figure}
 
-The data is now in a form that is much easier to analyse, allowing us to visualise
-the variability of travel patterns over geographic space.
-Because the \texttt{SpatialLinesDataFrame} object also contains
-data per line, it also helps with visualisation of the flows, as
-illustrated in Figure \ref{fig:lines_routes}.
+The resulting \texttt{l} object data is now in a spatial data class, enabling geographic analysis and
+visualisation, as illustrated in Figure \ref{fig:lines_routes}.
 A larger example of this desire line creation method is illustrated in \ref{fig:flights}, which also makes use of the function \texttt{buff\_geo}, is provided below based on a large dataset of flights from New York in 2013 from the \CRANpkg{nycflights13} package:
 
 \begin{Schunk}
