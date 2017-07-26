@@ -16,7 +16,7 @@ automatically by \code{\link{crs_select_aeq}}).}
 This function performs operations on projected data.
 }
 \examples{
-shp = st_sf(st_sfc(st_point(c(1, 0))))
+shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
 geo_projected(shp, st_buffer, dist = 100)
 geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 }

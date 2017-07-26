@@ -10,6 +10,6 @@ geo_select_aeq(shp)
 Select a projected CRS
 }
 \examples{
-shp = st_sf(st_sfc(st_point(c(1, 0))))
+shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
 geo_select_aeq(shp)
 }

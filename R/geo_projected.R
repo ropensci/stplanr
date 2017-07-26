@@ -1,7 +1,7 @@
 #' Select a projected CRS
 #'
 #' @examples
-#' shp = st_sf(st_sfc(st_point(c(1, 0))))
+#' shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
 #' geo_select_aeq(shp)
 geo_select_aeq <- function(shp){
   cent <- st_geometry(shp)
@@ -21,7 +21,7 @@ geo_select_aeq <- function(shp){
 #' automatically by \code{\link{crs_select_aeq}}).
 #' @export
 #' @examples
-#' shp = st_sf(st_sfc(st_point(c(1, 0))))
+#' shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
 #' geo_projected(shp, st_buffer, dist = 100)
 #' geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 geo_projected = function(x, ...) {
