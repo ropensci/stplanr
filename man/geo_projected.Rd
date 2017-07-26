@@ -4,7 +4,7 @@
 \alias{geo_projected}
 \title{Perform GIS functions on a temporary, projected version of a spatial object}
 \usage{
-geo_projected(x)
+geo_projected(x, ...)
 }
 \arguments{
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
@@ -17,5 +17,6 @@ This function performs operations on projected data.
 }
 \examples{
 shp = st_sf(st_sfc(st_point(c(1, 0))))
-geo_projected(shp, st_buffer, width = 100)
+geo_projected(shp, st_buffer, dist = 100)
+geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 }
