@@ -42,9 +42,9 @@ toptail <- function(l, toptail_dist, ...){
 
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, width = toptail_dist, ...)
+      sel <- buff_geo(lpoints, dist = toptail_dist, ...)
     } else {
-      sel <- rgeos::gBuffer(lpoints, width = toptail_dist, ...)
+      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist, ...)
     }
 
     if(rgeos::gContainsProperly(sel, l1)){
@@ -73,7 +73,7 @@ toptail <- function(l, toptail_dist, ...){
 #' @examples
 #' data("routes_fast")
 #' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
-#' buff <- buff_geo(routes_fast, width = 100)
+#' buff <- buff_geo(routes_fast, dist = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
 #' # Test it works the same on projected data
@@ -84,8 +84,8 @@ toptail <- function(l, toptail_dist, ...){
 #' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
 #' plot(buff)
 #' plot(buff3, add = TRUE, col = "black")
-buff_geo <- function(shp, width, ..., silent = TRUE){
-  gprojected(shp = shp, fun = rgeos::gBuffer, width = width)
+buff_geo <- function(shp, dist, ..., silent = TRUE){
+  gprojected(shp = shp, fun = rgeos::gBuffer, dist = dist)
 }
 
 #' Clip the first and last n metres of SpatialLines
