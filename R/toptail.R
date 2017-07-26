@@ -42,7 +42,7 @@ toptail <- function(l, toptail_dist, ...){
 
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, dist = toptail_dist, ...)
+      sel <- buff_geo(lpoints, width = toptail_dist, ...)
     } else {
       sel <- rgeos::gBuffer(lpoints, dist = toptail_dist, ...)
     }

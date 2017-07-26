@@ -1,9 +1,35 @@
-#' Select a projected CRS
+#' Select a custom projected CRS for the area of interest
 #'
+#' This function takes a spatial object with a geographic (WGS84)
+#' CRS and returns a custom projected CRS focussed on the centroid of the object.
+#' This function is especially useful for using units of metres in all directions
+#' for data collected anywhere in the world.
+#'
+#' The function is based on this stackexchange answer:
+#' \url{http://gis.stackexchange.com/questions/121489}
+#'
+#' @param shp A spatial object with a geographic (WGS84) coordinate system
+#' @export
 #' @examples
+#' bbox(routes_fast)
+#' proj4string(routes_fast) <- CRS("+init=epsg:4326")
+#' new_crs <- crs_select_aeq(routes_fast)
+#' rf_projected <- spTransform(routes_fast, new_crs)
+#' bbox(rf_projected)
+#' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
+#' plot(line_length, rf_projected$length)
 #' shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
 #' geo_select_aeq(shp)
-geo_select_aeq <- function(shp){
+#' @export
+geo_select_aeq <- function(shp) {
+  UseMethod("geo_select_aeq")
+}
+#' @export
+geo_select_aeq.Spatial <- function(shp){
+  crs_select_aeq(shp)
+}
+#' @export
+geo_select_aeq.sf <- function(shp){
   cent <- sf::st_geometry(shp)
   coords = sf::st_coordinates(shp)
   coords_mat = matrix(coords[,1:2], ncol = 2)
