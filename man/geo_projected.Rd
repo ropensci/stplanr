@@ -7,7 +7,11 @@
 geo_projected(x, ...)
 }
 \arguments{
+\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link{rgeos::gLength}}))}
+
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
+
+\item{fun}{A function to perform on the projected object (e.g.  \code{\link{gLength}}))}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
 automatically by \code{\link{crs_select_aeq}}).}
@@ -22,5 +26,6 @@ geo_projected(shp, st_buffer, dist = 100)
 library(sp)
 shp = as(shp, "Spatial")
 geo_projected(shp, fun = rgeos::gBuffer, width = 100)
-geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
+rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
+plot(routes_fast$length, rlength)
 }

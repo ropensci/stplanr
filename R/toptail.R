@@ -73,7 +73,7 @@ toptail <- function(l, toptail_dist, ...){
 #' @examples
 #' data("routes_fast")
 #' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
-#' buff <- buff_geo(routes_fast, dist = 100)
+#' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
 #' # Test it works the same on projected data
@@ -84,8 +84,8 @@ toptail <- function(l, toptail_dist, ...){
 #' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
 #' plot(buff)
 #' plot(buff3, add = TRUE, col = "black")
-buff_geo <- function(shp, dist, ..., silent = TRUE){
-  gprojected(shp = shp, fun = rgeos::gBuffer, dist = dist)
+buff_geo <- function(shp, width, ..., silent = TRUE){
+  gprojected(shp = shp, fun = rgeos::gBuffer, width = width)
 }
 
 #' Clip the first and last n metres of SpatialLines
@@ -97,7 +97,7 @@ buff_geo <- function(shp, dist, ..., silent = TRUE){
 #' @param l A SpatialLines object
 #' @param toptail_dist The distance (in metres) to top the line by.
 #' Can be either a single value or a vector of the same length as the
-#' SpatialLines object. If tail_dist is missing, is used as the tail distnce.
+#' SpatialLines object. If tail_dist is missing, is used as the tail distance.
 #' @param tail_dist The distance (in metres) to tail the line by. Can be
 #' either a single value or a vector of the same length as the SpatialLines
 #' object.

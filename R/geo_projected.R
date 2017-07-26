@@ -48,8 +48,7 @@ geo_projected.sf = function(shp, fun, crs = geo_select_aeq(shp),  ...){
   res
 }
 #' @export
-gprojected = # old function name
-  geo_projected.Spatial = function(shp, fun, crs = crs_select_aeq(shp), ...){
+geo_projected.Spatial = gprojected = function(shp, fun, crs = crs_select_aeq(shp), ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if(!is.na(is.projected(shp))){
     if(is.projected(shp)){
@@ -76,16 +75,21 @@ gprojected = # old function name
 #' non-projected data.
 #' @param shp A spatial object with a geographic CRS (e.g. WGS84)
 #' around which a buffer should be drawn
-#' @param width The distance (in metres) of the buffer
+#' @param dist The distance (in metres) of the buffer (when buffering simple features)
+#' @param width The distance (in metres) of the buffer (when buffering sp objects)
 #' @param ... Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)
 #' @param silent A binary value for printing the CRS details (default: FALSE)
+#' @seealso buff_geo
 #' @examples
-#' buff_sp = geo_buffer(routes_fast, dist = 100)
+#' buff_sp = geo_buffer(routes_fast, width = 100)
+#' class(buff_sp)
 #' plot(buff_sp, col = "red")
 #' routes_fast_sf = sf::st_as_sf(routes_fast)
 #' buff_sf = geo_buffer(routes_fast_sf, dist = 50)
+#' class(buff_sf)
+#' plot(buff_sf$geometry, add = TRUE)
 #' @export
-geo_buffer = function(shp, ...) {
+geo_buffer = function(...) {
   UseMethod("geo_buffer")
 }
 
@@ -96,5 +100,5 @@ geo_buffer.sf = function(shp, ...) {
 
 #' @export
 geo_buffer.Spatial = function(shp, ...) {
-  geo_projected.Spatial(shp, rgeos::gBuffer, width = dist)
+  geo_projected.Spatial(shp = shp, fun = rgeos::gBuffer, ...)
 }
