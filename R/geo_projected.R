@@ -58,7 +58,7 @@ geo_select_aeq.sf <- function(shp){
 #' geo_projected(shp, fun = rgeos::gBuffer, width = 100)
 #' rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 #' plot(routes_fast$length, rlength)
-geo_projected <- function(x, ...) {
+geo_projected <- function(shp, fun, crs, ...) {
   UseMethod(generic = "geo_projected")
 }
 #' @export
@@ -117,7 +117,7 @@ geo_projected.Spatial <- gprojected <- function(shp, fun, crs = crs_select_aeq(s
 #' class(buff_sf)
 #' plot(buff_sf$geometry, add = TRUE)
 #' @export
-geo_buffer <- function(...) {
+geo_buffer <- function(shp, dist = NULL, width = NULL, ..., silent = FALSE) {
   UseMethod("geo_buffer")
 }
 

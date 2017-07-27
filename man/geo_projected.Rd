@@ -4,17 +4,17 @@
 \alias{geo_projected}
 \title{Perform GIS functions on a temporary, projected version of a spatial object}
 \usage{
-geo_projected(x, ...)
+geo_projected(shp, fun, crs, ...)
 }
 \arguments{
-\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))}
-
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
 
 \item{fun}{A function to perform on the projected object (e.g. the the rgeos or sf packages)}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
 automatically by \code{\link{crs_select_aeq}}).}
+
+\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))}
 }
 \description{
 This function performs operations on projected data.
