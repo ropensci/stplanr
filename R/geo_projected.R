@@ -31,9 +31,9 @@ geo_select_aeq.Spatial <- function(shp){
 #' @export
 geo_select_aeq.sf <- function(shp){
   cent <- sf::st_geometry(shp)
-  coords = sf::st_coordinates(shp)
-  coords_mat = matrix(coords[,1:2], ncol = 2)
-  midpoint = apply(coords_mat, 2, mean)
+  coords <- sf::st_coordinates(shp)
+  coords_mat <- matrix(coords[,1:2], ncol = 2)
+  midpoint <- apply(coords_mat, 2, mean)
   aeqd <- sprintf("+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
                   midpoint[1], midpoint[1])
   sf::st_crs(aeqd)
@@ -58,40 +58,42 @@ geo_select_aeq.sf <- function(shp){
 #' geo_projected(shp, fun = rgeos::gBuffer, width = 100)
 #' rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 #' plot(routes_fast$length, rlength)
-geo_projected = function(x, ...) {
+geo_projected <- function(x, ...) {
   UseMethod(generic = "geo_projected")
 }
 #' @export
-geo_projected.sf = function(shp, fun, crs = geo_select_aeq(shp),  ...){
+geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp),  ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
-  if(is.na(sf::st_crs(shp))) sf::st_crs(shp) = 4326
-  crs_orig = sf::st_crs(shp)
-  shp_projected = sf::st_transform(shp, crs)
+  if(is.na(sf::st_crs(shp))) {
+    sf::st_crs(shp) <- 4326
+  }
+  crs_orig <- sf::st_crs(shp)
+  shp_projected <- sf::st_transform(shp, crs)
   message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs$proj4string))
-  res = fun(shp_projected, ...)
+  res <- fun(shp_projected, ...)
   if(grepl("sf", x = class(res)[1]))
-    res = sf::st_transform(res, crs_orig)
+    res <- sf::st_transform(res, crs_orig)
   res
 }
 #' @export
-geo_projected.Spatial = gprojected = function(shp, fun, crs = crs_select_aeq(shp), ...){
+geo_projected.Spatial <- gprojected <- function(shp, fun, crs = crs_select_aeq(shp), ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if(!is.na(is.projected(shp))){
     if(is.projected(shp)){
-      res = fun(shp, ...)
+      res <- fun(shp, ...)
     } else {
-      shp_projected = reproject(shp, crs = crs)
+      shp_projected <- reproject(shp, crs = crs)
       message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))
-      res = fun(shp_projected, ...)
+      res <- fun(shp_projected, ...)
       if(is(res, "Spatial"))
-        res = spTransform(res, CRS("+init=epsg:4326"))
+        res <- spTransform(res, CRS("+init=epsg:4326"))
     }
   } else {
-    shp_projected = reproject(shp, crs = crs)
+    shp_projected <- reproject(shp, crs = crs)
     message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))
-    res = fun(shp_projected, ...)
+    res <- fun(shp_projected, ...)
     if(is(res, "Spatial"))
-      res = spTransform(res, CRS("+init=epsg:4326"))
+      res <- spTransform(res, CRS("+init=epsg:4326"))
   }
   res
 }
@@ -115,16 +117,16 @@ geo_projected.Spatial = gprojected = function(shp, fun, crs = crs_select_aeq(shp
 #' class(buff_sf)
 #' plot(buff_sf$geometry, add = TRUE)
 #' @export
-geo_buffer = function(...) {
+geo_buffer <- function(...) {
   UseMethod("geo_buffer")
 }
 
 #' @export
-geo_buffer.sf = function(shp, ...) {
+geo_buffer.sf <- function(shp, ...) {
   geo_projected(shp, sf::st_buffer, ...)
 }
 
 #' @export
-geo_buffer.Spatial = function(shp, ...) {
+geo_buffer.Spatial <- function(shp, ...) {
   geo_projected.Spatial(shp = shp, fun = rgeos::gBuffer, ...)
 }
