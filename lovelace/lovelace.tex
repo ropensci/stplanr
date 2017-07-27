@@ -124,16 +124,28 @@ transport planning.
 The design of the R language, with its emphasis on flexibility, data
 processing and statistical modelling, suggests it can provide a powerful
 environment for transport planning research. There are many quantitative
-methods in transport planning \citep{willumsen_modelling_2011}.
-We focus on geospatial analysis methods, as illustrated by the kinds of task that \textbf{stplanr} was designed to tackle:
+methods in transport planning, many of which fit into the
+classic `four stage' transport model which involves the following steps
+\citep{willumsen_modelling_2011}:
+(1) trip \emph{generation} to estimate trip freqency from origins;
+(2) \emph{distribution} of trips to destinations;
+(3) \emph{modal split} of trips between walking, cycling, buses etc.;
+(4) \emph{assignment} of trips to the transport route network.
+To this we would like to add two more stages for the big data age:
+(0) data processing and exploration; and
+(5) validation.
+This sequence is not the only way of transport modelling
+and some have argued that its dominance has reduced innovation.
+However it is certainly a common approach and provides a useful
+schema for classifying the kinds of task that \textbf{stplanr} can tackle:
 
 \begin{itemize}
 \tightlist
 \item
   Accessing and processing of data on transport infrastructure and
-  behaviour
+  behaviour (stage 0)
 \item
-  Analysis and visualisation of the transport network
+  Analysis and visualisation of the transport network (0)
 \item
   Analysis of origin-destination (OD) data and the visualisation of
   resulting `desire lines'
