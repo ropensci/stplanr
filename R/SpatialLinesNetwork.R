@@ -94,17 +94,17 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
   if (is(sl, "sf")) {
 
     nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
-      dplyr::group_by(L1) %>%
-      dplyr::mutate(nrow = n(), rownum = row_number()) %>%
-      dplyr::filter(rownum == 1 | rownum == nrow) %>% dplyr::ungroup() %>%
-      dplyr::mutate(allrownum = row_number())
+      dplyr::group_by(.data$L1) %>%
+      dplyr::mutate(nrow = dplyr::n(), rownum = dplyr::row_number()) %>%
+      dplyr::filter(.data$rownum == 1 | .data$rownum == nrow) %>% dplyr::ungroup() %>%
+      dplyr::mutate(allrownum = dplyr::row_number())
 
     gdata <- coord_matches_sf(
       as.matrix(nodecoords %>%
-                  dplyr::select(X, Y, allrownum)),
+                  dplyr::select(.data$X, .data$Y, .data$allrownum)),
       as.matrix(nodecoords %>%
-                  dplyr::arrange(X, Y) %>%
-                  dplyr::select(X, Y, allrownum)),
+                  dplyr::arrange(.data$X, .data$Y) %>%
+                  dplyr::select(.data$X, .data$Y, .data$allrownum)),
       nrow(sl),
       tolerance
     )
@@ -551,7 +551,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
           })
       ) %>%
       sf::st_as_sf(
-        coords = utils::head(colnames(.),-2),
+        coords = utils::head(colnames(.data),-2),
         crs = sf::st_crs(sln@sl)$epsg
       ) %>%
       dplyr::group_by(linenum) %>%
