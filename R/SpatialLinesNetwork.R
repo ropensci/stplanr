@@ -554,11 +554,11 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
         coords = utils::head(colnames(.data),-2),
         crs = sf::st_crs(sln@sl)$epsg
       ) %>%
-      dplyr::group_by(linenum) %>%
+      dplyr::group_by(.data$linenum) %>%
       dplyr::summarise() %>%
       sf::st_cast("LINESTRING") %>%
       dplyr::bind_cols(routedata) %>%
-      dplyr::select(-linenum)
+      dplyr::select(-.data$linenum)
 
   } else {
 
