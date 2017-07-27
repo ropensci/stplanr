@@ -44,10 +44,10 @@ geo_select_aeq.sf <- function(shp){
 #' This function performs operations on projected data.
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
-#' @param fun A function to perform on the projected object (e.g.  \code{\link{gLength}}))
+#' @param fun A function to perform on the projected object (e.g. the the rgeos or sf packages)
 #' @param crs An optional coordinate reference system (if not provided it is set
 #' automatically by \code{\link{crs_select_aeq}}).
-#' @param ... Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link{rgeos::gLength}}))
+#' @param ... Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))
 #' @export
 #' @examples
 #' library(sf)
