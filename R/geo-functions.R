@@ -1,3 +1,87 @@
+# Credit: Edzer Pebesma: https://github.com/r-spatial/sf/blob/master/R/sp.R
+as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", 1:length(from))) {
+
+  if (cast)
+    from <- st_cast(from)
+
+  zm = class(from[[1]])[1]
+  if (zm %in% c("XYM", "XYZM"))
+    stop("geometries containing M not supported by sp")
+  StopZ = function(zm) { if (zm %in% c("XYZ", "XYZM"))
+    stop("Z not supported: use st_zm first to drop Z?") }
+  switch(class(from)[1],
+         "sfc_POINT" = sfc2SpatialPoints(from),
+         "sfc_MULTIPOINT" = sfc2SpatialMultiPoints(from),
+         "sfc_LINESTRING" = , "sfc_MULTILINESTRING" = { StopZ(zm); sfc2SpatialLines(from, IDs) },
+         "sfc_POLYGON" = , "sfc_MULTIPOLYGON" = { StopZ(zm); sfc2SpatialPolygons(from, IDs) },
+         stop(paste("conversion from feature type", class(from)[1], "to sp is not supported"))
+  )
+}
+
+# Credit: Edzer Pebesma: https://github.com/r-spatial/sf/blob/master/R/sp.R
+sfc2SpatialPoints = function(from) {
+  if (!requireNamespace("sp", quietly = TRUE))
+    stop("package sp required, please install it first")
+  sp::SpatialPoints(do.call(rbind, from), proj4string = sp::CRS(attr(from, "crs")$proj4string))
+}
+
+# Credit: Edzer Pebesma: https://github.com/r-spatial/sf/blob/master/R/sp.R
+sfc2SpatialMultiPoints = function(from) {
+  if (!requireNamespace("sp", quietly = TRUE))
+    stop("package sp required, please install it first")
+  sp::SpatialMultiPoints(lapply(from, unclass), proj4string =
+                           sp::CRS(attr(from, "crs")$proj4string))
+}
+
+# Credit: Edzer Pebesma: https://github.com/r-spatial/sf/blob/master/R/sp.R
+sfc2SpatialLines = function(from, IDs = paste0("ID", 1:length(from))) {
+  if (!requireNamespace("sp", quietly = TRUE))
+    stop("package sp required, please install it first")
+  l = if (class(from)[1]  == "sfc_MULTILINESTRING")
+    lapply(from, function(x) sp::Lines(lapply(x, function(y) sp::Line(unclass(y))), "ID"))
+  else
+    lapply(from, function(x) sp::Lines(list(sp::Line(unclass(x))), "ID"))
+  for (i in 1:length(from))
+    l[[i]]@ID = IDs[i]
+  sp::SpatialLines(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+}
+
+# Credit: Edzer Pebesma: https://github.com/r-spatial/sf/blob/master/R/sp.R
+sfc2SpatialPolygons = function(from, IDs = paste0("ID", 1:length(from))) {
+  if (!requireNamespace("sp", quietly = TRUE))
+    stop("package sp required, please install it first")
+  l = if (class(from)[1] == "sfc_MULTIPOLYGON")
+    lapply(from, function(x)  # for each sfc item, return a Polygons
+      sp::Polygons(unlist(lapply(x, function(y) # to each sub-polygon,
+        lapply(seq_along(y), function(i) sp::Polygon(y[[i]], i > 1))),
+        recursive = FALSE), "ID"))
+  else lapply(from, function(x)
+    sp::Polygons(lapply(seq_along(x), function(i) sp::Polygon(x[[i]], i > 1)), "ID"))
+
+  # set comment: ?Polygons: "Exterior rings are coded zero, while interior rings are
+  # coded with the 1-based index of the exterior ring to which they belong.":
+  for (i in 1:length(from)) {
+    l[[i]]@ID = IDs[i]
+    if (class(from)[1] == "sfc_MULTIPOLYGON")
+      comm = get_comment(from[[i]])
+    else
+      comm = c(0, rep(1, length(from[[i]])-1))
+    comment(l[[i]]) = paste(as.character(comm), collapse = " ")
+  }
+  sp::SpatialPolygons(l, proj4string = sp::CRS(attr(from, "crs")$proj4string))
+}
+
+get_comment = function(mp) { # for MULTIPOLYGON
+  l = lapply(mp, function(from) c(0, rep(1, length(from) - 1)))
+  offset = 0
+  for (i in 1:length(l)) {
+    l[[i]] = l[[i]] + offset
+    offset = offset + length(l[[i]])
+    l[[i]][1] = 0
+  }
+  unlist(l)
+}
+
 #' Write to geojson easily
 #'
 #' Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
@@ -176,13 +260,43 @@ bbox_scale <- function(bb, scale_factor){
 #' Takes a bounding box as an input and outputs a box in the form of a polygon
 #'
 #' @inheritParams gclip
+#' @aliases bb2poly
 #' @export
 #' @examples
-#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-#'   "coords.x2"), c("min", "max")))
-#' bb1 <- bb2poly(bb)
-#' plot(bb1)
+#' geo_bb(routes_fast)
+#' geo_bb(sp::bbox(routes_fast))
+#' # Simple features implementation:
+#' bb_sf1 <- geo_bb(routes_fast_sf) # keeps CRS
+#' plot(bb_sf1)
+#' plot(routes_fast, add = TRUE)
+#' geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
+geo_bb <- function(bb) {
+  UseMethod("geo_bb")
+}
+
+#' @export
+geo_bb.Spatial <- function(bb) {
+  bb2poly(bb)
+}
+
+#' @export
+geo_bb.sf <- function(bb) {
+  bb <- sf::as_Spatial(sf::st_geometry(bb))
+  bb <- bb2poly(bb)
+  sf::st_as_sf(bb)
+}
+#' @export
+geo_bb.bbox <- function(bb) {
+  bb <- matrix(bb, ncol = 2)
+  bb <- bb2poly(bb)
+  sf::st_as_sf(bb)
+}
+#' @export
+geo_bb.matrix <- function(bb) {
+  bb2poly(bb)
+}
+
+#' @export
 bb2poly <- function(bb){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
