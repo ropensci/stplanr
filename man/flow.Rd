@@ -52,6 +52,8 @@ routes_slow <- line2route(l = flowlines, plan = "quietest")
 
 use_data(routes_fast)
 use_data(routes_slow)
+routes_fast_sf <- sf::st_as_sf(routes_fast)
+routes_slow_sf <- sf::st_as_sf(routes_slow)
 }
 
 }
