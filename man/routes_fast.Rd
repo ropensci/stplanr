@@ -3,6 +3,7 @@
 \docType{data}
 \name{routes_fast}
 \alias{routes_fast}
+\alias{routes_fast_sf}
 \title{SpatialLinesDataFrame of commuter flows on the travel network}
 \format{A SpatialLinesDataFrame 49 rows and 15 columns}
 \usage{

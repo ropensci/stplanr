@@ -40,7 +40,6 @@ writeGeoJSON <- function(shp, filename){
 #' The percent argument refers to the percentage of removable points to retain.
 #' So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#' @seealso
 #' \code{\link[rgeos]{gSimplify}}
 #' @export
 #' @examples
@@ -176,13 +175,43 @@ bbox_scale <- function(bb, scale_factor){
 #' Takes a bounding box as an input and outputs a box in the form of a polygon
 #'
 #' @inheritParams gclip
+#' @aliases bb2poly
 #' @export
 #' @examples
-#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-#'   "coords.x2"), c("min", "max")))
-#' bb1 <- bb2poly(bb)
-#' plot(bb1)
+#' geo_bb(routes_fast)
+#' geo_bb(sp::bbox(routes_fast))
+#' # Simple features implementation:
+#' bb_sf1 <- geo_bb(routes_fast_sf) # keeps CRS
+#' plot(bb_sf1)
+#' plot(routes_fast, add = TRUE)
+#' geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
+geo_bb <- function(bb) {
+  UseMethod("geo_bb")
+}
+
+#' @export
+geo_bb.Spatial <- function(bb) {
+  bb2poly(bb)
+}
+
+#' @export
+geo_bb.sf <- function(bb) {
+  bb <- sf::as_Spatial(sf::st_geometry(bb))
+  bb <- bb2poly(bb)
+  sf::st_as_sf(bb)
+}
+#' @export
+geo_bb.bbox <- function(bb) {
+  bb <- matrix(bb, ncol = 2)
+  bb <- bb2poly(bb)
+  sf::st_as_sf(bb)
+}
+#' @export
+geo_bb.matrix <- function(bb) {
+  bb2poly(bb)
+}
+
+#' @export
 bb2poly <- function(bb){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")

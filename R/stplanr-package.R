@@ -35,6 +35,6 @@
 #' @importFrom utils download.file tail unzip
 #' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
-#'
+#' @importFrom sf st_cast st_geometry
 #' @useDynLib stplanr
 NULL

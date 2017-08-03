@@ -85,6 +85,8 @@ NULL
 #'
 #' use_data(routes_fast)
 #' use_data(routes_slow)
+#' routes_fast_sf <- sf::st_as_sf(routes_fast)
+#' routes_slow_sf <- sf::st_as_sf(routes_slow)
 #' }
 #'
 #' @docType data
@@ -174,6 +176,7 @@ NULL
 #' @name routes_fast
 #' @usage data(routes_fast)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
+#' @aliases routes_fast_sf
 NULL
 
 #' SpatialLinesDataFrame of commuter flows on the travel network
@@ -190,6 +193,7 @@ NULL
 #' @name routes_slow
 #' @usage data(routes_slow)
 #' @format A SpatialLinesDataFrame 49 rows and 15 columns
+#' @aliases routes_slow_sf
 NULL
 
 #' SpatialPolygonsDataFrame of home locations for flow analysis.
