@@ -59,31 +59,6 @@ gsection.sf <- function(sl){
   u_merged <- sf::st_line_merge(u)
   st_cast(u_merged, "LINESTRING")
 }
-
-  # # clean lines
-  # if(min(overlap_totals) == 0) {
-  #   dists <- sf::st_length(sl)
-  #   if(min(as.numeric(dists)) == 0) {
-  #     # clean so only lines with dists there (could be function)
-  #     sl <- sl[as.numeric(dists) > 0,]
-  #     # recalculate overlaps
-  #     m <- sf::st_overlaps(sl, sparse = FALSE)
-  #     overlap_totals <- apply(m, 2, sum)
-  #     non_overlapping_lines <- sl[overlap_totals == 0,]
-  #   }
-  # }
-  #
-  # # find overlaps associated with minimally intersecting line
-  # over_ord <- order(overlap_totals) # which order to run them in
-
-# see https://github.com/edzer/sp/blob/356ff6972cf62a266b75c41b1337d85e10381811/R/disaggregate.R
-# st_disaggregate <- function(sl) {
-#   nl <- vector(length = length(sl$geometry))
-#   for(i in 1:length(sl$geometry)) {
-#   ...
-#   }
-# }
-
 #' Label SpatialLinesDataFrame objects
 #'
 #' This function adds labels to lines plotted using base graphics. Largely
