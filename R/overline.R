@@ -9,7 +9,6 @@
 #' @export
 #' @examples \dontrun{
 #' data(routes_fast)
-#' rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")
 #' r1 <- routes_fast[2,]
 #' r2 <- routes_fast[3,]
 #' r3 <- routes_fast[22,]
@@ -18,11 +17,18 @@
 #' islines(r1, r2)
 #' islines(r1, r3)
 #' islines(r2, r3)
-#'
+#' islines(routes_fast_sf[2,], routes_fast_sf[3,])
+#' islines(routes_fast_sf[2,], routes_fast_sf[22,])
 #' }
-islines <- function(g1, g2){
+islines <- function(g1, g2) {
+  UseMethod("islines")
+}
+islines.Spatial <- function(g1, g2){
   ## return TRUE if geometries intersect as lines, not points
   inherits(rgeos::gIntersection(g1,g2), "SpatialLines")
+}
+islines.sf <- function(g1, g2) {
+  sf::st_geometry_type(sf::st_intersection(sf::st_geometry(g1), sf::st_geometry(g2))) == "MULTILINESTRING"
 }
 
 #' Function to split overlapping SpatialLines into segments
