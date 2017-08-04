@@ -4,19 +4,16 @@
 #' whether sets of lines overlap (beyond shared points) or
 #' not.
 #'
-#' @param g1 A SpatialLinesDataFrame
-#' @param g2 A SpatialLinesDataFrame
+#' @param g1 A spatial object
+#' @param g2 A spatial object
 #' @export
 #' @examples \dontrun{
-#' data(routes_fast)
-#' r1 <- routes_fast[2,]
-#' r2 <- routes_fast[3,]
-#' r3 <- routes_fast[22,]
+#' rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")
 #' plot(rnet)
-#' lines(r3, col = "red") # line without overlaps
-#' islines(r1, r2)
-#' islines(r1, r3)
-#' islines(r2, r3)
+#' lines(routes_fast[22,], col = "red") # line without overlaps
+#' islines(routes_fast[2,], routes_fast[3,])
+#' islines(routes_fast[2,], routes_fast[22,])
+#' # sf implementation
 #' islines(routes_fast_sf[2,], routes_fast_sf[3,])
 #' islines(routes_fast_sf[2,], routes_fast_sf[22,])
 #' }

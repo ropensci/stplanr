@@ -43,16 +43,14 @@ Imports:
     nabor,
     rlang,
     sf
-LinkingTo:
-    RcppArmadillo,
+LinkingTo: RcppArmadillo,
     Rcpp
 Suggests:
     testthat,
     knitr,
     rmarkdown,
     tmap
-Remotes:
-    r-spatial/sf
+Remotes: r-spatial/sf
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make

@@ -7,9 +7,9 @@
 islines(g1, g2)
 }
 \arguments{
-\item{g1}{A SpatialLinesDataFrame}
+\item{g1}{A spatial object}
 
-\item{g2}{A SpatialLinesDataFrame}
+\item{g2}{A spatial object}
 }
 \description{
 This is a function required in \code{\link{overline}}. It identifies
@@ -18,16 +18,13 @@ not.
 }
 \examples{
 \dontrun{
-data(routes_fast)
 rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")
-r1 <- routes_fast[2,]
-r2 <- routes_fast[3,]
-r3 <- routes_fast[22,]
 plot(rnet)
-lines(r3, col = "red") # line without overlaps
-islines(r1, r2)
-islines(r1, r3)
-islines(r2, r3)
-
+lines(routes_fast[22,], col = "red") # line without overlaps
+islines(routes_fast[2,], routes_fast[3,])
+islines(routes_fast[2,], routes_fast[22,])
+# sf implementation
+islines(routes_fast_sf[2,], routes_fast_sf[3,])
+islines(routes_fast_sf[2,], routes_fast_sf[22,])
 }
 }

@@ -24,7 +24,8 @@ See the mapshaper documentation for details:
 
 The percent argument refers to the percentage of removable points to retain.
 So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
-hard-disk space.}
+hard-disk space.
+\code{\link[rgeos]{gSimplify}}}
 }
 \description{
 Simplify geometry of spatial objects with the mapshaper library
@@ -59,7 +60,4 @@ rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
 plot(shp)
 plot(rfs_int, add = TRUE)
 }
-}
-\seealso{
-\code{\link[rgeos]{gSimplify}}
 }
