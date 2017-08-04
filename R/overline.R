@@ -37,22 +37,28 @@ islines.sf <- function(g1, g2) {
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
 #' @export
-#' @examples \dontrun{
-#' data(routes_fast)
-#' rsec <- gsection(routes_fast)
-#' plot(routes_fast)
-#' lines(rsec, col = "red", lwd = 3)
-#' length(rsec)
-#' set.seed(5)
-#' sel <- sample(length(rsec), 20)
-#' plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
-#' }
-gsection <- function(sl){
+#' @examples
+#' sl <- routes_fast[1:4,]
+#' rsec <- gsection(sl)
+#' plot(sl[1], lwd = 9, col = "yellow")
+#' plot(rsec, col = 1:length(rsec), add = TRUE)
+#' sl <- routes_fast_sf[1:4,]
+#' rsec <- gsection(sl)
+gsection <- function(sl) {
+  UseMethod("gsection")
+}
+gsection.Spatial <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
-  sp::disaggregate(rgeos::gLineMerge(rgeos::gUnion(sl, sl)))
+  u <- rgeos::gUnion(sl, sl)
+  u_merged <- rgeos::gLineMerge(u)
+  sp::disaggregate(u_merged)
 }
-
+gsection.sf <- function(sl){
+  u <- sf::st_union(sf::st_geometry(sl))
+  u_merged <- sf::st_line_merge(u)
+  st_cast(u_merged, "LINESTRING")
+}
 #' Label SpatialLinesDataFrame objects
 #'
 #' This function adds labels to lines plotted using base graphics. Largely
