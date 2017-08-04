@@ -57,7 +57,7 @@ gsection.Spatial <- function(sl){
 gsection.sf <- function(sl){
   u <- sf::st_union(sf::st_geometry(sl))
   u_merged <- sf::st_line_merge(u)
-  st_cast(u_merged, "LINESTRING")
+  sf::st_cast(u_merged, "LINESTRING")
 }
 #' Label SpatialLinesDataFrame objects
 #'
