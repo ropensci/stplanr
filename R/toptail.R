@@ -26,7 +26,7 @@
 toptail <- function(l, toptail_dist, ...){
 
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
-    stop("toptail_dist is vector but not of equal length to SpatialLines object")
+    stop("toptail_dist is vector but not of equal length to spatial object")
   }
 
   toptail_disto <- toptail_dist
