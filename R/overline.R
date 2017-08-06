@@ -107,14 +107,13 @@ lineLabels <- function(sldf, attrib){
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 #' @export
-#' @examples \dontrun{
+#' @examples
 #' rnet <- overline(sldf = routes_fast[1:7,], attrib = "length")
 #' plot(rnet, lwd = rnet$length / mean(rnet$length))
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
-#' }
 overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
   fun <- c(fun)
