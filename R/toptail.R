@@ -25,11 +25,10 @@
 #' plot(r_toptail, lwd = 9, add = TRUE)
 toptail <- function(l, toptail_dist, ...){
 
-  if (length(toptail_dist) > 1) {
-    if (length(toptail_dist) != length(l)) {
-      stop("toptail_dist is vector but not of equal length to SpatialLines object")
-    }
+  if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
+    stop("toptail_dist is vector but not of equal length to SpatialLines object")
   }
+
   toptail_disto <- toptail_dist
 
   for(i in 1:length(l)){
