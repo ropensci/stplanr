@@ -14,18 +14,15 @@
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @export
 #' @examples
-#' data("routes_fast")
-#' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
-#' r_toptail <- toptail(routes_fast, toptail_dist = 300)
-#' plot(routes_fast, lwd = 3)
-#' plot(r_toptail, col = "red", add = TRUE)
+#' l = routes_fast[2:4,]
+#' l_toptail <- toptail(l, toptail_dist = 300)
+#' plot(l)
+#' plot(l_toptail, col = "red", add = TRUE, lwd = 3)
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
-#' r_toptail <- toptail(routes_fast, toptail_dist = 1000)
+#' r_toptail <- toptail(l, toptail_dist = 900)
 #' length(r_toptail) # note short routes have been removed
-#' length(routes_fast)
-#' plot(routes_fast, lwd = 3)
-#' plot(r_toptail, col = "red", add = TRUE)
+#' plot(r_toptail, lwd = 9, add = TRUE)
 toptail <- function(l, toptail_dist, ...){
 
   if (length(toptail_dist) > 1) {
