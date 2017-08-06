@@ -174,33 +174,35 @@ line2df <- function(l){
 }
 
 #' Convert a SpatialLinesDataFrame to points
-#'
 #' The number of points will be double the number of lines with \code{line2points}.
 #' A closely related function, \code{line2pointsn} returns all the points that were line vertices.
 #' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
-#'
 #' @param l A SpatialLinesDataFrame
+#' @param ids Vector of ids (by default \code{1:nrow(l)})
 #' @export
 #' @examples
-#' data(routes_fast)
-#' lpoints <- line2pointsn(routes_fast[2,]) # for a single line
-#' lpoints2 = line2points(routes_fast[2,])
-#' plot(lpoints)
-#' plot(lpoints2)
-#' lpoints = line2pointsn(routes_fast) # for many lines
-#' plot(lpoints)
-#' data(flowlines) # load demo flowlines dataset
-#' lpoints <- line2points(flowlines) # for many lines
-#' sp::proj4string(lpoints) # maintains CRS info
-#' plot(lpoints) # note overlapping points
-#' i = 3
-#' j = (2*i):((2*i)+1)
-#' plot(flowlines[i,])
-#' plot(lpoints[j,], add = TRUE)
-#' @name line2points
-NULL
-
-#' @rdname line2points
+#' l <- routes_fast[2:4,]
+#' lpoints <- line_to_points(l)
+#' lpoints2 <- line2pointsn(l)
+#' plot(lpoints, pch = lpoints$id, cex = lpoints$id)
+#' points(lpoints2, add = TRUE)
+#' @aliases line2points
+#' @export
+line_to_points <- function(l, ids = rep(1:nrow(l), each = 2)){
+  for(i in 1:length(l)){
+    lcoords <- sp::coordinates(l[i,])[[1]][[1]]
+    pmat <- matrix(lcoords[c(1, nrow(lcoords)),], nrow = 2)
+    lpoints <- sp::SpatialPoints(pmat)
+    if(i == 1){
+      out <- lpoints
+    } else {
+      out <- raster::bind(out, lpoints)
+    }
+  }
+  sp::proj4string(out) <- sp::proj4string(l)
+  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
+  out
+}
 #' @export
 line2points <- function(l){
   for(i in 1:length(l)){
@@ -217,7 +219,7 @@ line2points <- function(l){
   out
 }
 
-#' @rdname line2points
+#' @rdname line_to_points
 #' @export
 line2pointsn <- function(l){
   spdf = raster::geom(l)
