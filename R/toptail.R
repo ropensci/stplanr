@@ -27,23 +27,30 @@ toptail <- function(l, toptail_dist, ...){
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
     stop("toptail_dist is vector but not of equal length to spatial object")
   }
-  if(length(toptail_dist) == 1) { toptail_dist = rep(toptail_dist, length(l))}
+
+  lpoints <- line_to_points(l)
+
+  if(length(toptail_dist) == 1) {
+    toptail_dist = rep(toptail_dist, length(l))
+  }
 
   for(i in 1:length(l)){
-    l1 <- l[i,]
-    lpoints <- line2points(l1)
+
+    sel_points <- lpoints[lpoints$id == i,]
+
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, width = toptail_dist[i], ...)
+      sel <- geo_buffer(lpoints, width = toptail_dist[i], ..., silent = TRUE)
     } else {
       sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
     }
-    if(rgeos::gContainsProperly(sel, l1)){
+
+    if(rgeos::gContainsProperly(sel, l[i,])){
       message(paste0("Line ", i, " is completely removed by the clip and",
                    " is omitted from the results"))
       next
     }
-    l2 <- rgeos::gDifference(l1, sel)
+    l2 <- rgeos::gDifference(l[i,], sel)
     if(!exists("out")){
       out <- l2
     } else {
@@ -163,8 +170,6 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @export
 #' @examples
-#' data("routes_fast")
-#' data("zones")
 #' r_toptail <- toptail_buff(routes_fast, zones)
 #' sel <- row.names(routes_fast) %in% row.names(r_toptail)
 #' rf_cross_poly <- routes_fast[sel,]
@@ -179,15 +184,14 @@ toptail_buff <- function(l, buff, ...){
     proj4string(buff) <- proj4string(l)
   }
   for(i in 1:length(l)){
-    l1 <- l[i,]
-    lpoints <- line2points(l1)
+    lpoints <- line2points(l[i,])
     # Select zones per line
     sel <- buff[lpoints,]
-    l2 <- rgeos::gDifference(l1, sel)
+    l2 <- rgeos::gDifference(l[i,], sel)
     if(is.null(l2)){
       next
     }else{
-      row.names(l2) <- row.names(l1)
+      row.names(l2) <- row.names(l[i,])
     }
     if(!exists("out")){
       out <- l2
