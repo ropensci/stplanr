@@ -40,8 +40,8 @@ islines.sf <- function(g1, g2) {
 #' @examples
 #' sl <- routes_fast[1:4,]
 #' rsec <- gsection(sl)
-#' plot(sl[1], lwd = 9, col = "yellow")
-#' plot(rsec, col = 1:length(rsec), add = TRUE)
+#' plot(sl[1], lwd = 9, col = (1:nrow(sl)) + length(rsec))
+#' plot(rsec, col = 1:length(rsec), add = TRUE, lwd = 3)
 #' sl <- routes_fast_sf[1:4,]
 #' rsec <- gsection(sl)
 gsection <- function(sl) {
@@ -50,14 +50,22 @@ gsection <- function(sl) {
 gsection.Spatial <- function(sl){
   ## union and merge and disaggregate to make a
   ## set of non-overlapping line segments
+  sl = toptail(sl, 1)
+  overlapping = rgeos::gOverlaps(sl, byid = T)
   u <- rgeos::gUnion(sl, sl)
   u_merged <- rgeos::gLineMerge(u)
   sp::disaggregate(u_merged)
 }
 gsection.sf <- function(sl){
+
+  # do toptail here
+
   u <- sf::st_union(sf::st_geometry(sl))
   u_merged <- sf::st_line_merge(u)
-  sf::st_cast(u_merged, "LINESTRING")
+  u_disag <- sf::st_cast(u_merged, "LINESTRING")
+  p <- line2points(sf::as_Spatial(sf::st_geometry(sl)))
+  p <- sf::st_as_sf(p)
+  sf::st_split(u_disag, p)
 }
 #' Label SpatialLinesDataFrame objects
 #'
@@ -100,28 +108,8 @@ lineLabels <- function(sldf, attrib){
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 #' @export
 #' @examples \dontrun{
-#' data(routes_fast)
-#' data(cents)
 #' rnet <- overline(sldf = routes_fast[1:7,], attrib = "length")
-#' plot(rnet)
-#' points(cents)
-#' lineLabels(sldf = rnet, "length")
-#' sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
-#' data(flowlines)
-#' plot(flowlines)
-#' aggflow <- overline(flowlines, attrib = "All")
-#' nrow(aggflow)
-#' aggflow2 <- overline(flowlines, attrib = "All", na.zero = TRUE)
-#' plot(aggflow2) # 8 lines
-#' sel <- as.logical(colSums(gEquals(flowlines, aggflow2, byid = TRUE)))
-#' flowlines_sub <- flowlines[!sel,]
-#' plot(flowlines_sub)
-#' flowlines_2way <- flowlines[sel,]
-#' library(maptools)
-#' flowlines_2way <- spChFIDs(flowlines_2way, as.character(100001:(nrow(flowlines_2way) + 100000)))
-#' flowlines_1way <- raster::bind(flowlines_sub, flowlines_2way)
-#' overlaps <- over()
-#' nrow(overlaps)
+#' plot(rnet, lwd = rnet$length / mean(rnet$length))
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
