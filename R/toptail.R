@@ -21,8 +21,7 @@
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
 #' r_toptail <- toptail(l, toptail_dist = 900)
-#' length(r_toptail) # note short routes have been removed
-#' plot(r_toptail, lwd = 9, add = TRUE)
+#' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
 toptail <- function(l, toptail_dist, ...){
 
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
@@ -35,9 +34,9 @@ toptail <- function(l, toptail_dist, ...){
     lpoints <- line2points(l1)
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, width = toptail_dist, ...)
+      sel <- buff_geo(lpoints, width = toptail_dist[i], ...)
     } else {
-      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist, ...)
+      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
     }
     if(rgeos::gContainsProperly(sel, l1)){
       message(paste0("Line ", i, " is completely removed by the clip and",
