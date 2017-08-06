@@ -28,21 +28,17 @@ toptail <- function(l, toptail_dist, ...){
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
     stop("toptail_dist is vector but not of equal length to spatial object")
   }
-
-  toptail_disto <- toptail_dist
+  if(length(toptail_dist) == 1) { toptail_dist = rep(toptail_dist, length(l))}
 
   for(i in 1:length(l)){
-    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
     l1 <- l[i,]
     lpoints <- line2points(l1)
-
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
       sel <- buff_geo(lpoints, width = toptail_dist, ...)
     } else {
       sel <- rgeos::gBuffer(lpoints, dist = toptail_dist, ...)
     }
-
     if(rgeos::gContainsProperly(sel, l1)){
       message(paste0("Line ", i, " is completely removed by the clip and",
                    " is omitted from the results"))
