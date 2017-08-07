@@ -45,8 +45,11 @@ islines.sf <- function(g1, g2) {
 #' plot(sl[1], lwd = 9, col = 1:nrow(sl))
 #' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
 #' plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
-#' sl <- routes_fast_sf[2:4,]
-#' rsec <- gsection(sl)
+#' # sf implementation (needs lwgeom)
+#' if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
+#'   sl <- routes_fast_sf[2:4,]
+#'   rsec <- gsection(sl)
+#' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
