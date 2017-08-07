@@ -122,15 +122,17 @@ overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
     fun <- rep(c(fun),length.out=length(attrib))
   }
 
-  if (is.na(byvars[1]) == TRUE) {
+  sl_sp <- as(sl, "SpatialLines")
+
+  if(is.na(byvars[1]) == TRUE) {
     ## get the line sections that make the network
     slu <- gsection(sl)
     ## overlay network with routes
-    overs = sp::over(slu, sl, returnList = TRUE)
+    overs = sp::over(slu, sl_sp, returnList = TRUE)
     ## overlay is true if end points overlay, so filter them out:
     overs = lapply(1:length(overs), function(islu){
       Filter(function(isl){
-        islines(sl[isl,],slu[islu,])
+        islines(sl_sp[isl,], slu[islu,])
       }, overs[[islu]])
     })
     ## now aggregate the required attribibute using fun():
