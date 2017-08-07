@@ -61,7 +61,7 @@ gsection.Spatial <- function(sl, buff_dist = 0){
   sp::disaggregate(u_merged)
 }
 #' @export
-gsection.sf <- function(sl){
+gsection.sf <- function(sl, buff_dist = 0){
 
   # do toptail here
 
@@ -115,8 +115,8 @@ lineLabels <- function(sl, attrib){
 #' sl <- routes_fast[2:4,]
 #' rnet1 <- overline(sl = sl, attrib = "length")
 #' rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
-#' plot(rnet1, lwd = rnet$length / mean(rnet$length))
-#' plot(rnet2, lwd = rnet$length / mean(rnet$length))
+#' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
+#' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
