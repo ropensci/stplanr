@@ -160,11 +160,11 @@ overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       split(sl, sl@data[,byvars]),
       function(x, attrib, gvar){
         groupingcat <- unname(unlist(unique(x@data[,gvar])))
-        sl = as(x, "SpatialLines")
+        sl_spg = as(x, "SpatialLines")
         slu = gsection(sl)
-        overs = sp::over(slu, sl, returnList = TRUE)
+        overs = sp::over(slu, sl_spg, returnList = TRUE)
         overs = lapply(1:length(overs), function(islu) {
-          Filter(function(isl){islines(sl[isl,],slu[islu,])}, overs[[islu]])
+          Filter(function(isl){islines(sl_spg[isl,],slu[islu,])}, overs[[islu]])
         })
         #aggs = sapply(overs, function(os){fun(x[[attrib]][os])})
         aggs <- setNames(
