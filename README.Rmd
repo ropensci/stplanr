@@ -118,7 +118,7 @@ below.
 
 ```{r rnet, warning=FALSE}
 t_routes$All <- travel_network$All
-rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
+rnet <- overline(t_routes, attrib = "All", fun = sum)
 
 lwd <- rnet$All / mean(rnet$All)
 plot(rnet, lwd = lwd)

@@ -74,7 +74,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' @export
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' class(SLN)
 #' weightfield(SLN) # field used to determine shortest path
@@ -151,7 +151,7 @@ SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' @param ... Arguments to pass to relevant plot function.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' plot(SLN)
 #' @export
@@ -177,7 +177,7 @@ setMethod("plot", signature = c(x="SpatialLinesNetwork"),
 #' @param ... Arguments to pass to relevant plot function.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' plot(SLN)
 #' @export
@@ -212,7 +212,7 @@ setMethod("plot", signature = c(x="sfNetwork"),
 #' otherwise the first column is used.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' weightfield(SLN) <- 'length'
 #' weightfield(SLN, 'randomnum') <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
@@ -313,7 +313,7 @@ setReplaceMethod("weightfield", signature(x = "sfNetwork", varname = "character"
 #' @param ... Arguments to pass to relevant summary function.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' summary(SLN)
 #' @export
@@ -330,7 +330,7 @@ setMethod("summary", signature = c(object="SpatialLinesNetwork"),
 #' @param ... Arguments to pass to relevant summary function.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' summary(SLN)
 #' @export
@@ -364,7 +364,7 @@ setMethod("summary", signature = c(object="sfNetwork"),
 #' from \code{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' find_network_nodes(SLN, -1.516734, 53.828)
 #' @export
@@ -449,7 +449,7 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #'
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' weightfield(SLN) # field used to determine shortest path
 #' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
@@ -590,7 +590,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 #' @export
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' (sln_nodes = sln2points(SLN))
 #' plot(SLN)
@@ -623,7 +623,7 @@ sln2points <- function(sln){
 #' If there are no additional colums, then overlapping routes are counted.
 #' @examples
 #' data(routes_fast)
-#' rnet <- overline(sldf = routes_fast, attrib = "length")
+#' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' weightfield(SLN) # field used to determine shortest path
 #' shortpath <- sum_network_links(

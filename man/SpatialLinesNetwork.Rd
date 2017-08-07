@@ -37,7 +37,7 @@ examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 
 \examples{
 data(routes_fast)
-rnet <- overline(sldf = routes_fast, attrib = "length")
+rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 class(SLN)
 weightfield(SLN) # field used to determine shortest path

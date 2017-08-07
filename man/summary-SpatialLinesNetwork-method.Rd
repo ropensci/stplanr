@@ -17,7 +17,7 @@ Print a summary of a SpatialLinesNetwork
 }
 \examples{
 data(routes_fast)
-rnet <- overline(sldf = routes_fast, attrib = "length")
+rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 summary(SLN)
 }
