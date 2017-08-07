@@ -36,21 +36,24 @@ islines.sf <- function(g1, g2) {
 #'
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
+#' @param buff_dist A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.
 #' @export
 #' @examples
 #' sl <- routes_fast[2:4,]
 #' rsec <- gsection(sl)
+#' rsec_buff <- gsection(sl, buff_dist = 1)
 #' plot(sl[1], lwd = 9, col = 1:nrow(sl))
 #' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+#' plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 #' sl <- routes_fast_sf[2:4,]
 #' rsec <- gsection(sl)
-gsection <- function(sl) {
+gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
-gsection.Spatial <- function(sl){
-  ## union and merge and disaggregate to make a
-  ## set of non-overlapping line segments
-  sl = toptail(sl, 1)
+gsection.Spatial <- function(sl, buff_dist = 0){
+  if(buff_dist > 0) {
+    sl = toptail(sl, toptail_dist = buff_dist)
+  }
   overlapping = rgeos::gOverlaps(sl, byid = T)
   u <- rgeos::gUnion(sl, sl)
   u_merged <- rgeos::gLineMerge(u)
@@ -99,10 +102,9 @@ lineLabels <- function(sl, attrib){
 #' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #' @param byvars Character vector containing the column names to use for grouping
-#'
+#' @inheritParams gsection
 #' @author Barry Rowlingson
 #' @references
-#'
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
@@ -115,7 +117,7 @@ lineLabels <- function(sl, attrib){
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
-overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
+overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
 
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
@@ -126,7 +128,7 @@ overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
   if(is.na(byvars[1]) == TRUE) {
     ## get the line sections that make the network
-    slu <- gsection(sl)
+    slu <- gsection(sl, buff_dist = buff_dist)
     ## overlay network with routes
     overs = sp::over(slu, sl_sp, returnList = TRUE)
     ## overlay is true if end points overlay, so filter them out:
@@ -161,7 +163,7 @@ overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       function(x, attrib, gvar){
         groupingcat <- unname(unlist(unique(x@data[,gvar])))
         sl_spg = as(x, "SpatialLines")
-        slu = gsection(sl)
+        slu = gsection(sl, buff_dist = buff_dist)
         overs = sp::over(slu, sl_spg, returnList = TRUE)
         overs = lapply(1:length(overs), function(islu) {
           Filter(function(isl){islines(sl_spg[isl,],slu[islu,])}, overs[[islu]])
