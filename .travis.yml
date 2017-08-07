@@ -1,8 +1,11 @@
 language: R
-cache: packages
+sudo: required
 cache: packages
 dist: trusty
-sudo: true
+
+addons:
+  postgresql: "9.6"
+
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
@@ -14,7 +17,6 @@ before_install:
   - (cd /tmp/postgis-2.3.2 ; ./configure; make; sudo make install)
   - # activate liblwgeom:
   - sudo ldconfig
-  - Rscript -e 'update.packages(ask = FALSE)'
 
 notifications:
     email:
