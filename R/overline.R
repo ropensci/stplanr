@@ -50,6 +50,7 @@ islines.sf <- function(g1, g2) {
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
+#' @export
 gsection.Spatial <- function(sl, buff_dist = 0){
   if(buff_dist > 0) {
     sl = toptail(sl, toptail_dist = buff_dist)
@@ -59,6 +60,7 @@ gsection.Spatial <- function(sl, buff_dist = 0){
   u_merged <- rgeos::gLineMerge(u)
   sp::disaggregate(u_merged)
 }
+#' @export
 gsection.sf <- function(sl){
 
   # do toptail here
