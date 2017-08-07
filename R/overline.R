@@ -38,11 +38,11 @@ islines.sf <- function(g1, g2) {
 #' number of overlapping features.
 #' @export
 #' @examples
-#' sl <- routes_fast[1:4,]
+#' sl <- routes_fast[2:4,]
 #' rsec <- gsection(sl)
-#' plot(sl[1], lwd = 9, col = (1:nrow(sl)) + length(rsec))
-#' plot(rsec, col = 1:length(rsec), add = TRUE, lwd = 3)
-#' sl <- routes_fast_sf[1:4,]
+#' plot(sl[1], lwd = 9, col = 1:nrow(sl))
+#' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+#' sl <- routes_fast_sf[2:4,]
 #' rsec <- gsection(sl)
 gsection <- function(sl) {
   UseMethod("gsection")
@@ -73,16 +73,16 @@ gsection.sf <- function(sl){
 #' for illustrative purposes, not designed for publication-quality
 #' graphics.
 #'
-#' @param sldf A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to a named variable in \code{sldf}
+#' @param sl A SpatialLinesDataFrame with overlapping elements
+#' @param attrib A text string corresponding to a named variable in \code{sl}
 #'
 #' @author Barry Rowlingson
 #'
 #' @export
-lineLabels <- function(sldf, attrib){
+lineLabels <- function(sl, attrib){
   text(sp::coordinates(
-    rgeos::gCentroid(sldf, byid = TRUE)
-    ), labels = sldf[[attrib]])
+    rgeos::gCentroid(sl, byid = TRUE)
+    ), labels = sl[[attrib]])
 }
 
 #' Convert series of overlapping lines into a route network
@@ -91,9 +91,9 @@ lineLabels <- function(sldf, attrib){
 #'  \code{SpatialLinesDataFrame}
 #' and converts these into a single route network.
 #'
-#' @param sldf A SpatialLinesDataFrame with overlapping elements
+#' @param sl A SpatialLinesDataFrame with overlapping elements
 #' @param attrib A character vector corresponding to the variables in
-#' \code{sldf$} on which the function(s) will operate.
+#' \code{sl$} on which the function(s) will operate.
 #' @param fun The function(s) used to aggregate the grouped values (default: sum).
 #' If length of \code{fun} is smaller than \code{attrib} then the functions are
 #' repeated for subsequent attributes.
@@ -108,13 +108,14 @@ lineLabels <- function(sldf, attrib){
 #'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 #' @export
 #' @examples
-#' rnet <- overline(sldf = routes_fast[1:7,], attrib = "length")
+#' sl <- routes_fast[2:4,]
+#' rnet <- overline(sl = sl, attrib = "length")
 #' plot(rnet, lwd = rnet$length / mean(rnet$length))
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
-overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
+overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
@@ -122,12 +123,10 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
   }
 
   if (is.na(byvars[1]) == TRUE) {
-    ## simplify down to SpatialLines
-    sl = as(sldf, "SpatialLines")
     ## get the line sections that make the network
-    slu = gsection(sl)
+    slu <- gsection(sl)
     ## overlay network with routes
-    overs = sp::over(slu, sl, returnList=TRUE)
+    overs = sp::over(slu, sl, returnList = TRUE)
     ## overlay is true if end points overlay, so filter them out:
     overs = lapply(1:length(overs), function(islu){
       Filter(function(isl){
@@ -135,13 +134,13 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
       }, overs[[islu]])
     })
     ## now aggregate the required attribibute using fun():
-    #aggs = sapply(overs, function(os){fun(sldf[[attrib]][os])})
+    #aggs = sapply(overs, function(os){fun(sl[[attrib]][os])})
     aggs <- setNames(
       as.data.frame(
         lapply(1:length(attrib),
                function(y, overs, attribs, aggfuns){
                  sapply(overs, function(os,attrib,fun2){
-                   fun2(sldf[[attrib]][os])},
+                   fun2(sl[[attrib]][os])},
                    attrib=attribs[y],
                    fun2=aggfuns[[y]])
                  },
@@ -150,13 +149,13 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
                fun)),
       attrib)
 
-    ## make a SLDF with the named attribibute:
-    sldf = sp::SpatialLinesDataFrame(slu, aggs)
-    #names(sldf) = attrib
+    ## make a sl with the named attribibute:
+    sl = sp::SpatialLinesDataFrame(slu, aggs)
+    #names(sl) = attrib
   } else {
 
     splitlines <- lapply(
-      split(sldf, sldf@data[,byvars]),
+      split(sl, sl@data[,byvars]),
       function(x, attrib, gvar){
         groupingcat <- unname(unlist(unique(x@data[,gvar])))
         sl = as(x, "SpatialLines")
@@ -180,10 +179,10 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
                    fun)
             ),
           attrib)
-        sldf = sp::SpatialLinesDataFrame(slu, cbind(aggs,as.data.frame(matrix(groupingcat,nrow=1))))
-        names(sldf) = c(attrib,gvar)
-        sldf <- spChFIDs(sldf, paste(paste(groupingcat,collapse='.'),row.names(sldf@data),sep='.'))
-        sldf
+        sl = sp::SpatialLinesDataFrame(slu, cbind(aggs,as.data.frame(matrix(groupingcat,nrow=1))))
+        names(sl) = c(attrib,gvar)
+        sl <- spChFIDs(sl, paste(paste(groupingcat,collapse='.'),row.names(sl@data),sep='.'))
+        sl
       },
       attrib,
       c(byvars)
@@ -192,7 +191,7 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
     splitlinesdf <- data.frame(dplyr::bind_rows(lapply(splitlines, function(x){x@data})))
     row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x){row.names(x@data)})))
 
-    sldf <- SpatialLinesDataFrame(
+    sl <- SpatialLinesDataFrame(
       SpatialLines(unlist(lapply(splitlines, function(x){x@lines}), recursive = FALSE),
                    proj4string = splitlines[[1]]@proj4string),
       splitlinesdf
@@ -202,10 +201,10 @@ overline <- function(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA){
 
   ## remove lines with attribute values of zero
   if(na.zero == TRUE){
-    sldf <- sldf[sldf[[attrib]] > 0, ]
+    sl <- sl[sl[[attrib]] > 0, ]
   }
 
-  sldf
+  sl
 }
 
 #' Aggregate flows so they become non-directional (by geometry - the slow way)
