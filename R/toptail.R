@@ -69,8 +69,6 @@ toptail <- function(l, toptail_dist, ...){
 #' @inheritParams geo_buffer
 #' @export
 #' @examples
-#' data("routes_fast")
-#' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
@@ -82,10 +80,9 @@ toptail <- function(l, toptail_dist, ...){
 #' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
 #' plot(buff)
 #' plot(buff3, add = TRUE, col = "black")
-buff_geo <- function(shp, width, ..., silent = TRUE){
-  gprojected(shp = shp, fun = rgeos::gBuffer, width = width)
+buff_geo <- function(shp, width, ...){
+  gprojected(shp = shp, fun = rgeos::gBuffer, width = width, ...)
 }
-
 #' Clip the first and last n metres of SpatialLines
 #'
 #' Takes lines and removes the start and end point, to a distance determined

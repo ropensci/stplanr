@@ -46,51 +46,57 @@ geo_select_aeq.sf <- function(shp){
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @param fun A function to perform on the projected object (e.g. the the rgeos or sf packages)
 #' @param crs An optional coordinate reference system (if not provided it is set
-#' automatically by \code{\link{crs_select_aeq}}).
+#' automatically by \code{\link{crs_select_aeq}})
+#' @param silent A binary value for printing the CRS details (default: TRUE)
 #' @param ... Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))
 #' @export
 #' @examples
 #' library(sf)
-#' shp = st_sf(st_sfc(st_point(c(1, 0))))
-#' geo_projected(shp, st_buffer, dist = 100)
-#' library(sp)
-#' shp = as(shp, "Spatial")
-#' geo_projected(shp, fun = rgeos::gBuffer, width = 100)
+#' shp = routes_fast_sf[2:4,]
+#' plot(geo_projected(shp, st_buffer, dist = 100)$geometry)
+#' shp = sf::as_Spatial(shp$geometry)
+#' geo_projected(shp, fun = rgeos::gBuffer, width = 100, byid = TRUE)
 #' rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 #' plot(routes_fast$length, rlength)
-geo_projected <- function(shp, fun, crs, ...) {
+geo_projected <- function(shp, fun, crs, silent, ...) {
   UseMethod(generic = "geo_projected")
 }
 #' @export
-geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp),  ...){
+geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if(is.na(sf::st_crs(shp))) {
     sf::st_crs(shp) <- 4326
   }
   crs_orig <- sf::st_crs(shp)
   shp_projected <- sf::st_transform(shp, crs)
-  message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs$proj4string))
+  if(!silent) {
+    message(paste0("Running function on a temporary projection: ", crs$proj4string))
+  }
   res <- fun(shp_projected, ...)
   if(grepl("sf", x = class(res)[1]))
     res <- sf::st_transform(res, crs_orig)
   res
 }
 #' @export
-geo_projected.Spatial <- gprojected <- function(shp, fun, crs = crs_select_aeq(shp), ...){
+geo_projected.Spatial <- gprojected <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if(!is.na(is.projected(shp))){
     if(is.projected(shp)){
       res <- fun(shp, ...)
     } else {
       shp_projected <- reproject(shp, crs = crs)
-      message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))
+      if(!silent) {
+        message(paste0("Running function on a temporary projection: ", crs))
+      }
       res <- fun(shp_projected, ...)
       if(is(res, "Spatial"))
         res <- spTransform(res, CRS("+init=epsg:4326"))
     }
   } else {
     shp_projected <- reproject(shp, crs = crs)
-    message(paste0("Running function on a temporary projected version of the Spatial object using the CRS: ", crs))
+    if(!silent) {
+      message(paste0("Running function on a temporary projection: ", crs$proj4string))
+    }
     res <- fun(shp_projected, ...)
     if(is(res, "Spatial"))
       res <- spTransform(res, CRS("+init=epsg:4326"))
@@ -106,7 +112,6 @@ geo_projected.Spatial <- gprojected <- function(shp, fun, crs = crs_select_aeq(s
 #' @param dist The distance (in metres) of the buffer (when buffering simple features)
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
 #' @param ... Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)
-#' @param silent A binary value for printing the CRS details (default: FALSE)
 #' @seealso buff_geo
 #' @examples
 #' buff_sp = geo_buffer(routes_fast, width = 100)
@@ -117,7 +122,7 @@ geo_projected.Spatial <- gprojected <- function(shp, fun, crs = crs_select_aeq(s
 #' class(buff_sf)
 #' plot(buff_sf$geometry, add = TRUE)
 #' @export
-geo_buffer <- function(shp, dist = NULL, width = NULL, ..., silent = FALSE) {
+geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
   UseMethod("geo_buffer")
 }
 

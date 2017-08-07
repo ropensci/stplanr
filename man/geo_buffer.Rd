@@ -4,7 +4,7 @@
 \alias{geo_buffer}
 \title{Perform a buffer operation on a temporary projected CRS}
 \usage{
-geo_buffer(shp, dist = NULL, width = NULL, ..., silent = FALSE)
+geo_buffer(shp, dist = NULL, width = NULL, ...)
 }
 \arguments{
 \item{shp}{A spatial object with a geographic CRS (e.g. WGS84)
@@ -15,8 +15,6 @@ around which a buffer should be drawn}
 \item{width}{The distance (in metres) of the buffer (when buffering sp objects)}
 
 \item{...}{Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)}
-
-\item{silent}{A binary value for printing the CRS details (default: FALSE)}
 }
 \description{
 This function solves the problem that buffers will not be circular when used on

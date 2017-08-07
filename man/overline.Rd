@@ -4,13 +4,14 @@
 \alias{overline}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sldf, attrib, fun = sum, na.zero = FALSE, byvars = NA)
+overline(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA,
+  buff_dist = 0)
 }
 \arguments{
-\item{sldf}{A SpatialLinesDataFrame with overlapping elements}
+\item{sl}{A SpatialLinesDataFrame with overlapping elements}
 
 \item{attrib}{A character vector corresponding to the variables in
-\code{sldf$} on which the function(s) will operate.}
+\code{sl$} on which the function(s) will operate.}
 
 \item{fun}{The function(s) used to aggregate the grouped values (default: sum).
 If length of \code{fun} is smaller than \code{attrib} then the functions are
@@ -19,6 +20,8 @@ repeated for subsequent attributes.}
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
 
 \item{byvars}{Character vector containing the column names to use for grouping}
+
+\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
 \description{
 This function takes a series of Lines stored in a
@@ -26,34 +29,15 @@ This function takes a series of Lines stored in a
 and converts these into a single route network.
 }
 \examples{
-\dontrun{
-data(routes_fast)
-data(cents)
-rnet <- overline(sldf = routes_fast[1:7,], attrib = "length")
-plot(rnet)
-points(cents)
-lineLabels(sldf = rnet, "length")
-sum(routes_fast$length[1:7], na.rm = TRUE) # verify highest flow
-data(flowlines)
-plot(flowlines)
-aggflow <- overline(flowlines, attrib = "All")
-nrow(aggflow)
-aggflow2 <- overline(flowlines, attrib = "All", na.zero = TRUE)
-plot(aggflow2) # 8 lines
-sel <- as.logical(colSums(gEquals(flowlines, aggflow2, byid = TRUE)))
-flowlines_sub <- flowlines[!sel,]
-plot(flowlines_sub)
-flowlines_2way <- flowlines[sel,]
-library(maptools)
-flowlines_2way <- spChFIDs(flowlines_2way, as.character(100001:(nrow(flowlines_2way) + 100000)))
-flowlines_1way <- raster::bind(flowlines_sub, flowlines_2way)
-overlaps <- over()
-nrow(overlaps)
+sl <- routes_fast[2:4,]
+rnet1 <- overline(sl = sl, attrib = "length")
+rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
+plot(rnet1, lwd = rnet$length / mean(rnet$length))
+plot(rnet2, lwd = rnet$length / mean(rnet$length))
 routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
-rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group")
+rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 plot(rnet_grouped, col = rnet_grouped$group, lwd =
   rnet_grouped$length / mean(rnet_grouped$length) * 3)
-}
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
