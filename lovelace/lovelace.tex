@@ -398,10 +398,10 @@ fatal crashes) and converted into a spatial class system, we can
 analyse them using geographical datasets of the type commonly used by
 \textbf{stplanr}. The following code, for example, geographically
 subsets the dataset to include only crashes that occurred within the
-bounding box of a
+bounding box of a sample
 \href{https://github.com/ropensci/stplanr/blob/master/data/route_network.rda?raw=true}{route
-network dataset} provided by \textbf{stplanr} (from version 0.1.7 and
-beyond) using the function \texttt{bb2poly}, which converts a spatial
+network dataset} contained as dataset in \textbf{stplanr} for illustrative purposes.
+Note the use of \texttt{bb2poly}, which converts a spatial
 dataset into a box, represented as a rectangular
 \texttt{SpatialPolygonsDataFrame}:
 
