@@ -386,15 +386,15 @@ This is communicated in a number of places, including on the website \href{http:
 \begin{Sinput}
 library(dplyr)
 ca_ac <- inner_join(ca, ac)
-ca_cycle <- ca_ac %>%
+ca_fatal <- ca_ac %>%
   filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) %>%
   select(Age = Age_of_Casualty, Mode = Casualty_Type, Longitude, Latitude)
-ca_sp <- SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
+ca_sp <- SpatialPointsDataFrame(coords = ca_fatal[3:4], data = ca_fatal[1:2])
 \end{Sinput}
 \end{Schunk}
 
 Now that this casualty data has been cleaned, subsetted (to only include
-serious cycle crashes) and converted into a spatial class system, we can
+fatal crashes) and converted into a spatial class system, we can
 analyse them using geographical datasets of the type commonly used by
 \textbf{stplanr}. The following code, for example, geographically
 subsets the dataset to include only crashes that occurred within the
