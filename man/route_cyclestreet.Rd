@@ -76,18 +76,10 @@ Read more about the .Renviron here: \code{?.Renviron}
 \examples{
 
 \dontrun{
-# Example from
-from = c(0.117950, 52.205302); to = c(0.131402, 52.221046)
+from = c(0.12, 52.21)
+to = c(0.13, 52.22)
 json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
 str(json_output) # what does cyclestreets give you?
-names(json_output$marker$`@attributes`)
-json_output$marker$`@attributes`$start[1] # starting point
-json_output$marker$`@attributes`$finish[1] # end point
-json_output$marker$`@attributes`$speed[1] # assumed speed (km/hr)
-json_output$marker$`@attributes`$busynance # busyness of each section
-json_output$marker$`@attributes`$elevations # list of elevations
-# jsonlite::toJSON(json_output, pretty = TRUE) # complete json output (long!)
-# Plan the 'fastest' route between two points in Manchester
 rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
 rf_mcr@data
 plot(rf_mcr)
@@ -95,8 +87,6 @@ plot(rf_mcr)
   (rf_mcr$time / (60 * 60)) # time in hours - average speed here: ~8mph
 # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
 rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
-# A long distance route (max = 500 km) - lat/lon pairs in the UK
-route_cyclestreet(c(-2, 52), c(-1, 53), "fastest")
 }
 
 }
