@@ -1150,8 +1150,7 @@ Another desirable direction of travel is towards better support for large datase
 We have demonstrated \textbf{stplnr}'s capabilities on deliberately small datasets for ease of understanding.
 However, the third criterion of transport planning software set-out in the introduction --- \emph{scalability} --- is vital to package's real world utility in the age of transport-related `Big Data' \citep{lovelace_big_2016}.
 For this reason we have endeavoured to use efficient programming techniques package functions and use C++ (via \CRANpkg{Rcpp}) for computationally intensive operations on \code{SpatialLinesNetwork}.
-\CRANpkg{stplanr} was first developed to generate data for the national
-Propensity to Cycle Project, which involved generating geographic desire lines for over 700,000 routes \citep{lovelace_propensity_2017} (and in Phase 2, over 4 million).
+\CRANpkg{stplanr} was first developed to to generate data for the English national Propensity to Cycle Tool, which estimates cycling potential across all major cyclable routes in England \citep{lovelace_propensity_2017}.
 This experience led to a number of optimisations in the code, including an implementation a faster implementation of the \code{od2line} function (\code{od2line2}) and a commit that led to a 10 fold speed-up in the \code{line2route} function (see commit \href{https://github.com/ropensci/stplanr/commit/c834abf7d0020c6fbb33845572d6be4801f31f47}{c834abf}).
 
 However, there are still opportunities for improving performance, including:
