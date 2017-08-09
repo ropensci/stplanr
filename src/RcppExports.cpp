@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // coord_matches
 List coord_matches(SEXP sldf, double tolval);
-RcppExport SEXP stplanr_coord_matches(SEXP sldfSEXP, SEXP tolvalSEXP) {
+RcppExport SEXP _stplanr_coord_matches(SEXP sldfSEXP, SEXP tolvalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // join_spatiallines_coords
 arma::mat join_spatiallines_coords(SEXP sldf, double startx, double starty);
-RcppExport SEXP stplanr_join_spatiallines_coords(SEXP sldfSEXP, SEXP startxSEXP, SEXP startySEXP) {
+RcppExport SEXP _stplanr_join_spatiallines_coords(SEXP sldfSEXP, SEXP startxSEXP, SEXP startySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,7 +33,7 @@ END_RCPP
 }
 // coord_matches_sf
 List coord_matches_sf(arma::mat x, arma::mat sortedx, unsigned int sllength, double tolval);
-RcppExport SEXP stplanr_coord_matches_sf(SEXP xSEXP, SEXP sortedxSEXP, SEXP sllengthSEXP, SEXP tolvalSEXP) {
+RcppExport SEXP _stplanr_coord_matches_sf(SEXP xSEXP, SEXP sortedxSEXP, SEXP sllengthSEXP, SEXP tolvalSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,7 +47,7 @@ END_RCPP
 }
 // join_spatiallines_coords_sf
 arma::mat join_spatiallines_coords_sf(List lines, double startx, double starty);
-RcppExport SEXP stplanr_join_spatiallines_coords_sf(SEXP linesSEXP, SEXP startxSEXP, SEXP startySEXP) {
+RcppExport SEXP _stplanr_join_spatiallines_coords_sf(SEXP linesSEXP, SEXP startxSEXP, SEXP startySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -60,10 +60,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"stplanr_coord_matches", (DL_FUNC) &stplanr_coord_matches, 2},
-    {"stplanr_join_spatiallines_coords", (DL_FUNC) &stplanr_join_spatiallines_coords, 3},
-    {"stplanr_coord_matches_sf", (DL_FUNC) &stplanr_coord_matches_sf, 4},
-    {"stplanr_join_spatiallines_coords_sf", (DL_FUNC) &stplanr_join_spatiallines_coords_sf, 3},
+    {"_stplanr_coord_matches", (DL_FUNC) &_stplanr_coord_matches, 2},
+    {"_stplanr_join_spatiallines_coords", (DL_FUNC) &_stplanr_join_spatiallines_coords, 3},
+    {"_stplanr_coord_matches_sf", (DL_FUNC) &_stplanr_coord_matches_sf, 4},
+    {"_stplanr_join_spatiallines_coords_sf", (DL_FUNC) &_stplanr_join_spatiallines_coords_sf, 3},
     {NULL, NULL, 0}
 };
 
