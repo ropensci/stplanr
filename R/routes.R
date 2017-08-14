@@ -222,7 +222,7 @@ route_cyclestreet <-
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
+#' r <- route_graphhopper(from = "Leeds, UK", to = "Dublin, Ireland", vehicle = "bike")
 #' r@data
 #' plot(r)
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
