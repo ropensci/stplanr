@@ -66,7 +66,6 @@ rf_no_id <- line2route(l)
 rf_no_id$id # [1] "1" "2" "3" "4"
 rf_with_id = line2route(l, l_id = "All")
 rf_with_id$id # [1] 38 10 44
-rf_with_err = line2route(l,  reporterrors = T)
-# rf_with_err$error[2] has the correct error message
+line2route(l[1,], route_graphhopper)
 }
 }

@@ -3,11 +3,8 @@
 \docType{data}
 \name{zones}
 \alias{zones}
-\title{SpatialPolygonsDataFrame of home locations for flow analysis.}
-\format{A SpatialPolygonsDataFrame}
-\usage{
-data(zones)
-}
+\alias{zones_sf}
+\title{Spatial polygons of home locations for flow analysis.}
 \description{
 These correspond to the \code{\link{cents}} data.
 }
@@ -23,8 +20,7 @@ proj4string(zones) <- proj4string(cents)
 zones <- zones[cents,]
 plot(zones)
 points(cents)
-# use_data(zones, overwrite = TRUE)
+zones_sf = sf::st_as_sf(zones)
 }
-
 }
 \keyword{datasets}

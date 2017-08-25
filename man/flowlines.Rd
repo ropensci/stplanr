@@ -3,11 +3,9 @@
 \docType{data}
 \name{flowlines}
 \alias{flowlines}
-\title{SpatialLinesDataFrame of commuter flows}
-\format{A SpatialLinesDataFrame 49 rows and 15 columns}
-\usage{
-data(flowlines)
-}
+\alias{flowlines_sf}
+\title{spatial lines dataset of commuter flows}
+\format{A spatial lines dataset with 49 rows and 15 columns}
 \description{
 Flow data after conversion to a spatial format
 with \code{\link{od2line}} (see \code{\link{flow}}).
