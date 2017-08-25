@@ -39,7 +39,7 @@
 #' @keywords datasets
 #' @name cents
 #' @usage data(cents)
-#' @format A SpatialPoints with 8 rows and 5 variables
+#' @format A spatial dataset with 8 rows and 5 variables
 NULL
 
 #' data frame of commuter flows
@@ -142,11 +142,13 @@ NULL
 #' destinations = rgeos::gCentroid(destinations, byid = TRUE)
 #' destinations = SpatialPointsDataFrame(destinations, destination_zones@data)
 #' devtools::use_data(destinations, overwrite = TRUE)
+#' destinations_sf = sf::st_as_sf(destinations)
+#' devtools::use_data(destinations_sf)
 #' }
 #' @docType data
 #' @keywords datasets
 #' @name destination_zones
-#' @aliases destinations
+#' @aliases destinations destinations_sf
 #' @usage data(destination_zones)
 #' @format A SpatialPolygonsDataFrame with 87 features
 NULL
