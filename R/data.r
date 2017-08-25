@@ -1,16 +1,16 @@
-#' SpatialPointsDataFrame of home locations for flow analysis.
+#' Spatial points representing home locations
 #'
-#'  These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
+#' These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
 #'
 #' \itemize{
-#'   \item geo_code. the official code of the zone
-#'   \item MSOA11NM. name zone name
-#'   \item percent_fem. the percent female
-#'   \item avslope. average gradient of the zone
+#'   \item geo_code the official code of the zone
+#'   \item MSOA11NM name zone name
+#'   \item percent_fem the percent female
+#'   \item avslope average gradient of the zone
 #' }
 #'
 #' Cents was generated from the data repository pct-data: https://github.com/npct/pct-data. This data was accessed from within the pct repo: https://github.com/npct/pct, using the following code:
-#'
+#' @aliases cents_sf
 #' @examples
 #' \dontrun{
 #' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
@@ -31,6 +31,8 @@
 #' cents$geo_code <- as.character(cents$geo_code)
 #' library(devtools)
 #' # use_data(cents, overwrite = TRUE)
+#' cents_sf = sf::st_as_sf(cents)
+#' devtools::use_data(cents_sf)
 #' }
 #'
 #' @docType data
