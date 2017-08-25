@@ -4,13 +4,13 @@
 \alias{viaroute2sldf}
 \title{Convert json result of OSRM routing query to SpatialLinesDataFrame}
 \usage{
-viaroute2sldf(osrmresult, usesf = FALSE)
+viaroute2sldf(osrmresult, return_sf = FALSE)
 }
 \arguments{
 \item{osrmresult}{Single character string or character vector containing
 encoded json result(s) of OSRM routing queries.}
 
-\item{usesf}{Boolean value if this function should return an sf object, if
+\item{return_sf}{Boolean value if this function should return an sf object, if
 FALSE returns sp object (default FALSE).}
 }
 \description{

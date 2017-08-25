@@ -6,7 +6,7 @@
 \usage{
 nearest_osm(lat, lng, number = 1, api = 5, profile = "driving",
   protocol = "v1", osrmurl = "http://router.project-osrm.org",
-  usesf = FALSE)
+  return_sf = FALSE)
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
@@ -27,7 +27,7 @@ Default is 5.}
 
 \item{osrmurl}{Base URL of the OSRM service}
 
-\item{usesf}{Boolean value if this function should return an sf object, if
+\item{return_sf}{Boolean value if this function should return an sf object, if
 FALSE returns sp object (default FALSE).}
 }
 \description{

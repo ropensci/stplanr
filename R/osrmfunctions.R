@@ -354,7 +354,7 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #'
 #' @param osrmresult Single character string or character vector containing
 #' encoded json result(s) of OSRM routing queries.
-#' @param usesf Boolean value if this function should return an sf object, if
+#' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
@@ -365,7 +365,7 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #'             endlng = 13.429290)
 #'  )
 #' }
-viaroute2sldf <- function(osrmresult, usesf = FALSE) {
+viaroute2sldf <- function(osrmresult, return_sf = FALSE) {
 
   osrmsldf <- c()
   for (curroute in 1:length(osrmresult)) {
@@ -390,7 +390,7 @@ viaroute2sldf <- function(osrmresult, usesf = FALSE) {
                              routename = osrmjson$route_name,
                              existrow = 0,
                              routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1),
-                             usesf = usesf)
+                             return_sf = return_sf)
 
       if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
         osrmsldf <- osrmsldfalt
@@ -414,9 +414,9 @@ viaroute2sldf <- function(osrmresult, usesf = FALSE) {
                              routename = osrmjson$alternative_names[[i]],
                              existrow = nrow(osrmsldf@data),
                              routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1)+i,
-                             usesf = usesf)
+                             return_sf = return_sf)
 
-          if (usesf == FALSE) {
+          if (return_sf == FALSE) {
             osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
           } else {
             osrmsldf <- rbind(osrmsldf, osrmsldfalt)
@@ -437,11 +437,11 @@ viaroute2sldf <- function(osrmresult, usesf = FALSE) {
           osrmjson$routes$legs[[i]]$steps[[j]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[j]]$geometry)
         }
       }
-      osrmsldfalt <- viaroute2sldf_instructv5(osrmjson, ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1), usesf = usesf)
+      osrmsldfalt <- viaroute2sldf_instructv5(osrmjson, ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1), return_sf = return_sf)
       if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE & is(osrmsldf, "sf") == FALSE) {
         osrmsldf <- osrmsldfalt
       } else {
-        if (usesf == FALSE) {
+        if (return_sf == FALSE) {
           osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
         } else {
           osrmsldf <- rbind(osrmsldf, osrmsldfalt)
@@ -457,7 +457,7 @@ viaroute2sldf <- function(osrmresult, usesf = FALSE) {
 
 }
 
-viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename = "", existrow = 0, routeid = 1, usesf = FALSE) {
+viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename = "", existrow = 0, routeid = 1, return_sf = FALSE) {
 
   if (class(routeinst) == "list") {
     routeinst <- unlist(routeinst, recursive = FALSE)
@@ -547,7 +547,7 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
   osrmsldf@data$routesect <- 1:nrow(osrmsldf@data)
   osrmsldf@data$routeid <- routeid
 
-  if (usesf == TRUE) {
+  if (return_sf == TRUE) {
     osrmsldf <- st_as_sf(osrmsldf)
   }
 
@@ -555,7 +555,7 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
 
 }
 
-viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, usesf = FALSE) {
+viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, return_sf = FALSE) {
 
   if (length(routeinst$routes$legs[[1]]$steps[[1]]$geometry) == 0) {
     osrmsldf <- sp::SpatialLinesDataFrame(
@@ -634,7 +634,7 @@ viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, usesf = FALSE)
     osrmsldf@data <- osrmsldf@data[,-ncol(osrmsldf@data)]
   }
 
-  if (usesf == TRUE) {
+  if (return_sf == TRUE) {
     osrmsldf <- st_as_sf(osrmsldf)
   }
 
@@ -659,7 +659,7 @@ viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, usesf = FALSE)
 #' @param profile OSRM profile to use (for API v5), defaults to "driving".
 #' @param protocol The protocol to use for the API (for v5), defaults to "v1".
 #' @param osrmurl Base URL of the OSRM service
-#' @param usesf Boolean value if this function should return an sf object, if
+#' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
@@ -671,7 +671,7 @@ viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, usesf = FALSE)
 nearest_osm <- function(lat, lng, number = 1,
                         api = 5, profile="driving", protocol = "v1",
                         osrmurl = "http://router.project-osrm.org",
-                        usesf = FALSE){
+                        return_sf = FALSE){
   if (is(lat,"data.frame")) {
     lng = lat[,2]
     lat = lat[,1]
@@ -684,7 +684,7 @@ nearest_osm <- function(lat, lng, number = 1,
                              ),recursive = FALSE),ncol=2,byrow = TRUE),
                            data = data.frame(orig_lat = lat, orig_lng = lng),
                            proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
-    if (usesf == TRUE) {
+    if (return_sf == TRUE) {
       st_as_sf(thisspdf)
     } else {
       thisspdf
@@ -709,7 +709,7 @@ nearest_osm <- function(lat, lng, number = 1,
         }),.id = "locnum")),
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
-    if (usesf == TRUE) {
+    if (return_sf == TRUE) {
       st_as_sf(thisspdf)
     } else {
       thisspdf
@@ -730,7 +730,7 @@ nearest_osm <- function(lat, lng, number = 1,
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param osrmurl Base URL of the OSRM service
-#' @param usesf Boolean value if this function should return an sf object, if
+#' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
@@ -740,9 +740,9 @@ nearest_osm <- function(lat, lng, number = 1,
 #'  )
 #' }
 #'
-locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org", usesf = FALSE) {
+locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
-  if (usesf == TRUE) {
+  if (return_sf == TRUE) {
     return(st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate")))
   } else {
     return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate"))
@@ -763,7 +763,7 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param osrmurl Base URL of the OSRM service
-#' @param usesf Boolean value if this function should return an sf object, if
+#' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
@@ -773,9 +773,9 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #'  )
 #' }
 #'
-nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", usesf = FALSE) {
+nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
-  if (usesf == TRUE) {
+  if (return_sf == TRUE) {
     return(st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
   } else {
     return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
