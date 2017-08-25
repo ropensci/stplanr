@@ -279,8 +279,7 @@ line2pointsn <- function(l){
 #' rf_no_id$id # [1] "1" "2" "3" "4"
 #' rf_with_id = line2route(l, l_id = "All")
 #' rf_with_id$id # [1] 38 10 44
-#' rf_with_err = line2route(l,  reporterrors = T)
-#' # rf_with_err$error[2] has the correct error message
+#' line2route(l[1,], route_graphhopper)
 #' }
 line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, ...){
   FUN <- match.fun(route_fun)
