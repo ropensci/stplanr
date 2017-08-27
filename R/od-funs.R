@@ -189,6 +189,9 @@ line2df <- function(l){
 #' @aliases line2points
 #' @export
 line_to_points <- function(l, ids = rep(1:nrow(l), each = 2)){
+  UseMethod("line_to_points")
+}
+line_to_points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)){
   for(i in 1:length(l)){
     lcoords <- sp::coordinates(l[i,])[[1]][[1]]
     pmat <- matrix(lcoords[c(1, nrow(lcoords)),], nrow = 2)
