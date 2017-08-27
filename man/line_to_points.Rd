@@ -30,4 +30,5 @@ lpoints <- line_to_points(l)
 lpoints2 <- line2pointsn(l)
 plot(lpoints, pch = lpoints$id, cex = lpoints$id)
 points(lpoints2, add = TRUE)
+line_to_points(routes_fast_sf[2:4,])
 }
