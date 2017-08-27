@@ -192,7 +192,7 @@ line2df <- function(l){
 line_to_points <- function(l, ids = rep(1:nrow(l), each = 2)){
   UseMethod("line_to_points")
 }
-
+#' @export
 line_to_points.sf <- function(l, ids = rep(1:nrow(l), each = 2)){
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
   d_indices <- 1:nrow(l) * 2
@@ -205,7 +205,7 @@ line_to_points.sf <- function(l, ids = rep(1:nrow(l), each = 2)){
   p <- st_cast(sf::st_sfc(p_multi), "POINT")
   sf::st_sf(data.frame(id = ids), p)
 }
-
+#' @export
 line_to_points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)){
   for(i in 1:length(l)){
     lcoords <- sp::coordinates(l[i,])[[1]][[1]]

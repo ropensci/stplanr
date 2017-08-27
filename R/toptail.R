@@ -27,6 +27,7 @@
 geo_toptail <- function(l, toptail_dist, ...) {
   UseMethod("geo_toptail")
 }
+#' @export
 geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
 
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
@@ -64,7 +65,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
   }
   out
 }
-
+#' @export
 geo_toptail.sf <- function(l, toptail_dist, ...){
   l_sp <- sp::SpatialLinesDataFrame(sf::as_Spatial(sf::st_geometry(l)), sf::st_set_geometry(l, NULL), match.ID = FALSE)
   res_sp <- geo_toptail(l_sp, toptail_dist = toptail_dist, ...)
