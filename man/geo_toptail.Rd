@@ -34,4 +34,5 @@ plot(cents, col = "blue", add = TRUE, pch = 15)
 # Note the behaviour when the buffer size removes lines
 r_toptail <- geo_toptail(l, toptail_dist = 900)
 plot(r_toptail, lwd = 9, add = TRUE) # short route removed
+geo_toptail(routes_fast_sf[2:4, ], 300)
 }

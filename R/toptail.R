@@ -23,6 +23,7 @@
 #' # Note the behaviour when the buffer size removes lines
 #' r_toptail <- geo_toptail(l, toptail_dist = 900)
 #' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
+#' geo_toptail(routes_fast_sf[2:4, ], 300)
 geo_toptail <- function(l, toptail_dist, ...) {
   UseMethod("geo_toptail")
 }
@@ -62,6 +63,12 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
     }
   }
   out
+}
+
+geo_toptail.sf <- function(l, toptail_dist, ...){
+  l_sp <- sp::SpatialLinesDataFrame(sf::as_Spatial(sf::st_geometry(l)), sf::st_set_geometry(l, NULL), match.ID = FALSE)
+  res_sp <- geo_toptail(l_sp, toptail_dist = toptail_dist, ...)
+  sf::st_as_sf(res_sp)
 }
 #' Create a buffer of n metres for non-projected 'geographical' spatial data
 #'
