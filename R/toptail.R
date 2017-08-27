@@ -12,17 +12,21 @@
 #' Can either be a single value or a vector of the same length as the
 #' SpatialLines object.
 #' @param ... Arguments passed to rgeos::gBuffer()
+#' @aliases toptail
 #' @export
 #' @examples
 #' l = routes_fast[2:4,]
-#' l_toptail <- toptail(l, toptail_dist = 300)
+#' l_toptail <- geo_toptail(l, toptail_dist = 300)
 #' plot(l)
 #' plot(l_toptail, col = "red", add = TRUE, lwd = 3)
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
-#' r_toptail <- toptail(l, toptail_dist = 900)
+#' r_toptail <- geo_toptail(l, toptail_dist = 900)
 #' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
-toptail <- function(l, toptail_dist, ...){
+geo_toptail <- function(l, toptail_dist, ...) {
+  UseMethod("geo_toptail")
+}
+geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
 
   if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
     stop("toptail_dist is vector but not of equal length to spatial object")
