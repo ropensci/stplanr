@@ -49,6 +49,7 @@ islines.sf <- function(g1, g2) {
 #' if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
 #'   sl <- routes_fast_sf[2:4,]
 #'   rsec <- gsection(sl)
+#'   rsec <- gsection(sl, buff_dist = 100)
 #' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
@@ -66,7 +67,9 @@ gsection.Spatial <- function(sl, buff_dist = 0){
 #' @export
 gsection.sf <- function(sl, buff_dist = 0){
 
-  # do toptail here
+  if(buff_dist > 0) {
+    sl = geo_toptail(sl, toptail_dist = buff_dist)
+  }
 
   u <- sf::st_union(sf::st_geometry(sl))
   u_merged <- sf::st_line_merge(u)

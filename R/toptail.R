@@ -68,7 +68,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
 #' @export
 geo_toptail.sf <- function(l, toptail_dist, ...){
   l_sp <- sp::SpatialLinesDataFrame(sf::as_Spatial(sf::st_geometry(l)), sf::st_set_geometry(l, NULL), match.ID = FALSE)
-  res_sp <- geo_toptail(l_sp, toptail_dist = toptail_dist, ...)
+  res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
   sf::st_as_sf(res_sp)
 }
 #' Create a buffer of n metres for non-projected 'geographical' spatial data
