@@ -127,7 +127,10 @@ lineLabels <- function(sl, attrib){
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
-overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
+overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
+  UseMethod("overline")
+}
+overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
 
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
