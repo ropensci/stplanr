@@ -98,14 +98,14 @@ calc_catchment <- function(
     targetintersectd <- sp::SpatialPolygonsDataFrame(targetintersectd,
                                                      data=if(length(calccols) == 1){
                                                        setNames(
-                                                         data.frame(x=sum(targetintersect@data[,calccols])),
+                                                         data.frame(x=sum(targetintersect@data[,calccols], na.rm = TRUE)),
                                                          calccols
                                                        )}else{
-                                                         data.frame(as.list(colSums(targetintersect@data[,calccols])))
+                                                         data.frame(as.list(colSums(targetintersect@data[,calccols],na.rm = TRUE)))
                                                        }
     )
-    targetintersectd@data$calc_catchment_fullArea <- sum(targetintersect@data$calc_catchment_fullArea)
-    targetintersectd@data$calc_catchment_sectArea <- sum(targetintersect@data$calc_catchment_sectArea)
+    targetintersectd@data$calc_catchment_fullArea <- sum(targetintersect@data$calc_catchment_fullArea, na.rm = TRUE)
+    targetintersectd@data$calc_catchment_sectArea <- sum(targetintersect@data$calc_catchment_sectArea, na.rm = TRUE)
     targetintersectd@data$calc_catchment_propArea <- targetintersectd@data$calc_catchment_sectArea/targetintersectd@data$calc_catchment_fullArea
     targetintersectd@data$calc_catchment_charid <- 'charid'
     targetintersect <- targetintersectd
@@ -209,7 +209,7 @@ calc_catchment_sum <- function(
       projection = projection,
       retainAreaProportion = retainAreaProportion,
       dissolve = FALSE
-    )@data[,calccols]))
+    )@data[,calccols],na.rm = TRUE))
   } else {
     return(colSums(calc_catchment(
       polygonlayer = polygonlayer,
@@ -219,7 +219,7 @@ calc_catchment_sum <- function(
       projection = projection,
       retainAreaProportion = retainAreaProportion,
       dissolve = FALSE
-    )@data[,calccols]))
+    )@data[,calccols],na.rm = TRUE))
   }
 }
 
@@ -407,18 +407,25 @@ calc_network_catchment <- function(
       newtargetlayer <- targetlayer
     }
       #targetnodes <- unique(find_network_nodes(sln, as.data.frame(coordinates(newtargetlayer))))
-      targetnodes <- unique(find_network_nodes(sln, as.data.frame(
-        unique(
-          do.call(
-            rbind,unlist(coordinates(newtargetlayer), recursive = FALSE)))
+      if (is(targetlayer, "SpatialPoints") |
+          is(targetlayer, "SpatialPointsDataFrame")) {
+        targetnodes <- unique(find_network_nodes(sln, as.data.frame(
+          unique(coordinates(newtargetlayer))
         )))
+      } else {
+        targetnodes <- unique(find_network_nodes(sln, as.data.frame(
+          unique(
+            do.call(
+              rbind,unlist(coordinates(newtargetlayer), recursive = FALSE)))
+          )))
+      }
       spaths <- lapply(targetnodes, function(x){
                        igraph::get.shortest.paths(sln@g, x,
-                                                  which(sp::spDists(
-                                                    x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                                                    y = matrix(cbind(sln@g$x,sln@g$y)[x,],ncol=2),
-                                                    longlat = longlat
-                                                  ) <= maximpedance),
+                                                  # which(sp::spDists(
+                                                  #   x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+                                                  #   y = matrix(cbind(sln@g$x,sln@g$y)[x,],ncol=2),
+                                                  #   longlat = longlat
+                                                  # ) <= maximpedance),
                                                   output = "epath")
         })
 
@@ -443,7 +450,7 @@ calc_network_catchment <- function(
     spaths,
     function(x){
       if(length(x)>0){
-        if(sum(sln@sl@data[x,sln@weightfield]) <= maximpedance){x}}})))
+        if(sum(sln@sl@data[x,sln@weightfield],na.rm = TRUE) <= maximpedance){x}}})))
 
   calc_catchment(
     polygonlayer = polygonlayer,
@@ -481,7 +488,7 @@ checkprojs <- function(polygonlayer, targetlayer, projection) {
     projection = sp::proj4string(polygonlayer)
     targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
   } else if (polyproj == TRUE & lineproj == TRUE) {
-    if (sp::proj4string(polyproj) != sp::proj4string(lineproj)) {
+    if (sp::proj4string(polygonlayer) != sp::proj4string(targetlayer)) {
       projection = sp::proj4string(polygonlayer)
       targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
     }
