@@ -130,6 +130,7 @@ lineLabels <- function(sl, attrib){
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
   UseMethod("overline")
 }
+#' @export
 overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
 
   fun <- c(fun)
