@@ -49,7 +49,7 @@ islines.sf <- function(g1, g2) {
 #' if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
 #'   sl <- routes_fast_sf[2:4,]
 #'   rsec <- gsection(sl)
-#'   rsec <- gsection(sl, buff_dist = 100)
+#'   rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
 #' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
@@ -76,7 +76,13 @@ gsection.sf <- function(sl, buff_dist = 0){
   u_disag <- sf::st_cast(u_merged, "LINESTRING")
   p <- line2points(sf::as_Spatial(sf::st_geometry(sl)))
   p <- sf::st_as_sf(p)
-  sf::st_split(u_disag, p)
+  p <- p[,1]
+  p_inter <- sf::st_intersection(x = sl, y = slu)
+  p_inter_p <- sf::st_as_sfc(p_intersection[sf::st_geometry_type(p_intersection) == "POINT",])
+  p_inter_p <- p_inter_p[,0]
+  p <- rbind(p, p_inter_p)
+  slu <- sf::st_split(u_disag, p)
+
 }
 #' Label SpatialLinesDataFrame objects
 #'
@@ -127,8 +133,17 @@ lineLabels <- function(sl, attrib){
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
+#' sl = routes_fast_sf[2:4, ]
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
   UseMethod("overline")
+}
+#' @export
+overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
+  slu <- gsection(sl, buff_dist = buff_dist)
+  slu_toptail <- gsection(sl, buff_dist = 1)
+  # pre_agg <- sf::st_intersection(slu, sl)
+  slu_point_sample <- sf::st_mi(slu)
+  aggs <- aggregate(sl[attrib], slu_toptail, FUN = fun, join = sf::st_overlaps)
 }
 #' @export
 overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
