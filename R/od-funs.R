@@ -264,7 +264,7 @@ line_to_points.sf <- function(l, ids = rep(1:nrow(l), each = 2)){
   y_coords[o_indices] <- sapply(l$geometry, function(x) x[length(x) / 2 + 1]) # first (y) element of each line
   y_coords[d_indices] <- sapply(l$geometry, tail, n = 1) # last (y) element of each line
   p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
-  p <- st_cast(sf::st_sfc(p_multi), "POINT")
+  p <-sf::st_cast(sf::st_sfc(p_multi), "POINT")
   sf::st_sf(data.frame(id = ids), p)
 }
 #' @export
