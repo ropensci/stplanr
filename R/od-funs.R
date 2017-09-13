@@ -101,6 +101,56 @@ od2line <- function(flow, zones, destinations = NULL,
   UseMethod("od2line", object = zones)
 }
 #' @export
+od2line.sf <- function(flow, zones, destinations = NULL,
+                            zone_code = names(zones)[1],
+                            origin_code = names(flow)[1],
+                            dest_code = names(flow)[2],
+                            zone_code_d = NA, silent = TRUE){
+  l <- vector("list", nrow(flow))
+
+  if(is.null(destinations)){
+    if(!silent){
+      message(paste("Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
+                    "for origins and destinations respectively"))
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(zones[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
+  } else {
+    if(is.na(zone_code_d)){
+      zone_code_d <- names(destinations)[1]
+    }
+    if(!silent){
+      message(paste("Matching", zone_code, "in the zones and", zone_code_d,  "in the destinations,\nto",
+                    origin_code, "and", dest_code,
+                    "for origins and destinations respectively"))
+    }
+    for(i in 1:nrow(flow)){
+      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
+      if(sum(from) == 0)
+        warning(paste0("No match for line ", i))
+      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
+      if(sum(to) == 0 & sum(from) == 1)
+        warning(paste0("No match for line ", i))
+      x <- sp::coordinates(zones[from, ])
+      y <- sp::coordinates(destinations[to, ])
+      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+    }
+  }
+  l <- sp::SpatialLines(l)
+  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
+  sp::proj4string(l) <- sp::proj4string(zones)
+  l
+}
+#' @export
 od2line.Spatial <- function(flow, zones, destinations = NULL,
                     zone_code = names(zones)[1],
                     origin_code = names(flow)[1],
