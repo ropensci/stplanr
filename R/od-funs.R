@@ -108,8 +108,12 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                             dest_code = names(flow)[2],
                             zone_code_d = NA, silent = TRUE){
 
-  coords_o <- dplyr::as_data_frame(sf::st_coordinates(zones_sf)[, 1:2])
-  coords_o[[origin_code]] <- zones_sf[[zone_code]]
+  if(unique(sf::st_geometry_type(zones)) == "POLYGON") {
+    zones <- sf::st_centroid(zones)
+  }
+
+  coords_o <- dplyr::as_data_frame(sf::st_coordinates(zones)[, 1:2])
+  coords_o[[origin_code]] <- zones[[zone_code]]
 
   origin_points <- dplyr::left_join(flow[origin_code], coords_o) %>%
     select(X, Y) %>%
@@ -121,12 +125,8 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                     "for origins and destinations respectively"))
     }
 
-    if(unique(sf::st_geometry_type(zones_sf)) == "POLYGON") {
-      zones_sf <- sf::st_centroid(zones_sf)
-    }
-
-    coords_d <- dplyr::as_data_frame(sf::st_coordinates(zones_sf)[, 1:2])
-    coords_d[[dest_code]] <- zones_sf[[zone_code]]
+    coords_d <- dplyr::as_data_frame(sf::st_coordinates(zones)[, 1:2])
+    coords_d[[dest_code]] <- zones[[zone_code]]
     dest_points <- dplyr::left_join(flow[dest_code], coords_d) %>%
       select(X, Y) %>%
       as.matrix()
@@ -150,7 +150,7 @@ od2line.sf <- function(flow, zones, destinations = NULL,
   }
   l <- lapply(1:nrow(flow), function(x)
       sf::st_linestring(rbind(origin_points[x, ], dest_points[x, ]))) %>%
-      sf::st_sfc(crs = sf::st_crs(zones_sf))
+      sf::st_sfc(crs = sf::st_crs(zones))
   l
   sf::st_sf(flow, geometry = l)
 }
