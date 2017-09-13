@@ -88,6 +88,7 @@ od2odf <- function(flow, zones){
 #' head(destinations@data[1:5])
 #' flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
 #' plot(flowlines_dests)
+#' od2line(flow, zones_sf)
 #' @name od2line
 NULL
 
