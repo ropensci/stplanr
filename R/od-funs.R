@@ -106,24 +106,30 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                             origin_code = names(flow)[1],
                             dest_code = names(flow)[2],
                             zone_code_d = NA, silent = TRUE){
-  l <- vector("list", nrow(flow))
+
+  coords_o <- dplyr::as_data_frame(sf::st_coordinates(zones_sf)[, 1:2])
+  coords_o[[origin_code]] <- zones_sf[[zone_code]]
+
+  origin_points <- dplyr::left_join(flow[origin_code], coords_o) %>%
+    select(X, Y) %>%
+    as.matrix()
 
   if(is.null(destinations)){
     if(!silent){
       message(paste("Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
                     "for origins and destinations respectively"))
     }
-    for(i in 1:nrow(flow)){
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if(sum(from) == 0)
-        warning(paste0("No match for line ", i))
-      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
-      if(sum(to) == 0 & sum(from) == 1)
-        warning(paste0("No match for line ", i))
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(zones[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
+
+    if(unique(sf::st_geometry_type(zones_sf)) == "POLYGON") {
+      zones_sf <- sf::st_centroid(zones_sf)
     }
+
+    coords_d <- dplyr::as_data_frame(sf::st_coordinates(zones_sf)[, 1:2])
+    coords_d[[dest_code]] <- zones_sf[[zone_code]]
+    dest_points <- dplyr::left_join(flow[dest_code], coords_d) %>%
+      select(X, Y) %>%
+      as.matrix()
+
   } else {
     if(is.na(zone_code_d)){
       zone_code_d <- names(destinations)[1]
@@ -133,22 +139,19 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                     origin_code, "and", dest_code,
                     "for origins and destinations respectively"))
     }
-    for(i in 1:nrow(flow)){
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if(sum(from) == 0)
-        warning(paste0("No match for line ", i))
-      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
-      if(sum(to) == 0 & sum(from) == 1)
-        warning(paste0("No match for line ", i))
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(destinations[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
+
+    coords_d <- dplyr::as_data_frame(sf::st_coordinates(destinations_sf)[, 1:2])
+    coords_d[[zone_code_d]] <- destinations_sf[[zone_code_d]]
+    dest_points <- dplyr::left_join(flow[zone_code_d], coords_d) %>%
+      select(X, Y) %>%
+      as.matrix()
+
   }
-  l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
-  sp::proj4string(l) <- sp::proj4string(zones)
+  l <- lapply(1:nrow(flow), function(x)
+      sf::st_linestring(rbind(origin_points[x, ], dest_points[x, ]))) %>%
+      sf::st_sfc(crs = sf::st_crs(zones_sf))
   l
+  sf::st_sf(flow, geometry = l)
 }
 #' @export
 od2line.Spatial <- function(flow, zones, destinations = NULL,
