@@ -97,6 +97,14 @@ od2line <- function(flow, zones, destinations = NULL,
                     zone_code = names(zones)[1],
                     origin_code = names(flow)[1],
                     dest_code = names(flow)[2],
+                    zone_code_d = NA, silent = TRUE) {
+  UseMethod("od2line", object = zones)
+}
+#' @export
+od2line.Spatial <- function(flow, zones, destinations = NULL,
+                    zone_code = names(zones)[1],
+                    origin_code = names(flow)[1],
+                    dest_code = names(flow)[2],
                     zone_code_d = NA, silent = TRUE){
   l <- vector("list", nrow(flow))
 

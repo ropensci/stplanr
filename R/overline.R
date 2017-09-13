@@ -57,7 +57,7 @@ gsection <- function(sl, buff_dist = 0) {
 #' @export
 gsection.Spatial <- function(sl, buff_dist = 0){
   if(buff_dist > 0) {
-    sl = toptail(sl, toptail_dist = buff_dist)
+    sl = geo_toptail(sl, toptail_dist = buff_dist)
   }
   overlapping = rgeos::gOverlaps(sl, byid = T)
   u <- rgeos::gUnion(sl, sl)
@@ -71,19 +71,32 @@ gsection.sf <- function(sl, buff_dist = 0){
     sl = geo_toptail(sl, toptail_dist = buff_dist)
   }
 
-  u <- sf::st_union(sf::st_geometry(sl))
+  u <- sf::st_union(sl)
   u_merged <- sf::st_line_merge(u)
   u_disag <- sf::st_cast(u_merged, "LINESTRING")
-  p <- line2points(sf::as_Spatial(sf::st_geometry(sl)))
-  p <- sf::st_as_sf(p)
-  p <- p[,1]
-  p_inter <- sf::st_intersection(x = sl, y = slu)
-  p_inter_p <- sf::st_as_sfc(p_intersection[sf::st_geometry_type(p_intersection) == "POINT",])
-  p_inter_p <- p_inter_p[,0]
-  p <- rbind(p, p_inter_p)
-  slu <- sf::st_split(u_disag, p)
+
+  u_disag
 
 }
+# gsection.sf <- function(sl, buff_dist = 0){
+#
+#   if(buff_dist > 0) {
+#     sl = geo_toptail(sl, toptail_dist = buff_dist)
+#   }
+#
+#   u <- sf::st_union(sf::st_geometry(sl))
+#
+#   # u_merged <- sf::st_line_merge(u)
+#   # u_disag <- sf::st_cast(u, "LINESTRING")
+#   p <- line2points(sf::as_Spatial(sf::st_geometry(sl)))
+#   p <- sf::st_as_sf(p)
+#   p_inter <- sf::st_intersection(x = sl, y = u)
+#   p_inter_p <- sf::st_as_sfc(p_inter[sf::st_geometry_type(p_inter) == "POINT",])
+#   p_inter_p <- p_inter_p[,0]
+#   p <- rbind(p, p_inter_p)
+#   slu <- sf::st_split(u_disag, p)
+#
+# }
 #' Label SpatialLinesDataFrame objects
 #'
 #' This function adds labels to lines plotted using base graphics. Largely
@@ -133,17 +146,25 @@ lineLabels <- function(sl, attrib){
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
 #'   rnet_grouped$length / mean(rnet_grouped$length) * 3)
+#' # sf methods
 #' sl = routes_fast_sf[2:4, ]
+#' overline(sl = sl, attrib = "length", buff_dist = 10)
+#' rnet_sf = overline(routes_fast_sf[!is.na(routes_fast_sf$length), ], attrib = "length", buff_dist = 10)
+#' plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
   UseMethod("overline")
 }
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
-  slu <- gsection(sl, buff_dist = buff_dist)
-  slu_toptail <- gsection(sl, buff_dist = 1)
-  # pre_agg <- sf::st_intersection(slu, sl)
-  slu_point_sample <- sf::st_mi(slu)
-  aggs <- aggregate(sl[attrib], slu_toptail, FUN = fun, join = sf::st_overlaps)
+
+  sl_spatial <- SpatialLinesDataFrame(sl = sf::as_Spatial(sl$geometry), data = sf::st_set_geometry(sl, NULL), match.ID = FALSE)
+  rnet_sp <- overline(sl_spatial, attrib, fun = fun, na.zero = na.zero, byvars = byvars, buff_dist = buff_dist)
+  sf::st_as_sf(rnet_sp)
+
+  # attempt to run with sf funs
+  # slu <- gsection(sl, buff_dist = buff_dist)
+  # aggs <- aggregate(sl[attrib], slu, FUN = fun, join = sf::st_overlaps, na.rm = FALSE)
+  # aggs
 }
 #' @export
 overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0){
