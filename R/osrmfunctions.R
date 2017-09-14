@@ -776,7 +776,7 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
   if (return_sf == TRUE) {
-    return(st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
+    return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
   } else {
     return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
   }
