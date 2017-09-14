@@ -44,16 +44,10 @@
 #' aggzones <- SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 #' sp::proj4string(aggzones) = sp::proj4string(zones)
 #' od_ag = od_aggregate(flow, zones, aggzones)
-#' od_sp = od2line(od_agg, zones)
-#' zones@data = cbind(1:nrow(zones), zones@data)
-#' od_sp_agg = od2line(od, zones, aggzones)
-#' # plot results
-#' plot(aggzones, lwd = 5)
-#' plot(zones, border = "red", add = TRUE)
-#' plot(od_sp, add = TRUE, col = "yellow")
-#' lwd = od_sp_agg$All / 50
-#' plot(od_sp_agg, lwd = lwd, add = TRUE)
-#'
+#' od_ag = na.omit(od_ag)
+#' od_sp = od2line(od_ag, aggzones)
+#' plot(aggzones)
+#' plot(od_sp, lwd = od_sp$All / 50, add = TRUE)
 #' # Sf methods
 #' aggzones_sf <- sf::st_as_sf(aggzones)
 #' aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
