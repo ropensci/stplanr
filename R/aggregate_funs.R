@@ -97,8 +97,7 @@ od_aggregate <- function(flow, zones, aggzones,
     aggzone_points <- sf::st_centroid(aggzones)
   }
 
-
-
+  aggflow_lines <- points2line(aggzone_points)
 
 
   intersectdf <- merge(merge(

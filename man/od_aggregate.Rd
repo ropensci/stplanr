@@ -4,9 +4,9 @@
 \alias{od_aggregate}
 \title{Aggregate OD data between polygon geometries}
 \usage{
-od_aggregate(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
-  FUN = sum, prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE,
-  FALSE), digits = getOption("digits"))
+od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
+  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
+  == FALSE, TRUE, FALSE), digits = getOption("digits"))
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -23,6 +23,9 @@ being distributed by area.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}
+
+\item{aggzone_points}{Points representing origins of OD flows
+(typically population-weighted centroids)}
 
 \item{cols}{A character vector containing the names of columns on which to
 apply FUN. By default, all numeric columns are aggregated.}
@@ -72,6 +75,7 @@ rgeos::gUnaryUnion(
  zones,
  id = zones@data$quadrant), data.frame(region = c(1:4))
 )
+sp::proj4string(aggzones) = sp::proj4string(zones)
 od = od_aggregate(flow, zones, aggzones)
 od_sp = od2line(flow, zones)
 zones@data = cbind(1:nrow(zones), zones@data)
@@ -82,4 +86,8 @@ plot(zones, border = "red", add = TRUE)
 plot(od_sp, add = TRUE, col = "yellow")
 lwd = od_sp_agg$All / 50
 plot(od_sp_agg, lwd = lwd, add = TRUE)
+
+# Sf methods
+aggzones_sf <- sf::st_as_sf(aggzones)
+od_aggregate(flow, zones_sf, aggzones_sf)
 }
