@@ -116,7 +116,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
   coords_o[[origin_code]] <- zones[[zone_code]]
 
   origin_points <- dplyr::left_join(flow[origin_code], coords_o) %>%
-    dplyr::ungroup() %>%
     dplyr::select(X, Y) %>%
     as.matrix()
 
@@ -129,7 +128,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     coords_d <- dplyr::as_data_frame(sf::st_coordinates(zones)[, 1:2])
     coords_d[[dest_code]] <- zones[[zone_code]]
     dest_points <- dplyr::left_join(flow[dest_code], coords_d) %>%
-      dplyr::ungroup() %>%
       dplyr::select(X, Y) %>%
       as.matrix()
 
@@ -138,7 +136,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     coords_d <- dplyr::as_data_frame(sf::st_coordinates(destinations)[, 1:2])
     coords_d[[zone_code_d]] <- destinations[[zone_code_d]]
     dest_points <- dplyr::left_join(flow[zone_code_d], coords_d) %>%
-      dplyr::ungroup() %>%
       dplyr::select(X, Y) %>%
       as.matrix()
 

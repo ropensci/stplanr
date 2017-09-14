@@ -39,15 +39,12 @@
 #' data(flow)
 #' data(zones)
 #' zones@data$region <- NULL
-#' zones$quadrant = quadrant(zones, number_out = TRUE)
-#' aggzones <- SpatialPolygonsDataFrame(
-#' rgeos::gUnaryUnion(
-#'  zones,
-#'  id = zones@data$quadrant), data.frame(region = c(1:4))
-#' )
+#' zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
+#' aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
+#' aggzones <- SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 #' sp::proj4string(aggzones) = sp::proj4string(zones)
-#' od = od_aggregate(flow, zones, aggzones)
-#' od_sp = od2line(flow, zones)
+#' od_ag = od_aggregate(flow, zones, aggzones)
+#' od_sp = od2line(od_agg, zones)
 #' zones@data = cbind(1:nrow(zones), zones@data)
 #' od_sp_agg = od2line(od, zones, aggzones)
 #' # plot results
@@ -115,7 +112,8 @@ od_aggregate.sf <- function(flow, zones, aggzones,
 
   flow_ag <- flow %>%
     dplyr::group_by(flow_new_orig, flow_new_dest) %>%
-    dplyr::summarise_at(.vars = cols, .funs = sum)
+    dplyr::summarise_at(.vars = cols, .funs = sum) %>%
+    dplyr::ungroup()
 
   flow_ag
 
