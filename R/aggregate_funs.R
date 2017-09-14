@@ -47,13 +47,14 @@
 #' od_ag = na.omit(od_ag)
 #' od_sp = od2line(od_ag, aggzones)
 #' plot(aggzones)
-#' plot(od_sp, lwd = od_sp$All / 50, add = TRUE)
+#' plot(flowlines, lwd = flowlines$All / 10, col = "grey", add = TRUE)
+#' plot(od_sp, lwd = od_sp$All / 30, col = "red", add = TRUE)
 #' # Sf methods
 #' aggzones_sf <- sf::st_as_sf(aggzones)
 #' aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 #' od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
 #' od_sf_agg <- od2line(od_agg, aggzones_sf)
-#' plot(od_sf_agg$geometry, lwd = od_sf_agg$All / od_sf_agg$All)
+#' plot(od_sf_agg$geometry, lwd = od_sf_agg$All / 50, col = "blue", add = TRUE)
 od_aggregate <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
