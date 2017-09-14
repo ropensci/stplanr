@@ -77,8 +77,8 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
   aggzonesfirstcol <- colnames(aggzones)[1]
 
   if (cols == FALSE) {
-    cols <- unlist(lapply(flow, is, 'numeric'))
-    cols <- names(cols[which(cols == TRUE)])
+    cols <- sapply(flow, is.numeric)
+    col_names <- names(cols[which(cols == TRUE)])
   }
   if (aggcols == FALSE) {
     aggcols <- colnames(aggzones)[1]
