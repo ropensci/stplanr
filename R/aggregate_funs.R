@@ -73,15 +73,15 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
                                  prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
                                  digits = getOption("digits")) {
 
-  zonesfirstcol <- colnames(zones@data)[1]
-  aggzonesfirstcol <- colnames(aggzones@data)[1]
+  zonesfirstcol <- colnames(zones)[1]
+  aggzonesfirstcol <- colnames(aggzones)[1]
 
   if (cols == FALSE) {
     cols <- unlist(lapply(flow, is, 'numeric'))
     cols <- names(cols[which(cols == TRUE)])
   }
   if (aggcols == FALSE) {
-    aggcols <- colnames(aggzones@data)[1]
+    aggcols <- colnames(aggzones)[1]
   }
 
   origzones <- zones
@@ -97,9 +97,9 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
     aggzones <- sp::spTransform(aggzones, projection)
   }
 
-  zones@data$stplanr_area <- rgeos::gArea(zones, byid = TRUE)
-  zones@data$od_aggregate_charid <- row.names(zones@data)
-  aggzones@data$od_aggregate_charid <- row.names(aggzones@data)
+  zones$stplanr_area <- rgeos::gArea(zones, byid = TRUE)
+  zones$od_aggregate_charid <- row.names(zones)
+  aggzones$od_aggregate_charid <- row.names(aggzones)
 
   zoneintersect <- rgeos::gIntersection(zones, aggzones, byid = TRUE)
   zoneintersect <- sp::SpatialPolygonsDataFrame(zoneintersect,
@@ -107,19 +107,19 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
                                                   od_aggregate_charid=sapply(zoneintersect@polygons, function(x) x@ID),
                                                   row.names=sapply(zoneintersect@polygons, function(x) x@ID)
                                                 ))
-  zoneintersect@data$od_aggregate_interarea <- rgeos::gArea(zoneintersect, byid = TRUE)
-  zoneintersect@data$od_aggregate_zone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,1]
-  zoneintersect@data$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect@data$od_aggregate_charid, " ", simplify = TRUE)[,2]
+  zoneintersect$od_aggregate_interarea <- rgeos::gArea(zoneintersect, byid = TRUE)
+  zoneintersect$od_aggregate_zone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,1]
+  zoneintersect$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,2]
 
-  zoneintersect <- merge(zoneintersect, zones@data, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
-  zoneintersect@data$od_aggregate_proparea <- zoneintersect@data$od_aggregate_interarea/zoneintersect@data$stplanr_area
+  zoneintersect <- merge(zoneintersect, zones, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
+  zoneintersect$od_aggregate_proparea <- zoneintersect$od_aggregate_interarea/zoneintersect$stplanr_area
 
   intersectdf <- merge(merge(
     flow,
-    setNames(zoneintersect@data, paste0('o_', colnames(zoneintersect@data))),
+    setNames(zoneintersect, paste0('o_', colnames(zoneintersect))),
     by.x=colnames(flow)[1],
     by.y=paste0('o_',zonesfirstcol)),
-    setNames(zoneintersect@data, paste0('d_', colnames(zoneintersect@data))),
+    setNames(zoneintersect, paste0('d_', colnames(zoneintersect))),
     by.x=colnames(flow)[2],
     by.y=paste0('d_',zonesfirstcol)
   )
@@ -135,9 +135,9 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
     dplyr::group_by_('o_od_aggregate_aggzone_charid', 'd_od_aggregate_aggzone_charid') %>%
     dplyr::select(dplyr::one_of(c('o_od_aggregate_aggzone_charid','d_od_aggregate_aggzone_charid',cols))) %>%
     dplyr::summarise_at(cols,.funs = FUN) %>%
-    dplyr::left_join(setNames(aggzones@data[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('o_',aggcols))),
+    dplyr::left_join(setNames(aggzones[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('o_',aggcols))),
                      by = c('o_od_aggregate_aggzone_charid' = 'od_aggregate_charid')) %>%
-    dplyr::left_join(setNames(aggzones@data[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('d_',aggcols))),
+    dplyr::left_join(setNames(aggzones[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('d_',aggcols))),
                      by = c('d_od_aggregate_aggzone_charid' = 'od_aggregate_charid'))
   intersectdf <- intersectdf[,c(
     paste0('o_', c(aggzonesfirstcol, aggcols[which(aggcols != aggzonesfirstcol)])),
