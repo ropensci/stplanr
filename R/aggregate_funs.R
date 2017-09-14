@@ -65,6 +65,13 @@ od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
                          digits = getOption("digits")){
+  UseMethod("od_aggregate", zones)
+}
+#' @export
+od_aggregate.Spatial <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
+                         FUN = sum,
+                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+                         digits = getOption("digits")){
 
   zonesfirstcol <- colnames(zones@data)[1]
   aggzonesfirstcol <- colnames(aggzones@data)[1]
