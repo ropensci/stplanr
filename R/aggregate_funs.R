@@ -38,15 +38,7 @@
 #' @examples
 #' data(flow)
 #' data(zones)
-#' zones@data$region <- 1
-#' zones@data[c(2, 5), c('region')] <- 2
-#' aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
-#'  zones,
-#'  id = zones@data$region), data.frame(region=c(1, 2))
-#' )
 #' zones@data$region <- NULL
-#' od_aggregate(flow, zones, aggzones)
-#' # another example with more zones and plots
 #' zones$quadrant = quadrant(zones, number_out = TRUE)
 #' aggzones <- SpatialPolygonsDataFrame(
 #' rgeos::gUnaryUnion(
@@ -67,7 +59,10 @@
 #'
 #' # Sf methods
 #' aggzones_sf <- sf::st_as_sf(aggzones)
-#' od_aggregate(flow, zones_sf, aggzones_sf)
+#' aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
+#' od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
+#' od_sf_agg <- od2line(od_agg, aggzones_sf)
+#' plot(od_sf_agg$geometry, lwd = od_sf_agg$All / od_sf_agg$All)
 od_aggregate <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
@@ -76,17 +71,20 @@ od_aggregate <- function(flow, zones, aggzones,
   UseMethod("od_aggregate", zones)
 }
 #' @export
-od_aggregate <- function(flow, zones, aggzones,
+od_aggregate.sf <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
                          digits = getOption("digits")){
+
+  flow_first_col <- colnames(flow)[1]
+  flow_second_col <- colnames(flow)[2]
   zonesfirstcol <- colnames(zones)[1]
   aggzonesfirstcol <- colnames(aggzones)[1]
 
   if (identical(cols, FALSE)) {
     col_ids <- sapply(flow, is.numeric)
-    cols <- names(cols)[col_ids]
+    cols <- names(col_ids)[col_ids]
   }
   if (aggcols == FALSE) {
     aggcols <- colnames(aggzones)[1]
@@ -99,43 +97,33 @@ od_aggregate <- function(flow, zones, aggzones,
 
   aggflow_lines <- points2line(aggzone_points)
 
+  zones_agg <- zone_points %>%
+    sf::st_join(y = aggzones[aggcols]) %>%
+    sf::st_set_geometry(NULL)
 
-  intersectdf <- merge(merge(
-    flow,
-    setNames(zoneintersect, paste0('o_', colnames(zoneintersect))),
-    by.x=colnames(flow)[1],
-    by.y=paste0('o_',zonesfirstcol)),
-    setNames(zoneintersect, paste0('d_', colnames(zoneintersect))),
-    by.x=colnames(flow)[2],
-    by.y=paste0('d_',zonesfirstcol)
-  )
+  names(zones_agg)[1] <- flow_first_col
 
-  if (prop_by_area == TRUE & is(zones, "SpatialPolygonsDataFrame") == TRUE) {
-    intersectdf <- intersectdf %>%
-      dplyr::mutate_at(
-        cols, dplyr::funs_('round(.*o_od_aggregate_proparea*d_od_aggregate_proparea)',args = list('digits'=digits))
-      )
-  }
+  flow$flow_new_orig <- flow[1] %>%
+    dplyr::inner_join(y = zones_agg[c(flow_first_col, aggcols)]) %>%
+    dplyr::pull(ncol(.))
 
-  intersectdf <- intersectdf %>%
-    dplyr::group_by_('o_od_aggregate_aggzone_charid', 'd_od_aggregate_aggzone_charid') %>%
-    dplyr::select(dplyr::one_of(c('o_od_aggregate_aggzone_charid','d_od_aggregate_aggzone_charid',cols))) %>%
-    dplyr::summarise_at(cols,.funs = FUN) %>%
-    dplyr::left_join(setNames(aggzones[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('o_',aggcols))),
-                     by = c('o_od_aggregate_aggzone_charid' = 'od_aggregate_charid')) %>%
-    dplyr::left_join(setNames(aggzones[,c('od_aggregate_charid', aggcols)], c('od_aggregate_charid', paste0('d_',aggcols))),
-                     by = c('d_od_aggregate_aggzone_charid' = 'od_aggregate_charid'))
-  intersectdf <- intersectdf[,c(
-    paste0('o_', c(aggzonesfirstcol, aggcols[which(aggcols != aggzonesfirstcol)])),
-    paste0('d_', c(aggzonesfirstcol, aggcols[which(aggcols != aggzonesfirstcol)])),
-    cols
-  )]
+  names(zones_agg)[1] <- flow_second_col
 
-  return(as.data.frame(intersectdf))
+  flow$flow_new_dest <- flow[2] %>%
+    dplyr::inner_join(y = zones_agg[c(flow_second_col, aggcols)]) %>%
+    dplyr::pull(ncol(.))
+
+  flow_ag <- flow %>%
+    dplyr::group_by(flow_new_orig, flow_new_dest) %>%
+    dplyr::summarise_at(.vars = cols, .funs = sum)
+
+  flow_ag
+
+  # od2line(flow = flow_ag, zones = aggzones) # to export as sf
 
 }
 #' @export
-od_aggregate <- function(flow, zones, aggzones,
+od_aggregate.Spatial <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
