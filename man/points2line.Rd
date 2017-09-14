@@ -22,4 +22,7 @@ plot(l)
 p = line2points(routes_fast)
 l = points2line(p)
 plot(l)
+p_sf = sf::st_sf(data.frame(X1 = as.character(1:length(p))), geometry = sf::st_as_sfc(p))
+l_sf = points2line(p_sf)
+sf::plot_sf(l_sf)
 }
