@@ -61,6 +61,10 @@
 #' plot(od_sp, add = TRUE, col = "yellow")
 #' lwd = od_sp_agg$All / 50
 #' plot(od_sp_agg, lwd = lwd, add = TRUE)
+#'
+#' # Sf methods
+#' aggzones_sf <- sf::st_as_sf(aggzones)
+#' od_aggregate(flow, zones_sf, aggzones_sf)
 od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
@@ -76,9 +80,9 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
   zonesfirstcol <- colnames(zones)[1]
   aggzonesfirstcol <- colnames(aggzones)[1]
 
-  if (cols == FALSE) {
-    cols <- sapply(flow, is.numeric)
-    col_names <- names(cols[which(cols == TRUE)])
+  if (identical(cols, FALSE)) {
+    col_ids <- sapply(flow, is.numeric)
+    cols <- names(cols)[col_ids]
   }
   if (aggcols == FALSE) {
     aggcols <- colnames(aggzones)[1]
@@ -87,29 +91,17 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
   origzones <- zones
   origaggzones <- aggzones
 
-  if (sp::is.projected(zones) == TRUE & all.equal(zones@proj4string, aggzones@proj4string) == FALSE) {
-    aggzones <- sp::spTransform(aggzones, zones@proj4string)
-  } else {
-    projection <- paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
-                         "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
-                         " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
-    zones <- sp::spTransform(zones, projection)
-    aggzones <- sp::spTransform(aggzones, projection)
-  }
-
-  zones$stplanr_area <- rgeos::gArea(zones, byid = TRUE)
-  zones$od_aggregate_charid <- row.names(zones)
+  zones$stplanr_area <- as.numeric(sf::st_area(zones))
+  zones$od_zone_charid <- row.names(zones)
   aggzones$od_aggregate_charid <- row.names(aggzones)
 
-  zoneintersect <- rgeos::gIntersection(zones, aggzones, byid = TRUE)
-  zoneintersect <- sp::SpatialPolygonsDataFrame(zoneintersect,
-                                                data=data.frame(
-                                                  od_aggregate_charid=sapply(zoneintersect@polygons, function(x) x@ID),
-                                                  row.names=sapply(zoneintersect@polygons, function(x) x@ID)
-                                                ))
-  zoneintersect$od_aggregate_interarea <- rgeos::gArea(zoneintersect, byid = TRUE)
+  zoneintersect <- sf::st_intersection(zones, aggzones)
+  zoneintersect$od_aggregate_charid <- 1:nrow(zoneintersect)
+  row.names(zoneintersect) <- 1:nrow(zoneintersect) # not sure if this is needed
+
+  zoneintersect$od_aggregate_interarea <- sf::st_area(zoneintersect)
   zoneintersect$od_aggregate_zone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,1]
-  zoneintersect$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,2]
+  zoneintersect$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,1]
 
   zoneintersect <- merge(zoneintersect, zones, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
   zoneintersect$od_aggregate_proparea <- zoneintersect$od_aggregate_interarea/zoneintersect$stplanr_area
