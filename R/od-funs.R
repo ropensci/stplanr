@@ -470,7 +470,20 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' df <- points2odf(cents)
 #' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
 #' df2 <- points2odf(cents_centroids)
-points2odf <- function(p){
+#' df3 <- points2odf(cents_sf)
+points2odf <- function(p) {
+  UseMethod("points2odf")
+}
+#' @export
+points2odf.sf <- function(p){
+  df = data.frame(
+    expand.grid(cents_sf[[1]], cents_sf[[1]])[2:1]
+  )
+  names(df) <- c("O", "D")
+  df
+}
+#' @export
+points2odf.Spatial <- function(p){
   if(grepl(pattern = "DataFrame", class(p))){
     geo_code <- p@data[,1]
   } else if(is(p, "SpatialPoints")){
@@ -498,6 +511,8 @@ points2odf <- function(p){
 #' plot(cents)
 #' flow <-points2flow(cents)
 #' plot(flow, add = TRUE)
+#' flow_sf <- points2flow(cents_sf)
+#' plot(flow_sf)
 points2flow <- function(p){
   df <- points2odf(p)
   flow <- od2line(flow = df, zones = p)
