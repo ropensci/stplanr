@@ -18,6 +18,8 @@
 #' being distributed by area.
 #' @param aggzones A SpatialPolygonsDataFrame containing the new
 #' boundaries to aggregate to.
+#' @param aggzone_points Points representing origins of OD flows
+#' (typically population-weighted centroids)
 #' @param cols A character vector containing the names of columns on which to
 #' apply FUN. By default, all numeric columns are aggregated.
 #' @param aggcols A character vector containing the names of columns in
@@ -51,6 +53,7 @@
 #'  zones,
 #'  id = zones@data$quadrant), data.frame(region = c(1:4))
 #' )
+#' sp::proj4string(aggzones) = sp::proj4string(zones)
 #' od = od_aggregate(flow, zones, aggzones)
 #' od_sp = od2line(flow, zones)
 #' zones@data = cbind(1:nrow(zones), zones@data)
@@ -65,18 +68,19 @@
 #' # Sf methods
 #' aggzones_sf <- sf::st_as_sf(aggzones)
 #' od_aggregate(flow, zones_sf, aggzones_sf)
-od_aggregate <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
+od_aggregate <- function(flow, zones, aggzones,
+                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
                          digits = getOption("digits")){
   UseMethod("od_aggregate", zones)
 }
 #' @export
-od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
-                                 FUN = sum,
-                                 prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-                                 digits = getOption("digits")) {
-
+od_aggregate <- function(flow, zones, aggzones,
+                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
+                         FUN = sum,
+                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+                         digits = getOption("digits")){
   zonesfirstcol <- colnames(zones)[1]
   aggzonesfirstcol <- colnames(aggzones)[1]
 
@@ -88,23 +92,14 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
     aggcols <- colnames(aggzones)[1]
   }
 
-  origzones <- zones
-  origaggzones <- aggzones
+  zone_points <- sf::st_centroid(zones)
+  if(is.null(aggzone_points)) {
+    aggzone_points <- sf::st_centroid(aggzones)
+  }
 
-  zones$stplanr_area <- as.numeric(sf::st_area(zones))
-  zones$od_zone_charid <- row.names(zones)
-  aggzones$od_aggregate_charid <- row.names(aggzones)
 
-  zoneintersect <- sf::st_intersection(zones, aggzones)
-  zoneintersect$od_aggregate_charid <- 1:nrow(zoneintersect)
-  row.names(zoneintersect) <- 1:nrow(zoneintersect) # not sure if this is needed
 
-  zoneintersect$od_aggregate_interarea <- sf::st_area(zoneintersect)
-  zoneintersect$od_aggregate_zone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,1]
-  zoneintersect$od_aggregate_aggzone_charid <- stringr::str_split(zoneintersect$od_aggregate_charid, " ", simplify = TRUE)[,1]
 
-  zoneintersect <- merge(zoneintersect, zones, by.x = 'od_aggregate_zone_charid', by.y = 'od_aggregate_charid')
-  zoneintersect$od_aggregate_proparea <- zoneintersect$od_aggregate_interarea/zoneintersect$stplanr_area
 
   intersectdf <- merge(merge(
     flow,
@@ -141,11 +136,11 @@ od_aggregate.sf <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE
 
 }
 #' @export
-od_aggregate.Spatial <- function(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
+od_aggregate <- function(flow, zones, aggzones,
+                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
                          digits = getOption("digits")){
-
   zonesfirstcol <- colnames(zones@data)[1]
   aggzonesfirstcol <- colnames(aggzones@data)[1]
 
