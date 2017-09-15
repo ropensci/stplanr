@@ -47,6 +47,7 @@
 #' od_ag = na.omit(od_ag)
 #' od_sp = od2line(od_ag, aggzones)
 #' plot(aggzones)
+#' plot(zones, lty = 3, add = TRUE)
 #' plot(flowlines, lwd = flowlines$All / 10, col = "grey", add = TRUE)
 #' plot(od_sp, lwd = od_sp$All / 30, col = "red", add = TRUE)
 #' # Sf methods
