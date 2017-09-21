@@ -548,7 +548,7 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
   osrmsldf@data$routeid <- routeid
 
   if (return_sf == TRUE) {
-    osrmsldf <- st_as_sf(osrmsldf)
+    osrmsldf <- sf::st_as_sf(osrmsldf)
   }
 
   return(osrmsldf)
@@ -635,7 +635,7 @@ viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, return_sf = FA
   }
 
   if (return_sf == TRUE) {
-    osrmsldf <- st_as_sf(osrmsldf)
+    osrmsldf <- sf::st_as_sf(osrmsldf)
   }
 
   return(osrmsldf)
@@ -685,7 +685,7 @@ nearest_osm <- function(lat, lng, number = 1,
                            data = data.frame(orig_lat = lat, orig_lng = lng),
                            proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
     if (return_sf == TRUE) {
-      st_as_sf(thisspdf)
+      sf::st_as_sf(thisspdf)
     } else {
       thisspdf
     }
@@ -710,7 +710,7 @@ nearest_osm <- function(lat, lng, number = 1,
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 
     if (return_sf == TRUE) {
-      st_as_sf(thisspdf)
+      sf::st_as_sf(thisspdf)
     } else {
       thisspdf
     }
@@ -743,7 +743,7 @@ nearest_osm <- function(lat, lng, number = 1,
 locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
   if (return_sf == TRUE) {
-    return(st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate")))
+    return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate")))
   } else {
     return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate"))
   }
@@ -776,7 +776,7 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
   if (return_sf == TRUE) {
-    return(st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
+    return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
   } else {
     return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
   }

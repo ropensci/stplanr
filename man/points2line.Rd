@@ -22,4 +22,6 @@ plot(l)
 p = line2points(routes_fast)
 l = points2line(p)
 plot(l)
+l_sf = points2line(cents_sf)
+plot(l_sf)
 }

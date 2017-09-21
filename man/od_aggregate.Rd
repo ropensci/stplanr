@@ -4,9 +4,9 @@
 \alias{od_aggregate}
 \title{Aggregate OD data between polygon geometries}
 \usage{
-od_aggregate(flow, zones, aggzones, cols = FALSE, aggcols = FALSE,
-  FUN = sum, prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE,
-  FALSE), digits = getOption("digits"))
+od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
+  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
+  == FALSE, TRUE, FALSE), digits = getOption("digits"))
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -23,6 +23,9 @@ being distributed by area.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}
+
+\item{aggzone_points}{Points representing origins of OD flows
+(typically population-weighted centroids)}
 
 \item{cols}{A character vector containing the names of columns on which to
 apply FUN. By default, all numeric columns are aggregated.}
@@ -57,29 +60,22 @@ allocating the original flows to larger zones based on area.
 \examples{
 data(flow)
 data(zones)
-zones@data$region <- 1
-zones@data[c(2, 5), c('region')] <- 2
-aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
- zones,
- id = zones@data$region), data.frame(region=c(1, 2))
-)
 zones@data$region <- NULL
-od_aggregate(flow, zones, aggzones)
-# another example with more zones and plots
-zones$quadrant = quadrant(zones, number_out = TRUE)
-aggzones <- SpatialPolygonsDataFrame(
-rgeos::gUnaryUnion(
- zones,
- id = zones@data$quadrant), data.frame(region = c(1:4))
-)
-od = od_aggregate(flow, zones, aggzones)
-od_sp = od2line(flow, zones)
-zones@data = cbind(1:nrow(zones), zones@data)
-od_sp_agg = od2line(od, zones, aggzones)
-# plot results
-plot(aggzones, lwd = 5)
-plot(zones, border = "red", add = TRUE)
-plot(od_sp, add = TRUE, col = "yellow")
-lwd = od_sp_agg$All / 50
-plot(od_sp_agg, lwd = lwd, add = TRUE)
+zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
+aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
+aggzones <- SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
+sp::proj4string(aggzones) = sp::proj4string(zones)
+od_ag = od_aggregate(flow, zones, aggzones)
+od_ag = na.omit(od_ag)
+od_sp = od2line(od_ag, aggzones)
+plot(aggzones)
+plot(zones, lty = 3, add = TRUE)
+plot(flowlines, lwd = flowlines$All / 10, col = "grey", add = TRUE)
+plot(od_sp, lwd = od_sp$All / 30, col = "red", add = TRUE)
+# Sf methods
+aggzones_sf <- sf::st_as_sf(aggzones)
+aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
+od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
+od_sf_agg <- od2line(od_agg, aggzones_sf)
+plot(od_sf_agg$geometry, lwd = od_sf_agg$All / 50, col = "blue", add = TRUE)
 }

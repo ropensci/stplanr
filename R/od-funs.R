@@ -88,12 +88,66 @@ od2odf <- function(flow, zones){
 #' head(destinations@data[1:5])
 #' flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
 #' plot(flowlines_dests)
+#' od2line(flow, zones_sf)
 #' @name od2line
 NULL
 
 #' @rdname od2line
 #' @export
 od2line <- function(flow, zones, destinations = NULL,
+                    zone_code = names(zones)[1],
+                    origin_code = names(flow)[1],
+                    dest_code = names(flow)[2],
+                    zone_code_d = NA, silent = TRUE) {
+  UseMethod("od2line", object = zones)
+}
+#' @export
+od2line.sf <- function(flow, zones, destinations = NULL,
+                       zone_code = names(zones)[1],
+                       origin_code = names(flow)[1],
+                       dest_code = names(flow)[2],
+                       zone_code_d = NA, silent = TRUE){
+
+  if(unique(sf::st_geometry_type(zones)) == "POLYGON") {
+    zones <- sf::st_centroid(zones)
+  }
+
+  coords_o <- dplyr::as_data_frame(sf::st_coordinates(zones)[, 1:2])
+  coords_o[[origin_code]] <- zones[[zone_code]]
+
+  origin_points <- dplyr::left_join(flow[origin_code], coords_o) %>%
+    dplyr::select(X, Y) %>%
+    as.matrix()
+
+  if(is.null(destinations)){
+    if(!silent){
+      message(paste("Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
+                    "for origins and destinations respectively"))
+    }
+
+    coords_d <- dplyr::as_data_frame(sf::st_coordinates(zones)[, 1:2])
+    coords_d[[dest_code]] <- zones[[zone_code]]
+    dest_points <- dplyr::left_join(flow[dest_code], coords_d) %>%
+      dplyr::select(X, Y) %>%
+      as.matrix()
+
+  } else {
+
+    coords_d <- dplyr::as_data_frame(sf::st_coordinates(destinations)[, 1:2])
+    coords_d[[zone_code_d]] <- destinations[[zone_code_d]]
+    dest_points <- dplyr::left_join(flow[zone_code_d], coords_d) %>%
+      dplyr::select(X, Y) %>%
+      as.matrix()
+
+  }
+
+  l <- lapply(1:nrow(flow), function(x)
+    sf::st_linestring(rbind(origin_points[x, ], dest_points[x, ]))) %>%
+    sf::st_sfc(crs = sf::st_crs(zones))
+  sf::st_sf(flow, geometry = l)
+}
+#' @export
+od2line.Spatial <- function(flow, zones, destinations = NULL,
                     zone_code = names(zones)[1],
                     origin_code = names(flow)[1],
                     dest_code = names(flow)[2],
@@ -202,7 +256,7 @@ line_to_points.sf <- function(l, ids = rep(1:nrow(l), each = 2)){
   y_coords[o_indices] <- sapply(l$geometry, function(x) x[length(x) / 2 + 1]) # first (y) element of each line
   y_coords[d_indices] <- sapply(l$geometry, tail, n = 1) # last (y) element of each line
   p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
-  p <- st_cast(sf::st_sfc(p_multi), "POINT")
+  p <-sf::st_cast(sf::st_sfc(p_multi), "POINT")
   sf::st_sf(data.frame(id = ids), p)
 }
 #' @export
@@ -408,7 +462,20 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' df <- points2odf(cents)
 #' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
 #' df2 <- points2odf(cents_centroids)
-points2odf <- function(p){
+#' df3 <- points2odf(cents_sf)
+points2odf <- function(p) {
+  UseMethod("points2odf")
+}
+#' @export
+points2odf.sf <- function(p){
+  odf = data.frame(
+    expand.grid(p[[1]], p[[1]])[2:1]
+  )
+  names(odf) <- c("O", "D")
+  odf
+}
+#' @export
+points2odf.Spatial <- function(p){
   if(grepl(pattern = "DataFrame", class(p))){
     geo_code <- p@data[,1]
   } else if(is(p, "SpatialPoints")){
@@ -416,11 +483,11 @@ points2odf <- function(p){
   } else {
     geo_code <- p[,1]
   }
-  df = data.frame(
+  odf = data.frame(
     expand.grid(geo_code, geo_code)[2:1]
   )
-  names(df) <- c("O", "D")
-  df
+  names(odf) <- c("O", "D")
+  odf
 }
 #' Convert a series of points into geographical flows
 #'
@@ -436,9 +503,11 @@ points2odf <- function(p){
 #' plot(cents)
 #' flow <-points2flow(cents)
 #' plot(flow, add = TRUE)
+#' flow_sf <- points2flow(cents_sf)
+#' plot(flow_sf)
 points2flow <- function(p){
-  df <- points2odf(p)
-  flow <- od2line(flow = df, zones = p)
+  odf <- points2odf(p)
+  od2line(flow = odf, zones = p)
 }
 
 #' Update line geometry
@@ -510,14 +579,29 @@ od_dist <- function(flow, zones){
 #' p = line2points(routes_fast)
 #' l = points2line(p)
 #' plot(l)
-points2line = function(p){
+#' l_sf = points2line(cents_sf)
+#' plot(l_sf)
+points2line <- function(p) {
+  UseMethod("points2line")
+}
+#' @export
+points2line.sf <- function(p){
+  points2flow(p = p)
+}
+#' @export
+points2line.Spatial <- function(p){
   if(is(p, "SpatialPoints")){
     p_proj = sp::proj4string(p)
     p = sp::coordinates(p)
   } else {
     p_proj = NA
   }
-  l = raster::spLines(p)
+  l = points2line(p)
   raster::crs(l) = p_proj
+  l
+}
+#' @export
+points2line.matrix <- function(p){
+  l = raster::spLines(p)
   l
 }
