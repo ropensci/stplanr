@@ -8,7 +8,7 @@ calc_catchment(polygonlayer, targetlayer, calccols, distance = 500,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
   "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
   " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), retainAreaProportion = FALSE,
-  dissolve = FALSE)
+  dissolve = FALSE, quadsegs = NULL)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -51,6 +51,10 @@ original area within the catchment area (Default = FALSE).}
 \item{dissolve}{Boolean value. If TRUE collapses the underlying zones
 within the catchment area into a single region with statistics for the
 whole catchment area.}
+
+\item{quadsegs}{Number of line segments to use to approximate a quarter
+circle. Parameter passed to buffer functions, default is 5 for sp and
+30 for sf.}
 }
 \description{
 Calculate catchment area and associated summary statistics.

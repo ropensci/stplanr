@@ -41,6 +41,9 @@
 #' @param dissolve Boolean value. If TRUE collapses the underlying zones
 #' within the catchment area into a single region with statistics for the
 #' whole catchment area.
+#' @param quadsegs Number of line segments to use to approximate a quarter
+#' circle. Parameter passed to buffer functions, default is 5 for sp and
+#' 30 for sf.
 #' @export
 #' @examples \dontrun{
 #' data_dir <- system.file("extdata", package = "stplanr")
@@ -63,14 +66,30 @@ calc_catchment <- function(
   calccols,
   distance = 500,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
+                   "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
+                   " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE,
+  dissolve = FALSE,
+  quadsegs = NULL
+) {
+  UseMethod(generic = "calc_catchment")
+}
+#' @export
+calc_catchment.Spatial <- function(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
                       "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
                       " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
   retainAreaProportion = FALSE,
-  dissolve = FALSE
-  ){
+  dissolve = FALSE,
+  quadsegs = 5
+){
 
   if (projection != "skipproj") {
-    confproj <- checkprojs(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
+    confproj <- checkprojs.Spatial(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
     polygonlayer <- confproj[["polygonlayer"]]
     targetlayer <- confproj[["targetlayer"]]
     origprojpolygon <- confproj[["origprojpolygon"]]
@@ -78,8 +97,10 @@ calc_catchment <- function(
 
   polygonlayer@data$calc_catchment_fullArea <- rgeos::gArea(polygonlayer, byid=TRUE)
 
-  targetbuffer <- rgeos::gBuffer(targetlayer, width=distance)
+  targetbuffer <- rgeos::gBuffer(targetlayer, width=distance, quadsegs = quadsegs, byid = TRUE)
   polygonlayer@data$calc_catchment_charid <- paste(row.names(polygonlayer@data),targetbuffer@polygons[[1]]@ID)
+  polygonlayer@data$calc_catchment_charid2 <- as.character(row.names(polygonlayer@data))
+  targetlayer@data$calc_catchment_charid <- as.character(row.names(targetlayer@data))
 
   targetintersect <- rgeos::gIntersection(polygonlayer,targetbuffer,byid=TRUE)
   targetintersect <- sp::SpatialPolygonsDataFrame(targetintersect,
@@ -88,24 +109,43 @@ calc_catchment <- function(
                                                     row.names=sapply(targetintersect@polygons, function(x) x@ID)
                                                   ))
   targetintersect@data$calc_catchment_sectArea <- rgeos::gArea(targetintersect,byid=TRUE)
-  targetintersect@data <- merge(targetintersect@data,polygonlayer@data,by='calc_catchment_charid',all.x=TRUE)
+  targetintersect@data <- cbind(
+    targetintersect@data,
+    setNames(
+      as.data.frame(
+        t(as.data.frame(
+          strsplit(
+            as.character(targetintersect@data$calc_catchment_charid), split = " "
+          )))),
+      c("calc_catchment_polygonid","calc_catchment_targetid"))
+    )
+  targetintersect@data$calc_catchment_polygonid <- as.character(targetintersect@data$calc_catchment_polygonid)
+  targetintersect@data$calc_catchment_targetid <- as.character(targetintersect@data$calc_catchment_targetid)
+  targetintersect@data <- merge(targetintersect@data, polygonlayer@data,
+                                by.x = 'calc_catchment_polygonid',
+                                by.y = 'calc_catchment_charid2', all.x = TRUE)
+  targetintersect@data <- merge(targetintersect@data, targetlayer@data,
+                                by.x = 'calc_catchment_targetid',
+                                by.y = 'calc_catchment_charid', all.x = TRUE)
   targetintersect@data$calc_catchment_propArea <- targetintersect@data$calc_catchment_sectArea/targetintersect@data$calc_catchment_fullArea
   targetintersect@data[,calccols] <- targetintersect@data[,calccols]*targetintersect@data$calc_catchment_propArea
 
 
   if(dissolve == TRUE) {
-    targetintersectd <- rgeos::gUnaryUnion(targetintersect)
+    targetintersectd <- rgeos::gUnaryUnion(targetintersect, id = targetintersect$calc_catchment_targetid)
+    targetcols <- colnames(targetlayer@data)
+    targetcols <- targetcols[which(targetcols != 'calc_catchment_charid')]
+    targetintersectd_data <- as.data.frame(
+      targetintersect@data %>%
+        dplyr::group_by_at(c("calc_catchment_targetid", targetcols)) %>%
+        dplyr::summarise_at(
+          dplyr::vars(
+            c(calccols,"calc_catchment_fullArea", "calc_catchment_sectArea")),
+          dplyr::funs("sum", .args = list("na.rm" = TRUE))))
+    rownames(targetintersectd_data) <- as.character(unlist(lapply(targetintersectd@polygons, function(x){x@ID})))
     targetintersectd <- sp::SpatialPolygonsDataFrame(targetintersectd,
-                                                     data=if(length(calccols) == 1){
-                                                       setNames(
-                                                         data.frame(x=sum(targetintersect@data[,calccols], na.rm = TRUE)),
-                                                         calccols
-                                                       )}else{
-                                                         data.frame(as.list(colSums(targetintersect@data[,calccols],na.rm = TRUE)))
-                                                       }
-    )
-    targetintersectd@data$calc_catchment_fullArea <- sum(targetintersect@data$calc_catchment_fullArea, na.rm = TRUE)
-    targetintersectd@data$calc_catchment_sectArea <- sum(targetintersect@data$calc_catchment_sectArea, na.rm = TRUE)
+                                                     data = targetintersectd_data)
+    rm(targetintersectd_data)
     targetintersectd@data$calc_catchment_propArea <- targetintersectd@data$calc_catchment_sectArea/targetintersectd@data$calc_catchment_fullArea
     targetintersectd@data$calc_catchment_charid <- 'charid'
     targetintersect <- targetintersectd
@@ -116,6 +156,10 @@ calc_catchment <- function(
   targetintersect@data$calc_catchment_fullArea <- NULL
   targetintersect@data$calc_catchment_sectArea <- NULL
   targetintersect@data$calc_catchment_charid <- NULL
+  targetintersect@data$calc_catchment_polygonid <- NULL
+  targetintersect@data$calc_catchment_targetid <- NULL
+  targetintersect@data$calc_catchment_charid.x <- NULL
+  targetintersect@data$calc_catchment_charid.y <- NULL
 
   if (retainAreaProportion == FALSE) {
     targetintersect@data$calc_catchment_propArea <- NULL
@@ -125,6 +169,65 @@ calc_catchment <- function(
 
   if (projection != "skipproj") {
     targetintersect <- sp::spTransform(targetintersect, sp::CRS(origprojpolygon))
+  }
+  return(targetintersect)
+
+}
+#' @export
+calc_catchment.sf <- function(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
+                   "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
+                   " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE,
+  dissolve = FALSE,
+  quadsegs = 30
+) {
+
+  if (projection != "skipproj") {
+    confproj <- checkprojs.sf(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
+    polygonlayer <- confproj[["polygonlayer"]]
+    targetlayer <- confproj[["targetlayer"]]
+    origprojpolygon <- confproj[["origprojpolygon"]]
+  }
+
+  polygonlayer$calc_catchment_fullArea <- as.numeric(sf::st_area(polygonlayer))
+
+  targetbuffer <- sf::st_buffer(targetlayer, distance, nQuadSegs = quadsegs)
+  polygonlayer$calc_catchment_charid <- paste(row.names(polygonlayer), row.names(targetbuffer))
+
+  targetintersect <- sf::st_intersection(polygonlayer, targetbuffer)
+
+
+  targetintersect$calc_catchment_sectArea <- as.numeric(sf::st_area(targetintersect))
+  targetintersect$calc_catchment_propArea <- targetintersect$calc_catchment_sectArea/targetintersect$calc_catchment_fullArea
+
+  targetintersect <- dplyr::mutate_at(targetintersect, dplyr::vars(calccols), dplyr::funs(.*calc_catchment_propArea))
+
+  if(dissolve == TRUE) {
+    targetcols <- colnames(targetlayer)
+    targetcols <- targetcols[which(targetcols != 'geometry')]
+    targetintersect <- targetintersect %>%
+      dplyr::group_by_at(targetcols) %>%
+      dplyr::summarise_at(dplyr::vars(calccols), .funs = 'sum', na.rm = TRUE)
+  }
+
+
+  targetintersect$calc_catchment_fullArea <- NULL
+  targetintersect$calc_catchment_sectArea <- NULL
+  targetintersect$calc_catchment_charid <- NULL
+
+  if (retainAreaProportion == FALSE) {
+    targetintersect$calc_catchment_propArea <- NULL
+  }
+
+  row.names(targetintersect) <- 1:nrow(targetintersect)
+
+  if (projection != "skipproj") {
+    targetintersect <- sf::st_transform(targetintersect, origprojpolygon)
   }
   return(targetintersect)
 
@@ -167,6 +270,9 @@ calc_catchment <- function(
 #' @param retainAreaProportion Boolean value. If TRUE retains a variable in
 #' the resulting SpatialPolygonsDataFrame containing the proportion of the
 #' original area within the catchment area (Default = FALSE).
+#' @param quadsegs Number of line segments to use to approximate a quarter
+#' circle. Parameter passed to buffer functions, default is 5 for sp and
+#' 30 for sf.
 #' @export
 #' @examples \dontrun{
 #' data_dir <- system.file("extdata", package = "stplanr")
@@ -198,8 +304,23 @@ calc_catchment_sum <- function(
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
                       " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
                       " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
-  retainAreaProportion = FALSE
-  ){
+  retainAreaProportion = FALSE,
+  quadsegs = NA
+){
+  UseMethod(generic = "calc_catchment_sum")
+}
+#' @export
+calc_catchment_sum.Spatial <- function(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
+                      " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
+                      " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE,
+  quadsegs = 5
+){
   if(length(calccols) == 1) {
     return(sum(calc_catchment(
       polygonlayer = polygonlayer,
@@ -208,7 +329,8 @@ calc_catchment_sum <- function(
       distance = distance,
       projection = projection,
       retainAreaProportion = retainAreaProportion,
-      dissolve = FALSE
+      dissolve = FALSE,
+      quadsegs = quadsegs
     )@data[,calccols],na.rm = TRUE))
   } else {
     return(colSums(calc_catchment(
@@ -218,8 +340,46 @@ calc_catchment_sum <- function(
       distance = distance,
       projection = projection,
       retainAreaProportion = retainAreaProportion,
-      dissolve = FALSE
+      dissolve = FALSE,
+      quadsegs = quadsegs
     )@data[,calccols],na.rm = TRUE))
+  }
+}
+
+#' @export
+calc_catchment_sum.sf <- function(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
+                      " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
+                      " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE,
+  quadsegs = 30
+){
+  if(length(calccols) == 1) {
+    return(sum(as.data.frame(calc_catchment(
+      polygonlayer = polygonlayer,
+      targetlayer = targetlayer,
+      calccols = calccols,
+      distance = distance,
+      projection = projection,
+      retainAreaProportion = retainAreaProportion,
+      dissolve = FALSE,
+      quadsegs = quadsegs
+    ))[,calccols],na.rm = TRUE))
+  } else {
+    return(colSums(as.data.frame(calc_catchment(
+      polygonlayer = polygonlayer,
+      targetlayer = targetlayer,
+      calccols = calccols,
+      distance = distance,
+      projection = projection,
+      retainAreaProportion = retainAreaProportion,
+      dissolve = FALSE,
+      quadsegs = quadsegs
+    ))[,calccols],na.rm = TRUE))
   }
 }
 
@@ -282,7 +442,7 @@ calc_moving_catchment <- function(
 ){
   newcalccols <- paste0('sum_',calccols)
 
-  confproj <- checkprojs(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
+  confproj <- checkprojs.Spatial(polygonlayer = polygonlayer, targetlayer = targetlayer, projection = projection)
   polygonlayer <- confproj[["polygonlayer"]]
   targetlayer <- confproj[["targetlayer"]]
   origprojpolygon <- confproj[["origprojpolygon"]]
@@ -406,43 +566,43 @@ calc_network_catchment <- function(
     else {
       newtargetlayer <- targetlayer
     }
-      #targetnodes <- unique(find_network_nodes(sln, as.data.frame(coordinates(newtargetlayer))))
-      if (is(targetlayer, "SpatialPoints") |
-          is(targetlayer, "SpatialPointsDataFrame")) {
-        targetnodes <- unique(find_network_nodes(sln, as.data.frame(
-          unique(coordinates(newtargetlayer))
-        )))
-      } else {
-        targetnodes <- unique(find_network_nodes(sln, as.data.frame(
-          unique(
-            do.call(
-              rbind,unlist(coordinates(newtargetlayer), recursive = FALSE)))
-          )))
-      }
-      spaths <- lapply(targetnodes, function(x){
-                       igraph::get.shortest.paths(sln@g, x,
-                                                  # which(sp::spDists(
-                                                  #   x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                                                  #   y = matrix(cbind(sln@g$x,sln@g$y)[x,],ncol=2),
-                                                  #   longlat = longlat
-                                                  # ) <= maximpedance),
-                                                  output = "epath")
-        })
-
-        spaths <- unlist(lapply(spaths, function(x){x$epath}),recursive = FALSE)
-
+    #targetnodes <- unique(find_network_nodes(sln, as.data.frame(coordinates(newtargetlayer))))
+    if (is(targetlayer, "SpatialPoints") |
+        is(targetlayer, "SpatialPointsDataFrame")) {
+      targetnodes <- unique(find_network_nodes(sln, as.data.frame(
+        unique(coordinates(newtargetlayer))
+      )))
+    } else {
+      targetnodes <- unique(find_network_nodes(sln, as.data.frame(
+        unique(
+          do.call(
+            rbind,unlist(coordinates(newtargetlayer), recursive = FALSE)))
+      )))
     }
+    spaths <- lapply(targetnodes, function(x){
+      igraph::get.shortest.paths(sln@g, x,
+                                 # which(sp::spDists(
+                                 #   x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+                                 #   y = matrix(cbind(sln@g$x,sln@g$y)[x,],ncol=2),
+                                 #   longlat = longlat
+                                 # ) <= maximpedance),
+                                 output = "epath")
+    })
+
+    spaths <- unlist(lapply(spaths, function(x){x$epath}),recursive = FALSE)
+
+  }
 
   else {
 
-      spaths <- igraph::get.shortest.paths(sln@g, targetlayer,
-                                       which(sp::spDists(
-                                         x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
-                                         y = matrix(cbind(sln@g$x,sln@g$y)[targetlayer,],ncol=2),
-                                         longlat = longlat
-                                       ) <= maximpedance),
-                                       output = "epath")
-      spaths <- spaths$epath
+    spaths <- igraph::get.shortest.paths(sln@g, targetlayer,
+                                         which(sp::spDists(
+                                           x = as.matrix(data.frame(x=sln@g$x, y=sln@g$y)),
+                                           y = matrix(cbind(sln@g$x,sln@g$y)[targetlayer,],ncol=2),
+                                           longlat = longlat
+                                         ) <= maximpedance),
+                                         output = "epath")
+    spaths <- spaths$epath
 
   }
 
@@ -464,7 +624,7 @@ calc_network_catchment <- function(
 
 }
 
-checkprojs <- function(polygonlayer, targetlayer, projection) {
+checkprojs.Spatial <- function(polygonlayer, targetlayer, projection) {
   # Define Named vector of known projection strings
   knownprojs <- c(
     'austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
@@ -491,6 +651,38 @@ checkprojs <- function(polygonlayer, targetlayer, projection) {
     if (sp::proj4string(polygonlayer) != sp::proj4string(targetlayer)) {
       projection = sp::proj4string(polygonlayer)
       targetlayer <- sp::spTransform(targetlayer, sp::CRS(projection))
+    }
+  }
+  return(list("polygonlayer"=polygonlayer,"targetlayer"=targetlayer,"origprojpolygon"=origprojpolygon))
+}
+
+checkprojs.sf <- function(polygonlayer, targetlayer, projection) {
+  # Define Named vector of known projection strings
+  knownprojs <- c(
+    'austalbers'='+proj=aea +lat_1=-18 +lat_2=-36 +lat_0=0 +lon_0=132 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+    'worldalbers'='+proj=aea +lat_1=90 +lat_2=-18.416667 +lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+  )
+
+  if (sum(is.na(knownprojs[projection])) == 0) {
+    projection <- knownprojs[projection]
+  }
+
+  polyproj <- !sf::st_is_longlat(polygonlayer)
+  lineproj <- !sf::st_is_longlat(targetlayer)
+
+  origprojpolygon <- sf::st_crs(polygonlayer)
+
+  if (polyproj == FALSE & lineproj == FALSE) {
+
+    polygonlayer <- sf::st_transform(polygonlayer, projection)
+    targetlayer <- sf::st_transform(targetlayer, projection)
+  } else if (polyproj == TRUE & lineproj == FALSE) {
+    projection <- sf::st_crs(polygonlayer)$proj4string
+    targetlayer <- sf::st_transform(targetlayer, projection)
+  } else if (polyproj == TRUE & lineproj == TRUE) {
+    if (sf::st_crs(polygonlayer)$proj4string != sf::st_crs(targetlayer)$proj4string) {
+      projection <- sf::st_crs(polygonlayer)$proj4string
+      targetlayer <- sf::st_transform(targetlayer, projection)
     }
   }
   return(list("polygonlayer"=polygonlayer,"targetlayer"=targetlayer,"origprojpolygon"=origprojpolygon))
