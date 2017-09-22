@@ -48,7 +48,8 @@ LinkingTo: RcppArmadillo,
 Suggests:
     testthat,
     knitr,
-    rmarkdown,
+    rmarkdown
+Enhances:
     tmap
 Remotes: r-spatial/sf
 VignetteBuilder: knitr
