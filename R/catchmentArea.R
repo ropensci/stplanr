@@ -212,7 +212,7 @@ calc_catchment.sf <- function(
   targetintersect$calc_catchment_sectArea <- as.numeric(sf::st_area(targetintersect))
   targetintersect$calc_catchment_propArea <- targetintersect$calc_catchment_sectArea/targetintersect$calc_catchment_fullArea
 
-  targetintersect <- dplyr::mutate_at(targetintersect, dplyr::vars(calccols), dplyr::funs(.*calc_catchment_propArea))
+  targetintersect <- dplyr::mutate_at(targetintersect, dplyr::vars(calccols), dplyr::funs(.data$.*.data$calc_catchment_propArea))
 
   if(dissolve == TRUE) {
     targetcols <- colnames(targetlayer)
