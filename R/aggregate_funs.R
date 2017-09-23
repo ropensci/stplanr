@@ -98,13 +98,13 @@ od_aggregate.sf <- function(flow, zones, aggzones,
 
   flow$flow_new_orig <- flow[1] %>%
     dplyr::inner_join(y = zones_agg[c(flow_first_col, aggcols)]) %>%
-    dplyr::pull(ncol(.))
+    dplyr::pull(ncol(.data))
 
   names(zones_agg)[1] <- flow_second_col
 
   flow$flow_new_dest <- flow[2] %>%
     dplyr::inner_join(y = zones_agg[c(flow_second_col, aggcols)]) %>%
-    dplyr::pull(ncol(.))
+    dplyr::pull(ncol(.data))
 
   flow_ag <- flow %>%
     dplyr::group_by(.data$flow_new_orig, .data$flow_new_dest) %>%
