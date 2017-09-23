@@ -38,3 +38,12 @@
 #' @importFrom sf st_cast st_geometry
 #' @useDynLib stplanr
 NULL
+#' Pipe operator
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom dplyr %>%
+#' @usage lhs \%>\% rhs
+NULL
