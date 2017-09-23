@@ -107,7 +107,7 @@ od_aggregate.sf <- function(flow, zones, aggzones,
     dplyr::pull(ncol(.))
 
   flow_ag <- flow %>%
-    dplyr::group_by(flow_new_orig, flow_new_dest) %>%
+    dplyr::group_by(.data$flow_new_orig, .data$flow_new_dest) %>%
     dplyr::summarise_at(.vars = cols, .funs = sum) %>%
     dplyr::ungroup()
 
