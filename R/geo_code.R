@@ -8,10 +8,10 @@
 #'  The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order
 #' @export
 #' @examples
-#' address = "LS7 3HB"
+#' address <- "LS7 3HB"
 #' geo_code(address = address)
 #' geo_code(address = address, return_all = TRUE)
-geo_code = function(address,
+geo_code <- function(address,
                     base_url = "http://maps.google.com/maps/api/geocode/json",
                     return_all = FALSE) {
 

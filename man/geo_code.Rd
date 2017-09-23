@@ -19,7 +19,7 @@ The default is `FALSE`: to return only two numbers: the longitude and latitude, 
 Generate a lat/long pair from data using Google's geolocation API.
 }
 \examples{
-address = "LS7 3HB"
+address <- "LS7 3HB"
 geo_code(address = address)
 geo_code(address = address, return_all = TRUE)
 }

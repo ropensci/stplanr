@@ -21,7 +21,7 @@
 #' l = flowlines[2:6,]
 #' l_lengths = line_length(l)
 #' n = n_sample_length(10, l_lengths, weights = l$All)
-n_sample_length = function(n, l_lengths, weights) {
+n_sample_length <- function(n, l_lengths, weights) {
   # generate length-adjusted weights equal to 1
   l_lengths_rel = l_lengths * weights / (sum(l_lengths * weights))
   n_vec = round(n * l_lengths_rel)

@@ -44,7 +44,7 @@ crs_select_aeq <- function(shp){
 #' rf_osgb_wgs84 = sp::spTransform(rf_osgb, CRS("+init=epsg:4326"))
 #' plot(rf_aeq_wgs84)
 #' plot(rf_osgb_wgs84, col = "red", add = TRUE)
-reproject = function(shp, crs = crs_select_aeq(shp)){
+reproject <- function(shp, crs = crs_select_aeq(shp)){
   if(is.na(raster::crs(shp))){
     message("Assuming a geographical (lat/lon) CRS (EPSG:4326)")
     raster::crs(shp) = CRS("+init=epsg:4326")

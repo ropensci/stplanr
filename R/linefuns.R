@@ -94,7 +94,7 @@ line_bearing <- function(l, bidirectional = FALSE){
 #' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 #' # East-West
 #' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
-angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
+angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
   if(is(object = l, "Spatial")){
     line_angles = line_bearing(l)
   } else {
@@ -120,7 +120,7 @@ angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
 #' @examples
 #' data(routes_fast)
 #' line_midpoint(routes_fast[2:5,])
-line_midpoint = function(l){
+line_midpoint <- function(l){
   gprojected(l, maptools::SpatialLinesMidPoints)
 }
 
@@ -128,7 +128,7 @@ line_midpoint = function(l){
 #' @inheritParams line2df
 #' @param byid Logical determining whether the length is returned per object (default is true)
 #' @export
-line_length = function(l, byid = TRUE){
+line_length <- function(l, byid = TRUE){
   gprojected(l, rgeos::gLength, byid = byid)
 }
 
@@ -148,7 +148,7 @@ line_length = function(l, byid = TRUE){
 #' plot(l_seg100m, col = l_seg100m$group, lwd = 10, add = TRUE)
 #' plot(l, col = "white", add = TRUE)
 #' line_segment(l = l, segment_length = 100)
-line_segment = function(l, n_segments, segment_length = NA){
+line_segment <- function(l, n_segments, segment_length = NA){
   if(!is.na(segment_length)){
     l_length = line_length(l)
     n_segments = round(l_length / segment_length)

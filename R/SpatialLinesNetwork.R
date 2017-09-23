@@ -89,7 +89,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' points(sln2points(SLN)[to_id,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
-SpatialLinesNetwork = function(sl, uselonglat = FALSE, tolerance = 0.000) {
+SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   stopifnot(is(sl, "SpatialLines") | is(sl,"sf"))
   if (is(sl, "sf")) {
 
