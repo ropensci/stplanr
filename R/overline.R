@@ -149,7 +149,7 @@ lineLabels <- function(sl, attrib){
 #' # sf methods
 #' sl = routes_fast_sf[2:4, ]
 #' overline(sl = sl, attrib = "length", buff_dist = 10)
-#' rnet_sf = overline(routes_fast_sf[!is.na(routes_fast_sf$length), ], attrib = "length", buff_dist = 10)
+#' rnet_sf = overline(routes_fast_sf, attrib = "length", buff_dist = 10)
 #' plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
   UseMethod("overline")
