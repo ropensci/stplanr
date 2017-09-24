@@ -221,7 +221,23 @@ od2line2 <- function(flow, zones){
 #' line2df(flowlines[5,]) # beginning and end of a single straight line
 #' line2df(flowlines) # on multiple lines
 #' line2df(routes_fast[5:6,]) # beginning and end of routes
-line2df <- function(l){
+#' line2df(routes_fast_sf[5:6,]) # beginning and end of routes
+line2df <- function(l) {
+  UseMethod("line2df")
+}
+#' @export
+line2df.sf <- function(l){
+
+  X = rlang::quo(X)
+  Y = rlang::quo(Y)
+
+  ldf_geom = sf::st_coordinates(l)
+  dplyr::group_by(dplyr::as_data_frame(ldf_geom), L1) %>%
+    dplyr::summarise(fx = dplyr::first(!!X), fy = dplyr::first(!!Y),
+                     tx = dplyr::last(!!X), ty = dplyr::last(!!Y))
+}
+#' @export
+line2df.Spatial <- function(l){
   ldf_geom = raster::geom(l)
   dplyr::group_by_(dplyr::as_data_frame(ldf_geom), 'object') %>%
     dplyr::summarise_(fx = quote(first(x)), fy = quote(first(y)), tx = quote(last(x)), ty = quote(last(y)))
