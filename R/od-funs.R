@@ -230,9 +230,10 @@ line2df.sf <- function(l){
 
   X = rlang::quo(X)
   Y = rlang::quo(Y)
+  L1 = rlang::quo(L1)
 
   ldf_geom = sf::st_coordinates(l)
-  dplyr::group_by(dplyr::as_data_frame(ldf_geom), L1) %>%
+  dplyr::group_by(dplyr::as_data_frame(ldf_geom), !!L1) %>%
     dplyr::summarise(fx = dplyr::first(!!X), fy = dplyr::first(!!Y),
                      tx = dplyr::last(!!X), ty = dplyr::last(!!Y))
 }
