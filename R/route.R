@@ -12,7 +12,7 @@
 #' to = "Hereford, UK"
 #' route_leek_to_hereford = route(from, to)
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-#' route(l = flowlines_sf[2:4, ]) # lines
+#' route(flowlines_sf[2:4, ]) # lines
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                        route_fun = route_cyclestreet,
