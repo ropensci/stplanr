@@ -7,7 +7,7 @@
 #' @inheritParams od_coords
 #' @inheritParams line2route
 #' @export
-#' @examples dontrun{
+#' @examples \dontrun{
 #' from = "Leek, UK"
 #' to = "Hereford, UK"
 #' route_leek_to_hereford = route(from, to)
