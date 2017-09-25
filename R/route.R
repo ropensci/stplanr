@@ -12,6 +12,7 @@
 #' to = "Hereford, UK"
 #' route_leek_to_hereford = route(from, to)
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
+#' route(l = flowlines_sf[2:4, ]) # lines
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                        route_fun = route_cyclestreet,
@@ -32,7 +33,7 @@ route <- function(from = NULL, to = NULL, l = NULL,
   rg <- sf::st_sfc(lapply(1:nrow(ldf), function(x)
     sf::st_linestring(matrix(as.numeric(NA), ncol = 2))))
 
-  rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]))
+  rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
   rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
   names(rdf) <- names(rc[[1]])
 
@@ -42,7 +43,7 @@ route <- function(from = NULL, to = NULL, l = NULL,
   if(nrow(ldf) > 1) {
     for(i in 2:nrow(ldf)){
       rc[[i]] <- tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]))
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
       }, error = error_fun)
       perc_temp <- i %% round(nrow(ldf) / n_print)
       # print % of distances calculated
@@ -55,7 +56,6 @@ route <- function(from = NULL, to = NULL, l = NULL,
 
     }
   }
-
 
   r <- sf::st_sf(geometry = rg, rdf)
 

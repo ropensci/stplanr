@@ -8,7 +8,8 @@ route(from = NULL, to = NULL, l = NULL, route_fun = route_cyclestreet,
   n_print = 10, list_output = FALSE, ...)
 }
 \arguments{
-\item{from}{An object representing origins}
+\item{from}{An object representing origins
+(if lines are provided as the first argument, from is assigned to \code{l})}
 
 \item{to}{An object representing destinations}
 
@@ -36,5 +37,6 @@ from = "Leek, UK"
 to = "Hereford, UK"
 route_leek_to_hereford = route(from, to)
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
+route(l = flowlines_sf[2:4, ]) # lines
 }
 }

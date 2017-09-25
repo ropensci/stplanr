@@ -4,6 +4,7 @@
 #' and returns a matrix of coordinates representing origin (fx, fy) and destination (tx, ty) points.
 #'
 #' @param from An object representing origins
+#' (if lines are provided as the first argument, from is assigned to \code{l})
 #' @param to An object representing destinations
 #' @param l Only needed if from and to are empty, in which case this
 #' should be a spatial object representing desire lines
@@ -13,9 +14,19 @@
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' od_coords("Sheffield", "Leek, UK")
 #' # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
-#' od_coords(l = flowlines)
-#' od_coords(l = flowlines_sf)
+#' od_coords(flowlines)
+#' od_coords(flowlines_sf)
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
+
+  if(is(object = from, class2 = "sf")) {
+    is_sf_line <- all(sf::st_geometry_type(from) == "LINESTRING")
+  } else {
+    is_sf_line <- FALSE
+  }
+
+  if(is_sf_line | any(grepl(pattern = "Line", x = class(from)))) {
+    l <- from
+  }
 
   if(!is.null(l)) {
     coord_matrix <- line2df(l) %>%

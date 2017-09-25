@@ -7,7 +7,8 @@
 od_coords(from = NULL, to = NULL, l = NULL)
 }
 \arguments{
-\item{from}{An object representing origins}
+\item{from}{An object representing origins
+(if lines are provided as the first argument, from is assigned to \code{l})}
 
 \item{to}{An object representing destinations}
 
@@ -23,6 +24,6 @@ od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
 od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 od_coords("Sheffield", "Leek, UK")
 # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
-od_coords(l = flowlines)
-od_coords(l = flowlines_sf)
+od_coords(flowlines)
+od_coords(flowlines_sf)
 }
