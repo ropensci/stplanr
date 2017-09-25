@@ -148,34 +148,35 @@ gclip <- function(shp, bb){
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 #'
 #' @inheritParams gclip
-#' @param scale_factor Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.
+#' @param scale_factor Numeric vector determining how much the bounding box will grow or shrink.
+#' Two numbers refer to extending the bounding box in x and y dimensions, respectively.
+#' If the value is 1, the output size will be the same as the input.
 #' @export
 #' @examples
-#' # dput(bbox(cents))
-#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-#'   "coords.x2"), c("min", "max")))
-#' bb1 <- bbox_scale(bb, 1.05)
-#' bb1
-#' bb2 <- bbox_scale(bb, 0.75)
-#' bb2
+#' bb <- matrix(c(-1.55, 53.80, -1.50, 53.83), nrow = 2)
+#' bb1 <- bbox_scale(bb, scale_factor = 1.05)
+#' bb2 <- bbox_scale(bb, scale_factor = c(2, 1.05))
 #' bb3 <- bbox_scale(bb, 0.1)
-#' plot(x = bb1[1,], y = bb1[2,])
-#' points(bb2[1,], bb2[2,])
+#' plot(x = bb2[1,], y = bb2[2,])
+#' points(bb1[1,], bb1[2,])
 #' points(bb3[1,], bb3[2,])
 #' points(bb[1,], bb[2,], col = "red")
-#' bbox_scale(bb, 0.75)
 bbox_scale <- function(bb, scale_factor){
+  if(length(scale_factor == 1)) scale_factor <- rep(scale_factor, 2)
   b <- (bb - rowMeans(bb)) * scale_factor + rowMeans(bb)
   b
 }
 
-#' Convert a bounding box to a SpatialPolygonsDataFrame
+#' Flexible function to generate bounding boxes
 #'
-#' Takes a bounding box as an input and outputs a box in the form of a polygon
+#' Takes a geographic object or bounding box as an input and outputs a bounding box,
+#' represented as a bounding box, corner points or rectangular polygon.
 #'
-#' @inheritParams gclip
-#' @aliases bb2poly
+#' @inheritParams bbox_scale
+#' @param shp Spatial object (from sf or sp packages)
+#' @param dist Distance in metres to extend the bounding box by
+#' @param output Type of object returned (polygon by default)
+#' @seealso bb_scale
 #' @export
 #' @examples
 #' geo_bb(routes_fast)
@@ -185,7 +186,7 @@ bbox_scale <- function(bb, scale_factor){
 #' plot(bb_sf1)
 #' plot(routes_fast, add = TRUE)
 #' geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
-geo_bb <- function(bb) {
+geo_bb <- function(shp, scale_factor = 1, dist = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
 
