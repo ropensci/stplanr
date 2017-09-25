@@ -4,9 +4,9 @@
 #' and returns the result as a spatial (sf or sp) object.
 #' The definition of optimal depends on the routing function used
 #'
-#' @inheritParams odcoords
+#' @inheritParams od_coords
 #' @inheritParams line2route
-#'
+#' @export
 #' @examples dontrun{
 #' from = "Leek, UK"
 #' to = "Hereford, UK"

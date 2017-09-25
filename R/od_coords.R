@@ -5,15 +5,16 @@
 #'
 #' @param from An object representing origins
 #' @param to An object representing destinations
-#' @param l If from and to are empty, this can be a spatial line object represent desire lines
+#' @param l Only needed if from and to are empty, in which case this
+#' should be a spatial object representing desire lines
 #' @export
 #' @examples
 #' od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-#' od_coords("Bristol", "Gloucester")
+#' od_coords("Sheffield", "Leek, UK")
 #' # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
 #' od_coords(l = flowlines)
-#' # od_coords(l = flowlines_sf) # todo
+#' od_coords(l = flowlines_sf) # todo
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
   if(!is.null(l)) {

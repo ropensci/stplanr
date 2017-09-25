@@ -8,7 +8,12 @@ route(from = NULL, to = NULL, l = NULL, route_fun = route_cyclestreet,
   n_print = 10, list_output = FALSE, ...)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{from}{An object representing origins}
+
+\item{to}{An object representing destinations}
+
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link{od2line}}}

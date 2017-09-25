@@ -11,7 +11,8 @@ od_coords(from = NULL, to = NULL, l = NULL)
 
 \item{to}{An object representing destinations}
 
-\item{l}{If from and to are empty, this can be a spatial line object represent desire lines}
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
 }
 \description{
 This function takes a wide range of input data types (spatial lines, points or text strings)
@@ -20,8 +21,8 @@ and returns a matrix of coordinates representing origin (fx, fy) and destination
 \examples{
 od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
 od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-od_coords("Bristol", "Gloucester")
+od_coords("Sheffield", "Leek, UK")
 # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
 od_coords(l = flowlines)
-# od_coords(l = flowlines_sf) # todo
+od_coords(l = flowlines_sf) # todo
 }
