@@ -14,7 +14,7 @@
 #' od_coords("Sheffield", "Leek, UK")
 #' # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
 #' od_coords(l = flowlines)
-#' od_coords(l = flowlines_sf) # todo
+#' od_coords(l = flowlines_sf)
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
   if(!is.null(l)) {
