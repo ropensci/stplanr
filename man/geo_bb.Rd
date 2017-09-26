@@ -3,22 +3,36 @@
 \name{geo_bb}
 \alias{geo_bb}
 \alias{bb2poly}
-\title{Convert a bounding box to a SpatialPolygonsDataFrame}
+\title{Flexible function to generate bounding boxes}
 \usage{
-geo_bb(bb)
+geo_bb(shp, scale_factor = 1, distance = 0, output = c("polygon",
+  "points", "bb"))
 }
 \arguments{
-\item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
+\item{shp}{Spatial object (from sf or sp packages)}
+
+\item{scale_factor}{Numeric vector determining how much the bounding box will grow or shrink.
+Two numbers refer to extending the bounding box in x and y dimensions, respectively.
+If the value is 1, the output size will be the same as the input.}
+
+\item{distance}{Distance in metres to extend the bounding box by}
+
+\item{output}{Type of object returned (polygon by default)}
 }
 \description{
-Takes a bounding box as an input and outputs a box in the form of a polygon
+Takes a geographic object or bounding box as an input and outputs a bounding box,
+represented as a bounding box, corner points or rectangular polygon.
 }
 \examples{
-geo_bb(routes_fast)
-geo_bb(sp::bbox(routes_fast))
+plot(geo_bb(routes_fast, distance = 100))
+plot(geo_bb(routes_fast), add = TRUE)
+plot(geo_bb(sp::bbox(routes_fast), scale_factor = 0.8), add = TRUE) # works on bb also
 # Simple features implementation:
-bb_sf1 <- geo_bb(routes_fast_sf) # keeps CRS
+bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5)) # keeps CRS
 plot(bb_sf1)
 plot(routes_fast, add = TRUE)
 geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
+}
+\seealso{
+bb_scale
 }

@@ -174,52 +174,93 @@ bbox_scale <- function(bb, scale_factor){
 #'
 #' @inheritParams bbox_scale
 #' @param shp Spatial object (from sf or sp packages)
-#' @param dist Distance in metres to extend the bounding box by
+#' @param distance Distance in metres to extend the bounding box by
 #' @param output Type of object returned (polygon by default)
+#' @aliases bb2poly
 #' @seealso bb_scale
 #' @export
 #' @examples
-#' geo_bb(routes_fast)
-#' geo_bb(sp::bbox(routes_fast))
+#' plot(geo_bb(routes_fast, distance = 100))
+#' plot(geo_bb(routes_fast), add = TRUE)
+#' plot(geo_bb(sp::bbox(routes_fast), scale_factor = 0.8), add = TRUE) # works on bb also
 #' # Simple features implementation:
-#' bb_sf1 <- geo_bb(routes_fast_sf) # keeps CRS
+#' bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5)) # keeps CRS
 #' plot(bb_sf1)
 #' plot(routes_fast, add = TRUE)
 #' geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
-geo_bb <- function(shp, scale_factor = 1, dist = 0, output = c("polygon", "points", "bb")) {
+geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
 
 #' @export
-geo_bb.Spatial <- function(bb) {
-  bb2poly(bb)
+geo_bb.Spatial <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  bb2poly(bb = shp, distance = distance)
 }
 
 #' @export
-geo_bb.sf <- function(bb) {
-  bb <- sf::as_Spatial(sf::st_geometry(bb))
-  bb <- bb2poly(bb)
+geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  bb <- sf::as_Spatial(sf::st_geometry(shp))
+  bb <- bb2poly(bb = bb, distance = distance)
   sf::st_as_sf(bb)
 }
 #' @export
-geo_bb.bbox <- function(bb) {
+geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   bb <- matrix(bb, ncol = 2)
-  bb <- bb2poly(bb)
+  bb <- bb2poly(bb = shp, distance = distance)
   sf::st_as_sf(bb)
 }
 #' @export
-geo_bb.matrix <- function(bb) {
-  bb2poly(bb)
+geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  bb2poly(bb = shp, distance = distance)
 }
 
 #' @export
-bb2poly <- function(bb){
+bb2poly <- function(bb, distance = 0){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   } else {
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
     proj4string(b_poly) <- proj4string(bb)
   }
+  if(distance > 0) {
+    b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
+    b_poly <- bb2poly(b_poly_buff)
+  }
   b_poly
 }
 
+#' Create matrix representing the spatial bounds of an object
+#'
+#' Converts a range of spatial data formats into a matrix representing the bounding box
+#'
+#' @inheritParams geo_bb
+#' @export
+#' @examples
+#' geo_bb_matrix(routes_fast)
+#' geo_bb_matrix(routes_fast_sf)
+#' geo_bb_matrix(cents[1, ])
+#' geo_bb_matrix(c(-2, 54))
+#' geo_bb_matrix(sf::st_coordinates(cents_sf))
+geo_bb_matrix <- function(shp) {
+  UseMethod("geo_bb_matrix")
+}
+#' @export
+geo_bb_matrix.Spatial <- function(shp) {
+  sp::bbox(shp)
+}
+#' @export
+geo_bb_matrix.sf <- function(shp) {
+  bb <- sf::st_bbox(shp)
+  bb <- matrix(bb, ncol = 2)
+  bb
+}
+#' @export
+geo_bb_matrix.numeric <- function(shp) {
+  matrix(rep(shp, 2), ncol = 2)
+}
+#' @export
+geo_bb_matrix.matrix <- function(shp) {
+  range_x <- range(shp[, 1])
+  range_y <- range(shp[, 2])
+  matrix(c(range_x, range_y), ncol = 2, byrow = TRUE)
+}
