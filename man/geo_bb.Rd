@@ -24,14 +24,22 @@ Takes a geographic object or bounding box as an input and outputs a bounding box
 represented as a bounding box, corner points or rectangular polygon.
 }
 \examples{
-plot(geo_bb(routes_fast, distance = 100))
-plot(geo_bb(routes_fast), add = TRUE)
-plot(geo_bb(sp::bbox(routes_fast), scale_factor = 0.8), add = TRUE) # works on bb also
+plot(geo_bb(routes_fast, distance = 100), col = "red")
+plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
+plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
+plot(geo_bb(routes_fast, output = "points"), add = TRUE)
 # Simple features implementation:
-bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5)) # keeps CRS
+bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5))
+bb_sf2 <- geo_bb(routes_fast_sf, c(2, 1.5), distance = 100)
 plot(bb_sf1)
+plot(bb_sf2, add = TRUE)
 plot(routes_fast, add = TRUE)
-geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
+plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
+bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
+if(require(tmap)) { # as input into tmap plot
+tm_shape(shp = routes_fast_sf, bbox = bb_matrix) +
+  tm_lines()
+}
 }
 \seealso{
 bb_scale

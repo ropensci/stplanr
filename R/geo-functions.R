@@ -180,38 +180,102 @@ bbox_scale <- function(bb, scale_factor){
 #' @seealso bb_scale
 #' @export
 #' @examples
-#' plot(geo_bb(routes_fast, distance = 100))
-#' plot(geo_bb(routes_fast), add = TRUE)
-#' plot(geo_bb(sp::bbox(routes_fast), scale_factor = 0.8), add = TRUE) # works on bb also
+#' plot(geo_bb(routes_fast, distance = 100), col = "red")
+#' plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
+#' plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
+#' plot(geo_bb(routes_fast, output = "points"), add = TRUE)
 #' # Simple features implementation:
-#' bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5)) # keeps CRS
+#' bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5))
+#' bb_sf2 <- geo_bb(routes_fast_sf, c(2, 1.5), distance = 100)
 #' plot(bb_sf1)
+#' plot(bb_sf2, add = TRUE)
 #' plot(routes_fast, add = TRUE)
-#' geo_bb(sf::st_bbox(routes_fast_sf)) # no CRS in bbox
+#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
+#' bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
+#' if(require(tmap)) { # as input into tmap plot
+#' tm_shape(shp = routes_fast_sf, bbox = bb_matrix) +
+#'   tm_lines()
+#' }
 geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
 
 #' @export
 geo_bb.Spatial <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  bb2poly(bb = shp, distance = distance)
+  output <- match.arg(output)
+  bb <- geo_bb_matrix(shp)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb <- bb2poly(bb = bb, distance = distance)
+  sp::proj4string(bb) <- sp::proj4string(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
+    sp::proj4string(bb_point) <- sp::proj4string(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
 }
 
 #' @export
 geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  bb <- sf::as_Spatial(sf::st_geometry(shp))
-  bb <- bb2poly(bb = bb, distance = distance)
-  sf::st_as_sf(bb)
+  output <- match.arg(output)
+  bb <- geo_bb_matrix(shp)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb_sp <- bb2poly(bb = bb, distance = distance)
+  bb <- sf::st_as_sf(bb_sp)
+  sf::st_crs(bb) <- sf::st_crs(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
+    bb_point <- sf::st_as_sf(bb_point)
+    sf::st_crs(bb_point) = sf::st_crs(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
 }
+
 #' @export
 geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  bb <- matrix(bb, ncol = 2)
-  bb <- bb2poly(bb = shp, distance = distance)
-  sf::st_as_sf(bb)
+  output <- match.arg(output)
+  bb <- matrix(shp, ncol = 2)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb_sp <- bb2poly(bb = bb, distance = distance)
+  bb <- sf::st_as_sf(bb_sp)
+  sf::st_crs(bb) <- sf::st_crs(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
+    bb_point <- sf::st_as_sf(bb_point)
+    sf::st_crs(bb_point) = sf::st_crs(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
 }
+
 #' @export
 geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
-  bb2poly(bb = shp, distance = distance)
+  output <- match.arg(output)
+  if(nrow(shp) != 2) {
+    bb <- geo_bb_matrix(shp)
+  } else {
+    bb <- shp
+  }
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb <- bb2poly(bb = bb, distance = distance)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
 }
 
 #' @export
