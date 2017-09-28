@@ -108,7 +108,7 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                        dest_code = names(flow)[2],
                        zone_code_d = NA, silent = TRUE){
 
-  if(unique(sf::st_geometry_type(zones)) == "POLYGON") {
+  if(grepl(pattern = "POLYGON", x = unique(sf::st_geometry_type(zones)))) {
     zones <- sf::st_centroid(zones)
   }
 
