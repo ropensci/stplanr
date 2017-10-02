@@ -11,10 +11,23 @@
 #'
 #' @export
 #' @examples
-#' data(routes_fast)
 #' n_vertices(routes_fast)
+#' n_vertices(routes_fast_sf)
 n_vertices <- function(l){
+  UseMethod("n_vertices")
+}
+#' @export
+n_vertices.Spatial <- function(l){
   sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
+}
+n_vertices.sf <- function(l){
+  geoms <- sf::st_coordinates(l)
+  L1 <- rlang::quo(L1)
+  geoms %>%
+    dplyr::as_data_frame() %>%
+    dplyr::group_by(!!L1) %>%
+    dplyr::summarise(n_vertices = n()) %>%
+    dplyr::pull(n_vertices)
 }
 
 #' Identify lines that are points
