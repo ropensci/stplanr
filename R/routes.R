@@ -66,17 +66,17 @@
 #' @examples
 #'
 #' \dontrun{
-#' from = c(0.12, 52.21)
-#' to = c(0.13, 52.22)
+#' from = c(-1.55, 53.80) # geo_code("leeds")
+#' to = c(-1.76, 53.80) # geo_code("bradford uk")
 #' json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
 #' str(json_output) # what does cyclestreets give you?
-#' rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
-#' rf_mcr@data
-#' plot(rf_mcr)
-#' (rf_mcr$length / (1000 * 1.61)) / # distance in miles
-#'   (rf_mcr$time / (60 * 60)) # time in hours - average speed here: ~8mph
+#' rf_lb <- route_cyclestreet(from, to, plan = "fastest")
+#' rf_lb@data
+#' plot(rf_lb)
+#' (rf_lb$length / (1000 * 1.61)) / # distance in miles
+#'   (rf_lb$time / (60 * 60)) # time in hours - average speed here: ~8mph
 #' # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
-#' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
+#' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", "balanced")
 #' }
 #'
 route_cyclestreet <-
@@ -129,7 +129,7 @@ route_cyclestreet <-
     stop("Error: CycleStreets did not return a valid result")
   }
 
-  obj <- jsonlite::fromJSON(txt)
+  obj <- jsonlite::fromJSON(txt, simplifyDataFrame = TRUE)
 
   if (is.element("error", names(obj))) {
     stop(paste0("Error: ", obj$error))

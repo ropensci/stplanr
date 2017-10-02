@@ -4,7 +4,7 @@
 \alias{geo_code}
 \title{Convert text strings into points on the map}
 \usage{
-geo_code(address, base_url = "http://maps.google.com/maps/api/geocode/json",
+geo_code(address, base_url = "https://maps.google.com/maps/api/geocode/json",
   return_all = FALSE, pat = NULL)
 }
 \arguments{
