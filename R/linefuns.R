@@ -20,6 +20,7 @@ n_vertices <- function(l){
 n_vertices.Spatial <- function(l){
   sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
 }
+#' @export
 n_vertices.sf <- function(l){
   geoms <- sf::st_coordinates(l)
   L1 <- rlang::quo(L1)
