@@ -2,28 +2,18 @@
 % Please edit documentation in R/as_sf_fun.R
 \name{as_sf_fun}
 \alias{as_sf_fun}
-\alias{as_sf_fun}
-\title{Convert function on sp data to take sf data in and convert to sf}
+\alias{as_sp_fun}
+\title{Convert functions support sf/sp}
 \usage{
-as_sf_fun(input, FUN, ...)
-
 as_sf_fun(input, FUN, ...)
 }
 \arguments{
 \item{input}{Input object - an sf or sp object}
 
-\item{FUN}{A function that works on sp data}
-
-\item{...}{Arguments passed to \code{FUN}}
-
-\item{input}{Input object - an sf or sp object}
-
-\item{FUN}{A function that works on sf data}
+\item{FUN}{A function that works on sp/sf data}
 
 \item{...}{Arguments passed to \code{FUN}}
 }
 \description{
-Convert function on sp data to take sf data in and convert to sf
-
-Convert function on sf data to take sp data in and convert to sp
+Convert functions support sf/sp
 }

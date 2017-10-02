@@ -1,8 +1,9 @@
-#' Convert function on sp data to take sf data in and convert to sf
+#' Convert functions support sf/sp
 #'
 #' @param input Input object - an sf or sp object
-#' @param FUN A function that works on sp data
+#' @param FUN A function that works on sp/sf data
 #' @param ... Arguments passed to \code{FUN}
+#' @aliases as_sp_fun
 as_sf_fun <- function(input, FUN, ...) {
   if(is(object = input, class2 = "sf")) {
     input <- as(object = input, Class = "Spatial")
@@ -14,12 +15,7 @@ as_sf_fun <- function(input, FUN, ...) {
   return(res)
 }
 
-#' Convert function on sf data to take sp data in and convert to sp
-#'
-#' @param input Input object - an sf or sp object
-#' @param FUN A function that works on sf data
-#' @param ... Arguments passed to \code{FUN}
-as_sf_fun <- function(input, FUN, ...) {
+as_sp_fun <- function(input, FUN, ...) {
   if(is(object = input, class2 = "Spatial")) {
     input <- sf::st_as_sf(input)
   }
