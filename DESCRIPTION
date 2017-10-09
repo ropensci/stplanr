@@ -3,7 +3,8 @@ Type: Package
 Title: Sustainable Transport Planning
 Version: 0.1.9
 Authors@R: c(
-    person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre")),
+    person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0001-5679-6536")),
     person("Richard", "Ellison", role = c("aut")),
     person("Barry", "Rowlingson", role = c("ctb"), comment = "Author of overline"),
     person("Nick", "Bearman", role = c("ctb"), comment = "Co-author of gclip"),
