@@ -5,7 +5,8 @@
 \title{Plan a single route with TransportAPI.com}
 \usage{
 route_transportapi(from, to, silent = FALSE,
-  base_url = "http://fcc.transportapi.com/v3/uk")
+  base_url = "http://fcc.transportapi.com/v3/uk", output = "linestrings",
+  mode = "bus")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -17,6 +18,8 @@ on Earth.}
 on Earth. This represents the destination of the trip.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
+
+\item{output}{Type of output. Either linestrings, multilinestrings or data.frame}
 }
 \description{
 Provides an R interface to the TransportAPI.com public transport API.
@@ -35,7 +38,8 @@ geo-coding services are used via \code{geo_code}.
 \examples{
 
 \dontrun{
-route_transportapi("leeds uk", "bradford")
+r = route_transportapi("hereford uk", "leeds uk")
+mapview::mapview(r)
 }
 
 }

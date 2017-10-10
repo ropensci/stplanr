@@ -12,6 +12,7 @@
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
+#' @param output Type of output. Either linestrings, multilinestrings or data.frame
 #'
 #' @details
 #'
@@ -30,12 +31,13 @@
 #' @examples
 #'
 #' \dontrun{
-#' r = route_transportapi("leeds uk", "bradford")
+#' r = route_transportapi("hereford uk", "leeds uk")
 #' mapview::mapview(r)
 #' }
 #'
 route_transportapi <- function(from, to, silent = FALSE,
-                                      base_url = 'http://fcc.transportapi.com/v3/uk',
+                               base_url = 'http://fcc.transportapi.com/v3/uk',
+                               output = "linestrings",
                                mode = "bus"){
 
   base_url = paste0(base_url, "/public/journey/")
@@ -65,13 +67,29 @@ route_transportapi <- function(from, to, silent = FALSE,
     stop("Error: Transportapi did not return a valid result")
   }
 
-  obj <- jsonlite::fromJSON(txt)
+  obj <- jsonlite::fromJSON(txt, simplifyDataFrame = TRUE)
+  class(obj)
+  names(obj)
+  head(obj$routes$route_parts[[1]]$duration)
 
-  coords <- lapply(obj$routes$route_parts, function(x) x$coordinates[[1]])
-  coords <- do.call(rbind, coords)
-  route <- sf::st_linestring(x = coords) %>%
-    sf::st_sfc() %>%
-    sf::st_sf(crs = 4326)
+  if(output == "linestrings") {
+
+    res_df = data.frame(
+      mode = obj$routes$route_parts[[1]]$mode,
+      from_point_name = obj$routes$route_parts[[1]]$from_point_name,
+      to_point_name = obj$routes$route_parts[[1]]$to_point_name,
+      destination = obj$routes$route_parts[[1]]$destination,
+      line_name = obj$routes$route_parts[[1]]$line_name,
+      duration = obj$routes$route_parts[[1]]$duration,
+      departure_time = obj$routes$route_parts[[1]]$departure_time,
+      arrival_time = obj$routes$route_parts[[1]]$arrival_time
+      )
+
+    coords <- lapply(obj$routes$route_parts[[1]]$coordinates, sf::st_linestring)
+    route <- coords %>%
+      sf::st_sfc() %>%
+      sf::st_sf(crs = 4326, res_df)
+  }
 
   # for the future: add summary data on the route
   route
