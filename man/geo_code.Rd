@@ -11,11 +11,12 @@ geo_code(address, service = "nominatim",
 \arguments{
 \item{address}{Text string representing the address you want to geocode}
 
+\item{service}{Which service to use? Nominatim by default}
+
 \item{base_url}{The base url to query}
 
 \item{return_all}{Should the request return all information returned by Google Maps?
-The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order
-@param service Which service to use? Nominatim by default}
+The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order}
 
 \item{pat}{The API key used. By default this is set to NULL and
 this is usually aquired automatically through a helper, api_pat().}

@@ -6,7 +6,7 @@
 #' @param base_url The base url to query
 #' @param return_all Should the request return all information returned by Google Maps?
 #'  The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order
-#'  @param service Which service to use? Nominatim by default
+#' @param service Which service to use? Nominatim by default
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
