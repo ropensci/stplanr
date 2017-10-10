@@ -1,9 +1,6 @@
 #' Plan a single route with TransportAPI.com
 #'
 #' Provides an R interface to the TransportAPI.com public transport API.
-#' The function returns a SpatialLinesDataFrame object representing the
-#' public route.
-#' Currently only works for the United Kingdom.
 #' See \url{https://developer.transportapi.com/documentation}for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
@@ -15,12 +12,6 @@
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
-#' @param region String for the active region to use for journey plans.
-#' Possible values are 'southeast' (default) or 'tfl'.
-#' @param modes Vector of character strings containing modes to use. Default is
-#' to use all modes.
-#' @param not_modes Vector of character strings containing modes not to use.
-#' Not used if \code{modes} is set.
 #'
 #' @details
 #'
@@ -39,15 +30,15 @@
 #' @examples
 #'
 #' \dontrun{
-#' # Plan the 'public' route from Hereford to Leeds
-#' rqh <- route_transportapi_public(from = "Hereford", to = "Leeds")
-#' plot(rq_hfd)
+#' r = route_transportapi("leeds uk", "bradford")
+#' mapview::mapview(r)
 #' }
 #'
-# Aim plan public transport routes with transportAPI
+route_transportapi <- function(from, to, silent = FALSE,
+                                      base_url = 'http://fcc.transportapi.com/v3/uk',
+                               mode = "bus"){
 
-route_transportapi_public <- function(from, to, silent = FALSE,
-                                      region = 'southeast', modes = NA, not_modes = NA){
+  base_url = paste0(base_url, "/public/journey/")
 
   # Convert sp object to lat/lon vector
   if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
@@ -64,34 +55,11 @@ route_transportapi_public <- function(from, to, silent = FALSE,
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
 
-  api_base = "http://fcc.transportapi.com"
-  ft_string <- paste0("/from/lonlat:", orig, "/to/lonlat:", dest)
+    q_url <- paste0(base_url, "from/lonlat:", orig, "/to/lonlat:", dest, ".json?", "mode=", mode)
 
-  queryattrs <- list(region = region)
-  if (is.na(modes) == FALSE) {
-    queryattrs[['modes']] = paste0(modes, collapse = "-")
-  } else {
-    if (is.na(not_modes) == FALSE) {
-      queryattrs[['not_modes']] = paste0(not_modes, collapse = "-")
-    }
-  }
+  res <- httr::GET(q_url)
 
-  httrreq <- httr::GET(
-    url = api_base,
-    path = paste0("/v3/uk/public/journey",ft_string, ".json"),
-    query = queryattrs
-  )
-
-  if (silent == FALSE) {
-    print(paste0("The request sent to transportapi was: ", httrreq$request$url))
-  }
-
-  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
-      grepl('js',httrreq$headers$`content-type`) == FALSE) {
-    stop("Error: Transportapi did not return a valid result")
-  }
-
-  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+  txt <- httr::content(res, as = "text", encoding = "UTF-8")
 
   if (txt == "") {
     stop("Error: Transportapi did not return a valid result")
@@ -99,10 +67,11 @@ route_transportapi_public <- function(from, to, silent = FALSE,
 
   obj <- jsonlite::fromJSON(txt)
 
-  coords <- obj$routes$route_parts[[1]]$coordinates
+  coords <- lapply(obj$routes$route_parts, function(x) x$coordinates[[1]])
   coords <- do.call(rbind, coords)
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
-  proj4string(route) <- CRS("+init=epsg:4326")
+  route <- sf::st_linestring(x = coords) %>%
+    sf::st_sfc() %>%
+    sf::st_sf(crs = 4326)
 
   # for the future: add summary data on the route
   route
