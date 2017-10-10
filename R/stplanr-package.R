@@ -47,3 +47,4 @@ NULL
 #' @importFrom dplyr %>%
 #' @usage lhs \%>\% rhs
 NULL
+utils::globalVariables(c(".", "n"))
