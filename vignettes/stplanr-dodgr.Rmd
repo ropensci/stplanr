@@ -43,11 +43,45 @@ cents_lds = cents[bb, ]
 plot(cents_lds$geometry, add = T, pch = 3)
 ```
 
+Set up the required data structures for `dodgr::dodgr_flows()`, which are:
+
+1. A vector of IDs for origin points
+2. A vector of IDs for destination points
+3. A corresponding matrix of flows
+
 ```{r}
 # convert into dataframe form representing edges between nodes - mode-specific
 net = weight_streetnet(sf_lines = snet, wt_profile = "bicycle")
+pts <- lapply (cents$geometry, function (i) i [1:2])
+pts <- data.frame (cents$geo_code, do.call (rbind, pts))
+names (pts) <- c ("geo_code", "x", "y")
+indx <- which (od_data$geo_code1 %in% pts$geo_code &
+               od_data$geo_code2 %in% pts$geo_code)
+od_data <- od_data [indx, ]
+od <- data.frame (from = od_data$geo_code1, to = od_data$geo_code2,
+                  flow = od_data$bicycle) %>% reshape2::dcast (from ~ to)
+from_names <- od$from
+od [, 1] <- NULL
+row.names (od) <- from_names
 
+indx_fr <- match (rownames (od), pts$geo_code)
+indx_to <- match (colnames (od), pts$geo_code)
+xy_fr <- pts [indx_fr, ]
+xy_to <- pts [indx_to, ]
+verts <- dodgr_vertices (net)
+xy_fr <- match_pts_to_graph (verts, xy = xy_fr [, 2:3])
+xy_to <- match_pts_to_graph (verts, xy = xy_to [, 2:3])
+id_fr <- verts$id [xy_fr]
+id_to <- verts$id [xy_to]
 ```
+
+
+Then calculate the flows
+```{r}
+netf <- dodgr_flows (net, from = id_fr, to = id_to, flows = od)
+netm <- merge_directed_flows (netf)
+```
+
 
 
 
