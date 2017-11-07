@@ -43,6 +43,10 @@ plot(cents, add = T)
 cents = st_as_sf(cents)
 cents_lds = cents[bb, ]
 plot(cents_lds$geometry, add = T, pch = 3)
+m = tidyr::spread(data = od_data[c("geo_code1", "geo_code2", "bicycle")], geo_code2, bicycle)
+row.names(m) = m$geo_code1
+m = as.matrix(m[, -1])
+summary(as.vector(m))
 ```
 
 Set up the required data structures for `dodgr::dodgr_flows()`, which are:
