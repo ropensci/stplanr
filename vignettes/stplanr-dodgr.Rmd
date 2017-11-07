@@ -71,6 +71,7 @@ od = tidyr::spread(data = od_data[c("geo_code1", "geo_code2", "bicycle")],
                    geo_code2, bicycle)
 row.names(od) = od$geo_code1
 od = as.matrix(od[, -1])
+od[is.na(od)] = 0
 summary(as.vector(od))
 ```
 Match those origin and destination points into the street network
