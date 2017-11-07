@@ -32,6 +32,7 @@ plot(desire_lines[1:1000, ])
 # data setup
 library(dodgr)
 library(sf)
+devtools::load_all(".")
 packageVersion("dodgr")
 snet = dodgr::dodgr_streetnet("Leeds UK")
 class(snet)
@@ -43,10 +44,6 @@ plot(cents, add = T)
 cents = st_as_sf(cents)
 cents_lds = cents[bb, ]
 plot(cents_lds$geometry, add = T, pch = 3)
-m = tidyr::spread(data = od_data[c("geo_code1", "geo_code2", "bicycle")], geo_code2, bicycle)
-row.names(m) = m$geo_code1
-m = as.matrix(m[, -1])
-summary(as.vector(m))
 ```
 
 Set up the required data structures for `dodgr::dodgr_flows()`, which are:
@@ -61,15 +58,23 @@ net = weight_streetnet(sf_lines = snet, wt_profile = "bicycle")
 pts <- lapply (cents$geometry, function (i) i [1:2])
 pts <- data.frame (cents$geo_code, do.call (rbind, pts))
 names (pts) <- c ("geo_code", "x", "y")
+```
+Reduce the `od_data` to only those points that are present in the centroids:
+```{r}
 indx <- which (od_data$geo_code1 %in% pts$geo_code &
                od_data$geo_code2 %in% pts$geo_code)
 od_data <- od_data [indx, ]
-od <- data.frame (from = od_data$geo_code1, to = od_data$geo_code2,
-                  flow = od_data$bicycle) %>% reshape2::dcast (from ~ to)
-from_names <- od$from
-od [, 1] <- NULL
-row.names (od) <- from_names
-
+```
+Then convert to square matrix of "flows":
+```{r}
+od = tidyr::spread(data = od_data[c("geo_code1", "geo_code2", "bicycle")],
+                   geo_code2, bicycle)
+row.names(od) = od$geo_code1
+od = as.matrix(od[, -1])
+summary(as.vector(od))
+```
+Match those origin and destination points into the street network
+```{r}
 indx_fr <- match (rownames (od), pts$geo_code)
 indx_to <- match (colnames (od), pts$geo_code)
 xy_fr <- pts [indx_fr, ]
@@ -81,15 +86,53 @@ id_fr <- verts$id [xy_fr]
 id_to <- verts$id [xy_to]
 ```
 
-
 Then calculate the flows
 ```{r}
 netf <- dodgr_flows (net, from = id_fr, to = id_to, flows = od)
 netm <- merge_directed_flows (netf)
+summary (netm$flow)
 ```
 
+### Plotting the results with `svgplotr`
 
+```{r}
+devtools::install_github ("hypertidy/svgplotr")
+library (svgplotr)
+```
+`svgplotr` is currently hard-coded to accept very specifically structured
+`data.frame` objects, so this just requires conforming the `netm` object to the
+expected structure. First to plot is as a straight `svg` rendered in `html`
+format:
 
+```{r}
+dat <- netm [, c (3:4, 6:7)]
+names (dat) <- c ("xfr", "yfr", "xto", "yto")
+xlims <- range (c (dat$xfr, dat$xto))
+ylims <- range (c (dat$yfr, dat$yto))
+size <- 1000
+dat$xfr <- size * (dat$xfr - xlims [1]) / diff (xlims)
+dat$xto <- size * (dat$xto - xlims [1]) / diff (xlims)
+dat$yfr <- size * (dat$yfr - ylims [1]) / diff (ylims)
+dat$yto <- size * (dat$yto - ylims [1]) / diff (ylims)
+dat$col <- rainbow (50) [ceiling (50 * netm$flow / max (netm$flow))]
+dat$lwd <- 5 * netm$flow / max (netm$flow)
+svgplot_lines (dat, filename = "leeds-lines.html")
+system2 ("xdg-open", "leeds-lines.html &")
+```
+
+And then the interactive `leaflet` version, which just requires the `write.csv`
+file to save the data to the `svgplotr/leaflet` directory, following which the
+map should be able to be viewed by simply opening the `index.html`
+
+```{r}
+dat <- netm [, c (1, 4, 3, 7, 6, 13)]
+names (dat) <- c ("id", "latfrom", "lonfrom", "latto", "lonto", "flow")
+dat$color <- rainbow (30) [ceiling (dat$flow * 30 / max (dat$flow))]
+dat$color <- substr (dat$color, 2, nchar (dat$color))
+dat$type <- 5 - ceiling (4 * dat$flow / max (dat$flow))
+dat$lwd <- 1 * dat$flow / max (dat$flow)
+#write.csv (dat, file = "leeds-flows.csv", quote = FALSE, row.names = FALSE)
+```
 
 
 Create network with dodgr
@@ -120,5 +163,4 @@ plot(net2, lwd = net2$flow)
 mapview::mapview(r)
 mapview::mapview(net2)
 ```
-
 
