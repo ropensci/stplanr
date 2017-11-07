@@ -16,8 +16,10 @@ library(stplanr)
 library(osmdata)
 download.file("https://github.com/npct/pct-outputs-regional-R/raw/master/commute/msoa/west-yorkshire/l.Rds", "l.Rds")
 download.file("https://github.com/npct/pct-outputs-regional-R/raw/master/commute/msoa/west-yorkshire/c.Rds", "c.Rds")
-cents = readRDS("c.Rds")
+download.file("https://github.com/npct/pct-outputs-regional-R/raw/master/commute/msoa/west-yorkshire/rf.Rds", "rf.Rds")
 od_data = readRDS("l.Rds")@data
+cents = readRDS("c.Rds")
+rf <- readRDS("rf.Rds")
 names(od_data)
 od_data$id = NULL
 # od_data = od_data[od_data$geo_code1 %in% cents$geo_code & od_data$geo_code2 %in% cents$geo_code, ]
@@ -89,6 +91,14 @@ netm <- merge_directed_flows (netf)
 Create network with dodgr
 
 Compare with PCT
+
+```{r}
+r_high_cycle = rf[od_data$bicycle > 20, ]
+nrow(r_high_cycle)
+plot(r_high_cycle)
+rnet = overline(r_high_cycle, "bicycle", buff_dist = 1)
+plot(rnet, lwd = rnet$bicycle / 100)
+```
 
 
 
