@@ -1,0 +1,76 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Get OD data in Leeds containing cycling
+
+```{r}
+library(stplanr)
+library(osmdata)
+download.file("https://github.com/npct/pct-outputs-regional-R/raw/master/commute/msoa/west-yorkshire/l.Rds", "l.Rds")
+download.file("https://github.com/npct/pct-outputs-regional-R/raw/master/commute/msoa/west-yorkshire/c.Rds", "c.Rds")
+cents = readRDS("c.Rds")
+od_data = readRDS("l.Rds")@data
+names(od_data)
+od_data$id = NULL
+# od_data = od_data[od_data$geo_code1 %in% cents$geo_code & od_data$geo_code2 %in% cents$geo_code, ]
+summary(cents@coords)
+desire_lines = od2line(flow = od_data, cents)
+plot(desire_lines[1:1000, ])
+```
+
+```{r}
+# data setup
+library(dodgr)
+library(sf)
+packageVersion("dodgr")
+snet = dodgr::dodgr_streetnet("Leeds UK")
+class(snet)
+bbpol = getbb(place_name = "Leeds UK", format_out = "polygon")[[1]]
+bb = geo_bb(snet)
+plot(bb)
+plot(cents, add = T)
+# plot(bbpol, add = T) # needs to be sf
+cents = st_as_sf(cents)
+cents_lds = cents[bb, ]
+plot(cents_lds$geometry, add = T, pch = 3)
+```
+
+```{r}
+# convert into dataframe form representing edges between nodes - mode-specific
+net = weight_streetnet(sf_lines = snet, wt_profile = "bicycle")
+
+```
+
+
+
+
+Create network with dodgr
+
+Compare with PCT
+
+
+
+
+```{r}
+library(stplanr)
+plot(routes_fast_sf$geometry)
+r = routes_fast_sf[1:6, ]
+r$flow = runif(nrow(r), 1, 5)
+plot(r$geometry, lwd = r$flow)
+net = overline(r, attrib = "flow")
+plot(net, lwd = net$flow)
+net2 = overline(r, attrib = "flow", buff_dist = 1)
+plot(net2, lwd = net2$flow)
+mapview::mapview(r)
+mapview::mapview(net2)
+```
+
+
