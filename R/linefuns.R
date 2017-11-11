@@ -108,7 +108,12 @@ line_bearing <- function(l, bidirectional = FALSE){
 #' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 #' # East-West
 #' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
-angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
+#' angle_diff(flowlines_sf[2, ], angle = 0)
+angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
+  UseMethod("angle_diff")
+}
+#' @export
+angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
   if(is(object = l, "Spatial")){
     line_angles = line_bearing(l)
   } else {
@@ -124,6 +129,11 @@ angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
   if(absolute)
     angle_diff = abs(angle_diff)
   angle_diff
+}
+#' @export
+angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
+  l_sp <- as(l, "Spatial")
+  angle_diff.Spatial(l_sp, angle, bidirectional = FALSE, absolute = TRUE)
 }
 #' Find the mid-point of lines
 #'
