@@ -49,10 +49,13 @@ LinkingTo: RcppArmadillo,
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    dodgr
 Enhances:
     tmap
-Remotes: r-spatial/sf
+Remotes:
+    r-spatial/sf,
+    ATFutures/dodgr
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
