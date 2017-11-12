@@ -2,6 +2,7 @@
 % Please edit documentation in R/geo_projected.R
 \name{geo_projected}
 \alias{geo_projected}
+\alias{gprojected}
 \title{Perform GIS functions on a temporary, projected version of a spatial object}
 \usage{
 geo_projected(shp, fun, crs, silent, ...)

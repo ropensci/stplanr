@@ -49,6 +49,7 @@ geo_select_aeq.sf <- function(shp){
 #' automatically by \code{\link{crs_select_aeq}})
 #' @param silent A binary value for printing the CRS details (default: TRUE)
 #' @param ... Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))
+#' @aliases gprojected
 #' @export
 #' @examples
 #' library(sf)
