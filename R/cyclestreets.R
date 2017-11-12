@@ -31,9 +31,9 @@ nearest_cyclestreets.NULL <- function(lat, lng, pat = api_pat("cyclestreet")) {
 }
 #' @export
 nearest_cyclestreets.Spatial <- function(shp, lat = shp@coords[1, 2], lng = shp@coords[1, 1], pat = api_pat("cyclestreet")) {
-  nearest_cyclestreets.numeric(lat, lng, pat)
+  nearest_cyclestreets.NULL(lat, lng, pat)
 }
 #' @export
 nearest_cyclestreets.sf <- function(shp, lat = sf::st_coordinates(shp)[2], lng = sf::st_coordinates(shp)[1], pat = api_pat("cyclestreet")) {
-  sf::st_as_sf(nearest_cyclestreets.numeric(lat, lng, pat))
+  sf::st_as_sf(nearest_cyclestreets.NULL(lat, lng, pat))
 }
