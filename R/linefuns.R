@@ -74,7 +74,13 @@ is_linepoint <- function(l){
 #' b1 <- line_bearing(flowlines)
 #' b2 <- line_bearing(flowlines, bidirectional = TRUE)
 #' plot(b1, b2)
-line_bearing <- function(l, bidirectional = FALSE){
+#' line_bearing(flowlines_sf[1:9, ])
+line_bearing <- function(l, bidirectional = FALSE) {
+  UseMethod("line_bearing")
+}
+#' @export
+line_bearing.Spatial <- function(l, bidirectional = FALSE) {
+
   ldf <- line2df(l)
   bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
     if(bidirectional) {
@@ -82,6 +88,9 @@ line_bearing <- function(l, bidirectional = FALSE){
       bearing[bearing < -90] <- bearing[bearing < -90] + 180
   }
   bearing
+}
+line_bearing.sf <- function(l, bidirectional = FALSE) {
+  line_bearing(as(l, "Spatial"), bidirectional)
 }
 #' Calculate the angular difference between lines and a predefined bearing
 #'
@@ -144,10 +153,19 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
 #' @examples
 #' data(routes_fast)
 #' line_midpoint(routes_fast[2:5,])
-line_midpoint <- function(l){
+line_midpoint <- function(l) {
+  UseMethod("line_midpoint")
+}
+#' @export
+line_midpoint.Spatial <- function(l) {
   gprojected(l, maptools::SpatialLinesMidPoints)
 }
-
+#' @export
+line_midpoint.sf <- function(l) {
+  l <- as(l, "Spatial")
+  res_sp <- line_midpoint.Spatial(l)
+  sf::st_as_sf(l)
+}
 #' Calculate length of lines in geographic CRS
 #' @inheritParams line2df
 #' @param byid Logical determining whether the length is returned per object (default is true)
