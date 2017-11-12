@@ -78,7 +78,7 @@ geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE,
   res
 }
 #' @export
-geo_projected.Spatial <- gprojected <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...){
+geo_projected.Spatial <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if(!is.na(is.projected(shp))){
     if(is.projected(shp)){
@@ -103,6 +103,8 @@ geo_projected.Spatial <- gprojected <- function(shp, fun, crs = geo_select_aeq(s
   }
   res
 }
+#' @export
+gprojected <- geo_projected.Spatial
 #' Perform a buffer operation on a temporary projected CRS
 #'
 #' This function solves the problem that buffers will not be circular when used on
