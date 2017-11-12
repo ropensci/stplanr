@@ -113,7 +113,7 @@ gclip <- function(shp, bb) {
   UseMethod("gclip")
 }
 #' @export
-gclip.Spatal <- function(shp, bb) {
+gclip.Spatial <- function(shp, bb) {
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
