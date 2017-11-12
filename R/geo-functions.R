@@ -98,18 +98,22 @@ mapshape_available <- function() {
 #'
 #' @export
 #' @examples
-#' library(sp)
 #' data(cents)
 #' bb <- bbox(cents)
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 #' plot(cents)
 #' plot(cb, add = TRUE)
 #' clipped <- gclip(cents, cb)
-#' row.names(clipped)
+#' plot(clipped, add = TRUE)
 #' clipped$avslope # gclip also returns the data attribute
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
-gclip <- function(shp, bb){
+#' gclip(cents_sf, cb)
+gclip <- function(shp, bb) {
+  UseMethod("gclip")
+}
+#' @export
+gclip.Spatal <- function(shp, bb) {
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
@@ -142,7 +146,12 @@ gclip <- function(shp, bb){
   clipped@data$gclip_id <- NULL
   clipped
 }
-
+#' @export
+gclip.sf <- function(shp, bb) {
+    shp <- as(shp, "Spatial")
+    shp <- gclip.Spatal(shp, as(bb, "Spatial"))
+    sf::st_as_sf(shp)
+}
 #' Scale a bounding box
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
