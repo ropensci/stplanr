@@ -89,6 +89,7 @@ line_bearing.Spatial <- function(l, bidirectional = FALSE) {
   }
   bearing
 }
+#' @export
 line_bearing.sf <- function(l, bidirectional = FALSE) {
   line_bearing(as(l, "Spatial"), bidirectional)
 }
