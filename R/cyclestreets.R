@@ -13,7 +13,12 @@
 #' @examples \dontrun{
 #'  nearest_cyclestreets(lat = 53, lng = 0.02, google_api = "api_key_here")
 #' }
+
 nearest_cyclestreets <- function(lat, lng, pat = api_pat("cyclestreet")){
+    UseMethod ("nearest_cyclestreets")
+}
+
+nearest_cyclestreets.Spatial <- function(lat, lng, pat = api_pat("cyclestreet")){
   url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj = jsonlite::fromJSON(url)
   coords = obj$features$geometry$coordinates[[1]]
@@ -21,3 +26,9 @@ nearest_cyclestreets <- function(lat, lng, pat = api_pat("cyclestreet")){
                          data = data.frame(orig_lat = lat, orig_lng = lng))
 }
 
+nearest_cyclestreets.sf <- function(lat, lng, pat = api_pat("cyclestreet")){
+  url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
+  obj = jsonlite::fromJSON(url)
+  coords = obj$features$geometry$coordinates[[1]]
+  st_sf (st_sfc (st_point (coords)))
+}
