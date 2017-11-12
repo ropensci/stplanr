@@ -149,7 +149,7 @@ gclip.Spatial <- function(shp, bb) {
 #' @export
 gclip.sf <- function(shp, bb) {
     shp <- as(shp, "Spatial")
-    shp <- gclip.Spatal(shp, as(bb, "Spatial"))
+    shp <- gclip.Spatial(shp, as(bb, "Spatial"))
     sf::st_as_sf(shp)
 }
 #' Scale a bounding box
