@@ -13,11 +13,10 @@
 #' @examples \dontrun{
 #'  nearest_cyclestreets(lat = 53, lng = 0.02, google_api = "api_key_here")
 #' }
-
 nearest_cyclestreets <- function(lat, lng, pat = api_pat("cyclestreet")){
     UseMethod ("nearest_cyclestreets")
 }
-
+#' @export
 nearest_cyclestreets.Spatial <- function(lat, lng, pat = api_pat("cyclestreet")){
   url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj = jsonlite::fromJSON(url)
@@ -25,10 +24,10 @@ nearest_cyclestreets.Spatial <- function(lat, lng, pat = api_pat("cyclestreet"))
   SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
                          data = data.frame(orig_lat = lat, orig_lng = lng))
 }
-
+#' @export
 nearest_cyclestreets.sf <- function(lat, lng, pat = api_pat("cyclestreet")){
   url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj = jsonlite::fromJSON(url)
   coords = obj$features$geometry$coordinates[[1]]
-  st_sf (st_sfc (st_point (coords)))
+  sf::st_sf(sf::st_sfc(st::st_point(coords)))
 }
