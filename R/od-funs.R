@@ -329,14 +329,15 @@ line2pointsn <- function(l){
 #' @export
 #' @examples
 #' \dontrun{
-#' l = flowlines[2,]
-#' line2route(l)
 #' l = flowlines[2:5,]
+#' r <- line2route(l, "route_osrm")
 #' rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = l, plan = "quietest", silent = TRUE)
-#' plot(rf, col = "red")
+#' plot(r)
+#' plot(rf, col = "red", add = TRUE)
 #' plot(rq, col = "green", add = TRUE)
 #' plot(l, add = T)
+#' line2route(flowlines_sf[2:3, ], route_osrm)
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
 #' n = 2
 #' plot(l[n,])
@@ -345,21 +346,14 @@ line2pointsn <- function(l){
 #' # Example with list output
 #' l <- l[1:3,]
 #' rf_list <- line2route(l = l, list_output = TRUE)
-#' class(rf_list)       # list output
-#' class(rf_list[[2]])  # but individual elements are spatial
-#' rf_list_of_lists <- line2route(l = l, list_output = TRUE, save_raw = TRUE)
-#' class(rf_list_of_lists)       # list output
-#' class(rf_list_of_lists[[2]])  # but individual elements are spatial
-#' # illustration of how the l_id argument works:
-#' rf$id # has id as l has "id" field
-#' l$id <- NULL # remove id field for testing
-#' rf_no_id <- line2route(l)
-#' rf_no_id$id # [1] "1" "2" "3" "4"
-#' rf_with_id = line2route(l, l_id = "All")
-#' rf_with_id$id # [1] 38 10 44
 #' line2route(l[1,], route_graphhopper)
 #' }
 line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, ...){
+
+  return_sf <- is(l, "sf")
+  if(return_sf) {
+    l <- as(l, "Spatial")
+  }
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)
   n_ldf <- nrow(ldf)
@@ -413,6 +407,9 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     } else {
       row.names(l)
     }
+  }
+  if(return_sf) {
+    r <- sf::st_as_sf(r)
   }
   r
 }
