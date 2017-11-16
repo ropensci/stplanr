@@ -58,7 +58,7 @@ Where \code{url} is an example api request from
 }
 \examples{
 \dontrun{
-r <- route_graphhopper(from = "Leeds", to = "Dublin", vehicle = "bike")
+r <- route_graphhopper(from = "Leeds, UK", to = "Dublin, Ireland", vehicle = "bike")
 r@data
 plot(r)
 r <- route_graphhopper("New York", "Washington", vehicle = "foot")

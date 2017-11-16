@@ -73,4 +73,5 @@ head(flow_dests[1:5]) # check data
 head(destinations@data[1:5])
 flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
 plot(flowlines_dests)
+nfl_sf <- od2line(flow, zones_sf)
 }

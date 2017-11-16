@@ -34,11 +34,17 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-data(flowlines)
-plot(flowlines)
+plot(flowlines[1:30, ], lwd = flowlines$On.foot[1:30])
+singlines <- onewaygeo(flowlines[1:30, ], attrib = which(names(flowlines) == "On.foot"))
+plot(singlines, lwd = singlines$On.foot / 2, col = "red", add = TRUE)
+\dontrun{
+plot(flowlines, lwd = flowlines$All / 10)
 singlelines <- onewaygeo(flowlines, attrib = 3:14)
-plot(singlelines, lwd = 3, col = "red")
-lines(singlelines) # check we've got the right lines
-sum(singlelines$All)
+plot(singlelines, lwd = singlelines$All / 20, col = "red", add = TRUE)
+sum(singlelines$All) == sum(flowlines$All)
 nrow(singlelines)
+singlelines_sf <- onewaygeo(flowlines_sf, attrib = 3:14)
+sum(singlelines_sf$All) == sum(flowlines_sf$All)
+summary(singlelines$All == singlelines_sf$All)
+}
 }

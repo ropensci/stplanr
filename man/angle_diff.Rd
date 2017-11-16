@@ -35,6 +35,7 @@ plot(flowlines)
 plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 # East-West
 plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+angle_diff(flowlines_sf[2, ], angle = 0)
 }
 \author{
 Robin Lovelace and Malcolm Morgan

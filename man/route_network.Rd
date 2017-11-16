@@ -3,13 +3,13 @@
 \docType{data}
 \name{route_network}
 \alias{route_network}
-\title{SpatialLinesDataFrame representing a route network}
-\format{A SpatialLinesDataFrame 80 rows and 1 column}
+\title{spatial lines dataset representing a route network}
+\format{A spatial lines dataset 80 rows and 1 column}
 \usage{
 data(route_network)
 }
 \description{
-SpatialLinesDataFrame representing a route network
+spatial lines dataset representing a route network
 }
 \examples{
 \dontrun{

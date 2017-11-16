@@ -19,4 +19,6 @@ data(cents)
 plot(cents)
 flow <-points2flow(cents)
 plot(flow, add = TRUE)
+flow_sf <- points2flow(cents_sf)
+plot(flow_sf)
 }

@@ -3,8 +3,9 @@
 \docType{data}
 \name{cents}
 \alias{cents}
-\title{SpatialPointsDataFrame of home locations for flow analysis.}
-\format{A SpatialPoints with 8 rows and 5 variables}
+\alias{cents_sf}
+\title{Spatial points representing home locations}
+\format{A spatial dataset with 8 rows and 5 variables}
 \usage{
 data(cents)
 }
@@ -13,10 +14,10 @@ These points represent population-weighted centroids of Medium Super Output Area
 }
 \details{
 \itemize{
-  \item geo_code. the official code of the zone
-  \item MSOA11NM. name zone name
-  \item percent_fem. the percent female
-  \item avslope. average gradient of the zone
+  \item geo_code the official code of the zone
+  \item MSOA11NM name zone name
+  \item percent_fem the percent female
+  \item avslope average gradient of the zone
 }
 
 Cents was generated from the data repository pct-data: https://github.com/npct/pct-data. This data was accessed from within the pct repo: https://github.com/npct/pct, using the following code:
@@ -41,6 +42,8 @@ cents <- sp::spTransform(x = cents, CRSobj = crs)
 cents$geo_code <- as.character(cents$geo_code)
 library(devtools)
 # use_data(cents, overwrite = TRUE)
+cents_sf = sf::st_as_sf(cents)
+devtools::use_data(cents_sf)
 }
 
 }

@@ -18,4 +18,5 @@ data(flowlines)
 line2df(flowlines[5,]) # beginning and end of a single straight line
 line2df(flowlines) # on multiple lines
 line2df(routes_fast[5:6,]) # beginning and end of routes
+line2df(routes_fast_sf[5:6,]) # beginning and end of routes
 }

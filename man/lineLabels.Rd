@@ -4,12 +4,12 @@
 \alias{lineLabels}
 \title{Label SpatialLinesDataFrame objects}
 \usage{
-lineLabels(sldf, attrib)
+lineLabels(sl, attrib)
 }
 \arguments{
-\item{sldf}{A SpatialLinesDataFrame with overlapping elements}
+\item{sl}{A SpatialLinesDataFrame with overlapping elements}
 
-\item{attrib}{A text string corresponding to a named variable in \code{sldf}}
+\item{attrib}{A text string corresponding to a named variable in \code{sl}}
 }
 \description{
 This function adds labels to lines plotted using base graphics. Largely

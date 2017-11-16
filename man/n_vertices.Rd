@@ -17,6 +17,6 @@ with the number of vertices per line or polygon.
 See \url{http://gis.stackexchange.com/questions/58147/} for more information.
 }
 \examples{
-data(routes_fast)
 n_vertices(routes_fast)
+n_vertices(routes_fast_sf)
 }

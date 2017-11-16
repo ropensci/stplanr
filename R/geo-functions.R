@@ -40,7 +40,6 @@ writeGeoJSON <- function(shp, filename){
 #' The percent argument refers to the percentage of removable points to retain.
 #' So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#' @seealso
 #' \code{\link[rgeos]{gSimplify}}
 #' @export
 #' @examples
@@ -99,18 +98,22 @@ mapshape_available <- function() {
 #'
 #' @export
 #' @examples
-#' library(sp)
 #' data(cents)
 #' bb <- bbox(cents)
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 #' plot(cents)
 #' plot(cb, add = TRUE)
 #' clipped <- gclip(cents, cb)
-#' row.names(clipped)
+#' plot(clipped, add = TRUE)
 #' clipped$avslope # gclip also returns the data attribute
 #' points(clipped)
 #' points(cents[cb,], col = "red") # note difference
-gclip <- function(shp, bb){
+#' gclip(cents_sf, cb)
+gclip <- function(shp, bb) {
+  UseMethod("gclip")
+}
+#' @export
+gclip.Spatial <- function(shp, bb) {
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
@@ -143,53 +146,194 @@ gclip <- function(shp, bb){
   clipped@data$gclip_id <- NULL
   clipped
 }
-
+#' @export
+gclip.sf <- function(shp, bb) {
+    shp <- as(shp, "Spatial")
+    shp <- gclip.Spatial(shp, as(bb, "Spatial"))
+    sf::st_as_sf(shp)
+}
 #' Scale a bounding box
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 #'
 #' @inheritParams gclip
-#' @param scale_factor Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.
+#' @param scale_factor Numeric vector determining how much the bounding box will grow or shrink.
+#' Two numbers refer to extending the bounding box in x and y dimensions, respectively.
+#' If the value is 1, the output size will be the same as the input.
 #' @export
 #' @examples
-#' # dput(bbox(cents))
-#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-#'   "coords.x2"), c("min", "max")))
-#' bb1 <- bbox_scale(bb, 1.05)
-#' bb1
-#' bb2 <- bbox_scale(bb, 0.75)
-#' bb2
+#' bb <- matrix(c(-1.55, 53.80, -1.50, 53.83), nrow = 2)
+#' bb1 <- bbox_scale(bb, scale_factor = 1.05)
+#' bb2 <- bbox_scale(bb, scale_factor = c(2, 1.05))
 #' bb3 <- bbox_scale(bb, 0.1)
-#' plot(x = bb1[1,], y = bb1[2,])
-#' points(bb2[1,], bb2[2,])
+#' plot(x = bb2[1,], y = bb2[2,])
+#' points(bb1[1,], bb1[2,])
 #' points(bb3[1,], bb3[2,])
 #' points(bb[1,], bb[2,], col = "red")
-#' bbox_scale(bb, 0.75)
 bbox_scale <- function(bb, scale_factor){
+  if(length(scale_factor == 1)) scale_factor <- rep(scale_factor, 2)
   b <- (bb - rowMeans(bb)) * scale_factor + rowMeans(bb)
   b
 }
 
-#' Convert a bounding box to a SpatialPolygonsDataFrame
+#' Flexible function to generate bounding boxes
 #'
-#' Takes a bounding box as an input and outputs a box in the form of a polygon
+#' Takes a geographic object or bounding box as an input and outputs a bounding box,
+#' represented as a bounding box, corner points or rectangular polygon.
 #'
-#' @inheritParams gclip
+#' @inheritParams bbox_scale
+#' @param shp Spatial object (from sf or sp packages)
+#' @param distance Distance in metres to extend the bounding box by
+#' @param output Type of object returned (polygon by default)
+#' @aliases bb2poly
+#' @seealso bb_scale
 #' @export
 #' @examples
-#' bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-#' 53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-#'   "coords.x2"), c("min", "max")))
-#' bb1 <- bb2poly(bb)
-#' plot(bb1)
-bb2poly <- function(bb){
+#' plot(geo_bb(routes_fast, distance = 100), col = "red")
+#' plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
+#' plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
+#' plot(geo_bb(routes_fast, output = "points"), add = TRUE)
+#' # Simple features implementation:
+#' bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5))
+#' bb_sf2 <- geo_bb(routes_fast_sf, c(2, 1.5), distance = 100)
+#' plot(bb_sf1)
+#' plot(bb_sf2, add = TRUE)
+#' plot(routes_fast, add = TRUE)
+#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
+#' bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
+#' if(require(tmap)) { # as input into tmap plot
+#' tm_shape(shp = routes_fast_sf, bbox = bb_matrix) +
+#'   tm_lines()
+#' }
+geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  UseMethod("geo_bb")
+}
+
+#' @export
+geo_bb.Spatial <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  output <- match.arg(output)
+  bb <- geo_bb_matrix(shp)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb <- bb2poly(bb = bb, distance = distance)
+  sp::proj4string(bb) <- sp::proj4string(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
+    sp::proj4string(bb_point) <- sp::proj4string(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
+}
+
+#' @export
+geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  output <- match.arg(output)
+  bb <- geo_bb_matrix(shp)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb_sp <- bb2poly(bb = bb, distance = distance)
+  bb <- sf::st_as_sf(bb_sp)
+  sf::st_crs(bb) <- sf::st_crs(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
+    bb_point <- sf::st_as_sf(bb_point)
+    sf::st_crs(bb_point) = sf::st_crs(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
+}
+
+#' @export
+geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  output <- match.arg(output)
+  bb <- matrix(shp, ncol = 2)
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb_sp <- bb2poly(bb = bb, distance = distance)
+  bb <- sf::st_as_sf(bb_sp)
+  sf::st_crs(bb) <- sf::st_crs(shp)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
+    bb_point <- sf::st_as_sf(bb_point)
+    sf::st_crs(bb_point) = sf::st_crs(shp)
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
+}
+
+#' @export
+geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
+  output <- match.arg(output)
+  if(nrow(shp) != 2) {
+    bb <- geo_bb_matrix(shp)
+  } else {
+    bb <- shp
+  }
+  bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
+  bb <- bb2poly(bb = bb, distance = distance)
+  if(output == "polygon") {
+    return(bb)
+  } else if(output == "points") {
+    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
+    return(bb_point)
+  } else if(output == "bb") {
+    return(geo_bb_matrix(bb))
+  }
+}
+
+#' @export
+bb2poly <- function(bb, distance = 0){
   if(class(bb) == "matrix"){
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   } else {
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
     proj4string(b_poly) <- proj4string(bb)
   }
+  if(distance > 0) {
+    b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
+    b_poly <- bb2poly(b_poly_buff)
+  }
   b_poly
 }
 
+#' Create matrix representing the spatial bounds of an object
+#'
+#' Converts a range of spatial data formats into a matrix representing the bounding box
+#'
+#' @inheritParams geo_bb
+#' @export
+#' @examples
+#' geo_bb_matrix(routes_fast)
+#' geo_bb_matrix(routes_fast_sf)
+#' geo_bb_matrix(cents[1, ])
+#' geo_bb_matrix(c(-2, 54))
+#' geo_bb_matrix(sf::st_coordinates(cents_sf))
+geo_bb_matrix <- function(shp) {
+  UseMethod("geo_bb_matrix")
+}
+#' @export
+geo_bb_matrix.Spatial <- function(shp) {
+  sp::bbox(shp)
+}
+#' @export
+geo_bb_matrix.sf <- function(shp) {
+  bb <- sf::st_bbox(shp)
+  bb <- matrix(bb, ncol = 2)
+  bb
+}
+#' @export
+geo_bb_matrix.numeric <- function(shp) {
+  matrix(rep(shp, 2), ncol = 2)
+}
+#' @export
+geo_bb_matrix.matrix <- function(shp) {
+  range_x <- range(shp[, 1])
+  range_y <- range(shp[, 2])
+  matrix(c(range_x, range_y), ncol = 2, byrow = TRUE)
+}

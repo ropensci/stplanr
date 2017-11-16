@@ -11,7 +11,7 @@ toptailgs(l, toptail_dist, tail_dist = NULL)
 
 \item{toptail_dist}{The distance (in metres) to top the line by.
 Can be either a single value or a vector of the same length as the
-SpatialLines object. If tail_dist is missing, is used as the tail distnce.}
+SpatialLines object. If tail_dist is missing, is used as the tail distance.}
 
 \item{tail_dist}{The distance (in metres) to tail the line by. Can be
 either a single value or a vector of the same length as the SpatialLines

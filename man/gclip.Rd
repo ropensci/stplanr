@@ -20,15 +20,15 @@ The utility of such a function is illustrated in the following question:
 \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
 }
 \examples{
-library(sp)
 data(cents)
 bb <- bbox(cents)
 cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 plot(cents)
 plot(cb, add = TRUE)
 clipped <- gclip(cents, cb)
-row.names(clipped)
+plot(clipped, add = TRUE)
 clipped$avslope # gclip also returns the data attribute
 points(clipped)
 points(cents[cb,], col = "red") # note difference
+gclip(cents_sf, cb)
 }

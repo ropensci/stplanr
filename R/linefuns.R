@@ -11,10 +11,24 @@
 #'
 #' @export
 #' @examples
-#' data(routes_fast)
 #' n_vertices(routes_fast)
+#' n_vertices(routes_fast_sf)
 n_vertices <- function(l){
+  UseMethod("n_vertices")
+}
+#' @export
+n_vertices.Spatial <- function(l){
   sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
+}
+#' @export
+n_vertices.sf <- function(l){
+  geoms <- sf::st_coordinates(l)
+  L1 <- rlang::quo(L1)
+  geoms %>%
+    dplyr::as_data_frame() %>%
+    dplyr::group_by(!!L1) %>%
+    dplyr::summarise(n_vertices = n()) %>%
+    dplyr::pull(n_vertices)
 }
 
 #' Identify lines that are points
@@ -60,7 +74,13 @@ is_linepoint <- function(l){
 #' b1 <- line_bearing(flowlines)
 #' b2 <- line_bearing(flowlines, bidirectional = TRUE)
 #' plot(b1, b2)
-line_bearing <- function(l, bidirectional = FALSE){
+#' line_bearing(flowlines_sf[1:9, ])
+line_bearing <- function(l, bidirectional = FALSE) {
+  UseMethod("line_bearing")
+}
+#' @export
+line_bearing.Spatial <- function(l, bidirectional = FALSE) {
+
   ldf <- line2df(l)
   bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
     if(bidirectional) {
@@ -68,6 +88,10 @@ line_bearing <- function(l, bidirectional = FALSE){
       bearing[bearing < -90] <- bearing[bearing < -90] + 180
   }
   bearing
+}
+#' @export
+line_bearing.sf <- function(l, bidirectional = FALSE) {
+  line_bearing(as(l, "Spatial"), bidirectional)
 }
 #' Calculate the angular difference between lines and a predefined bearing
 #'
@@ -94,7 +118,12 @@ line_bearing <- function(l, bidirectional = FALSE){
 #' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
 #' # East-West
 #' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
-angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
+#' angle_diff(flowlines_sf[2, ], angle = 0)
+angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
+  UseMethod("angle_diff")
+}
+#' @export
+angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
   if(is(object = l, "Spatial")){
     line_angles = line_bearing(l)
   } else {
@@ -111,6 +140,11 @@ angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
     angle_diff = abs(angle_diff)
   angle_diff
 }
+#' @export
+angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
+  l_sp <- as(l, "Spatial")
+  angle_diff.Spatial(l_sp, angle, bidirectional = FALSE, absolute = TRUE)
+}
 #' Find the mid-point of lines
 #'
 #' This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to find the midpoint
@@ -120,15 +154,24 @@ angle_diff = function(l, angle, bidirectional = FALSE, absolute = TRUE){
 #' @examples
 #' data(routes_fast)
 #' line_midpoint(routes_fast[2:5,])
-line_midpoint = function(l){
+line_midpoint <- function(l) {
+  UseMethod("line_midpoint")
+}
+#' @export
+line_midpoint.Spatial <- function(l) {
   gprojected(l, maptools::SpatialLinesMidPoints)
 }
-
+#' @export
+line_midpoint.sf <- function(l) {
+  l <- as(l, "Spatial")
+  res_sp <- line_midpoint.Spatial(l)
+  sf::st_as_sf(l)
+}
 #' Calculate length of lines in geographic CRS
 #' @inheritParams line2df
 #' @param byid Logical determining whether the length is returned per object (default is true)
 #' @export
-line_length = function(l, byid = TRUE){
+line_length <- function(l, byid = TRUE){
   gprojected(l, rgeos::gLength, byid = byid)
 }
 
@@ -148,7 +191,7 @@ line_length = function(l, byid = TRUE){
 #' plot(l_seg100m, col = l_seg100m$group, lwd = 10, add = TRUE)
 #' plot(l, col = "white", add = TRUE)
 #' line_segment(l = l, segment_length = 100)
-line_segment = function(l, n_segments, segment_length = NA){
+line_segment <- function(l, n_segments, segment_length = NA){
   if(!is.na(segment_length)){
     l_length = line_length(l)
     n_segments = round(l_length / segment_length)

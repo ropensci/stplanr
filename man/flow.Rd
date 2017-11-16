@@ -42,7 +42,7 @@ library(devtools)
 flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
 use_data(flow, overwrite = TRUE)
 
-# Convert flows to SpatialLinesDataFrame
+# Convert flows to spatial lines dataset
 flowlines <- od2line(flow = flow, zones = cents)
 # use_data(flowlines, overwrite = TRUE)
 
@@ -52,6 +52,8 @@ routes_slow <- line2route(l = flowlines, plan = "quietest")
 
 use_data(routes_fast)
 use_data(routes_slow)
+routes_fast_sf <- sf::st_as_sf(routes_fast)
+routes_slow_sf <- sf::st_as_sf(routes_slow)
 }
 
 }

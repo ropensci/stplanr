@@ -7,8 +7,11 @@
 \alias{weightfield<-}
 \alias{weightfield<-}
 \alias{weightfield,SpatialLinesNetwork-method}
+\alias{weightfield,sfNetwork-method}
 \alias{weightfield<-,SpatialLinesNetwork,ANY-method}
+\alias{weightfield<-,sfNetwork,ANY-method}
 \alias{weightfield<-,SpatialLinesNetwork,character-method}
+\alias{weightfield<-,sfNetwork,character-method}
 \title{Get or set weight field in SpatialLinesNetwork}
 \usage{
 weightfield(x)
@@ -19,9 +22,15 @@ weightfield(x, varname) <- value
 
 \S4method{weightfield}{SpatialLinesNetwork}(x)
 
+\S4method{weightfield}{sfNetwork}(x)
+
 \S4method{weightfield}{SpatialLinesNetwork,ANY}(x) <- value
 
+\S4method{weightfield}{sfNetwork,ANY}(x) <- value
+
 \S4method{weightfield}{SpatialLinesNetwork,character}(x, varname) <- value
+
+\S4method{weightfield}{sfNetwork,character}(x, varname) <- value
 }
 \arguments{
 \item{x}{SpatialLinesNetwork to use}
@@ -47,7 +56,7 @@ variables.
 
 \examples{
 data(routes_fast)
-rnet <- overline(sldf = routes_fast, attrib = "length")
+rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 weightfield(SLN) <- 'length'
 weightfield(SLN, 'randomnum') <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)

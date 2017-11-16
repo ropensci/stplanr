@@ -1,16 +1,16 @@
-#' SpatialPointsDataFrame of home locations for flow analysis.
+#' Spatial points representing home locations
 #'
-#'  These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
+#' These points represent population-weighted centroids of Medium Super Output Area (MSOA) zones within a 1 mile radius of of my home when I was writing this package.
 #'
 #' \itemize{
-#'   \item geo_code. the official code of the zone
-#'   \item MSOA11NM. name zone name
-#'   \item percent_fem. the percent female
-#'   \item avslope. average gradient of the zone
+#'   \item geo_code the official code of the zone
+#'   \item MSOA11NM name zone name
+#'   \item percent_fem the percent female
+#'   \item avslope average gradient of the zone
 #' }
 #'
 #' Cents was generated from the data repository pct-data: https://github.com/npct/pct-data. This data was accessed from within the pct repo: https://github.com/npct/pct, using the following code:
-#'
+#' @aliases cents_sf
 #' @examples
 #' \dontrun{
 #' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
@@ -31,13 +31,15 @@
 #' cents$geo_code <- as.character(cents$geo_code)
 #' library(devtools)
 #' # use_data(cents, overwrite = TRUE)
+#' cents_sf = sf::st_as_sf(cents)
+#' devtools::use_data(cents_sf)
 #' }
 #'
 #' @docType data
 #' @keywords datasets
 #' @name cents
 #' @usage data(cents)
-#' @format A SpatialPoints with 8 rows and 5 variables
+#' @format A spatial dataset with 8 rows and 5 variables
 NULL
 
 #' data frame of commuter flows
@@ -75,7 +77,7 @@ NULL
 #' flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
 #' use_data(flow, overwrite = TRUE)
 #'
-#' # Convert flows to SpatialLinesDataFrame
+#' # Convert flows to spatial lines dataset
 #' flowlines <- od2line(flow = flow, zones = cents)
 #' # use_data(flowlines, overwrite = TRUE)
 #'
@@ -85,6 +87,8 @@ NULL
 #'
 #' use_data(routes_fast)
 #' use_data(routes_slow)
+#' routes_fast_sf <- sf::st_as_sf(routes_fast)
+#' routes_slow_sf <- sf::st_as_sf(routes_slow)
 #' }
 #'
 #' @docType data
@@ -138,15 +142,17 @@ NULL
 #' destinations = rgeos::gCentroid(destinations, byid = TRUE)
 #' destinations = SpatialPointsDataFrame(destinations, destination_zones@data)
 #' devtools::use_data(destinations, overwrite = TRUE)
+#' destinations_sf = sf::st_as_sf(destinations)
+#' devtools::use_data(destinations_sf)
 #' }
 #' @docType data
 #' @keywords datasets
 #' @name destination_zones
-#' @aliases destinations
+#' @aliases destinations destinations_sf
 #' @usage data(destination_zones)
-#' @format A SpatialPolygonsDataFrame with 87 features
+#' @format A spatial dataset with 87 features
 NULL
-#' SpatialLinesDataFrame of commuter flows
+#' spatial lines dataset of commuter flows
 #'
 # @family example flow data
 #'
@@ -156,13 +162,13 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name flowlines
-#' @usage data(flowlines)
-#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+#' @aliases flowlines_sf
+#' @format A spatial lines dataset with 49 rows and 15 columns
 NULL
 
-#' SpatialLinesDataFrame of commuter flows on the travel network
+#' spatial lines dataset of commuter flows on the travel network
 #'
-# @family example flow data
+#' @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between \code{\link{cents}}
@@ -173,10 +179,11 @@ NULL
 #' @keywords datasets
 #' @name routes_fast
 #' @usage data(routes_fast)
-#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+#' @format A spatial lines dataset with 49 rows and 15 columns
+#' @aliases routes_fast_sf
 NULL
 
-#' SpatialLinesDataFrame of commuter flows on the travel network
+#' spatial lines dataset of commuter flows on the travel network
 #'
 #' @family example flow data
 #'
@@ -189,10 +196,11 @@ NULL
 #' @keywords datasets
 #' @name routes_slow
 #' @usage data(routes_slow)
-#' @format A SpatialLinesDataFrame 49 rows and 15 columns
+#' @format A spatial lines dataset 49 rows and 15 columns
+#' @aliases routes_slow_sf
 NULL
 
-#' SpatialPolygonsDataFrame of home locations for flow analysis.
+#' Spatial polygons of home locations for flow analysis.
 #'
 #'  These correspond to the \code{\link{cents}} data.
 #'
@@ -207,17 +215,15 @@ NULL
 #' zones <- zones[cents,]
 #' plot(zones)
 #' points(cents)
-#' # use_data(zones, overwrite = TRUE)
+#' zones_sf = sf::st_as_sf(zones)
 #' }
-#'
 #' @docType data
 #' @keywords datasets
 #' @name zones
-#' @usage data(zones)
-#' @format A SpatialPolygonsDataFrame
+#' @aliases zones_sf
 NULL
 
-#' SpatialLinesDataFrame representing a route network
+#' spatial lines dataset representing a route network
 #'
 #' @family example of route network data (sometimes called flow data)
 #'
@@ -228,7 +234,7 @@ NULL
 #' @keywords datasets
 #' @name route_network
 #' @usage data(route_network)
-#' @format A SpatialLinesDataFrame 80 rows and 1 column
+#' @format A spatial lines dataset 80 rows and 1 column
 #' @examples \dontrun{
 #' # Generate route network
 #' route_network = overline(routes_fast, "All", fun = sum)

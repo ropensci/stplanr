@@ -12,47 +12,51 @@
 #' Can either be a single value or a vector of the same length as the
 #' SpatialLines object.
 #' @param ... Arguments passed to rgeos::gBuffer()
+#' @aliases toptail
 #' @export
 #' @examples
-#' data("routes_fast")
-#' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
-#' r_toptail <- toptail(routes_fast, toptail_dist = 300)
-#' plot(routes_fast, lwd = 3)
-#' plot(r_toptail, col = "red", add = TRUE)
+#' l = routes_fast[2:4,]
+#' l_toptail <- geo_toptail(l, toptail_dist = 300)
+#' plot(l)
+#' plot(l_toptail, col = "red", add = TRUE, lwd = 3)
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
-#' r_toptail <- toptail(routes_fast, toptail_dist = 1000)
-#' length(r_toptail) # note short routes have been removed
-#' length(routes_fast)
-#' plot(routes_fast, lwd = 3)
-#' plot(r_toptail, col = "red", add = TRUE)
-toptail <- function(l, toptail_dist, ...){
+#' r_toptail <- geo_toptail(l, toptail_dist = 900)
+#' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
+#' geo_toptail(routes_fast_sf[2:4, ], 300)
+geo_toptail <- function(l, toptail_dist, ...) {
+  UseMethod("geo_toptail")
+}
+#' @export
+geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
 
-  if (length(toptail_dist) > 1) {
-    if (length(toptail_dist) != length(l)) {
-      stop("toptail_dist is vector but not of equal length to SpatialLines object")
-    }
+  if(length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
+    stop("toptail_dist is vector but not of equal length to spatial object")
   }
-  toptail_disto <- toptail_dist
+
+  lpoints <- line_to_points(l)
+
+  if(length(toptail_dist) == 1) {
+    toptail_dist = rep(toptail_dist, length(l))
+  }
 
   for(i in 1:length(l)){
-    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
-    l1 <- l[i,]
-    lpoints <- line2points(l1)
+
+    sel_points <- lpoints[lpoints$id == i,]
 
     # Create buffer for geographic or projected crs
     if(!is.projected(l)){
-      sel <- buff_geo(lpoints, width = toptail_dist, ...)
+      sel <- geo_buffer(lpoints, width = toptail_dist[i], ..., silent = TRUE)
     } else {
-      sel <- rgeos::gBuffer(lpoints, width = toptail_dist, ...)
+      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
     }
 
-    if(rgeos::gContainsProperly(sel, l1)){
+    if(rgeos::gContainsProperly(sel, l[i,])){
       message(paste0("Line ", i, " is completely removed by the clip and",
                    " is omitted from the results"))
       next
     }
-    l2 <- rgeos::gDifference(l1, sel)
+    l2 <- rgeos::gDifference(l[i,], sel)
     if(!exists("out")){
       out <- l2
     } else {
@@ -61,6 +65,12 @@ toptail <- function(l, toptail_dist, ...){
   }
   out
 }
+#' @export
+geo_toptail.sf <- function(l, toptail_dist, ...){
+  l_sp <- as(l, "Spatial")
+  res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
+  sf::st_as_sf(res_sp)
+}
 #' Create a buffer of n metres for non-projected 'geographical' spatial data
 #'
 #' Solves the problem that buffers will not be circular when used on
@@ -68,15 +78,9 @@ toptail <- function(l, toptail_dist, ...){
 #'
 #' Returns a
 #'
-#' @param shp A spatial object with a geographic CRS (WGS84)
-#' around which a buffer should be drawn
-#' @param width The distance (in metres) of the buffer
-#' @param ... Arguments passed to rgeos::gBuffer()
-#' @param silent A binary value for printing the CRS details (default: FALSE)
+#' @inheritParams geo_buffer
 #' @export
 #' @examples
-#' data("routes_fast")
-#' sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
 #' buff <- buff_geo(routes_fast, width = 100)
 #' plot(buff)
 #' plot(routes_fast, add = TRUE)
@@ -88,10 +92,9 @@ toptail <- function(l, toptail_dist, ...){
 #' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
 #' plot(buff)
 #' plot(buff3, add = TRUE, col = "black")
-buff_geo <- function(shp, width, ..., silent = TRUE){
-  gprojected(shp = shp, fun = rgeos::gBuffer, width = width)
+buff_geo <- function(shp, width, ...){
+  gprojected(shp = shp, fun = rgeos::gBuffer, width = width, ...)
 }
-
 #' Clip the first and last n metres of SpatialLines
 #'
 #' Takes lines and removes the start and end point, to a distance determined
@@ -101,7 +104,7 @@ buff_geo <- function(shp, width, ..., silent = TRUE){
 #' @param l A SpatialLines object
 #' @param toptail_dist The distance (in metres) to top the line by.
 #' Can be either a single value or a vector of the same length as the
-#' SpatialLines object. If tail_dist is missing, is used as the tail distnce.
+#' SpatialLines object. If tail_dist is missing, is used as the tail distance.
 #' @param tail_dist The distance (in metres) to tail the line by. Can be
 #' either a single value or a vector of the same length as the SpatialLines
 #' object.
@@ -176,8 +179,6 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @export
 #' @examples
-#' data("routes_fast")
-#' data("zones")
 #' r_toptail <- toptail_buff(routes_fast, zones)
 #' sel <- row.names(routes_fast) %in% row.names(r_toptail)
 #' rf_cross_poly <- routes_fast[sel,]
@@ -192,15 +193,14 @@ toptail_buff <- function(l, buff, ...){
     proj4string(buff) <- proj4string(l)
   }
   for(i in 1:length(l)){
-    l1 <- l[i,]
-    lpoints <- line2points(l1)
+    lpoints <- line2points(l[i,])
     # Select zones per line
     sel <- buff[lpoints,]
-    l2 <- rgeos::gDifference(l1, sel)
+    l2 <- rgeos::gDifference(l[i,], sel)
     if(is.null(l2)){
       next
     }else{
-      row.names(l2) <- row.names(l1)
+      row.names(l2) <- row.names(l[i,])
     }
     if(!exists("out")){
       out <- l2

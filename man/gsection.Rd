@@ -4,11 +4,13 @@
 \alias{gsection}
 \title{Function to split overlapping SpatialLines into segments}
 \usage{
-gsection(sl)
+gsection(sl, buff_dist = 0)
 }
 \arguments{
 \item{sl}{SpatialLinesDataFrame with overlapping Lines to split by
 number of overlapping features.}
+
+\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
 \description{
 Divides SpatialLinesDataFrame objects into separate Lines.
@@ -16,14 +18,16 @@ Each new Lines object is the aggregate of a single number
 of aggregated lines.
 }
 \examples{
-\dontrun{
-data(routes_fast)
-rsec <- gsection(routes_fast)
-plot(routes_fast)
-lines(rsec, col = "red", lwd = 3)
-length(rsec)
-set.seed(5)
-sel <- sample(length(rsec), 20)
-plot(rsec[sel,], col = "blue", add = TRUE, lwd = 3) # overlapping lines
+sl <- routes_fast[2:4,]
+rsec <- gsection(sl)
+rsec_buff <- gsection(sl, buff_dist = 1)
+plot(sl[1], lwd = 9, col = 1:nrow(sl))
+plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
+# sf implementation (needs lwgeom)
+if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
+  sl <- routes_fast_sf[2:4,]
+  rsec <- gsection(sl)
+  rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
 }
 }

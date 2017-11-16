@@ -67,6 +67,7 @@ colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are 
 # Demonstrate the results from onewayid and onewaygeo are identical
 flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
+onewayid(flowlines_sf, "all")
 # with spatial data
 data(flowlines)
 fo <- onewayid(flowlines, attrib = "All")

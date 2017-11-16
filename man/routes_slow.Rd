@@ -3,12 +3,13 @@
 \docType{data}
 \name{routes_slow}
 \alias{routes_slow}
-\title{SpatialLinesDataFrame of commuter flows on the travel network}
-\format{A SpatialLinesDataFrame 49 rows and 15 columns}
+\alias{routes_slow_sf}
+\title{spatial lines dataset of commuter flows on the travel network}
+\format{A spatial lines dataset 49 rows and 15 columns}
 \usage{
 data(routes_slow)
 }
 \description{
-SpatialLinesDataFrame of commuter flows on the travel network
+spatial lines dataset of commuter flows on the travel network
 }
 \keyword{datasets}

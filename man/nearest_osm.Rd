@@ -5,7 +5,8 @@
 \title{Generate nearest point on the route network of a point from OSRM locate service}
 \usage{
 nearest_osm(lat, lng, number = 1, api = 5, profile = "driving",
-  protocol = "v1", osrmurl = "http://router.project-osrm.org")
+  protocol = "v1", osrmurl = "http://router.project-osrm.org",
+  return_sf = FALSE)
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
@@ -25,6 +26,9 @@ Default is 5.}
 \item{protocol}{The protocol to use for the API (for v5), defaults to "v1".}
 
 \item{osrmurl}{Base URL of the OSRM service}
+
+\item{return_sf}{Boolean value if this function should return an sf object, if
+FALSE returns sp object (default FALSE).}
 }
 \description{
 Generate nearest point on the route network of a point from OSRM locate service

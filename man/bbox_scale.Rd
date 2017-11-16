@@ -9,24 +9,20 @@ bbox_scale(bb, scale_factor)
 \arguments{
 \item{bb}{the bounding box or spatial object that will be used to crop \code{shp}}
 
-\item{scale_factor}{Number determining how much the bounding box will grow or shrink. If the value is 1, the output size will be the same as the input.}
+\item{scale_factor}{Numeric vector determining how much the bounding box will grow or shrink.
+Two numbers refer to extending the bounding box in x and y dimensions, respectively.
+If the value is 1, the output size will be the same as the input.}
 }
 \description{
 Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 }
 \examples{
-# dput(bbox(cents))
-bb <- structure(c(-1.55080650299106, 53.8040984493515, -1.51186138683098,
-53.828874094091), .Dim = c(2L, 2L), .Dimnames = list(c("coords.x1",
-  "coords.x2"), c("min", "max")))
-bb1 <- bbox_scale(bb, 1.05)
-bb1
-bb2 <- bbox_scale(bb, 0.75)
-bb2
+bb <- matrix(c(-1.55, 53.80, -1.50, 53.83), nrow = 2)
+bb1 <- bbox_scale(bb, scale_factor = 1.05)
+bb2 <- bbox_scale(bb, scale_factor = c(2, 1.05))
 bb3 <- bbox_scale(bb, 0.1)
-plot(x = bb1[1,], y = bb1[2,])
-points(bb2[1,], bb2[2,])
+plot(x = bb2[1,], y = bb2[2,])
+points(bb1[1,], bb1[2,])
 points(bb3[1,], bb3[2,])
 points(bb[1,], bb[2,], col = "red")
-bbox_scale(bb, 0.75)
 }

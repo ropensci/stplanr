@@ -8,7 +8,7 @@ calc_catchment_sum(polygonlayer, targetlayer, calccols, distance = 500,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667",
   " +lat_0=0 +lon_0=10 +x_0=0 +y_0=0",
   " +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
-  retainAreaProportion = FALSE)
+  retainAreaProportion = FALSE, quadsegs = NA)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -43,6 +43,10 @@ Equal Area project).}
 \item{retainAreaProportion}{Boolean value. If TRUE retains a variable in
 the resulting SpatialPolygonsDataFrame containing the proportion of the
 original area within the catchment area (Default = FALSE).}
+
+\item{quadsegs}{Number of line segments to use to approximate a quarter
+circle. Parameter passed to buffer functions, default is 5 for sp and
+30 for sf.}
 }
 \description{
 Calculate summary statistics for catchment area.

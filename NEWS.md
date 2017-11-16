@@ -1,3 +1,12 @@
+# stplanr 0.2.0
+
+## NEW FEATURES
+
+* Support for **sf**. The package now support the new spatial class system for most functions.
+* New function `geo_bb()` supercedes `bb2poly()`. The new function can return polygons, points and matrix objects determined by the `output` argument. It also allows bounding boxes to be extended in metres, and scaled in x and y dimensions.
+* New generic `route()` function for routing. This is more flexible and user-friendly than the existing `line2route()` and `route_*()` functions it enhances.
+
+
 # stplanr 0.1.9
 
 ## NEW FEATURES
