@@ -286,14 +286,20 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 #' with a distance (i.e. not intra-zone flows) are included
 #' @export
 #' @examples
-#' data(flowlines)
-#' plot(flowlines)
+#' plot(flowlines, lwd = flowlines$All / 10)
 #' singlelines <- onewaygeo(flowlines, attrib = 3:14)
-#' plot(singlelines, lwd = 3, col = "red")
-#' lines(singlelines) # check we've got the right lines
+#' plot(singlelines, lwd = singlelines$All / 30, col = "red", add = TRUE)
 #' sum(singlelines$All)
 #' nrow(singlelines)
-onewaygeo <- function(x, attrib){
+onewaygeo <- function(x, attrib) {
+  UseMethod("onewaygeo")
+}
+#' @export
+onewaygeo.sf <- function(x, attrib) {
+
+}
+#' @export
+onewaygeo.Spatial <- function(x, attrib){
   geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
   sel1 <- !duplicated(geq) # repeated rows
   singlelines <- x[sel1,]
@@ -304,10 +310,10 @@ onewaygeo <- function(x, attrib){
         apply(geq, 1, function(x){
           which(x == TRUE)
         }),
-        function(y,x) {
-          colSums(x[y,3:14]@data)
+        function(y, x) {
+          colSums(x[y, attrib]@data)
         }, x)),
-    nrow=49,
+    nrow = nrow(x),
     byrow=TRUE))[sel1,]
 
   return(singlelines)

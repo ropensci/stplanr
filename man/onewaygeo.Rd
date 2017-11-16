@@ -34,11 +34,9 @@ potentially halving the number of lines objects and reducing the number
 of overlapping lines to zero.
 }
 \examples{
-data(flowlines)
-plot(flowlines)
+plot(flowlines, lwd = flowlines$All / 10)
 singlelines <- onewaygeo(flowlines, attrib = 3:14)
-plot(singlelines, lwd = 3, col = "red")
-lines(singlelines) # check we've got the right lines
+plot(singlelines, lwd = singlelines$All / 30, col = "red", add = TRUE)
 sum(singlelines$All)
 nrow(singlelines)
 }
