@@ -291,17 +291,26 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 #' plot(singlines, lwd = singlines$On.foot / 2, col = "red", add = TRUE)
 #' \dontrun{
 #' plot(flowlines, lwd = flowlines$All / 10)
-#' singlelines <- onewaygeo(flowlines, attrib = 3)
+#' singlelines <- onewaygeo(flowlines, attrib = 3:14)
 #' plot(singlelines, lwd = singlelines$All / 20, col = "red", add = TRUE)
 #' sum(singlelines$All) == sum(flowlines$All)
 #' nrow(singlelines)
+#' singlelines_sf <- onewaygeo(flowlines_sf, attrib = 3:14)
+#' sum(singlelines_sf$All) == sum(flowlines_sf$All)
+#' summary(singlelines$All == singlelines_sf$All)
 #' }
 onewaygeo <- function(x, attrib) {
   UseMethod("onewaygeo")
 }
 #' @export
 onewaygeo.sf <- function(x, attrib) {
+  geq <- sf::st_equals(x, x, sparse = FALSE) | sf::st_equals_exact(x, x, sparse = FALSE, par = 0.0)
+  sel1 <- !duplicated(geq) # repeated rows
+  x$matching_rows =  apply(geq, 1, function(x) paste0(formatC(which(x), width = 2, format = "d", flag = 0), collapse = "-"))
 
+  singlelines <- aggregate(x[attrib], list(x$matching_rows), FUN = sum)
+
+  return(singlelines)
 }
 #' @export
 onewaygeo.Spatial <- function(x, attrib){
