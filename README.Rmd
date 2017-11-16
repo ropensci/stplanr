@@ -47,7 +47,7 @@ must be combined with geo-referenced zones or points to generate meaningful
 analyses and visualisations of 'flows' or origin-destination (OD) data.
 **stplanr** facilitates this with
 `od2line()`, which takes flow and geographical data as inputs and
-outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
+outputs spatial data. Some example data is provided in the package:
 
 ```{r, results='hide', message=FALSE}
 library(stplanr)
