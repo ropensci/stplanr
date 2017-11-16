@@ -63,7 +63,9 @@ conjunction with the viaroute2sldf function.
   exroutes <- viaroute(50, 0, 51, 1)
   r <- viaroute2sldf(exroutes)
   plot(r)
-  exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
+  lngs <- c(-33.5,-33.6,-33.7)
+  lats <- c(150,150.1,150.2)
+  exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
   r <- viaroute2sldf(exroutes)
   plot(r)
 }

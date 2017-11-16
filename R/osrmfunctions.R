@@ -15,7 +15,7 @@
 #' @examples \dontrun{
 #'  decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@@", precision = 5)
 #' }
-decode_gl <- function(polyline, precision=6, forceline=TRUE) {
+decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
 
   latlngsets <- lapply(polyline, function(polyline, precision){
 
@@ -95,7 +95,9 @@ decode_gl <- function(polyline, precision=6, forceline=TRUE) {
 #'   exroutes <- viaroute(50, 0, 51, 1)
 #'   r <- viaroute2sldf(exroutes)
 #'   plot(r)
-#'   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
+#'   lngs <- c(-33.5,-33.6,-33.7)
+#'   lats <- c(150,150.1,150.2)
+#'   exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
 #'   r <- viaroute2sldf(exroutes)
 #'   plot(r)
 #' }
@@ -922,5 +924,41 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
     tabledata2 <- jsonlite::fromJSON(httr::content(httrreq, "text"))
     return(tabledata2$distance_table)
   }
+
+}
+#' Plan a route with OSRM
+#'
+#' This is a wrapper around \code{viaroute} that returns a single route between A and B.
+#'
+#' @param singleline Should a single line be returned? Default is \code{TRUE}
+#' @param ... Arguments passed to viaroute()
+#' @inheritParams route_cyclestreet
+#' @inheritParams viaroute
+#' @export
+#' @examples
+#' \dontrun{
+#' from = c(-1.55, 53.80) # geo_code("leeds")
+#' to = c(-1.76, 53.80) # geo_code("bradford uk")
+#' r = route_osrm(from, to)
+#' plot(r)
+#' r_many <- line2route(flowlines[2:9,], route_osrm)
+#' plot(cents)
+#' plot(r_many, add = TRUE)
+#' }
+route_osrm <- function(from, to, alt = FALSE, ..., singleline = TRUE) {
+
+  v <- viaroute(startlat = from[2], startlng = from[1], endlat = to[2], endlng = to[1], ...)
+  r <- viaroute2sldf(v)
+
+  if(!alt) {
+    r <- r[1:min(which(r$type == "arrive")), ]
+  }
+  if(singleline) {
+    r <- sp::SpatialLinesDataFrame(rgeos::gLineMerge(r),
+                                   data.frame(distance = sum(r$distance),
+                                              duration = sum(r$duration)))
+  }
+
+  return(r)
 
 }
