@@ -286,11 +286,16 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 #' with a distance (i.e. not intra-zone flows) are included
 #' @export
 #' @examples
+#' plot(flowlines[1:30, ], lwd = flowlines$On.foot[1:30])
+#' singlines <- onewaygeo(flowlines[1:30, ], attrib = which(names(flowlines) == "On.foot"))
+#' plot(singlines, lwd = singlines$On.foot / 2, col = "red", add = TRUE)
+#' \dontrun{
 #' plot(flowlines, lwd = flowlines$All / 10)
-#' singlelines <- onewaygeo(flowlines, attrib = 3:14)
-#' plot(singlelines, lwd = singlelines$All / 30, col = "red", add = TRUE)
-#' sum(singlelines$All)
+#' singlelines <- onewaygeo(flowlines, attrib = 3)
+#' plot(singlelines, lwd = singlelines$All / 20, col = "red", add = TRUE)
+#' sum(singlelines$All) == sum(flowlines$All)
 #' nrow(singlelines)
+#' }
 onewaygeo <- function(x, attrib) {
   UseMethod("onewaygeo")
 }
@@ -303,8 +308,10 @@ onewaygeo.Spatial <- function(x, attrib){
   geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
   sel1 <- !duplicated(geq) # repeated rows
   singlelines <- x[sel1,]
+  non_numeric_cols <- which(!sapply(x@data, is.numeric))
+  keeper_cols <- sort(unique(c(non_numeric_cols, attrib)))
 
-  singlelines@data[,attrib] <- (matrix(
+  singlelines@data[, attrib] <- (matrix(
     unlist(
       lapply(
         apply(geq, 1, function(x){
@@ -315,6 +322,8 @@ onewaygeo.Spatial <- function(x, attrib){
         }, x)),
     nrow = nrow(x),
     byrow=TRUE))[sel1,]
+
+  singlelines@data <- singlelines@data[keeper_cols]
 
   return(singlelines)
 }
