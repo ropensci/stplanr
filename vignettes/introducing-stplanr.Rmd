@@ -151,13 +151,15 @@ Another useful visulisation involves setting the colour relative to the number o
 tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
-Finally, we can convert these desire lines into routes as follows:
+Finally, we can convert these desire lines into routes as follows (other `route_*` functions can be used, but may require API keys to work - see `?route_cyclestreets` for details):
 
-```{r, eval=FALSE}
-r = line2route(l) # requires the a cyclestreets.net API key
+```{r, eval=curl::has_internet(), message=FALSE}
+# if the next line returns FALSE this uses local data - if TRUE it pings the OSRM API
+curl::has_internet() 
+r = line2route(l, route_fun = route_osrm)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=!curl::has_internet()}
 r = routes_fast
 r = r[!is.na(r$length), ]
 ```
