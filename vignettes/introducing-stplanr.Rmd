@@ -126,11 +126,13 @@ qtm(desire_line_single, lines.lwd = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
-The following command creates desire lines for all OD pairs stored in the dataset `flowlines`:
+The following command creates desire lines for all OD pairs stored --- omitting 'internal flows' via the `sel` object belwo --- represented in the dataset `flowlines`:
 
 ```{r}
 l = od2line(flow = flow, zones = cents)
-l = l[! l$Area.of.residence == l$Area.of.workplace,]
+# remove 'internal flows'
+sel = l$Area.of.residence == l$Area.of.workplace
+l = l[!sel, ]
 ```
 
 This creates the geographic data object `l`, which can be visualised as follows:
