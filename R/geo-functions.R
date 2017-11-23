@@ -44,12 +44,11 @@ writeGeoJSON <- function(shp, filename){
 #' @export
 #' @examples
 #' \dontrun{
-#' data(routes_fast)
-#' shp <- routes_fast[1,]
+#' shp <- routes_fast[2,]
+#' plot(shp)
 #' rfs10 <- mapshape(shp)
 #' rfs5 <- mapshape(shp, percent = 5)
 #' rfs1 <- mapshape(shp, percent = 1)
-#' plot(shp)
 #' plot(rfs10, add = TRUE, col ="red")
 #' plot(rfs5, add = TRUE, col ="blue")
 #' plot(rfs1, add = TRUE, col = "grey")
@@ -57,18 +56,27 @@ writeGeoJSON <- function(shp, filename){
 #' rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
 #' plot(shp)
 #' plot(rfs_int, add = TRUE)
+#' mapshape(routes_fast_sf[2,])
 #' }
 mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", silent = FALSE){
+  shp_filename = paste0(dsn, ".shp")
+  new_filename = paste0(dsn, "-ms.shp")
   if(!mapshape_available()) stop("mapshaper not available on this system")
-  raster::shapefile(shp, dsn, overwrite = TRUE)
-  cmd <- paste0("mapshaper ", ms_options, " ", dsn, ".shp -simplify ", percent, "% -o")
+  is_sp <- is(shp, "Spatial")
+  if(is_sp) {
+    shp <- sf::st_as_sf(shp)
+  }
+  sf::write_sf(shp, shp_filename, delete_layer = TRUE)
+  cmd <- paste0("mapshaper ", ms_options, " ", shp_filename, " -simplify ", percent, "% -o ", new_filename)
   if(!silent)  print(paste0("Running the following command from the system: ", cmd))
   system(cmd, ignore.stderr = TRUE)
-  suppressWarnings(new_shp <- raster::shapefile(paste0(dsn, "-ms.shp")))
-  new_shp@data <- shp@data
-  proj4string(new_shp) <- proj4string(shp)
+  new_shp <- sf::st_read(paste0(dsn, "-ms.shp"))
+  sf::st_crs(new_shp) <- sf::st_crs(shp)
   to_remove <- list.files(pattern = dsn)
   file.remove(to_remove)
+  if(is_sp) {
+    new_shp <- as(new_shp, "Spatial")
+  }
   new_shp
 }
 

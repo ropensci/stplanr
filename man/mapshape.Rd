@@ -46,12 +46,11 @@ Thanks to Richard and Adrian Ellison for demonstrating this in R.
 
 \examples{
 \dontrun{
-data(routes_fast)
-shp <- routes_fast[1,]
+shp <- routes_fast[2,]
+plot(shp)
 rfs10 <- mapshape(shp)
 rfs5 <- mapshape(shp, percent = 5)
 rfs1 <- mapshape(shp, percent = 1)
-plot(shp)
 plot(rfs10, add = TRUE, col ="red")
 plot(rfs5, add = TRUE, col ="blue")
 plot(rfs1, add = TRUE, col = "grey")
@@ -59,5 +58,6 @@ plot(rfs1, add = TRUE, col = "grey")
 rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
 plot(shp)
 plot(rfs_int, add = TRUE)
+mapshape(routes_fast_sf[2,])
 }
 }

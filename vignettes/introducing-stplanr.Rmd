@@ -12,7 +12,8 @@ bibliography: references.bib
 
 ```{r, include=FALSE}
 library(stplanr)
-build = require("tmap") & curl::has_internet()
+has_internet <- curl::has_internet()
+build = require("tmap") & has_internet
 knitr::opts_chunk$set(eval = build)
 ```
 
@@ -126,11 +127,13 @@ qtm(desire_line_single, lines.lwd = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
-The following command creates desire lines for all OD pairs stored in the dataset `flowlines`:
+The following command creates desire lines for all OD pairs stored --- omitting 'internal flows' via the `sel` object belwo --- represented in the dataset `flowlines`:
 
 ```{r}
 l = od2line(flow = flow, zones = cents)
-l = l[! l$Area.of.residence == l$Area.of.workplace,]
+# remove 'internal flows'
+sel = l$Area.of.residence == l$Area.of.workplace
+l = l[!sel, ]
 ```
 
 This creates the geographic data object `l`, which can be visualised as follows:
@@ -151,17 +154,13 @@ Another useful visulisation involves setting the colour relative to the number o
 tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 ```
 
-Finally, we can convert these desire lines into routes as follows:
+Finally, we can convert these desire lines into routes as follows (other `route_*` functions can be used, but may require API keys to work - see `?route_cyclestreets` for details):
 
-```{r, eval=FALSE}
-r = line2route(l) # requires the a cyclestreets.net API key
+```{r, message=FALSE}
+# if the next line returns FALSE the code will not run
+curl::has_internet() 
+r = line2route(l, route_fun = route_osrm)
 ```
-
-```{r, echo=FALSE}
-r = routes_fast
-r = r[!is.na(r$length), ]
-```
-
 
 These routes contain the same information on origin and destination, but have additional spatial information about the route network. The routes can be plotted in the same way as the desire lines were plotted:
 
