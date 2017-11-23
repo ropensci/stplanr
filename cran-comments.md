@@ -16,4 +16,9 @@
     
 ## R CMD check:
 
-OK
+OK - but a note about package reviewer:
+
+```
+Authors@R field gives persons with non-standard roles:
+  Scott  Chamberlin [rev] (Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10): rev
+```
