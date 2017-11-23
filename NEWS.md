@@ -2,9 +2,18 @@
 
 ## NEW FEATURES
 
+* This is the largest release since the package was created, with dozens of changes to support simple features - see https://github.com/ropensci/stplanr/pull/198 for details.
 * Support for **sf**. The package now support the new spatial class system for most functions.
 * New function `geo_bb()` supercedes `bb2poly()`. The new function can return polygons, points and matrix objects determined by the `output` argument. It also allows bounding boxes to be extended in metres, and scaled in x and y dimensions.
+* `geo_code()` now uses nominatim by default to find locations on the maps.
+* New function `od_coords()` takes a wide range of input data types to return a consistent output representing OD data as a data frame of origin and destination coordinates. This is used behind the scenes to make other functions more modular.
+
+## WORK IN PROGRESS
+
+Plans for the next release
+
 * New generic `route()` function for routing. This is more flexible and user-friendly than the existing `line2route()` and `route_*()` functions it enhances.
+* Updated function names to make using **stplanr** easier and more intuitive.
 
 
 # stplanr 0.1.9
