@@ -142,6 +142,7 @@ lineLabels <- function(sl, attrib){
 #' rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 #' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 #' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
+#' \dontrun{
 #' routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
 #' rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
 #' plot(rnet_grouped, col = rnet_grouped$group, lwd =
@@ -151,6 +152,7 @@ lineLabels <- function(sl, attrib){
 #' overline(sl = sl, attrib = "length", buff_dist = 10)
 #' rnet_sf = overline(routes_fast_sf, attrib = "length", buff_dist = 10)
 #' plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
+#' }
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
   UseMethod("overline")
 }
@@ -306,9 +308,9 @@ onewaygeo <- function(x, attrib) {
 onewaygeo.sf <- function(x, attrib) {
   geq <- sf::st_equals(x, x, sparse = FALSE) | sf::st_equals_exact(x, x, sparse = FALSE, par = 0.0)
   sel1 <- !duplicated(geq) # repeated rows
-  x$matching_rows =  apply(geq, 1, function(x) paste0(formatC(which(x), width = 2, format = "d", flag = 0), collapse = "-"))
+  x$matching_rows =  apply(geq, 1, function(x) paste0(formatC(which(x), width = 4, format = "d", flag = 0), collapse = "-"))
 
-  singlelines <- aggregate(x[attrib], list(x$matching_rows), FUN = sum)
+  singlelines <- stats::aggregate(x[attrib], list(x$matching_rows), FUN = sum)
 
   return(singlelines)
 }
