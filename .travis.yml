@@ -8,6 +8,9 @@ before_install:
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev libv8-dev
 
+r_packages:
+  - rgdal
+
 notifications:
     email:
       on_success: change
