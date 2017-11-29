@@ -57,7 +57,7 @@ line_sample <- function(l, n, weights) {
   if(not_projected) {
     crs_orig = sp::proj4string(l)
     if(is.na(crs_orig))
-      crs_orig = CRS("+init=epsg:4326")
+      crs_orig = sp::CRS("+init=epsg:4326")
     crs_new = crs_select_aeq(l)
     l = sp::spTransform(l, CRSobj = crs_new)
   }
@@ -71,8 +71,8 @@ line_sample <- function(l, n, weights) {
   # class(psf) # its a MULIPOINT
   psf_point = as(psf, "Spatial")
   psp = as(psf, "Spatial")
-  psp = SpatialPoints(matrix(coordinates(psp), ncol = 2), proj4string = CRS(proj4string(psp)))
+  psp = sp::SpatialPoints(matrix(sp::coordinates(psp), ncol = 2), proj4string = sp::CRS(proj4string(psp)))
   if(not_projected)
-    psp = spTransform(psp, crs_orig)
+    psp = sp::spTransform(psp, crs_orig)
   return(psp)
 }

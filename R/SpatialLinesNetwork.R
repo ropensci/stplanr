@@ -136,7 +136,7 @@ SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
     # line lengths:
     # If uselonglat == FALSE then checks if sl uses longlat coordinate
     # system/projection. If so, passes longlat=TRUE.
-    sl$length = sapply(sl@lines, function(x) LineLength(x@Lines[[1]],longlat=ifelse(uselonglat == TRUE,TRUE,ifelse(length(grep("proj=longlat",sp::proj4string(sl))) > 0,TRUE,FALSE))))
+    sl$length = sapply(sl@lines, function(x) sp::LineLength(x@Lines[[1]],longlat=ifelse(uselonglat == TRUE,TRUE,ifelse(length(grep("proj=longlat",sp::proj4string(sl))) > 0,TRUE,FALSE))))
     igraph::E(g)$weight = sl$length
     new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield="length")
   }
@@ -409,7 +409,7 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
     }, sf::st_as_sf(data.frame(x = sln@g$x, y = sln@g$y), coords = c("x","y"),
                     crs = sf::st_crs(sln@sl)$epsg))
   } else {
-    longlat <- ifelse(is.projected(sln@sl) == TRUE, FALSE, TRUE)
+    longlat <- ifelse(sp::is.projected(sln@sl) == TRUE, FALSE, TRUE)
     maxdist <- ifelse(longlat == TRUE, maxdist/1000, maxdist)
 
       distlist <- lapply(1:length(x), function(i, gxy){

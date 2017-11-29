@@ -517,7 +517,7 @@ plot(l$d_euclidean, l$pwalk, cex = l$All / 50,
 
 ```{r euclidfastest, out.width='100%', fig.cap='Euclidean and fastest route distance of trips in the study area (left) and Euclidean distance vs the proportion of trips made by walking (right).', echo=FALSE}
 par(mfrow = c(1, 2))
-lgb <- spTransform(l, CRSobj = CRS("+init=epsg:27700"))
+lgb <- sp::spTransform(l, CRSobj = sp::CRS("+init=epsg:27700"))
 l$d_euclidean <- rgeos::gLength(lgb, byid = T)
 l$d_rf <- routes_fast@data$length
 plot(l$d_euclidean, l$d_rf,

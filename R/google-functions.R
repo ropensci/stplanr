@@ -19,7 +19,7 @@ nearest_google <- function(lat, lng, google_api){
   url = paste0(base_url, "?path=", lat, ",", lng, "&key=", google_api)
   obj = jsonlite::fromJSON(url)
   coords = c(obj$snappedPoints$location$longitude, obj$snappedPoints$location$latitude)
-  SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
+  sp::SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
                          data = data.frame(orig_lat = lat, orig_lng = lng))
 }
 #' Return travel network distances and time using the Google Maps API

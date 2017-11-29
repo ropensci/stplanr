@@ -159,7 +159,7 @@ overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_d
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
 
-  sl_spatial <- SpatialLinesDataFrame(sl = sf::as_Spatial(sl$geometry), data = sf::st_set_geometry(sl, NULL), match.ID = FALSE)
+  sl_spatial <- sp::SpatialLinesDataFrame(sl = sf::as_Spatial(sl$geometry), data = sf::st_set_geometry(sl, NULL), match.ID = FALSE)
   rnet_sp <- overline(sl_spatial, attrib, fun = fun, na.zero = na.zero, byvars = byvars, buff_dist = buff_dist)
   sf::st_as_sf(rnet_sp)
 
@@ -237,7 +237,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
           attrib)
         sl = sp::SpatialLinesDataFrame(slu, cbind(aggs,as.data.frame(matrix(groupingcat,nrow=1))))
         names(sl) = c(attrib,gvar)
-        sl <- spChFIDs(sl, paste(paste(groupingcat,collapse='.'),row.names(sl@data),sep='.'))
+        sl <- sp::spChFIDs(sl, paste(paste(groupingcat,collapse='.'),row.names(sl@data),sep='.'))
         sl
       },
       attrib,
@@ -247,8 +247,8 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
     splitlinesdf <- data.frame(dplyr::bind_rows(lapply(splitlines, function(x){x@data})))
     row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x){row.names(x@data)})))
 
-    sl <- SpatialLinesDataFrame(
-      SpatialLines(unlist(lapply(splitlines, function(x){x@lines}), recursive = FALSE),
+    sl <- sp::SpatialLinesDataFrame(
+      sp::SpatialLines(unlist(lapply(splitlines, function(x){x@lines}), recursive = FALSE),
                    proj4string = splitlines[[1]]@proj4string),
       splitlinesdf
     )

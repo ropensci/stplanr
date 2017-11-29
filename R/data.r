@@ -16,8 +16,8 @@
 #' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
 #' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
 #' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
-#' crs <- CRS("+init=epsg:4326")
-#' crsuk <- CRS("+init=epsg:27700")
+#' crs <- sp::CRS("+init=epsg:4326")
+#' crsuk <- sp::CRS("+init=epsg:27700")
 #' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
 #' home <- geo_code("LS7 3HB")
 #' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
@@ -134,13 +134,13 @@ NULL
 #' to_remove = list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
 #' file.remove(to_remove)
 #' proj4string(wz)
-#' wz = spTransform(wz, proj4string(zones))
+#' wz = sp::spTransform(wz, proj4string(zones))
 #' destination_zones = wz[zones,]
 #' plot(destination_zones)
 #' devtools::use_data(destination_zones)
 #' head(destination_zones@data)
 #' destinations = rgeos::gCentroid(destinations, byid = TRUE)
-#' destinations = SpatialPointsDataFrame(destinations, destination_zones@data)
+#' destinations = sp::SpatialPointsDataFrame(destinations, destination_zones@data)
 #' devtools::use_data(destinations, overwrite = TRUE)
 #' destinations_sf = sf::st_as_sf(destinations)
 #' devtools::use_data(destinations_sf)
@@ -262,7 +262,7 @@ NULL
 #' ca_cycle <- ca_ac %>%
 #'   filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) %>%
 #'   select(Age = Age_of_Casualty, Mode = Casualty_Type, Longitude, Latitude)
-#' ca_sp <- SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
+#' ca_sp <- sp::SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
 #' data("route_network")
 #' proj4string(ca_sp) <- proj4string(route_network)
 #' bb <- bb2poly(route_network)

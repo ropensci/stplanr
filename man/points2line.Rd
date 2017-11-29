@@ -15,6 +15,7 @@ This is a simple wrapper around \code{\link{spLines}} that makes the creation of
 }
 \examples{
 p = matrix(1:4, ncol = 2)
+library(sp)
 l = points2line(p)
 plot(l)
 l = points2line(cents)

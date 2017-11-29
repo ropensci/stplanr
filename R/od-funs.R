@@ -80,7 +80,7 @@ od2odf <- function(flow, zones){
 #' plot(cents)
 #' lines(newflowlines, lwd = 3)
 #' lines(newflowlines2, col = "white")
-#' nfl_sldf <- SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
+#' nfl_sldf <- sp::SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
 #' identical(nfl_sldf, newflowlines)
 #' # When destinations are different
 #' data(destinations)
@@ -575,6 +575,7 @@ od_dist <- function(flow, zones){
 #' @export
 #' @examples
 #' p = matrix(1:4, ncol = 2)
+#' library(sp)
 #' l = points2line(p)
 #' plot(l)
 #' l = points2line(cents)

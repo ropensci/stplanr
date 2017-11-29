@@ -40,22 +40,14 @@
 #' data(zones)
 #' zones@data$region <- NULL
 #' zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
+#' library(sp)
 #' aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
-#' aggzones <- SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
+#' aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 #' sp::proj4string(aggzones) = sp::proj4string(zones)
-#' od_ag = od_aggregate(flow, zones, aggzones)
-#' od_ag = na.omit(od_ag)
-#' od_sp = od2line(od_ag, aggzones)
-#' plot(aggzones)
-#' plot(zones, lty = 3, add = TRUE)
-#' plot(flowlines, lwd = flowlines$All / 10, col = "grey", add = TRUE)
-#' plot(od_sp, lwd = od_sp$All / 30, col = "red", add = TRUE)
-#' # Sf methods
 #' aggzones_sf <- sf::st_as_sf(aggzones)
 #' aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 #' od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
 #' od_sf_agg <- od2line(od_agg, aggzones_sf)
-#' plot(od_sf_agg$geometry, lwd = od_sf_agg$All / 50, col = "blue", add = TRUE)
 od_aggregate <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
                          FUN = sum,
@@ -223,17 +215,18 @@ od_aggregate.Spatial <- function(flow, zones, aggzones,
 #'
 #' @export
 #' @examples
-#' data(flow)
-#' data(zones)
+#' \dontrun{
 #' zones@data$region <- 1
 #' zones@data[c(2, 5), c('region')] <- 2
-#' aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
+#' aggzones <- sp::SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
 #'  zones,
 #'  id = zones@data$region), data.frame(region=c(1, 2))
 #' )
 #' zones@data$region <- NULL
 #' zones@data$exdata <- 5
+#' library(sp)
 #' sp_aggregate(zones, aggzones)
+#' }
 sp_aggregate <- function(zones, aggzones, cols = FALSE,
                          FUN = sum,
                          prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),

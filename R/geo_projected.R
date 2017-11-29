@@ -11,11 +11,10 @@
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @export
 #' @examples
-#' bbox(routes_fast)
-#' proj4string(routes_fast) <- CRS("+init=epsg:4326")
+#' sp::bbox(routes_fast)
 #' new_crs <- crs_select_aeq(routes_fast)
-#' rf_projected <- spTransform(routes_fast, new_crs)
-#' bbox(rf_projected)
+#' rf_projected <- sp::spTransform(routes_fast, new_crs)
+#' sp::bbox(rf_projected)
 #' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 #' plot(line_length, rf_projected$length)
 #' shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
@@ -81,8 +80,8 @@ geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE,
 #' @export
 geo_projected.Spatial <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...){
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
-  if(!is.na(is.projected(shp))){
-    if(is.projected(shp)){
+  if(!is.na(sp::is.projected(shp))){
+    if(sp::is.projected(shp)){
       res <- fun(shp, ...)
     } else {
       shp_projected <- reproject(shp, crs = crs)
@@ -91,7 +90,7 @@ geo_projected.Spatial <- function(shp, fun, crs = geo_select_aeq(shp), silent = 
       }
       res <- fun(shp_projected, ...)
       if(is(res, "Spatial"))
-        res <- spTransform(res, CRS("+init=epsg:4326"))
+        res <- sp::spTransform(res, sp::CRS("+init=epsg:4326"))
     }
   } else {
     shp_projected <- reproject(shp, crs = crs)
@@ -100,7 +99,7 @@ geo_projected.Spatial <- function(shp, fun, crs = geo_select_aeq(shp), silent = 
     }
     res <- fun(shp_projected, ...)
     if(is(res, "Spatial"))
-      res <- spTransform(res, CRS("+init=epsg:4326"))
+      res <- sp::spTransform(res, sp::CRS("+init=epsg:4326"))
   }
   res
 }

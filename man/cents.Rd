@@ -27,8 +27,8 @@ Cents was generated from the data repository pct-data: https://github.com/npct/p
 cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
 # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
 # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
-crs <- CRS("+init=epsg:4326")
-crsuk <- CRS("+init=epsg:27700")
+crs <- sp::CRS("+init=epsg:4326")
+crsuk <- sp::CRS("+init=epsg:27700")
 cents <- sp::spTransform(x = cents, CRSobj = crsuk)
 home <- geo_code("LS7 3HB")
 home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)

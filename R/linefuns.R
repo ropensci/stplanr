@@ -182,15 +182,10 @@ line_length <- function(l, byid = TRUE){
 #' @export
 #' @examples
 #' data(routes_fast)
-#' l = routes_fast[2,]
+#' l = routes_fast[2, ]
+#' library(sp)
 #' l_seg2 = line_segment(l = l, n_segments = 2)
 #' plot(l_seg2, col = l_seg2$group, lwd = 50)
-#' l_seg5 = line_segment(l = l, n_segments = 5)
-#' plot(l_seg5, col = l_seg5$group, lwd = 30, add = TRUE)
-#' l_seg100m = line_segment(l = l, segment_length = 100)
-#' plot(l_seg100m, col = l_seg100m$group, lwd = 10, add = TRUE)
-#' plot(l, col = "white", add = TRUE)
-#' line_segment(l = l, segment_length = 100)
 line_segment <- function(l, n_segments, segment_length = NA){
   if(!is.na(segment_length)){
     l_length = line_length(l)
@@ -199,28 +194,28 @@ line_segment <- function(l, n_segments, segment_length = NA){
   if(n_segments == 2){
     pseg = line_midpoint(l)
   } else {
-    pseg = spsample(x = l, n = n_segments - 1, type = "regular")
+    pseg = sp::spsample(x = l, n = n_segments - 1, type = "regular")
   }
   l_geom = raster::geom(l)
   l_coords = l_geom[, c("x", "y")]
-  knn_res = nabor::knn(data = l_coords, query = coordinates(pseg), k = 1)
+  knn_res = nabor::knn(data = l_coords, query = sp::coordinates(pseg), k = 1)
   sel_nearest = c(knn_res$nn.idx)
   for(i in 1:(length(sel_nearest) + 1)){
     ids = c(1, sel_nearest, nrow(l))
     if(i == 1){
       l_seg = points2line(l_coords[ids[i]:ids[(i + 1)],])
-      spChFIDs(l) = i
+      sp::spChFIDs(l) = i
     } else if(i == length(sel_nearest) + 1){
       l_temp = points2line(l_coords[ids[i]:nrow(l_coords),])
-      spChFIDs(l_temp) = i
+      sp::spChFIDs(l_temp) = i
       l_seg = raster::bind(l_seg, l_temp)
     } else {
       l_temp = points2line(l_coords[ids[i]:ids[(i + 1)],])
-      spChFIDs(l_temp) = i
+      sp::spChFIDs(l_temp) = i
       l_seg = raster::bind(l_seg, l_temp)
     }
   }
-  l_seg = SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
+  l_seg = sp::SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
   raster::crs(l_seg) = raster::crs(l)
   l_seg
 }

@@ -42,15 +42,16 @@ different geometry specified by another SpatialPolygons object.
 }
 
 \examples{
-data(flow)
-data(zones)
+\dontrun{
 zones@data$region <- 1
 zones@data[c(2, 5), c('region')] <- 2
-aggzones <- SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
+aggzones <- sp::SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
  zones,
  id = zones@data$region), data.frame(region=c(1, 2))
 )
 zones@data$region <- NULL
 zones@data$exdata <- 5
+library(sp)
 sp_aggregate(zones, aggzones)
+}
 }

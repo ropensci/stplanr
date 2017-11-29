@@ -107,7 +107,6 @@ mapshape_available <- function() {
 #' @export
 #' @examples
 #' data(cents)
-#' bb <- bbox(cents)
 #' cb <- rgeos::gBuffer(cents[8, ], width = 0.012, byid = TRUE)
 #' plot(cents)
 #' plot(cb, add = TRUE)
