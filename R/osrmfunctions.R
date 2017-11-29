@@ -680,7 +680,7 @@ nearest_osm <- function(lat, lng, number = 1,
   }
   if (api == 4) {
     url = paste0(osrmurl, "/nearest?loc=", lat, ",", lng)
-    thisspdf <- SpatialPointsDataFrame(coords = matrix(unlist(lapply(
+    thisspdf <- sp::SpatialPointsDataFrame(coords = matrix(unlist(lapply(
                              url, function(x){
                                matrix(jsonlite::fromJSON(x)$mapped_coordinate, ncol=2)}
                              ),recursive = FALSE),ncol=2,byrow = TRUE),
@@ -700,7 +700,7 @@ nearest_osm <- function(lat, lng, number = 1,
       jsonlite::fromJSON(x)
     })
 
-    thisspdf <- SpatialPointsDataFrame(coords = matrix(unlist(lapply(
+    thisspdf <- sp::SpatialPointsDataFrame(coords = matrix(unlist(lapply(
       jsondata, function(x){
         matrix(x$waypoints$location[[1]], ncol=2)}
       ),recursive = FALSE),ncol=2,byrow = TRUE),

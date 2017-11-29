@@ -102,7 +102,7 @@ route_transportapi_public <- function(from, to, silent = FALSE,
   coords <- obj$routes$route_parts[[1]]$coordinates
   coords <- do.call(rbind, coords)
   route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(coords)), ID = 1)))
-  proj4string(route) <- CRS("+init=epsg:4326")
+  proj4string(route) <- sp::CRS("+init=epsg:4326")
 
   # for the future: add summary data on the route
   route

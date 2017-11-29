@@ -34,7 +34,7 @@ line_match <- function(l1, l2, threshold = 0.01, return_sp = FALSE){
     if(is(l2, "SpatialLinesDataFrame")) {
       l2matched$match <- match_num
     } else {
-      l2matched <- SpatialLinesDataFrame(l2matched, data = data.frame(match_num), match.ID = FALSE)
+      l2matched <- sp::SpatialLinesDataFrame(l2matched, data = data.frame(match_num), match.ID = FALSE)
     }
     return(l2matched)
   } else {

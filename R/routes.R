@@ -181,7 +181,7 @@ route_cyclestreet <-
 
     row.names(df) <- route@lines[[1]]@ID
     route <- sp::SpatialLinesDataFrame(route, df)
-    proj4string(route) <- CRS("+init=epsg:4326")
+    sp::proj4string(route) <- sp::CRS("+init=epsg:4326")
     route
   }
 }
@@ -293,7 +293,7 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
   )
 
   route <- sp::SpatialLinesDataFrame(route, df)
-  proj4string(route) <- CRS("+init=epsg:4326")
+  sp::proj4string(route) <- sp::CRS("+init=epsg:4326")
   route
 
 }

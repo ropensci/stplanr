@@ -18,13 +18,8 @@ Divide SpatialLines dataset into regular segments
 }
 \examples{
 data(routes_fast)
-l = routes_fast[2,]
+l = routes_fast[2, ]
+library(sp)
 l_seg2 = line_segment(l = l, n_segments = 2)
 plot(l_seg2, col = l_seg2$group, lwd = 50)
-l_seg5 = line_segment(l = l, n_segments = 5)
-plot(l_seg5, col = l_seg5$group, lwd = 30, add = TRUE)
-l_seg100m = line_segment(l = l, segment_length = 100)
-plot(l_seg100m, col = l_seg100m$group, lwd = 10, add = TRUE)
-plot(l, col = "white", add = TRUE)
-line_segment(l = l, segment_length = 100)
 }

@@ -17,11 +17,6 @@ Many GIS functions (e.g. finding the area)
 }
 \examples{
 data(routes_fast)
-rf_aeq = reproject(routes_fast)
-rf_osgb = reproject(routes_fast, 27700)
-cor(rgeos::gLength(rf_aeq, byid = TRUE), rgeos::gLength(rf_osgb, byid = TRUE))
-rf_aeq_wgs84 = sp::spTransform(rf_aeq, CRS("+init=epsg:4326"))
-rf_osgb_wgs84 = sp::spTransform(rf_osgb, CRS("+init=epsg:4326"))
-plot(rf_aeq_wgs84)
-plot(rf_osgb_wgs84, col = "red", add = TRUE)
+rf_aeq = reproject(routes_fast[1:3, ])
+rf_osgb = reproject(routes_fast[1:3, ], 27700)
 }

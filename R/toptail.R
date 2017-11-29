@@ -45,7 +45,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...){
     sel_points <- lpoints[lpoints$id == i,]
 
     # Create buffer for geographic or projected crs
-    if(!is.projected(l)){
+    if(!sp::is.projected(l)){
       sel <- geo_buffer(lpoints, width = toptail_dist[i], ..., silent = TRUE)
     } else {
       sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
@@ -81,15 +81,16 @@ geo_toptail.sf <- function(l, toptail_dist, ...){
 #' @inheritParams geo_buffer
 #' @export
 #' @examples
-#' buff <- buff_geo(routes_fast, width = 100)
+#' r = routes_fast[1:3, ]
+#' buff <- buff_geo(r, width = 100)
 #' plot(buff)
-#' plot(routes_fast, add = TRUE)
+#' plot(r, add = TRUE)
 #' # Test it works the same on projected data
-#' shp <- spTransform(routes_fast, CRS("+init=epsg:27700"))
+#' shp <- sp::spTransform(r, sp::CRS("+init=epsg:27700"))
 #' buff2 = buff_geo(shp, 50) # test if it works the same on projected data
 #' plot(buff2)
-#' plot(routes_fast, add = TRUE) # note they do not show
-#' buff3 = spTransform(buff2, CRS("+init=epsg:4326"))
+#' plot(r, add = TRUE) # note they do not show
+#' buff3 = sp::spTransform(buff2, sp::CRS("+init=epsg:4326"))
 #' plot(buff)
 #' plot(buff3, add = TRUE, col = "black")
 buff_geo <- function(shp, width, ...){
@@ -111,9 +112,9 @@ buff_geo <- function(shp, width, ...){
 #' @export
 #' @examples
 #' data("routes_fast")
-#' rf = routes_fast[!is.na(routes_fast$length),]
+#' rf = routes_fast[2:3, ]
 #' r_toptail <- toptailgs(rf, toptail_dist = 300)
-#' plot(routes_fast, lwd = 3)
+#' plot(rf, lwd = 3)
 #' plot(r_toptail, col = "red", add = TRUE)
 #' plot(cents, add = TRUE)
 toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
@@ -189,8 +190,8 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' plot(r_toptail, col = "red", add = TRUE)
 toptail_buff <- function(l, buff, ...){
   # force same crs
-  if(!identicalCRS(l, buff)){
-    proj4string(buff) <- proj4string(l)
+  if(!sp::identicalCRS(l, buff)){
+    sp::proj4string(buff) <- sp::proj4string(l)
   }
   for(i in 1:length(l)){
     lpoints <- line2points(l[i,])

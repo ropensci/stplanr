@@ -20,9 +20,9 @@ License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
 Depends:
-    sp,
     R (>= 3.0)
 Imports:
+    sp,
     curl,
     readr,
     dplyr,

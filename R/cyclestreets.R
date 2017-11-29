@@ -25,7 +25,7 @@ nearest_cyclestreets.NULL <- function(shp = NULL, lat, lng, pat = api_pat("cycle
   url = paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj = jsonlite::fromJSON(url)
   coords = obj$features$geometry$coordinates[[1]]
-  SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
+  sp::SpatialPointsDataFrame(coords = matrix(coords, ncol = 2),
                          data = data.frame(orig_lat = lat, orig_lng = lng))
 
 }
