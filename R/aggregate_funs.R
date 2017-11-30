@@ -27,40 +27,32 @@
 #' only the first column is retained. These columns are renamed with a prefix
 #' of "o_" and "d_".
 #' @param FUN Function to use on aggregation. Default is sum.
-#' @param prop_by_area Boolean value indicating if the values should be
-#' proportionally adjusted based on area. Default is TRUE unless FUN = mean.
-#' @param digits The number of digits to use when proportionally adjusting
-#' values based on area. Default is the value of getOption("digits").
-#'
 #' @return data.frame containing the aggregated od flows.
 #'
 #' @export
 #' @examples
-#' data(flow)
-#' data(zones)
-#' zones@data$region <- NULL
 #' zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
-#' library(sp)
 #' aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
 #' aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 #' sp::proj4string(aggzones) = sp::proj4string(zones)
 #' aggzones_sf <- sf::st_as_sf(aggzones)
 #' aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 #' od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
+#' colSums(od_agg[3:9]) == colSums(flow[3:9])
 #' od_sf_agg <- od2line(od_agg, aggzones_sf)
+#' plot(flowlines, lwd = flowlines$Bicycle)
+#' plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 od_aggregate <- function(flow, zones, aggzones,
-                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
-                         FUN = sum,
-                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-                         digits = getOption("digits")){
+                         aggzone_points = NULL,
+                         cols = FALSE,
+                         aggcols = FALSE,
+                         FUN = sum) {
   UseMethod("od_aggregate", zones)
 }
 #' @export
 od_aggregate.sf <- function(flow, zones, aggzones,
                          aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
-                         FUN = sum,
-                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-                         digits = getOption("digits")){
+                         FUN = sum){
 
   flow_first_col <- colnames(flow)[1]
   flow_second_col <- colnames(flow)[2]
@@ -85,19 +77,19 @@ od_aggregate.sf <- function(flow, zones, aggzones,
     sf::st_set_geometry(NULL)
 
   names(zones_agg)[1] <- flow_first_col
+  zones_agg$new_orig = zones_agg[, aggcols[1]]
+  zones_agg$new_dest = zones_agg[, aggcols[1]]
 
-  flow$flow_new_orig <- flow[1] %>%
-    dplyr::inner_join(y = zones_agg[c(flow_first_col, aggcols)]) %>%
-    dplyr::pull(aggcols)
+  flow_new_orig <- flow %>%
+    dplyr::inner_join(y = zones_agg[c(flow_first_col, "new_orig")])
 
   names(zones_agg)[1] <- flow_second_col
 
-  flow$flow_new_dest <- flow[2] %>%
-    dplyr::inner_join(y = zones_agg[c(flow_second_col, aggcols)]) %>%
-    dplyr::pull(aggcols)
+  flow_new_dest <- flow_new_orig %>%
+    dplyr::inner_join(y = zones_agg[c(flow_second_col, "new_dest")])
 
-  flow_ag <- flow %>%
-    dplyr::group_by(.data$flow_new_orig, .data$flow_new_dest) %>%
+  flow_ag <- flow_new_dest %>%
+    dplyr::group_by(!!rlang::sym("new_orig"), !!rlang::sym("new_dest")) %>%
     dplyr::summarise_at(.vars = cols, .funs = sum) %>%
     dplyr::ungroup()
 

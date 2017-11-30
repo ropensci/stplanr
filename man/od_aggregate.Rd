@@ -5,8 +5,7 @@
 \title{Aggregate OD data between polygon geometries}
 \usage{
 od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
-  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
-  == FALSE, TRUE, FALSE), digits = getOption("digits"))
+  aggcols = FALSE, FUN = sum)
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -36,12 +35,6 @@ only the first column is retained. These columns are renamed with a prefix
 of "o_" and "d_".}
 
 \item{FUN}{Function to use on aggregation. Default is sum.}
-
-\item{prop_by_area}{Boolean value indicating if the values should be
-proportionally adjusted based on area. Default is TRUE unless FUN = mean.}
-
-\item{digits}{The number of digits to use when proportionally adjusting
-values based on area. Default is the value of getOption("digits").}
 }
 \value{
 data.frame containing the aggregated od flows.
@@ -58,16 +51,15 @@ allocating the original flows to larger zones based on area.
 }
 
 \examples{
-data(flow)
-data(zones)
-zones@data$region <- NULL
 zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
-library(sp)
 aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
 aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 sp::proj4string(aggzones) = sp::proj4string(zones)
 aggzones_sf <- sf::st_as_sf(aggzones)
 aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
+colSums(od_agg[3:9]) == colSums(flow[3:9])
 od_sf_agg <- od2line(od_agg, aggzones_sf)
+plot(flowlines, lwd = flowlines$Bicycle)
+plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
