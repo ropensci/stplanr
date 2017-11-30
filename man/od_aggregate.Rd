@@ -5,7 +5,8 @@
 \title{Aggregate OD data between polygon geometries}
 \usage{
 od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
-  aggcols = FALSE, FUN = sum)
+  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
+  == FALSE, TRUE, FALSE), digits = getOption("digits"))
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -35,6 +36,12 @@ only the first column is retained. These columns are renamed with a prefix
 of "o_" and "d_".}
 
 \item{FUN}{Function to use on aggregation. Default is sum.}
+
+\item{prop_by_area}{Boolean value indicating if the values should be
+proportionally adjusted based on area. Default is TRUE unless FUN = mean.}
+
+\item{digits}{The number of digits to use when proportionally adjusting
+values based on area. Default is the value of getOption("digits").}
 }
 \value{
 data.frame containing the aggregated od flows.

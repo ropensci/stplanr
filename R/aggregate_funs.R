@@ -27,6 +27,7 @@
 #' only the first column is retained. These columns are renamed with a prefix
 #' of "o_" and "d_".
 #' @param FUN Function to use on aggregation. Default is sum.
+#' @inheritParams sp_aggregate
 #' @return data.frame containing the aggregated od flows.
 #'
 #' @export
@@ -46,13 +47,19 @@ od_aggregate <- function(flow, zones, aggzones,
                          aggzone_points = NULL,
                          cols = FALSE,
                          aggcols = FALSE,
-                         FUN = sum) {
+                         FUN = sum,
+                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+                         digits = getOption("digits")) {
   UseMethod("od_aggregate", zones)
 }
 #' @export
 od_aggregate.sf <- function(flow, zones, aggzones,
-                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
-                         FUN = sum){
+                            aggzone_points = NULL,
+                            cols = FALSE,
+                            aggcols = FALSE,
+                            FUN = sum,
+                            prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+                            digits = getOption("digits")) {
 
   flow_first_col <- colnames(flow)[1]
   flow_second_col <- colnames(flow)[2]
@@ -100,10 +107,12 @@ od_aggregate.sf <- function(flow, zones, aggzones,
 }
 #' @export
 od_aggregate.Spatial <- function(flow, zones, aggzones,
-                         aggzone_points = NULL, cols = FALSE, aggcols = FALSE,
-                         FUN = sum,
-                         prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-                         digits = getOption("digits")){
+                                 aggzone_points = NULL,
+                                 cols = FALSE,
+                                 aggcols = FALSE,
+                                 FUN = sum,
+                                 prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+                                 digits = getOption("digits")) {
   zonesfirstcol <- colnames(zones@data)[1]
   aggzonesfirstcol <- colnames(aggzones@data)[1]
 
