@@ -80,8 +80,6 @@ od_aggregate.sf <- function(flow, zones, aggzones,
     aggzone_points <- sf::st_centroid(aggzones)
   }
 
-  aggflow_lines <- points2line(aggzone_points)
-
   zones_agg <- zone_points %>%
     sf::st_join(y = aggzones[aggcols]) %>%
     sf::st_set_geometry(NULL)
