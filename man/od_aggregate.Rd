@@ -58,16 +58,15 @@ allocating the original flows to larger zones based on area.
 }
 
 \examples{
-data(flow)
-data(zones)
-zones@data$region <- NULL
 zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
-library(sp)
 aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
 aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
 sp::proj4string(aggzones) = sp::proj4string(zones)
 aggzones_sf <- sf::st_as_sf(aggzones)
 aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
+colSums(od_agg[3:9]) == colSums(flow[3:9])
 od_sf_agg <- od2line(od_agg, aggzones_sf)
+plot(flowlines, lwd = flowlines$Bicycle)
+plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
