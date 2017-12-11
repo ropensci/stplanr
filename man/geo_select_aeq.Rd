@@ -26,6 +26,5 @@ rf_projected <- sp::spTransform(routes_fast, new_crs)
 sp::bbox(rf_projected)
 line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 plot(line_length, rf_projected$length)
-shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
-geo_select_aeq(shp)
+geo_select_aeq(zones_sf)
 }

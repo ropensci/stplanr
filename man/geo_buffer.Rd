@@ -26,7 +26,6 @@ class(buff_sp)
 plot(buff_sp, col = "red")
 routes_fast_sf = sf::st_as_sf(routes_fast)
 buff_sf = geo_buffer(routes_fast_sf, dist = 50)
-class(buff_sf)
 plot(buff_sf$geometry, add = TRUE)
 }
 \seealso{
