@@ -17,8 +17,7 @@
 #' sp::bbox(rf_projected)
 #' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 #' plot(line_length, rf_projected$length)
-#' shp = sf::st_sf(sf::st_sfc(sf::st_point(c(1, 0))))
-#' geo_select_aeq(shp)
+#' geo_select_aeq(zones_sf)
 #' @export
 geo_select_aeq <- function(shp) {
   UseMethod("geo_select_aeq")
@@ -121,7 +120,6 @@ gprojected <- geo_projected.Spatial
 #' plot(buff_sp, col = "red")
 #' routes_fast_sf = sf::st_as_sf(routes_fast)
 #' buff_sf = geo_buffer(routes_fast_sf, dist = 50)
-#' class(buff_sf)
 #' plot(buff_sf$geometry, add = TRUE)
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
