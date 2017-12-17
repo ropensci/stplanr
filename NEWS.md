@@ -1,6 +1,12 @@
 # stplanr 0.2.2
 
+## NEW FEATURES
+
 * In this release **sp** is demoted from a Depends to an Imports, meaning that all its functions will not be attached to your namespace (it will not be loaded) when you run `library(stplanr)`, making it less tied to **sp**. This is a continuation of the work to support **sf** and will make it easier for the package to work with alternative representations of geographic data.
+
+## BUG FIXES
+
+* Bug in `geo_select_aeq.sf()` was fixed by Jakub Nowosad in pull [#238](https://github.com/ropensci/stplanr/pull/238)
 
 # stplanr 0.2.0
 
