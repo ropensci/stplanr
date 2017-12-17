@@ -34,7 +34,7 @@ geo_select_aeq.sf <- function(shp){
   coords_mat <- matrix(coords[,1:2], ncol = 2)
   midpoint <- apply(coords_mat, 2, mean)
   aeqd <- sprintf("+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
-                  midpoint[1], midpoint[1])
+                  midpoint[2], midpoint[1])
   sf::st_crs(aeqd)
 }
 
