@@ -12,8 +12,7 @@
 #' @examples
 #' od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-#' od_coords("Sheffield", "Leek, UK")
-#' # od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
+#' # od_coords("Hereford", "Leeds") # geocode locations
 #' od_coords(flowlines)
 #' od_coords(flowlines_sf)
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
@@ -43,7 +42,9 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
     if(is(object = to, "sf")) to <- sf::st_coordinates(to)
 
     # Convert character strings to lon/lat if needs be
+    browser()
     if(is.character(from)) from <- matrix(geo_code(from), ncol = 2)
+    Sys.sleep(1)
     if(is.character(to)) to <- matrix(geo_code(to), ncol = 2)
 
     coord_matrix <- cbind(from, to)
