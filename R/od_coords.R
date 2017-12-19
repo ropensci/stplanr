@@ -42,11 +42,8 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
     if(is(object = to, "sf")) to <- sf::st_coordinates(to)
 
     # Convert character strings to lon/lat if needs be
-    browser()
     if(is.character(from)) from <- matrix(geo_code(from), ncol = 2)
-    Sys.sleep(1)
     if(is.character(to)) to <- matrix(geo_code(to), ncol = 2)
-
     coord_matrix <- cbind(from, to)
     colnames(coord_matrix) <- c("fx", "fy", "tx", "ty")
   }
