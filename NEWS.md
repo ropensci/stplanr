@@ -7,6 +7,7 @@
 ## BUG FIXES
 
 * Bug in `geo_select_aeq.sf()` was fixed by Jakub Nowosad in pull [#238](https://github.com/ropensci/stplanr/pull/238)
+* An issue with `od_aggregate.sf()` was fixed making it much faster
 
 # stplanr 0.2.0
 
