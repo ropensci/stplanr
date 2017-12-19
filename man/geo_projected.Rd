@@ -24,7 +24,7 @@ This function performs operations on projected data.
 }
 \examples{
 shp = routes_fast_sf[2:4,]
-plot(geo_projected(shp, st_buffer, dist = 100)$geometry)
+plot(geo_projected(shp, sf::st_buffer, dist = 100)$geometry)
 shp = routes_fast[2:4,]
 geo_projected(shp, fun = rgeos::gBuffer, width = 100, byid = TRUE)
 rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
