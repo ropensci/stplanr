@@ -22,8 +22,7 @@ and returns a matrix of coordinates representing origin (fx, fy) and destination
 \examples{
 od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
 od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-od_coords("Sheffield", "Leek, UK")
-# od_coords(c("Bristol", "Temple Meads"), c("Gloucester", "Bristol")) # not working
+# od_coords("Hereford", "Leeds") # geocode locations
 od_coords(flowlines)
 od_coords(flowlines_sf)
 }

@@ -23,10 +23,9 @@ automatically by \code{\link{crs_select_aeq}})}
 This function performs operations on projected data.
 }
 \examples{
-library(sf)
 shp = routes_fast_sf[2:4,]
-plot(geo_projected(shp, st_buffer, dist = 100)$geometry)
-shp = sf::as_Spatial(shp$geometry)
+plot(geo_projected(shp, sf::st_buffer, dist = 100)$geometry)
+shp = routes_fast[2:4,]
 geo_projected(shp, fun = rgeos::gBuffer, width = 100, byid = TRUE)
 rlength = geo_projected(routes_fast, fun = rgeos::gLength, byid = TRUE)
 plot(routes_fast$length, rlength)
