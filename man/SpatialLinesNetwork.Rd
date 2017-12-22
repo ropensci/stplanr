@@ -36,22 +36,22 @@ examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 }
 
 \examples{
-data(routes_fast)
-rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
+SLN <- SpatialLinesNetwork(route_network)
 class(SLN)
 weightfield(SLN) # field used to determine shortest path
 plot(SLN)
-from_id = 1
-to_id = 50
-points(sln2points(SLN)[from_id,], cex = 5)
-points(sln2points(SLN)[to_id,], cex = 5)
-shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
+points(sln2points(SLN)[1,], cex = 5)
+points(sln2points(SLN)[50,], cex = 5)
+shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
-to_id = 35
-points(sln2points(SLN)[to_id,], cex = 5)
-shortpath <- sum_network_routes(SLN, from_id, to_id, sumvars = "length")
+points(sln2points(SLN)[35,], cex = 5)
+shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
+route_network_sf <- sf::st_as_sf(route_network)
+SLN_sf <- SpatialLinesNetwork(route_network_sf)
+plot(SLN_sf@sl$geometry)
+# shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
+# plot(shortpath, col = "red", lwd = 4, add = TRUE)
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
