@@ -21,6 +21,8 @@ before_install:
 r_packages:
   - rgdal
 
+r_github_packages: r-spatial/sf
+
 notifications:
     email:
       on_success: change
