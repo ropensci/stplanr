@@ -119,12 +119,12 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 #' @export
 SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
 
-  nodes_all = sf::st_coordinates(sl)
-  nodecoords = line_to_points(sl) %>%
-    sf::st_coordinates() %>%
-    dplyr::as_data_frame()
-  nodecoords$nrow = rep(n_vertices(sl), each = 2)
-  nodecoords$allrownum <- dplyr::row_number(nodecoords$nrow)
+  nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
+    dplyr::group_by(.data$L1) %>%
+    dplyr::mutate(nrow = n(), rownum = row_number()) %>%
+    dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(allrownum = row_number())
 
     gdata <- coord_matches_sf(
       as.matrix(
@@ -560,7 +560,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
           })
       ) %>%
       sf::st_as_sf(
-        coords = utils::head(colnames(.data),-2),
+        coords = utils::head(colnames(.),-2),
         crs = sf::st_crs(sln@sl)$epsg
       ) %>%
       dplyr::group_by(.data$linenum) %>%
