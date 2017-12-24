@@ -233,11 +233,13 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name route_network
+#' @aliases route_network_sf
 #' @usage data(route_network)
 #' @format A spatial lines dataset 80 rows and 1 column
 #' @examples \dontrun{
 #' # Generate route network
 #' route_network = overline(routes_fast, "All", fun = sum)
+#' route_network_sf <- sf::st_as_sf(route_network)
 #' }
 NULL
 

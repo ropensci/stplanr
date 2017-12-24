@@ -39,5 +39,4 @@ weightfield(SLN) # field used to determine shortest path
 shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4)
 plot(SLN, add = TRUE)
-
 }

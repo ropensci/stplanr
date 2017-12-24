@@ -3,6 +3,7 @@
 \docType{data}
 \name{route_network}
 \alias{route_network}
+\alias{route_network_sf}
 \title{spatial lines dataset representing a route network}
 \format{A spatial lines dataset 80 rows and 1 column}
 \usage{
@@ -15,6 +16,7 @@ spatial lines dataset representing a route network
 \dontrun{
 # Generate route network
 route_network = overline(routes_fast, "All", fun = sum)
+route_network_sf <- sf::st_as_sf(route_network)
 }
 }
 \keyword{datasets}
