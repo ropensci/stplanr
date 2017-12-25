@@ -119,6 +119,10 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 #' @export
 SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
 
+  if ("sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
+  }
+
   nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
     dplyr::mutate(nrow = n(), rownum = row_number()) %>%
@@ -477,6 +481,9 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (length(start) != length(end) && combinations == FALSE) {
     stop("start and end not the same length.")
   }
+  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
+  }
 
   if (combinations == FALSE) {
     routesegs <- lapply(1:length(start), function(i) {
@@ -658,6 +665,9 @@ sum_network_links <- function(sln, routedata) {
   }
   if (ncol(routedata) < 2) {
     stop("routedata has fewer than 2 columns.")
+  }
+  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
   }
 
   if(ncol(routedata) < 3) {
