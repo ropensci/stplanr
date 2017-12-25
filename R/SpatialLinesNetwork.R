@@ -84,6 +84,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' points(sln2points(SLN)[35,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
+#' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf@sl$geometry)
 #' # shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
@@ -125,10 +126,10 @@ SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
 
   nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
-    dplyr::mutate(nrow = n(), rownum = row_number()) %>%
+    dplyr::mutate(nrow = n(), rownum = 1:n()) %>%
     dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(allrownum = row_number())
+    dplyr::mutate(allrownum = 1:n())
 
     gdata <- coord_matches_sf(
       as.matrix(
