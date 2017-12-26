@@ -87,8 +87,8 @@ setClass("sfNetwork", representation(sl = "sf",
 #' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf@sl$geometry)
-#' # shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
-#' # plot(shortpath, col = "red", lwd = 4, add = TRUE)
+#' shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
+#' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
