@@ -5,7 +5,7 @@
 \maketitle
 
 \abstract{%
-Tools for transport planning should be flexible, scalable and transparent (open source).
+Tools for transport planning should be flexible, scalable and transparent.
 The \textbf{stplanr} package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes.
 \textbf{stplanr} facilitates some common transport planning tasks including:
 downloading and cleaning transport datasets;
@@ -25,15 +25,11 @@ current approach which is heavily reliant on proprietary and technically and fin
 
 \section{Introduction}\label{introduction}
 
-The practice of transport planning can been defined as
-"preparing, assessing and implementing policies, plans and projects to
-improve and manage our transport systems"
-\citep{jones_road_2014}.
-This inevitably involves judgments based on intuition, experience and political considerations.
-However, with the push for evidence-based policy, the pressure to adopt scientific methods has grown.
-This includes the development and use of open source software \citep{balmer_matsim-t:_2009}.
-Transport planning is a diverse field with diverse software requirements \citep{boyce_forecasting_2015}, but the following generalisations can be made.
-Software for transport planning should be:
+Transport planning can broadly be defined as the process of designing and evaluating transport interventions \citep{willumsen_modelling_2011}, usually with the ultimate aim of improving transport systems from economic, social and environmental perspectives.
+This inevitably involves a degree of subjective judgment and intuition.
+With the proliferation of new transport datasets --- and the increasing availability of hardware and software to make sense of them --- there is great potential for the discipline to become more evidence-based and scientific \citep{balmer_matsim-t:_2009}.
+Transport planners have always undertaken a wide range computational activities \citep{boyce_forecasting_2015}, but with the digital revolution the demands have grown beyond the capabilities of a single, monolithic product.
+The diversity of tasks , and need for democratic accountability in public decision making, suggests that future-proof transport planning software should be:
 
 \begin{itemize}
 \tightlist
@@ -42,22 +38,17 @@ Software for transport planning should be:
 \item
   scalable, able to work at multiple geographic levels from single streets to large cities and regions
 \item
-  robust and reliable, tested on a range of datasets and able to work 'out of the box' in a range of real-world projects.
+  robust and reliable, tested on a range of datasets and able to work 'out of the box' in a range of real-world projects
 \item
-  open source and reproducible. This ensures transparency and encourages citizen science and evidence-based, democratic decision making based in which many people can participate in the technical discussion and analysis.
+  open source and reproducible, ensuring transparency and encouraging citizen science
 \end{itemize}
 
-This paper sets out to demonstrate, with reproducible examples, that open source software with a command-line interface (CLI) can provide a foundation for transport planning software that meets
+This paper sets out to demonstrate that open source software with a command-line interface (CLI) can provide a foundation for transport planning software that meets
 each of these criteria.
-We argue that R provides a strong basis for progress in this direction, as it contains many of the building blocks for a transport planning workflow.
-Packages such as \CRANpkg{sp}
-\citep{pebesma_classes_2005} and \CRANpkg{rgeos}
-\citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and
-modelling capabilities \citep{bivand_applied_2013}
-(see the \ctv{Spatial} task view for an overview).
-Packages building on
-spatial class system have been developed for specific domains,
-including: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
+R provides a strong basis for progress in this direction because it already contains functionality used in common transport planning workflows.
+\CRANpkg{sp}, \CRANpkg{rgeos}, \CRANpkg{rgdal} and \CRANpkg{raster} greatly extended R's spatial abilities with class systems for geographic data \citep{bivand_applied_2013}.
+
+Building on these foundations a number of spatial packages have been developed for applied domains including: disease mapping and modelling, with packages such as \CRANpkg{SpatialEpi} and \CRANpkg{diseasemapping} \citep{kim_spatialepi:_2016,brown_diseasemapping:_2016}; spatial ecology, with the \textbf{adehabitat} family of packages \citep{calenge_package_2006};
 and visualisation, with packages such as \CRANpkg{leaflet}, \CRANpkg{tmap}, \CRANpkg{mapview} and \CRANpkg{mapmisc} \citep{RJ-2016-005}.
 However, there has been little prior work to develop R functionality designed
 specifically for transport planning, with the notable exceptions of
@@ -235,8 +226,7 @@ library(stplanr)
 \end{Soutput}
 \end{Schunk}
 
-As illustrated by the message emitted when \textbf{stplanr} is loaded,
-it depends on \CRANpkg{sp}. This means that the spatial data classes
+\textbf{stplanr} imports both \CRANpkg{sp} and its successor \CRANpkg{sf}, meaning that spatial objects
 commonly used in the package will work with generic R functions such as
 \texttt{summary}, \texttt{aggregate} and, as illustrated in the figures
 below, \texttt{plot} \citep{bivand_applied_2013}.
