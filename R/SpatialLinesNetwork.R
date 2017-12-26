@@ -84,6 +84,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' points(sln2points(SLN)[35,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
+#' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf@sl$geometry)
 #' # shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
@@ -119,12 +120,16 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 #' @export
 SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
 
-  nodes_all = sf::st_coordinates(sl)
-  nodecoords = line_to_points(sl) %>%
-    sf::st_coordinates() %>%
-    dplyr::as_data_frame()
-  nodecoords$nrow = rep(n_vertices(sl), each = 2)
-  nodecoords$allrownum <- dplyr::row_number(nodecoords$nrow)
+  if ("sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
+  }
+
+  nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
+    dplyr::group_by(.data$L1) %>%
+    dplyr::mutate(nrow = n(), rownum = 1:n()) %>%
+    dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(allrownum = 1:n())
 
     gdata <- coord_matches_sf(
       as.matrix(
@@ -477,6 +482,9 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (length(start) != length(end) && combinations == FALSE) {
     stop("start and end not the same length.")
   }
+  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
+  }
 
   if (combinations == FALSE) {
     routesegs <- lapply(1:length(start), function(i) {
@@ -560,7 +568,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
           })
       ) %>%
       sf::st_as_sf(
-        coords = utils::head(colnames(.data),-2),
+        coords = utils::head(colnames(.),-2),
         crs = sf::st_crs(sln@sl)$epsg
       ) %>%
       dplyr::group_by(.data$linenum) %>%
@@ -658,6 +666,9 @@ sum_network_links <- function(sln, routedata) {
   }
   if (ncol(routedata) < 2) {
     stop("routedata has fewer than 2 columns.")
+  }
+  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
+    stop("sf package must be loaded first. Run library(sf)")
   }
 
   if(ncol(routedata) < 3) {
