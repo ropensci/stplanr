@@ -84,7 +84,6 @@ setClass("sfNetwork", representation(sl = "sf",
 #' points(sln2points(SLN)[35,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
-#' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf@sl$geometry)
 #' shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
@@ -119,10 +118,6 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 }
 #' @export
 SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
-
-  if ("sf" %in% (.packages()) == FALSE) {
-    stop("sf package must be loaded first. Run library(sf)")
-  }
 
   nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
@@ -482,9 +477,6 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (length(start) != length(end) && combinations == FALSE) {
     stop("start and end not the same length.")
   }
-  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
-    stop("sf package must be loaded first. Run library(sf)")
-  }
 
   if (combinations == FALSE) {
     routesegs <- lapply(1:length(start), function(i) {
@@ -492,6 +484,9 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
       })
 
     if (is(sln, "sfNetwork")) {
+      if(!require(sf)) {
+        stop("sf must be installed")
+      }
       routecoords <- mapply(function(routesegs, start) {
         linecoords <- sf::st_coordinates(sln@sl[routesegs,])
         linecoords <- lapply(1:max(linecoords[,'L1']), function(x){
