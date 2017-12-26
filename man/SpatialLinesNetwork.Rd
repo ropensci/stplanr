@@ -49,7 +49,7 @@ shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
 library(sf)
 SLN_sf <- SpatialLinesNetwork(route_network_sf)
-plot(SLN_sf@sl$geometry)
+plot(SLN_sf)
 shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
 plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 }

@@ -86,7 +86,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
 #' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
-#' plot(SLN_sf@sl$geometry)
+#' plot(SLN_sf)
 #' shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
@@ -161,10 +161,9 @@ SpatialLinesNetwork.sf <-function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' representation.
 #' @param ... Arguments to pass to relevant plot function.
 #' @examples
-#' data(routes_fast)
-#' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
+#' SLN <- SpatialLinesNetwork(route_network)
 #' plot(SLN)
+#' plot(SLN, component = "graph")
 #' @export
 setMethod("plot", signature = c(x="SpatialLinesNetwork"),
           definition = function(x, component = "sl", ...){
@@ -179,7 +178,7 @@ setMethod("plot", signature = c(x="SpatialLinesNetwork"),
             }
           })
 
-#' Plot a sfNetwork
+#' Plot an sfNetwork
 #'
 #' @param x The sfNetwork to plot
 #' @param component The component of the network to plot. Valid values are "sl"
@@ -187,15 +186,13 @@ setMethod("plot", signature = c(x="SpatialLinesNetwork"),
 #' representation.
 #' @param ... Arguments to pass to relevant plot function.
 #' @examples
-#' data(routes_fast)
-#' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' plot(SLN)
+#' SLN_sf <- SpatialLinesNetwork(route_network_sf)
+#' plot(SLN_sf)
 #' @export
 setMethod("plot", signature = c(x="sfNetwork"),
           definition = function(x, component = "sl", ...){
             if (component == "sl") {
-              sp::plot(x@sl, ...)
+              sp::plot(x@sl$geometry, ...)
             }
             else if (component == "graph") {
               igraph::plot.igraph(x@g, ...)
