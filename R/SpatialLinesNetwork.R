@@ -84,6 +84,7 @@ setClass("sfNetwork", representation(sl = "sf",
 #' points(sln2points(SLN)[35,], cex = 5)
 #' shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
+#' library(sf)
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf@sl$geometry)
 #' shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
@@ -484,9 +485,9 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
       })
 
     if (is(sln, "sfNetwork")) {
-      if(!require(sf)) {
-        stop("sf must be installed")
-      }
+      if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
+        stop("Load the sf package, e.g. with\nlibrary(sf)")
+        }
       routecoords <- mapply(function(routesegs, start) {
         linecoords <- sf::st_coordinates(sln@sl[routesegs,])
         linecoords <- lapply(1:max(linecoords[,'L1']), function(x){
