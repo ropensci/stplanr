@@ -1,3 +1,15 @@
+# stplanr 0.2.3
+
+## NEW FEATURES
+
+* **stplanr** now imports **lwgeom**, needed for `sf::st_length()`, used in `SpatialLinesNetwork()`.
+* Plotting behaviour updated for `sfNetwork` objects: now only plots the geometry by default.
+* Improved documentation for `SpatialLinesNetwork()` and `plot()` for spatial networks.
+
+## BUG FIXES
+
+* Bug in `sum_network_routes()` fixed (see [#240](https://github.com/ropensci/stplanr/issues/240)).
+
 # stplanr 0.2.2
 
 ## NEW FEATURES
