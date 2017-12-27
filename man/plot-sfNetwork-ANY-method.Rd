@@ -3,7 +3,7 @@
 \docType{methods}
 \name{plot,sfNetwork,ANY-method}
 \alias{plot,sfNetwork,ANY-method}
-\title{Plot a sfNetwork}
+\title{Plot an sfNetwork}
 \usage{
 \S4method{plot}{sfNetwork,ANY}(x, component = "sl", ...)
 }
@@ -17,11 +17,9 @@ representation.}
 \item{...}{Arguments to pass to relevant plot function.}
 }
 \description{
-Plot a sfNetwork
+Plot an sfNetwork
 }
 \examples{
-data(routes_fast)
-rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-plot(SLN)
+SLN_sf <- SpatialLinesNetwork(route_network_sf)
+plot(SLN_sf)
 }

@@ -20,8 +20,7 @@ representation.}
 Plot a SpatialLinesNetwork
 }
 \examples{
-data(routes_fast)
-rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
+SLN <- SpatialLinesNetwork(route_network)
 plot(SLN)
+plot(SLN, component = "graph")
 }
