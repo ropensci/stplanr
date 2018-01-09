@@ -16,24 +16,29 @@ author:
 abstract: >
   Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analysis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
   
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{stplanr A Package for Transport Planning}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  rticles::rjournal_article:
+    keep_tex: yes
 ---
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 ```
 
-## Note
+<!-- ## Note -->
 
-This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions.
+<!-- This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions. -->
 
 # Introduction
 
-Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software in the transport planner's toolkit should be flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
+The practice of transport planning can been defined as
+"preparing, assessing and implementing policies, plans and projects to improve and manage our transport systems"
+\citep{jones_road_2014}.
+Clearly this will involve some judgements based on intuition, experience and political considerations.
+However, with the push for measurable improvements in terms of `sustainability' (e.g. reduced energy use),
+the pressure on transport planners to adopt scientific methods, including computating, has grown 
+\citep{balmer_matsim-t:_2009}.
+Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software for transport planning should therefore be: flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
 
 R can provide a solid basis for a transport planning workflow that meets each of these criteria. Packages such as \CRANpkg{sp} \citep{pebesma_classes_2005} and \CRANpkg{rgeos} \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and modelling capabilities \citep{bivand_applied_2013}. Packages building on the **sp** class system have been developed for specific domains, including \CRANpkg{SpatialEpi} \citep{kim_spatialepi:_2016}, \CRANpkg{diseasemapping} \citep{brown_diseasemapping:_2016} and the **adehabitat** family of packages \citep{calenge_package_2006}.
 
@@ -195,6 +200,31 @@ points(ca_local, pch = 4)
 points(ca_buff, cex = 3)
 ```
 
+### Reading census data:
+One common source of transport data are many country's national census.
+A census frequently includes questions on where people live and work, and ocassionally other common purposes (shopping, etc.).
+This is often accompanied by a question on what mode was taken.
+These data are generally provided in standard tables that can be downloaded for free.
+For the Australian census, both these standard tables are available as well as custom tables that can be produced using a service named TableBuilder.
+TableBuilder generates Excel or CSV files that contain additional lines that make reading these data into R difficult.
+**stplanr** provides the read_table_builder function to read in these files.
+
+Using the example `SA1Population.xlsx` file included with **stplanr** that contains the population by SA1 zone (a statistical area used for the Australian census), we can use the `read_table_builder` function to read and format the table for use in R.
+The function automatically removes the additional lines and sets the column headers and data types as appropriate.
+The result is a `data.frame` that can be used with GIS boundary files and other datasets produced for SA1 zones.
+
+```{r}
+data_dir <- system.file("extdata", package = "stplanr")
+t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
+                         filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
+```
+
+### Bicycle share data:
+**stplanr** can also be used in conjunction with complementary R packages for downloading data from Open Street Maps (OSM) using \CRANpkg{osmdata} and bicycle share data using the \CRANpkg{bikedata} package.
+
+The bicycle share data that can be accessed using the \CRANpkg{bikedata} package is particularly well suited for integration with stplanr as it produces origin-destination (OD) flows from bicycle sharing systems.
+
+
 ## Creating geographic desire lines
 
 Perhaps the most common type of aggregate-level transport information is origin-destination ('OD') data.
@@ -252,7 +282,7 @@ This is difficult (and was until recently near impossible using free software)
 because of the size and complexity of transport networks, the complexity
 of realistic routing algorithms and need for context-specificity in the routing
 engine. Inexperienced cyclists, for example, would take a very different route
-than a heavy goods vehicle. **stplanr** tackles this issue by using 3rd party APIs to provide
+than a heavy goods vehicle. **stplanr** tackles this issue by using third party APIs to provide
 route-allocation. 
 
 Route allocation is undertaken by \code{route\_}
@@ -428,6 +458,13 @@ plot(catch800m, col = rgb(1, 0, 0, 0.5), add = TRUE)
 plot(netcatch800m, col = rgb(0, 0, 1, 0.5), add = TRUE)
 plot(testcycleway, col = "green", add = TRUE)
 ```
+
+`calc_catchment` and `calc_network_catchment` provide complementary functions that allow for the computation of catchment areas.
+Although for many transport applications it would be better to use the `calc_network_catchment` function that uses the true network distances, it may still be useful to use the straight-line version in some cases.
+These include calculating the population that may be affected by noise levels from transport infrastructure (such as a motorway) where the effects of noise are not limited by the network.
+In situations where network data is not available it would be possible to use the `calc_catchment` function together with a fixed assumption about what straight-line distance corresponds to the desired network distance (i.e., 1km network = 700m straight-line).
+It may also be appropriate to use the straight-line distance when the network is not a reasonable constraint.
+This may be because the infrastructure of interest is accessed primarily by walking or cycling in an area where these are not limited to the road network (such as parks or shopping areas with passthroughs or overpasses available to pedestrians).
 
 # Modelling and visualisation
 
