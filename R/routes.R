@@ -218,23 +218,22 @@ route_cyclestreet <-
 #'  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 #'
 #' @inheritParams route_cyclestreet
+#' @inheritParams od_coords
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' r <- route_graphhopper(from = "Leeds, UK", to = "Dublin, Ireland", vehicle = "bike")
+#' from = c(-1.5, 53.5); to = c(-1.6, 53.5)
+#' r <- route_graphhopper(from = from, to = to, vehicle = "bike")
 #' r@data
 #' plot(r)
 #' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
 #' plot(r)
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
+route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
   # Convert character strings to lon/lat if needs be
-  if(is.character(from) | is.character(to)){
-    from <- geo_code(from)
-    to <- geo_code(to)
-  }
+  coords <- od_coords(from, to, l)
 
   if(is.null(pat))
     pat = api_pat("graphhopper")
@@ -243,8 +242,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     base_url,
     path = "/api/1/route",
     query = list(
-      point = paste0(from[2:1], collapse = ","),
-      point = paste0(to[2:1], collapse = ","),
+      point = paste0(coords[1, c("fy", "fx")], collapse = ","),
+      point = paste0(coords[1, c("ty", "tx")], collapse = ","),
       vehicle = vehicle,
       locale = "en-US",
       debug = 'true',
