@@ -223,12 +223,10 @@ route_cyclestreet <-
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' from = c(-1.5, 53.5); to = c(-1.6, 53.5)
-#' r <- route_graphhopper(from = from, to = to, vehicle = "bike")
-#' r@data
-#' plot(r)
-#' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
-#' plot(r)
+#' from = c(-0.12, 51.5); to = c(-0.14, 51.5)
+#' r1 = route_graphhopper(from = from, to = to, vehicle = "bike")
+#' r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+#' plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
 #' }
 route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
