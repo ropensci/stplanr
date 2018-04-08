@@ -193,8 +193,8 @@ route_cyclestreet <-
 #' The function returns a SpatialLinesDataFrame object.
 #' See \url{https://github.com/graphhopper} for more information.
 #'
-#' @param vehicle A text string representing the vehicle. Can be bike, bike2, car
-#' or foot.
+#' @param vehicle A text string representing the vehicle.
+#' Can be bike (default), car or foot. See \url{https://graphhopper.com/api/1/docs/supported-vehicle-profiles/} for further details.
 #'
 #' @details
 #'
@@ -224,9 +224,11 @@ route_cyclestreet <-
 #' @examples
 #' \dontrun{
 #' from = c(-0.12, 51.5); to = c(-0.14, 51.5)
-#' r1 = route_graphhopper(from = from, to = to, vehicle = "bike")
+#' r1 = route_graphhopper(from = from, to = to, silent = FALSE)
 #' r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+#' r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
 #' plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+#' plot(r3, add = TRUE, col = "red")
 #' }
 route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
