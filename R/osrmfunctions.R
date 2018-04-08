@@ -930,9 +930,13 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
 #'
 #' This is a wrapper around \code{viaroute} that returns a single route between A and B.
 #'
+#' @note The public-facing OSRM routing service (the default)
+#' only provides routing for cars by default. For details, see
+#' \url{https://github.com/Project-OSRM/osrm-backend/issues/4530}.
+#'
 #' @param singleline Should a single line be returned? Default is \code{TRUE}
 #' @param ... Arguments passed to viaroute()
-#' @inheritParams route_cyclestreet
+#' @inheritParams route_graphhopper
 #' @inheritParams viaroute
 #' @export
 #' @examples
@@ -945,9 +949,10 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
 #' plot(cents)
 #' plot(r_many, add = TRUE)
 #' }
-route_osrm <- function(from, to, alt = FALSE, ..., singleline = TRUE) {
+route_osrm <- function(from, to, l = NULL, alt = FALSE, ..., singleline = TRUE) {
 
-  v <- viaroute(startlat = from[2], startlng = from[1], endlat = to[2], endlng = to[1], ...)
+  coords <- od_coords(from, to, l)
+  v <- viaroute(coords[1, "fy"], coords[1, "fx"], coords[1, "ty"], coords[1, "tx"], ...)
   r <- viaroute2sldf(v)
 
   if(!alt) {
