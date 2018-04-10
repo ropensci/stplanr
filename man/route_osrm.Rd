@@ -4,7 +4,7 @@
 \alias{route_osrm}
 \title{Plan a route with OSRM}
 \usage{
-route_osrm(from, to, alt = FALSE, ..., singleline = TRUE)
+route_osrm(from, to, l = NULL, alt = FALSE, ..., singleline = TRUE)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -15,6 +15,9 @@ on Earth.}
 \code{length = 2} representing latitude and longitude) representing a point
 on Earth. This represents the destination of the trip.}
 
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
+
 \item{alt}{Boolean value to return alternative routes (default = TRUE).}
 
 \item{...}{Arguments passed to viaroute()}
@@ -23,6 +26,11 @@ on Earth. This represents the destination of the trip.}
 }
 \description{
 This is a wrapper around \code{viaroute} that returns a single route between A and B.
+}
+\note{
+The public-facing OSRM routing service (the default)
+only provides routing for cars by default. For details, see
+\url{https://github.com/Project-OSRM/osrm-backend/issues/4530}.
 }
 \examples{
 \dontrun{

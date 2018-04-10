@@ -20,9 +20,10 @@ This function takes a wide range of input data types (spatial lines, points or t
 and returns a matrix of coordinates representing origin (fx, fy) and destination (tx, ty) points.
 }
 \examples{
-od_coords(from = cents[1:3, ], to = cents[2:4, ]) # Spatial points
+od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
+od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
 od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 # od_coords("Hereford", "Leeds") # geocode locations
-od_coords(flowlines)
-od_coords(flowlines_sf)
+od_coords(flowlines[1:3, ])
+od_coords(flowlines_sf[1:3, ])
 }

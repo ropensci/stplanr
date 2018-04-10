@@ -1,3 +1,10 @@
+# stplanr 0.2.3.9000
+
+## DOCUMENTATION
+
+- `?route_graphhopper` no longer mentions the depreciated 'bike2' profile - see [#246](https://github.com/ropensci/stplanr/issues/246)
+- `?route_osrm` mentions that the public API only routes for cars - see [#246](https://github.com/ropensci/stplanr/issues/246)
+
 # stplanr 0.2.3
 
 ## NEW FEATURES

@@ -193,8 +193,8 @@ route_cyclestreet <-
 #' The function returns a SpatialLinesDataFrame object.
 #' See \url{https://github.com/graphhopper} for more information.
 #'
-#' @param vehicle A text string representing the vehicle. Can be bike, bike2, car
-#' or foot.
+#' @param vehicle A text string representing the vehicle.
+#' Can be bike (default), car or foot. See \url{https://graphhopper.com/api/1/docs/supported-vehicle-profiles/} for further details.
 #'
 #' @details
 #'
@@ -218,23 +218,22 @@ route_cyclestreet <-
 #'  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 #'
 #' @inheritParams route_cyclestreet
+#' @inheritParams od_coords
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
 #' \dontrun{
-#' r <- route_graphhopper(from = "Leeds, UK", to = "Dublin, Ireland", vehicle = "bike")
-#' r@data
-#' plot(r)
-#' r <- route_graphhopper("New York", "Washington", vehicle = "foot")
-#' plot(r)
+#' from = c(-0.12, 51.5); to = c(-0.14, 51.5)
+#' r1 = route_graphhopper(from = from, to = to, silent = FALSE)
+#' r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+#' r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
+#' plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+#' plot(r3, add = TRUE, col = "red")
 #' }
-route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
+route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRUE, pat = NULL, base_url = "https://graphhopper.com"){
 
   # Convert character strings to lon/lat if needs be
-  if(is.character(from) | is.character(to)){
-    from <- geo_code(from)
-    to <- geo_code(to)
-  }
+  coords <- od_coords(from, to, l)
 
   if(is.null(pat))
     pat = api_pat("graphhopper")
@@ -243,8 +242,8 @@ route_graphhopper <- function(from, to, vehicle = "bike", silent = TRUE, pat = N
     base_url,
     path = "/api/1/route",
     query = list(
-      point = paste0(from[2:1], collapse = ","),
-      point = paste0(to[2:1], collapse = ","),
+      point = paste0(coords[1, c("fy", "fx")], collapse = ","),
+      point = paste0(coords[1, c("ty", "tx")], collapse = ","),
       vehicle = vehicle,
       locale = "en-US",
       debug = 'true',

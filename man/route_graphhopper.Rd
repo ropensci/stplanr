@@ -4,8 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, vehicle = "bike", silent = TRUE, pat = NULL,
-  base_url = "https://graphhopper.com")
+route_graphhopper(from, to, l = NULL, vehicle = "bike", silent = TRUE,
+  pat = NULL, base_url = "https://graphhopper.com")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -16,8 +16,11 @@ on Earth.}
 \code{length = 2} representing latitude and longitude) representing a point
 on Earth. This represents the destination of the trip.}
 
-\item{vehicle}{A text string representing the vehicle. Can be bike, bike2, car
-or foot.}
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
+
+\item{vehicle}{A text string representing the vehicle.
+Can be bike (default), car or foot. See \url{https://graphhopper.com/api/1/docs/supported-vehicle-profiles/} for further details.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
@@ -58,11 +61,12 @@ Where \code{url} is an example api request from
 }
 \examples{
 \dontrun{
-r <- route_graphhopper(from = "Leeds, UK", to = "Dublin, Ireland", vehicle = "bike")
-r@data
-plot(r)
-r <- route_graphhopper("New York", "Washington", vehicle = "foot")
-plot(r)
+from = c(-0.12, 51.5); to = c(-0.14, 51.5)
+r1 = route_graphhopper(from = from, to = to, silent = FALSE)
+r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
+plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+plot(r3, add = TRUE, col = "red")
 }
 }
 \seealso{
