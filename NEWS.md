@@ -1,7 +1,5 @@
 # stplanr 0.2.4
 
-# stplanr 0.2.3.9000
-
 ## DOCUMENTATION
 
 - `?route_graphhopper` no longer mentions the depreciated 'bike2' profile - see [#246](https://github.com/ropensci/stplanr/issues/246)
