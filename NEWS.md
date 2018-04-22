@@ -1,3 +1,5 @@
+# stplanr 0.2.4
+
 # stplanr 0.2.3.9000
 
 ## DOCUMENTATION
