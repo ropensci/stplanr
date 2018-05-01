@@ -43,6 +43,7 @@ Imports:
     igraph,
     nabor,
     rlang,
+    lwgeom,
     sf
 LinkingTo: RcppArmadillo,
     Rcpp
