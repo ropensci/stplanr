@@ -45,8 +45,7 @@ islines.sf <- function(g1, g2) {
 #' plot(sl[1], lwd = 9, col = 1:nrow(sl))
 #' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
 #' plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
-#' # sf implementation (needs lwgeom)
-#' if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
+#' \dontrun{
 #'   sl <- routes_fast_sf[2:4,]
 #'   rsec <- gsection(sl)
 #'   rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
@@ -78,25 +77,6 @@ gsection.sf <- function(sl, buff_dist = 0){
   u_disag
 
 }
-# gsection.sf <- function(sl, buff_dist = 0){
-#
-#   if(buff_dist > 0) {
-#     sl = geo_toptail(sl, toptail_dist = buff_dist)
-#   }
-#
-#   u <- sf::st_union(sf::st_geometry(sl))
-#
-#   # u_merged <- sf::st_line_merge(u)
-#   # u_disag <- sf::st_cast(u, "LINESTRING")
-#   p <- line2points(sf::as_Spatial(sf::st_geometry(sl)))
-#   p <- sf::st_as_sf(p)
-#   p_inter <- sf::st_intersection(x = sl, y = u)
-#   p_inter_p <- sf::st_as_sfc(p_inter[sf::st_geometry_type(p_inter) == "POINT",])
-#   p_inter_p <- p_inter_p[,0]
-#   p <- rbind(p, p_inter_p)
-#   slu <- sf::st_split(u_disag, p)
-#
-# }
 #' Label SpatialLinesDataFrame objects
 #'
 #' This function adds labels to lines plotted using base graphics. Largely

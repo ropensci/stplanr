@@ -24,8 +24,7 @@ rsec_buff <- gsection(sl, buff_dist = 1)
 plot(sl[1], lwd = 9, col = 1:nrow(sl))
 plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
 plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
-# sf implementation (needs lwgeom)
-if (!is.na(sf::sf_extSoftVersion()["lwgeom"])) {
+\dontrun{
   sl <- routes_fast_sf[2:4,]
   rsec <- gsection(sl)
   rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
