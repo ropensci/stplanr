@@ -134,3 +134,30 @@ geo_buffer.sf <- function(shp, ...) {
 geo_buffer.Spatial <- function(shp, ...) {
   geo_projected.Spatial(shp = shp, fun = rgeos::gBuffer, ...)
 }
+#' Calculate line length of line with geographic or projected CRS
+#'
+#' Takes a line (represented in sf or sp classes)
+#' and returns a numeric value representing distance in meters.
+#' @param shp A spatial line object
+#' @seealso buff_geo
+#' @examples
+#' geo_length(routes_fast)
+#' geo_length(routes_fast_sf)
+#' @export
+geo_length <- function(shp) {
+  UseMethod("geo_length")
+}
+
+#' @export
+geo_length.sf <- function(shp) {
+  if(sf::st_is_longlat(shp))
+    l <- lwgeom::st_geod_length(shp) else
+      l <- sf::st_length(shp)
+  as.numeric(l)
+}
+
+#' @export
+geo_length.Spatial <- function(shp) {
+  shp <- sf::st_as_sf(shp)
+  geo_length(shp)
+}

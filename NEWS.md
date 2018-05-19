@@ -1,5 +1,9 @@
 # stplanr 0.2.4
 
+## NEW FEATURES
+
+* New function `geo_length()` returns numeric vector of line lengths from **sp** or **sf** objects.
+
 ## DOCUMENTATION
 
 - `?route_graphhopper` no longer mentions the depreciated 'bike2' profile - see [#246](https://github.com/ropensci/stplanr/issues/246)

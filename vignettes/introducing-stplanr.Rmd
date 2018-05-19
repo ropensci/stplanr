@@ -127,13 +127,16 @@ qtm(desire_line_single, lines.lwd = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
-The following command creates desire lines for all OD pairs stored --- omitting 'internal flows' via the `sel` object belwo --- represented in the dataset `flowlines`:
+The following command creates desire lines longer than than 2km in distance via the `geo_length()` function --- omitting 'internal flows' via the `sel` object below --- represented in the dataset `flowlines`:
 
 ```{r}
 l = od2line(flow = flow, zones = cents)
 # remove 'internal flows'
 sel = l$Area.of.residence == l$Area.of.workplace
 l = l[!sel, ]
+l_distances = geo_length(l)
+summary(l_distances)
+l = l[l_distances > 2000, ]
 ```
 
 This creates the geographic data object `l`, which can be visualised as follows:
@@ -171,7 +174,6 @@ tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
 
 The next stage is to aggregate these lines together to create a 'route network'.
 This, and many other functions, are described in the [stplanr-paper vignette](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd).
-
 
 ## Context and discussion
 
