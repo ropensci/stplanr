@@ -7,7 +7,7 @@
 is_linepoint(l)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 }
 \description{
 OD matrices often contain 'intrazonal' flows, where the origin is the same point as the

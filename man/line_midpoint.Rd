@@ -7,7 +7,7 @@
 line_midpoint(l)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 }
 \description{
 This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to find the midpoint

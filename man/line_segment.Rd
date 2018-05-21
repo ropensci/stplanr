@@ -7,7 +7,7 @@
 line_segment(l, n_segments, segment_length = NA)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 
 \item{n_segments}{The number of segments to divide the line into}
 

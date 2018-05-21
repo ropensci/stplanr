@@ -7,7 +7,7 @@
 angle_diff(l, angle, bidirectional = FALSE, absolute = TRUE)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 
 \item{angle}{an angle in degrees relative to North, with 90 being East and -90 being West.
 (direction of rotation is ignored).}
