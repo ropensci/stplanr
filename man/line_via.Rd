@@ -24,9 +24,9 @@ and generates 3 extra geometries based on points \code{p}:
 }
 \examples{
 {
-l = flowlines_sf[2:4, ]
-p = destinations_sf
-lv = line_via(l, p)
+l <- flowlines_sf[2:4, ]
+p <- destinations_sf
+lv <- line_via(l, p)
 \dontrun{
 library(mapview)
 mapview(lv) +

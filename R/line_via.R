@@ -36,9 +36,9 @@ mats2line <- function(mat1, mat2) {
 #' @inheritParams line2df
 #' @export
 #' @examples {
-#' l = flowlines_sf[2:4, ]
-#' p = destinations_sf
-#' lv = line_via(l, p)
+#' l <- flowlines_sf[2:4, ]
+#' p <- destinations_sf
+#' lv <- line_via(l, p)
 #' \dontrun{
 #' library(mapview)
 #' mapview(lv) +
@@ -50,17 +50,17 @@ mats2line <- function(mat1, mat2) {
 #' plot(lv$leg_via, col = "black", add = TRUE)
 #' plot(lv$leg_dest, col = "green", lwd = 5, add = TRUE)
 #' }
-line_via = function(l, p) {
-  # mat_orig = line2mat(l)
-  mat_orig = as.matrix(line2df(l)[c("fx", "fy")])
-  mat_dest = as.matrix(line2df(l)[c("tx", "ty")])
-  mat_via = sf::st_coordinates(p)
-  knn_orig = nabor::knn(mat_via, query = mat_orig, k = 1)$nn.idx
-  knn_dest = nabor::knn(mat_via, query = mat_dest, k = 1)$nn.idx
-  mat_via_o = mat_via[knn_orig, ]
-  mat_via_d = mat_via[knn_dest, ]
-  l$leg_orig = mats2line(mat_orig, mat_via_o)
-  l$leg_via = mats2line(mat_via_o, mat_via_d)
-  l$leg_dest = mats2line(mat_via_d, mat_dest)
+line_via <- function(l, p) {
+  # mat_orig <- line2mat(l)
+  mat_orig <- as.matrix(line2df(l)[c("fx", "fy")])
+  mat_dest <- as.matrix(line2df(l)[c("tx", "ty")])
+  mat_via <- sf::st_coordinates(p)
+  knn_orig <- nabor::knn(mat_via, query = mat_orig, k = 1)$nn.idx
+  knn_dest <- nabor::knn(mat_via, query = mat_dest, k = 1)$nn.idx
+  mat_via_o <- mat_via[knn_orig, ]
+  mat_via_d <- mat_via[knn_dest, ]
+  l$leg_orig <- mats2line(mat_orig, mat_via_o)
+  l$leg_via <- mats2line(mat_via_o, mat_via_d)
+  l$leg_dest <- mats2line(mat_via_d, mat_dest)
   l
 }
