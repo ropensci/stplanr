@@ -4,17 +4,15 @@
 \alias{buff_geo}
 \title{Create a buffer of n metres for non-projected 'geographical' spatial data}
 \usage{
-buff_geo(shp, width, ..., silent = TRUE)
+buff_geo(shp, width, ...)
 }
 \arguments{
-\item{shp}{A spatial object with a geographic CRS (WGS84)
+\item{shp}{A spatial object with a geographic CRS (e.g. WGS84)
 around which a buffer should be drawn}
 
-\item{width}{The distance (in metres) of the buffer}
+\item{width}{The distance (in metres) of the buffer (when buffering sp objects)}
 
-\item{...}{Arguments passed to rgeos::gBuffer()}
-
-\item{silent}{A binary value for printing the CRS details (default: FALSE)}
+\item{...}{Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)}
 }
 \description{
 Solves the problem that buffers will not be circular when used on
@@ -24,10 +22,16 @@ non-projected data.
 Returns a
 }
 \examples{
-data("routes_fast")
-sp::proj4string(routes_fast) <- CRS("+init=epsg:4326")
-buff <- buff_geo(routes_fast, width = 100)
+r = routes_fast[1:3, ]
+buff <- buff_geo(r, width = 100)
 plot(buff)
-plot(routes_fast, add = TRUE)
+plot(r, add = TRUE)
+# Test it works the same on projected data
+shp <- sp::spTransform(r, sp::CRS("+init=epsg:27700"))
+buff2 = buff_geo(shp, 50) # test if it works the same on projected data
+plot(buff2)
+plot(r, add = TRUE) # note they do not show
+buff3 = sp::spTransform(buff2, sp::CRS("+init=epsg:4326"))
+plot(buff)
+plot(buff3, add = TRUE, col = "black")
 }
-

@@ -23,6 +23,7 @@ It results in unzipped .csv data in R's temporary directory.
 
 Ensure you have a fast internet connection and at least 100 Mb space
 }
+
 \examples{
 \dontrun{
 dl_stats19()
@@ -34,4 +35,3 @@ ve <- read_stats19_ve()
 # now you can analyse the UK's stats19 data in a single table
 }
 }
-

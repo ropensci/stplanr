@@ -11,7 +11,7 @@ toptailgs(l, toptail_dist, tail_dist = NULL)
 
 \item{toptail_dist}{The distance (in metres) to top the line by.
 Can be either a single value or a vector of the same length as the
-SpatialLines object. If tail_dist is missing, is used as the tail distnce.}
+SpatialLines object. If tail_dist is missing, is used as the tail distance.}
 
 \item{tail_dist}{The distance (in metres) to tail the line by. Can be
 either a single value or a vector of the same length as the SpatialLines
@@ -24,9 +24,9 @@ coordinates in WGS84 (lng/lat).
 }
 \examples{
 data("routes_fast")
-r_toptail <- toptailgs(routes_fast, toptail_dist = 300)
-plot(routes_fast, lwd = 3)
+rf = routes_fast[2:3, ]
+r_toptail <- toptailgs(rf, toptail_dist = 300)
+plot(rf, lwd = 3)
 plot(r_toptail, col = "red", add = TRUE)
 plot(cents, add = TRUE)
 }
-

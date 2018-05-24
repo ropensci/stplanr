@@ -19,4 +19,8 @@ representation.}
 \description{
 Plot a SpatialLinesNetwork
 }
-
+\examples{
+SLN <- SpatialLinesNetwork(route_network)
+plot(SLN)
+plot(SLN, component = "graph")
+}

@@ -15,7 +15,7 @@
 #' @examples \dontrun{
 #'  decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@@", precision = 5)
 #' }
-decode_gl <- function(polyline, precision=6, forceline=TRUE) {
+decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
 
   latlngsets <- lapply(polyline, function(polyline, precision){
 
@@ -45,7 +45,7 @@ decode_gl <- function(polyline, precision=6, forceline=TRUE) {
   if (forceline == TRUE) {
     latlngsets <- lapply(latlngsets, function(x, forceline){
       if (forceline == TRUE & nrow(x) == 1) {
-        x <- rbind(x,x)
+        x <- rbind(x,x+0.0000000001)
       }
       return(x)
     }, forceline)
@@ -93,14 +93,11 @@ decode_gl <- function(polyline, precision=6, forceline=TRUE) {
 #' @export
 #' @examples \dontrun{
 #'   exroutes <- viaroute(50, 0, 51, 1)
-#'   r1 <- viaroute2sldf(exroutes)
-#'   exroutes <- viaroute(50, 0, 51, 1, zoom = 4)
-#'   r2 <- viaroute2sldf(exroutes)
-#'   # Requires mapview to be installed
-#'   # Show the difference between outputs with different zoom levels
-#'   mapview::mapview(r1) +
-#'    mapview::mapview(r2, color = "blue")
-#'   exroutes <- viaroute(viapoints=list(data.frame(x=c(-33.5,-33.6,-33.7),y=c(150,150.1,150.2))))
+#'   r <- viaroute2sldf(exroutes)
+#'   plot(r)
+#'   lngs <- c(-33.5,-33.6,-33.7)
+#'   lats <- c(150,150.1,150.2)
+#'   exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
 #'   r <- viaroute2sldf(exroutes)
 #'   plot(r)
 #' }
@@ -111,9 +108,9 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
                      instructions=TRUE, alt=TRUE, geometry=TRUE, uturns="default") {
 
   if (api == 4) {
-    qryurl <- paste0(osrmurl,"/viaroute?")
+    path <- "/viaroute"
   } else {
-    qryurl <- paste0(osrmurl,"/route/",protocol,"/",profile,"/")
+    path <- paste0("/route/",protocol,"/",profile,"/")
   }
   returnval <- c()
 
@@ -126,25 +123,103 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 
   if (missing(viapoints) == FALSE) {
 
-    if (is(viapoints,"list")) {
+    if (!is(viapoints,"list")) {
       stop("viapoints is not a list.")
     }
 
     i <- 1
     while (i <= length(viapoints)) {
       if(ncol(viapoints[[i]]) == 3) {
-        returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(viapoints[[i]][,1],',',viapoints[[i]][,2],'&u=',viapoints[[i]][,3],collapse='&loc='),'&',
-                             paste0(paste0(
-                             c("z","instructions","alt","geometry","uturns"),'=',
-                             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))))
+        if (api == 4) {
+
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = path,
+            query =
+              c(unlist(
+                apply(viapoints[[1]], 1, function(x){
+                  list("loc"=paste0(x[1],",",x[2]), "u"=x[3])
+                }),recursive=FALSE),
+              list(
+              "z"=zoom,
+              "instructions"=instructions,
+              "alt"=alt,
+              "geometry"=geometry,
+              "uturns"=uturns
+            ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                  httr::content(httrreq, as = "text", encoding = "UTF-8")))
+          }
+        } else {
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = paste0(path,paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';')),
+            query = list(
+              "overview"="full",
+              "steps"=instructions,
+              "alternatives"=alt,
+              "continue_straight"=uturns
+            )
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\','\\\\\\\\',
+              httr::content(httrreq, as = "text", encoding = "UTF-8"))
+          }
+        }
       }
       else {
-        returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",paste0(paste0(viapoints[[i]][,1],',',viapoints[[i]][,2]),collapse='&loc='),'&',
-           paste0(paste0(
-             c("z","instructions","alt","geometry","uturns"),'=',
-             c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-        ))))
+        if (api == 4) {
+
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = path,
+            query =
+              c(unlist(
+                apply(viapoints[[1]], 1, function(x){
+                  list("loc"=paste0(x[1],",",x[2]))
+                }),recursive=FALSE),
+                list(
+                  "z"=zoom,
+                  "instructions"=instructions,
+                  "alt"=alt,
+                  "geometry"=geometry,
+                  "uturns"=uturns
+                ))
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                                             httr::content(httrreq, as = "text", encoding = "UTF-8")))
+          }
+        } else {
+          httrreq <- httr::GET(
+            url = osrmurl,
+            path = paste0(path,paste0(viapoints[[i]][,2],',',viapoints[[i]][,1],collapse=';')),
+            query = list(
+              "overview"="full",
+              "steps"=instructions,
+              "alternatives"=alt,
+              "continue_straight"=uturns
+            )
+          )
+          if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+              grepl('js',httrreq$headers$`content-type`) == FALSE) {
+            returnval[i] <- ''
+          } else {
+            returnval[i] <- gsub('\\\\','\\\\\\\\',
+                                 httr::content(httrreq, as = "text", encoding = "UTF-8"))
+          }
+        }
       }
       i <- i + 1
     }
@@ -159,34 +234,88 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 
           if (length(startlat) == 1) {
             if (api == 4) {
-            returnval <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat,",",startlng,"&loc=",endlat,",",endlng,"&",
-                                              paste0(paste0(c("z","instructions","alt","geometry","uturns"),'=',
-                                                            c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-            ))))
+              httrreq <- httr::GET(
+                url = osrmurl,
+                path = path,
+                query = list(
+                      "loc"=paste0(startlat,",",startlng),
+                      "loc"=paste0(endlat,",",endlng),
+                      "z"=zoom,
+                      "instructions"=instructions,
+                      "alt"=alt,
+                      "geometry"=geometry,
+                      "uturns"=uturns
+                    )
+              )
+              if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                  grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                returnval <- ''
+              } else {
+                returnval <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                     httr::content(httrreq, as = "text", encoding = "UTF-8")))
+              }
             } else {
-              returnval <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-                paste0(qryurl,startlng,",",startlat,";",endlng,",",endlat,"?overview=full&",
-                       paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                     c(instructions,alt,uturns)), collapse='&')
-                       )
-              ))
+              httrreq <- httr::GET(
+                url = osrmurl,
+                path = paste0(path,startlng,',',startlat,';',endlng,',',endlat),
+                query = list(
+                  "overview"="full",
+                  "steps"=instructions,
+                  "alternatives"=alt,
+                  "continue_straight"=uturns
+                )
+              )
+              if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                  grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                returnval <- ''
+              } else {
+                returnval <- gsub('\\\\','\\\\\\\\',
+                                     httr::content(httrreq, as = "text", encoding = "UTF-8"))
+              }
             }
           }
           else {
             i <- 1
             while (i <= length(startlat)) {
               if (api == 4) {
-              returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',RCurl::getURL(paste0(qryurl,"loc=",startlat[i],",",startlng[i],"&loc=",endlat[i],",",endlng[i],"&",
-                                                   paste(paste0(c("z","instructions","alt","geometry","uturns"),'=',
-                                                                c(zoom,instructions,alt,geometry,uturns)),collapse='&')
-              ))))
-              } else {
-                returnval[i] <- gsub('\\\\','\\\\\\\\',RCurl::getURL(
-                  paste0(qryurl,startlng[i],",",startlat[i],";",endlng[i],",",endlat[i],"?overview=full&",
-                         paste0(paste0(c("steps","alternatives","continue_straight"),'=',
-                                       c(instructions,alt,uturns)), collapse='&')
+                httrreq <- httr::GET(
+                  url = osrmurl,
+                  path = path,
+                  query = list(
+                    "loc"=paste0(startlat[i],",",startlng[i]),
+                    "loc"=paste0(endlat[i],",",endlng[i]),
+                    "z"=zoom,
+                    "instructions"=instructions,
+                    "alt"=alt,
+                    "geometry"=geometry,
+                    "uturns"=uturns
                   )
-                ))
+                )
+                if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                    grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                  returnval[i] <- ''
+                } else {
+                  returnval[i] <- gsub('\\\\\\\\\"','\\\\\\"',gsub('\\\\','\\\\\\\\',
+                                                                httr::content(httrreq, as = "text", encoding = "UTF-8")))
+                }
+              } else {
+                httrreq <- httr::GET(
+                  url = osrmurl,
+                  path = paste0(path,startlng[i],',',startlat[i],';',endlng[i],',',endlat[i]),
+                  query = list(
+                    "overview"="full",
+                    "steps"=instructions,
+                    "alternatives"=alt,
+                    "continue_straight"=uturns
+                  )
+                )
+                if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
+                    grepl('js',httrreq$headers$`content-type`) == FALSE) {
+                  returnval[i] <- ''
+                } else {
+                  returnval[i] <- gsub('\\\\','\\\\\\\\',
+                                    httr::content(httrreq, as = "text", encoding = "UTF-8"))
+                }
               }
               i <- i + 1
             }
@@ -195,6 +324,24 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
   }
   else {
     stop("Missing viapoints coordinates")
+  }
+  if (length(returnval) > 1) {
+    removerowlist <- c()
+    for (i in 1:length(returnval)) {
+      if (returnval[i] == "") {
+        removerowlist <- c(removerowlist,i)
+      }
+    }
+    if (length(removerowlist) == length(returnval)) {
+      stop("OSRM server returned empty result for all routes")
+    } else if(length(removerowlist) > 0) {
+      warning(paste0("Routes ",paste0(removerowlist, collapse=', '), " returned empty result, removing from result"))
+      returnval <- returnval[-removerowlist]
+    }
+  } else {
+    if (returnval == "") {
+      stop("OSRM server returned empty result")
+    }
   }
 
   return(returnval)
@@ -207,72 +354,104 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #' Converts the result of a (successful) OSRM routing query and returns a
 #' SpatialLinesDataFrame containing the route, route summary and instructions.
 #'
-#' @param osrmresult String containing encoded json result of OSRM routing
-#' query.
+#' @param osrmresult Single character string or character vector containing
+#' encoded json result(s) of OSRM routing queries.
+#' @param return_sf Boolean value if this function should return an sf object, if
+#' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
-#' library(RCurl)
 #'  viaroute2sldf(
-#'    RCurl::getURL(paste0(
-#'    "http://router.project-osrm.org/viaroute?loc=52.503033,13.420526&",
-#'    "loc=52.516582,13.429290&instructions=true"))
+#'    viaroute(startlat = 52.503033,
+#'             startlng = 13.420526,
+#'             endlat = 52.516582,
+#'             endlng = 13.429290)
 #'  )
 #' }
-viaroute2sldf <- function(osrmresult) {
+viaroute2sldf <- function(osrmresult, return_sf = FALSE) {
 
-  osrmjson <- jsonlite::fromJSON(osrmresult)
+  osrmsldf <- c()
+  for (curroute in 1:length(osrmresult)) {
+    osrmjson <- jsonlite::fromJSON(osrmresult[curroute])
 
-  if (is(osrmjson$code,"character")) {
-    api <- 5
-  }
-  else {
-    api <- 4
-  }
+    if (is(osrmjson$code,"character")) {
+      api <- 5
+    }
+    else {
+      api <- 4
+    }
 
-  if (api == 4) {
-    routecoords <- decode_gl(osrmjson$route_geometry)
+    if (api == 4) {
+      routecoords <- decode_gl(osrmjson$route_geometry)
 
-    osrmsldf <- viaroute2sldf_instruct(
-                           ifelse(exists("route_instructions",osrmjson) == TRUE,
-                                  list(osrmjson$route_instructions),
-                                  FALSE),
-                           osrmjson$route_summary,
-                           routecoords,
-                           routename = osrmjson$route_name,
-                           existrow = 0,
-                           routeid = 1)
+      osrmsldfalt <- viaroute2sldf_instruct(
+                             ifelse(exists("route_instructions",osrmjson) == TRUE,
+                                    list(osrmjson$route_instructions),
+                                    FALSE),
+                             osrmjson$route_summary,
+                             routecoords,
+                             routename = osrmjson$route_name,
+                             existrow = 0,
+                             routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1),
+                             return_sf = return_sf)
 
-    if (osrmjson$found_alternative == TRUE) {
+      if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE) {
+        osrmsldf <- osrmsldfalt
+      } else {
+        osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
+      }
 
-      i <- 1
-      while (i <= length(osrmjson$alternative_geometries)) {
+      if (osrmjson$found_alternative == TRUE) {
 
-        routecoords <- decode_gl(osrmjson$alternative_geometries[i])
+        i <- 1
+        while (i <= length(osrmjson$alternative_geometries)) {
 
-        osrmsldfalt <- viaroute2sldf_instruct(
-                           ifelse(exists("alternative_instructions",osrmjson) == TRUE,
-                                  list(osrmjson$alternative_instructions[[i]]),
-                                  FALSE),
-                           osrmjson$alternative_summaries[i,],
-                           routecoords,
-                           routename = osrmjson$alternative_names[[i]],
-                           existrow = nrow(osrmsldf@data),
-                           routeid = 1+i)
+          routecoords <- decode_gl(osrmjson$alternative_geometries[i])
 
-        osrmsldf <- maptools::spRbind(osrmsldf, osrmsldfalt)
+          osrmsldfalt <- viaroute2sldf_instruct(
+                             ifelse(exists("alternative_instructions",osrmjson) == TRUE,
+                                    list(osrmjson$alternative_instructions[[i]]),
+                                    FALSE),
+                             osrmjson$alternative_summaries[i,],
+                             routecoords,
+                             routename = osrmjson$alternative_names[[i]],
+                             existrow = nrow(osrmsldf@data),
+                             routeid = ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1)+i,
+                             return_sf = return_sf)
 
-        i <- i + 1
+          if (return_sf == FALSE) {
+            osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
+          } else {
+            osrmsldf <- rbind(osrmsldf, osrmsldfalt)
+          }
+
+          i <- i + 1
+        }
+
+      }
+
+    } else {
+
+      for (i in 1:length(osrmjson$routes$geometry)) {
+        osrmjson$routes$geometry[i] <- gsub('\\\\\\\\','\\\\',osrmjson$routes$geometry[i])
+      }
+      for (i in 1:length(osrmjson$routes$legs)) {
+        for (j in 1:length(osrmjson$routes$legs[[i]]$steps)) {
+          osrmjson$routes$legs[[i]]$steps[[j]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[j]]$geometry)
+        }
+      }
+      osrmsldfalt <- viaroute2sldf_instructv5(osrmjson, ifelse(curroute == 1, 1, nrow(osrmsldf@data)+1), return_sf = return_sf)
+      if(is(osrmsldf, "SpatialLinesDataFrame") == FALSE & is(osrmsldf, "sf") == FALSE) {
+        osrmsldf <- osrmsldfalt
+      } else {
+        if (return_sf == FALSE) {
+          osrmsldf <- raster::bind(osrmsldf, osrmsldfalt)
+        } else {
+          osrmsldf <- rbind(osrmsldf, osrmsldfalt)
+        }
+
       }
 
     }
-
-  } else {
-
-    for (i in 1:length(osrmjson$routes$geometry)) {
-      osrmjson$routes$geometry[i] <- gsub('\\\\\\\\','\\\\',osrmjson$routes$geometry[i])
-      osrmjson$routes$legs[[i]]$steps[[1]]$geometry <- gsub('\\\\\\\\','\\\\',osrmjson$routes$legs[[i]]$steps[[1]]$geometry)
-    }
-    osrmsldf <- viaroute2sldf_instructv5(osrmjson)
 
   }
 
@@ -280,7 +459,7 @@ viaroute2sldf <- function(osrmresult) {
 
 }
 
-viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename = "", existrow = 0, routeid = 1) {
+viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename = "", existrow = 0, routeid = 1, return_sf = FALSE) {
 
   if (class(routeinst) == "list") {
     routeinst <- unlist(routeinst, recursive = FALSE)
@@ -370,11 +549,15 @@ viaroute2sldf_instruct <- function(routeinst, routesum, routecoords, routename =
   osrmsldf@data$routesect <- 1:nrow(osrmsldf@data)
   osrmsldf@data$routeid <- routeid
 
+  if (return_sf == TRUE) {
+    osrmsldf <- sf::st_as_sf(osrmsldf)
+  }
+
   return(osrmsldf)
 
 }
 
-viaroute2sldf_instructv5 <- function(routeinst) {
+viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, return_sf = FALSE) {
 
   if (length(routeinst$routes$legs[[1]]$steps[[1]]$geometry) == 0) {
     osrmsldf <- sp::SpatialLinesDataFrame(
@@ -383,7 +566,7 @@ viaroute2sldf_instructv5 <- function(routeinst) {
           sp::Lines(sp::Line(coords = decode_gl(x$routes$geometry[i], 5)),ID = i)
         },routeinst),
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      data.table::rbindlist(lapply(1:length(routeinst$routes$geometry), function(i,x){
+      dplyr::bind_rows(lapply(1:length(routeinst$routes$geometry), function(i,x){
         data.frame(routenum = i,
                    origin = x$waypoints$name[1],
                    dest = x$waypoints$name[2],
@@ -395,47 +578,66 @@ viaroute2sldf_instructv5 <- function(routeinst) {
     )
   } else {
     osrmsldf <- sp::SpatialLinesDataFrame(
-        sp::SpatialLines(unlist(lapply(1:length(routeinst$routes$legs),
-               function(i,x){
-                 lapply(
-                   1:length(x$routes$legs[[i]]$steps[[1]]$geometry),
-                   function(j,x,i,k) {
-                     sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[1]]$geometry[j],5)[,c(2,1)]),ID = k+j)
-                  },
-               x,i,
-                 ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x))))
-               )},
-               routeinst),recursive = FALSE),
-               proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
-      data.table::rbindlist(lapply(1:length(routeinst$routes$legs), function(i,x){
-        prevrows <- ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x))))
-        if (length(x$routes$legs[[i]]$steps[[1]]$maneuver$exit) > 0) {
-          exitvals <- x$routes$legs[[i]]$steps[[1]]$maneuver$exit
-        } else {
-          exitvals <- NA
-        }
-        if (length(x$routes$legs[[i]]$steps[[1]]$mode) > 0) {
-          modevals <- x$routes$legs[[i]]$steps[[1]]$mode
-        } else {
-          modevals <- NA
-        }
-        data.frame(
-          routenum = i,
-          routedesc = rep(x$routes$legs[[i]]$summary,times=length(x$routes$legs[[i]]$steps[[1]]$distance)),
-          streetname = x$routes$legs[[i]]$steps[[1]]$name,
-          bearing_after = x$routes$legs[[i]]$steps[[1]]$maneuver$bearing_after,
-          bearing_before = x$routes$legs[[i]]$steps[[1]]$maneuver$bearing_before,
-          type = x$routes$legs[[i]]$steps[[1]]$maneuver$type,
-          modifier = x$routes$legs[[i]]$steps[[1]]$maneuver$modifier,
-          exit = exitvals,
-          duration = x$routes$legs[[i]]$steps[[1]]$duration,
-          distance = x$routes$legs[[i]]$steps[[1]]$distance,
-          destination = x$routes$legs[[i]]$steps[[1]]$destination,
-          mode = modevals,
-          row.names = (1:length(x$routes$legs[[i]]$steps[[1]]$distance))+prevrows
-        )
-      },routeinst))
+      sp::SpatialLines(unlist(unlist(lapply(1:length(routeinst$routes$legs),
+                                            function(i,x){
+                                              lapply(1:length(x$routes$legs[[i]]$steps), function(j,x,i){
+                                                lapply(
+                                                  1:length(x$routes$legs[[i]]$steps[[j]]$geometry),
+                                                  function(k,x,i,j,prevrows) {
+                                                    sp::Lines(sp::Line(coords = decode_gl(x$routes$legs[[i]]$steps[[j]]$geometry[k],5)[,c(2,1)]),ID = startrouteid-1+prevrows+k)
+                                                  },
+                                                  x,i,j,
+                                                  ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x)))) +
+                                                    ifelse(j == 1, 0, sum(unlist(lapply(1:(j-1), function(j,x,i){length(x$routes$legs[[i]]$steps[[j]]$geometry)},x,i))))
+                                                )
+                                              },x,i)
+                                            },
+                                            routeinst),recursive = FALSE), recursive = FALSE),
+                       proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")),
+      data.frame(dplyr::bind_rows(lapply(1:length(routeinst$routes$legs), function(i,x){
+        dplyr::bind_rows(
+          lapply(1:length(x$routes$legs[[i]]$summary), function(j,x,i){
+
+            prevrows <- ifelse(i == 1, 0, sum(unlist(lapply(1:(i-1), function(i,x){length(x$routes$legs[[i]]$steps[[1]]$geometry)},x)))) +
+              ifelse(j == 1, 0, sum(unlist(lapply(1:(j-1), function(i, x){length(x[[i]]$geometry)}, x = x$routes$legs[[i]]$steps))))
+
+            if (length(x$routes$legs[[i]]$steps[[j]]$maneuver$exit) > 0) {
+              exitvals <- x$routes$legs[[i]]$steps[[j]]$maneuver$exit
+            } else {
+              exitvals <- NA
+            }
+            if (length(x$routes$legs[[i]]$steps[[j]]$mode) > 0) {
+              modevals <- x$routes$legs[[i]]$steps[[j]]$mode
+            } else {
+              modevals <- NA
+            }
+
+            data.frame(
+              routenum = startrouteid-1+i,
+              legnum = j,
+              routedesc = as.character(rep(x$routes$legs[[i]]$summary[j],times=length(x$routes$legs[[i]]$steps[[j]]$distance))),
+              streetname = as.character(x$routes$legs[[i]]$steps[[j]]$name),
+              bearing_after = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_after,
+              bearing_before = x$routes$legs[[i]]$steps[[j]]$maneuver$bearing_before,
+              type = as.character(x$routes$legs[[i]]$steps[[j]]$maneuver$type),
+              modifier = as.character(x$routes$legs[[i]]$steps[[j]]$maneuver$modifier),
+              exit = as.character(exitvals),
+              duration = x$routes$legs[[i]]$steps[[j]]$duration,
+              distance = x$routes$legs[[i]]$steps[[j]]$distance,
+              destination = as.character(ifelse(is.null(x$routes$legs[[i]]$steps[[j]]$destination), NA, x$routes$legs[[i]]$steps[[j]]$destination)),
+              mode = as.character(modevals),
+              rowid = startrouteid-1+(1:length(x$routes$legs[[i]]$steps[[j]]$distance))+prevrows,
+              stringsAsFactors = FALSE
+            )
+
+          }, x, i)
+        )},routeinst)),row.names = "rowid")
     )
+    osrmsldf@data <- osrmsldf@data[,-ncol(osrmsldf@data)]
+  }
+
+  if (return_sf == TRUE) {
+    osrmsldf <- sf::st_as_sf(osrmsldf)
   }
 
   return(osrmsldf)
@@ -459,6 +661,8 @@ viaroute2sldf_instructv5 <- function(routeinst) {
 #' @param profile OSRM profile to use (for API v5), defaults to "driving".
 #' @param protocol The protocol to use for the API (for v5), defaults to "v1".
 #' @param osrmurl Base URL of the OSRM service
+#' @param return_sf Boolean value if this function should return an sf object, if
+#' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
 #'  nearest_osm(
@@ -468,19 +672,25 @@ viaroute2sldf_instructv5 <- function(routeinst) {
 #' }
 nearest_osm <- function(lat, lng, number = 1,
                         api = 5, profile="driving", protocol = "v1",
-                        osrmurl = "http://router.project-osrm.org"){
+                        osrmurl = "http://router.project-osrm.org",
+                        return_sf = FALSE){
   if (is(lat,"data.frame")) {
     lng = lat[,2]
     lat = lat[,1]
   }
   if (api == 4) {
     url = paste0(osrmurl, "/nearest?loc=", lat, ",", lng)
-    SpatialPointsDataFrame(coords = matrix(unlist(lapply(
+    thisspdf <- sp::SpatialPointsDataFrame(coords = matrix(unlist(lapply(
                              url, function(x){
                                matrix(jsonlite::fromJSON(x)$mapped_coordinate, ncol=2)}
                              ),recursive = FALSE),ncol=2,byrow = TRUE),
                            data = data.frame(orig_lat = lat, orig_lng = lng),
                            proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+    if (return_sf == TRUE) {
+      sf::st_as_sf(thisspdf)
+    } else {
+      thisspdf
+    }
   } else {
     if(number < 1) {
       stop("number must be greater than 0")
@@ -490,16 +700,23 @@ nearest_osm <- function(lat, lng, number = 1,
       jsonlite::fromJSON(x)
     })
 
-    SpatialPointsDataFrame(coords = matrix(unlist(lapply(
+    thisspdf <- sp::SpatialPointsDataFrame(coords = matrix(unlist(lapply(
       jsondata, function(x){
         matrix(x$waypoints$location[[1]], ncol=2)}
       ),recursive = FALSE),ncol=2,byrow = TRUE),
         data = cbind(data.frame(orig_lat = lat, orig_lng = lng),
-        data.table::rbindlist(lapply(jsondata, function(x){
+        dplyr::bind_rows(lapply(jsondata, function(x){
           data.frame(distance = x$waypoints$distance,
                      name = x$waypoints$name)
-        }),idcol = "locnum")),
+        }),.id = "locnum")),
         proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+
+    if (return_sf == TRUE) {
+      sf::st_as_sf(thisspdf)
+    } else {
+      thisspdf
+    }
+
   }
 }
 
@@ -515,6 +732,8 @@ nearest_osm <- function(lat, lng, number = 1,
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param osrmurl Base URL of the OSRM service
+#' @param return_sf Boolean value if this function should return an sf object, if
+#' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
 #'  locate2spdf(
@@ -523,9 +742,13 @@ nearest_osm <- function(lat, lng, number = 1,
 #'  )
 #' }
 #'
-locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org") {
+locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
-  return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate"))
+  if (return_sf == TRUE) {
+    return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate")))
+  } else {
+    return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate"))
+  }
 
 }
 
@@ -542,6 +765,8 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param osrmurl Base URL of the OSRM service
+#' @param return_sf Boolean value if this function should return an sf object, if
+#' FALSE returns sp object (default FALSE).
 #' @export
 #' @examples \dontrun{
 #'  nearest2spdf(
@@ -550,9 +775,13 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #'  )
 #' }
 #'
-nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org") {
+nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
 
-  return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
+  if (return_sf == TRUE) {
+    return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
+  } else {
+    return(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest"))
+  }
 
 }
 
@@ -575,12 +804,12 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
   i <- 1
   p <- dplyr::progress_estimated(length(lat), min_time = 5)
   while (i <= length(lat)) {
-    locatedata <- RCurl::getURL(paste0(osrmurl,
-                                       "/",service,"?loc=",
-                                       coorddf[i,]$origlat,
-                                       ",",
-                                       coorddf[i,]$origlng))
-    locatedata2 <- jsonlite::fromJSON(locatedata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = service,
+      query = list("loc"=paste0(coorddf[i,]$origlat,',',coorddf[i,]$origlng))
+    )
+    locatedata2 <- jsonlite::fromJSON(httr::content(httrreq, as = "text"))
     if (locatedata2$status == 0 | locatedata2$status == 200) {
       if (service == "locate") {
         coorddf[i,c("mappedlat","mappedlng","status")] <- c(locatedata2$mapped_coordinate,0)
@@ -671,21 +900,70 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
     sources <- which(locations$lng %in% lng & locations$lat %in% lat)-1
     destinations <- which(locations$lng %in% destlng & locations$lat %in% destlat)-1
 
-    tabledata <- RCurl::getURL(paste0(
-      osrmurl,"/table/",protocol,"/",profile,"/",
-      paste0(paste(locations$lng, locations$lat, sep=','), collapse=';'),
-      "?sources=",paste0(sources,collapse=';'),
-      "&destinations=",paste0(destinations,collapse=';')
-    ))
-    tabledata2 <- jsonlite::fromJSON(tabledata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = paste0("table/",protocol,"/",profile,"/",
+                    paste0(paste(locations$lng, locations$lat, sep=','), collapse=';')),
+      query = list(
+        "sources" = paste0(sources, collapse = ";"),
+        "destinations" = paste0(destinations, collapse = ";")
+      )
+    )
+    tabledata2 <- jsonlite::fromJSON(httr::content(httrreq, "text"))
     return(tabledata2$durations)
   } else {
-    tabledata <- RCurl::getURL(paste0(osrmurl,
-               "/table?loc=",
-               paste0(apply(data.frame(lat=lat,lng=lng),1,function(x){paste0(x,collapse=',')}),collapse='&loc=')
-               ))
-    tabledata2 <- jsonlite::fromJSON(tabledata)
+    httrreq <- httr::GET(
+      url = osrmurl,
+      path = "table",
+      query = unlist(
+        apply(data.frame(lat = lat, lng = lng), 1, function(x){
+          list("loc" = paste0(x, collapse = ","))
+        }), recursive = FALSE
+      )
+    )
+    tabledata2 <- jsonlite::fromJSON(httr::content(httrreq, "text"))
     return(tabledata2$distance_table)
   }
+
+}
+#' Plan a route with OSRM
+#'
+#' This is a wrapper around \code{viaroute} that returns a single route between A and B.
+#'
+#' @note The public-facing OSRM routing service (the default)
+#' only provides routing for cars by default. For details, see
+#' \url{https://github.com/Project-OSRM/osrm-backend/issues/4530}.
+#'
+#' @param singleline Should a single line be returned? Default is \code{TRUE}
+#' @param ... Arguments passed to viaroute()
+#' @inheritParams route_graphhopper
+#' @inheritParams viaroute
+#' @export
+#' @examples
+#' \dontrun{
+#' from = c(-1.55, 53.80) # geo_code("leeds")
+#' to = c(-1.76, 53.80) # geo_code("bradford uk")
+#' r = route_osrm(from, to)
+#' plot(r)
+#' r_many <- line2route(flowlines_sf[2:9,], route_osrm)
+#' plot(cents)
+#' plot(r_many, add = TRUE)
+#' }
+route_osrm <- function(from, to, l = NULL, alt = FALSE, ..., singleline = TRUE) {
+
+  coords <- od_coords(from, to, l)
+  v <- viaroute(coords[1, "fy"], coords[1, "fx"], coords[1, "ty"], coords[1, "tx"], ...)
+  r <- viaroute2sldf(v)
+
+  if(!alt) {
+    r <- r[1:min(which(r$type == "arrive")), ]
+  }
+  if(singleline) {
+    r <- sp::SpatialLinesDataFrame(rgeos::gLineMerge(r),
+                                   data.frame(distance = sum(r$distance),
+                                              duration = sum(r$duration)))
+  }
+
+  return(r)
 
 }

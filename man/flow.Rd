@@ -24,7 +24,6 @@ The variables are as follows:
   \item [,4:15]. Flows for different modes
   \item id. unique id of flow
 }
-
 Although these variable names are unique to UK data, the data
 structure is generalisable and typical of flow data from any source.
 The key variables are the origin and destination ids, which link to
@@ -41,9 +40,9 @@ d <- flow$Area.of.workplace \%in\% cents$geo_code[-1]
 flow <- flow[o & d, ] # subset flows with o and d in study area
 library(devtools)
 flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
-use_data(flow, overwrite = T)
+use_data(flow, overwrite = TRUE)
 
-# Convert flows to SpatialLinesDataFrame
+# Convert flows to spatial lines dataset
 flowlines <- od2line(flow = flow, zones = cents)
 # use_data(flowlines, overwrite = TRUE)
 
@@ -53,8 +52,9 @@ routes_slow <- line2route(l = flowlines, plan = "quietest")
 
 use_data(routes_fast)
 use_data(routes_slow)
+routes_fast_sf <- sf::st_as_sf(routes_fast)
+routes_slow_sf <- sf::st_as_sf(routes_slow)
 }
 
 }
 \keyword{datasets}
-

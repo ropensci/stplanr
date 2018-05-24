@@ -1,20 +1,19 @@
-# stplanr
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](http://cran.r-project.org/package=stplanr) [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+[![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr) [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app) [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/onboarding/issues/10)
 
-This package is for sustainable transport planning with R (hence the name **stplanr**).
+**stplanr** is a package for sustainable transport planning with R.
 
-It brings together a range of tools for transport planning practitioners and researchers to better understand transport systems and inform policy.
+It provides functions for solving common problems in transport planning and modelling, such as how to best get from point A to point B. The overall aim is to provide a reproducible, transparent and accessible toolkit to help people better understand transport systems and inform policy.
 
-The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the Propensity to Cycle Tool ([PCT](http://pct.bike/)) project to identify where bicycle paths are most urgently needed. Please see the package [vignette](https://cran.r-project.org/web/packages/stplanr/vignettes/introducing-stplanr.html) or an [academic paper on the PCT](http://arxiv.org/abs/1509.04425) for more information on how it can be used. This README gives some basics.
+The initial work on the project was funded by the Department of Transport ([DfT](https://www.gov.uk/government/organisations/department-for-transport)) as part of the development of the Propensity to Cycle Tool ([PCT](http://pct.bike/)). The PCT uses origin-destination data as the basis of spatial analysis and modelling work to identify where bicycle paths are most needed. See the package vignette (e.g. via `vignette("introducing-stplanr")`) or an [academic paper on the Propensity to Cycle Tool (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on how it can be used. This README gives some basics.
 
 **stplanr** should be useful to researchers everywhere. The function `route_graphhopper()`, for example, works anywhere in the world using the [graphhopper](https://graphhopper.com/) routing API and `read_table_builder()` reads-in Australian data. We welcome contributions that make transport research easier worldwide.
 
 Key functions
 -------------
 
-Data frames representing flows between origins and destinations must be combined with geo-referenced zones or points to generate meaningful analyses and visualisations of 'flows' or origin-destination (OD) data ([Caceres 2007](https://www.researchgate.net/profile/Francisco_Benitez/publication/3480996_Deriving_origin_destination_data_from_a_mobile_phone_network/links/0f31753ad7db9e7ece000000.pdf)). **stplanr** facilitates this with `od2line()`, which takes flow and geographical data as inputs and outputs a `SpatialLinesDataFrame`. Some example data is provided in the package:
+Data frames representing flows between origins and destinations must be combined with geo-referenced zones or points to generate meaningful analyses and visualisations of 'flows' or origin-destination (OD) data. **stplanr** facilitates this with `od2line()`, which takes flow and geographical data as inputs and outputs spatial data. Some example data is provided in the package:
 
 ``` r
 library(stplanr)
@@ -48,45 +47,31 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](README-plot1-1.png)
+![](vignettes/README-plot1-1.png)
 
-The package can also allocate flows to the road network, for example through a link to the [CycleStreets.net API](https://www.cyclestreets.net/api/).
+The package can also allocate flows to the road network, e.g. with [CycleStreets.net](https://www.cyclestreets.net/api/) and the OpenStreetMap Routing Machine ([OSRM](https://github.com/Project-OSRM/osrm-backend)) API interfaces. These are supported in `route_*()` functions such as `route_cyclestreets` and `route_osrm()`:
 
 Route functions take lat/lon inputs:
 
 ``` r
 trip <-
-  route_cyclestreet(from = c(-1, 53), to = c(-1.1, 53), plan = "balanced")
+  route_osrm(from = c(-1, 53), to = c(-1.1, 53))
 ```
 
 and place names, found using the Google Map API:
 
-``` r
-trip <- route_cyclestreet("London", "Birmingham, UK", plan = "balanced")
-# devtools::install_github("mtennekes/tmap", subdir = "pkg")
-library(tmap)
-osm_tiles <- read_osm(bb(bbox(trip), ext = 1.5))
-tm_shape(osm_tiles) +
-  tm_raster() +
-  tm_shape(trip) +
-  tm_lines(lwd = 3)
-```
-
-![](README-cycle-trip-1.png)
-
-We can replicate this call to CycleStreets.net multiple times using `line2route`.
+We can replicate this call multiple times using `line2route`.
 
 ``` r
-# Remove intra-zone flow
 intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
 travel_network <- travel_network[!intrazone,]
-t_routes <- line2route(travel_network)
+t_routes <- line2route(travel_network, route_fun = route_osrm)
 plot(t_routes)
 ```
 
-![](README-plot2-1.png)
+![](vignettes/README-plot2-1.png)
 
-Another way to visualise this is with the leaflet package (not shown):
+Another way to visualise this is with the leaflet package:
 
 ``` r
 library(leaflet)
@@ -95,23 +80,18 @@ leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
 
 For more examples, `example("line2route")`.
 
-`overline` is a function which takes a series of route-allocated lines, splits them into unique segmentes and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below using the [tmap](https://github.com/mtennekes/tmap) package.
+`overline` is a function which takes a series of route-allocated lines, splits them into unique segments and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as illustrated below.
 
 ``` r
 t_routes$All <- travel_network$All
-rnet <- overline(sldf = t_routes, attrib = "All", fun = sum)
+rnet <- overline(t_routes, attrib = "All", fun = sum)
 
-osm_tiles <- read_osm(bb(rnet, ext = 1.05))
-rnet$lwd <- rnet$All / mean(rnet$All)
-tm_shape(osm_tiles) +
-  tm_raster(saturation = .25) +
-  tm_shape(rnet) +
-  tm_lines(lwd = "lwd", scale = 5, legend.lwd.show = FALSE)  +
-  tm_shape(cents) +
-  tm_bubbles()
+lwd <- rnet$All / mean(rnet$All)
+plot(rnet, lwd = lwd)
+points(cents)
 ```
 
-![](README-rnet-1.png)
+![](vignettes/README-rnet-1.png)
 
 Installation
 ------------
@@ -122,7 +102,7 @@ To install the stable version, use:
 install.packages("stplanr")
 ```
 
-The development version can be installed using devtools:
+The development version can be installed using **devtools**:
 
 ``` r
 # install.packages("devtools") # if not already installed
@@ -157,6 +137,29 @@ To get internal help on a specific function, use the standard way.
 ?od2line
 ```
 
+Dependencies
+------------
+
+**stplanr** imports many great packages that it depends on. Many thanks to the developers of these tools:
+
+``` r
+desc = read.dcf("DESCRIPTION")
+headings = dimnames(desc)[[2]]
+fields = which(headings %in% c("Depends", "Imports", "Suggests"))
+pkgs = paste(desc[fields], collapse = ", ")
+pkgs = gsub("\n", " ", pkgs)
+strsplit(pkgs, ",")[[1]]
+#>  [1] "sp"                " R (>= 3.0)"       " curl"            
+#>  [4] " readr"            " dplyr"            " httr"            
+#>  [7] " jsonlite"         " stringi"          " stringr"         
+#> [10] " lubridate"        " maptools"         " raster"          
+#> [13] " rgdal"            " rgeos"            " openxlsx"        
+#> [16] " methods"          " R.utils"          " geosphere"       
+#> [19] " Rcpp (>= 0.12.1)" " igraph"           " nabor"           
+#> [22] " rlang"            " sf"               " testthat"        
+#> [25] " knitr"            " rmarkdown"        " dodgr"
+```
+
 Meta
 ----
 
@@ -165,4 +168,4 @@ Meta
 -   Get citation information for `stplanr` in R doing `citation(package = 'stplanr')`
 -   This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+<!-- [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org) -->

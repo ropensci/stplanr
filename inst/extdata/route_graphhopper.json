@@ -1,0 +1,122 @@
+{
+  "hints" : {
+    "visited_nodes.average" : "40.0",
+    "visited_nodes.sum" : "40"
+  },
+  "paths" : [ {
+    "instructions" : [ {
+      "distance" : 41.328,
+      "heading" : 6.39,
+      "sign" : 0,
+      "interval" : [ 0, 1 ],
+      "text" : "Continue",
+      "time" : 37195,
+      "street_name" : ""
+    }, {
+      "distance" : 5.576,
+      "sign" : 2,
+      "interval" : [ 1, 2 ],
+      "text" : "Turn right",
+      "time" : 10036,
+      "street_name" : ""
+    }, {
+      "annotation_text" : "get off the bike",
+      "distance" : 35.753,
+      "sign" : -2,
+      "annotation_importance" : 0,
+      "interval" : [ 2, 3 ],
+      "text" : "Turn left",
+      "time" : 39775,
+      "street_name" : ""
+    }, {
+      "annotation_text" : "get off the bike",
+      "distance" : 39.46,
+      "sign" : 2,
+      "annotation_importance" : 0,
+      "interval" : [ 3, 4 ],
+      "text" : "Turn right",
+      "time" : 35514,
+      "street_name" : ""
+    }, {
+      "annotation_text" : "get off the bike",
+      "distance" : 4.225,
+      "sign" : -2,
+      "annotation_importance" : 0,
+      "interval" : [ 4, 5 ],
+      "text" : "Turn left",
+      "time" : 3802,
+      "street_name" : ""
+    }, {
+      "annotation_text" : "cycleway",
+      "distance" : 43.644,
+      "sign" : -2,
+      "annotation_importance" : 0,
+      "interval" : [ 5, 7 ],
+      "text" : "Turn left",
+      "time" : 8728,
+      "street_name" : ""
+    }, {
+      "distance" : 220.026,
+      "sign" : -2,
+      "interval" : [ 7, 10 ],
+      "text" : "Turn left onto Westminster Bridge Road, A302",
+      "time" : 44004,
+      "street_name" : "Westminster Bridge Road, A302"
+    }, {
+      "annotation_text" : "cycleway",
+      "distance" : 1121.787,
+      "sign" : -7,
+      "annotation_importance" : 0,
+      "interval" : [ 10, 25 ],
+      "text" : "Keep left",
+      "time" : 247745,
+      "street_name" : ""
+    }, {
+      "annotation_text" : "cycleway",
+      "distance" : 7.872,
+      "sign" : -2,
+      "annotation_importance" : 0,
+      "interval" : [ 25, 26 ],
+      "text" : "Turn left",
+      "time" : 1574,
+      "street_name" : ""
+    }, {
+      "distance" : 76.878,
+      "sign" : 2,
+      "interval" : [ 26, 27 ],
+      "text" : "Turn right onto Birdcage Walk",
+      "time" : 16228,
+      "street_name" : "Birdcage Walk"
+    }, {
+      "distance" : 0.0,
+      "sign" : 4,
+      "last_heading" : 259.49258541474984,
+      "interval" : [ 27, 27 ],
+      "text" : "Arrive at destination",
+      "time" : 0,
+      "street_name" : ""
+    } ],
+    "descend" : 9.601998090744019,
+    "ascend" : 15.201998233795166,
+    "distance" : 1596.549,
+    "bbox" : [ -0.140081, 51.500005, -0.119311, 51.501324 ],
+    "weight" : 367.362476,
+    "points_encoded" : false,
+    "points" : {
+      "coordinates" : [ [ -0.120077, 51.500005 ], [ -0.12001, 51.500375 ], [ -0.119939, 51.500369 ], [ -0.11988, 51.500689 ], [ -0.119311, 51.500668 ], [ -0.119311, 51.500706 ], [ -0.119794, 51.500721 ], [ -0.119874, 51.500798 ], [ -0.122757, 51.500899 ], [ -0.122834, 51.500865 ], [ -0.12303, 51.500868 ], [ -0.123185, 51.500838 ], [ -0.123582, 51.500842 ], [ -0.124435, 51.50088 ], [ -0.124629, 51.500903 ], [ -0.126146, 51.500911 ], [ -0.127197, 51.500983 ], [ -0.12737, 51.50113 ], [ -0.12746, 51.501144 ], [ -0.129802, 51.501321 ], [ -0.130128, 51.501324 ], [ -0.130724, 51.501301 ], [ -0.131731, 51.501206 ], [ -0.133874, 51.500963 ], [ -0.138817, 51.500444 ], [ -0.138949, 51.50045 ], [ -0.138985, 51.500383 ], [ -0.140081, 51.500273 ] ],
+      "type" : "LineString"
+    },
+    "transfers" : 0,
+    "legs" : [ ],
+    "details" : { },
+    "time" : 444601,
+    "snapped_waypoints" : {
+      "coordinates" : [ [ -0.120077, 51.500005 ], [ -0.140081, 51.500273 ] ],
+      "type" : "LineString"
+    }
+  } ],
+  "info" : {
+    "took" : 36,
+    "copyrights" : [ "GraphHopper", "OpenStreetMap contributors" ]
+  }
+}

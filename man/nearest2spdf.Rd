@@ -4,7 +4,8 @@
 \alias{nearest2spdf}
 \title{Return SpatialPointsDataFrame with nearest street from OSRM nearest service}
 \usage{
-nearest2spdf(lat, lng, osrmurl = "http://router.project-osrm.org")
+nearest2spdf(lat, lng, osrmurl = "http://router.project-osrm.org",
+  return_sf = FALSE)
 }
 \arguments{
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
@@ -15,6 +16,9 @@ longitude in the second column.}
 coordinate to map.}
 
 \item{osrmurl}{Base URL of the OSRM service}
+
+\item{return_sf}{Boolean value if this function should return an sf object, if
+FALSE returns sp object (default FALSE).}
 }
 \description{
 Return SpatialPointsDataFrame with nearest street from OSRM nearest service
@@ -25,6 +29,7 @@ Retrieve coordinates and name of the node(s) on the network mapped from
 coordinates passed to functions using OSRM API v4 only. For API v5,
 use nearest_osm.
 }
+
 \examples{
 \dontrun{
  nearest2spdf(
@@ -34,4 +39,3 @@ use nearest_osm.
 }
 
 }
-

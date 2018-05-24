@@ -18,5 +18,5 @@ See \url{http://gis.stackexchange.com/questions/58147/} for more information.
 }
 \examples{
 n_vertices(routes_fast)
+n_vertices(routes_fast_sf)
 }
-

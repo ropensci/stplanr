@@ -2,10 +2,12 @@
 % Please edit documentation in R/routes.R
 \name{route_cyclestreet}
 \alias{route_cyclestreet}
+\alias{route_cyclestreets}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
-  pat = cyclestreet_pat())
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+  base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
+  save_raw = "FALSE")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -16,31 +18,40 @@ on Earth.}
 \code{length = 2} representing latitude and longitude) representing a point
 on Earth. This represents the destination of the trip.}
 
-\item{plan}{Text strong of either "fastest", "quietest" or "balanced"}
+\item{plan}{Text strong of either "fastest" (default), "quietest" or "balanced"}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
+
+\item{base_url}{The base url from which to construct API requests
+(with default set to main server)}
+
+\item{reporterrors}{Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).
+should report errors (FALSE by default).}
+
+\item{save_raw}{Boolean value which returns raw list from the json if TRUE (FALSE by default).}
 }
 \description{
 Provides an R interface to the CycleStreets.net cycle planning API,
 a route planner made by cyclists for cyclists.
 The function returns a SpatialLinesDataFrame object representing the
 an estimate of the fastest, quietest or most balance route.
-Currently only works for the United Kingdom and part of continental Europe.
-See \url{http://www.cyclestreets.net/api/}for more information.
+Currently only works for the United Kingdom and part of continental Europe,
+though other areas may be requested by contacting CycleStreets.
+See \url{https://www.cyclestreets.net/api/}for more information.
 }
 \details{
 This function uses the online routing service
 CycleStreets.net to find routes suitable for cyclists
 between origins and destinations. Requires an
 internet connection, a CycleStreets.net API key
-and origins and destinations within the UK to run.
+and origins and destinations within the UK (and various areas beyond) to run.
 
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
-geo-coding services are used via \code{RgoogleMaps::getGeoCode()}.
+geo-coding services are used via \code{geo_code()}.
 
 You need to have an api key for this code to run.
 Loading a locally saved copy of the api key text string
@@ -65,35 +76,20 @@ Read more about the .Renviron here: \code{?.Renviron}
 \examples{
 
 \dontrun{
-# Plan the 'fastest' route between two points in Manchester
-rf_mcr <- route_cyclestreet(from = "M3 4EE", to = "M1 4BT", plan = "fastest")
-plot(rf_mcr)
-
-# Plan the 'quietest' route from Hereford to Leeds
-rqh <- route_cyclestreet(from = "Hereford", to = "Leeds", plan = "quietest")
-plot(rq_hfd)
-
-# Plan a 'balanced' route from Pedaller's Arms in Leeds
-to the University of Leeds
-
-rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds", "balanced")
-
-library(leaflet) # requires the leaflet CRAN package
-# display the route on an interactive map
-leaflet() \%>\% addTiles() \%>\%
-  addPolylines(data = rb_pa)
-
-woodys_route = route_cyclestreet(from = "Stokesley", plan = "fastest", to = "Leeds")
-
-# Plan a route between two lat/lon pairs in the UK
-
-p1 <- c(-2, 52)
-p2 <- p1 + 1 # add a degree!
-route_cyclestreet(p1, p2, "fastest")
+from = c(-1.55, 53.80) # geo_code("leeds")
+to = c(-1.76, 53.80) # geo_code("bradford uk")
+json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+str(json_output) # what does cyclestreets give you?
+rf_lb <- route_cyclestreet(from, to, plan = "fastest")
+rf_lb@data
+plot(rf_lb)
+(rf_lb$length / (1000 * 1.61)) / # distance in miles
+  (rf_lb$time / (60 * 60)) # time in hours - average speed here: ~8mph
+# Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
+rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", "balanced")
 }
 
 }
 \seealso{
 line2route
 }
-

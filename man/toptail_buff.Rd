@@ -18,8 +18,6 @@ Takes lines and removes the start and end point, to a distance determined
 by the nearest polygon border.
 }
 \examples{
-data("routes_fast")
-data("zones")
 r_toptail <- toptail_buff(routes_fast, zones)
 sel <- row.names(routes_fast) \%in\% row.names(r_toptail)
 rf_cross_poly <- routes_fast[sel,]
@@ -29,4 +27,3 @@ plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
 plot(rf_cross_poly, add = TRUE, lwd = 2)
 plot(r_toptail, col = "red", add = TRUE)
 }
-

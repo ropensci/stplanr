@@ -4,11 +4,14 @@
 \alias{viaroute2sldf}
 \title{Convert json result of OSRM routing query to SpatialLinesDataFrame}
 \usage{
-viaroute2sldf(osrmresult)
+viaroute2sldf(osrmresult, return_sf = FALSE)
 }
 \arguments{
-\item{osrmresult}{String containing encoded json result of OSRM routing
-query.}
+\item{osrmresult}{Single character string or character vector containing
+encoded json result(s) of OSRM routing queries.}
+
+\item{return_sf}{Boolean value if this function should return an sf object, if
+FALSE returns sp object (default FALSE).}
 }
 \description{
 Convert json result of OSRM routing query to SpatialLinesDataFrame
@@ -18,14 +21,14 @@ Convert json result of OSRM routing query to SpatialLinesDataFrame
 Converts the result of a (successful) OSRM routing query and returns a
 SpatialLinesDataFrame containing the route, route summary and instructions.
 }
+
 \examples{
 \dontrun{
-library(RCurl)
  viaroute2sldf(
-   RCurl::getURL(paste0(
-   "http://router.project-osrm.org/viaroute?loc=52.503033,13.420526&",
-   "loc=52.516582,13.429290&instructions=true"))
+   viaroute(startlat = 52.503033,
+            startlng = 13.420526,
+            endlat = 52.516582,
+            endlng = 13.429290)
  )
 }
 }
-

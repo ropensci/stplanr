@@ -1,24 +1,26 @@
 # Testing routing services
 
 library(stplanr)
+r1 <- route_graphhopper("Yeadon, UK", to = "Leeds", silent = FALSE)
+r2 <- route_graphhopper("Leeds", "Yeadon, UK")
 
-r1 <- route_graphhopper("Yeadon", to = "Leeds")
-r2 <- route_graphhopper("Leeds", "Yeadon")
+# plot the data
+if(require(leaflet)) {
+  leaflet() %>% addTiles() %>% addPolylines(data = r1)
+}
 
-
-library(leaflet)
-leaflet() %>% addTiles() %>% addPolylines(data = r1)
-
+# look at the data
 r1@data
 r2@data
 
-
+# Now with CycleStreets.net
 r1 <- route_cyclestreet("Yeadon", to = "Leeds")
 r2 <- route_cyclestreet("Leeds", "Yeadon")
 
-
-library(leaflet)
-leaflet() %>% addTiles() %>% addPolylines(data = r1)
+# plot the data
+if(require(leaflet)) {
+  leaflet() %>% addTiles() %>% addPolylines(data = r1)
+}
 
 r1@data
 r2@data

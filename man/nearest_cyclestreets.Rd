@@ -4,9 +4,11 @@
 \alias{nearest_cyclestreets}
 \title{Generate nearest point on the route network of a point using the CycleStreets.net}
 \usage{
-nearest_cyclestreets(lat, lng, pat = cyclestreet_pat())
+nearest_cyclestreets(shp = NULL, lat, lng, pat = api_pat("cyclestreet"))
 }
 \arguments{
+\item{shp}{A spatial object}
+
 \item{lat}{Numeric vector containing latitude coordinate for each coordinate
 to map. Also accepts dataframe with latitude in the first column and
 longitude in the second column.}
@@ -14,8 +16,8 @@ longitude in the second column.}
 \item{lng}{Numeric vector containing longitude coordinate for each
 coordinate to map.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
 }
 \description{
 Generate nearest point on the route network of a point using the CycleStreets.net
@@ -25,9 +27,11 @@ Generate nearest point on the route network of a point using the CycleStreets.ne
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
 }
+
 \examples{
 \dontrun{
- nearest_cyclestreets(lat = 53, lng = 0.02, google_api = "api_key_here")
+ nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
+ nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
+ nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
 }
 }
-

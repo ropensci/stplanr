@@ -2,9 +2,9 @@
 % Please edit documentation in R/SpatialLinesNetwork.R
 \name{SpatialLinesNetwork}
 \alias{SpatialLinesNetwork}
-\title{Create object of class SpatialLinesNetwork from SpatialLinesDataFrame}
+\title{Create object of class SpatialLinesNetwork or sfNetwork}
 \usage{
-SpatialLinesNetwork(sl, uselonglat = FALSE)
+SpatialLinesNetwork(sl, uselonglat = FALSE, tolerance = 0)
 }
 \arguments{
 \item{sl}{A SpatialLines or SpatialLinesDataFrame containing the lines to
@@ -13,10 +13,13 @@ use to create the network.}
 \item{uselonglat}{A boolean value indicating if the data should be assumed
 to be using WGS84 latitude/longitude coordinates. If \code{FALSE} or not
 set, uses the coordinate system specified by the SpatialLines object.}
+
+\item{tolerance}{A numeric value indicating the tolerance (in the units of
+the coordinate system) to use as a tolerance with which to match nodes.}
 }
 \description{
-Creates a new SpatialLinesNetwork object that can be used for routing
-analysis within R.
+Creates a new SpatialLinesNetwork (for SpatialLines) or sfNetwork (for sf)
+object that can be used for routing analysis within R.
 }
 \section{Details}{
 
@@ -31,14 +34,24 @@ The original implementation has been rewritten to better support large
 useful for conducting transport research following on from the initial
 examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 }
+
 \examples{
-data(routes_fast)
-rnet <- overline(sldf = routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
+SLN <- SpatialLinesNetwork(route_network)
+class(SLN)
 weightfield(SLN) # field used to determine shortest path
+plot(SLN)
+points(sln2points(SLN)[1,], cex = 5)
+points(sln2points(SLN)[50,], cex = 5)
 shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
-plot(shortpath, col = "red", lwd = 4)
-plot(SLN, add = TRUE)
+plot(shortpath, col = "red", lwd = 4, add = TRUE)
+points(sln2points(SLN)[35,], cex = 5)
+shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
+plot(shortpath, col = "red", lwd = 4, add = TRUE)
+library(sf)
+SLN_sf <- SpatialLinesNetwork(route_network_sf)
+plot(SLN_sf)
+shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
+plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
@@ -46,4 +59,3 @@ Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
 Janoska, Z. (2013). Find shortest path in spatial network,
 URL:http://rpubs.com/janoskaz/10396.
 }
-

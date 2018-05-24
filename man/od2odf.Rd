@@ -26,12 +26,14 @@ in the form of 1 line per flow with zone codes of origin and destination
 centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
 }
+
 \examples{
-\dontrun{
+data(flow)
+data(zones)
 od2odf(flow, zones)
 }
-}
 \references{
-Rae, A. (2009). From spatial interaction data to spatial interaction information? Geovisualisation and spatial structures of migration from the 2001 UK census. Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+Rae, A. (2009). From spatial interaction data to spatial interaction information?
+Geovisualisation and spatial structures of migration from the 2001 UK census.
+ Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 }
-

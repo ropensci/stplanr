@@ -4,8 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, vehicle = "bike", silent = TRUE,
-  pat = graphhopper_pat())
+route_graphhopper(from, to, l = NULL, vehicle = "bike", silent = TRUE,
+  pat = NULL, base_url = "https://graphhopper.com")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -16,13 +16,19 @@ on Earth.}
 \code{length = 2} representing latitude and longitude) representing a point
 on Earth. This represents the destination of the trip.}
 
-\item{vehicle}{A text string representing the vehicle. Can be bike, bike2, car
-or foot.}
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
+
+\item{vehicle}{A text string representing the vehicle.
+Can be bike (default), car or foot. See \url{https://graphhopper.com/api/1/docs/supported-vehicle-profiles/} for further details.}
 
 \item{silent}{Logical (default is FALSE). TRUE hides request sent.}
 
-\item{pat}{The API key used - this is usually aquired automatically through a helper
-function}
+\item{pat}{The API key used. By default this is set to NULL and
+this is usually aquired automatically through a helper, api_pat().}
+
+\item{base_url}{The base url from which to construct API requests
+(with default set to main server)}
 }
 \description{
 Provides an R interface to the graphhopper routing engine,
@@ -41,7 +47,7 @@ To use this function you will need to obtain an API key from
 It is assumed that you have set your api key as a system environment
 for security reasons (so you avoid typing the API key in your code).
 Do this by adding the following to your .Renviron file (see \code{?.Renviron}
-or \url{https://cran.r-project.org/web/packages/httr/vignettes/api-packages.html}
+or the 'api-packages' vignette at \url{https://cran.r-project.org/package=httr}
 for more on this):
 
 \code{GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'}.
@@ -54,16 +60,15 @@ Where \code{url} is an example api request from
  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
-
 \dontrun{
-r <- route_graphhopper("Leeds", "Dublin", vehicle = "bike")
-r2 <- route_graphhopper("New York", "Washington", vehicle = "foot")
-library(leaflet)
-
-leaflet() \%>\% addTiles() \%>\% addPolylines(data = r)
+from = c(-0.12, 51.5); to = c(-0.14, 51.5)
+r1 = route_graphhopper(from = from, to = to, silent = FALSE)
+r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
+plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+plot(r3, add = TRUE, col = "red")
 }
 }
 \seealso{
 route_cyclestreet
 }
-

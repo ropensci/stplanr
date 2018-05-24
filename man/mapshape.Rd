@@ -24,7 +24,8 @@ See the mapshaper documentation for details:
 
 The percent argument refers to the percentage of removable points to retain.
 So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
-hard-disk space.}
+hard-disk space.
+\code{\link[rgeos]{gSimplify}}}
 }
 \description{
 Simplify geometry of spatial objects with the mapshaper library
@@ -42,14 +43,14 @@ mapshaper must be installed and available to \code{\link{system}}.
 \code{mapshape} writes new a file to disk.
 Thanks to Richard and Adrian Ellison for demonstrating this in R.
 }
+
 \examples{
 \dontrun{
-data(routes_fast)
-shp <- routes_fast[1,]
+shp <- routes_fast[2,]
+plot(shp)
 rfs10 <- mapshape(shp)
 rfs5 <- mapshape(shp, percent = 5)
 rfs1 <- mapshape(shp, percent = 1)
-plot(shp)
 plot(rfs10, add = TRUE, col ="red")
 plot(rfs5, add = TRUE, col ="blue")
 plot(rfs1, add = TRUE, col = "grey")
@@ -57,9 +58,6 @@ plot(rfs1, add = TRUE, col = "grey")
 rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
 plot(shp)
 plot(rfs_int, add = TRUE)
+mapshape(routes_fast_sf[2,])
 }
 }
-\seealso{
-\code{\link[rgeos]{gSimplify}}
-}
-

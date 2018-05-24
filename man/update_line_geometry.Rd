@@ -16,7 +16,8 @@ Take two SpatialLines objects and update the geometry of the former with that of
 retaining the data of the former.
 }
 \examples{
-l <- flowlines
+data(flowlines)
+l <- flowlines[2:5,]
 nl <- routes_fast
 nrow(l)
 nrow(nl)
@@ -28,4 +29,3 @@ plot(l, lwd = l$All / mean(l$All))
 plot(l_newgeom, lwd = l$All / mean(l$All))
 names(l_newgeom)
 }
-

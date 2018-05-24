@@ -50,6 +50,7 @@ zones. Assumes that the frequency of the variable is evenly distributed
 throughout the zone. Returns the original source dataframe with additional
 columns with summary variables.
 }
+
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
@@ -66,4 +67,3 @@ calc_moving_catchment(
 )
 }
 }
-

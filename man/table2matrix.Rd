@@ -40,10 +40,10 @@ Return Matrix containing travel times between origins and destinations
 
 Return a matrix containing travel times between origins and destinations
 }
+
 \examples{
 \dontrun{
  table2matrix(seq(from=50,to=52,by=0.1),seq(from=12,to=14,by=0.1))
 }
 
 }
-

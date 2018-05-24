@@ -31,4 +31,3 @@ yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
 sp::plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
 }
 }
-
