@@ -568,7 +568,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
       dplyr::summarise(do_union = FALSE) %>%
       sf::st_cast("LINESTRING") %>%
       dplyr::bind_cols(routedata) %>%
-      dplyr::select(-.data$linenum)
+      dplyr::select(-.data$linenum,-.data$do_union)
 
   } else {
 
