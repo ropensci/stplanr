@@ -7,7 +7,7 @@
 points2odf(p)
 }
 \arguments{
-\item{p}{SpatialPointsDataFrame or data.frame}
+\item{p}{A spatial points object}
 }
 \description{
 Takes a series of geographical points and converts them into a data.frame

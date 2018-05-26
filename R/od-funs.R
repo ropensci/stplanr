@@ -198,12 +198,12 @@ od2line2 <- function(flow, zones){
   l <- sp::SpatialLines(l)
 }
 
-#' Convert SpatialLinesDataFrame objects to a data.frame with from and to coords
+#' Convert geographic line objects to a data.frame with from and to coords
 #'
 #' This function returns a data frame with fx and fy and tx and ty variables
 #' representing the beginning and end points of spatial line features respectively.
 #'
-#' @param l A SpatialLinesDataFrame
+#' @param l A spatial lines object
 #' @export
 #' @examples
 #' data(flowlines)
@@ -458,7 +458,7 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' representing the potential flows, or 'spatial interaction', between every combination
 #' of points.
 #'
-#' @param p SpatialPointsDataFrame or data.frame
+#' @param p A spatial points object
 #' @export
 #' @examples
 #' data(cents)

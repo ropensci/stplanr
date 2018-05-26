@@ -7,7 +7,7 @@
 line_length(l, byid = TRUE)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 
 \item{byid}{Logical determining whether the length is returned per object (default is true)}
 }

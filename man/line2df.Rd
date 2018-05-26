@@ -2,12 +2,12 @@
 % Please edit documentation in R/od-funs.R
 \name{line2df}
 \alias{line2df}
-\title{Convert SpatialLinesDataFrame objects to a data.frame with from and to coords}
+\title{Convert geographic line objects to a data.frame with from and to coords}
 \usage{
 line2df(l)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 }
 \description{
 This function returns a data frame with fx and fy and tx and ty variables
