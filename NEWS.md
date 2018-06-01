@@ -1,4 +1,12 @@
-# stplanr 0.2.4.9000
+# stplanr 0.2.5
+
+## NEW FEATURES
+
+* New function `line_via()` for identifying intermediary points on a transport network
+
+## BUG FIXES
+
+* Bug associated with `SpatialLinesNetwork()` fixed (see [#249](https://github.com/ropensci/stplanr/issues/249))
 
 # stplanr 0.2.4
 
