@@ -1,7 +1,12 @@
-language: R
+language: r
+
+r:
+  - release
+
 sudo: required
 cache: packages
 dist: trusty
+
 
 addons:
   postgresql: "9.6"
@@ -12,6 +17,8 @@ addons:
       - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
     packages:
+      - libprotobuf-dev
+      - protobuf-compiler
       - libv8-3.14-dev
       - libjq-dev
       - libudunits2-dev
