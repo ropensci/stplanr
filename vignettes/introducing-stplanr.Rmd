@@ -46,16 +46,21 @@ Load the package as follows:
 library(stplanr)
 ```
 
+**stplanr** contains many datasets for testing and demonstrating how R can be used for transport planning.
+The names of these datasets (which are loaded 'lazily' into your namespace when you attach **stplanr**) are listed below:
+
+```{r}
+data(package = "stplanr")$result[, "Item"]
+```
+
+
 # Links to related packages
 
-The message printed when **stplanr** is loaded tells us that it also loads **sp**. This means that **stplanr** *depends* on **sp**.
+**stplanr** is focussed on spatial data. The reason for this is that almost all transport data, from the spatial distribution of bus stops to the routes that pedestrians take between home and work, contains a spatial element. Representing this spatial data in a formal *class system* has many advantages, including sensible defaults for plotting the spatial data on a map.
 
-The reason for this is that almost all transport data, from the spatial distribution of bus stops to the routes that pedestrians take between home and work, contains a spatial element. Representing this spatial data in a formal *class system* has many advantages, including sensible defaults for plotting the spatial data on a map.
+We use **sp** and **sf** because these support the range of vector data formats common in transport planning (points, lines, zones). See [github.com/edzer/sfr](https://github.com/edzer/sfr) and the [**sf** vignettes](https://github.com/edzer/sfr/blob/master/vignettes/sf1.Rmd) for details.
 
-We use **sp** because it is the most mature package for representing spatial data in R. At some point we may switch to the **sf** package, which provides a new way of representing spatial data. See [github.com/edzer/sfr](https://github.com/edzer/sfr) and the [**sf** vignettes](https://github.com/edzer/sfr/blob/master/vignettes/sf1.Rmd) for more information on these developments and spatial data classes in general.
-
-To get the best out of **stplanr** it helps to have a strong understanding of spatial data in R in general. *Introduction to Visualising Spatial Data in R*  (which lives at [github.com/Robinlovelace/Creating-maps-in-R](https://github.com/Robinlovelace/Creating-maps-in-R)) provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress.
-@bivand_applied_2013 provides a more detailed account of spatial data in R
+To get the best out of **stplanr** it helps to have a strong understanding of spatial data in R in general. Chapter 2 of the open source book [*Geocomputation with R*](http://geocompr.robinlovelace.net/) provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress.
 
 # OD data to desire lines and routes
 
@@ -91,7 +96,6 @@ Work is needed to convert the OD data into 'desire lines'. Desire lines are stra
 To show how these desire lines are created, we'll switch to using real OD data provided by **stplanr**. The first three of these is shown below:
 
 ```{r}
-data("flow") # load the 'flow' dataset from the stplanr package
 head(flow[c(1:3, 12)])
 ```
 
@@ -100,17 +104,15 @@ This shows that, between zone E02002361 and E02002361 (i.e. intrazonal flow) the
 For that we need another dataset, also provided by **stplanr**:
 
 ```{r}
-data("cents") # load the 'cents' dataset
-head(cents)
+head(cents_sf)
 ```
 
 The `cents` dataset is *spatial*, illustrated by it's class: a `SpatialPointsDataFrame`, from the **sp** package.
 Because **stplanr** loads **sp**, the dataset will be plotted as a map by default, as illustrated below:
 
 ```{r}
-library(tmap)
-tmap_mode("view")
-qtm(cents, symbols.size = 5)
+library(sf)
+plot(st_geometry(cents_sf))
 ```
 
 **stplanr** creates desire lines using the `od2line()` function, which links geographical and non-geographical datasets together. In this case, it will join the non-geographical `flow` data with the geographical `cents` data plotted above. Let's take a single OD pair, E02002361 to E02002371, the fourth row represented in the table above, to see how this works:
@@ -123,14 +125,16 @@ desire_line_single = od2line(flow = flow_single_line, zones = cents)
 This can be plotted as follows:
 
 ```{r}
-qtm(desire_line_single, lines.lwd = 5)
+desire_line_single = st_as_sf(desire_line_single)
+plot(st_geometry(desire_line_single), lwd = 5)
+plot(cents_sf, add = TRUE, cex = 5)
 ```
 
 Note that the R *function* `od2line()` is generic in the sense that it will work the same if you give it a single OD pair or a table representing thousands of desire lines.
 The following command creates desire lines longer than than 2km in distance via the `geo_length()` function --- omitting 'internal flows' via the `sel` object below --- represented in the dataset `flowlines`:
 
 ```{r}
-l = od2line(flow = flow, zones = cents)
+l = od2line(flow = flow, zones = cents_sf)
 # identify 'intrazone flows'
 sel_intra = l$Area.of.residence == l$Area.of.workplace
 # find distances
@@ -144,19 +148,20 @@ l = l[sel, ]
 This creates the geographic data object `l`, which can be visualised as follows:
 
 ```{r, eval=FALSE}
-qtm(l)
+plot(l)
 ```
 
 Now the data is set-up, we can change the visual appearance of the desire lines with a single extra argument passed to the plotting function. Let's make width depend on the total number of people travelling along the desire line:
 
 ```{r}
-qtm(l, lines.lwd = "All", scale = 10)
+lwd = l$All / mean(l$All)
+plot(st_geometry(l), lwd = lwd)
 ```
 
 Another useful visulisation involves setting the colour relative to the number of people cycling:
 
 ```{r}
-tm_shape(l) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+plot(l["Bicycle"], lwd = lwd)
 ```
 
 Finally, we can convert these desire lines into routes as follows (other `route_*` functions can be used, but may require API keys to work - see `?route_cyclestreets` for details):
@@ -172,11 +177,23 @@ if(has_internet & cs_key == 32) {
 }
 ```
 
-These routes contain the same information on origin and destination, but have additional spatial information about the route network. The routes can be plotted in the same way as the desire lines were plotted:
+These routes contain the same information on origin and destination, but have additional spatial information about the route network. The routes can be plotted in the same way as the desire lines were plotted, (with buildings shown for context):
 
-```{r}
-r@data = cbind(r@data, l@data)
-tm_shape(r) + tm_lines(lwd = "All", scale = 10, col = "Bicycle")
+```{r, out.width="500", out.height="500"}
+r_sf = st_sf(l, geometry = st_as_sfc(r))
+plot(r_sf["Bicycle"], lwd = lwd * 3, reset = FALSE)
+```
+
+```{r, out.width="500", out.height="500", echo=FALSE, eval=FALSE}
+# alternative showing buildings:
+r_sf = st_sf(l, geometry = st_as_sfc(r))
+if(require(osmdata)) {
+  buildings = opq(st_bbox(l)) %>% 
+  add_osm_feature(key = "building", value = "industrial") %>% 
+  osmdata_sf()
+}
+plot(r_sf["Bicycle"], lwd = lwd * 3, reset = FALSE)
+plot(st_geometry(buildings$osm_polygons), col = "grey", add = TRUE)
 ```
 
 The next stage is to aggregate these lines together to create a 'route network'.
