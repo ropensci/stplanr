@@ -139,19 +139,21 @@ library(stplanr)
 
 stplanr depends on rgdal, which can be tricky to install.
 
-### Installing rgdal on Ubuntu and Mac
+### Installing stplanr on Linux and Mac
 
-On Ubuntu rgdal can be installed with:
+**splanr** depends on **rgdal** which can be installed on Ubuntu, for example, with:
 
 ```
-sudo apt-get install r-cran-rgdal
+sudo apt install r-cran-rgdal
 ```
 
-Using apt-get ensures the system dependencies, such as
-[gdal](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries) are also installed.
+To install `gdal` binaries on other distributions please see here: http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries
 
-On Mac, homebrew can install gdal. Full instructions are provided
-[here](https://github.com/ropensci/geojsonio#install).
+**stplanr** also depends on **sf**. Installation instructions for Mac, Ubuntu and other Linux distros can be found here: https://github.com/r-spatial/sf#installing
+
+Instructions to install `gdal` and `Quartz` are provided at https://github.com/ropensci/geojsonio#install and https://www.xquartz.org/ respectively (Quartz is required for R - as described [here](https://cran.r-project.org/bin/macosx/)).
+
+
 
 
 ## Funtions, help and contributing
