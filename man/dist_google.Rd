@@ -40,33 +40,38 @@ Note: Currently returns the json object returned by the Google Maps API and uses
 
 \examples{
 \dontrun{
- # Distances from one origin to one destination
- from = c(-46.3, -23.4)
- to = c(-46.4, -23.4)
- dist_google(from = from, to = to, mode = "walking") # not supported on last test
- dist_google(from = from, to = to, mode = "driving")
- dist_google(from = c(0, 52), to = c(0, 53))
- data("cents")
- # Distances from between all origins and destinations
- dists_cycle = dist_google(from = cents, to = cents)
- dists_drive = dist_google(cents, cents, mode = "driving")
- dists_trans = dist_google(cents, cents, mode = "transit")
- dists_trans_am = dist_google(cents, cents, mode = "transit",
+# Distances from one origin to one destination
+from <- c(-46.3, -23.4)
+to <- c(-46.4, -23.4)
+dist_google(from = from, to = to, mode = "walking") # not supported on last test
+dist_google(from = from, to = to, mode = "driving")
+dist_google(from = c(0, 52), to = c(0, 53))
+data("cents")
+# Distances from between all origins and destinations
+dists_cycle <- dist_google(from = cents, to = cents)
+dists_drive <- dist_google(cents, cents, mode = "driving")
+dists_trans <- dist_google(cents, cents, mode = "transit")
+dists_trans_am <- dist_google(cents, cents,
+  mode = "transit",
   arrival_time = strptime("2016-05-27 09:00:00",
-   format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"))
- # Find out how much longer (or shorter) cycling takes than walking
- summary(dists_cycle$duration / dists_trans$duration)
- # Difference between travelling now and for 9am arrival
- summary(dists_trans_am$duration / dists_trans$duration)
- odf = points2odf(cents)
- odf = cbind(odf, dists)
- head(odf)
- flow = points2flow(cents)
- # show the results for duration (thicker line = shorter)
- plot(flow, lwd = mean(odf$duration) / odf$duration)
- dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
- dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
+    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
+  )
+)
+# Find out how much longer (or shorter) cycling takes than walking
+summary(dists_cycle$duration / dists_trans$duration)
+# Difference between travelling now and for 9am arrival
+summary(dists_trans_am$duration / dists_trans$duration)
+odf <- points2odf(cents)
+odf <- cbind(odf, dists)
+head(odf)
+flow <- points2flow(cents)
+# show the results for duration (thicker line = shorter)
+plot(flow, lwd = mean(odf$duration) / odf$duration)
+dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
+dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
   mode = "transit", arrival_time = strptime("2016-05-27 17:30:00",
-  format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"))
+    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
+  )
+)
 }
 }

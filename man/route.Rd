@@ -4,8 +4,9 @@
 \alias{route}
 \title{Plan routes on the transport network}
 \usage{
-route(from = NULL, to = NULL, l = NULL, route_fun = route_cyclestreet,
-  n_print = 10, list_output = FALSE, ...)
+route(from = NULL, to = NULL, l = NULL,
+  route_fun = route_cyclestreet, n_print = 10, list_output = FALSE,
+  ...)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -33,9 +34,9 @@ The definition of optimal depends on the routing function used
 }
 \examples{
 \dontrun{
-from = "Leek, UK"
-to = "Hereford, UK"
-route_leek_to_hereford = route(from, to)
+from <- "Leek, UK"
+to <- "Hereford, UK"
+route_leek_to_hereford <- route(from, to)
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
 }

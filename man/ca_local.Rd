@@ -28,7 +28,7 @@ ca_sp <- sp::SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2]
 data("route_network")
 proj4string(ca_sp) <- proj4string(route_network)
 bb <- bb2poly(route_network)
-ca_local = ca_sp[bb,]
+ca_local <- ca_sp[bb, ]
 }
 }
 \keyword{datasets}

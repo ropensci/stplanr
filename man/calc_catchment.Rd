@@ -7,8 +7,8 @@
 calc_catchment(polygonlayer, targetlayer, calccols, distance = 500,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
   "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
-  " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"), retainAreaProportion = FALSE,
-  dissolve = FALSE, quadsegs = NULL)
+  " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE, dissolve = FALSE, quadsegs = NULL)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -71,17 +71,17 @@ throughout the zone. Returns a SpatialPolygonsDataFrame.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'))
-unzip(file.path(data_dir, 'testcycleway.zip'))
-sa1income <- readOGR(".","smallsa1")
-testcycleway <- readOGR(".","testcycleway")
+unzip(file.path(data_dir, "smallsa1.zip"))
+unzip(file.path(data_dir, "testcycleway.zip"))
+sa1income <- readOGR(".", "smallsa1")
+testcycleway <- readOGR(".", "testcycleway")
 calc_catchment(
-   polygonlayer = sa1income,
-   targetlayer = testcycleway,
-   calccols = c('Total'),
-   distance = 800,
-   projection = 'austalbers',
-   dissolve = TRUE
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  distance = 800,
+  projection = "austalbers",
+  dissolve = TRUE
 )
 }
 }

@@ -17,20 +17,20 @@ n_sample_length(n, l_lengths, weights)
 Sample integer number from given continuous vector of line lengths and probabilities, with total n
 }
 \examples{
-n = 10
-l_lengths = 1:5
-weights = 9:5
-(res = n_sample_length(n, l_lengths, weights))
+n <- 10
+l_lengths <- 1:5
+weights <- 9:5
+(res <- n_sample_length(n, l_lengths, weights))
 sum(res)
-n = 100
-l_lengths = c(12, 22, 15, 14)
-weights = c(38, 10, 44, 34)
-(res = n_sample_length(n, l_lengths, weights))
+n <- 100
+l_lengths <- c(12, 22, 15, 14)
+weights <- c(38, 10, 44, 34)
+(res <- n_sample_length(n, l_lengths, weights))
 sum(res)
 # more examples:
 n_sample_length(5, 1:5, c(0.1, 0.9, 0, 0, 0))
 n_sample_length(5, 1:5, c(0.5, 0.3, 0.1, 0, 0))
-l = flowlines[2:6,]
-l_lengths = line_length(l)
-n = n_sample_length(10, l_lengths, weights = l$All)
+l <- flowlines[2:6, ]
+l_lengths <- line_length(l)
+n <- n_sample_length(10, l_lengths, weights = l$All)
 }

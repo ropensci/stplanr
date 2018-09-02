@@ -20,7 +20,7 @@ by the nearest polygon border.
 \examples{
 r_toptail <- toptail_buff(routes_fast, zones)
 sel <- row.names(routes_fast) \%in\% row.names(r_toptail)
-rf_cross_poly <- routes_fast[sel,]
+rf_cross_poly <- routes_fast[sel, ]
 plot(zones)
 plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
 # note adjacent lines removed

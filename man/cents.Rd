@@ -35,14 +35,14 @@ home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
 home <- sp::spTransform(x = home, CRSobj = crsuk)
 buf <- rgeos::gBuffer(home, width = 2000)
 # Check it saved the points OK
-cents <- cents[buf,]
+cents <- cents[buf, ]
 plot(buf)
 points(cents)
 cents <- sp::spTransform(x = cents, CRSobj = crs)
 cents$geo_code <- as.character(cents$geo_code)
 library(devtools)
 # use_data(cents, overwrite = TRUE)
-cents_sf = sf::st_as_sf(cents)
+cents_sf <- sf::st_as_sf(cents)
 devtools::use_data(cents_sf)
 }
 

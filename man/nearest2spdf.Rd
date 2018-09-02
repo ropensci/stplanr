@@ -32,10 +32,10 @@ use nearest_osm.
 
 \examples{
 \dontrun{
- nearest2spdf(
-   lat = c(50.3, 50.2),
-   lng = c(13.2, 13.1)
- )
+nearest2spdf(
+  lat = c(50.3, 50.2),
+  lng = c(13.2, 13.1)
+)
 }
 
 }

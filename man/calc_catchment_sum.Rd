@@ -64,24 +64,24 @@ length = 1, or a named vector otherwise.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'))
-unzip(file.path(data_dir, 'testcycleway.zip'))
-sa1income <- readOGR(".","smallsa1")
-testcycleway <- readOGR(".","testcycleway")
+unzip(file.path(data_dir, "smallsa1.zip"))
+unzip(file.path(data_dir, "testcycleway.zip"))
+sa1income <- readOGR(".", "smallsa1")
+testcycleway <- readOGR(".", "testcycleway")
 calc_catchment_sum(
-   polygonlayer = sa1income,
-   targetlayer = testcycleway,
-   calccols = c('Total'),
-   distance = 800,
-   projection = 'austalbers'
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  distance = 800,
+  projection = "austalbers"
 )
 
 calc_catchment_sum(
-polygonlayer = sa1income,
-targetlayer = testcycleway,
-calccols = c('Total'),
-distance = 800,
-projection = 'austalbers'
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  distance = 800,
+  projection = "austalbers"
 )
 }
 }

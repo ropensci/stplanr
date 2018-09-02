@@ -24,5 +24,5 @@ islp <- is_linepoint(flowlines)
 nrow(flowlines)
 sum(islp)
 # Remove invisible 'linepoints'
-nrow(flowlines[!islp,])
+nrow(flowlines[!islp, ])
 }

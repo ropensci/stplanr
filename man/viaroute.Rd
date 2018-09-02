@@ -4,10 +4,11 @@
 \alias{viaroute}
 \title{Query OSRM service and return json string result}
 \usage{
-viaroute(startlat = NULL, startlng = NULL, endlat = NULL, endlng = NULL,
-  viapoints = NULL, api = 5, profile = "driving", protocol = "v1",
-  osrmurl = "http://router.project-osrm.org", zoom = 18,
-  instructions = TRUE, alt = TRUE, geometry = TRUE, uturns = "default")
+viaroute(startlat = NULL, startlng = NULL, endlat = NULL,
+  endlng = NULL, viapoints = NULL, api = 5, profile = "driving",
+  protocol = "v1", osrmurl = "http://router.project-osrm.org",
+  zoom = 18, instructions = TRUE, alt = TRUE, geometry = TRUE,
+  uturns = "default")
 }
 \arguments{
 \item{startlat}{A single value or vector containing latitude(s) of the start
@@ -60,13 +61,13 @@ conjunction with the viaroute2sldf function.
 
 \examples{
 \dontrun{
-  exroutes <- viaroute(50, 0, 51, 1)
-  r <- viaroute2sldf(exroutes)
-  plot(r)
-  lngs <- c(-33.5,-33.6,-33.7)
-  lats <- c(150,150.1,150.2)
-  exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
-  r <- viaroute2sldf(exroutes)
-  plot(r)
+exroutes <- viaroute(50, 0, 51, 1)
+r <- viaroute2sldf(exroutes)
+plot(r)
+lngs <- c(-33.5, -33.6, -33.7)
+lats <- c(150, 150.1, 150.2)
+exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
+r <- viaroute2sldf(exroutes)
+plot(r)
 }
 }

@@ -19,17 +19,17 @@ line_match(l1, l2, threshold = 0.01, return_sp = FALSE)
 This function is a wrapper around gDistance that matches lines based on the Hausdorff distance
 }
 \examples{
-x1 = 2:4
-x2 = 3:5
+x1 <- 2:4
+x2 <- 3:5
 match(x1, x2) # how the base function works
-l1 = flowlines[2:4,]
-l2 = routes_fast[3:5,]
-(lmatches = line_match(l1, l2)) # how the stplanr version works
-l2matched = l2[lmatches[!is.na(lmatches)],]
+l1 <- flowlines[2:4, ]
+l2 <- routes_fast[3:5, ]
+(lmatches <- line_match(l1, l2)) # how the stplanr version works
+l2matched <- l2[lmatches[!is.na(lmatches)], ]
 plot(l1)
 plot(l2, add = TRUE)
 plot(l2matched, add = TRUE, col = "red") # showing matched routes
-l2matched2 = line_match(l1, l2, return_sp = TRUE)
+l2matched2 <- line_match(l1, l2, return_sp = TRUE)
 identical(l2matched, l2matched2)
 # decreasing the match likelihood via the threshold
 line_match(l1, l2, threshold = 0.003)

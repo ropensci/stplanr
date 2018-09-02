@@ -30,12 +30,11 @@ rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 weightfield(SLN) # field used to determine shortest path
 shortpath <- sum_network_links(
-    SLN,
-    data.frame(
-        start=rep(c(1,2,3,4,5),each=4),
-        end=rep(c(50,51,52,33),times=5)
-    )
+  SLN,
+  data.frame(
+    start = rep(c(1, 2, 3, 4, 5), each = 4),
+    end = rep(c(50, 51, 52, 33), times = 5)
+  )
 )
-plot(shortpath, lwd=shortpath$count)
-
+plot(shortpath, lwd = shortpath$count)
 }

@@ -5,9 +5,9 @@
 \alias{route_cyclestreets}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-  base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
-  save_raw = "FALSE")
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
+  pat = NULL, base_url = "https://www.cyclestreets.net",
+  reporterrors = TRUE, save_raw = "FALSE")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -76,9 +76,9 @@ Read more about the .Renviron here: \code{?.Renviron}
 \examples{
 
 \dontrun{
-from = c(-1.55, 53.80) # geo_code("leeds")
-to = c(-1.76, 53.80) # geo_code("bradford uk")
-json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+from <- c(-1.55, 53.80) # geo_code("leeds")
+to <- c(-1.76, 53.80) # geo_code("bradford uk")
+json_output <- route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
 str(json_output) # what does cyclestreets give you?
 rf_lb <- route_cyclestreet(from, to, plan = "fastest")
 rf_lb@data

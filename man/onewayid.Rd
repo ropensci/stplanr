@@ -2,9 +2,7 @@
 % Please edit documentation in R/oneway.R
 \name{onewayid}
 \alias{onewayid}
-\alias{onewayid}
 \alias{onewayid.data.frame}
-\alias{onewayid}
 \alias{onewayid.SpatialLines}
 \title{Aggregate ods so they become non-directional}
 \usage{
@@ -55,17 +53,17 @@ for users and are difficult to plot.
 }
 \examples{
 data(flow)
-flow_oneway = onewayid(flow, attrib = 3)
+flow_oneway <- onewayid(flow, attrib = 3)
 nrow(flow_oneway) < nrow(flow) # result has fewer rows
 sum(flow$All) == sum(flow_oneway$All) # but the same total flow
 # using names instead of index for attribute
 onewayid(flow, attrib = "All")
 # using many attributes to aggregate
-attrib = which(vapply(flow, is.numeric, TRUE))
-flow_oneway = onewayid(flow, attrib = attrib)
+attrib <- which(vapply(flow, is.numeric, TRUE))
+flow_oneway <- onewayid(flow, attrib = attrib)
 colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 # Demonstrate the results from onewayid and onewaygeo are identical
-flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
+flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
 onewayid(flowlines_sf, "all")
 # with spatial data
@@ -76,9 +74,9 @@ plot(fo)
 sum(fo$All) == sum(flowlines$All)
 # test results for one line
 n <- 3
-plot(fo[n,], lwd = 20, add = TRUE)
-f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
+plot(fo[n, ], lwd = 20, add = TRUE)
+f_over_n <- rgeos::gEquals(fo[n, ], flowlines["All"], byid = TRUE)
 sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
-plot(flowlines[which(f_over_n)[1],], add = TRUE, col = "white", lwd = 10)
-plot(flowlines[which(f_over_n)[2],], add = TRUE, lwd = 5)
+plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
+plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
 }

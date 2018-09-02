@@ -26,7 +26,7 @@ on data with geographic CRS's due to its reliance on the geosphere
 package.
 }
 \examples{
-l = routes_fast[2:4,]
+l <- routes_fast[2:4, ]
 l_toptail <- geo_toptail(l, toptail_dist = 300)
 plot(l)
 plot(l_toptail, col = "red", add = TRUE, lwd = 3)

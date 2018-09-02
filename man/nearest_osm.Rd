@@ -41,9 +41,9 @@ passed to functions.
 
 \examples{
 \dontrun{
- nearest_osm(
-   lat = 50.3,
-   lng = 13.2
- )
+nearest_osm(
+  lat = 50.3,
+  lng = 13.2
+)
 }
 }

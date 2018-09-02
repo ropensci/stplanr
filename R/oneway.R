@@ -33,28 +33,27 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' for users and are difficult to plot.
 #' @examples
 #' data(flow)
-#' flow_oneway = onewayid(flow, attrib = 3)
+#' flow_oneway <- onewayid(flow, attrib = 3)
 #' nrow(flow_oneway) < nrow(flow) # result has fewer rows
 #' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
 #' # using names instead of index for attribute
 #' onewayid(flow, attrib = "All")
 #' # using many attributes to aggregate
-#' attrib = which(vapply(flow, is.numeric, TRUE))
-#' flow_oneway = onewayid(flow, attrib = attrib)
+#' attrib <- which(vapply(flow, is.numeric, TRUE))
+#' flow_oneway <- onewayid(flow, attrib = attrib)
 #' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 #' # Demonstrate the results from onewayid and onewaygeo are identical
-#' flow_oneway_geo = onewaygeo(flowlines, attrib = attrib)
+#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
 #' onewayid(flowlines_sf, "all")
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-                                stplanr.key = od_id_order(x, id1, id2)){
-
-  if(is.numeric(attrib)){
-    attrib_names = names(x)[attrib]
+                                stplanr.key = od_id_order(x, id1, id2)) {
+  if (is.numeric(attrib)) {
+    attrib_names <- names(x)[attrib]
   } else {
-    attrib_names = attrib
-    attrib = which(names(x) %in% attrib)
+    attrib_names <- attrib
+    attrib <- which(names(x) %in% attrib)
   }
 
   x <- dplyr::bind_cols(x, stplanr.key)
@@ -67,27 +66,26 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
     dplyr::summarise(is_two_way = dplyr::last(.data$is_two_way)) %>%
     dplyr::select(-stplanr.key)
 
-  x_oneway_character = x %>%
+  x_oneway_character <- x %>%
     dplyr::transmute(
       id1 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 1],
       id2 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 2],
       stplanr.key = .data$stplanr.key
     ) %>%
     dplyr::group_by(stplanr.key) %>%
-    dplyr::summarise(id1 =dplyr::first(id1), id2 =dplyr::first(id2)) %>%
+    dplyr::summarise(id1 = dplyr::first(id1), id2 = dplyr::first(id2)) %>%
     dplyr::select(-stplanr.key)
 
-  x_oneway = dplyr::bind_cols(
+  x_oneway <- dplyr::bind_cols(
     x_oneway_character,
     x_oneway_numeric,
     x_oneway_binary
   )
 
   x_oneway$stplanr.key <- NULL
-  names(x_oneway)[1:2] = c(id1, id2)
+  names(x_oneway)[1:2] <- c(id1, id2)
 
   return(x_oneway)
-
 }
 
 #' @name onewayid
@@ -100,31 +98,29 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' sum(fo$All) == sum(flowlines$All)
 #' # test results for one line
 #' n <- 3
-#' plot(fo[n,], lwd = 20, add = TRUE)
-#' f_over_n <- rgeos::gEquals(fo[n,], flowlines["All"], byid = TRUE)
+#' plot(fo[n, ], lwd = 20, add = TRUE)
+#' f_over_n <- rgeos::gEquals(fo[n, ], flowlines["All"], byid = TRUE)
 #' sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
-#' plot(flowlines[which(f_over_n)[1],], add = TRUE, col = "white", lwd = 10)
-#' plot(flowlines[which(f_over_n)[2],], add = TRUE, lwd = 5)
+#' plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
+#' plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
 #' @export
 onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-                                  stplanr.key = od_id_order(x, id1, id2)){
-
+                                  stplanr.key = od_id_order(x, id1, id2)) {
   x_geom <- sp::SpatialLines(x@lines, proj4string = sp::CRS(proj4string(x)))
   x <- x@data
 
-  x_oneway = onewayid(x, id1, id2, attrib = attrib)
-  x_oneway$stplanr.key = od_id_order(x_oneway[c(id1, id2)])$stplanr.key
+  x_oneway <- onewayid(x, id1, id2, attrib = attrib)
+  x_oneway$stplanr.key <- od_id_order(x_oneway[c(id1, id2)])$stplanr.key
 
-  if(length(x_geom) != nrow(x_oneway)) {
+  if (length(x_geom) != nrow(x_oneway)) {
     id_old <- paste(x[[id1]], x[[id2]])
     sel <- id_old %in% x_oneway$stplanr.key
-    x_geom <- x_geom[sel,]
+    x_geom <- x_geom[sel, ]
   }
 
   x_oneway <- sp::SpatialLinesDataFrame(sl = x_geom, data = x_oneway, match.ID = FALSE)
 
   return(x_oneway)
-
 }
 
 #' Generate ordered ids of OD pairs so lowest is always first
@@ -132,11 +128,13 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
 #' @inheritParams onewayid
 #'
 #' @examples
-#' x = data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
+#' x <- data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
 #' od_id_order(x) # 4th line switches id1 and id2 so stplanr.key is in order
 #' @export
-od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]){
-  dplyr::transmute_(x, stplanr.id1 = as.name(id1),
-                    stplanr.id2 = as.name(id2),
-                    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2)))
+od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
+  dplyr::transmute_(x,
+    stplanr.id1 = as.name(id1),
+    stplanr.id2 = as.name(id2),
+    stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))
+  )
 }

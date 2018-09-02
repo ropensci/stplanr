@@ -4,8 +4,8 @@
 \alias{route_transportapi_public}
 \title{Plan a single route with TransportAPI.com}
 \usage{
-route_transportapi_public(from, to, silent = FALSE, region = "southeast",
-  modes = NA, not_modes = NA)
+route_transportapi_public(from, to, silent = FALSE,
+  region = "southeast", modes = NA, not_modes = NA)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -52,6 +52,7 @@ rqh <- route_transportapi_public(from = "Hereford", to = "Leeds")
 plot(rq_hfd)
 }
 
+# Aim plan public transport routes with transportAPI
 }
 \seealso{
 line2route

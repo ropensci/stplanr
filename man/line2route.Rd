@@ -38,7 +38,7 @@ See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da15
 
 \examples{
 \dontrun{
-l = flowlines[2:5,]
+l <- flowlines[2:5, ]
 r <- line2route(l, "route_osrm")
 rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = l, plan = "quietest", silent = TRUE)
@@ -48,13 +48,13 @@ plot(rq, col = "green", add = TRUE)
 plot(l, add = T)
 line2route(flowlines_sf[2:3, ], route_osrm)
 # Plot for a single line to compare 'fastest' and 'quietest' route
-n = 2
-plot(l[n,])
-lines(rf[n,], col = "red")
-lines(rq[n,], col = "green")
+n <- 2
+plot(l[n, ])
+lines(rf[n, ], col = "red")
+lines(rq[n, ], col = "green")
 # Example with list output
-l <- l[1:3,]
+l <- l[1:3, ]
 rf_list <- line2route(l = l, list_output = TRUE)
-line2route(l[1,], route_graphhopper)
+line2route(l[1, ], route_graphhopper)
 }
 }

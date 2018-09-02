@@ -17,6 +17,6 @@ Many GIS functions (e.g. finding the area)
 }
 \examples{
 data(routes_fast)
-rf_aeq = reproject(routes_fast[1:3, ])
-rf_osgb = reproject(routes_fast[1:3, ], 27700)
+rf_aeq <- reproject(routes_fast[1:3, ])
+rf_osgb <- reproject(routes_fast[1:3, ], 27700)
 }

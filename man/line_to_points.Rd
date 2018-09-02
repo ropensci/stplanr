@@ -25,10 +25,10 @@ A closely related function, \code{line2pointsn} returns all the points that were
 The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
 }
 \examples{
-l <- routes_fast[2:4,]
+l <- routes_fast[2:4, ]
 lpoints <- line_to_points(l)
 lpoints2 <- line2pointsn(l)
 plot(lpoints, pch = lpoints$id, cex = lpoints$id)
 points(lpoints2, add = TRUE)
-line_to_points(routes_fast_sf[2:4,])
+line_to_points(routes_fast_sf[2:4, ])
 }

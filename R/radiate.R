@@ -29,19 +29,19 @@
 #' sum(cents$population) # the total inter-zonal flow
 #' plot(flowlines_radiation, lwd = flowlines_radiation$flow / 100)
 #' points(cents, cex = cents$population / 100)
-od_radiation <- function(p, pop_var = "population", proportion = 1){
+od_radiation <- function(p, pop_var = "population", proportion = 1) {
   l <- points2flow(p)
   l$flow <- NA
-  for(i in 1:nrow(p)){
-    for(j in 1:nrow(p)){
-      if(i == j) next()
+  for (i in 1:nrow(p)) {
+    for (j in 1:nrow(p)) {
+      if (i == j) next()
       m <- p[[pop_var]][i]
       n <- p[[pop_var]][j]
-      sel_flow = which(l$O == p@data[i,1] & l$D == p@data[j,1])
+      sel_flow <- which(l$O == p@data[i, 1] & l$D == p@data[j, 1])
       # create circle the radius of which is the distance between i and j centered on i
-      radius = gprojected(shp = l[sel_flow,], fun = rgeos::gLength)
-      s_circle <- buff_geo(shp = p[i,], width = radius)
-      ps <- p[-c(i, j),][s_circle,]
+      radius <- gprojected(shp = l[sel_flow, ], fun = rgeos::gLength)
+      s_circle <- buff_geo(shp = p[i, ], width = radius)
+      ps <- p[-c(i, j), ][s_circle, ]
       s <- sum(ps[[pop_var]])
       l$flow[sel_flow] <-
         p[[pop_var]][i] * proportion * ((m * n) / ((m + s) * (m + n + s)))

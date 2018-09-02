@@ -28,6 +28,6 @@ dataframes otherwise.
 
 \examples{
 \dontrun{
- decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@", precision = 5)
+decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@", precision = 5)
 }
 }

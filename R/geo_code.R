@@ -19,51 +19,49 @@
 #' }
 geo_code <- function(address,
                      service = "nominatim",
-                    base_url = "https://maps.google.com/maps/api/geocode/json",
-                    return_all = FALSE,
-                    pat = NULL
-                    ) {
-
-    if(service == "nominatim") {
-      if(base_url == "https://maps.google.com/maps/api/geocode/json") {
-        base_url <- "https://nominatim.openstreetmap.org"
+                     base_url = "https://maps.google.com/maps/api/geocode/json",
+                     return_all = FALSE,
+                     pat = NULL) {
+  if (service == "nominatim") {
+    if (base_url == "https://maps.google.com/maps/api/geocode/json") {
+      base_url <- "https://nominatim.openstreetmap.org"
     }
-      place_name <- address
-      query <- list (q = place_name, format = "json")
-      if(!return_all) {
-        query <- c(query, limit = 1)
-      }
+    place_name <- address
+    query <- list(q = place_name, format = "json")
+    if (!return_all) {
+      query <- c(query, limit = 1)
+    }
 
-      q_url <- httr::modify_url(base_url, query = query)
-      res <- httr::GET (q_url)
-      txt <- httr::content(res, as = "text", encoding = "UTF-8",
-                           type = "application/xml")
-      obj <- jsonlite::fromJSON(txt)
-      res_df <- data.frame(lon = obj$lon, lat = obj$lat, name = obj$display_name)
-      lon_lat <- as.numeric(c(lon = obj$lon[1], lat = obj$lat[1]))
+    q_url <- httr::modify_url(base_url, query = query)
+    res <- httr::GET(q_url)
+    txt <- httr::content(res,
+      as = "text", encoding = "UTF-8",
+      type = "application/xml"
+    )
+    obj <- jsonlite::fromJSON(txt)
+    res_df <- data.frame(lon = obj$lon, lat = obj$lat, name = obj$display_name)
+    lon_lat <- as.numeric(c(lon = obj$lon[1], lat = obj$lat[1]))
   } else {
-
     query <- list(address = address, sensor = "false")
-    if(!is.null(pat)) {
+    if (!is.null(pat)) {
       query <- c(query, key = pat)
     }
-  u <- httr::modify_url(base_url, query = query)
-  res <- jsonlite::fromJSON(u)
-  if(res$status == "OVER_QUERY_LIMIT") {
-    stop(res$error_message)
-  }
+    u <- httr::modify_url(base_url, query = query)
+    res <- jsonlite::fromJSON(u)
+    if (res$status == "OVER_QUERY_LIMIT") {
+      stop(res$error_message)
+    }
 
-  res_df <- jsonlite::flatten(res$results)
-  lon_lat <- c(
-    lon = res_df$geometry.location.lng,
-    lat = res_df$geometry.location.lat
+    res_df <- jsonlite::flatten(res$results)
+    lon_lat <- c(
+      lon = res_df$geometry.location.lng,
+      lat = res_df$geometry.location.lat
     )
   }
 
-  if(return_all) {
+  if (return_all) {
     return(res_df)
   } else {
     return(lon_lat)
   }
-
 }

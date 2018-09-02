@@ -18,22 +18,24 @@ level than the origins stored in the \code{cents}.
 \dontrun{
 # This is how the dataset was constructed - see
 # http://cowz.geodata.soton.ac.uk/download/
-download.file("http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
-  "COWZ_EW_2011_BFC.zip")
+download.file(
+  "http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
+  "COWZ_EW_2011_BFC.zip"
+)
 unzip("COWZ_EW_2011_BFC.zip")
-wz = raster::shapefile("COWZ_EW_2011_BFC.shp")
-to_remove = list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
+wz <- raster::shapefile("COWZ_EW_2011_BFC.shp")
+to_remove <- list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
 file.remove(to_remove)
 proj4string(wz)
-wz = sp::spTransform(wz, proj4string(zones))
-destination_zones = wz[zones,]
+wz <- sp::spTransform(wz, proj4string(zones))
+destination_zones <- wz[zones, ]
 plot(destination_zones)
 devtools::use_data(destination_zones)
 head(destination_zones@data)
-destinations = rgeos::gCentroid(destinations, byid = TRUE)
-destinations = sp::SpatialPointsDataFrame(destinations, destination_zones@data)
+destinations <- rgeos::gCentroid(destinations, byid = TRUE)
+destinations <- sp::SpatialPointsDataFrame(destinations, destination_zones@data)
 devtools::use_data(destinations, overwrite = TRUE)
-destinations_sf = sf::st_as_sf(destinations)
+destinations_sf <- sf::st_as_sf(destinations)
 devtools::use_data(destinations_sf)
 }
 }

@@ -4,8 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, l = NULL, vehicle = "bike", silent = TRUE,
-  pat = NULL, base_url = "https://graphhopper.com")
+route_graphhopper(from, to, l = NULL, vehicle = "bike",
+  silent = TRUE, pat = NULL, base_url = "https://graphhopper.com")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -61,11 +61,13 @@ Where \code{url} is an example api request from
 }
 \examples{
 \dontrun{
-from = c(-0.12, 51.5); to = c(-0.14, 51.5)
-r1 = route_graphhopper(from = from, to = to, silent = FALSE)
-r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
-r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
-plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+from <- c(-0.12, 51.5)
+to <- c(-0.14, 51.5)
+r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
+r2 <- route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+r3 <- route_graphhopper("London Eye", "Westminster", vehicle = "car")
+plot(r1)
+plot(r2, add = TRUE, col = "blue") # compare routes
 plot(r3, add = TRUE, col = "red")
 }
 }

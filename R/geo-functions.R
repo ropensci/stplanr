@@ -6,8 +6,8 @@
 #'
 #' @inheritParams gclip
 #' @param filename File name of the output geojson
-writeGeoJSON <- function(shp, filename){
-  name <- nm <-deparse(substitute(shp))
+writeGeoJSON <- function(shp, filename) {
+  name <- nm <- deparse(substitute(shp))
   rgdal::writeOGR(obj = shp, layer = name, dsn = filename, driver = "GeoJSON")
   newname <- paste0(filename, ".geojson")
   file.rename(filename, newname)
@@ -44,37 +44,37 @@ writeGeoJSON <- function(shp, filename){
 #' @export
 #' @examples
 #' \dontrun{
-#' shp <- routes_fast[2,]
+#' shp <- routes_fast[2, ]
 #' plot(shp)
 #' rfs10 <- mapshape(shp)
 #' rfs5 <- mapshape(shp, percent = 5)
 #' rfs1 <- mapshape(shp, percent = 1)
-#' plot(rfs10, add = TRUE, col ="red")
-#' plot(rfs5, add = TRUE, col ="blue")
+#' plot(rfs10, add = TRUE, col = "red")
+#' plot(rfs5, add = TRUE, col = "blue")
 #' plot(rfs1, add = TRUE, col = "grey")
 #' # snap the lines to the nearest interval
 #' rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
 #' plot(shp)
 #' plot(rfs_int, add = TRUE)
-#' mapshape(routes_fast_sf[2,])
+#' mapshape(routes_fast_sf[2, ])
 #' }
-mapshape <- function(shp, percent = 10, ms_options = "",  dsn = "mapshape", silent = FALSE){
-  shp_filename = paste0(dsn, ".shp")
-  new_filename = paste0(dsn, "-ms.shp")
-  if(!mapshape_available()) stop("mapshaper not available on this system")
+mapshape <- function(shp, percent = 10, ms_options = "", dsn = "mapshape", silent = FALSE) {
+  shp_filename <- paste0(dsn, ".shp")
+  new_filename <- paste0(dsn, "-ms.shp")
+  if (!mapshape_available()) stop("mapshaper not available on this system")
   is_sp <- is(shp, "Spatial")
-  if(is_sp) {
+  if (is_sp) {
     shp <- sf::st_as_sf(shp)
   }
   sf::write_sf(shp, shp_filename, delete_layer = TRUE)
   cmd <- paste0("mapshaper ", ms_options, " ", shp_filename, " -simplify ", percent, "% -o ", new_filename)
-  if(!silent)  print(paste0("Running the following command from the system: ", cmd))
+  if (!silent) print(paste0("Running the following command from the system: ", cmd))
   system(cmd, ignore.stderr = TRUE)
   new_shp <- sf::st_read(paste0(dsn, "-ms.shp"))
   sf::st_crs(new_shp) <- sf::st_crs(shp)
   to_remove <- list.files(pattern = dsn)
   file.remove(to_remove)
-  if(is_sp) {
+  if (is_sp) {
     new_shp <- as(new_shp, "Spatial")
   }
   new_shp
@@ -114,22 +114,22 @@ mapshape_available <- function() {
 #' plot(clipped, add = TRUE)
 #' clipped$avslope # gclip also returns the data attribute
 #' points(clipped)
-#' points(cents[cb,], col = "red") # note difference
+#' points(cents[cb, ], col = "red") # note difference
 #' gclip(cents_sf, cb)
 gclip <- function(shp, bb) {
   UseMethod("gclip")
 }
 #' @export
 gclip.Spatial <- function(shp, bb) {
-  if(class(bb) == "matrix"){
+  if (class(bb) == "matrix") {
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   }
-  else{
+  else {
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
   }
   clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
-  if(grepl("DataFrame", class(shp))){
-    if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
+  if (grepl("DataFrame", class(shp))) {
+    if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
       geodata <- data.frame(gclip_id = row.names(clipped@lineobj))
     }
     else {
@@ -138,15 +138,15 @@ gclip.Spatial <- function(shp, bb) {
     joindata <- cbind(gclip_id = row.names(shp), shp@data)
     geodata <- dplyr::left_join(geodata, joindata)
     row.names(geodata) <- geodata$gclip_id
-    #if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
-    if(grepl("SpatialPolygons", class(shp))){
-      #then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
-      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped),], "data.frame"))
-    } else if(grepl("SpatialLines", class(shp)) & grepl("SpatialCollections",class(clipped))) {
+    # if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
+    if (grepl("SpatialPolygons", class(shp))) {
+      # then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
+      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped), ], "data.frame"))
+    } else if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
       clipped <- sp::SpatialLinesDataFrame(clipped@lineobj, geodata)
-    } else if(grepl("SpatialLines", class(shp))) {
+    } else if (grepl("SpatialLines", class(shp))) {
       clipped <- sp::SpatialLinesDataFrame(clipped, geodata)
-    } else { #assumes the data is a SpatialPointsDataFrame
+    } else { # assumes the data is a SpatialPointsDataFrame
       clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
     }
   }
@@ -155,9 +155,9 @@ gclip.Spatial <- function(shp, bb) {
 }
 #' @export
 gclip.sf <- function(shp, bb) {
-    shp <- as(shp, "Spatial")
-    shp <- gclip.Spatial(shp, as(bb, "Spatial"))
-    sf::st_as_sf(shp)
+  shp <- as(shp, "Spatial")
+  shp <- gclip.Spatial(shp, as(bb, "Spatial"))
+  sf::st_as_sf(shp)
 }
 #' Scale a bounding box
 #'
@@ -173,12 +173,12 @@ gclip.sf <- function(shp, bb) {
 #' bb1 <- bbox_scale(bb, scale_factor = 1.05)
 #' bb2 <- bbox_scale(bb, scale_factor = c(2, 1.05))
 #' bb3 <- bbox_scale(bb, 0.1)
-#' plot(x = bb2[1,], y = bb2[2,])
-#' points(bb1[1,], bb1[2,])
-#' points(bb3[1,], bb3[2,])
-#' points(bb[1,], bb[2,], col = "red")
-bbox_scale <- function(bb, scale_factor){
-  if(length(scale_factor == 1)) scale_factor <- rep(scale_factor, 2)
+#' plot(x = bb2[1, ], y = bb2[2, ])
+#' points(bb1[1, ], bb1[2, ])
+#' points(bb3[1, ], bb3[2, ])
+#' points(bb[1, ], bb[2, ], col = "red")
+bbox_scale <- function(bb, scale_factor) {
+  if (length(scale_factor == 1)) scale_factor <- rep(scale_factor, 2)
   b <- (bb - rowMeans(bb)) * scale_factor + rowMeans(bb)
   b
 }
@@ -220,13 +220,13 @@ geo_bb.Spatial <- function(shp, scale_factor = 1, distance = 0, output = c("poly
   bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
   bb <- bb2poly(bb = bb, distance = distance)
   sp::proj4string(bb) <- sp::proj4string(shp)
-  if(output == "polygon") {
+  if (output == "polygon") {
     return(bb)
-  } else if(output == "points") {
+  } else if (output == "points") {
     bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
     sp::proj4string(bb_point) <- sp::proj4string(shp)
     return(bb_point)
-  } else if(output == "bb") {
+  } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
 }
@@ -239,14 +239,14 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
   bb_sp <- bb2poly(bb = bb, distance = distance)
   bb <- sf::st_as_sf(bb_sp)
   sf::st_crs(bb) <- sf::st_crs(shp)
-  if(output == "polygon") {
+  if (output == "polygon") {
     return(bb)
-  } else if(output == "points") {
+  } else if (output == "points") {
     bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
     bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) = sf::st_crs(shp)
+    sf::st_crs(bb_point) <- sf::st_crs(shp)
     return(bb_point)
-  } else if(output == "bb") {
+  } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
 }
@@ -259,14 +259,14 @@ geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon
   bb_sp <- bb2poly(bb = bb, distance = distance)
   bb <- sf::st_as_sf(bb_sp)
   sf::st_crs(bb) <- sf::st_crs(shp)
-  if(output == "polygon") {
+  if (output == "polygon") {
     return(bb)
-  } else if(output == "points") {
+  } else if (output == "points") {
     bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
     bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) = sf::st_crs(shp)
+    sf::st_crs(bb_point) <- sf::st_crs(shp)
     return(bb_point)
-  } else if(output == "bb") {
+  } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
 }
@@ -274,32 +274,32 @@ geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon
 #' @export
 geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   output <- match.arg(output)
-  if(nrow(shp) != 2) {
+  if (nrow(shp) != 2) {
     bb <- geo_bb_matrix(shp)
   } else {
     bb <- shp
   }
   bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
   bb <- bb2poly(bb = bb, distance = distance)
-  if(output == "polygon") {
+  if (output == "polygon") {
     return(bb)
-  } else if(output == "points") {
+  } else if (output == "points") {
     bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
     return(bb_point)
-  } else if(output == "bb") {
+  } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
 }
 
 #' @export
-bb2poly <- function(bb, distance = 0){
-  if(class(bb) == "matrix"){
+bb2poly <- function(bb, distance = 0) {
+  if (class(bb) == "matrix") {
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   } else {
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
     proj4string(b_poly) <- proj4string(bb)
   }
-  if(distance > 0) {
+  if (distance > 0) {
     b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
     b_poly <- bb2poly(b_poly_buff)
   }

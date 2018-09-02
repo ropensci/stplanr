@@ -4,9 +4,10 @@
 \alias{od_aggregate}
 \title{Aggregate OD data between polygon geometries}
 \usage{
-od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
-  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
-  == FALSE, TRUE, FALSE), digits = getOption("digits"))
+od_aggregate(flow, zones, aggzones, aggzone_points = NULL,
+  cols = FALSE, aggcols = FALSE, FUN = sum,
+  prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+  digits = getOption("digits"))
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
@@ -58,10 +59,10 @@ allocating the original flows to larger zones based on area.
 }
 
 \examples{
-zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
+zones$quadrant <- c(1, 2, 1, 4, 5, 6, 7, 1)
 aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
 aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
-sp::proj4string(aggzones) = sp::proj4string(zones)
+sp::proj4string(aggzones) <- sp::proj4string(zones)
 aggzones_sf <- sf::st_as_sf(aggzones)
 aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)

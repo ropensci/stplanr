@@ -17,10 +17,10 @@ These correspond to the \code{\link{cents}} data.
 \dontrun{
 zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
 proj4string(zones) <- proj4string(cents)
-zones <- zones[cents,]
+zones <- zones[cents, ]
 plot(zones)
 points(cents)
-zones_sf = sf::st_as_sf(zones)
+zones_sf <- sf::st_as_sf(zones)
 }
 }
 \keyword{datasets}

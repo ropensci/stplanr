@@ -31,10 +31,10 @@ passed to functions using OSRM API v4 only. For API v5, use nearest_osm.
 
 \examples{
 \dontrun{
- locate2spdf(
-   lat = c(50.3, 50.2),
-   lng = c(13.2, 13.1)
- )
+locate2spdf(
+  lat = c(50.3, 50.2),
+  lng = c(13.2, 13.1)
+)
 }
 
 }

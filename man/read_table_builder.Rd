@@ -39,9 +39,10 @@ or .xlsx format before creating an R dataframe with the data.
 
 \examples{
 data_dir <- system.file("extdata", package = "stplanr")
-t1 <- read_table_builder(file.path(data_dir, 'SA1Population.csv'))
-t2 <- read_table_builder(file.path(data_dir, 'SA1Population.xlsx'),
- filetype = 'xlsx', sheet = 1, removeTotal = TRUE)
-sa1pop <- read.csv(file.path(data_dir, 'SA1Population.csv'), header=FALSE)
+t1 <- read_table_builder(file.path(data_dir, "SA1Population.csv"))
+t2 <- read_table_builder(file.path(data_dir, "SA1Population.xlsx"),
+  filetype = "xlsx", sheet = 1, removeTotal = TRUE
+)
+sa1pop <- read.csv(file.path(data_dir, "SA1Population.csv"), header = FALSE)
 t3 <- read_table_builder(sa1pop)
 }

@@ -29,6 +29,6 @@ See \code{\link{line2route}} for the version that is not retried on errors.
 \examples{
 \dontrun{
 data(flowlines)
-rf_list <- line2routeRetry(flowlines[1:2,], pattern = "nonexistanceerror", silent = F)
+rf_list <- line2routeRetry(flowlines[1:2, ], pattern = "nonexistanceerror", silent = F)
 }
 }

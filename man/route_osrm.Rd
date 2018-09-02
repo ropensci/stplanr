@@ -34,11 +34,11 @@ only provides routing for cars by default. For details, see
 }
 \examples{
 \dontrun{
-from = c(-1.55, 53.80) # geo_code("leeds")
-to = c(-1.76, 53.80) # geo_code("bradford uk")
-r = route_osrm(from, to)
+from <- c(-1.55, 53.80) # geo_code("leeds")
+to <- c(-1.76, 53.80) # geo_code("bradford uk")
+r <- route_osrm(from, to)
 plot(r)
-r_many <- line2route(flowlines_sf[2:9,], route_osrm)
+r_many <- line2route(flowlines_sf[2:9, ], route_osrm)
 plot(cents)
 plot(r_many, add = TRUE)
 }

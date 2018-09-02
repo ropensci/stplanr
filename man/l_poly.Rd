@@ -13,8 +13,8 @@ This dataset represents road width for testing.
 }
 \examples{
 \dontrun{
-l = routes_fast[13,]
-l_poly = buff_geo(l, 8)
+l <- routes_fast[13, ]
+l_poly <- buff_geo(l, 8)
 plot(l_poly)
 plot(routes_fast, add = TRUE)
 # allocate road width to relevant line

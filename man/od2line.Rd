@@ -2,7 +2,6 @@
 % Please edit documentation in R/od-funs.R
 \name{od2line}
 \alias{od2line}
-\alias{od2line}
 \alias{od2line2}
 \title{Convert flow data to SpatialLinesDataFrame}
 \usage{
@@ -71,7 +70,7 @@ identical(nfl_sldf, newflowlines)
 data(destinations)
 head(flow_dests[1:5]) # check data
 head(destinations@data[1:5])
-flowlines_dests = od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
+flowlines_dests <- od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
 plot(flowlines_dests)
 nfl_sf <- od2line(flow, zones_sf)
 }

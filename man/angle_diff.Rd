@@ -30,11 +30,11 @@ North is definied as 0, East as 90 and West as -90.
 \examples{
 data(flowlines)
 # Find all routes going North-South
-a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
+a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 plot(flowlines)
-plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
+plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
 # East-West
-plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
 angle_diff(flowlines_sf[2, ], angle = 0)
 }
 \author{

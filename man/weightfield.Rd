@@ -3,8 +3,6 @@
 \docType{methods}
 \name{weightfield}
 \alias{weightfield}
-\alias{weightfield}
-\alias{weightfield<-}
 \alias{weightfield<-}
 \alias{weightfield,SpatialLinesNetwork-method}
 \alias{weightfield,sfNetwork-method}
@@ -28,7 +26,8 @@ weightfield(x, varname) <- value
 
 \S4method{weightfield}{sfNetwork,ANY}(x) <- value
 
-\S4method{weightfield}{SpatialLinesNetwork,character}(x, varname) <- value
+\S4method{weightfield}{SpatialLinesNetwork,character}(x,
+  varname) <- value
 
 \S4method{weightfield}{sfNetwork,character}(x, varname) <- value
 }
@@ -58,7 +57,6 @@ variables.
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
-weightfield(SLN) <- 'length'
-weightfield(SLN, 'randomnum') <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
-
+weightfield(SLN) <- "length"
+weightfield(SLN, "randomnum") <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
 }

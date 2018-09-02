@@ -24,17 +24,17 @@
 #' home <- sp::spTransform(x = home, CRSobj = crsuk)
 #' buf <- rgeos::gBuffer(home, width = 2000)
 #' # Check it saved the points OK
-#' cents <- cents[buf,]
+#' cents <- cents[buf, ]
 #' plot(buf)
 #' points(cents)
 #' cents <- sp::spTransform(x = cents, CRSobj = crs)
 #' cents$geo_code <- as.character(cents$geo_code)
 #' library(devtools)
 #' # use_data(cents, overwrite = TRUE)
-#' cents_sf = sf::st_as_sf(cents)
+#' cents_sf <- sf::st_as_sf(cents)
 #' devtools::use_data(cents_sf)
 #' }
-#'
+#' 
 #' @docType data
 #' @keywords datasets
 #' @name cents
@@ -76,21 +76,21 @@ NULL
 #' library(devtools)
 #' flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
 #' use_data(flow, overwrite = TRUE)
-#'
+#' 
 #' # Convert flows to spatial lines dataset
 #' flowlines <- od2line(flow = flow, zones = cents)
 #' # use_data(flowlines, overwrite = TRUE)
-#'
+#' 
 #' # Convert flows to routes
 #' routes_fast <- line2route(l = flowlines, plan = "fastest")
 #' routes_slow <- line2route(l = flowlines, plan = "quietest")
-#'
+#' 
 #' use_data(routes_fast)
 #' use_data(routes_slow)
 #' routes_fast_sf <- sf::st_as_sf(routes_fast)
 #' routes_slow_sf <- sf::st_as_sf(routes_slow)
 #' }
-#'
+#' 
 #' @docType data
 #' @keywords datasets
 #' @name flow
@@ -105,12 +105,12 @@ NULL
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed
-#' flow_dests = flow
-#' flow_dests$Area.of.workplace = sample(x = destinations$WZ11CD, size = nrow(flow))
-#' flow_dests = dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
+#' flow_dests <- flow
+#' flow_dests$Area.of.workplace <- sample(x = destinations$WZ11CD, size = nrow(flow))
+#' flow_dests <- dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
 #' devtools::use_data(flow_dests)
 #' }
-#'
+#' 
 #' @docType data
 #' @keywords datasets
 #' @name flow_dests
@@ -127,22 +127,24 @@ NULL
 #' \dontrun{
 #' # This is how the dataset was constructed - see
 #' # http://cowz.geodata.soton.ac.uk/download/
-#' download.file("http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
-#'   "COWZ_EW_2011_BFC.zip")
+#' download.file(
+#'   "http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
+#'   "COWZ_EW_2011_BFC.zip"
+#' )
 #' unzip("COWZ_EW_2011_BFC.zip")
-#' wz = raster::shapefile("COWZ_EW_2011_BFC.shp")
-#' to_remove = list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
+#' wz <- raster::shapefile("COWZ_EW_2011_BFC.shp")
+#' to_remove <- list.files(pattern = "COWZ", full.names = TRUE, recursive = TRUE)
 #' file.remove(to_remove)
 #' proj4string(wz)
-#' wz = sp::spTransform(wz, proj4string(zones))
-#' destination_zones = wz[zones,]
+#' wz <- sp::spTransform(wz, proj4string(zones))
+#' destination_zones <- wz[zones, ]
 #' plot(destination_zones)
 #' devtools::use_data(destination_zones)
 #' head(destination_zones@data)
-#' destinations = rgeos::gCentroid(destinations, byid = TRUE)
-#' destinations = sp::SpatialPointsDataFrame(destinations, destination_zones@data)
+#' destinations <- rgeos::gCentroid(destinations, byid = TRUE)
+#' destinations <- sp::SpatialPointsDataFrame(destinations, destination_zones@data)
 #' devtools::use_data(destinations, overwrite = TRUE)
-#' destinations_sf = sf::st_as_sf(destinations)
+#' destinations_sf <- sf::st_as_sf(destinations)
 #' devtools::use_data(destinations_sf)
 #' }
 #' @docType data
@@ -212,10 +214,10 @@ NULL
 #' \dontrun{
 #' zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
 #' proj4string(zones) <- proj4string(cents)
-#' zones <- zones[cents,]
+#' zones <- zones[cents, ]
 #' plot(zones)
 #' points(cents)
-#' zones_sf = sf::st_as_sf(zones)
+#' zones_sf <- sf::st_as_sf(zones)
 #' }
 #' @docType data
 #' @keywords datasets
@@ -236,9 +238,10 @@ NULL
 #' @aliases route_network_sf
 #' @usage data(route_network)
 #' @format A spatial lines dataset 80 rows and 1 column
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' # Generate route network
-#' route_network = overline(routes_fast, "All", fun = sum)
+#' route_network <- overline(routes_fast, "All", fun = sum)
 #' route_network_sf <- sf::st_as_sf(route_network)
 #' }
 NULL
@@ -254,7 +257,8 @@ NULL
 #' @name ca_local
 #' @usage data(ca_local)
 #' @format A SpatialPointsDataFrame with 11 rows and 2 columns
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' # Generate data
 #' ac <- read_stats19_ac()
 #' ca <- read_stats19_ca()
@@ -268,7 +272,7 @@ NULL
 #' data("route_network")
 #' proj4string(ca_sp) <- proj4string(route_network)
 #' bb <- bb2poly(route_network)
-#' ca_local = ca_sp[bb,]
+#' ca_local <- ca_sp[bb, ]
 #' }
 NULL
 
@@ -281,9 +285,10 @@ NULL
 #' @usage data(l_poly)
 #' @format A SpatialPolygon
 #'
-#' @examples \dontrun{
-#' l = routes_fast[13,]
-#' l_poly = buff_geo(l, 8)
+#' @examples
+#' \dontrun{
+#' l <- routes_fast[13, ]
+#' l_poly <- buff_geo(l, 8)
 #' plot(l_poly)
 #' plot(routes_fast, add = TRUE)
 #' # allocate road width to relevant line

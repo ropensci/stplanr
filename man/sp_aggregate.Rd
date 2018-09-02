@@ -44,11 +44,11 @@ different geometry specified by another SpatialPolygons object.
 \examples{
 \dontrun{
 zones@data$region <- 1
-zones@data[c(2, 5), c('region')] <- 2
+zones@data[c(2, 5), c("region")] <- 2
 aggzones <- sp::SpatialPolygonsDataFrame(rgeos::gUnaryUnion(
- zones,
- id = zones@data$region), data.frame(region=c(1, 2))
-)
+  zones,
+  id = zones@data$region
+), data.frame(region = c(1, 2)))
 zones@data$region <- NULL
 zones@data$exdata <- 5
 library(sp)

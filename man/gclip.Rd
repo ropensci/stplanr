@@ -28,6 +28,6 @@ clipped <- gclip(cents, cb)
 plot(clipped, add = TRUE)
 clipped$avslope # gclip also returns the data attribute
 points(clipped)
-points(cents[cb,], col = "red") # note difference
+points(cents[cb, ], col = "red") # note difference
 gclip(cents_sf, cb)
 }

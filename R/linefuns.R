@@ -13,15 +13,15 @@
 #' @examples
 #' n_vertices(routes_fast)
 #' n_vertices(routes_fast_sf)
-n_vertices <- function(l){
+n_vertices <- function(l) {
   UseMethod("n_vertices")
 }
 #' @export
-n_vertices.Spatial <- function(l){
+n_vertices.Spatial <- function(l) {
   sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
 }
 #' @export
-n_vertices.sf <- function(l){
+n_vertices.sf <- function(l) {
   geoms <- sf::st_coordinates(l)
   L1 <- rlang::quo(L1)
   geoms %>%
@@ -49,8 +49,8 @@ n_vertices.sf <- function(l){
 #' nrow(flowlines)
 #' sum(islp)
 #' # Remove invisible 'linepoints'
-#' nrow(flowlines[!islp,])
-is_linepoint <- function(l){
+#' nrow(flowlines[!islp, ])
+is_linepoint <- function(l) {
   nverts <- n_vertices(l)
   sel <- nverts <= 2
   ldf <- line2df(l)
@@ -80,12 +80,11 @@ line_bearing <- function(l, bidirectional = FALSE) {
 }
 #' @export
 line_bearing.Spatial <- function(l, bidirectional = FALSE) {
-
   ldf <- line2df(l)
-  bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[,c("tx", "ty")]))
-    if(bidirectional) {
-      bearing[bearing > 90] <- bearing[bearing > 90] - 180
-      bearing[bearing < -90] <- bearing[bearing < -90] + 180
+  bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[, c("tx", "ty")]))
+  if (bidirectional) {
+    bearing[bearing > 90] <- bearing[bearing > 90] - 180
+    bearing[bearing < -90] <- bearing[bearing < -90] + 180
   }
   bearing
 }
@@ -113,35 +112,36 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' @examples
 #' data(flowlines)
 #' # Find all routes going North-South
-#' a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
+#' a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 #' plot(flowlines)
-#' plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
+#' plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
 #' # East-West
-#' plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+#' plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
 #' angle_diff(flowlines_sf[2, ], angle = 0)
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
 }
 #' @export
-angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
-  if(is(object = l, "Spatial")){
-    line_angles = line_bearing(l)
+angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
+  if (is(object = l, "Spatial")) {
+    line_angles <- line_bearing(l)
   } else {
-    line_angles = l
+    line_angles <- l
   }
-  angle_diff = angle - line_angles
-  angle_diff[angle_diff <= -180] = angle_diff[angle_diff <= -180] + 180
-  angle_diff[angle_diff >= 180] = angle_diff[angle_diff >= 180] - 180
-  if(bidirectional){
-    angle_diff[angle_diff <= -90] = 180 + angle_diff[angle_diff <= -90]
-    angle_diff[angle_diff >= 90] = 180 - angle_diff[angle_diff >= 90]
+  angle_diff <- angle - line_angles
+  angle_diff[angle_diff <= -180] <- angle_diff[angle_diff <= -180] + 180
+  angle_diff[angle_diff >= 180] <- angle_diff[angle_diff >= 180] - 180
+  if (bidirectional) {
+    angle_diff[angle_diff <= -90] <- 180 + angle_diff[angle_diff <= -90]
+    angle_diff[angle_diff >= 90] <- 180 - angle_diff[angle_diff >= 90]
   }
-  if(absolute)
-    angle_diff = abs(angle_diff)
+  if (absolute) {
+    angle_diff <- abs(angle_diff)
+  }
   angle_diff
 }
 #' @export
-angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
+angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   l_sp <- as(l, "Spatial")
   angle_diff.Spatial(l_sp, angle, bidirectional = FALSE, absolute = TRUE)
 }
@@ -153,7 +153,7 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE){
 #' @export
 #' @examples
 #' data(routes_fast)
-#' line_midpoint(routes_fast[2:5,])
+#' line_midpoint(routes_fast[2:5, ])
 line_midpoint <- function(l) {
   UseMethod("line_midpoint")
 }
@@ -171,7 +171,7 @@ line_midpoint.sf <- function(l) {
 #' @inheritParams line2df
 #' @param byid Logical determining whether the length is returned per object (default is true)
 #' @export
-line_length <- function(l, byid = TRUE){
+line_length <- function(l, byid = TRUE) {
   gprojected(l, rgeos::gLength, byid = byid)
 }
 
@@ -182,40 +182,40 @@ line_length <- function(l, byid = TRUE){
 #' @export
 #' @examples
 #' data(routes_fast)
-#' l = routes_fast[2, ]
+#' l <- routes_fast[2, ]
 #' library(sp)
-#' l_seg2 = line_segment(l = l, n_segments = 2)
+#' l_seg2 <- line_segment(l = l, n_segments = 2)
 #' plot(l_seg2, col = l_seg2$group, lwd = 50)
-line_segment <- function(l, n_segments, segment_length = NA){
-  if(!is.na(segment_length)){
-    l_length = line_length(l)
-    n_segments = round(l_length / segment_length)
+line_segment <- function(l, n_segments, segment_length = NA) {
+  if (!is.na(segment_length)) {
+    l_length <- line_length(l)
+    n_segments <- round(l_length / segment_length)
   }
-  if(n_segments == 2){
-    pseg = line_midpoint(l)
+  if (n_segments == 2) {
+    pseg <- line_midpoint(l)
   } else {
-    pseg = sp::spsample(x = l, n = n_segments - 1, type = "regular")
+    pseg <- sp::spsample(x = l, n = n_segments - 1, type = "regular")
   }
-  l_geom = raster::geom(l)
-  l_coords = l_geom[, c("x", "y")]
-  knn_res = nabor::knn(data = l_coords, query = sp::coordinates(pseg), k = 1)
-  sel_nearest = c(knn_res$nn.idx)
-  for(i in 1:(length(sel_nearest) + 1)){
-    ids = c(1, sel_nearest, nrow(l))
-    if(i == 1){
-      l_seg = points2line(l_coords[ids[i]:ids[(i + 1)],])
-      sp::spChFIDs(l) = i
-    } else if(i == length(sel_nearest) + 1){
-      l_temp = points2line(l_coords[ids[i]:nrow(l_coords),])
-      sp::spChFIDs(l_temp) = i
-      l_seg = raster::bind(l_seg, l_temp)
+  l_geom <- raster::geom(l)
+  l_coords <- l_geom[, c("x", "y")]
+  knn_res <- nabor::knn(data = l_coords, query = sp::coordinates(pseg), k = 1)
+  sel_nearest <- c(knn_res$nn.idx)
+  for (i in 1:(length(sel_nearest) + 1)) {
+    ids <- c(1, sel_nearest, nrow(l))
+    if (i == 1) {
+      l_seg <- points2line(l_coords[ids[i]:ids[(i + 1)], ])
+      sp::spChFIDs(l) <- i
+    } else if (i == length(sel_nearest) + 1) {
+      l_temp <- points2line(l_coords[ids[i]:nrow(l_coords), ])
+      sp::spChFIDs(l_temp) <- i
+      l_seg <- raster::bind(l_seg, l_temp)
     } else {
-      l_temp = points2line(l_coords[ids[i]:ids[(i + 1)],])
-      sp::spChFIDs(l_temp) = i
-      l_seg = raster::bind(l_seg, l_temp)
+      l_temp <- points2line(l_coords[ids[i]:ids[(i + 1)], ])
+      sp::spChFIDs(l_temp) <- i
+      l_seg <- raster::bind(l_seg, l_temp)
     }
   }
-  l_seg = sp::SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
-  raster::crs(l_seg) = raster::crs(l)
+  l_seg <- sp::SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
+  raster::crs(l_seg) <- raster::crs(l)
   l_seg
 }

@@ -70,22 +70,22 @@ distributed throughout the zone. Returns a SpatialPolygonsDataFrame.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'), exdir=tempdir())
-unzip(file.path(data_dir, 'testcycleway.zip'), exdir=tempdir())
-unzip(file.path(data_dir, 'sydroads.zip'), exdir=tempdir())
-sa1income <- readOGR(tempdir(),"smallsa1")
-testcycleway <- readOGR(tempdir(),"testcycleway")
-sydroads <- readOGR(tempdir(),"roads")
+unzip(file.path(data_dir, "smallsa1.zip"), exdir = tempdir())
+unzip(file.path(data_dir, "testcycleway.zip"), exdir = tempdir())
+unzip(file.path(data_dir, "sydroads.zip"), exdir = tempdir())
+sa1income <- readOGR(tempdir(), "smallsa1")
+testcycleway <- readOGR(tempdir(), "testcycleway")
+sydroads <- readOGR(tempdir(), "roads")
 sydnetwork <- SpatialLinesNetwork(sydroads)
 calc_network_catchment(
-   sln = sydnetwork,
-   polygonlayer = sa1income,
-   targetlayer = testcycleway,
-   calccols = c('Total'),
-   maximpedance = 800,
-   distance = 200,
-   projection = 'austalbers',
-   dissolve = TRUE
+  sln = sydnetwork,
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  maximpedance = 800,
+  distance = 200,
+  projection = "austalbers",
+  dissolve = TRUE
 )
 }
 }

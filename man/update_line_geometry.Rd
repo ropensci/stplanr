@@ -17,11 +17,11 @@ retaining the data of the former.
 }
 \examples{
 data(flowlines)
-l <- flowlines[2:5,]
+l <- flowlines[2:5, ]
 nl <- routes_fast
 nrow(l)
 nrow(nl)
-l <- l[!is_linepoint(l),]
+l <- l[!is_linepoint(l), ]
 names(l)
 names(routes_fast)
 l_newgeom <- update_line_geometry(l, nl)
