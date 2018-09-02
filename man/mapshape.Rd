@@ -25,7 +25,7 @@ See the mapshaper documentation for details:
 The percent argument refers to the percentage of removable points to retain.
 So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
 hard-disk space.
-\code{\link[rgeos]{gSimplify}}}
+\code{\link[rgeos:gSimplify]{rgeos::gSimplify()}}}
 }
 \description{
 Simplify geometry of spatial objects with the mapshaper library
@@ -39,7 +39,7 @@ package: \url{https://github.com/ateucher/rmapshaper}.
 Calls the JavaScript command-line GIS application mapshaper
 (\url{https://github.com/mbloch/mapshaper}) from the system
 to simplify geographic features, and then tidies up.
-mapshaper must be installed and available to \code{\link{system}}.
+mapshaper must be installed and available to \code{\link[=system]{system()}}.
 \code{mapshape} writes new a file to disk.
 Thanks to Richard and Adrian Ellison for demonstrating this in R.
 }

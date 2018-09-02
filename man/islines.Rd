@@ -12,7 +12,7 @@ islines(g1, g2)
 \item{g2}{A spatial object}
 }
 \description{
-This is a function required in \code{\link{overline}}. It identifies
+This is a function required in \code{\link[=overline]{overline()}}. It identifies
 whether sets of lines overlap (beyond shared points) or
 not.
 }

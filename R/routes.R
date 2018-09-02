@@ -6,14 +6,14 @@
 #' an estimate of the fastest, quietest or most balance route.
 #' Currently only works for the United Kingdom and part of continental Europe,
 #' though other areas may be requested by contacting CycleStreets.
-#' See \url{https://www.cyclestreets.net/api/}for more information.
+#' See <https://www.cyclestreets.net/api/>for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth.
 #'
 #' @param to Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param plan Text strong of either "fastest" (default), "quietest" or "balanced"
@@ -29,29 +29,29 @@
 #' internet connection, a CycleStreets.net API key
 #' and origins and destinations within the UK (and various areas beyond) to run.
 #'
-#' Note that if \code{from} and \code{to} are supplied as
+#' Note that if `from` and `to` are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{geo_code()}.
+#' geo-coding services are used via `geo_code()`.
 #'
 #' You need to have an api key for this code to run.
 #' Loading a locally saved copy of the api key text string
 #' before running the function, for example, will ensure it
 #' is available on any computer:
 #'
-#' \code{
+#' `
 #' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
 #' Sys.setenv(CYCLESTREET = mytoken)
-#' }
+#' `
 #'
 #' if you want the API key to be available in future
 #' sessions, set it using the .Renviron file
 #' e.g. on Linux machines in bash via:
 #'
-#' \code{
+#' `
 #' echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
-#' }
+#' `
 #'
-#' Read more about the .Renviron here: \code{?.Renviron}
+#' Read more about the .Renviron here: `?.Renviron`
 #'
 #'
 #' @inheritParams line2route
@@ -196,31 +196,31 @@ route_cyclestreet <-
 #' an open source route planning service.
 #'
 #' The function returns a SpatialLinesDataFrame object.
-#' See \url{https://github.com/graphhopper} for more information.
+#' See <https://github.com/graphhopper> for more information.
 #'
 #' @param vehicle A text string representing the vehicle.
-#' Can be bike (default), car or foot. See \url{https://graphhopper.com/api/1/docs/supported-vehicle-profiles/} for further details.
+#' Can be bike (default), car or foot. See <https://graphhopper.com/api/1/docs/supported-vehicle-profiles/> for further details.
 #'
 #' @details
 #'
 #' To test graphopper is working for you, try something like this, but with
 #' your own API key:
 #' To use this function you will need to obtain an API key from
-#' \url{https://graphhopper.com/#directions-api}.
+#' <https://graphhopper.com/#directions-api>.
 #' It is assumed that you have set your api key as a system environment
 #' for security reasons (so you avoid typing the API key in your code).
-#' Do this by adding the following to your .Renviron file (see \code{?.Renviron}
-#' or the 'api-packages' vignette at \url{https://cran.r-project.org/package=httr}
+#' Do this by adding the following to your .Renviron file (see `?.Renviron`
+#' or the 'api-packages' vignette at <https://cran.r-project.org/package=httr>
 #' for more on this):
 #'
-#' \code{GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'}.
+#' `GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'`.
 #'
 #' (Note: key not real, use your own key.)
 #'
-#' \code{obj <- jsonlite::fromJSON(url)}
+#' `obj <- jsonlite::fromJSON(url)`
 #'
-#' Where \code{url} is an example api request from
-#'  \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
+#' Where `url` is an example api request from
+#'  <https://github.com/graphhopper/directions-api/blob/master/routing.md>.
 #'
 #' @inheritParams route_cyclestreet
 #' @inheritParams od_coords

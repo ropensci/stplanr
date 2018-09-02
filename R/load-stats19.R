@@ -76,7 +76,7 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
 #' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
-#' @param ac Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param ac Dataframe representing the raw Stats19 data read-in with `read_csv()`.
 #'
 #' @export
 #' @examples
@@ -193,7 +193,7 @@ read_stats19_ve <- function(data_dir = tempdir(), filename = "Vehicles0514.csv")
 #' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
-#' @param ve Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param ve Dataframe representing the raw Stats19 data read-in with `read_csv()`.
 #' @export
 #' @examples
 #' \dontrun{
@@ -302,7 +302,7 @@ read_stats19_ca <- function(data_dir = tempdir(), filename = "Casualties0514.csv
 #' @section Details:
 #' This is a helper function to format raw stats19 data
 #'
-#' @param ca Dataframe representing the raw Stats19 data read-in with \code{read_csv()}.
+#' @param ca Dataframe representing the raw Stats19 data read-in with `read_csv()`.
 #' @export
 #' @examples
 #' \dontrun{

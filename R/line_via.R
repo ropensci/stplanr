@@ -23,8 +23,8 @@ mats2line <- function(mat1, mat2) {
 }
 #' Add geometry columns representing a route via intermediary points
 #'
-#' Takes an origin (A) and destination (B), represented by the linestring \code{l},
-#' and generates 3 extra geometries based on points \code{p}:
+#' Takes an origin (A) and destination (B), represented by the linestring `l`,
+#' and generates 3 extra geometries based on points `p`:
 #'
 #' 1) From A to P1 (P1 being the nearest point to A)
 #'

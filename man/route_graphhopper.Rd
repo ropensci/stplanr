@@ -38,8 +38,6 @@ an open source route planning service.
 The function returns a SpatialLinesDataFrame object.
 See \url{https://github.com/graphhopper} for more information.
 
-
-
 To test graphopper is working for you, try something like this, but with
 your own API key:
 To use this function you will need to obtain an API key from
@@ -57,7 +55,7 @@ for more on this):
 \code{obj <- jsonlite::fromJSON(url)}
 
 Where \code{url} is an example api request from
- \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
+\url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
 \dontrun{

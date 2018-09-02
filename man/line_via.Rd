@@ -16,11 +16,11 @@ Takes an origin (A) and destination (B), represented by the linestring \code{l},
 and generates 3 extra geometries based on points \code{p}:
 }
 \details{
-1) From A to P1 (P1 being the nearest point to A)
-
-2) From P1 to P2 (P2 being the nearest point to B)
-
-3) From P2 to B
+\enumerate{
+\item From A to P1 (P1 being the nearest point to A)
+\item From P1 to P2 (P2 being the nearest point to B)
+\item From P2 to B
+}
 }
 \examples{
 {

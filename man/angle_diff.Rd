@@ -24,7 +24,7 @@ on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
 bidirectional (which mean values greater than +/- 90 are impossible).
 }
 \details{
-Building on the convention used in \code{\link{bearing}} and in many applications,
+Building on the convention used in \code{\link[=bearing]{bearing()}} and in many applications,
 North is definied as 0, East as 90 and West as -90.
 }
 \examples{

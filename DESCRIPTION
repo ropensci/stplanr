@@ -57,3 +57,5 @@ VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
 RoxygenNote: 6.1.0
+Roxygen: list(markdown = TRUE)
+Encoding: UTF-8

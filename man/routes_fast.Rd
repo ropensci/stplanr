@@ -15,7 +15,7 @@ spatial lines dataset of commuter flows on the travel network
 \concept{example flow data
 
 Simulated travel route allocated to the transport network
-representing the 'fastest' between \code{\link{cents}}
+representing the 'fastest' between [cents()]
 objects
-with \code{\link{od2line}} (see \code{\link{flow}}).}
+with [od2line()] (see [flow()]).}
 \keyword{datasets}

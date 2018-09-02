@@ -6,7 +6,7 @@
 #' for data collected anywhere in the world.
 #'
 #' The function is based on this stackexchange answer:
-#' \url{http://gis.stackexchange.com/questions/121489}
+#' <http://gis.stackexchange.com/questions/121489>
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @export
@@ -34,7 +34,7 @@ crs_select_aeq <- function(shp) {
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @param crs An optional coordinate reference system (if not provided it is set
-#' automatically by \code{\link{crs_select_aeq}}).
+#' automatically by [crs_select_aeq()]).
 #' @export
 #' @examples
 #' data(routes_fast)

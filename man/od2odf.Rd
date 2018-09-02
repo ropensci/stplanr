@@ -9,9 +9,9 @@ od2odf(flow, zones)
 \arguments{
 \item{flow}{A data frame representing the flow between two points
 or zones. The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link{cents}},
+to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
-of \code{\link{flow}}.}
+of \code{\link[=flow]{flow()}}.}
 
 \item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 representing origins and destinations of travel flows.}
@@ -35,5 +35,5 @@ od2odf(flow, zones)
 \references{
 Rae, A. (2009). From spatial interaction data to spatial interaction information?
 Geovisualisation and spatial structures of migration from the 2001 UK census.
- Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 }

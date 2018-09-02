@@ -7,7 +7,7 @@
 mapshape_available()
 }
 \description{
-This helper function for \code{\link{mapshape}}
+This helper function for \code{\link[=mapshape]{mapshape()}}
 determines whether or not the JavaScript library
 mapshaper is available.
 }

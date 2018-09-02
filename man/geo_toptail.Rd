@@ -21,7 +21,7 @@ Takes lines and removes the start and end point, to a distance determined
 by the user.
 }
 \details{
-Note: \code{\link{toptailgs}} is around 10 times faster, but only works
+Note: \code{\link[=toptailgs]{toptailgs()}} is around 10 times faster, but only works
 on data with geographic CRS's due to its reliance on the geosphere
 package.
 }

@@ -1,8 +1,8 @@
 #' Write to geojson easily
 #'
 #' Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
-#' \code{geojson_write} from the geojsonio package
-#' provides the same functionality \url{https://github.com/ropensci/geojsonio}.
+#' `geojson_write` from the geojsonio package
+#' provides the same functionality <https://github.com/ropensci/geojsonio>.
 #'
 #' @inheritParams gclip
 #' @param filename File name of the output geojson
@@ -18,13 +18,13 @@ writeGeoJSON <- function(shp, filename) {
 #' @section Details:
 #'
 #' Note: more advance R/mapshaper tools are provided by the rmapshaper
-#' package: \url{https://github.com/ateucher/rmapshaper}.
+#' package: <https://github.com/ateucher/rmapshaper>.
 #'
 #' Calls the JavaScript command-line GIS application mapshaper
-#' (\url{https://github.com/mbloch/mapshaper}) from the system
+#' (<https://github.com/mbloch/mapshaper>) from the system
 #' to simplify geographic features, and then tidies up.
-#' mapshaper must be installed and available to \code{\link{system}}.
-#' \code{mapshape} writes new a file to disk.
+#' mapshaper must be installed and available to [system()].
+#' `mapshape` writes new a file to disk.
 #' Thanks to Richard and Adrian Ellison for demonstrating this in R.
 #'
 #' @param shp A spatial object to be simplified.
@@ -33,14 +33,14 @@ writeGeoJSON <- function(shp, filename) {
 #' @param ms_options Text string of options passed to mapshaper such as
 #' @param dsn The name of the temporary file to write to (deleted after use)
 #' @param silent Logical determining whether the function call is printed to screen
-#' \code{no-topology} (a flag) and \code{snap-interval=1} (a key value pair).
+#' `no-topology` (a flag) and `snap-interval=1` (a key value pair).
 #' See the mapshaper documentation for details:
-#' \url{https://github.com/mbloch/mapshaper/wiki/Command-Reference}.
+#' <https://github.com/mbloch/mapshaper/wiki/Command-Reference>.
 #'
 #' The percent argument refers to the percentage of removable points to retain.
-#' So \code{percent = 1} is a very aggressive simplication, saving a huge amount of
+#' So `percent = 1` is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#' \code{\link[rgeos]{gSimplify}}
+#' [rgeos::gSimplify()]
 #' @export
 #' @examples
 #' \dontrun{
@@ -82,7 +82,7 @@ mapshape <- function(shp, percent = 10, ms_options = "", dsn = "mapshape", silen
 
 #' Does the computer have mapshaper available?
 #'
-#' This helper function for \code{\link{mapshape}}
+#' This helper function for [mapshape()]
 #' determines whether or not the JavaScript library
 #' mapshaper is available.
 #'
@@ -100,9 +100,9 @@ mapshape_available <- function() {
 #' raster::crop() and rgeos::gIntersection(). The output is the subset of
 #' spatial object a with an outline described by a square bounding box.
 #' The utility of such a function is illustrated in the following question:
-#' \url{http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/}.
+#' <http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
 #' @param shp The spatial object a to be cropped
-#' @param bb the bounding box or spatial object that will be used to crop \code{shp}
+#' @param bb the bounding box or spatial object that will be used to crop `shp`
 #'
 #' @export
 #' @examples

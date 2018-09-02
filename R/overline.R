@@ -1,6 +1,6 @@
 #' Do the intersections between two geometries create lines?
 #'
-#' This is a function required in \code{\link{overline}}. It identifies
+#' This is a function required in [overline()]. It identifies
 #' whether sets of lines overlap (beyond shared points) or
 #' not.
 #'
@@ -83,7 +83,7 @@ gsection.sf <- function(sl, buff_dist = 0) {
 #' graphics.
 #'
 #' @param sl A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to a named variable in \code{sl}
+#' @param attrib A text string corresponding to a named variable in `sl`
 #'
 #' @author Barry Rowlingson
 #'
@@ -97,14 +97,14 @@ lineLabels <- function(sl, attrib) {
 #' Convert series of overlapping lines into a route network
 #'
 #' This function takes a series of Lines stored in a
-#'  \code{SpatialLinesDataFrame}
+#'  `SpatialLinesDataFrame`
 #' and converts these into a single route network.
 #'
 #' @param sl A SpatialLinesDataFrame with overlapping elements
 #' @param attrib A character vector corresponding to the variables in
-#' \code{sl$} on which the function(s) will operate.
+#' `sl$` on which the function(s) will operate.
 #' @param fun The function(s) used to aggregate the grouped values (default: sum).
-#' If length of \code{fun} is smaller than \code{attrib} then the functions are
+#' If length of `fun` is smaller than `attrib` then the functions are
 #' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #' @param byvars Character vector containing the column names to use for grouping
@@ -113,7 +113,7 @@ lineLabels <- function(sl, attrib) {
 #' @references
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
-#'  \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+#'  <http://gis.stackexchange.com>. See <http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
 #' @export
 #' @examples
 #' sl <- routes_fast[2:4, ]
@@ -269,7 +269,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 #' example, the true extent of travel will by heavily under-estimated for
 #' OD pairs which have similar amounts of travel in both directions.
 #' Flows in both direction are often represented by overlapping lines with
-#' identical geometries (see \code{\link{flowlines}}) which can be confusing
+#' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #'
 #' This function aggregates directional flows into non-directional flows,
@@ -280,7 +280,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 #' @param attrib A text string containing the name of the line's attribute to
 #' aggregate or a numeric vector of the columns to be aggregated
 #'
-#' @return \code{onewaygeo} outputs a SpatialLinesDataFrame with single lines
+#' @return `onewaygeo` outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included
 #' @export

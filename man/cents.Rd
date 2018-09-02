@@ -14,10 +14,10 @@ These points represent population-weighted centroids of Medium Super Output Area
 }
 \details{
 \itemize{
-  \item geo_code the official code of the zone
-  \item MSOA11NM name zone name
-  \item percent_fem the percent female
-  \item avslope average gradient of the zone
+\item geo_code the official code of the zone
+\item MSOA11NM name zone name
+\item percent_fem the percent female
+\item avslope average gradient of the zone
 }
 
 Cents was generated from the data repository pct-data: https://github.com/npct/pct-data. This data was accessed from within the pct repo: https://github.com/npct/pct, using the following code:

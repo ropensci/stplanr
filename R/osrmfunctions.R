@@ -82,7 +82,7 @@ decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
 #' @param profile OSRM profile to use (for API v5), defaults to "driving".
 #' @param protocol The protocol to use for the API (for v5), defaults to "v1".
 #' @param osrmurl URL for OSRM sservice, e.g. an osrm instance running on
-#' localhost. By default this is \code{"http://router.project-osrm.org"}.
+#' localhost. By default this is `"http://router.project-osrm.org"`.
 #' @param zoom Zoom level for route geometry (0 to 18) for API v4
 #' (default = 18). Higher values are more detailed.
 #' @param instructions Boolean value to return instructions (default = TRUE).
@@ -961,13 +961,13 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
 }
 #' Plan a route with OSRM
 #'
-#' This is a wrapper around \code{viaroute} that returns a single route between A and B.
+#' This is a wrapper around `viaroute` that returns a single route between A and B.
 #'
 #' @note The public-facing OSRM routing service (the default)
 #' only provides routing for cars by default. For details, see
-#' \url{https://github.com/Project-OSRM/osrm-backend/issues/4530}.
+#' <https://github.com/Project-OSRM/osrm-backend/issues/4530>.
 #'
-#' @param singleline Should a single line be returned? Default is \code{TRUE}
+#' @param singleline Should a single line be returned? Default is `TRUE`
 #' @param ... Arguments passed to viaroute()
 #' @inheritParams route_graphhopper
 #' @inheritParams viaroute

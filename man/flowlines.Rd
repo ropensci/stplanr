@@ -8,6 +8,6 @@
 \format{A spatial lines dataset with 49 rows and 15 columns}
 \description{
 Flow data after conversion to a spatial format
-with \code{\link{od2line}} (see \code{\link{flow}}).
+with \code{\link[=od2line]{od2line()}} (see \code{\link[=flow]{flow()}}).
 }
 \keyword{datasets}

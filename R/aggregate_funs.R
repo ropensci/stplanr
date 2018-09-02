@@ -8,9 +8,9 @@
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in \code{\link{cents}},
+#' to the first column of the data in the zones. Thus in [cents()],
 #' the first column is geo_code. This corresponds to the first two columns
-#' of \code{\link{flow}}.
+#' of [flow()].
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing the original centroids or boundaries of the travel flow data.
 #' Note that in the case of a SpatialPointsDataFrame, the entirety of the flow

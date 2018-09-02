@@ -10,7 +10,7 @@ points2line(p)
 \item{p}{A SpatialPoints obect or matrix representing the coordinates of points.}
 }
 \description{
-This is a simple wrapper around \code{\link{spLines}} that makes the creation of
+This is a simple wrapper around \code{\link[=spLines]{spLines()}} that makes the creation of
 \code{SpatialLines} objects easy and intuitive
 }
 \examples{

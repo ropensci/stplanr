@@ -14,7 +14,7 @@ line2routeRetry(lines, pattern = "^Error: ", n_retry = 3, ...)
 
 \item{n_retry}{Number of times to retry}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
 \description{
 Convert straight SpatialLinesDataFrame from flow data into routes retrying
@@ -23,7 +23,7 @@ on connection (or other) intermittent failures
 \section{Details}{
 
 
-See \code{\link{line2route}} for the version that is not retried on errors.
+See \code{\link[=line2route]{line2route()}} for the version that is not retried on errors.
 }
 
 \examples{

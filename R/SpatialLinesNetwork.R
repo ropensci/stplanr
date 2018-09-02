@@ -8,7 +8,7 @@ setOldClass("sf")
 #' other network analyses.
 #' @slot sl A SpatialLinesDataFrame with the geometry and other attributes
 #' for each link the in network.
-#' @slot g The graph network corresponding to \code{sl}.
+#' @slot g The graph network corresponding to `sl`.
 #' @slot nb A list containing vectors of the nodes connected to each node
 #' in the network.
 #' @slot weightfield A character vector containing the variable (column) name
@@ -31,7 +31,7 @@ validity = function(object) {
 #' other network analyses.
 #' @slot sl A sf line layer with the geometry and other attributes
 #' for each link the in network.
-#' @slot g The graph network corresponding to \code{sl}.
+#' @slot g The graph network corresponding to `sl`.
 #' @slot nb A list containing vectors of the nodes connected to each node
 #' in the network.
 #' @slot weightfield A character vector containing the variable (column) name
@@ -67,7 +67,7 @@ validity = function(object) {
 #' @param sl A SpatialLines or SpatialLinesDataFrame containing the lines to
 #' use to create the network.
 #' @param uselonglat A boolean value indicating if the data should be assumed
-#' to be using WGS84 latitude/longitude coordinates. If \code{FALSE} or not
+#' to be using WGS84 latitude/longitude coordinates. If `FALSE` or not
 #' set, uses the coordinate system specified by the SpatialLines object.
 #' @param tolerance A numeric value indicating the tolerance (in the units of
 #' the coordinate system) to use as a tolerance with which to match nodes.
@@ -224,9 +224,9 @@ setMethod("plot",
 #' @param x SpatialLinesNetwork to use
 #' @param varname The name of the variable to set/use.
 #' @param value Either the name of the variable to use as the weight field or
-#' a dataframe or vector containing the weights to use if \code{varname} is
+#' a dataframe or vector containing the weights to use if `varname` is
 #' passed to the replacement function. If the dataframe contains multiple
-#' columns, the column with the same name as \code{varname} is used,
+#' columns, the column with the same name as `varname` is used,
 #' otherwise the first column is used.
 #' @examples
 #' data(routes_fast)
@@ -388,9 +388,9 @@ setMethod("summary",
 #' coordinates. If the SpatialLinesNetwork is projected then distance should
 #' be in the same units as the projection. If longlat, then distance is in
 #' metres. Default is 1000.
-#' @return An integer value with the ID of the node closest to \code{(x,y)}
-#' with a value of \code{NA} the closest node is further than \code{maxdist}
-#' from \code{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
+#' @return An integer value with the ID of the node closest to `(x,y)`
+#' with a value of `NA` the closest node is further than `maxdist`
+#' from `(x,y)`. If `x` is a vector, returns a vector of Node IDs.
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")

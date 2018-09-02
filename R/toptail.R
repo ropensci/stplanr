@@ -3,7 +3,7 @@
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the user.
 #'
-#' Note: \code{\link{toptailgs}} is around 10 times faster, but only works
+#' Note: [toptailgs()] is around 10 times faster, but only works
 #' on data with geographic CRS's due to its reliance on the geosphere
 #' package.
 #'

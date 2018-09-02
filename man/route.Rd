@@ -18,14 +18,14 @@ route(from = NULL, to = NULL, l = NULL,
 should be a spatial object representing desire lines}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
-\code{\link{od2line}}}
+\code{\link[=od2line]{od2line()}}}
 
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
 \item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them

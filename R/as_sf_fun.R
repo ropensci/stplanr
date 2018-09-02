@@ -2,7 +2,7 @@
 #'
 #' @param input Input object - an sf or sp object
 #' @param FUN A function that works on sp/sf data
-#' @param ... Arguments passed to \code{FUN}
+#' @param ... Arguments passed to `FUN`
 #' @aliases as_sp_fun
 as_sf_fun <- function(input, FUN, ...) {
   if (is(object = input, class2 = "sf")) {

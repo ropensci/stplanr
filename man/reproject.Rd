@@ -10,7 +10,7 @@ reproject(shp, crs = crs_select_aeq(shp))
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
-automatically by \code{\link{crs_select_aeq}}).}
+automatically by \code{\link[=crs_select_aeq]{crs_select_aeq()}}).}
 }
 \description{
 Many GIS functions (e.g. finding the area)

@@ -6,7 +6,7 @@
 #' for data collected anywhere in the world.
 #'
 #' The function is based on this stackexchange answer:
-#' \url{http://gis.stackexchange.com/questions/121489}
+#' <http://gis.stackexchange.com/questions/121489>
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @export
@@ -46,9 +46,9 @@ geo_select_aeq.sf <- function(shp) {
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @param fun A function to perform on the projected object (e.g. the the rgeos or sf packages)
 #' @param crs An optional coordinate reference system (if not provided it is set
-#' automatically by \code{\link{crs_select_aeq}})
+#' automatically by [crs_select_aeq()])
 #' @param silent A binary value for printing the CRS details (default: TRUE)
-#' @param ... Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))
+#' @param ... Arguments to pass to `fun`, e.g. `byid = TRUE` if the function is [rgeos::gLength()]))
 #' @aliases gprojected
 #' @export
 #' @examples
@@ -116,7 +116,7 @@ gprojected <- geo_projected.Spatial
 #' around which a buffer should be drawn
 #' @param dist The distance (in metres) of the buffer (when buffering simple features)
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
-#' @param ... Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)
+#' @param ... Arguments passed to the buffer (see `?rgeos::gBuffer` or `?sf::st_buffer` for details)
 #' @seealso buff_geo
 #' @examples
 #' buff_sp <- geo_buffer(routes_fast, width = 100)

@@ -4,7 +4,7 @@
 #' and returns a matrix of coordinates representing origin (fx, fy) and destination (tx, ty) points.
 #'
 #' @param from An object representing origins
-#' (if lines are provided as the first argument, from is assigned to \code{l})
+#' (if lines are provided as the first argument, from is assigned to `l`)
 #' @param to An object representing destinations
 #' @param l Only needed if from and to are empty, in which case this
 #' should be a spatial object representing desire lines

@@ -4,14 +4,14 @@
 #' The function returns a SpatialLinesDataFrame object representing the
 #' public route.
 #' Currently only works for the United Kingdom.
-#' See \url{https://developer.transportapi.com/documentation}for more information.
+#' See <https://developer.transportapi.com/documentation>for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth.
 #'
 #' @param to Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
@@ -20,7 +20,7 @@
 #' @param modes Vector of character strings containing modes to use. Default is
 #' to use all modes.
 #' @param not_modes Vector of character strings containing modes not to use.
-#' Not used if \code{modes} is set.
+#' Not used if `modes` is set.
 #'
 #' @details
 #'
@@ -29,9 +29,9 @@
 #' between origins and destinations. It does not require
 #' any key to access the API.
 #'
-#' Note that if \code{from} and \code{to} are supplied as
+#' Note that if `from` and `to` are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{geo_code}.
+#' geo-coding services are used via `geo_code`.
 #'
 #' @inheritParams line2route
 #' @export

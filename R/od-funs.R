@@ -8,9 +8,9 @@
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in \code{\link{cents}},
+#' to the first column of the data in the zones. Thus in [cents()],
 #' the first column is geo_code. This corresponds to the first two columns
-#' of \code{\link{flow}}.
+#' of [flow()].
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins and destinations of travel flows.
 #' @references
@@ -45,30 +45,30 @@ od2odf <- function(flow, zones) {
 #' The function expects zone codes to be in the 1st column of the zones/destinations
 #' datasets and the 1st and 2nd columns of the flow data, respectively.
 #'
-#' \code{\link{od2line2}} is a faster implementation
+#' [od2line2()] is a faster implementation
 #' (around 6 times faster on large datasets)
-#' that returns a \code{SpatialLines} object, omitting the data and working
+#' that returns a `SpatialLines` object, omitting the data and working
 #' only when there is no destinations dataset (i.e. when the geography of
 #' origins is the same as that of destinations).
 #'
 #' @param flow A data frame representing the flow between two points
 #' or zones. The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in \code{\link{cents}},
+#' to the first column of the data in the zones. Thus in [cents()],
 #' the first column is geo_code. This corresponds to the first two columns
-#' of \code{\link{flow}}.
+#' of [flow()].
 #' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing origins (and destinations if no separate destinations object is provided)
 #' of travel flows.
 #' @param destinations A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing destinations of travel flows.
-#' @param zone_code Name of the variable in \code{zones} containing the ids of the zone.
+#' @param zone_code Name of the variable in `zones` containing the ids of the zone.
 #' By default this is the first column names in the zones.
-#' @param origin_code Name of the variable in \code{flow} containing the ids of the zone of origin.
+#' @param origin_code Name of the variable in `flow` containing the ids of the zone of origin.
 #' By default this is the first column name in the flow input dataset.
-#' @param dest_code Name of the variable in \code{flow} containing the ids of the zone of destination.
+#' @param dest_code Name of the variable in `flow` containing the ids of the zone of destination.
 #' By default this is the second column name in the flow input dataset or the first column name in the
 #' destinations if that is set.
-#' @param zone_code_d Name of the variable in \code{destinations} containing the ids of the zone.
+#' @param zone_code_d Name of the variable in `destinations` containing the ids of the zone.
 #' By default this is the first column names in the destinations.
 #' @param silent TRUE by default, setting it to TRUE will show you the matching columns
 #' @export
@@ -240,11 +240,11 @@ line2df.Spatial <- function(l) {
 }
 
 #' Convert a SpatialLinesDataFrame to points
-#' The number of points will be double the number of lines with \code{line2points}.
-#' A closely related function, \code{line2pointsn} returns all the points that were line vertices.
-#' The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
+#' The number of points will be double the number of lines with `line2points`.
+#' A closely related function, `line2pointsn` returns all the points that were line vertices.
+#' The points corresponding with a given line, `i`, will be `(2*i):((2*i)+1)`.
 #' @param l A SpatialLinesDataFrame
-#' @param ids Vector of ids (by default \code{1:nrow(l)})
+#' @param ids Vector of ids (by default `1:nrow(l)`)
 #' @export
 #' @examples
 #' l <- routes_fast[2:4, ]
@@ -315,7 +315,7 @@ line2pointsn <- function(l) {
 #'
 #' @section Details:
 #'
-#' See \code{\link{route_cyclestreet}} and other route functions for details.
+#' See [route_cyclestreet()] and other route functions for details.
 #'
 #' A parallel implementation of this was available until version 0.1.8.
 #' See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.
@@ -323,14 +323,14 @@ line2pointsn <- function(l) {
 #'
 #' @param l A SpatialLinesDataFrame
 #' @param route_fun A routing function to be used for converting the straight lines to routes
-#' \code{\link{od2line}}
+#' [od2line()]
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
 #' @param list_output If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
-#' @param ... Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}
+#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
 #' @inheritParams route_cyclestreet
 #' @export
 #' @examples
@@ -424,7 +424,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
 #'
 #' @section Details:
 #'
-#' See \code{\link{line2route}} for the version that is not retried on errors.
+#' See [line2route()] for the version that is not retried on errors.
 #' @param lines A SpatialLinesDataFrame
 #' @param pattern A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "
 #' @param n_retry Number of times to retry
@@ -524,7 +524,7 @@ points2flow <- function(p) {
 #' retaining the data of the former.
 #'
 #' @param l A SpatialLines object, whose geometry is to be modified
-#' @param nl A SpatialLines object of the same length as \code{l} to provide the new geometry
+#' @param nl A SpatialLines object of the same length as `l` to provide the new geometry
 #'
 #' @export
 #' @examples
@@ -551,10 +551,10 @@ update_line_geometry <- function(l, nl) {
 #'
 #' It is common to want to know the Euclidean distance between origins and destinations
 #' in OD data. You can calculate this by first converting OD data to SpatialLines data,
-#' e.g. with \code{\link{od2line}}. However this can be slow and overkill if you just
+#' e.g. with [od2line()]. However this can be slow and overkill if you just
 #' want to know the distance. This function is a few orders of magnitude faster.
 #'
-#' Note: this function assumes that the zones or centroids in \code{cents} have a geographic
+#' Note: this function assumes that the zones or centroids in `cents` have a geographic
 #' (lat/lon) CRS.
 #'
 #' @inheritParams od2line
@@ -573,8 +573,8 @@ od_dist <- function(flow, zones) {
 
 #' Convert a series of points, or a matrix of coordinates, into a line
 #'
-#' This is a simple wrapper around \code{\link{spLines}} that makes the creation of
-#' \code{SpatialLines} objects easy and intuitive
+#' This is a simple wrapper around [spLines()] that makes the creation of
+#' `SpatialLines` objects easy and intuitive
 #'
 #' @param p A SpatialPoints obect or matrix representing the coordinates of points.
 #' @export

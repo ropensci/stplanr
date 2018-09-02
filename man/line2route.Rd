@@ -11,7 +11,7 @@ line2route(l, route_fun = "route_cyclestreet", n_print = 10,
 \item{l}{A SpatialLinesDataFrame}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
-\code{\link{od2line}}}
+\code{\link[=od2line]{od2line()}}}
 
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
@@ -22,7 +22,7 @@ should be shown}
 typically the origin and destination ids pasted together. If absent, the row name of the
 straight lines will be used.}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link{route_cyclestreet}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
 \description{
 Convert straight OD data (desire lines) into routes
@@ -30,7 +30,7 @@ Convert straight OD data (desire lines) into routes
 \section{Details}{
 
 
-See \code{\link{route_cyclestreet}} and other route functions for details.
+See \code{\link[=route_cyclestreet]{route_cyclestreet()}} and other route functions for details.
 
 A parallel implementation of this was available until version 0.1.8.
 See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.

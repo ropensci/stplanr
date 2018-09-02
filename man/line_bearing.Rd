@@ -13,7 +13,7 @@ line_bearing(l, bidirectional = FALSE)
 Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing}
 }
 \description{
-This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
+This is a simple wrapper around the geosphere function \code{\link[=bearing]{bearing()}} to return the
 bearing (in degrees relative to north) of lines.
 }
 \details{

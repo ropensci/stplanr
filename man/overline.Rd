@@ -25,7 +25,7 @@ repeated for subsequent attributes.}
 }
 \description{
 This function takes a series of Lines stored in a
- \code{SpatialLinesDataFrame}
+\code{SpatialLinesDataFrame}
 and converts these into a single route network.
 }
 \examples{
@@ -50,8 +50,8 @@ plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
- overlapping segments. Reproducible question from
- \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+overlapping segments. Reproducible question from
+\url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
 \author{
 Barry Rowlingson

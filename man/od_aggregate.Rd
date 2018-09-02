@@ -12,9 +12,9 @@ od_aggregate(flow, zones, aggzones, aggzone_points = NULL,
 \arguments{
 \item{flow}{A data frame representing the flow between two points
 or zones. The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link{cents}},
+to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
-of \code{\link{flow}}.}
+of \code{\link[=flow]{flow()}}.}
 
 \item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 representing the original centroids or boundaries of the travel flow data.

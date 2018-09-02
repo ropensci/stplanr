@@ -13,11 +13,11 @@ geo_projected(shp, fun, crs, silent, ...)
 \item{fun}{A function to perform on the projected object (e.g. the the rgeos or sf packages)}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
-automatically by \code{\link{crs_select_aeq}})}
+automatically by \code{\link[=crs_select_aeq]{crs_select_aeq()}})}
 
 \item{silent}{A binary value for printing the CRS details (default: TRUE)}
 
-\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos]{gLength}}))}
+\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos:gLength]{rgeos::gLength()}}))}
 }
 \description{
 This function performs operations on projected data.

@@ -6,11 +6,11 @@
 \alias{zones_sf}
 \title{Spatial polygons of home locations for flow analysis.}
 \description{
-These correspond to the \code{\link{cents}} data.
+These correspond to the \code{\link[=cents]{cents()}} data.
 }
 \details{
 \itemize{
-  \item geo_code. the official code of the zone
+\item geo_code. the official code of the zone
 }
 }
 \examples{

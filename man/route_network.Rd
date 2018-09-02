@@ -22,5 +22,5 @@ route_network_sf <- sf::st_as_sf(route_network)
 \concept{example of route network data (sometimes called flow data)
 
 The flow of commuters using different segments of the road network represented in the
-\code{\link{flowlines}} and \code{\link{routes_fast}} datasets}
+[flowlines()] and [routes_fast()] datasets}
 \keyword{datasets}

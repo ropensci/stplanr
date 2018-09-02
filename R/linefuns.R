@@ -5,7 +5,7 @@
 #' Returns a vector of the same length as the number of lines,
 #' with the number of vertices per line or polygon.
 #'
-#' See \url{http://gis.stackexchange.com/questions/58147/} for more information.
+#' See <http://gis.stackexchange.com/questions/58147/> for more information.
 #'
 #' @param l A SpatialLines or SpatalPolygons object
 #'
@@ -58,7 +58,7 @@ is_linepoint <- function(l) {
 }
 #' Find the bearing of straight lines
 #'
-#' This is a simple wrapper around the geosphere function \code{\link{bearing}} to return the
+#' This is a simple wrapper around the geosphere function [bearing()] to return the
 #' bearing (in degrees relative to north) of lines.
 #'
 #' @details
@@ -99,7 +99,7 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
 #' bidirectional (which mean values greater than +/- 90 are impossible).
 #'
-#' Building on the convention used in \code{\link{bearing}} and in many applications,
+#' Building on the convention used in [bearing()] and in many applications,
 #' North is definied as 0, East as 90 and West as -90.
 #'
 #' @inheritParams line_bearing
@@ -147,7 +147,7 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 }
 #' Find the mid-point of lines
 #'
-#' This is a wrapper around \code{\link{SpatialLinesMidPoints}} that allows it to find the midpoint
+#' This is a wrapper around [SpatialLinesMidPoints()] that allows it to find the midpoint
 #' of lines that are not projected, which have a lat/long CRS.
 #' @inheritParams line2df
 #' @export

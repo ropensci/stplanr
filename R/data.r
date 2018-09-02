@@ -34,7 +34,7 @@
 #' cents_sf <- sf::st_as_sf(cents)
 #' devtools::use_data(cents_sf)
 #' }
-#' 
+#'
 #' @docType data
 #' @keywords datasets
 #' @name cents
@@ -47,9 +47,9 @@ NULL
 # @family example flow data
 #'
 #' This dataset represents commuter flows (work travel) between origin
-#' and destination zones (see \code{\link{cents}}).
+#' and destination zones (see [cents()]).
 #' The data is from the UK and is available as open data:
-#' \url{http://wicid.ukdataservice.ac.uk/}.
+#' <http://wicid.ukdataservice.ac.uk/>.
 #'
 #' The variables are as follows:
 #'
@@ -57,13 +57,13 @@ NULL
 #'   \item Area.of.residence. id of origin zone
 #'   \item Area.of.workplace id of destination zone
 #'   \item All. Travel to work flows by all modes
-#'   \item [,4:15]. Flows for different modes
+#'   \item `[,4:15]`. Flows for different modes
 #'   \item id. unique id of flow
 #' }
 #' Although these variable names are unique to UK data, the data
 #' structure is generalisable and typical of flow data from any source.
 #' The key variables are the origin and destination ids, which link to
-#' the \code{cents} georeferenced spatial objects.
+#' the `cents` georeferenced spatial objects.
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed - see
@@ -76,21 +76,21 @@ NULL
 #' library(devtools)
 #' flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
 #' use_data(flow, overwrite = TRUE)
-#' 
+#'
 #' # Convert flows to spatial lines dataset
 #' flowlines <- od2line(flow = flow, zones = cents)
 #' # use_data(flowlines, overwrite = TRUE)
-#' 
+#'
 #' # Convert flows to routes
 #' routes_fast <- line2route(l = flowlines, plan = "fastest")
 #' routes_slow <- line2route(l = flowlines, plan = "quietest")
-#' 
+#'
 #' use_data(routes_fast)
 #' use_data(routes_slow)
 #' routes_fast_sf <- sf::st_as_sf(routes_fast)
 #' routes_slow_sf <- sf::st_as_sf(routes_slow)
 #' }
-#' 
+#'
 #' @docType data
 #' @keywords datasets
 #' @name flow
@@ -110,7 +110,7 @@ NULL
 #' flow_dests <- dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
 #' devtools::use_data(flow_dests)
 #' }
-#' 
+#'
 #' @docType data
 #' @keywords datasets
 #' @name flow_dests
@@ -122,7 +122,7 @@ NULL
 # @family example destinations
 #'
 #' This dataset represents trip destinations on a different geographic
-#' level than the origins stored in the \code{cents}.
+#' level than the origins stored in the `cents`.
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed - see
@@ -159,7 +159,7 @@ NULL
 # @family example flow data
 #'
 #' Flow data after conversion to a spatial format
-#' with \code{\link{od2line}} (see \code{\link{flow}}).
+#' with [od2line()] (see [flow()]).
 #'
 #' @docType data
 #' @keywords datasets
@@ -173,9 +173,9 @@ NULL
 #' @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
-#' representing the 'fastest' between \code{\link{cents}}
+#' representing the 'fastest' between [cents()]
 #' objects
-#' with \code{\link{od2line}} (see \code{\link{flow}}).
+#' with [od2line()] (see [flow()]).
 #'
 #' @docType data
 #' @keywords datasets
@@ -190,9 +190,9 @@ NULL
 #' @family example flow data
 #'
 #' Simulated travel route allocated to the transport network
-#' representing the 'quietest' between \code{\link{cents}()}
+#' representing the 'quietest' between [cents()]
 #' objects
-#' with \code{\link{od2line}} (see \code{\link{flow}}).
+#' with [od2line()] (see [flow()]).
 #'
 #' @docType data
 #' @keywords datasets
@@ -204,7 +204,7 @@ NULL
 
 #' Spatial polygons of home locations for flow analysis.
 #'
-#'  These correspond to the \code{\link{cents}} data.
+#'  These correspond to the [cents()] data.
 #'
 #' \itemize{
 #'   \item geo_code. the official code of the zone
@@ -230,7 +230,7 @@ NULL
 #' @family example of route network data (sometimes called flow data)
 #'
 #' The flow of commuters using different segments of the road network represented in the
-#' \code{\link{flowlines}} and \code{\link{routes_fast}} datasets
+#' [flowlines()] and [routes_fast()] datasets
 #'
 #' @docType data
 #' @keywords datasets
