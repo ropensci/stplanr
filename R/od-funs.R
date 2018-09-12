@@ -330,6 +330,7 @@ line2pointsn <- function(l) {
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
+#' @param time_delay Number or seconds to wait between each query
 #' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
 #' @inheritParams route_cyclestreet
 #' @export
@@ -354,7 +355,7 @@ line2pointsn <- function(l) {
 #' rf_list <- line2route(l = l, list_output = TRUE)
 #' line2route(l[1, ], route_graphhopper)
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, ...) {
+line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, time_delay = 0, ...) {
   return_sf <- is(l, "sf")
   if (return_sf) {
     l <- as(l, "Spatial")
@@ -378,6 +379,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
     if (!is.na(perc_temp) & perc_temp == 0) {
       message(paste0(round(100 * i / n_ldf), " % out of ", n_ldf, " distances calculated"))
     }
+    Sys.sleep(time = time_delay)
   }
 
   if (list_output) {
@@ -392,6 +394,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
         r@data <- rdata
         break
       }
+      Sys.sleep(time = time_delay)
     }
 
     # Copy rc into r including the data or copy the error into r
@@ -402,6 +405,7 @@ line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_ou
       } else {
         r@data[i, "error"] <- rc[[i]][1]
       }
+      Sys.sleep(time = time_delay)
     }
 
     # Set the id in r

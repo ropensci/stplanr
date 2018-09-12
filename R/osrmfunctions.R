@@ -777,7 +777,7 @@ nearest_osm <- function(lat, lng, number = 1,
 #'   lng = c(13.2, 13.1)
 #' )
 #' }
-#' 
+#'
 locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
   if (return_sf == TRUE) {
     return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "locate")))
@@ -809,7 +809,7 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #'   lng = c(13.2, 13.1)
 #' )
 #' }
-#' 
+#'
 nearest2spdf <- function(lat, lng, osrmurl = "http://router.project-osrm.org", return_sf = FALSE) {
   if (return_sf == TRUE) {
     return(sf::st_as_sf(getlocnear(lat = lat, lng = lng, osrmurl = osrmurl, "nearest")))
@@ -897,7 +897,7 @@ getlocnear <- function(lat, lng, osrmurl = "http://router.project-osrm.org", ser
 #' \dontrun{
 #' table2matrix(seq(from = 50, to = 52, by = 0.1), seq(from = 12, to = 14, by = 0.1))
 #' }
-#' 
+#'
 table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
                          api = 5, profile = "driving", protocol = "v1",
                          osrmurl = "http://router.project-osrm.org") {

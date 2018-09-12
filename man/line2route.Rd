@@ -5,7 +5,7 @@
 \title{Convert straight OD data (desire lines) into routes}
 \usage{
 line2route(l, route_fun = "route_cyclestreet", n_print = 10,
-  list_output = FALSE, l_id = NA, ...)
+  list_output = FALSE, l_id = NA, time_delay = 0, ...)
 }
 \arguments{
 \item{l}{A SpatialLinesDataFrame}
@@ -21,6 +21,8 @@ should be shown}
 \item{l_id}{Character string naming the id field from the input lines data,
 typically the origin and destination ids pasted together. If absent, the row name of the
 straight lines will be used.}
+
+\item{time_delay}{Number or seconds to wait between each query}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
