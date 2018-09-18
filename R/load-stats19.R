@@ -12,7 +12,7 @@
 #' @examples
 #' \dontrun{
 #' dl_stats19()
-#' 
+#'
 #' # Load all stats19 datasets
 #' ac <- read_stats19_ac()
 #' ca <- read_stats19_ca()
@@ -61,7 +61,16 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
   }
 
   # read the data in
-  ac <- readr::read_csv(file.path(data_dir, "Accidents0514.csv"))
+  ac <- readr::read_csv(file.path(data_dir, "Accidents0514.csv"), col_types = readr::cols(
+    .default = readr::col_integer(),
+    Accident_Index = readr::col_character(),
+    Longitude = readr::col_double(),
+    Latitude = readr::col_double(),
+    Date = readr::col_character(),
+    Time = readr::col_character(),
+    `Local_Authority_(Highway)` = readr::col_character(),
+    LSOA_of_Accident_Location = readr::col_character()
+  ))
   #   ve <- readr::read_csv(file.path(data_dir, "Vehicles0514.csv"))
   #   ca <- readr::read_csv(file.path(data_dir, "Casualties0514.csv"))
 
@@ -146,9 +155,6 @@ format_stats19_ac <- function(ac) {
         "Frost or ice", "Flood over 3cm. deep"
       )
     )
-  ac$Time <-
-    lubridate::hm(ac$Time)
-  # hist(ac$Time@hour) # verify times
   ac$Date <- lubridate::dmy(ac$Date)
   # barplot(table(lubridate::wday(ac$Date, label = TRUE)))
 
