@@ -79,7 +79,7 @@ od_eg = read.csv(text =
 knitr::kable(od_eg)
 ```
 
-What this example OD table means is that 100 units of 'V1' and 3 units of V2 travel between zone 1 and zone 2. There is also movement represented between Zone 2 and 3. 
+What this example OD table means is that 100 units of 'V1' and 3 units of V2 travel between zone 1 and zone 2. There is also movement represented between Zone 1 and 3. 
 
 This dataset can also be represent as an 'od matrix', where rows represent the origins and columns destinations. However, for multiple variables (e.g. modes of transport) and to prevent giant and unwieldy sparse matrices, the 'long' form represented above is much more common.
 
