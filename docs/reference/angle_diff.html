@@ -18,11 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="Calculate the angular difference between lines and a predefined bearing — angle_diff" />
+
+<meta property="og:description" content="This function was designed to find lines that are close to parallel and perpendicular
+to some pre-defined route. It can return results that are absolute (contain information
+on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
+bidirectional (which mean values greater than +/- 90 are impossible)." />
+<meta name="twitter:card" content="summary" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +62,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +107,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,27 +115,31 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate the angular difference between lines and a predefined bearing</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/linefuns.R'><code>R/linefuns.R</code></a></small>
+    <div class="hidden name"><code>angle_diff.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function was designed to find lines that are close to parallel and perpendicular
 to some pre-defined route. It can return results that are absolute (contain information
 on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
 bidirectional (which mean values greater than +/- 90 are impossible).</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>angle_diff</span>(<span class='no'>l</span>, <span class='no'>angle</span>, <span class='kw'>bidirectional</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>l</th>
-      <td><p>A SpatialLinesDataFrame</p></td>
+      <td><p>A spatial lines object</p></td>
     </tr>
     <tr>
       <th>angle</th>
@@ -116,16 +159,15 @@ Default is FALSE. If TRUE, the same line in the oposite direction would have the
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Building on the convention used in <code>bearing</code> and in many applications,
+    <p>Building on the convention used in <code>bearing()</code> and in many applications,
 North is definied as 0, East as 90 and West as -90.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>flowlines</span>)
 <span class='co'># Find all routes going North-South</span>
-<span class='no'>a</span> <span class='kw'>=</span> <span class='fu'>angle_diff</span>(<span class='no'>flowlines</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>bidirectional</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>plot</span>(<span class='no'>flowlines</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='no'>a</span> <span class='kw'>&lt;</span> <span class='fl'>15</span>,], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='input'><span class='co'># East-West</span>
-<span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='no'>a</span> <span class='kw'>&gt;</span> <span class='fl'>75</span>,], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"green"</span>)</div><img src='angle_diff-4.png' alt='' width='540' height='400' /></pre>
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'>angle_diff</span>(<span class='no'>flowlines</span>, <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>bidirectional</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `first`. Please use dplyr::first() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `first`. Please use dplyr::first() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `last`. Please use dplyr::last() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `last`. Please use dplyr::last() or library(dplyr) to remove this warning.</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='no'>a</span> <span class='kw'>&lt;</span> <span class='fl'>15</span>, ], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='co'># East-West</span>
+<span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='no'>a</span> <span class='kw'>&gt;</span> <span class='fl'>75</span>, ], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"green"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='fu'>angle_diff</span>(<span class='no'>flowlines_sf</span>[<span class='fl'>2</span>, ], <span class='kw'>angle</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `first`. Please use dplyr::first() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `first`. Please use dplyr::first() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `last`. Please use dplyr::last() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: hybrid evaluation forced for `last`. Please use dplyr::last() or library(dplyr) to remove this warning.</span></div><div class='output co'>#&gt; [1] 92.04942</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -150,11 +192,14 @@ Robin Lovelace and Malcolm Morgan
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -1,0 +1,7 @@
+pandoc: 2.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  introducing-stplanr: introducing-stplanr.html
+  stplanr-paper: stplanr-paper.html
+

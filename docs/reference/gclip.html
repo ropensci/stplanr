@@ -18,11 +18,29 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="Crops spatial object x to the bounding box of spatial object (or matrix) b — gclip" />
+
+<meta property="og:description" content="This function is a cross between the spatial subsetting funtions such as
+sp::over(), rgeos::gIntersects() etc, and the cropping functions of
+raster::crop() and rgeos::gIntersection(). The output is the subset of
+spatial object a with an outline described by a square bounding box.
+The utility of such a function is illustrated in the following question:
+http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/." />
+<meta name="twitter:card" content="summary" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +64,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +109,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,24 +117,28 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Crops spatial object x to the bounding box of spatial object (or matrix) b</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/geo-functions.R'><code>R/geo-functions.R</code></a></small>
+    <div class="hidden name"><code>gclip.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This function is a cross between the spatial subsetting funtions such as
 sp::over(), rgeos::gIntersects() etc, and the cropping functions of
 raster::crop() and rgeos::gIntersection(). The output is the subset of
 spatial object a with an outline described by a square bounding box.
 The utility of such a function is illustrated in the following question:
-<a href = 'http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/'>http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/</a>.</p>
+<a href='http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/'>http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/</a>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>gclip</span>(<span class='no'>shp</span>, <span class='no'>bb</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -108,10 +153,17 @@ The utility of such a function is illustrated in the following question:
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>sp</span>)
-<span class='fu'>data</span>(<span class='no'>cents</span>)
-<span class='no'>bb</span> <span class='kw'>&lt;-</span> <span class='fu'>bbox</span>(<span class='no'>cents</span>)
-<span class='no'>cb</span> <span class='kw'>&lt;-</span> <span class='kw'>rgeos</span><span class='kw'>::</span><span class='fu'>gBuffer</span>(<span class='no'>cents</span>[<span class='fl'>8</span>, ], <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.012</span>, <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Spatial object is not projected; GEOS expects planar coordinates</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>cents</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>cb</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='no'>clipped</span> <span class='kw'>&lt;-</span> <span class='fu'>gclip</span>(<span class='no'>cents</span>, <span class='no'>cb</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: spgeom1 and spgeom2 have different proj4 strings</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "gclip_id"</span></div><div class='output co'>#&gt; <span class='warning'>Warning: joining factors with different levels, coercing to character vector</span></div><div class='input'><span class='fu'>row.names</span>(<span class='no'>clipped</span>)</div><div class='output co'>#&gt; [1] "1928" "2029" "2034"</div><div class='input'><span class='no'>clipped</span>$<span class='no'>avslope</span> <span class='co'># gclip also returns the data attribute</span></div><div class='output co'>#&gt; [1] 3.076791 2.762529 2.814496</div><div class='input'><span class='fu'>points</span>(<span class='no'>clipped</span>)</div><div class='input'><span class='fu'>points</span>(<span class='no'>cents</span>[<span class='no'>cb</span>,], <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>) <span class='co'># note difference</span></div><img src='gclip-15.png' alt='' width='540' height='400' /></pre>
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>cents</span>)
+<span class='no'>cb</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgeos</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rgeos/topics/misc-gBuffer'>gBuffer</a></span>(<span class='no'>cents</span>[<span class='fl'>8</span>, ], <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0.012</span>, <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Spatial object is not projected; GEOS expects planar coordinates</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>cents</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>cb</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='no'>clipped</span> <span class='kw'>&lt;-</span> <span class='fu'>gclip</span>(<span class='no'>cents</span>, <span class='no'>cb</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: spgeom1 and spgeom2 have different proj4 strings</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "gclip_id"</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Column `gclip_id` joining factors with different levels, coercing to character vector</span></div><div class='input'><span class='fu'>plot</span>(<span class='no'>clipped</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='no'>clipped</span>$<span class='no'>avslope</span> <span class='co'># gclip also returns the data attribute</span></div><div class='output co'>#&gt; [1] 3.076791 2.762529 2.814496</div><div class='input'><span class='fu'>points</span>(<span class='no'>clipped</span>)</div><div class='output co'>#&gt; <span class='error'>Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></div><div class='input'><span class='fu'>points</span>(<span class='no'>cents</span>[<span class='no'>cb</span>, ], <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>) <span class='co'># note difference</span></div><div class='output co'>#&gt; <span class='error'>Error in plot.xy(xy.coords(x, y), type = type, ...): plot.new has not been called yet</span></div><div class='input'><span class='fu'>gclip</span>(<span class='no'>cents_sf</span>, <span class='no'>cb</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: spgeom1 and spgeom2 have different proj4 strings</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "gclip_id"</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Column `gclip_id` joining factors with different levels, coercing to character vector</span></div><div class='output co'>#&gt; Simple feature collection with 3 features and 4 fields
+#&gt; geometry type:  POINT
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -1.535617 ymin: 53.8158 xmax: -1.519318 ymax: 53.82847
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt;       geo_code  MSOA11NM percent_fem  avslope                   geometry
+#&gt; 1928 E02002363 Leeds 034    0.525161 3.076791 POINT (-1.535617 53.82847)
+#&gt; 2029 E02002377 Leeds 048    0.408293 2.762529  POINT (-1.519318 53.8158)
+#&gt; 2034 E02002371 Leeds 042    0.504460 2.814496 POINT (-1.530712 53.81756)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -130,11 +182,14 @@ The utility of such a function is illustrated in the following question:
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

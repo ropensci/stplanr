@@ -18,11 +18,30 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="Plan a single route with CycleStreets.net — route_cyclestreet" />
+
+<meta property="og:description" content="Provides an R interface to the CycleStreets.net cycle planning API,
+a route planner made by cyclists for cyclists.
+The function returns a SpatialLinesDataFrame object representing the
+an estimate of the fastest, quietest or most balance route.
+Currently only works for the United Kingdom and part of continental Europe,
+though other areas may be requested by contacting CycleStreets.
+See https://www.cyclestreets.net/api/for more information." />
+<meta name="twitter:card" content="summary" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +65,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +110,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,26 +118,31 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plan a single route with CycleStreets.net</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/routes.R'><code>R/routes.R</code></a></small>
+    <div class="hidden name"><code>route_cyclestreet.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Provides an R interface to the CycleStreets.net cycle planning API,
 a route planner made by cyclists for cyclists.
 The function returns a SpatialLinesDataFrame object representing the
 an estimate of the fastest, quietest or most balance route.
-Currently only works for the United Kingdom and part of continental Europe.
-See <a href = 'https://www.cyclestreets.net/api/'>https://www.cyclestreets.net/api/</a>for more information.</p>
+Currently only works for the United Kingdom and part of continental Europe,
+though other areas may be requested by contacting CycleStreets.
+See <a href='https://www.cyclestreets.net/api/'>https://www.cyclestreets.net/api/</a>for more information.</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>route_cyclestreet</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>pat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://www.cyclestreets.net"</span>, <span class='kw'>reporterrors</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>save_raw</span> <span class='kw'>=</span> <span class='st'>"FALSE"</span>)</pre>
+    <pre class="usage"><span class='fu'>route_cyclestreet</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>pat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://www.cyclestreets.net"</span>,
+  <span class='kw'>reporterrors</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>save_raw</span> <span class='kw'>=</span> <span class='st'>"FALSE"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -145,61 +192,42 @@ should report errors (FALSE by default).</p></td>
 CycleStreets.net to find routes suitable for cyclists
 between origins and destinations. Requires an
 internet connection, a CycleStreets.net API key
-and origins and destinations within the UK to run.</p>
+and origins and destinations within the UK (and various areas beyond) to run.</p>
 <p>Note that if <code>from</code> and <code>to</code> are supplied as
 character strings (instead of lon/lat pairs), Google's
-geo-coding services are used via <code>RgoogleMaps::getGeoCode()</code>.</p>
+geo-coding services are used via <code><a href='geo_code.html'>geo_code()</a></code>.</p>
 <p>You need to have an api key for this code to run.
 Loading a locally saved copy of the api key text string
 before running the function, for example, will ensure it
-is available on any computer:
-    <code>
-mytoken &lt;- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-Sys.setenv(CYCLESTREET = mytoken)
-</code></p>
+is available on any computer:</p>
+<p><code>mytoken &lt;- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREET = mytoken)</code></p>
 <p>if you want the API key to be available in future
 sessions, set it using the .Renviron file
-e.g. on Linux machines in bash via:
-    <code>
-echo "CYCLESTREET=f3fe3d078ac34737" &gt;&gt; ~/.Renviron
-</code></p>
+e.g. on Linux machines in bash via:</p>
+<p><code>echo "CYCLESTREET=f3fe3d078ac34737" &gt;&gt; ~/.Renviron</code></p>
 <p>Read more about the .Renviron here: <code>?.Renviron</code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>line2route</p>
+    <div class='dont-index'><p>line2route</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>not_run</span>({
-  <span class='co'># Example from</span>
-  <span class='no'>from</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.117950</span>, <span class='fl'>52.205302</span>); <span class='no'>to</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.131402</span>, <span class='fl'>52.221046</span>)
-  <span class='no'>json_output</span> <span class='kw'>=</span> <span class='fu'>route_cyclestreet</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>, <span class='kw'>save_raw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  <span class='fu'>str</span>(<span class='no'>json_output</span>) <span class='co'># what does cyclestreets give you?</span>
-  <span class='fu'>names</span>(<span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>)
-  <span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>$<span class='no'>start</span>[<span class='fl'>1</span>] <span class='co'># starting point</span>
-  <span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>$<span class='no'>finish</span>[<span class='fl'>1</span>] <span class='co'># end point</span>
-  <span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>$<span class='no'>speed</span>[<span class='fl'>1</span>] <span class='co'># assumed speed (km/hr)</span>
-  <span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>$<span class='no'>busynance</span> <span class='co'># busyness of each section</span>
-  <span class='no'>json_output</span>$<span class='no'>marker</span>$<span class='no'>`@attributes`</span>$<span class='no'>elevations</span> <span class='co'># list of elevations</span>
-  <span class='co'># jsonlite::toJSON(json_output, pretty = TRUE) # complete json output (long!)</span>
-  <span class='co'># Plan the 'fastest' route between two points in Manchester</span>
-  <span class='no'>rf_mcr</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"M3 4EE"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"M1 4BT"</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>)
-  <span class='no'>rf_mcr</span>@<span class='kw'>data</span>
-  <span class='fu'>plot</span>(<span class='no'>rf_mcr</span>)
-  (<span class='no'>rf_mcr</span>$<span class='no'>length</span> / (<span class='fl'>1000</span> * <span class='fl'>1.61</span>)) / <span class='co'># distance in miles</span>
-    (<span class='no'>rf_mcr</span>$<span class='no'>time</span> / (<span class='fl'>60</span> * <span class='fl'>60</span>)) <span class='co'># time in hours - average speed here: ~8mph</span>
-  <span class='co'># Plan the 'quietest' route from Hereford to Leeds</span>
-  <span class='no'>rqh</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"Hereford"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"Leeds"</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>)
-  <span class='fu'>plot</span>(<span class='no'>rq_hfd</span>)
-  <span class='co'># Plan a 'balanced' route from Pedaller's Arms to the University of Leeds</span>
-  <span class='no'>rb_pa</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='st'>"Pedaller's Arms, Leeds"</span>, <span class='st'>"University of Leeds"</span>, <span class='st'>"balanced"</span>)
-  <span class='co'># A long distance route (max = 500 km)</span>
-  <span class='no'>woodys_route</span> <span class='kw'>=</span> <span class='fu'>route_cyclestreet</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"Stokesley"</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"Leeds"</span>)
-  <span class='co'># Plan a route between two lat/lon pairs in the UK</span>
-  <span class='fu'>route_cyclestreet</span>(<span class='fu'>c</span>(-<span class='fl'>2</span>, <span class='fl'>52</span>), <span class='fu'>c</span>(-<span class='fl'>1</span>, <span class='fl'>53</span>), <span class='st'>"fastest"</span>)
-})</div></pre>
+</div><span class='co'># NOT RUN {</span>
+<span class='no'>from</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(-<span class='fl'>1.55</span>, <span class='fl'>53.80</span>) <span class='co'># geo_code("leeds")</span>
+<span class='no'>to</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(-<span class='fl'>1.76</span>, <span class='fl'>53.80</span>) <span class='co'># geo_code("bradford uk")</span>
+<span class='no'>json_output</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>, <span class='kw'>save_raw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>str</span>(<span class='no'>json_output</span>) <span class='co'># what does cyclestreets give you?</span>
+<span class='no'>rf_lb</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>)
+<span class='no'>rf_lb</span>@<span class='kw'>data</span>
+<span class='fu'>plot</span>(<span class='no'>rf_lb</span>)
+(<span class='no'>rf_lb</span>$<span class='no'>length</span> / (<span class='fl'>1000</span> * <span class='fl'>1.61</span>)) / <span class='co'># distance in miles</span>
+  (<span class='no'>rf_lb</span>$<span class='no'>time</span> / (<span class='fl'>60</span> * <span class='fl'>60</span>)) <span class='co'># time in hours - average speed here: ~8mph</span>
+<span class='co'># Plan a 'balanced' route from Pedaller's Arms to the University of Leeds</span>
+<span class='no'>rb_pa</span> <span class='kw'>&lt;-</span> <span class='fu'>route_cyclestreet</span>(<span class='st'>"Pedaller's Arms, Leeds"</span>, <span class='st'>"University of Leeds, UK"</span>, <span class='st'>"balanced"</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -222,11 +250,14 @@ echo "CYCLESTREET=f3fe3d078ac34737" &gt;&gt; ~/.Renviron
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
