@@ -14,8 +14,8 @@ author:
     - Darlington, NSW 2008, Australia
     email:  richard.ellison@sydney.edu.au
 abstract: >
-  Tools for transport planning should be flexible, robust and scalable. **stplanr** meets each of these criteria by providing functionality commonly needed for transport planning in R, with an emphasis on spatial transport data. This includes tools to import and clean transport datasets; the creation of geographic 'desire lines' from origin-destination data; methods to assign these desire lines to the transport network, e.g. via interfaces to routing services such as CycleStreets.net, Graphhopper and the OpenStreetMap Routing Machine (OSRM); functions to calculate the geographic attributes of such routes, such as their bearing and equidistant surroundings; and 'travel watershed' analysis. With reproducible examples and using real transport datasets, this article demonstrates how R can form the basis of a reproducible and flexible transport planning workflow. We conclude with a brief discussion of desirable directions of future development.
-  
+  Tools for transport planning should be flexible, scalable and transparent. The **stplanr** package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes. **stplanr** facilitates common transport planning tasks including: downloading and cleaning transport datasets; creating geographic 'desire lines from origin-destination (OD) data; route assignment, via the `SpatialLinesNetwork` class and interfaces to routing services such as CycleStreets.net; calculation of route segment attributes such as bearing and aggregate flow; and `travel watershed' analysis. This paper demonstrates this functionality using reproducible examples on real transport datasets. More broadly, the experience shows open source software can form the basis of a reproducible transport planning workflow. **stplanr**, alongside other packages and open source projects, could provide a more transparent and democratically accountable alternative to the current approach which is heavily reliant on proprietary and technically and financially inaccessible software.
+bibliography: references-paper.bib
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{stplanr A Package for Transport Planning}
@@ -33,53 +33,153 @@ This vignette is under peer review and was submitted in pdf form to the [R Journ
 
 # Introduction
 
-Transport planning is a diverse field requiring a wide range of computational tasks \citep{boyce_forecasting_2015}. Software in the transport planner's toolkit should be flexible, able to handle a wide range of data formats; robust, able to generate reproducible results for transparent decision-making; and scalable, able to work at multiple geographic levels from single streets to large cities and regions.
+Transport planning can broadly be defined as the process of designing
+and evaluating transport interventions [@willumsen_modelling_2011]
+usually with the ultimate aim of improving transport systems from
+economic, social and environmental perspectives. This inevitably
+involves a degree of subjective judgment and intuition. With the
+proliferation of new transport datasets — and the increasing
+availability of hardware and software to make sense of them — there is
+great potential for the discipline to become more evidence-based and
+scientific [@balmer_matsim-t:_2009]. Transport planners have always
+undertaken a wide range computational activities
+[@boyce_forecasting_2015], but with the digital revolution the demands
+have grown beyond the capabilities of a single, monolithic product. The
+diversity of tasks , and need for democratic accountability in public
+decision making, suggests that future-proof transport planning software
+should be:
 
-R can provide a solid basis for a transport planning workflow that meets each of these criteria. Packages such as \CRANpkg{sp} \citep{pebesma_classes_2005} and \CRANpkg{rgeos} \citep{bivand_rgeos:_2016} greatly extend R's spatial data handling and modelling capabilities \citep{bivand_applied_2013}. Packages building on the **sp** class system have been developed for specific domains, including \CRANpkg{SpatialEpi} \citep{kim_spatialepi:_2016}, \CRANpkg{diseasemapping} \citep{brown_diseasemapping:_2016} and the **adehabitat** family of packages \citep{calenge_package_2006}.
 
-Inspired by such efforts and driven by our own research needs, our primary aim for **stplanr** is to provide an R toolbox for transport planning. Although the focus is on spatial transport datasets (and most transport problems contain a spatial component), **stplanr** also provides functions for handling non-spatial datasets.
+-   flexible, able to handle a wide range of data formats
 
-## Motivations
+-   scalable, able to work at multiple geographic levels from single
+    streets to large cities and regions
 
-There has been little in the way of R development for transport applications. This is surprising given the ubiquity of transport
-problems,^[Most
-people can identify interventions that they think would make the transport systems they interact with more sustainable. Think
-about the paths and roads you travel on, for example: what interventions would you prioritise to improve non-motorised access, for walking, cycling and wheel-chairs? What quantitative evidence would you need to communicate this to the relevant authorities?
+-   robust and reliable, tested on a range of datasets and able to work
+    ’out of the box’ in a range of real-world projects
+
+-   open source and reproducible, ensuring transparency and encouraging
+    citizen science
+
+This paper sets out to demonstrate that open source software with a
+command-line interface (CLI) can provide a foundation for transport
+planning software that meets each of these criteria. R provides a strong
+basis for progress in this direction because it already contains
+functionality used in common transport planning workflows. , and greatly
+improved R’s spatial abilities [@bivand_applied_2013], work that is
+being consolidated and extended in the recent package.
+
+Building on these foundations a number of spatial packages have been
+developed for applied domains including: disease mapping and modelling,
+with packages such as and
+[@kim_spatialepi:_2016; @brown_diseasemapping:_2016]; spatial ecology,
+with the **adehabitat** family of packages [@calenge_package_2006]; and
+visualisation, with packages such as **SpatialEpi**, **diseasemapping** and @RJ-2016-005. However,
+there has been little prior work to develop R functionality designed
+specifically for transport planning, with the notable exceptions of
+[TravelR](http://r-forge.r-project.org/projects/travelr/) (a package on
+R-Forge last updated in 2012) and
+[gtfsr](https://github.com/ropensci/gtfsr) (a package for handling
+General Transit Feed Specification (GTFS) data).
+
+The purpose of **stplanr** is to provide a toolbox rather than a
+specific solution for transport planning, with an emphasis on spatial
+data and active modes. This emphasis is timely given the recent emphasis
+on sustainability [@banister_sustainable_2008] and ‘Big Data’
+[@zheng_big_2016] in the wider field of transport planning. A major
+motivation was the lack of R packages, and open source software in
+general, for transport applications. This may be surprising given the
+uqiquity of transport problems;^[
+Many people can think of things that could be improved on their local transport networks, especially for walking, cycling and wheel-chairs.
+But most lack the evidence to communicate the issues, and potential solutions, to others.
 ]
-R's aptitude for handling transport data (including spatial and travel survey data),
-and the increasing use of R in applied domains. Increasingly, R is the go-to statistical software in many organisations: academic, public sector and privately owned. Such organisations undertake the majority of transport planning research. This paper was therefore motivated by the desire to demonstrate that R provides an excellent framework for transport research. If readers decide not to use the package, perhaps needing bespoke solutions to specific transport problems not covered by **stplanr**, it is hoped that the ideas, functions and datasets described in this paper inspire parallel developments in the space of 'R for transport applications'. Moreover, by making the package deliberately broad in its scope, we hope that **stplanr** can help build a nascent community of R-using transport researchers and welcome feature requests and feedback at the package's [online home](https://github.com/ropensci/stplanr/issues).
+R’s proficiency at handling spatial,
+temporal and travel survey data that describe transport systems; and the
+growing popularity of R in applied domains
+[@jalal_overview_2017; @moore_why_2017]. Another motivation is the
+growth in open access datasets: the main purpose of early versions of
+the package was to process open origin-destination data
+[@lovelace_propensity_2017].
 
-R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems.
-For instance, \citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles.
-\citeauthor{efthymiou_use_2012} (\citeyear{efthymiou_use_2012}) also used R to collect and analyse transport-related data from Twitter using packages including \CRANpkg{XML}, \CRANpkg{twitteR} and \CRANpkg{ggplot2}.
-These packages were used to download, parse and plot the Twitter data using a method that can be repeated and the results reproduced or updated.
-More general statistical analyses have also been conducted on transport-related datasets using packages including \CRANpkg{muStat} and \CRANpkg{mgcv} \citep{diana_studying_2012,cerin_walking_2013}.
-<!-- Peter and bronsall, for example, use the xxx package to do this. -->
-<!-- Alfred et al, to provide another example, use the package to do that. -->
-Despite the rising use of R for transport research, there has yet been to be a package for transport planning.
+R is already used in transport applications, as illustrated by recent
+research that applies packages from other domains to transport problems.
+For instance, @efthymiou_use_2012 use R to
+analyse the data collected from an online survey focused on car-sharing,
+bicycle-sharing and electric vehicles. @efthymiou_use_2012
+also used R to collect and analyse
+transport-related data from Twitter using packages including , and .
+These packages were used to download, parse and plot the Twitter data
+using a method that can be repeated and the results reproduced or
+updated. More general statistical analyses have also been conducted on
+transport-related datasets using packages including and
+[@diana_studying_2012; @cerin_walking_2013]. Despite the rising use of R
+for transport research, there has yet been to be a package for transport
+planning.
 
-The design of the R language, with its emphasis on flexibility, data processing and statistical modelling, suggests it can provide a powerful environment for transport planning research. There are many quantitative methods in transport planning \citep{ortuzar_modelling_2001} and we have attempted to focus on those that are most generalisable and frequently used.
-**stplanr** facilitates the following common computational tasks for transport planning:
+The design of the R language, with its emphasis on flexibility, data
+processing and statistical modelling, suggests it can provide a powerful
+environment for transport planning research. There are many quantitative
+methods in transport planning, many of which fit into the classic ‘four
+stage’ transport model which involves the following steps
+[@willumsen_modelling_2011]: (1) trip *generation* to estimate trip
+freqency from origins; (2) *distribution* of trips to destinations; (3)
+*modal split* of trips between walking, cycling, buses etc.; (4)
+*assignment* of trips to the transport route network. To this we would
+like to add two more stages for the big data age: (0) data processing
+and exploration; and (5) validation. This sequence is not the only way
+of transport modelling and some have argued that its dominance has
+reduced innovation. However it is certainly a common approach and
+provides a useful schema for classifying the kinds of task that
+**stplanr** can tackle:
 
-- Accessing and processing of data on transport infrastructure and behaviour
-- Analysis and visualisation of the transport network
-- Analysis of origin-destination (OD) data and the visualisation of resulting 'desire lines'
-- The allocation of desire lines to roads and other guideways via routing algorithms to show commonly used routes through geographical space
-- The aggregation of routes to estimate total levels of flow on segments throughout the transport network
-- Development of models to estimate transport behaviour currently and under various scenarios of change
-- The calculation of 'catchment areas' affected by transport infrastructure
+-   Accessing and processing of data on transport infrastructure and
+    behaviour (stage 0)
 
-The automation of such tasks can assist researchers and practitioners to create evidence for decision making. If the data processing and analysis stages are fast and painless, more time can be dedicated to visualisation and decision making. This should allow researchers to focus on problems, rather than on wrestling with unwieldy datasets, clunky graphical user interfaces (GUIs), and ad-hoc scripts that could be generalised. Furthermore, if the process can be made reproducible and accessible (e.g. via online visualisation packages such as \CRANpkg{shiny} and \CRANpkg{leaflet}), this will help transport planning move away from reliance on 'black boxes' and become a more transparent and democratic activity \citep{waddell_urbansim:_2002,hollander_who_2015}.
-<!-- Thus **stplanr** fits into the fist parts of a wider 'analyse, plan, design' workflow. - xx commented as it needs a reference-->
+-   Analysis and visualisation of the transport network (0)
 
-<!-- **stplanr** facilitates each of these tasks with a series of functions which, used in conjunction with R's statistical and (via packages such as **raster**) spatial capabilities, provide an integrated toolkit for computational transport planning research. Because R has a command-line interface (CLI), as opposed to the graphical user interface (GUI) approach used in many transport planning programs, it has a steep learning curve. This issue is tackled by documentation: **stplanr** has numerous example datasets (outlined in the next section), descriptive help pages (e.g see `?od2line` and `example(od2line)`) and a vignette (on which this paper is based).  -->
+-   Analysis of origin-destination (OD) data and the visualisation of
+    resulting ‘desire lines’
 
-The technical advantages of using modern, interpreted, and open source languages such as R are manifold: they enable automation and sharing of methods between researchers, for example the application of methods developed for one city to another; they ease the integration with other software systems and the web; and they have very strong user communities. The advantages of using R specifically to develop the functionality described in this paper are that it has unparalleled geo-statistical capabilities \citep{pebesma_software_2015}, visualisation packages (e.g. \CRANpkg{tmap}, \CRANpkg{ggplot2}) and the ability to rapidly read-in data stored in many formats (e.g. via the \CRANpkg{haven} and \CRANpkg{rio} packages).
+-   The allocation of desire lines to roads and other guideways via
+    routing services
 
-<!-- As we shall see in the next section, **stplanr** provides functions for undertaking each of these methods on real data. -->
+-   The aggregation of routes to estimate total levels of flow on
+    segments throughout the transport network
 
-<!-- includes trip flows and calculations of catchments for transport services. -->
-<!--  combined with R's increasing use in academic research, industry and the public sector, suggests there could be substantial latent demand for transport planning functionality in R.  -->
+-   Development of models to estimate transport behaviour currently and
+    under various scenarios of change
+
+-   The calculation of ‘catchment areas’ affected by transport
+    infrastructure
+
+The automation of such tasks can assist researchers and practitioners to
+create evidence for decision making. If the data processing and analysis
+stages are fast and painless, more time can be dedicated to
+visualisation and decision making. This should allow researchers to
+focus on problems, rather than on clunky graphical user interfaces
+(GUIs), and ad-hoc scripts that could be generalised. Furthermore, if
+the process can be made reproducible and accessible (e.g. via online
+visualisation packages such as **shiny**), this could help transport planning
+move away from reliance on ‘black boxes’ [@waddell_urbansim:_2002] and
+empower citizens to challenge decisions made by transport planning
+authorities based on the evidence [@hollander_transport_2016]. There are
+many advantages of using a scriptable, interactive and open source
+language such as R for transport planning. Such an approach enables:
+reproducible research; the automation and sharing of code between
+researchers; reduced barriers to innovation as anyone can create new
+features for the benefit of all planners; easier interaction with non
+domain experts (who will lack dedicated software); and integration with
+other software systems, as illustrated by the use of to generate
+JavaScript for sharing interactive maps for transport planning, as used
+in the publicly accessible Propensity to Cycle Tool
+[@lovelace_propensity_2017]. Furthermore, R has a strong user community
+which can support newcomers (*stplanr* was peer reviewed thanks to the
+community surrounding ROpenSci). The advantages of using R specifically
+to develop the functionality described in this paper are that it has
+excellent geo-statistical capabilities [@pebesma_software_2015],
+visualisation packages (e.g. **tmap**, **ggplot2**), support for logit models (which are
+useful for modelling modal shift), and support for the many formats that
+transport datasets are stored in (e.g. via the **haven**  and **rio** packages).
 
 # Package structure and functionality
 
@@ -599,4 +699,4 @@ Like much open source software **stplanr** is an open-ended project, a work-in-p
 <!-- If you would like to contribute or request new features, see -->
 <!-- https://github.com/Robinlovelace/stplanr -->
 
-\bibliography{references}
+# References
