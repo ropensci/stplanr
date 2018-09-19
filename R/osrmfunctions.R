@@ -978,9 +978,9 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
 #' to <- c(-1.76, 53.80) # geo_code("bradford uk")
 #' r <- route_osrm(from, to)
 #' plot(r)
-#' r_many <- line2route(flowlines_sf[2:9, ], route_osrm)
+#' r_many <- line2route(flowlines_sf[2:9, ], route_osrm, time_delay = 1)
 #' plot(cents)
-#' plot(r_many, add = TRUE)
+#' plot(r_many$geometry)
 #' }
 route_osrm <- function(from, to, l = NULL, alt = FALSE, ..., singleline = TRUE) {
   coords <- od_coords(from, to, l)
