@@ -22,37 +22,38 @@ LazyData: yes
 Depends:
     R (>= 3.0)
 Imports:
-    sp,
-    curl,
-    readr,
-    dplyr,
-    httr,
-    jsonlite,
-    stringi,
-    stringr,
-    lubridate,
-    maptools,
-    raster,
-    rgdal,
-    rgeos,
-    openxlsx,
+    sp (>= 1.3.1),
+    curl (>= 3.2),
+    readr (>= 1.1.1),
+    dplyr (>= 0.7.6),
+    httr (>= 1.3.1),
+    jsonlite (>= 1.5),
+    stringi (>= 1.2.4),
+    stringr (>= 1.3.1),
+    lubridate (>= 1.7.4),
+    maptools (>= 0.9.3),
+    raster (>= 2.6.7),
+    rgdal (>= 1.3.4),
+    rgeos (>= 0.3.28),
+    openxlsx (>= 4.1.0),
     methods,
-    R.utils,
-    geosphere,
+    R.utils (>= 2.7.0),
+    geosphere (>= 1.5.7),
     Rcpp (>= 0.12.1),
-    igraph,
-    nabor,
-    rlang,
-    lwgeom,
-    sf
-LinkingTo: RcppArmadillo,
-    Rcpp
+    igraph (>= 1.2.2),
+    nabor (>= 0.5.0),
+    rlang (>= 0.2.2),
+    lwgeom (>= 0.1.4),
+    sf (>= 0.6.3)
+LinkingTo: 
+    RcppArmadillo (>= 0.9.100.5.0),
+    Rcpp (>= 0.12.18)
 Suggests:
-    testthat,
-    knitr,
-    rmarkdown,
-    dodgr,
-    tmap
+    testthat (>= 2.0.0),
+    knitr (>= 1.20),
+    rmarkdown (>= 1.10),
+    dodgr (>= 0.0.3),
+    tmap (>= 2.1.1)
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
