@@ -7,18 +7,18 @@
   - Travis: https://travis-ci.org/ropensci/stplanr/builds/252840164?utm_source=github_status&utm_medium=notification
 
 * MacOS
-  - elcapitan on rhub: https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-bc643a88aeeb4be18dc13a1097a1ef38
+  - elcapitan on rhub: 
 
 * Windows
-  - rhub release (warning due to pandoc): https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-9a4bc29713d44514b6589b043ff5b15d
-  - rhub devel (fail due to dependency issues): https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-3655ad52ae97420bba8ad925eff71778
-  
+  - rhub release: 
     
 ## R CMD check:
 
-OK - but a note about package reviewer:
-
-```
-Authors@R field gives persons with non-standard roles:
-  Scott  Chamberlin [rev] (Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10): rev
-```
+NOTE
+Versioned 'LinkingTo' values for
+  ‘RcppArmadillo’ ‘Rcpp’
+  
+WARNING
+checking compilation flags used ... WARNING
+Compilation used the following non-portable flag(s):
+  ‘-Wdate-time’ ‘-Werror=format-security’ ‘-Wformat’

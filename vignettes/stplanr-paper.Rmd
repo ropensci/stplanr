@@ -15,7 +15,7 @@ author:
     email:  richard.ellison@sydney.edu.au
 abstract: >
   Tools for transport planning should be flexible, scalable and transparent. The **stplanr** package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes. **stplanr** facilitates common transport planning tasks including: downloading and cleaning transport datasets; creating geographic 'desire lines from origin-destination (OD) data; route assignment, via the `SpatialLinesNetwork` class and interfaces to routing services such as CycleStreets.net; calculation of route segment attributes such as bearing and aggregate flow; and `travel watershed' analysis. This paper demonstrates this functionality using reproducible examples on real transport datasets. More broadly, the experience shows open source software can form the basis of a reproducible transport planning workflow. **stplanr**, alongside other packages and open source projects, could provide a more transparent and democratically accountable alternative to the current approach which is heavily reliant on proprietary and technically and financially inaccessible software.
-bibliography: references-paper.bib
+bibliography: references.bib
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{stplanr A Package for Transport Planning}
