@@ -3,9 +3,9 @@
 ## Test environments
 
 * Linux
-  - Local
-  - Travis: https://travis-ci.org/ropensci/stplanr/builds/252840164?utm_source=github_status&utm_medium=notification
-
+  - Local (Ubuntu 18.04)
+  - Travis:https://travis-ci.org/ropensci/stplanr
+  
 * MacOS
   - elcapitan on rhub: 
 
