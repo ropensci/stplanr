@@ -3,7 +3,7 @@
 ## NEW FEATURES
 
 * New function `route_local()`
-# * New argument in `line2route()`: `time_sleep` waits a period between each route request
+* New argument in `line2route()`: `time_sleep` waits a period between each route request
 
 ## BUG FIXES
 
