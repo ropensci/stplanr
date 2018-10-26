@@ -157,7 +157,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 
   sl_sp <- as(sl, "SpatialLines")
 
-  if (is.na(byvars[1]) == TRUE) {
+  if (is.na(byvars[1])) {
     ## get the line sections that make the network
     slu <- gsection(sl, buff_dist = buff_dist)
     ## overlay network with routes
@@ -253,7 +253,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
   }
 
   ## remove lines with attribute values of zero
-  if (na.zero == TRUE) {
+  if (na.zero) {
     sl <- sl[sl[[attrib]] > 0, ]
   }
 
