@@ -4,8 +4,7 @@
 \alias{overline}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA,
-  buff_dist = 0)
+overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 }
 \arguments{
 \item{sl}{A SpatialLinesDataFrame with overlapping elements}
@@ -18,8 +17,6 @@ If length of \code{fun} is smaller than \code{attrib} then the functions are
 repeated for subsequent attributes.}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
-
-\item{byvars}{Character vector containing the column names to use for grouping}
 
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
@@ -35,12 +32,6 @@ rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 \dontrun{
-routes_fast$group <- rep(1:3, length.out = nrow(routes_fast))
-rnet_grouped <- overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
-plot(rnet_grouped,
-  col = rnet_grouped$group, lwd =
-    rnet_grouped$length / mean(rnet_grouped$length) * 3
-)
 # sf methods
 sl <- routes_fast_sf[2:4, ]
 overline(sl = sl, attrib = "length", buff_dist = 10)

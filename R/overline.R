@@ -107,7 +107,6 @@ lineLabels <- function(sl, attrib) {
 #' If length of `fun` is smaller than `attrib` then the functions are
 #' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
-#' @param byvars Character vector containing the column names to use for grouping
 #' @inheritParams gsection
 #' @author Barry Rowlingson
 #' @references
@@ -122,25 +121,19 @@ lineLabels <- function(sl, attrib) {
 #' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 #' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 #' \dontrun{
-#' routes_fast$group <- rep(1:3, length.out = nrow(routes_fast))
-#' rnet_grouped <- overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
-#' plot(rnet_grouped,
-#'   col = rnet_grouped$group, lwd =
-#'     rnet_grouped$length / mean(rnet_grouped$length) * 3
-#' )
 #' # sf methods
 #' sl <- routes_fast_sf[2:4, ]
 #' overline(sl = sl, attrib = "length", buff_dist = 10)
 #' rnet_sf <- overline(routes_fast_sf, attrib = "length", buff_dist = 10)
 #' plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
 #' }
-overline <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
+overline <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   UseMethod("overline")
 }
 #' @export
-overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
+overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   sl_spatial <- sp::SpatialLinesDataFrame(sl = sf::as_Spatial(sl$geometry), data = sf::st_set_geometry(sl, NULL), match.ID = FALSE)
-  rnet_sp <- overline(sl_spatial, attrib, fun = fun, na.zero = na.zero, byvars = byvars, buff_dist = buff_dist)
+  rnet_sp <- overline(sl_spatial, attrib, fun = fun, na.zero = na.zero, buff_dist = buff_dist)
   sf::st_as_sf(rnet_sp)
 
   # attempt to run with sf funs
@@ -149,7 +142,7 @@ overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buf
   # aggs
 }
 #' @export
-overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA, buff_dist = 0) {
+overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
     fun <- rep(c(fun), length.out = length(attrib))
@@ -157,7 +150,6 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
 
   sl_sp <- as(sl, "SpatialLines")
 
-  if (is.na(byvars[1])) {
     ## get the line sections that make the network
     slu <- gsection(sl, buff_dist = buff_dist)
     ## overlay network with routes
@@ -193,64 +185,6 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA
     ## make a sl with the named attribibute:
     sl <- sp::SpatialLinesDataFrame(slu, aggs)
     # names(sl) = attrib
-  } else {
-    splitlines <- lapply(
-      split(sl, sl@data[, byvars]),
-      function(x, attrib, gvar) {
-        groupingcat <- unname(unlist(unique(x@data[, gvar])))
-        sl_spg <- as(x, "SpatialLines")
-        slu <- gsection(sl, buff_dist = buff_dist)
-        overs <- sp::over(slu, sl_spg, returnList = TRUE)
-        overs <- lapply(1:length(overs), function(islu) {
-          Filter(function(isl) {
-            islines(sl_spg[isl, ], slu[islu, ])
-          }, overs[[islu]])
-        })
-        # aggs = sapply(overs, function(os){fun(x[[attrib]][os])})
-        aggs <- setNames(
-          as.data.frame(
-            lapply(
-              1:length(attrib),
-              function(y, overs, attribs, aggfuns) {
-                sapply(overs, function(os, attrib, fun2) {
-                  fun2(x[[attrib]][os])
-                },
-                attrib = attribs[y],
-                fun2 = aggfuns[[y]]
-                )
-              },
-              overs,
-              attrib,
-              fun
-            )
-          ),
-          attrib
-        )
-        sl <- sp::SpatialLinesDataFrame(slu, cbind(aggs, as.data.frame(matrix(groupingcat, nrow = 1))))
-        names(sl) <- c(attrib, gvar)
-        sl <- sp::spChFIDs(sl, paste(paste(groupingcat, collapse = "."), row.names(sl@data), sep = "."))
-        sl
-      },
-      attrib,
-      c(byvars)
-    )
-
-    splitlinesdf <- data.frame(dplyr::bind_rows(lapply(splitlines, function(x) {
-      x@data
-    })))
-    row.names(splitlinesdf) <- unname(unlist(lapply(splitlines, function(x) {
-      row.names(x@data)
-    })))
-
-    sl <- sp::SpatialLinesDataFrame(
-      sp::SpatialLines(unlist(lapply(splitlines, function(x) {
-        x@lines
-      }), recursive = FALSE),
-      proj4string = splitlines[[1]]@proj4string
-      ),
-      splitlinesdf
-    )
-  }
 
   ## remove lines with attribute values of zero
   if (na.zero) {
