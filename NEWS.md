@@ -1,12 +1,15 @@
 # stplanr 0.2.6.9000
 
-# stplanr 0.2.7
-
 ## NEW FEATURES
 
 ## BUG FIXES
 
 * Fixed [#272](https://github.com/ropensci/stplanr/issues/272) by removing byvars argument of overline in preparation for overdue overhaul of overline function.
+
+## OTHER
+
+* No longer suggests **tmap** to reduce install times: `install.packages()` installs suggested packages by default
+
 
 # stplanr 0.2.6
 
