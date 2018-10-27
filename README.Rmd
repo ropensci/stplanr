@@ -183,6 +183,21 @@ pkgs = gsub("\n", " ", pkgs)
 strsplit(pkgs, ",")[[1]]
 ```
 
+```{r, eval=FALSE, echo=FALSE}
+# Aim: explore dependencies
+install.packages("miniCRAN")
+library(miniCRAN)
+tags <- "stplanr"
+pkgDep(tags)
+dg <- makeDepGraph(tags, enhances = TRUE)
+set.seed(1)
+plot(dg, legendPosition = c(-1, 1), vertex.size = 20)
+library(DiagrammeR)
+DiagrammeR::visnetwork(dg)
+visNetwork::visIgraph(dg)
+```
+
+
 
 ## Meta
 
