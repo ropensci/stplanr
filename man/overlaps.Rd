@@ -10,7 +10,14 @@ overlaps(sl, sl2, pattern = "1F1F00102")
 \item{sl}{A SpatialLinesDataFrame with overlapping elements}
 
 \item{sl2}{A second \code{LINESTRING} object to aggregate}
+
+\item{patter}{DE-9IM pattern
+(see \href{https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates}{DE-9IM}
+on wikipedia for more information)}
 }
 \description{
-Identify overlapping lines
+A small wrapper around \code{sf::st_relate()} that does not create
+messages when done on non projected data, and which has
+default \href{https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates}{DE-9IM}
+values.
 }

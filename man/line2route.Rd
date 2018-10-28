@@ -47,7 +47,7 @@ rq <- line2route(l = l, plan = "quietest", silent = TRUE)
 plot(r)
 plot(rf, col = "red", add = TRUE)
 plot(rq, col = "green", add = TRUE)
-plot(l, add = T)
+plot(l, add = TRUE)
 line2route(flowlines_sf[2:3, ], route_osrm)
 # Plot for a single line to compare 'fastest' and 'quietest' route
 n <- 2

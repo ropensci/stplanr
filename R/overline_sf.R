@@ -64,7 +64,7 @@ overline_sf <- function(sl, attrib, fun = sum) {
 #' rnet3 = overline_sf(sl = sl, attrib = c("value", "length"))
 #' rnet4 = overline_sf2(rnet3[1, ], routes_fast_sf[6, ], "value")
 #' plot(rnet3$geometry, lwd = rnet3$value)
-#' plot(rnet4, add = T, col = "red")
+#' plot(rnet4, add = TRUE, col = "red")
 overline_sf2 = function(sl, sl2, attrib = "value", fun = sum) {
   attrib1 = paste0(attrib, ".1")
   suppressMessages({
@@ -87,6 +87,13 @@ overline_sf2 = function(sl, sl2, attrib = "value", fun = sum) {
 }
 #' Identify overlapping lines
 #'
+#' A small wrapper around `sf::st_relate()` that does not create
+#' messages when done on non projected data, and which has
+#' default [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
+#' values.
+#' @param patter DE-9IM pattern
+#'  (see [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
+#'  on wikipedia for more information)
 #' @inheritParams overline_sf2
 #' @export
 overlaps = function(sl, sl2, pattern = "1F1F00102") {
