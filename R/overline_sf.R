@@ -9,6 +9,10 @@
 #' @export
 #' @examples \dontrun{
 #' routes_fast_sf$value = 1
+#' sl <- routes_fast_sf[2:6, ]
+#' rnet = overline_sf(sl = sl, attrib = c("value", "length"))
+#' plot(rnet, lwd = rnet$value)
+#' # A larger example
 #' sl <- routes_fast_sf[2:7, ]
 #' rnet = overline_sf(sl = sl, attrib = c("value", "length"))
 #' plot(rnet, lwd = rnet$value)
@@ -30,14 +34,19 @@ overline_sf <- function(sl, attrib, fun = sum) {
       rnet_overlap = rnet[sel_overlaps, ]
       if(sum(sel_overlaps) == 1) {
         rnet_new = overline_sf2(rnet_overlap, sl[i, ], attrib = attrib, fun = fun)
-        } else {
+      } else {
         message("Multiple intersections for route ", i)
-        browser()
-        rnet_new = overline_sf2(rnet_overlap[1, ], sl[i, ], attrib = attrib, fun = fun)
+        rnet_new = overline_sf2(rnet_overlap[1,], sl[i,], attrib = attrib, fun = fun)
+        # sel_overlaps2 = overlaps(rnet_new, sl[i, ])
+        # rnet_new = rnet_new_over[sel_overlaps2, ]
         rnet_new_ls = rnet_new[is_linestring(rnet_new), ] # save 'easy' part
-        rnet_new_mls = rnet_new[!is_linestring(rnet_new), ]
+        sl$geometry[i] = rnet_new$geometry[!is_linestring(rnet_new)]
         for(j in 2:nrow(rnet_overlap)) {
-          rnet_new = rbind(rnet_new_ls, overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib))
+          rnet_new_over = overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib, fun = fun)
+          sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
+          rnet_new2 = rnet_new_over[sel_overlaps2, ]
+          rnet_new = rbind(rnet_new, rnet_new2)
+          sl$geometry[i] = st_difference(sl$geometry[i], rnet_new$geometry)
         }
       }
       rnet = rbind(rnet_no_overlap, rnet_new)
