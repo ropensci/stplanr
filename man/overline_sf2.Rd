@@ -5,7 +5,8 @@
 \title{Combine 2 \code{sf} \code{LINESTRING} objects into non-overlapping segments and
 find the aggregate value of selected columns defined by \code{attrib} along shared segments.}
 \usage{
-overline_sf2(sl, sl2, attrib = "value", fun = sum)
+overline_sf2(sl, sl2, attrib = "value", fun = sum,
+  return_linestring = FALSE)
 }
 \arguments{
 \item{sl}{A SpatialLinesDataFrame with overlapping elements}
@@ -18,6 +19,9 @@ overline_sf2(sl, sl2, attrib = "value", fun = sum)
 \item{fun}{The function(s) used to aggregate the grouped values (default: sum).
 If length of \code{fun} is smaller than \code{attrib} then the functions are
 repeated for subsequent attributes.}
+
+\item{return_linestring}{Can the result include \code{MULTILINESTRING} geometries?
+Default: \code{FALSE}}
 }
 \description{
 Combine 2 \code{sf} \code{LINESTRING} objects into non-overlapping segments and
@@ -28,12 +32,18 @@ routes_fast_sf$value = 1
 sl = routes_fast_sf[2, ]
 sl2 = routes_fast_sf[3, ]
 rnet = overline_sf2(sl, sl2, attrib = "value")
+sf::st_geometry_type(rnet)
 plot(rnet, lwd = rnet$value)
 rnet2 = overline_sf2(sl, sl2, attrib = c("value", "length"))
 plot(rnet2)
-sl <- routes_fast_sf[2:5, ]
+sl <- routes_fast_sf[2:6, ]
 rnet3 = overline_sf(sl = sl, attrib = c("value", "length"))
-rnet4 = overline_sf2(rnet3[1, ], routes_fast_sf[6, ], "value")
+sel_over = overlaps(rnet3, routes_fast_sf[7, ])
+sl1 = rnet3[sel_over, ][1, ]
+rnet4 = overline_sf2(sl1, routes_fast_sf[7, ], "value")
 plot(rnet3$geometry, lwd = rnet3$value)
-plot(rnet4, add = TRUE, col = "red")
+plot(sl1$geometry, lwd = 9, add = TRUE)
+rnet4
+nrow(rnet)
+plot(rnet4_ls, add = TRUE, col = "red", lwd = rnet4_ls$value)
 }

@@ -4,16 +4,14 @@
 \alias{overlaps}
 \title{Identify overlapping lines}
 \usage{
-overlaps(sl, sl2, pattern = "1F1F00102")
+overlaps(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102")
 }
 \arguments{
 \item{sl}{A SpatialLinesDataFrame with overlapping elements}
 
 \item{sl2}{A second \code{LINESTRING} object to aggregate}
 
-\item{pattern}{DE-9IM pattern
-(see \href{https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates}{DE-9IM}
-on wikipedia for more information)}
+\item{pattern}{DE-9IM patterns to match. Default: \code{1F1F00102|1F10F0102|1FF0FF102|1FF00F102}}
 }
 \description{
 A small wrapper around \code{sf::st_relate()} that does not create
