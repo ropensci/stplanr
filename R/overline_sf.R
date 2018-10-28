@@ -83,7 +83,7 @@ overline_sf <- function(sl, attrib, fun = sum) {
 #' rnet4 = overline_sf2(sl1, routes_fast_sf[7, ], "value")
 #' plot(rnet3$geometry, lwd = rnet3$value)
 #' plot(sl1$geometry, lwd = 9, add = TRUE)
-#' plot(rnet4, add = TRUE, col = "red", lwd = rnet4_ls$value)
+#' plot(rnet4, add = TRUE, col = "red", lwd = rnet4$value)
 overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring = FALSE) {
   attrib1 = paste0(attrib, ".1")
   suppressMessages({
