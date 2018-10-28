@@ -91,7 +91,7 @@ overline_sf2 = function(sl, sl2, attrib = "value", fun = sum) {
 #' messages when done on non projected data, and which has
 #' default [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
 #' values.
-#' @param patter DE-9IM pattern
+#' @param pattern DE-9IM pattern
 #'  (see [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
 #'  on wikipedia for more information)
 #' @inheritParams overline_sf2
