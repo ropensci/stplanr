@@ -46,7 +46,7 @@ overline_sf <- function(sl, attrib, fun = sum) {
           sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
           rnet_new2 = rnet_new_over[sel_overlaps2, ]
           rnet_new = rbind(rnet_new, rnet_new2)
-          sl$geometry[i] = st_difference(sl$geometry[i], rnet_new$geometry)
+          sl$geometry[i] = sf::st_difference(sl$geometry[i], rnet_new$geometry)
         }
       }
       rnet = rbind(rnet_no_overlap, rnet_new)
@@ -128,7 +128,7 @@ overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102"
 #' A small wrapper around `sf::st_geometry_type()` that
 #' identifies lines that are `LINESTRING`s
 #' @inheritParams overline_sf2
-#' @param geom_type The type of geometry to check for, `LINESTRING` by default.
+#' @param geom_type The type of geometry to check for, `LINESTRING` by default
 #' @export
 is_linestring = function(sl, geom_type = "LINESTRING") {
   sf::st_geometry_type(sl) == "LINESTRING"
