@@ -43,5 +43,5 @@ sl1 = rnet3[sel_over, ][1, ]
 rnet4 = overline_sf2(sl1, routes_fast_sf[7, ], "value")
 plot(rnet3$geometry, lwd = rnet3$value)
 plot(sl1$geometry, lwd = 9, add = TRUE)
-plot(rnet4, add = TRUE, col = "red", lwd = rnet4_ls$value)
+plot(rnet4, add = TRUE, col = "red", lwd = rnet4$value)
 }
