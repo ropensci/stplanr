@@ -50,8 +50,8 @@ LinkingTo:
     Rcpp (>= 0.12.18)
 Suggests:
     testthat (>= 2.0.0),
-    knitr (>= 1.20),
-    rmarkdown (>= 1.10),
+    knitr,
+    rmarkdown,
     dodgr (>= 0.0.3)
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr

@@ -1,0 +1,233 @@
+---
+title: "Aggregating overlapping lines with stplanr/sf/geos"
+author: "Robin Lovelace"
+date: "`r Sys.Date()`"
+# output:
+#   github_document:
+#     html_preview: false
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The transport 'flow' on any particular segment of the transport networks is the aggregate (sum) of trips that pass through it.
+Finding the flow across a transport network based on input data composed of individual routes, is therefore an aggregation problem.
+It requires a more complex solution than that provided by the `aggregate()` function in the base R package **stats**, however, because the geometry of the output `LINESTRING`s will be fundamentally different than the input `LINESTRINGS` of the routes: a route network is composed of many small way segments, but a route is a single long `LINESTRING`.
+
+Creating such a route network, with aggregated values per segment, is the problem that the `overline()` function in **stplanr** was designed to solve. 
+Rather that starting from scratch and writing a geographic algorithm from the ground-up, we will start by exploring solutions provided by existing packages, notably **sf**, which provides an interface to the `GEOS` library.
+
+Let's start simple, with just 2 lines, which have an associated amount of flow (with illustrative values of 2 and 5 in this case):
+
+```{r}
+library(stplanr)
+routes_fast_sf$value = 1
+sl = routes_fast_sf[2:3, ]
+sl$value = c(2, 5)
+```
+
+These lines clearly have a decent amount of overlap, which can be extracted using the function `st_intersection()`:
+
+```{r}
+sl_intersection = sf::st_intersection(sl[1, ], sl[2, ])
+plot(sl$geometry, lwd = 9, col = sf::sf.colors(2, alpha = 0.5))
+plot(sl_intersection, add = TRUE)
+```
+
+Furthermore, we can find the aggregated value associated with this new segment as follows:
+
+```{r}
+sl_intersection$value = sum(sl_intersection$value, sl_intersection$value.1)
+```
+
+We still do not have a full route network composed of 3 non-overlapping lines, however:
+the original lines need to be 'clipped' so that they do not overlap with `sl_intersection`.
+This can be done as follows:
+
+```{r}
+sl_seg1 = sf::st_difference(sl[1, ], sl_intersection)
+sl_seg2 = sf::st_difference(sl[2, ], sl_intersection)
+plot(sl$geometry, lwd = 9, col = sf::sf.colors(2, alpha = 0.5))
+plot(sl_seg1, add = TRUE)
+plot(sl_seg2, add = TRUE)
+```
+
+We now have all the geographic components needed for a route network.
+The only remaining task is to combine them, using `rbind`, right?
+Not quite: the following command fails:
+
+```{r, error=TRUE}
+rnet = rbind(sl_seg1, sl_seg2, sl_intersection)
+```
+
+Lesson: we need to be more careful in isolating the value to aggregate.
+We will therefore run the previous stages again, but with `attrib` set to the attribute we would like to aggregate over (`value` in this case):
+
+```{r}
+attrib = "value"
+attrib1 = paste0(attrib, ".1")
+sl_intersection = sf::st_intersection(sl[1, attrib], sl[2, attrib])
+sl_intersection[[attrib]] = sl_intersection[[attrib]] + sl_intersection[[attrib1]]
+sl_intersection[[attrib1]] = NULL
+```
+
+That leaves us with a 'clean' object that only has a value (7) for the attribute column name we want (`value`).
+
+On this basis we can proceed to create the other segments, keeping only the column we're interested in. To save time and typing, we'll create both segments in a single command:
+
+```{r}
+sl_seg = sf::st_difference(sl[attrib], sf::st_geometry(sl_intersection))
+rnet = rbind(sl_intersection, sl_seg)
+```
+
+It worked! Now we're in a position to plot the resulting route network, with 'width' proportional to the flow along each segment:
+
+```{r, fig.cap="Illustration of a route network generated with sf functions."}
+plot(rnet, lwd = rnet$value)
+```
+
+## A benchmark
+
+To test that the method is fast, or is at least not slower than the original `overline()` function, at least for this task, we'll package-up the method in a new function:
+
+```{r}
+overline_sf2 = function(sl, attrib) {
+  attrib = "value"
+  attrib1 = paste0(attrib, ".1")
+  sl_intersection = sf::st_intersection(sl[1, attrib], sl[2, attrib])
+  sl_intersection[[attrib]] = sl_intersection[[attrib]] + sl_intersection[[attrib1]]
+  sl_intersection[[attrib1]] = NULL
+  sl_seg = sf::st_difference(sl[attrib], sf::st_geometry(sl_intersection))
+  rnet = rbind(sl_intersection, sl_seg)
+  return(rnet)
+}
+```
+
+If you are new to scripts/algorithms/functions, it may be worth taking a look at the new [Algorithms](https://geocompr.robinlovelace.net/algorithms.html) chapter in Geocomputation with R.
+Now the method has been put in a function, we can compare its performance with the per-existing `overline()` function for comparison:
+
+```{r time}
+system.time({overline(sl, attrib = "value")})
+system.time({overline_sf2(sl, attrib = "value")})
+```
+
+The results are not Earth-shattering: the new function seems to be around the same speed as the original, if a little faster.
+This is great news, but remember: the new function only works on 2 lines so is much simpler. 
+
+## Dealing with many lines
+
+The above method worked with 2 lines but how can it be used to process many lines?
+Clearly the same function could be implemented on another line, but it would need to work from the 3 lines of the newly created `rnet` object rather than the original 2 routes.
+Let's introduce a 3^rd^ route into the equation, that does not intersect with this newly created **rnet** object:
+
+```{r}
+sl3 = routes_fast_sf[4, ]
+rnet = overline_sf2(sl)
+plot(rnet$geometry, lwd = rnet$value)
+plot(sl3, col = "red", add = TRUE)
+```
+
+In this case the method of adding to rnet is simple: just add the entirety of the line to the `rnet` object:
+
+```{r}
+rnet3 = rbind(rnet, sl3[attrib])
+plot(rnet3$geometry, lwd = rnet3$value)
+```
+
+This works fine.
+In fact it works better than the original `overline` function because it does not add the value of the existing thickest line in the previous figure onto the new line, a problem associated with `overline.sp()` that is illustrated in the following code chunk and resulting figure:
+
+```{r}
+sl1_3 = as(routes_fast_sf[2:4, ], "Spatial")
+rnet3_sp = overline(sl1_3, attrib = "value")
+plot(rnet3_sp, lwd = rnet3_sp$value)
+```
+
+A question that arises from the previous example is this: what if the next line intersects with the route network?
+It is no longer possible to simply add together two values.
+This can be illustrated by introducing 2 more lines:
+
+```{r}
+sl4_5 = routes_fast_sf[5:6, ]
+plot(rnet3$geometry, lwd = rnet3$value)
+plot(sl4_5$geometry, col = "red", add = TRUE)
+```
+
+Both the new lines intersect with the newest part of the route network.
+This means that we cannot simply `rbind()` them to it as we did for `sl3`.
+They need to be dealt with separately.
+
+Before we deal with them, it's worth taking some time to consider what we mean by 'intersect'.
+Intersection is actuall a specific type of geometric relation between 2 sets of features.
+We can see the type of relation by using the function `st_relate()`:
+
+```{r}
+relations = sf::st_relate(sl4_5, rnet3)
+relations
+unique(as.vector(relations))
+```
+
+This shows us something important: although 2 elements (1 and 4) of `rnet` relate *in some way* to the new lines, only the 4^th^ feature has a linear, overlapping relation with it.
+That relation is `1F1F00102` which, as far as I can tell, is not a [named spatial predicate](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates) (`FF1F00102` means 'intersects and touches' but does not have a linear overlap).
+This relation is what we need to decide whether or not to simply bind a new feature to the growing `rnet`, whether we need to break it up (or at least part of it) into smaller lines before doing so (it also raises the wider question of which order should we do things).
+
+In the simple case of *whether* to simply bind the next line (4) onto `rnet3` the answer is simple now we know the string code associated with linear overlaps.
+First we'll test it on the previous example of `sl3` and the original `rnet` composed of 3 features:
+
+```{r}
+relate_rnet_3 = sf::st_relate(rnet, sl3, pattern = "1F1F00102")
+relate_rnet_3
+any(lengths(relate_rnet_3))
+```
+
+The `FALSE` meant there was no linear overlaps. So we simply used `rbind()`.
+When we ask the same question of `rnet3` and `sl4`, however, the answer is `TRUE`:
+
+```{r}
+sl4 = sl4_5[1, ]
+relate_rnet_4 = sf::st_relate(rnet3, sl4, pattern = "1F1F00102")
+relate_rnet_4
+any(lengths(relate_rnet_4))
+```
+
+How to proceed? We need to avoid `rnet` objects containing any overlapping lines.
+Because `sl4` overlaps with part of `rnet3` we will need to remove the overlapping line, run the `overline_sf2()` function, and then re-combine the result with the pre-existing route network object.
+We can split-up the `rnet3` object into overlapping and non-overlapping features as follows:
+
+```{r}
+sel_overlaps = lengths(relate_rnet_4) > 0
+rnet_overlaps = rnet3[sel_overlaps, ]
+rnet3_tmp = rnet3[!sel_overlaps, ]
+```
+
+We can check that there is only one overlapping feature as follows:
+
+```{r}
+nrow(rnet_overlaps)
+```
+
+And we can proceed to join the two features together using our new function:
+
+```{r}
+rnet_overlaps4 = overline_sf2(rbind(rnet_overlaps, sl4[attrib]))
+```
+
+Adding this back to the `rnet3` object results in an larger `rnet` object incorporating all the `value` and `geometry` column data we have so far:
+
+```{r}
+rnet = rbind(rnet3_tmp, rnet_overlaps4)
+plot(rnet$geometry, lwd = rnet$value)
+```
+
+
