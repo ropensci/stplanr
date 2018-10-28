@@ -128,6 +128,7 @@ overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102"
 #' A small wrapper around `sf::st_geometry_type()` that
 #' identifies lines that are `LINESTRING`s
 #' @inheritParams overline_sf2
+#' @param geom_type The type of geometry to check for, `LINESTRING` by default.
 #' @export
 is_linestring = function(sl, geom_type = "LINESTRING") {
   sf::st_geometry_type(sl) == "LINESTRING"
