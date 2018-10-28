@@ -24,6 +24,10 @@ geometries and aggregated values.
 \examples{
 \dontrun{
 routes_fast_sf$value = 1
+sl <- routes_fast_sf[2:6, ]
+rnet = overline_sf(sl = sl, attrib = c("value", "length"))
+plot(rnet, lwd = rnet$value)
+# A larger example
 sl <- routes_fast_sf[2:7, ]
 rnet = overline_sf(sl = sl, attrib = c("value", "length"))
 plot(rnet, lwd = rnet$value)
