@@ -230,4 +230,181 @@ rnet = rbind(rnet3_tmp, rnet_overlaps4)
 plot(rnet$geometry, lwd = rnet$value)
 ```
 
+The information provided so far informed the creation of the following function:
+
+```{r}
+overline_sf = function(sl, attrib, fun = sum) {
+  # initiate line to join-on
+  rnet = sl[1, attrib]
+  for(i in 2:nrow(sl)) {
+    # for(i in 2:5) {
+    # relate_rnet = sf::st_relate(rnet, sl[i, ], pattern = "1F1F00102")
+    # sel_overlaps = lengths(relate_rnet) > 0
+    sel_overlaps = overlaps(rnet, sl[i, ])
+    if(!any(sel_overlaps)) {
+      rnet = rbind(rnet, sl[i, attrib])
+    } else {
+      rnet_no_overlap = rnet[!sel_overlaps, ]
+      rnet_overlap = rnet[sel_overlaps, ]
+      if(sum(sel_overlaps) == 1) {
+        rnet_new = overline_sf2(rnet_overlap, sl[i, ], attrib = attrib, fun = fun)
+      } else {
+        message("Multiple intersections for route ", i)
+        rnet_new = overline_sf2(rnet_overlap[1,], sl[i,], attrib = attrib, fun = fun)
+        # sel_overlaps2 = overlaps(rnet_new, sl[i, ])
+        # rnet_new = rnet_new_over[sel_overlaps2, ]
+        rnet_new_ls = rnet_new[is_linestring(rnet_new), ] # save 'easy' part
+        sl$geometry[i] = rnet_new$geometry[!is_linestring(rnet_new)]
+        for(j in 2:nrow(rnet_overlap)) {
+          rnet_new_over = overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib, fun = fun)
+          sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
+          rnet_new2 = rnet_new_over[sel_overlaps2, ]
+          rnet_new = rbind(rnet_new, rnet_new2)
+          sl$geometry[i] = sf::st_difference(sl$geometry[i], rnet_new$geometry)
+        }
+      }
+      rnet = rbind(rnet_no_overlap, rnet_new)
+    }
+    # plot(rnet, lwd = rnet$value, main = "yes")
+    # Sys.sleep(1)
+  }
+  # test for overlaps (to comment-out)
+  rnet_overlaps = sf::st_relate(rnet)
+  if(length(unique(as.vector(rnet_overlaps))) > 3) message("Unwanted relation")
+  # rnet_overlaps = matrix(as.numeric(as.factor(rnet_overlaps)), nrow = 10)
+  return(rnet)
+}
+```
+
+This function made use of the slightly simpler individual route-joining function, and associated helper functions:
+
+```{r}
+overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring = FALSE) {
+  attrib1 = paste0(attrib, ".1")
+  suppressMessages({
+    suppressWarnings({
+      sl_intersection = sf::st_intersection(sl[attrib], sl2[attrib])
+    })
+  })
+  for(i in seq_len(length(attrib))) {
+    sl_intersection[[attrib[i]]] = fun(sl_intersection[[attrib[i]]], sl_intersection[[attrib1[i]]])
+    sl_intersection[[attrib1[i]]] = NULL
+  }
+  suppressMessages({
+    suppressWarnings({
+      sl_intersection = sf::st_line_merge(sl_intersection)
+      sl_seg1 = sf::st_difference(sl[attrib], sf::st_geometry(sl_intersection))
+      sl_seg2 = sf::st_difference(sl2[attrib], sf::st_geometry(sl_intersection))
+    })
+  })
+  rnet = rbind(sl_seg1, sl_seg2, sl_intersection)
+  if(return_linestring && any(!is_linestring(rnet))) {
+    rnet = to_linestring(rnet)
+  }
+  return(rnet)
+}
+#' Identify overlapping lines
+#'
+#' A small wrapper around `sf::st_relate()` that does not create
+#' messages when done on non projected data, and which has
+#' default [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
+#' values.
+#' @inheritParams overline_sf2
+#' @param pattern DE-9IM patterns to match. Default: `1F1F00102|1F10F0102|1FF0FF102|1FF00F102`
+#' @export
+overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102") {
+  suppressMessages({
+    relate_rnet = sf::st_relate(sl, sl2)
+  })
+  grepl(pattern = pattern, relate_rnet)
+}
+#' Identify overlapping lines
+#'
+#' A small wrapper around `sf::st_geometry_type()` that
+#' identifies lines that are `LINESTRING`s
+#' @inheritParams overline_sf2
+#' @param geom_type The type of geometry to check for, `LINESTRING` by default
+#' @export
+is_linestring = function(sl, geom_type = "LINESTRING") {
+  sf::st_geometry_type(sl) == "LINESTRING"
+}
+#' Identify overlapping lines
+#'
+#' Convert geometries that may be a mixture of `MULTILINESTRING`s
+#' and `LINESTRING`s into non-overlapping `LINESTRING`s.
+#'
+#' @inheritParams overline_sf2
+#' @export
+#' @examples
+#' l1 = sf::st_linestring(matrix(c(1, 2, 4, 1, 1, 2), ncol = 2))
+#' l2 = sf::st_linestring(matrix(c(1, 2, 4, 1, 1, 0), ncol = 2))
+#' ml = sf::st_multilinestring(list(l1, l2))
+#' sl = sf::st_sf(sf::st_sfc(l1, l2, ml))
+#' to_linestring(sl)
+to_linestring = function(sl) {
+  sel_linestring = is_linestring(sl)
+  sl_linestring = sl[sel_linestring, ]
+  sl_multilinestring = sl[!sel_linestring, ]
+  sl_mlines = sf::st_cast(sl_multilinestring, "LINESTRING")
+  rbind(sl_linestring, sl_mlines)
+}
+```
+
+
+
+Aside from being clunky, this approach has the additional flaw of not working.
+It works fine for lines 2 to 6 in `routes_fast_sf` but after that it fails, as illustrated below:
+
+```{r}
+rnet6 = overline_sf(routes_fast_sf[2:6, ], attrib = "value")
+plot(rnet6)
+```
+
+A problem arises when we try to the new route 7 to this, which we will break-down:
+
+```{r}
+# res7 = overline_sf2(rnet6, routes_fast_sf[7, ]) # fails
+sl_intersection =
+  sf::st_intersection(rnet6[attrib], routes_fast_sf[7, ][attrib])
+sl_intersection
+```
+
+Suddenly this is getting more interesting: there are `POINT` geometries in the intersection, which clearly are not welcome in the final route network.
+
+Nevertheless we can visualise them as follows:
+
+```{r}
+plot(rnet6$geometry, col = "grey", lwd = 7)
+plot(sl_intersection$geometry, add = T, lwd = sl_intersection$value)
+```
+
+The plot shows an interesting feature of this new line: 
+it intersects with the entire route.
+Splitting it up will surely be a challenge.
+The first stage is to break-up the parts of the existing route network it overlaps with:
+
+```{r}
+sel7 = overlaps(rnet6, routes_fast_sf[7, ])
+sel7
+```
+
+This shows that although the intersection is complex, it only affects 3 parts of the route network, as illustrated below:
+
+```{r}
+plot(rnet6$geometry[sel7], col = "grey", lwd = rnet6$value[sel7] * 5)
+plot(sl_intersection$geometry, add = T)
+```
+
+From this image it's clear what must happen next:
+the two thicker lines must simply become thicker and completely absorb the new line along their length.
+The thinner line must be split in two, with the section overlapping with the new line becoming thicker and the section with no intersection staying the same width.
+
+
+```{r}
+# failed test to see if rnet has special properties:
+sum(rnet$value * sf::st_length(rnet))
+sum(routes_fast_sf$value[2:4] * sf::st_length(routes_fast_sf)[2:4])
+```
+
+
 
