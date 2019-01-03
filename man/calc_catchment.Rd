@@ -73,9 +73,11 @@ throughout the zone. Returns a SpatialPolygonsDataFrame.
 data_dir <- system.file("extdata", package = "stplanr")
 unzip(file.path(data_dir, "smallsa1.zip"))
 unzip(file.path(data_dir, "testcycleway.zip"))
-sa1income <- readOGR(".", "smallsa1")
-testcycleway <- readOGR(".", "testcycleway")
-calc_catchment(
+sa1income <- sf::read_sf("smallsa1.shp")
+testcycleway <- sf::read_sf("testcycleway.shp")
+f = list.files(".", "testcycleway|smallsa1")
+file.remove(f)
+cway_catch <- calc_catchment(
   polygonlayer = sa1income,
   targetlayer = testcycleway,
   calccols = c("Total"),
@@ -83,5 +85,8 @@ calc_catchment(
   projection = "austalbers",
   dissolve = TRUE
 )
+plot(sa1income$geometry)
+plot(testcycleway$geometry, col = "red", add = TRUE)
+plot(cway_catch["Total"], add = TRUE)
 }
 }
