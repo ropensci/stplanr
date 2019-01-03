@@ -36,7 +36,7 @@
 #' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
 #' @importFrom sf st_cast st_geometry
-#' @importFrom dplyr first last
+#' @importFrom dplyr first last n
 #' @useDynLib stplanr
 NULL
 utils::globalVariables(c(".", "n"))
