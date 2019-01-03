@@ -44,7 +44,8 @@ Imports:
     nabor (>= 0.5.0),
     rlang (>= 0.2.2),
     lwgeom (>= 0.1.4),
-    sf (>= 0.6.3)
+    sf (>= 0.6.3),
+    magrittr
 LinkingTo: 
     RcppArmadillo (>= 0.9.100.5.0),
     Rcpp (>= 0.12.18)
@@ -56,6 +57,6 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
