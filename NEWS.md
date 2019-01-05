@@ -1,8 +1,10 @@
 # stplanr 0.2.7
 
-# stplanr 0.2.6.9000
-
 ## NEW FEATURES
+
+* Various changes to support `dplyr` [0.8.0](https://www.tidyverse.org/articles/2018/12/dplyr-0-8-0-release-candidate/): https://github.com/ropensci/stplanr/pull/275
+
+* 
 
 ## BUG FIXES
 
@@ -11,7 +13,6 @@
 ## OTHER
 
 * No longer suggests **tmap** to reduce install times: `install.packages()` installs suggested packages by default
-
 
 # stplanr 0.2.6
 
