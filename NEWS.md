@@ -4,7 +4,6 @@
 
 * Various changes to support `dplyr` [0.8.0](https://www.tidyverse.org/articles/2018/12/dplyr-0-8-0-release-candidate/): https://github.com/ropensci/stplanr/pull/275
 
-* 
 
 ## BUG FIXES
 
