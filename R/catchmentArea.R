@@ -52,7 +52,7 @@
 #' unzip(file.path(data_dir, "testcycleway.zip"))
 #' sa1income <- rgdal::readOGR(".", "smallsa1")
 #' testcycleway <- rgdal::readOGR(".", "testcycleway")
-#' calc_catchment(
+#' cway_catch <- calc_catchment(
 #'   polygonlayer = sa1income,
 #'   targetlayer = testcycleway,
 #'   calccols = c("Total"),
@@ -60,6 +60,9 @@
 #'   projection = "austalbers",
 #'   dissolve = TRUE
 #' )
+#' plot(sa1income)
+#' plot(cway_catch, add = TRUE, col = "green")
+#' plot(testcycleway, col = "red", add = TRUE)
 #' sa1income <- sf::read_sf("smallsa1.shp")
 #' testcycleway <- sf::read_sf("testcycleway.shp")
 #' f = list.files(".", "testcycleway|smallsa1")
@@ -164,6 +167,9 @@ calc_catchment.Spatial <- function(
     targetintersectd <- rgeos::gUnaryUnion(targetintersect, id = targetintersect$calc_catchment_targetid)
     targetcols <- colnames(targetlayer@data)
     targetcols <- targetcols[which(targetcols != "calc_catchment_charid")]
+    targetintersect@data[targetcols] <- lapply(targetcols, function(x){
+      as.character(targetintersect@data[[x]])
+    })
     targetintersectd_data <- as.data.frame(
       targetintersect@data %>%
         dplyr::group_by_at(c("calc_catchment_targetid", targetcols)) %>%
