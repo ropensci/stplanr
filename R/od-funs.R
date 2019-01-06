@@ -236,7 +236,8 @@ line2df.sf <- function(l) {
 line2df.Spatial <- function(l) {
   ldf_geom <- raster::geom(l)
   dplyr::group_by_(dplyr::as_data_frame(ldf_geom), "object") %>%
-    dplyr::summarise_(fx = quote(first(x)), fy = quote(first(y)), tx = quote(last(x)), ty = quote(last(y)))
+    dplyr::summarise_(fx = quote(dplyr::first(x)), fy = quote(dplyr::first(y)), 
+	tx = quote(dplyr::last(x)), ty = quote(dplyr::last(y)))
 }
 
 #' Convert a SpatialLinesDataFrame to points

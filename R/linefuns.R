@@ -27,7 +27,7 @@ n_vertices.sf <- function(l) {
   geoms %>%
     dplyr::as_data_frame() %>%
     dplyr::group_by(!!L1) %>%
-    dplyr::summarise(n_vertices = n()) %>%
+    dplyr::summarise(n_vertices = dplyr::n()) %>%
     dplyr::pull(n_vertices)
 }
 

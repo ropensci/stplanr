@@ -130,10 +130,10 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
-    dplyr::mutate(nrow = n(), rownum = 1:n()) %>%
+    dplyr::mutate(nrow = dplyr::n(), rownum = 1:dplyr::n()) %>%
     dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(allrownum = 1:n())
+    dplyr::mutate(allrownum = 1:dplyr::n())
 
   gdata <- coord_matches_sf(
     as.matrix(
