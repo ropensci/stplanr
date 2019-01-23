@@ -1,6 +1,6 @@
-# stplanr 0.2.7.9001
+# stplanr 0.2.8
 
-# stplanr 0.2.7.9000
+- STATS19 functions such as `dl_stats19()` are depreciated. They have been split-out into the new package [`stats19`](https://github.com/ropensci/stats19)
 
 # stplanr 0.2.7
 

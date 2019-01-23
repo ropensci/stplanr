@@ -24,9 +24,9 @@ dl_stats19 <- function(zip_url = paste0(
                          "road-accidents-safety-data/Stats19_Data_2005-2014.zip"
                        ), data_dir = tempdir()) {
 
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
     )
 
   # download and unzip the data if it's not present
@@ -65,9 +65,9 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
     dl_stats19()
   }
 
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
 
   # read the data in
@@ -103,9 +103,9 @@ read_stats19_ac <- function(data_dir = tempdir(), filename = "Accidents0514.csv"
 #' ac <- format_stats19_ac(ac)
 #' }
 format_stats19_ac <- function(ac) {
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
   ac$Accident_Severity <-
     factor(ac$Accident_Severity, labels = c("Fatal", "Serious", "Slight"))
@@ -193,9 +193,9 @@ format_stats19_ac <- function(ac) {
 #' ve <- read_stats19_ve()
 #' }
 read_stats19_ve <- function(data_dir = tempdir(), filename = "Vehicles0514.csv") {
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
   if (!filename %in% list.files(data_dir)) {
     dl_stats19()
@@ -224,9 +224,9 @@ read_stats19_ve <- function(data_dir = tempdir(), filename = "Vehicles0514.csv")
 #' ve <- format_stats19_ve(ve)
 #' }
 format_stats19_ve <- function(ve) {
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
   ve$Vehicle_Type <- factor(ve$Vehicle_Type,
     labels = c(
@@ -310,9 +310,9 @@ format_stats19_ve <- function(ve) {
 #' ca <- read_stats19_ca()
 #' }
 read_stats19_ca <- function(data_dir = tempdir(), filename = "Casualties0514.csv") {
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
   if (!filename %in% list.files(data_dir)) {
     dl_stats19()
@@ -341,9 +341,9 @@ read_stats19_ca <- function(data_dir = tempdir(), filename = "Casualties0514.csv
 #' ca <- format_stats19_ca(ca)
 #' }
 format_stats19_ca <- function(ca) {
-  message(
+  .Deprecated(msg = paste0(
     "Improved functions for downloading stats19 data can be found in the package stats19\n",
-    "Try install.packages('stats19') and then vignette('stats19') for more information"
+    "Try install.packages('stats19') and then vignette('stats19') for more information")
   )
   # nrow(ca) / nrow(ac) # 1.3 casualties per incident: reasonable
   ca$Casualty_Class <- factor(ca$Casualty_Class,
