@@ -21,3 +21,28 @@ overline2(x, attrib, ncores = 1, simplify = TRUE,
 \description{
 Overlay duplicated lines
 }
+\examples{
+sl = routes_fast_sf[routes_fast_sf$length > 0, ]
+sl$bicycle = 1
+system.time({rnet1 = overline2(sl, "bicycle")})
+system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
+identical(rnet1, rnet2)
+lwd = rnet1$bicycle / mean(rnet1$bicycle)
+plot(rnet1, lwd = lwd)
+\donttest{
+region = "isle-of-wight"
+
+u = paste0(
+  "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
+   region,
+  "/rf.geojson"
+)
+
+sl = sf::read_sf(u)
+system.time({rnet1 = overline2(sl, "bicycle")})
+system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
+identical(rnet1, rnet2)
+lwd = rnet1$bicycle / mean(rnet1$bicycle)
+plot(rnet1, lwd = lwd)
+}
+}

@@ -279,6 +279,31 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param ncores integer, how many cores to use in parallel processing
 #' @param simplify, logical, if TRUE group final segments back into lines
 #' @param regionalise, integer, during simplification regonalisation is used if the number of segments exceeds this value
+#' @export
+#' @examples
+#' sl = routes_fast_sf[routes_fast_sf$length > 0, ]
+#' sl$bicycle = 1
+#' system.time({rnet1 = overline2(sl, "bicycle")})
+#' system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
+#' identical(rnet1, rnet2)
+#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
+#' plot(rnet1, lwd = lwd)
+#' \donttest{
+#' region = "isle-of-wight"
+#'
+#' u = paste0(
+#'   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
+#'    region,
+#'   "/rf.geojson"
+#' )
+#'
+#' sl = sf::read_sf(u)
+#' system.time({rnet1 = overline2(sl, "bicycle")})
+#' system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
+#' identical(rnet1, rnet2)
+#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
+#' plot(rnet1, lwd = lwd)
+#' }
 overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4) {
 
   # Defensive programming checks:
@@ -440,3 +465,15 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
     return(x_split)
   }
 }
+
+# devtools::install_github("ropensci/stplanr", "refactor-overlineII")
+# library(stplanr)
+# sl = routes_fast_sf[!is.na(routes_fast_sf$length), ]
+# sl$bicycle = 1
+# system.time({rnet1 = overline2(sl, "bicycle")})
+# system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
+# plot(rnet1, lwd = rnet1$bicycle)
+# nrow(rnet1)
+# rnet1_2 = rnet1[rnet1$bicycle == 2, ]
+# plot(rnet1_2)
+# plot(rnet1_2[7, ])
