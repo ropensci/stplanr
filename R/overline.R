@@ -290,7 +290,7 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
   }
 
   x <- x[, attrib]
-  x_crs <- st_crs(x)
+  x_crs <- sf::st_crs(x)
 
   message(paste0(Sys.time(), " constructing segments"))
   c1 <- sf::st_coordinates(x) # Convert SF to matrix
@@ -347,14 +347,14 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
   # Calcualte the attributes
   message(paste0(Sys.time(), " restructuring attributes"))
   x_split <- x # extract attributes
-  st_geometry(x_split) <- NULL
+  sf::st_geometry(x_split) <- NULL
   x_split <- as.data.frame(x_split)
   x_split <- x_split[l1[l1_start], , drop = FALSE] # repeate attriibutes
   x_split$matchingID <- matchID
   x_split <- x_split %>%
-    group_by(matchingID) %>%
-    summarise_all(funs(sum), na.rm = TRUE) %>%
-    arrange(matchingID)
+    dplyr::group_by(matchingID) %>%
+    dplyr::summarise_all(dplyr::funs(sum), na.rm = TRUE) %>%
+    dplyr::arrange(matchingID)
   x_split$matchingID <- NULL
 
   # Make Geometry
@@ -363,8 +363,8 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
     sf::st_linestring(matrix(c3_nodup[y, ], ncol = 2, byrow = T))
   })
   rm(c3_nodup, l1, l1_start, matchID)
-  geoms <- st_as_sfc(geoms, crs = st_crs(x))
-  st_geometry(x_split) <- geoms # put together
+  geoms <- sf::st_as_sfc(geoms, crs = sf::st_crs(x))
+  sf::st_geometry(x_split) <- geoms # put together
   rm(geoms, x)
 
   # Recombine into fewer lines
