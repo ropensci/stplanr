@@ -55,7 +55,8 @@ Suggests:
     rmarkdown (>= 1.10),
     dodgr (>= 0.0.3),
     stats19,
-    cyclestreets
+    cyclestreets,
+    pbapply
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make

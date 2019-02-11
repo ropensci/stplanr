@@ -280,6 +280,8 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param simplify, logical, if TRUE group final segments back into lines
 #' @param regionalise, integer, during simplification regonalisation is used if the number of segments exceeds this value
 overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4) {
+
+  # Defensive programming checks:
   if (all(sf::st_geometry_type(x) != "LINESTRING")) {
     message("Only LINESTRING is supported")
     stop()
@@ -287,6 +289,9 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
   if ("matchingID" %in% names(x)) {
     message("matchingID is not a permitted column name, please rename that column")
     stop()
+  }
+  if(!requireNamespace("pbapply")) {
+    stop("Install pbapply to use this function")
   }
 
   x <- x[, attrib]
