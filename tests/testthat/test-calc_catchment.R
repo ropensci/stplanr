@@ -6,8 +6,8 @@ test_that(
     data_dir <- system.file("extdata", package = "stplanr")
     unzip(file.path(data_dir, "smallsa1.zip"))
     unzip(file.path(data_dir, "testcycleway.zip"))
-    sa1income <- readOGR(".", "smallsa1")
-    testcycleway <- readOGR(".", "testcycleway")
+    sa1income <- rgdal::readOGR(".", "smallsa1")
+    testcycleway <- rgdal::readOGR(".", "testcycleway")
     t1 <- calc_catchment(
       polygonlayer = sa1income,
       targetlayer = testcycleway,

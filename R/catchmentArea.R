@@ -50,9 +50,9 @@
 #' data_dir <- system.file("extdata", package = "stplanr")
 #' unzip(file.path(data_dir, "smallsa1.zip"))
 #' unzip(file.path(data_dir, "testcycleway.zip"))
-#' sa1income <- readOGR(".", "smallsa1")
-#' testcycleway <- readOGR(".", "testcycleway")
-#' calc_catchment(
+#' sa1income <- rgdal::readOGR(".", "smallsa1")
+#' testcycleway <- rgdal::readOGR(".", "testcycleway")
+#' cway_catch <- calc_catchment(
 #'   polygonlayer = sa1income,
 #'   targetlayer = testcycleway,
 #'   calccols = c("Total"),
@@ -60,6 +60,24 @@
 #'   projection = "austalbers",
 #'   dissolve = TRUE
 #' )
+#' plot(sa1income)
+#' plot(cway_catch, add = TRUE, col = "green")
+#' plot(testcycleway, col = "red", add = TRUE)
+#' sa1income <- sf::read_sf("smallsa1.shp")
+#' testcycleway <- sf::read_sf("testcycleway.shp")
+#' f = list.files(".", "testcycleway|smallsa1")
+#' file.remove(f)
+#' cway_catch <- calc_catchment(
+#'   polygonlayer = sa1income,
+#'   targetlayer = testcycleway,
+#'   calccols = c("Total"),
+#'   distance = 800,
+#'   projection = "austalbers",
+#'   dissolve = TRUE
+#' )
+#' plot(sa1income$geometry)
+#' plot(testcycleway$geometry, col = "red", add = TRUE)
+#' plot(cway_catch["Total"], add = TRUE)
 #' }
 calc_catchment <- function(
                            polygonlayer,
@@ -149,6 +167,9 @@ calc_catchment.Spatial <- function(
     targetintersectd <- rgeos::gUnaryUnion(targetintersect, id = targetintersect$calc_catchment_targetid)
     targetcols <- colnames(targetlayer@data)
     targetcols <- targetcols[which(targetcols != "calc_catchment_charid")]
+    targetintersect@data[targetcols] <- lapply(targetcols, function(x){
+      as.character(targetintersect@data[[x]])
+    })
     targetintersectd_data <- as.data.frame(
       targetintersect@data %>%
         dplyr::group_by_at(c("calc_catchment_targetid", targetcols)) %>%
@@ -308,7 +329,7 @@ calc_catchment.sf <- function(
 #'   distance = 800,
 #'   projection = "austalbers"
 #' )
-#' 
+#'
 #' calc_catchment_sum(
 #'   polygonlayer = sa1income,
 #'   targetlayer = testcycleway,

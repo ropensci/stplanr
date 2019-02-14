@@ -1,6 +1,13 @@
-# stplanr 0.2.6.9000
+# stplanr 0.2.8
+
+- STATS19 functions such as `dl_stats19()` are depreciated. They have been split-out into the new package [`stats19`](https://github.com/ropensci/stats19)
+
+# stplanr 0.2.7
 
 ## NEW FEATURES
+
+* Various changes to support `dplyr` [0.8.0](https://www.tidyverse.org/articles/2018/12/dplyr-0-8-0-release-candidate/): https://github.com/ropensci/stplanr/pull/275
+
 
 ## BUG FIXES
 
@@ -9,7 +16,6 @@
 ## OTHER
 
 * No longer suggests **tmap** to reduce install times: `install.packages()` installs suggested packages by default
-
 
 # stplanr 0.2.6
 

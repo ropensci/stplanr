@@ -36,15 +36,7 @@
 #' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
 #' @importFrom sf st_cast st_geometry
+#' @importFrom dplyr first last n
 #' @useDynLib stplanr
 NULL
-#' Pipe operator
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom dplyr %>%
-#' @usage lhs \%>\% rhs
-NULL
-utils::globalVariables(c(".", "n"))
+utils::globalVariables(c(".", "n", "matchingID"))

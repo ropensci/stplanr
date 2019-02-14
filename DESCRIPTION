@@ -1,7 +1,7 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.2.6.9000
+Version: 0.2.7.9001
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0001-5679-6536")),
@@ -44,18 +44,22 @@ Imports:
     nabor (>= 0.5.0),
     rlang (>= 0.2.2),
     lwgeom (>= 0.1.4),
-    sf (>= 0.6.3)
+    sf (>= 0.6.3),
+    magrittr
 LinkingTo: 
     RcppArmadillo (>= 0.9.100.5.0),
     Rcpp (>= 0.12.18)
 Suggests:
     testthat (>= 2.0.0),
-    knitr,
-    rmarkdown,
-    dodgr (>= 0.0.3)
+    knitr (>= 1.20),
+    rmarkdown (>= 1.10),
+    dodgr (>= 0.0.3),
+    stats19,
+    cyclestreets,
+    pbapply
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
