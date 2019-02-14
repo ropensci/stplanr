@@ -406,5 +406,26 @@ sum(rnet$value * sf::st_length(rnet))
 sum(routes_fast_sf$value[2:4] * sf::st_length(routes_fast_sf)[2:4])
 ```
 
+## Aggregating lines, Part II
+
+The [previous post](https://www.robinlovelace.net/2018/10/27/aggregating-lines/) demonstrated a new method to aggregate overlapping lines.
+It showed how to combine 2 lines that have an area of overlap.
+To re-cap, these are the package versions we'll be using in this post (run these lines if you want to reproduce the results)
+
+```{r}
+
+library(stplanr)
+```
+
+
+this was the input data:
+
+```{r}
+sl = routes_fast_sf[2:3, ]
+sl$value = c(2, 5)
+```
+
+Which was aggregated using functions in the **sf** package.
+It was found that
 
 
