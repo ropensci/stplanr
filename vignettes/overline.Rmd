@@ -125,6 +125,29 @@ system.time({overline_sf2(sl, attrib = "value")})
 The results are not Earth-shattering: the new function seems to be around the same speed as the original, if a little faster.
 This is great news, but remember: the new function only works on 2 lines so is much simpler. 
 
+## Aggregating lines, Part II
+
+The [previous post](https://www.robinlovelace.net/2018/10/27/aggregating-lines/) demonstrated a new method to aggregate overlapping lines.
+It showed how to combine 2 lines that have an area of overlap.
+More excitingly, it led to the creation of a new function in **stplanr**, `overline_sf()`, that lives in the development version of the package.
+The purpose of this post is to provide an update on the status of the work to refactor the `overline()` function, in a human friendly alternative to discussion in the relevant GitHub issue: https://github.com/ropensci/stplanr/issues/273
+
+## Set-up
+
+To re-cap, these are the package versions we'll be using in this post (run this line to get the development version of stplanr if you want to reproduce the results):
+
+```{r, eval=FALSE}
+remotes::install_github("ropensci/stplanr", ref = "refactor-overline")
+```
+
+The library is loaded and the input data from the previous post was loaded as follows:
+
+```{r}
+library(stplanr)
+sl = routes_fast_sf[2:3, ]
+sl$value = c(2, 5)
+```
+
 ## Dealing with many lines
 
 The above method worked with 2 lines but how can it be used to process many lines?
@@ -233,134 +256,50 @@ plot(rnet$geometry, lwd = rnet$value)
 The information provided so far informed the creation of the following function:
 
 ```{r}
-overline_sf = function(sl, attrib, fun = sum) {
-  # initiate line to join-on
-  rnet = sl[1, attrib]
-  for(i in 2:nrow(sl)) {
-    # for(i in 2:5) {
-    # relate_rnet = sf::st_relate(rnet, sl[i, ], pattern = "1F1F00102")
-    # sel_overlaps = lengths(relate_rnet) > 0
-    sel_overlaps = overlaps(rnet, sl[i, ])
-    if(!any(sel_overlaps)) {
-      rnet = rbind(rnet, sl[i, attrib])
-    } else {
-      rnet_no_overlap = rnet[!sel_overlaps, ]
-      rnet_overlap = rnet[sel_overlaps, ]
-      if(sum(sel_overlaps) == 1) {
-        rnet_new = overline_sf2(rnet_overlap, sl[i, ], attrib = attrib, fun = fun)
-      } else {
-        message("Multiple intersections for route ", i)
-        rnet_new = overline_sf2(rnet_overlap[1,], sl[i,], attrib = attrib, fun = fun)
-        # sel_overlaps2 = overlaps(rnet_new, sl[i, ])
-        # rnet_new = rnet_new_over[sel_overlaps2, ]
-        rnet_new_ls = rnet_new[is_linestring(rnet_new), ] # save 'easy' part
-        sl$geometry[i] = rnet_new$geometry[!is_linestring(rnet_new)]
-        for(j in 2:nrow(rnet_overlap)) {
-          rnet_new_over = overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib, fun = fun)
-          sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
-          rnet_new2 = rnet_new_over[sel_overlaps2, ]
-          rnet_new = rbind(rnet_new, rnet_new2)
-          sl$geometry[i] = sf::st_difference(sl$geometry[i], rnet_new$geometry)
-        }
-      }
-      rnet = rbind(rnet_no_overlap, rnet_new)
-    }
-    # plot(rnet, lwd = rnet$value, main = "yes")
-    # Sys.sleep(1)
-  }
-  # test for overlaps (to comment-out)
-  rnet_overlaps = sf::st_relate(rnet)
-  if(length(unique(as.vector(rnet_overlaps))) > 3) message("Unwanted relation")
-  # rnet_overlaps = matrix(as.numeric(as.factor(rnet_overlaps)), nrow = 10)
-  return(rnet)
-}
+stplanr::overline_sf
 ```
 
 This function made use of the slightly simpler individual route-joining function, and associated helper functions:
 
 ```{r}
-overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring = FALSE) {
-  attrib1 = paste0(attrib, ".1")
-  suppressMessages({
-    suppressWarnings({
-      sl_intersection = sf::st_intersection(sl[attrib], sl2[attrib])
-    })
-  })
-  for(i in seq_len(length(attrib))) {
-    sl_intersection[[attrib[i]]] = fun(sl_intersection[[attrib[i]]], sl_intersection[[attrib1[i]]])
-    sl_intersection[[attrib1[i]]] = NULL
-  }
-  suppressMessages({
-    suppressWarnings({
-      sl_intersection = sf::st_line_merge(sl_intersection)
-      sl_seg1 = sf::st_difference(sl[attrib], sf::st_geometry(sl_intersection))
-      sl_seg2 = sf::st_difference(sl2[attrib], sf::st_geometry(sl_intersection))
-    })
-  })
-  rnet = rbind(sl_seg1, sl_seg2, sl_intersection)
-  if(return_linestring && any(!is_linestring(rnet))) {
-    rnet = to_linestring(rnet)
-  }
-  return(rnet)
-}
-#' Identify overlapping lines
-#'
-#' A small wrapper around `sf::st_relate()` that does not create
-#' messages when done on non projected data, and which has
-#' default [DE-9IM](https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates)
-#' values.
-#' @inheritParams overline_sf2
-#' @param pattern DE-9IM patterns to match. Default: `1F1F00102|1F10F0102|1FF0FF102|1FF00F102`
-#' @export
-overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102") {
-  suppressMessages({
-    relate_rnet = sf::st_relate(sl, sl2)
-  })
-  grepl(pattern = pattern, relate_rnet)
-}
-#' Identify overlapping lines
-#'
-#' A small wrapper around `sf::st_geometry_type()` that
-#' identifies lines that are `LINESTRING`s
-#' @inheritParams overline_sf2
-#' @param geom_type The type of geometry to check for, `LINESTRING` by default
-#' @export
-is_linestring = function(sl, geom_type = "LINESTRING") {
-  sf::st_geometry_type(sl) == "LINESTRING"
-}
-#' Identify overlapping lines
-#'
-#' Convert geometries that may be a mixture of `MULTILINESTRING`s
-#' and `LINESTRING`s into non-overlapping `LINESTRING`s.
-#'
-#' @inheritParams overline_sf2
-#' @export
-#' @examples
-#' l1 = sf::st_linestring(matrix(c(1, 2, 4, 1, 1, 2), ncol = 2))
-#' l2 = sf::st_linestring(matrix(c(1, 2, 4, 1, 1, 0), ncol = 2))
-#' ml = sf::st_multilinestring(list(l1, l2))
-#' sl = sf::st_sf(sf::st_sfc(l1, l2, ml))
-#' to_linestring(sl)
-to_linestring = function(sl) {
-  sel_linestring = is_linestring(sl)
-  sl_linestring = sl[sel_linestring, ]
-  sl_multilinestring = sl[!sel_linestring, ]
-  sl_mlines = sf::st_cast(sl_multilinestring, "LINESTRING")
-  rbind(sl_linestring, sl_mlines)
-}
+stplanr::overline_sf2
+
+stplanr::overlaps
+stplanr::to_linestring
 ```
 
-
-
 Aside from being clunky, this approach has the additional flaw of not working.
-It works fine for lines 2 to 6 in `routes_fast_sf` but after that it fails, as illustrated below:
+It works fine for lines 2 to 6 in `routes_fast_sf`, as illustrated below.
 
 ```{r}
-rnet6 = overline_sf(routes_fast_sf[2:6, ], attrib = "value")
+r6 = routes_fast_sf[2:6, ]
+rnet6 = overline_sf(r6, attrib = "value")
 plot(rnet6)
 ```
 
-A problem arises when we try to the new route 7 to this, which we will break-down:
+A problem arises when we try to run the same command on the same data, but with one more line added.
+That will be the topic of the next post on aggregating lines to form route networks, which will also introduce a new function `overline2()`, developed by my colleague [Malcolm Morgan](https://environment.leeds.ac.uk/transport/staff/964/dr-malcolm-morgan).
+
+## Another benchmark
+
+To provide a taster of the new function, let's see it in action in a benchmark on this latest route network consisting of the five lines illustrated in the previous plot.
+Again, we use `bench::mark()` to benchmark each approach:
+
+```{r}
+bench::mark(check = FALSE,
+  overline = stplanr::overline(r6, "value"),
+  overline_sf = stplanr::overline_sf(r6, "value"),
+  overline2 = stplanr::overline2(r6, "value")
+)
+```
+
+Again the results are not Earth-shattering and should be taken with a large pinch of salt: performance should not be evaluated against these relatively tiny datasets, but against the scale of datasets that the functions were designed to handle: city scale route networks involving thousands of overlapping lines.
+The same principle is used in the benchmarking section of the [h2oai website](https://h2oai.github.io/db-benchmark/): focus on benchmarks that apply to the datasets you will actually be using.
+In this case, my hypothesis is that the geometric functions `overline()` and `overline_sf()` will perform disproportionately badly as the size of the input dataset grows (to be tested).
+Still, it is interesting to note that the new `overline2()` function uses way more memory than the other functions.
+More next time!
+
+<!-- A problem arises when we try to the new route 7 to this, which we will break-down: -->
 
 ```{r}
 # res7 = overline_sf2(rnet6, routes_fast_sf[7, ]) # fails
@@ -406,24 +345,11 @@ sum(rnet$value * sf::st_length(rnet))
 sum(routes_fast_sf$value[2:4] * sf::st_length(routes_fast_sf)[2:4])
 ```
 
-## Aggregating lines, Part II
-
-The [previous post](https://www.robinlovelace.net/2018/10/27/aggregating-lines/) demonstrated a new method to aggregate overlapping lines.
-It showed how to combine 2 lines that have an area of overlap.
-To re-cap, these are the package versions we'll be using in this post (run these lines if you want to reproduce the results)
-
-```{r}
-
-library(stplanr)
-```
 
 
-this was the input data:
+## A new function
 
-```{r}
-sl = routes_fast_sf[2:3, ]
-sl$value = c(2, 5)
-```
+In addition to `overline_sf()`, the beginnings of which were documented in the previous p
 
 Which was aggregated using functions in the **sf** package.
 It was found that
