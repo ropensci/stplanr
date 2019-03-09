@@ -1,0 +1,14 @@
+citHeader("To cite the stplanr package in publications, please use:")
+
+citEntry(entry="Article",
+  author = c(
+  person("Robin Lovelace"),
+  person("Richard Ellison")),
+  title = "{stplanr: A Package for Transport Planning}",
+  year = 2018,
+  volume = 10,
+  number = 2,
+  journal = "{The R Journal}",
+  url = "https://doi.org/10.32614/RJ-2018-053",
+  textVersion = "Lovelace, R. and Ellison, R., 2017. stplanr: A Package for Transport Planning. The R Journal. https://doi.org/10.32614/RJ-2018-053"
+)
