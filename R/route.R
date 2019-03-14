@@ -65,3 +65,25 @@ route <- function(from = NULL, to = NULL, l = NULL,
 
   r
 }
+
+#' Route on local data using the dodgr package
+#'
+#' @inheritParams route
+#' @param rnet sf object representing the route network
+#' @export
+#' @examples
+#' from <- sf::st_coordinates(cents_sf[1, ])
+#' to <- sf::st_coordinates(cents_sf[2, ])
+#' r <- route_dodgr(from, to)
+route_dodgr <- function(from = NULL, to = NULL, l = NULL, rnet = NULL) {
+
+  # Try to get route network if rnet not provided
+  pts <- rbind(from, to)
+  if(is.null(rnet)) {
+    rnet <- dodgr::dodgr_streetnet(pts = rbind(from, to))
+  }
+
+  # clever routing code
+  plot(rnet) # in there for the fun of it (to be removed)
+
+}
