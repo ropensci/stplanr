@@ -236,7 +236,7 @@ line2df.sf <- function(l) {
 line2df.Spatial <- function(l) {
   ldf_geom <- raster::geom(l)
   dplyr::group_by_(dplyr::as_data_frame(ldf_geom), "object") %>%
-    dplyr::summarise_(fx = quote(dplyr::first(x)), fy = quote(dplyr::first(y)), 
+    dplyr::summarise_(fx = quote(dplyr::first(x)), fy = quote(dplyr::first(y)),
 	tx = quote(dplyr::last(x)), ty = quote(dplyr::last(y)))
 }
 
@@ -338,7 +338,7 @@ line2pointsn <- function(l) {
 #' @examples
 #' \dontrun{
 #' l <- flowlines[2:5, ]
-#' r <- line2route(l, "route_osrm")
+#' r <- line2route(l)
 #' rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = l, plan = "quietest", silent = TRUE)
 #' plot(r)
@@ -356,7 +356,7 @@ line2pointsn <- function(l) {
 #' rf_list <- line2route(l = l, list_output = TRUE)
 #' line2route(l[1, ], route_graphhopper)
 #' }
-line2route <- function(l, route_fun = "route_cyclestreet", n_print = 10, list_output = FALSE, l_id = NA, time_delay = 0, ...) {
+line2route <- function(l, route_fun = stplanr::route_cyclestreet, n_print = 10, list_output = FALSE, l_id = NA, time_delay = 0, ...) {
   return_sf <- is(l, "sf")
   if (return_sf) {
     l <- as(l, "Spatial")

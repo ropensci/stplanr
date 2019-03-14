@@ -5,8 +5,8 @@
 \title{Plan routes on the transport network}
 \usage{
 route(from = NULL, to = NULL, l = NULL,
-  route_fun = route_cyclestreet, n_print = 10, list_output = FALSE,
-  ...)
+  route_fun = stplanr::route_cyclestreet, n_print = 10,
+  list_output = FALSE, ...)
 }
 \arguments{
 \item{from}{An object representing origins

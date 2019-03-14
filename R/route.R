@@ -16,7 +16,7 @@
 #' route(flowlines_sf[2:4, ]) # lines
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = route_cyclestreet,
+                  route_fun = stplanr::route_cyclestreet,
                   n_print = 10, list_output = FALSE, ...) {
 
   # generate od coordinates
