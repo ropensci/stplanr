@@ -46,6 +46,8 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
   if (is(object = from, class2 = "sf")) {
     is_sf_line <- all(sf::st_geometry_type(from) == "LINESTRING")
+  } else {
+    is_sf_line <- FALSE
   }
 
   if (is_sf_line | any(grepl(pattern = "Line", x = class(from)))) {
@@ -96,12 +98,12 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' odlines <- od_coords2line(odf)
 #' odlines <- od_coords2line(odf, crs = 4326)
 #' plot(odlines)
-od_coords2line <- function(odc, crs = NA) {
-  odm <- as.matrix(odf)
+od_coords2line <- function(odc, crs = NA_crs_) {
+  odm <- as.matrix(odc)
   linestring_list <- lapply(seq(nrow(odm)), function(i) {
     sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4]))
   })
-  sf::st_sf(sf::st_sfc(linestring_list), crs = crs)
+  sf::st_sfc(linestring_list, crs = crs)
 }
 #' Convert flow data to SpatialLinesDataFrame
 #'
@@ -141,22 +143,16 @@ od_coords2line <- function(odc, crs = NA) {
 #' @param silent TRUE by default, setting it to TRUE will show you the matching columns
 #' @export
 #' @examples
-#' data(flow) # load example data - see ?flow for mor information
-#' data(cents)
-#' newflowlines <- od2line(flow = flow, zones = cents)
-#' newflowlines2 <- od2line2(flow = flow, zones = cents)
+#' l <- od2line(flow = flow, zones = cents)
 #' plot(cents)
-#' lines(newflowlines, lwd = 3)
-#' lines(newflowlines2, col = "white")
-#' nfl_sldf <- sp::SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
-#' identical(nfl_sldf, newflowlines)
+#' plot(l, lwd = l$All / mean(l$All), add = TRUE)
 #' # When destinations are different
-#' data(destinations)
 #' head(flow_dests[1:5]) # check data
-#' head(destinations@data[1:5])
-#' flowlines_dests <- od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
+#' head(destinations[1:5])
+#' flowlines_dests <- od2line(flow_dests, cents, destinations = destinations)
 #' plot(flowlines_dests)
-#' nfl_sf <- od2line(flow, zones_sf)
+#' l <- od2line(flow, zones_sf)
+#' plot(l["All"], lwd = l$All/mean(l$All))
 #' @name od2line
 NULL
 
@@ -166,7 +162,7 @@ od2line <- function(flow, zones, destinations = NULL,
                     zone_code = names(zones)[1],
                     origin_code = names(flow)[1],
                     dest_code = names(flow)[2],
-                    zone_code_d = NA, silent = TRUE) {
+                    zone_code_d = NA, silent = FALSE) {
   UseMethod("od2line", object = zones)
 }
 #' @export
@@ -176,11 +172,11 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                        dest_code = names(flow)[2],
                        zone_code_d = NA, silent = TRUE) {
   if (grepl(pattern = "POLYGON", x = unique(sf::st_geometry_type(zones)))) {
+    message("Creating centroids representing desire line start and end points.")
     zones <- sf::st_centroid(zones)
   }
 
   coords_o <- sf::st_coordinates(zones)[, 1:2]
-
   origin_points <- coords_o[match(flow[[origin_code]], zones[[zone_code]]), ]
 
   if (is.null(destinations)) {
@@ -196,10 +192,11 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     dest_points <- coords_o[match(flow[[dest_code]], destinations[[zone_code_d]]), ]
   }
 
-  l <- lapply(1:nrow(flow), function(x)
-    sf::st_linestring(rbind(origin_points[x, ], dest_points[x, ]))) %>%
-    sf::st_sfc(crs = sf::st_crs(zones))
-  sf::st_sf(flow, geometry = l)
+  odm = cbind(origin_points, dest_points)
+
+  odsfc <- od_coords2line(odm, crs = sf::st_crs(zones))
+  sf::st_sf(flow, geometry = odsfc)
+
 }
 #' @export
 od2line.Spatial <- function(flow, zones, destinations = NULL,
