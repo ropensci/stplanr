@@ -2,7 +2,7 @@
 % Please edit documentation in R/od-funs.R
 \name{od_coords2line}
 \alias{od_coords2line}
-\title{Convert a origin-destination coordinates into desire lines}
+\title{Convert origin-destination coordinates into desire lines}
 \usage{
 od_coords2line(odc, crs = NA)
 }
@@ -17,7 +17,7 @@ the second two columns represent the coordinates of the destination
 of the result.}
 }
 \description{
-Convert a origin-destination coordinates into desire lines
+Convert origin-destination coordinates into desire lines
 }
 \examples{
 odf <- od_coords(l = flowlines_sf)

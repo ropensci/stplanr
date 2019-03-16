@@ -81,7 +81,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
 }
 
-#' Convert a origin-destination coordinates into desire lines
+#' Convert origin-destination coordinates into desire lines
 #'
 #' @param odc A data frame or matrix of representing the coordinates
 #' of origin-destination data. The first two columns represent the
