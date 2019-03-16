@@ -4,17 +4,17 @@
 \alias{od_coords2line}
 \title{Convert a origin-destination coordinates into desire lines}
 \usage{
-od_coords2line(odf, crs = NA)
+od_coords2line(odc, crs = NA)
 }
 \arguments{
-\item{crs}{A number representing the coordinate reference system
-of the result.}
-
 \item{odc}{A data frame or matrix of representing the coordinates
 of origin-destination data. The first two columns represent the
 coordinates of the origin (typically longitude and latitude) points;
 the second two columns represent the coordinates of the destination
 (in the same CRS). Each row represents travel from origin to destination.}
+
+\item{crs}{A number representing the coordinate reference system
+of the result.}
 }
 \description{
 Convert a origin-destination coordinates into desire lines

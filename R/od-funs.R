@@ -6,15 +6,11 @@
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #' @inheritParams od2line
-#' @references
-#' Rae, A. (2009). From spatial interaction data to spatial interaction information?
-#' Geovisualisation and spatial structures of migration from the 2001 UK census.
-#'  Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
 #' @export
 #' @examples
 #' data(flow)
 #' data(zones)
-#' od2odf(flow, zones)
+#' od2odf(flow[1:2, ], zones)
 od2odf <- function(flow, zones) {
   coords <- dplyr::data_frame(
     code = as.character(zones[[1]]),
@@ -26,6 +22,63 @@ od2odf <- function(flow, zones) {
   odf <- dplyr::left_join(odf, coords, by = c("code_d" = "code"))
 
   data.frame(odf) # return data.frame as more compatible with spatial data
+}
+
+#' Create matrices representing origin-destination coordinates
+#'
+#' This function takes a wide range of input data types (spatial lines, points or text strings)
+#' and returns a matrix of coordinates representing origin (fx, fy) and destination (tx, ty) points.
+#'
+#' @param from An object representing origins
+#' (if lines are provided as the first argument, from is assigned to `l`)
+#' @param to An object representing destinations
+#' @param l Only needed if from and to are empty, in which case this
+#' should be a spatial object representing desire lines
+#' @export
+#' @examples
+#' od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
+#' od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
+#' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
+#' # od_coords("Hereford", "Leeds") # geocode locations
+#' od_coords(flowlines[1:3, ])
+#' od_coords(flowlines_sf[1:3, ])
+od_coords <- function(from = NULL, to = NULL, l = NULL) {
+
+  if (is(object = from, class2 = "sf")) {
+    is_sf_line <- all(sf::st_geometry_type(from) == "LINESTRING")
+  }
+
+  if (is_sf_line | any(grepl(pattern = "Line", x = class(from)))) {
+    l <- from
+  }
+
+  if (!is.null(l)) {
+    coord_matrix <- line2df(l) %>%
+      dplyr::select("fx", "fy", "tx", "ty")
+  }
+
+  else {
+    # Convert sp object to lat/lon vector
+    if (is(object = from, "Spatial")) from <- sp::coordinates(from)
+    if (is(object = to, "Spatial")) to <- sp::coordinates(to)
+
+    # sf objects
+    if (is(object = from, "sf")) from <- sf::st_coordinates(from)
+    if (is(object = to, "sf")) to <- sf::st_coordinates(to)
+
+    # Convert character strings to lon/lat if needs be
+    if (is.character(from)) from <- matrix(geo_code(from), ncol = 2)
+    if (is.character(to)) to <- matrix(geo_code(to), ncol = 2)
+    if (is.vector(from) & is.vector(to)) {
+      coord_matrix <- matrix(c(from, to), ncol = 4)
+    } else {
+      coord_matrix <- cbind(from, to)
+    }
+    colnames(coord_matrix) <- c("fx", "fy", "tx", "ty")
+  }
+
+  as.matrix(coord_matrix)
+
 }
 
 #' Convert a origin-destination coordinates into desire lines
@@ -43,15 +96,10 @@ od2odf <- function(flow, zones) {
 #' odlines <- od_coords2line(odf)
 #' odlines <- od_coords2line(odf, crs = 4326)
 #' plot(odlines)
-od_coords2line <- function(odf, crs = NA) {
+od_coords2line <- function(odc, crs = NA) {
   odm <- as.matrix(odf)
-  # # idea: set crs to 4326 by default, parked for now
-  # if(is.na(crs)) {
-  #   message("No CRS specified. Setting to WGS84 (EPSG:4326) by default.")
-  #   crs <- 4326
-  # }
   linestring_list <- lapply(seq(nrow(odm)), function(i) {
-    sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4], deparse.level = 0))
+    sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4]))
   })
   sf::st_sf(sf::st_sfc(linestring_list), crs = crs)
 }

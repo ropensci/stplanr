@@ -30,10 +30,5 @@ This function makes the task easier.
 \examples{
 data(flow)
 data(zones)
-od2odf(flow, zones)
-}
-\references{
-Rae, A. (2009). From spatial interaction data to spatial interaction information?
-Geovisualisation and spatial structures of migration from the 2001 UK census.
-Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+od2odf(flow[1:2, ], zones)
 }
