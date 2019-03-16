@@ -98,7 +98,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' odlines <- od_coords2line(odf)
 #' odlines <- od_coords2line(odf, crs = 4326)
 #' plot(odlines)
-od_coords2line <- function(odc, crs = NA_crs_) {
+od_coords2line <- function(odc, crs = sf::st_crs()) {
   odm <- as.matrix(odc)
   linestring_list <- lapply(seq(nrow(odm)), function(i) {
     sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4]))
