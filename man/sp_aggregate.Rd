@@ -9,11 +9,8 @@ sp_aggregate(zones, aggzones, cols = FALSE, FUN = sum,
   digits = getOption("digits"))
 }
 \arguments{
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing the original centroids or boundaries.
-Note that in the case of a SpatialPointsDataFrame, the original value
-will be allocated to the polygon in which the point is located rather than
-being distributed by area.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}

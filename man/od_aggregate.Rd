@@ -16,11 +16,8 @@ to the first column of the data in the zones. Thus in \code{\link[=cents]{cents(
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing the original centroids or boundaries of the travel flow data.
-Note that in the case of a SpatialPointsDataFrame, the entirety of the flow
-will be allocated to the polygon in which the point is located rather than
-being distributed by area.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}

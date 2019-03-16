@@ -5,14 +5,7 @@
 #' in the form of 1 line per flow with zone codes of origin and destination
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
-#'
-#' @param flow A data frame representing the flow between two points
-#' or zones. The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in [cents()],
-#' the first column is geo_code. This corresponds to the first two columns
-#' of [flow()].
-#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-#' representing origins and destinations of travel flows.
+#' @inheritParams od2line
 #' @references
 #' Rae, A. (2009). From spatial interaction data to spatial interaction information?
 #' Geovisualisation and spatial structures of migration from the 2001 UK census.
@@ -56,9 +49,8 @@ od2odf <- function(flow, zones) {
 #' to the first column of the data in the zones. Thus in [cents()],
 #' the first column is geo_code. This corresponds to the first two columns
 #' of [flow()].
-#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-#' representing origins (and destinations if no separate destinations object is provided)
-#' of travel flows.
+#' @param zones A spatial object representing origins (and destinations
+#' if no separate destinations object is provided) of travel.
 #' @param destinations A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 #' representing destinations of travel flows.
 #' @param zone_code Name of the variable in `zones` containing the ids of the zone.
