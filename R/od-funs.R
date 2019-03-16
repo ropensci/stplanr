@@ -27,6 +27,34 @@ od2odf <- function(flow, zones) {
 
   data.frame(odf) # return data.frame as more compatible with spatial data
 }
+
+#' Convert a origin-destination coordinates into desire lines
+#'
+#' @param odc A data frame or matrix of representing the coordinates
+#' of origin-destination data. The first two columns represent the
+#' coordinates of the origin (typically longitude and latitude) points;
+#' the second two columns represent the coordinates of the destination
+#' (in the same CRS). Each row represents travel from origin to destination.
+#' @param crs A number representing the coordinate reference system
+#' of the result.
+#' @export
+#' @examples
+#' odf <- od_coords(l = flowlines_sf)
+#' odlines <- od_coords2line(odf)
+#' odlines <- od_coords2line(odf, crs = 4326)
+#' plot(odlines)
+od_coords2line <- function(odf, crs = NA) {
+  odm <- as.matrix(odf)
+  # # idea: set crs to 4326 by default, parked for now
+  # if(is.na(crs)) {
+  #   message("No CRS specified. Setting to WGS84 (EPSG:4326) by default.")
+  #   crs <- 4326
+  # }
+  linestring_list <- lapply(seq(nrow(odm)), function(i) {
+    sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4], deparse.level = 0))
+  })
+  sf::st_sf(sf::st_sfc(linestring_list), crs = crs)
+}
 #' Convert flow data to SpatialLinesDataFrame
 #'
 #' Origin-destination ('OD') flow data is often provided
