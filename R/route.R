@@ -72,11 +72,15 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' @param net sf object representing the route network
 #' @export
 #' @examples
-#' from <- sf::st_coordinates(cents_sf[1, ])
-#' to <- sf::st_coordinates(cents_sf[2, ])
-#' pts = rbind(from, to)
-#' net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.3)
-#' r <- route_dodgr(from, to, net = net)
+#' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
+#' from <- structure(c(-1.5327711, 53.8006988), .Dim = 1:2)
+#' # to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
+#' to <- structure(c(-1.527937, 53.8044309), .Dim = 1:2)
+#' pts <- rbind(from, to)
+#' colnames(pts) = c("X", "Y")
+#' # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
+#' # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
+#' r <- route_dodgr(from, to, net = osm_net_example)
 #' plot(net$geometry)
 #' plot(r, add = TRUE, col = "red", lwd = 5)
 route_dodgr <-
@@ -112,7 +116,7 @@ route_dodgr <-
   dp <- dodgr::dodgr_paths(ways_dg, from = verts$id[knf$nn.idx], to = verts$id[knt$nn.idx])
   path <- verts[match(dp[[1]][[1]], verts$id), ]
   path_linestring <- sf::st_linestring(cbind(path$x, path$y))
-  path_sf <- sf::st_sf(sf::st_sfc(path_linestring))
+  path_sf <- sf::st_sf(sf::st_sfc(path_linestring), crs = 4326)
   # plot(net$geometry) # in there for the fun of it (to be removed)
   # plot(path_linestring, col = "red", lwd = 5, add = TRUE)
   path_sf

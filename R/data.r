@@ -295,3 +295,13 @@ NULL
 #' devtools::use_data(l_poly)
 #' }
 NULL
+
+#' Example of OpenStreetMap road network
+#' @docType data
+#' @keywords datasets
+#' @name osm_net_example
+#' @format An sf object
+#' @rdname route_dodgr
+#' @examples
+#' osm_net_example
+NULL
