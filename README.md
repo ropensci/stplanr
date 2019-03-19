@@ -16,19 +16,29 @@ It provides functions for solving common problems in transport planning
 and modelling, such as how to best get from point A to point B. The
 overall aim is to provide a reproducible, transparent and accessible
 toolkit to help people better understand transport systems and inform
-policy.
+policy, as outlined in a
+[paper](https://journal.r-project.org/archive/2018/RJ-2018-053/index.html)
+about the package, and the potential for open source software in
+transport planning in general, published in the [R
+Journal](http://journal.r-project.org/).
 
 The initial work on the project was funded by the Department of
 Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
-as part of the development of the Propensity to Cycle Tool
-([PCT](http://pct.bike/)). The PCT uses origin-destination data as the
-basis of spatial analysis and modelling work to identify where bicycle
-paths are most needed. See the package vignette (e.g. via
-`vignette("introducing-stplanr")`) or an [academic paper on the
-Propensity to Cycle Tool (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862)
-for more information on how it can be used. This README gives some
-basics.
+as part of the development of the Propensity to Cycle Tool (PCT), a web
+application to explore current travel patterns and cycling potential at
+zone, desire line, route and route network levels (see
+[www.pct.bike](http://www.pct.bike/) and click on a region to try it
+out). The basis of the methods underlying the PCT is origin-destination
+data, which are used to highlight where many short distance trips are
+being made, and estimate how many could switch to cycling. The results
+help identify where cycleways are most needed, an important component of
+sustainable transport planning infrastructure engineering and policy
+[design](https://www.icevirtuallibrary.com/doi/abs/10.1680/dfct.63495.001).
+See the package vignette (e.g. via `vignette("introducing-stplanr")`) or
+an [academic paper on the Propensity to Cycle Tool
+(PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on
+how it can be used. This README provides some basics.
 
 **stplanr** should be useful to researchers everywhere. The function
 `route_graphhopper()`, for example, works anywhere in the world using
@@ -47,7 +57,6 @@ is provided in the package:
 
 ``` r
 library(stplanr)
-data(cents, flow)
 ```
 
 Let’s take a look at this data:
@@ -58,21 +67,23 @@ flow[1:3, 1:3] # typical form of flow data
 #> 920573         E02002361         E02002361 109
 #> 920575         E02002361         E02002363  38
 #> 920578         E02002361         E02002367  10
-cents[1:3,] # points representing origins and destinations
-#> class       : SpatialPointsDataFrame 
-#> features    : 3 
-#> extent      : -1.546463, -1.511861, 53.8041, 53.81161  (xmin, xmax, ymin, ymax)
-#> coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
-#> variables   : 4
-#> names       :  geo_code,  MSOA11NM, percent_fem,  avslope 
-#> min values  : E02002382, Leeds 053,    0.408759, 2.284782 
-#> max values  : E02002393, Leeds 064,    0.458721, 2.856563
+cents_sf[1:3,] # points representing origins and destinations
+#> Simple feature collection with 3 features and 4 fields
+#> geometry type:  POINT
+#> dimension:      XY
+#> bbox:           xmin: -1.546463 ymin: 53.8041 xmax: -1.511861 ymax: 53.81161
+#> epsg (SRID):    4326
+#> proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#>       geo_code  MSOA11NM percent_fem  avslope                   geometry
+#> 1708 E02002384 Leeds 055    0.458721 2.856563 POINT (-1.546463 53.80952)
+#> 1712 E02002382 Leeds 053    0.438144 2.284782 POINT (-1.511861 53.81161)
+#> 1805 E02002393 Leeds 064    0.408759 2.361707  POINT (-1.524205 53.8041)
 ```
 
 These datasets can be combined as follows:
 
 ``` r
-travel_network <- od2line(flow = flow, zones = cents)
+travel_network <- od2line(flow = flow, zones = cents_sf)
 w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
@@ -86,45 +97,44 @@ OpenStreetMap Routing Machine
 These are supported in `route_*()` functions such as
 `route_cyclestreets` and `route_osrm()`:
 
-Route functions take lat/lon inputs:
+Route functions take lat/lon inputs (results not calculated):
 
 ``` r
-trip <-
-  route_osrm(from = c(-1, 53), to = c(-1.1, 53))
+trip <- route_osrm(from = c(-1, 53), to = c(-1.1, 53))
 ```
 
 and place names, found using the Google Map API:
 
-We can replicate this call multiple times using
-`line2route`.
+We can replicate this call multiple times using `line2route`, in this
+case lines 2 to 5. First we’ll create a small subset of the lines:
 
 ``` r
-intrazone <- travel_network$Area.of.residence == travel_network$Area.of.workplace
-travel_network <- travel_network[!intrazone,]
-t_routes <- line2route(travel_network, route_fun = route_osrm)
-#> Warning in summarise_impl(.data, dots): hybrid evaluation forced for
-#> `first`. Please use dplyr::first() or library(dplyr) to remove this
-#> warning.
-
-#> Warning in summarise_impl(.data, dots): hybrid evaluation forced for
-#> `first`. Please use dplyr::first() or library(dplyr) to remove this
-#> warning.
-#> Warning in summarise_impl(.data, dots): hybrid evaluation forced for
-#> `last`. Please use dplyr::last() or library(dplyr) to remove this warning.
-
-#> Warning in summarise_impl(.data, dots): hybrid evaluation forced for
-#> `last`. Please use dplyr::last() or library(dplyr) to remove this warning.
-plot(t_routes)
+desire_lines <- travel_network[2:5,]
 ```
 
-![](vignettes/README-plot2-1.png)<!-- -->
+Next, we’ll calculate the routes (not not evaluated):
+
+``` r
+routes <- line2route(desire_lines, route_fun = route_osrm)
+```
+
+The resulting routes will look something like this:
+
+``` r
+routes = routes_fast_sf[2:5, ]
+plot(routes$geometry)
+```
+
+![](vignettes/README-unnamed-chunk-7-1.png)<!-- -->
 
 Another way to visualise this is with the leaflet package:
 
 ``` r
 library(leaflet)
-leaflet() %>% addTiles() %>% addPolylines(data = t_routes)
+leaflet() %>% addTiles() %>% addPolylines(data = routes)
 ```
+
+![](vignettes/README-unnamed-chunk-8-1.png)<!-- -->
 
 For more examples, `example("line2route")`.
 
@@ -134,12 +144,20 @@ overlapping lines. This can represent where there will be most traffic
 on the transport system, as illustrated below.
 
 ``` r
-t_routes$All <- travel_network$All
-rnet <- overline(t_routes, attrib = "All", fun = sum)
+routes$All <- desire_lines$All
+rnet <- overline2(routes, attrib = "All")
+#> Loading required namespace: pbapply
+#> 2019-03-19 13:13:19 constructing segments
+#> 2019-03-19 13:13:19 transposing 'B to A' to 'A to B'
+#> 2019-03-19 13:13:19 removing duplicates
+#> 2019-03-19 13:13:19 restructuring attributes
+#> 2019-03-19 13:13:19 building geometry
+#> 2019-03-19 13:13:19 simplifying geometry
+#> 2019-03-19 13:13:19 rejoining segments into linestrings
 
 lwd <- rnet$All / mean(rnet$All)
-plot(rnet, lwd = lwd)
-points(cents)
+plot(rnet, lwd = lwd, reset = FALSE)
+plot(cents_sf, add = TRUE)
 ```
 
 ![](vignettes/README-rnet-1.png)<!-- -->
@@ -219,8 +237,10 @@ strsplit(pkgs, ",")[[1]]
 #> [19] " Rcpp (>= 0.12.1)"     " igraph (>= 1.2.2)"   
 #> [21] " nabor (>= 0.5.0)"     " rlang (>= 0.2.2)"    
 #> [23] " lwgeom (>= 0.1.4)"    " sf (>= 0.6.3)"       
-#> [25] " testthat (>= 2.0.0)"  " knitr (>= 1.20)"     
-#> [27] " rmarkdown (>= 1.10)"  " dodgr (>= 0.0.3)"
+#> [25] " magrittr"             " testthat (>= 2.0.0)" 
+#> [27] " knitr (>= 1.20)"      " rmarkdown (>= 1.10)" 
+#> [29] " dodgr (>= 0.0.3)"     " stats19"             
+#> [31] " cyclestreets"         " pbapply"
 ```
 
 ## Meta
@@ -235,4 +255,6 @@ strsplit(pkgs, ",")[[1]]
     abide by its
 terms.
 
-<!-- [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org) -->
+[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+
+## References
