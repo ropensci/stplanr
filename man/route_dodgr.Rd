@@ -4,7 +4,7 @@
 \alias{route_dodgr}
 \title{Route on local data using the dodgr package}
 \usage{
-route_dodgr(from = NULL, to = NULL, l = NULL, rnet = NULL)
+route_dodgr(from = NULL, to = NULL, l = NULL, net = NULL)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -15,7 +15,7 @@ route_dodgr(from = NULL, to = NULL, l = NULL, rnet = NULL)
 \item{l}{Only needed if from and to are empty, in which case this
 should be a spatial object representing desire lines}
 
-\item{rnet}{sf object representing the route network}
+\item{net}{sf object representing the route network}
 }
 \description{
 Route on local data using the dodgr package
@@ -23,5 +23,9 @@ Route on local data using the dodgr package
 \examples{
 from <- sf::st_coordinates(cents_sf[1, ])
 to <- sf::st_coordinates(cents_sf[2, ])
-r <- route_dodgr(from, to)
+pts = rbind(from, to)
+net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.3)
+r <- route_dodgr(from, to, net = net)
+plot(net$geometry)
+plot(r, add = TRUE, col = "red", lwd = 5)
 }

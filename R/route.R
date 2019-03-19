@@ -69,21 +69,54 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' Route on local data using the dodgr package
 #'
 #' @inheritParams route
-#' @param rnet sf object representing the route network
+#' @param net sf object representing the route network
 #' @export
 #' @examples
 #' from <- sf::st_coordinates(cents_sf[1, ])
 #' to <- sf::st_coordinates(cents_sf[2, ])
-#' r <- route_dodgr(from, to)
-route_dodgr <- function(from = NULL, to = NULL, l = NULL, rnet = NULL) {
+#' pts = rbind(from, to)
+#' net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.3)
+#' r <- route_dodgr(from, to, net = net)
+#' plot(net$geometry)
+#' plot(r, add = TRUE, col = "red", lwd = 5)
+route_dodgr <-
+  function(from = NULL,
+           to = NULL,
+           l = NULL,
+           net = NULL
+           # ,
+           # return_net = FALSE
 
-  # Try to get route network if rnet not provided
-  pts <- rbind(from, to)
-  if(is.null(rnet)) {
-    rnet <- dodgr::dodgr_streetnet(pts = rbind(from, to))
+           ) {
+
+  if(is.numeric(from) & is.numeric(to)) {
+    from_coords <- from
+    to_coords <- to
   }
 
+  # Try to get route network if net not provided
+  pts <- rbind(from_coords, to_coords)
+  if(is.null(net)) {
+    net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
+  }
+
+  suppressWarnings(
+    suppressMessages(
+      ways_dg <- dodgr::weight_streetnet(net)
+      )
+  )
+
+  verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
+  knf <- nabor::knn(cbind(verts$x, verts$y), matrix(from_coords, ncol = 2), k = 1)
+  knt <- nabor::knn(cbind(verts$x, verts$y), matrix(to_coords, ncol = 2), k = 1)
+  dp <- dodgr::dodgr_paths(ways_dg, from = verts$id[knf$nn.idx], to = verts$id[knt$nn.idx])
+  path <- verts[match(dp[[1]][[1]], verts$id), ]
+  path_linestring <- sf::st_linestring(cbind(path$x, path$y))
+  path_sf <- sf::st_sf(sf::st_sfc(path_linestring))
+  # plot(net$geometry) # in there for the fun of it (to be removed)
+  # plot(path_linestring, col = "red", lwd = 5, add = TRUE)
+  path_sf
+
   # clever routing code
-  plot(rnet) # in there for the fun of it (to be removed)
 
 }
