@@ -73,9 +73,9 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' @export
 #' @examples
 #' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
-#' from <- structure(c(-1.5327711, 53.8006988), .Dim = 1:2)
+#' from <- matrix(c(-1.5327711, 53.8006988), ncol = 2)
 #' # to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
-#' to <- structure(c(-1.527937, 53.8044309), .Dim = 1:2)
+#' to <- matrix(c(-1.527937, 53.8044309), ncol = 2)
 #' pts <- rbind(from, to)
 #' colnames(pts) = c("X", "Y")
 #' # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
@@ -99,21 +99,21 @@ route_dodgr <-
   }
 
   # Try to get route network if net not provided
-  pts <- rbind(from_coords, to_coords)
   if(is.null(net)) {
-    net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
+      pts <- rbind(from_coords, to_coords)
+      net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
   }
 
-  suppressWarnings(
-    suppressMessages(
-      ways_dg <- dodgr::weight_streetnet(net)
-      )
+  suppressMessages (
+    ways_dg <- dodgr::weight_streetnet(net)
   )
 
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
-  knf <- nabor::knn(cbind(verts$x, verts$y), matrix(from_coords, ncol = 2), k = 1)
-  knt <- nabor::knn(cbind(verts$x, verts$y), matrix(to_coords, ncol = 2), k = 1)
-  dp <- dodgr::dodgr_paths(ways_dg, from = verts$id[knf$nn.idx], to = verts$id[knt$nn.idx])
+  suppressMessages ({
+    from_id <- verts$id[dodgr::match_pts_to_graph(verts, from_coords)]
+    to_id <- verts$id[dodgr::match_pts_to_graph(verts, to_coords)]
+  })
+  dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
   path <- verts[match(dp[[1]][[1]], verts$id), ]
   path_linestring <- sf::st_linestring(cbind(path$x, path$y))
   path_sf <- sf::st_sf(sf::st_sfc(path_linestring), crs = 4326)
