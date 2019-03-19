@@ -25,16 +25,16 @@ This function returns the shortest path between locations
 in, or near to, segements on a \code{SpatialLinesNetwork}.
 }
 \examples{
-bb = sf::st_bbox(routes_fast)
-set.seed(5)
-from = c(runif(1, bb$xmin, bb$xmax), runif(1, bb$ymin, bb$ymax))
-to = c(runif(1, bb$xmin, bb$xmax), runif(1, bb$ymin, bb$ymax))
-sln = SpatialLinesNetwork(routes_fast)
+# from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
+from <-c(-1.5327711, 53.8006988)
+# to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
+to <- c(-1.527937, 53.8044309)
+sln <- SpatialLinesNetwork(osm_net_example)
+\dontrun{
 r <- route_local(sln, from, to)
 plot(r)
- \dontrun{
 # todo: next code chunk is not currently working:
-r2 = route_local(sln = sln, cents_sf[5, ], cents_sf[6, ])
+r2 <- route_local(sln = sln, cents_sf[5, ], cents_sf[6, ])
 plot(r2)
 r_many <- line2route(flowlines_sf[2:9, ], route_local, sln = sln)
 plot(cents)
