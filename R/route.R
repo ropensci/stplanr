@@ -81,7 +81,7 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
 #' # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
 #' r <- route_dodgr(from, to, net = osm_net_example)
-#' plot(net$geometry)
+#' plot(osm_net_example$geometry)
 #' plot(r, add = TRUE, col = "red", lwd = 5)
 route_dodgr <-
   function(from = NULL,
