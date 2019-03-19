@@ -147,13 +147,13 @@ on the transport system, as illustrated below.
 routes$All <- desire_lines$All
 rnet <- overline2(routes, attrib = "All")
 #> Loading required namespace: pbapply
-#> 2019-03-19 13:13:19 constructing segments
-#> 2019-03-19 13:13:19 transposing 'B to A' to 'A to B'
-#> 2019-03-19 13:13:19 removing duplicates
-#> 2019-03-19 13:13:19 restructuring attributes
-#> 2019-03-19 13:13:19 building geometry
-#> 2019-03-19 13:13:19 simplifying geometry
-#> 2019-03-19 13:13:19 rejoining segments into linestrings
+#> 2019-03-19 13:15:54 constructing segments
+#> 2019-03-19 13:15:54 transposing 'B to A' to 'A to B'
+#> 2019-03-19 13:15:54 removing duplicates
+#> 2019-03-19 13:15:54 restructuring attributes
+#> 2019-03-19 13:15:55 building geometry
+#> 2019-03-19 13:15:55 simplifying geometry
+#> 2019-03-19 13:15:55 rejoining segments into linestrings
 
 lwd <- rnet$All / mean(rnet$All)
 plot(rnet, lwd = lwd, reset = FALSE)
@@ -256,5 +256,3 @@ strsplit(pkgs, ",")[[1]]
 terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
-
-## References

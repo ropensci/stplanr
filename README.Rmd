@@ -220,5 +220,3 @@ visNetwork::visIgraph(dg)
 By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
-
-## References
