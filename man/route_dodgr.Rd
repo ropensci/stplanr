@@ -28,9 +28,9 @@ Route on local data using the dodgr package
 \examples{
 osm_net_example
 # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
-from <- structure(c(-1.5327711, 53.8006988), .Dim = 1:2)
+from <- matrix(c(-1.5327711, 53.8006988), ncol = 2)
 # to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
-to <- structure(c(-1.527937, 53.8044309), .Dim = 1:2)
+to <- matrix(c(-1.527937, 53.8044309), ncol = 2)
 pts <- rbind(from, to)
 colnames(pts) = c("X", "Y")
 # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
