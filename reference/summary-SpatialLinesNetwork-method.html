@@ -76,6 +76,9 @@
   </a>
 </li>
 <li>
+  <a href="../articles/stplanr.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -85,9 +88,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -99,12 +99,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/ropensci/stplanr">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -118,7 +113,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Print a summary of a SpatialLinesNetwork</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/SpatialLinesNetwork.R'><code>R/SpatialLinesNetwork.R</code></a></small>
+    
     <div class="hidden name"><code>summary-SpatialLinesNetwork-method.Rd</code></div>
     </div>
 
@@ -149,7 +144,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
 <span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
 <span class='no'>SLN</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>SLN</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 6036b05 U-W- 52 80 -- 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>SLN</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH d5bc604 U-W- 52 80 -- 
 #&gt; + attr: x (g/n), y (g/n), n (g/n), weight (e/n)</div><div class='output co'>#&gt; Object of class SpatialLinesDataFrame
 #&gt; Coordinates:
 #&gt;         min       max
