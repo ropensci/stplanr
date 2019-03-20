@@ -3,6 +3,10 @@
 #' @section Details:
 #' Retrieve coordinates of the node(s) on the network mapped from coordinates
 #' passed to functions.
+#'
+#' Note: there is now a dedicated cyclestreets package:
+#' https://github.com/Robinlovelace/cyclestreets
+#'
 #' @inheritParams route_cyclestreet
 #' @param shp A spatial object
 #' @param lat Numeric vector containing latitude coordinate for each coordinate

@@ -47,3 +47,8 @@ nearest_osm(
 )
 }
 }
+\seealso{
+Other nodes: \code{\link{geo_code}},
+  \code{\link{locate2spdf}}, \code{\link{nearest_google}}
+}
+\concept{nodes}

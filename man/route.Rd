@@ -41,3 +41,14 @@ route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{osm_net_example}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{viaroute2sldf}}, \code{\link{viaroute}}
+}
+\concept{routes}

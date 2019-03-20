@@ -6,6 +6,7 @@
 #'
 #' @param g1 A spatial object
 #' @param g2 A spatial object
+#' @family rnet
 #' @export
 #' @examples
 #' \dontrun{
@@ -37,7 +38,9 @@ islines.sf <- function(g1, g2) {
 #'
 #' @param sl SpatialLinesDataFrame with overlapping Lines to split by
 #' number of overlapping features.
-#' @param buff_dist A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.
+#' @param buff_dist A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
+#' If the distance is zero (the default) touching but non-overlapping lines may be aggregated.
+#' @family rnet
 #' @export
 #' @examples
 #' sl <- routes_fast[2:4, ]
@@ -86,6 +89,7 @@ gsection.sf <- function(sl, buff_dist = 0) {
 #' @param attrib A text string corresponding to a named variable in `sl`
 #'
 #' @author Barry Rowlingson
+#' @family rnet
 #'
 #' @export
 lineLabels <- function(sl, attrib) {
@@ -113,6 +117,7 @@ lineLabels <- function(sl, attrib) {
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  <http://gis.stackexchange.com>. See <http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
+#' @family rnet
 #' @export
 #' @examples
 #' sl <- routes_fast[2:4, ]
@@ -217,6 +222,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist =
 #' @return `onewaygeo` outputs a SpatialLinesDataFrame with single lines
 #' and user-selected attribute values that have been aggregated. Only lines
 #' with a distance (i.e. not intra-zone flows) are included
+#' @family lines
 #' @export
 #' @examples
 #' plot(flowlines[1:30, ], lwd = flowlines$On.foot[1:30])
@@ -279,6 +285,7 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param ncores integer, how many cores to use in parallel processing
 #' @param simplify, logical, if TRUE group final segments back into lines
 #' @param regionalise, integer, during simplification regonalisation is used if the number of segments exceeds this value
+#' @family rnet
 #' @export
 #' @examples
 #' sl = routes_fast_sf[routes_fast_sf$length > 0, ]

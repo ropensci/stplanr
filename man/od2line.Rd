@@ -68,9 +68,10 @@ l <- od2line(flow, zones_sf)
 plot(l["All"], lwd = l$All/mean(l$All))
 }
 \seealso{
-Other od: \code{\link{od_aggregate}},
-  \code{\link{od_coords2line}}, \code{\link{od_coords}},
-  \code{\link{od_dist}}, \code{\link{od_radiation}},
-  \code{\link{sp_aggregate}}
+Other od: \code{\link{dist_google}}, \code{\link{od2odf}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
 }
 \concept{od}

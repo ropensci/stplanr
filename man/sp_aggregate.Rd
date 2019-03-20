@@ -53,9 +53,10 @@ sp_aggregate(zones, aggzones)
 }
 }
 \seealso{
-Other od: \code{\link{od2line}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_radiation}}
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_dist}}, \code{\link{od_radiation}},
+  \code{\link{points2flow}}, \code{\link{points2odf}}
 }
 \concept{od}

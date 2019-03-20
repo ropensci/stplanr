@@ -38,3 +38,8 @@ locate2spdf(
 }
 
 }
+\seealso{
+Other nodes: \code{\link{geo_code}},
+  \code{\link{nearest_google}}, \code{\link{nearest_osm}}
+}
+\concept{nodes}

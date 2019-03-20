@@ -3,6 +3,7 @@
 #' @param n Sum of integer values returned
 #' @param l_lengths Numeric vector of line lengths
 #' @param weights Relative probabilities of samples on lines
+#' @family lines
 #' @export
 #' @examples
 #' n <- 10
@@ -43,6 +44,7 @@ n_sample_length <- function(n, l_lengths, weights) {
 #' @param n The total number of points to sample
 #' @param l The SpatialLines object along which to create sample points
 #' @param weights The relative probabilities of lines being samples
+#' @family lines
 #' @export
 #' @examples
 #' l <- flowlines[2:5, ]

@@ -6,9 +6,6 @@ template:
 destination: docs
 
 reference:
-- title: Geographic functions
-  contents:
-  - has_concept("zones")
 - title: Functions for working with origin-destination data
   contents:
   - has_concept("od")
@@ -27,6 +24,9 @@ reference:
 - title: General geographic functions
   contents:
   - has_concept("geo")
+- title: Get transport data
+  contents:
+  - has_concept("data")
 - title: Example travel datasets
   contents:
   - has_concept("example travel data")

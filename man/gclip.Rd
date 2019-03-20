@@ -33,8 +33,10 @@ gclip(cents_sf, cb)
 }
 \seealso{
 Other geo: \code{\link{bbox_scale}},
+  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
   \code{\link{decode_gl}}, \code{\link{geo_bb_matrix}},
   \code{\link{geo_bb}}, \code{\link{mapshape_available}},
-  \code{\link{mapshape}}, \code{\link{quadrant}}
+  \code{\link{mapshape}}, \code{\link{quadrant}},
+  \code{\link{reproject}}
 }
 \concept{geo}

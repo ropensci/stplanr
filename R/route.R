@@ -6,6 +6,7 @@
 #'
 #' @inheritParams od_coords
 #' @inheritParams line2route
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -70,6 +71,7 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #'
 #' @inheritParams route
 #' @param net sf object representing the route network
+#' @family routes
 #' @export
 #' @examples
 #' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
