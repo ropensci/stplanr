@@ -52,3 +52,9 @@ library(sp)
 sp_aggregate(zones, aggzones)
 }
 }
+\seealso{
+Other od: \code{\link{od2line}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}}
+}
+\concept{od}

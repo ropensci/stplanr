@@ -23,4 +23,5 @@ devtools::use_data(flow_dests)
 }
 
 }
+\concept{example travel data}
 \keyword{datasets}

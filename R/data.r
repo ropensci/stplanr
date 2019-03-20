@@ -44,7 +44,7 @@ NULL
 
 #' data frame of commuter flows
 #'
-# @family example travel data
+#' @family example travel data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see [cents()]).
@@ -100,7 +100,7 @@ NULL
 #' data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
-# @family example travel data
+#' @family example travel data
 #'
 #' @examples
 #' \dontrun{
@@ -119,7 +119,7 @@ NULL
 NULL
 #' example destinations data
 #'
-# @family example destinations
+#' @family example destinations
 #'
 #' This dataset represents trip destinations on a different geographic
 #' level than the origins stored in the `cents`.
@@ -156,7 +156,7 @@ NULL
 NULL
 #' spatial lines dataset of commuter flows
 #'
-# @family example travel data
+#' @family example travel data
 #'
 #' Flow data after conversion to a spatial format
 #' with [od2line()] (see [flow()]).

@@ -26,7 +26,8 @@ odlines <- od_coords2line(odf, crs = 4326)
 plot(odlines)
 }
 \seealso{
-Other od: \code{\link{od2line}}, \code{\link{od_coords}},
-  \code{\link{od_dist}}
+Other od: \code{\link{od2line}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords}},
+  \code{\link{od_dist}}, \code{\link{sp_aggregate}}
 }
 \concept{od}

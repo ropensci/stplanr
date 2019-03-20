@@ -33,6 +33,7 @@ od_dist(flow, cents)
 }
 \seealso{
 Other od: \code{\link{od2line}},
-  \code{\link{od_coords2line}}, \code{\link{od_coords}}
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{sp_aggregate}}
 }
 \concept{od}
