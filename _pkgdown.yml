@@ -1,0 +1,6 @@
+url: https://ropensci.github.io/stplanr
+
+template:
+  package: rotemplate
+
+destination: docs
