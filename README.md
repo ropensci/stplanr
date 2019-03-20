@@ -147,13 +147,13 @@ on the transport system, as illustrated below.
 routes$All <- desire_lines$All
 rnet <- overline2(routes, attrib = "All")
 #> Loading required namespace: pbapply
-#> 2019-03-20 10:50:56 constructing segments
-#> 2019-03-20 10:50:56 transposing 'B to A' to 'A to B'
-#> 2019-03-20 10:50:56 removing duplicates
-#> 2019-03-20 10:50:56 restructuring attributes
-#> 2019-03-20 10:50:56 building geometry
-#> 2019-03-20 10:50:56 simplifying geometry
-#> 2019-03-20 10:50:56 rejoining segments into linestrings
+#> 2019-03-20 11:36:35 constructing segments
+#> 2019-03-20 11:36:35 transposing 'B to A' to 'A to B'
+#> 2019-03-20 11:36:35 removing duplicates
+#> 2019-03-20 11:36:35 restructuring attributes
+#> 2019-03-20 11:36:35 building geometry
+#> 2019-03-20 11:36:35 simplifying geometry
+#> 2019-03-20 11:36:35 rejoining segments into linestrings
 
 lwd <- rnet$All / mean(rnet$All)
 plot(rnet, lwd = lwd, reset = FALSE)
@@ -233,7 +233,9 @@ However, there are already some good resources on the topic, including
   - The `stplanr` paper, which describes the context in which the
     package was developed:
     <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
-  - The `dodgr` vignette, which provides an introduction to routing in R
+  - The `dodgr` vignette, which provides an introduction to routing in
+    R:
+    <https://cran.r-project.org/web/packages/dodgr/vignettes/dodgr.html>
 
 ## Meta
 
