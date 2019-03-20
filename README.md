@@ -88,7 +88,7 @@ w <- flow$All / max(flow$All) *10
 plot(travel_network, lwd = w)
 ```
 
-![](vignettes/README-plot1-1.png)<!-- -->
+<img src="man/figures/README-plot1-1.png" width="100%" />
 
 The package can also allocate flows to the road network, e.g. with
 [CycleStreets.net](https://www.cyclestreets.net/api/) and the
@@ -125,7 +125,7 @@ routes = routes_fast_sf[2:5, ]
 plot(routes$geometry)
 ```
 
-![](vignettes/README-unnamed-chunk-7-1.png)<!-- -->
+<img src="man/figures/README-routes-1.png" width="100%" />
 
 Another way to visualise this is with the leaflet package:
 
@@ -134,7 +134,7 @@ library(leaflet)
 leaflet() %>% addTiles() %>% addPolylines(data = routes)
 ```
 
-![](vignettes/README-unnamed-chunk-8-1.png)<!-- -->
+<img src="man/figures/README-routes-leaf-1.png" width="100%" />
 
 For more examples, `example("line2route")`.
 
@@ -147,20 +147,20 @@ on the transport system, as illustrated below.
 routes$All <- desire_lines$All
 rnet <- overline2(routes, attrib = "All")
 #> Loading required namespace: pbapply
-#> 2019-03-19 13:15:54 constructing segments
-#> 2019-03-19 13:15:54 transposing 'B to A' to 'A to B'
-#> 2019-03-19 13:15:54 removing duplicates
-#> 2019-03-19 13:15:54 restructuring attributes
-#> 2019-03-19 13:15:55 building geometry
-#> 2019-03-19 13:15:55 simplifying geometry
-#> 2019-03-19 13:15:55 rejoining segments into linestrings
+#> 2019-03-20 10:50:56 constructing segments
+#> 2019-03-20 10:50:56 transposing 'B to A' to 'A to B'
+#> 2019-03-20 10:50:56 removing duplicates
+#> 2019-03-20 10:50:56 restructuring attributes
+#> 2019-03-20 10:50:56 building geometry
+#> 2019-03-20 10:50:56 simplifying geometry
+#> 2019-03-20 10:50:56 rejoining segments into linestrings
 
 lwd <- rnet$All / mean(rnet$All)
 plot(rnet, lwd = lwd, reset = FALSE)
 plot(cents_sf, add = TRUE)
 ```
 
-![](vignettes/README-rnet-1.png)<!-- -->
+<img src="man/figures/README-rnet-1.png" width="100%" />
 
 ## Installation
 
@@ -201,7 +201,10 @@ described [here](https://cran.r-project.org/bin/macosx/)).
 
 ## Funtions, help and contributing
 
-The current list of available functions can be seen with:
+The current list of available functions can be seen on the package’s
+website at
+[ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/), or
+with the following command:
 
 ``` r
 lsf.str("package:stplanr", all = TRUE)
@@ -213,35 +216,24 @@ To get internal help on a specific function, use the standard way.
 ?od2line
 ```
 
-## Dependencies
+To contribute, report bugs or request features, see the [issue
+tracker](https://github.com/ropensci/stplanr/issues).
 
-**stplanr** imports many great packages that it depends on. Many thanks
-to the developers of these tools:
+## Further resources / tutorials
 
-``` r
-desc = read.dcf("DESCRIPTION")
-headings = dimnames(desc)[[2]]
-fields = which(headings %in% c("Depends", "Imports", "Suggests"))
-pkgs = paste(desc[fields], collapse = ", ")
-pkgs = gsub("\n", " ", pkgs)
-strsplit(pkgs, ",")[[1]]
-#>  [1] "R (>= 3.0.2)"          " sp (>= 1.3.1)"       
-#>  [3] " curl (>= 3.2)"        " readr (>= 1.1.1)"    
-#>  [5] " dplyr (>= 0.7.6)"     " httr (>= 1.3.1)"     
-#>  [7] " jsonlite (>= 1.5)"    " stringi (>= 1.2.4)"  
-#>  [9] " stringr (>= 1.3.1)"   " lubridate (>= 1.7.4)"
-#> [11] " maptools (>= 0.9.3)"  " raster (>= 2.6.7)"   
-#> [13] " rgdal (>= 1.3.4)"     " rgeos (>= 0.3.28)"   
-#> [15] " openxlsx (>= 4.1.0)"  " methods"             
-#> [17] " R.utils (>= 2.7.0)"   " geosphere (>= 1.5.7)"
-#> [19] " Rcpp (>= 0.12.1)"     " igraph (>= 1.2.2)"   
-#> [21] " nabor (>= 0.5.0)"     " rlang (>= 0.2.2)"    
-#> [23] " lwgeom (>= 0.1.4)"    " sf (>= 0.6.3)"       
-#> [25] " magrittr"             " testthat (>= 2.0.0)" 
-#> [27] " knitr (>= 1.20)"      " rmarkdown (>= 1.10)" 
-#> [29] " dodgr (>= 0.0.3)"     " stats19"             
-#> [31] " cyclestreets"         " pbapply"
-```
+Want to learn how to use open source software for reproducible
+sustainable transport planning work? Now is a great time to learn.
+Transport planning is a relatively new field of application in R.
+However, there are already some good resources on the topic, including
+(any further suggestions: welcome):
+
+  - The Transport chapter of *Geocomputation with R*, which provides a
+    broad introduction from a geographic data perspective:
+    <https://geocompr.robinlovelace.net/transport.html>
+  - The `stplanr` paper, which describes the context in which the
+    package was developed:
+    <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
+  - The `dodgr` vignette, which provides an introduction to routing in R
 
 ## Meta
 
