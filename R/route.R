@@ -104,15 +104,15 @@ route_dodgr <-
       net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
   }
 
-  #suppressMessages (
+  suppressMessages (
     ways_dg <- dodgr::weight_streetnet(net)
-  #)
+  )
 
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
-  suppressMessages ({
+  #suppressMessages ({
     from_id <- verts$id[dodgr::match_pts_to_graph(verts, from_coords)]
     to_id <- verts$id[dodgr::match_pts_to_graph(verts, to_coords)]
-  })
+  #})
   dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
   paths <- lapply(dp, function (i)
                    lapply(i, function (j) {
