@@ -10,6 +10,7 @@
 - `route_dodgr()` has been added
 - A new example dataset, `osm_net_example`, has been added for local routing purposes.
 - A citation to the package has been added. Try `citation("stplanr")`
+- The package has a shiny new website thanks to `@maelle`: https://ropensci.github.io/stplanr/
 
 # stplanr 0.2.7
 
