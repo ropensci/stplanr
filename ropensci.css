@@ -73,6 +73,8 @@ a:focus, a:hover {
   font-size: 100%;
   position: relative;
   margin-left: 5px;
+  background-color: #6faef5;
+  box-shadow: unset;
 }
 
 .navbar .info .partof {
