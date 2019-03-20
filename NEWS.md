@@ -1,6 +1,15 @@
 # stplanr 0.2.8
 
+## NEW FEATURES
+
+- The stplanr paper has been published! See it here: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html
 - STATS19 functions such as `dl_stats19()` are depreciated. They have been split-out into the new package [`stats19`](https://github.com/ropensci/stats19)
+- `route_dodgr()` has now been implemented
+- A new function `overline2()` has been added, thanks to Malcolm Morgan. This is faster than `overline()`.
+- A substantial refactoring operation has begun. This has resulted in fewer lines of code in the `od` functions, a new `stplanr::od_coords2line()` function, and more support of `sf`
+- `route_dodgr()` has been added
+- A new example dataset, `osm_net_example`, has been added for local routing purposes.
+- A citation to the package has been added. Try `citation("stplanr")`
 
 # stplanr 0.2.7
 
