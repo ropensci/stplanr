@@ -34,6 +34,7 @@ od2odf <- function(flow, zones) {
 #' @param to An object representing destinations
 #' @param l Only needed if from and to are empty, in which case this
 #' should be a spatial object representing desire lines
+#' @family od
 #' @export
 #' @examples
 #' od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
@@ -92,6 +93,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' (in the same CRS). Each row represents travel from origin to destination.
 #' @param crs A number representing the coordinate reference system
 #' of the result.
+#' @family od
 #' @export
 #' @examples
 #' odf <- od_coords(l = flowlines_sf)
@@ -141,6 +143,7 @@ od_coords2line <- function(odc, crs = sf::st_crs()) {
 #' @param zone_code_d Name of the variable in `destinations` containing the ids of the zone.
 #' By default this is the first column names in the destinations.
 #' @param silent TRUE by default, setting it to TRUE will show you the matching columns
+#' @family od
 #' @export
 #' @examples
 #' l <- od2line(flow = flow, zones = cents)
@@ -628,6 +631,7 @@ update_line_geometry <- function(l, nl) {
 #' (lat/lon) CRS.
 #'
 #' @inheritParams od2line
+#' @family od
 #' @export
 #' @examples
 #' data(flow)

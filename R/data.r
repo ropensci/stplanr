@@ -44,7 +44,7 @@ NULL
 
 #' data frame of commuter flows
 #'
-# @family example flow data
+# @family example travel data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see [cents()]).
@@ -100,7 +100,7 @@ NULL
 #' data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
-# @family example flow data
+# @family example travel data
 #'
 #' @examples
 #' \dontrun{
@@ -156,7 +156,7 @@ NULL
 NULL
 #' spatial lines dataset of commuter flows
 #'
-# @family example flow data
+# @family example travel data
 #'
 #' Flow data after conversion to a spatial format
 #' with [od2line()] (see [flow()]).
@@ -170,7 +170,7 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example flow data
+#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between [cents()]
@@ -187,7 +187,7 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example flow data
+#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between [cents()]
@@ -227,7 +227,7 @@ NULL
 
 #' spatial lines dataset representing a route network
 #'
-#' @family example of route network data (sometimes called flow data)
+#' @family example travel data
 #'
 #' The flow of commuters using different segments of the road network represented in the
 #' [flowlines()] and [routes_fast()] datasets

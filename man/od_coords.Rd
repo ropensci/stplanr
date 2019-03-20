@@ -27,3 +27,8 @@ od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 od_coords(flowlines[1:3, ])
 od_coords(flowlines_sf[1:3, ])
 }
+\seealso{
+Other od: \code{\link{od2line}},
+  \code{\link{od_coords2line}}, \code{\link{od_dist}}
+}
+\concept{od}

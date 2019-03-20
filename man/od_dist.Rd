@@ -31,3 +31,8 @@ data(flow)
 data(cents)
 od_dist(flow, cents)
 }
+\seealso{
+Other od: \code{\link{od2line}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}}
+}
+\concept{od}
