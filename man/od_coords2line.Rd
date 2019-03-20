@@ -28,6 +28,7 @@ plot(odlines)
 \seealso{
 Other od: \code{\link{od2line}},
   \code{\link{od_aggregate}}, \code{\link{od_coords}},
-  \code{\link{od_dist}}, \code{\link{sp_aggregate}}
+  \code{\link{od_dist}}, \code{\link{od_radiation}},
+  \code{\link{sp_aggregate}}
 }
 \concept{od}

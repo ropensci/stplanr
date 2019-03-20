@@ -40,4 +40,11 @@ plot(routes_fast_sf[2:5, ], bbox = bb_matrix)
 }
 \seealso{
 bb_scale
+
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}},
+  \code{\link{mapshape_available}}, \code{\link{mapshape}},
+  \code{\link{quadrant}}
 }
+\concept{geo}

@@ -41,6 +41,7 @@ writeGeoJSON <- function(shp, filename) {
 #' So `percent = 1` is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
 #' [rgeos::gSimplify()]
+#' @family geo
 #' @export
 #' @examples
 #' \dontrun{
@@ -86,6 +87,7 @@ mapshape <- function(shp, percent = 10, ms_options = "", dsn = "mapshape", silen
 #' determines whether or not the JavaScript library
 #' mapshaper is available.
 #'
+#' @family geo
 #' @export
 #' @examples
 #' mapshape_available()
@@ -103,6 +105,7 @@ mapshape_available <- function() {
 #' <http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
 #' @param shp The spatial object a to be cropped
 #' @param bb the bounding box or spatial object that will be used to crop `shp`
+#' @family geo
 #'
 #' @export
 #' @examples
@@ -167,6 +170,7 @@ gclip.sf <- function(shp, bb) {
 #' @param scale_factor Numeric vector determining how much the bounding box will grow or shrink.
 #' Two numbers refer to extending the bounding box in x and y dimensions, respectively.
 #' If the value is 1, the output size will be the same as the input.
+#' @family geo
 #' @export
 #' @examples
 #' bb <- matrix(c(-1.55, 53.80, -1.50, 53.83), nrow = 2)
@@ -194,6 +198,7 @@ bbox_scale <- function(bb, scale_factor) {
 #' @param output Type of object returned (polygon by default)
 #' @aliases bb2poly
 #' @seealso bb_scale
+#' @family geo
 #' @export
 #' @examples
 #' plot(geo_bb(routes_fast, distance = 100), col = "red")
@@ -311,6 +316,7 @@ bb2poly <- function(bb, distance = 0) {
 #' Converts a range of spatial data formats into a matrix representing the bounding box
 #'
 #' @inheritParams geo_bb
+#' @family geo
 #' @export
 #' @examples
 #' geo_bb_matrix(routes_fast)

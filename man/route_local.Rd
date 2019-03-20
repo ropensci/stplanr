@@ -42,3 +42,7 @@ plot(sln@sl, add = TRUE)
 plot(r_many, add = TRUE)
 }
 }
+\seealso{
+Other routes: \code{\link{route_transportapi_public}}
+}
+\concept{routes}

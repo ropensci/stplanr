@@ -31,3 +31,10 @@ points(clipped)
 points(cents[cb, ], col = "red") # note difference
 gclip(cents_sf, cb)
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{decode_gl}}, \code{\link{geo_bb_matrix}},
+  \code{\link{geo_bb}}, \code{\link{mapshape_available}},
+  \code{\link{mapshape}}, \code{\link{quadrant}}
+}
+\concept{geo}

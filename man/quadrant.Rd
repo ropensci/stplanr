@@ -29,3 +29,10 @@ sp_obj <- raster::rasterToPolygons(raster::raster(ncol = 3, nrow = 3))
 (quads <- quadrant(sp_obj))
 plot(sp_obj, col = factor(quads))
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
+  \code{\link{mapshape_available}}, \code{\link{mapshape}}
+}
+\concept{geo}

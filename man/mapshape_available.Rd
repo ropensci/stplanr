@@ -14,3 +14,10 @@ mapshaper is available.
 \examples{
 mapshape_available()
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
+  \code{\link{mapshape}}, \code{\link{quadrant}}
+}
+\concept{geo}

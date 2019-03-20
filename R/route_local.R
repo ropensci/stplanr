@@ -5,6 +5,7 @@
 #'
 #' @inheritParams route_graphhopper
 #' @inheritParams sum_network_routes
+#' @family routes
 #' @export
 #' @examples
 #' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)

@@ -43,6 +43,9 @@ any key to access the API.
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
 geo-coding services are used via \code{geo_code}.
+
+Note: there is now a dedicated transportAPI package:
+https://github.com/ITSLeeds/transportAPI
 }
 \examples{
 
@@ -56,4 +59,7 @@ plot(rq_hfd)
 }
 \seealso{
 line2route
+
+Other routes: \code{\link{route_local}}
 }
+\concept{routes}

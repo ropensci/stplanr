@@ -9,9 +9,12 @@ reference:
 - title: Geographic functions
   contents:
   - has_concept("zones")
-- title: Origin-destination functions
+- title: Functions for working with origin-destination data
   contents:
   - has_concept("od")
+- title: Functions for working with (desire) lines
+  contents:
+  - has_concept("lines")
 - title: Functions for generating and working with routes
   contents:
   - has_concept("routes")

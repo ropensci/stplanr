@@ -5,12 +5,16 @@
 #' strings. Returns a dataframe if polyline is of length 1 and a list of
 #' dataframes otherwise.
 #'
+#' See the more recent googlePolylines package, which is faster:
+#' https://github.com/SymbolixAU/googlePolylines
+#'
 #' @param polyline A character string or vector of character strings containing
 #' the encoded polyline to be decoded.
 #' @param precision An integer indicating the number of decimals in the
 #' initial encoded coordinates. Default is 6 (for OSRM default).
 #' @param forceline Boolean value indicating if the returned coordinates should
 #' be a line (i.e., minimum two points) Default is TRUE.
+#' @family geo
 #' @export
 #' @examples
 #' \dontrun{

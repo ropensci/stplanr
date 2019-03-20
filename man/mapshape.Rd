@@ -61,3 +61,10 @@ plot(rfs_int, add = TRUE)
 mapshape(routes_fast_sf[2, ])
 }
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
+  \code{\link{mapshape_available}}, \code{\link{quadrant}}
+}
+\concept{geo}
