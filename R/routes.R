@@ -279,7 +279,7 @@ route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRU
       stop("Invalid API key")
     }
   }
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][, 1:2])), ID = "1")))
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[2]][[1]][, 1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
 
