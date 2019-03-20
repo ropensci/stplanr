@@ -56,7 +56,8 @@ Suggests:
     dodgr (>= 0.0.3),
     stats19,
     cyclestreets,
-    pbapply
+    pbapply,
+    leaflet
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr
 SystemRequirements: GNU make
