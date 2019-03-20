@@ -4,4 +4,7 @@ pkgdown_sha: ~
 articles:
   stplanr-paper: stplanr-paper.html
   stplanr: stplanr.html
+urls:
+  reference: https://ropensci.github.io/stplanr/reference
+  article: https://ropensci.github.io/stplanr/articles
 
