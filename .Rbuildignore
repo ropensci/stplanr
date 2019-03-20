@@ -12,3 +12,4 @@ log-latest
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
+^pkgdown$
