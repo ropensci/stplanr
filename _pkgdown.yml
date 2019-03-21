@@ -20,7 +20,7 @@ reference:
   - has_concept("nodes")
 - title: Route network functions
   contents:
-  - has_concept("rnets")
+  - has_concept("rnet")
 - title: Geographic functions
   contents:
   - has_concept("geo")

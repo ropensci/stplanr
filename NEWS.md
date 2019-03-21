@@ -11,7 +11,7 @@
 - A new example dataset, `osm_net_example`, has been added for local routing purposes.
 - A citation to the package has been added. Try `citation("stplanr")`
 - The package has a shiny new website thanks to `@maelle`: https://ropensci.github.io/stplanr/
-- The package looses its dependency on rgdal, which should make installation quicker/easier
+- The package looses its Imports dependency on rgdal, which has been demoted to a Suggests
 
 ## BUG FIXES
 
