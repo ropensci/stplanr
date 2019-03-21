@@ -151,8 +151,26 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>cents</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>cents</span>)
+<span class='no'>cents</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgdal</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rgdal/topics/readOGR'>readOGR</a></span>(<span class='kw'>dsn</span> <span class='kw'>=</span> <span class='st'>"/home/robin/npct/pct-bigdata/cents.geojson"</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='st'>"OGRGeoJSON"</span>)
+<span class='co'># library(geojsonio) # load with the ropensci package geojsonio if rgdal fails</span>
+<span class='co'># cents &lt;- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")</span>
+<span class='no'>crs</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/CRS-class'>CRS</a></span>(<span class='st'>"+init=epsg:4326"</span>)
+<span class='no'>crsuk</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/CRS-class'>CRS</a></span>(<span class='st'>"+init=epsg:27700"</span>)
+<span class='no'>cents</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/spTransform'>spTransform</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>cents</span>, <span class='kw'>CRSobj</span> <span class='kw'>=</span> <span class='no'>crsuk</span>)
+<span class='no'>home</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='geo_code.html'>geo_code</a></span>(<span class='st'>"LS7 3HB"</span>)
+<span class='no'>home</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/SpatialPoints'>SpatialPoints</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='no'>home</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>proj4string</span> <span class='kw'>=</span> <span class='no'>crs</span>)
+<span class='no'>home</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/spTransform'>spTransform</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>home</span>, <span class='kw'>CRSobj</span> <span class='kw'>=</span> <span class='no'>crsuk</span>)
+<span class='no'>buf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgeos</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rgeos/topics/misc-gBuffer'>gBuffer</a></span>(<span class='no'>home</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2000</span>)
+<span class='co'># Check it saved the points OK</span>
+<span class='no'>cents</span> <span class='kw'>&lt;-</span> <span class='no'>cents</span>[<span class='no'>buf</span>, ]
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>buf</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/points'>points</a></span>(<span class='no'>cents</span>)
+<span class='no'>cents</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/spTransform'>spTransform</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>cents</span>, <span class='kw'>CRSobj</span> <span class='kw'>=</span> <span class='no'>crs</span>)
+<span class='no'>cents</span>$<span class='no'>geo_code</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>cents</span>$<span class='no'>geo_code</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>devtools</span>)
+<span class='co'># use_data(cents, overwrite = TRUE)</span>
+<span class='no'>cents_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>cents</span>)
+<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>cents_sf</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
