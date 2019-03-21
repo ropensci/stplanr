@@ -57,7 +57,8 @@ Suggests:
     stats19,
     cyclestreets,
     pbapply,
-    leaflet
+    leaflet,
+    rgdal
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://ropensci.github.io/stplanr/
 SystemRequirements: GNU make
