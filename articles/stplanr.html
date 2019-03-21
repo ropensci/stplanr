@@ -105,16 +105,18 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p><strong>stplanr</strong> was developed to solve a real world problem: how to convert official data on travel behaviour into geographic objects that can be plotted on a map and analysed using methods from geographical information systems (GIS)? Specifically, we wanted to visualise and investigate the spatial distribution origin-destination (OD) data such as the open datasets provided by the UK Data Services WICID portal (see <a href="http://wicid.ukdataservice.ac.uk/">wicid.ukdataservice.ac.uk/</a>) to explore cycling potential <span class="citation">(Lovelace et al. 2017)</span>. Since this basic functionality has been implemented (with the function <code><a href="../reference/od2line.html">od2line()</a></code>) there have been many further developments in <strong>stplanr</strong>, some of which are described in a <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd">longer vignette</a>. The purpose of this vignette is to get you up-to-speed with the basics and provide useful links for doing transport research with R.</p>
+<p>The purpose of this vignette is to get you up-to-speed with the basics and provide useful links for doing transport research with R.</p>
+<p>Initially, <strong>stplanr</strong> was developed to solve a real world problem: how to convert official data on travel behaviour into geographic objects that can be plotted on a map and analysed using methods from geographical information systems (GIS)? Specifically, how can origin-destination (OD) data, such as the open datasets provided by the UK Data Services WICID portal (see <a href="http://wicid.ukdataservice.ac.uk/">wicid.ukdataservice.ac.uk/</a>), be used to estimate cycling potential down to the street levels at city and national levels? The research project that the initial work on <strong>stplanr</strong> was funded by was called the Propensity to Cycle Tool (PCT), which has now been deployed as a web application hosted at www.pct.bike and written-up as an academic paper <span class="citation">(Lovelace et al. 2017)</span>.</p>
+<p>Since this basic functionality has been implemented (with the function <code><a href="../reference/od2line.html">od2line()</a></code>) there have been many further developments in <strong>stplanr</strong>. The package was reviewed through the rOpenSci package review process (see here for the details) and the package is now hosted on their site. See the website at <a href="https://ropensci.github.io/stplanr/">ropensci.github.io/stplanr</a>. A more detailed overview of the package’s aims and capabilities is contained in a <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd">longer vignette</a>, which has since been published in the R Journal <span class="citation">(Lovelace and Ellison 2018)</span>.</p>
 </div>
 <div id="installing-stplanr" class="section level1">
 <h1 class="hasAnchor">
 <a href="#installing-stplanr" class="anchor"></a>Installing stplanr</h1>
-<p>If you’re new to programming and transport data, we recommend using <strong>stplanr</strong> interactively in an Integrated Development Environment (IDE) such as RStudio to make life easier. Steps to set-up a suitable R/RStudio environment are described in sections <a href="https://csgillespie.github.io/efficientR/set-up.html#r-version">2.3</a> and <a href="https://csgillespie.github.io/efficientR/set-up.html#rstudio">2.5</a> of the book <a href="https://csgillespie.github.io/efficientR/set-up.html">Efficient R Programming</a> <span class="citation">(Gillespie and Lovelace 2016)</span>.</p>
+<p>If you’re new to programming and transport data, we recommend using <strong>stplanr</strong> interactively in an Integrated Development Environment (IDE) such as RStudio to make life easier. Steps to set-up a suitable R/RStudio environment are described in the package’s <a href="https://ropensci.github.io/stplanr/#installation">README</a>. Broader guidance on R set-up can be found in sections <a href="https://csgillespie.github.io/efficientR/set-up.html#r-version">2.3</a> and <a href="https://csgillespie.github.io/efficientR/set-up.html#rstudio">2.5</a> of the book <a href="https://csgillespie.github.io/efficientR/set-up.html">Efficient R Programming</a> <span class="citation">(Gillespie and Lovelace 2016)</span>.</p>
 <p>Once you have an R set-up you are happy with, the latest version can be installed from CRAN in the usual way:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"stplanr"</span>)</a></code></pre></div>
-<p>The development version can be installed with the <strong>devtools</strong> package as follows:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/stplanr"</span>)</a></code></pre></div>
+<p>The development version can be installed as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"ropensci/stplanr"</span>)</a></code></pre></div>
 <p>Load the package as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(stplanr)</a></code></pre></div>
 <p><strong>stplanr</strong> contains many datasets for testing and demonstrating how R can be used for transport planning. The names of these datasets (which are loaded ‘lazily’ into your namespace when you attach <strong>stplanr</strong>) are listed below:</p>
@@ -126,13 +128,7 @@
 ## [13] "route_network"     "route_network_sf"  "routes_fast"      
 ## [16] "routes_fast_sf"    "routes_slow"       "routes_slow_sf"   
 ## [19] "zones"             "zones_sf"</code></pre>
-</div>
-<div id="links-to-related-packages" class="section level1">
-<h1 class="hasAnchor">
-<a href="#links-to-related-packages" class="anchor"></a>Links to related packages</h1>
-<p><strong>stplanr</strong> is focussed on spatial data. The reason for this is that almost all transport data, from the spatial distribution of bus stops to the routes that pedestrians take between home and work, contains a spatial element. Representing this spatial data in a formal <em>class system</em> has many advantages, including sensible defaults for plotting the spatial data on a map.</p>
-<p>We use <strong>sp</strong> and <strong>sf</strong> because these support the range of vector data formats common in transport planning (points, lines, zones). See <a href="https://github.com/edzer/sfr">github.com/edzer/sfr</a> and the <a href="https://github.com/edzer/sfr/blob/master/vignettes/sf1.Rmd"><strong>sf</strong> vignettes</a> for details.</p>
-<p>To get the best out of <strong>stplanr</strong> it helps to have a strong understanding of spatial data in R in general. Chapter 2 of the open source book <a href="http://geocompr.robinlovelace.net/"><em>Geocomputation with R</em></a> provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress.</p>
+<p>A more complete list of functions in the package can be found here: <a href="https://ropensci.github.io/stplanr/reference/index.html" class="uri">https://ropensci.github.io/stplanr/reference/index.html</a>.</p>
 </div>
 <div id="od-data-to-desire-lines-and-routes" class="section level1">
 <h1 class="hasAnchor">
@@ -171,9 +167,10 @@
 <p>This dataset can also be represent as an ‘od matrix’, where rows represent the origins and columns destinations. However, for multiple variables (e.g. modes of transport) and to prevent giant and unwieldy sparse matrices, the ‘long’ form represented above is much more common.</p>
 <p>Now, imagine that V1 represents the total number of people travelling between the origin and destination and that V2 represents the number who regularly cycle. From this we can get a good indication of where people cycle at the desire line level. (Note: a good source of open OD data has been made available from the <a href="http://wicid.ukdataservice.ac.uk/">wicid.ukdataservice.ac.uk</a> website).</p>
 <p>To extract useful information from this OD dataset, we need to be able to place the lines on the map. What kind of place does a desire line originate from? What about the destination? What is the environment like that it passes through? To answer all these questions we need a geographic representation of the OD table illustrated above.</p>
-<div id="converting-od-data-to-desire-lines-with-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#converting-od-data-to-desire-lines-with-r" class="anchor"></a>Converting OD data to desire lines with R</h2>
+</div>
+<div id="converting-od-data-to-desire-lines-with-r" class="section level1">
+<h1 class="hasAnchor">
+<a href="#converting-od-data-to-desire-lines-with-r" class="anchor"></a>Converting OD data to desire lines with R</h1>
 <p>One problem with OD data is that the rows do not tend to have geography inherently built in. They could contain a variables called <code>lat_origin</code>, <code>lon_origin</code>, <code>lat_destination</code> and <code>lon_destination</code>. But generally they only contain the IDs of geographic zones.</p>
 <p>Work is needed to convert the OD data into ‘desire lines’. Desire lines are straight lines between the origin and destination and represent where people would go if they were not constrained by the route network (see Figure 3 from <a href="https://www.jtlu.org/index.php/jtlu/article/download/862/826">this paper</a>).</p>
 <p>To show how these desire lines are created, we’ll switch to using real OD data provided by <strong>stplanr</strong>. The first three of these is shown below:</p>
@@ -254,15 +251,21 @@
 <p><img src="stplanr_files/figure-html/unnamed-chunk-17-1.png" width="500" height="500"></p>
 <p>The next stage is to aggregate these lines together to create a ‘route network’. This, and many other functions, are described in the <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd">stplanr-paper vignette</a>.</p>
 </div>
-<div id="context-and-discussion" class="section level2">
-<h2 class="hasAnchor">
-<a href="#context-and-discussion" class="anchor"></a>Context and discussion</h2>
+<div id="context-and-discussion" class="section level1">
+<h1 class="hasAnchor">
+<a href="#context-and-discussion" class="anchor"></a>Context and discussion</h1>
 <p>This section outlines some of the wider motivations underlying the package.</p>
 <p>As settlements worldwide have grown and become more complex, the process of planning has had to adapt. Planners today are specialists, in sub-fields such as Emergency, Logistics, Healthcare, Urban and Transport Planning. And the ‘art’ of planning has become more of a science, with its own array of specialist hardware and software.</p>
 <p>The process of Transport Planning has undergone a particularly dramatic revolution. Transport interventions such as new bridges, ports and active travel routes are no longer decided based on the intuition of public sector or political authorities. Decisions are now the result of a long socio-technical process involving public consultation, cost-benefit analyses and computer modelling and visualisation. With the ongoing digital revolution, the importance of this last stage has grown, to the point where transport planning is now a highly technical process, employing dozens of software developers in large planning organisations. There is now a multi-billion pound global transport planning consultancy industry, to support the decision-making process. Yet the fruits of all this labour are unavailable to the vast majority of citizens worldwide, and transport planning decisions which go against the best available evidence keep getting made.</p>
 <p>This is the context which motivated the development of <strong>stplanr</strong>. Its aim is simple: to provide an accessible toolbox for transport planning. It is hoped that it will be useful for practitioners and researchers alike as part of the transition to open source software taking place in the tech industry, which is gradually filtering down into other sectors of the economy, notably ‘Big Data’ in consultancies.</p>
 <p>A further motivation is that the best available evidence suggests the future of civilisation depends on our ability to transition away from fossile fuels. The transport sector is the fastest growing source of emissions by sector, and represents a major roadblock in the path towards a zero-carbon economy. Transport systems are also a major cause of ill health, by enabling sedentary lifestyles and causing numerous road traffic casualties. Knowledge of these impacts motivated the word ‘sustainable’ in the package’s name: by focussing on active travel and public transport modes, <strong>stplanr</strong> encourages the design of transport interventions that reduce dependence on fossil fuels.</p>
 </div>
+<div id="further-resources" class="section level1">
+<h1 class="hasAnchor">
+<a href="#further-resources" class="anchor"></a>Further resources</h1>
+<p><strong>stplanr</strong> is focussed on spatial data. The reason for this is that almost all transport data, from the spatial distribution of bus stops to the routes that pedestrians take between home and work, contains a spatial element. Representing this spatial data in a formal <em>class system</em> has many advantages, including sensible defaults for plotting the spatial data on a map.</p>
+<p>We use <strong>sp</strong> and <strong>sf</strong> because these support the range of vector data formats common in transport planning (points, lines, zones). See <em>stplanr: A package for transport planning</em>, a <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html">paper publised in the R Journal</a>, for more on this <span class="citation">(Lovelace and Ellison 2018)</span>.</p>
+<p>To get the best out of <strong>stplanr</strong> it helps to have a strong understanding of spatial data in R in general. Chapter 2 of the open source book <a href="http://geocompr.robinlovelace.net/"><em>Geocomputation with R</em></a> provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress. Further information on geographic data for transport applications can be found in the same book. See <a href="http://geocompr.robinlovelace.net/transport.html" class="uri">http://geocompr.robinlovelace.net/transport.html</a>.</p>
 </div>
 <div id="contributing" class="section level1">
 <h1 class="hasAnchor">
@@ -275,6 +278,9 @@
 <div id="refs" class="references">
 <div id="ref-gillespie_efficient_2016">
 <p>Gillespie, Colin, and Robin Lovelace. 2016. <em>Efficient R Programming: A Practical Guide to Smarter Programming</em>. O’Reilly Media.</p>
+</div>
+<div id="ref-lovelace_stplanr_2018">
+<p>Lovelace, Robin, and Richard Ellison. 2018. “Stplanr: A Package for Transport Planning.” <em>The R Journal</em> 10 (2): 7–23. <a href="https://doi.org/10.32614/RJ-2018-053" class="uri">https://doi.org/10.32614/RJ-2018-053</a>.</p>
 </div>
 <div id="ref-lovelace_propensity_2017">
 <p>Lovelace, Robin, Anna Goodman, Rachel Aldred, Nikolai Berkoff, Ali Abbas, and James Woodcock. 2017. “The Propensity to Cycle Tool: An Open Source Online System for Sustainable Transport Planning.” <em>Journal of Transport and Land Use</em> 10 (1). <a href="https://doi.org/10.5198/jtlu.2016.862" class="uri">https://doi.org/10.5198/jtlu.2016.862</a>.</p>
@@ -290,13 +296,10 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#installing-stplanr">Installing stplanr</a></li>
-      <li><a href="#links-to-related-packages">Links to related packages</a></li>
-      <li>
-<a href="#od-data-to-desire-lines-and-routes">OD data to desire lines and routes</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#converting-od-data-to-desire-lines-with-r">Converting OD data to desire lines with R</a></li>
+      <li><a href="#od-data-to-desire-lines-and-routes">OD data to desire lines and routes</a></li>
+      <li><a href="#converting-od-data-to-desire-lines-with-r">Converting OD data to desire lines with R</a></li>
       <li><a href="#context-and-discussion">Context and discussion</a></li>
-      </ul>
-</li>
+      <li><a href="#further-resources">Further resources</a></li>
       <li><a href="#contributing">Contributing</a></li>
       <li><a href="#references">References</a></li>
       </ul>
