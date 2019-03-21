@@ -141,14 +141,28 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>zones</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgdal</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rgdal/topics/readOGR'>readOGR</a></span>(<span class='kw'>dsn</span> <span class='kw'>=</span> <span class='st'>"/home/robin/npct/pct-bigdata/msoas.geojson"</span>, <span class='kw'>layer</span> <span class='kw'>=</span> <span class='st'>"OGRGeoJSON"</span>)
-<span class='fu'>proj4string</span>(<span class='no'>zones</span>) <span class='kw'>&lt;-</span> <span class='fu'>proj4string</span>(<span class='no'>cents</span>)
-<span class='no'>zones</span> <span class='kw'>&lt;-</span> <span class='no'>zones</span>[<span class='no'>cents</span>, ]
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>zones</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/points'>points</a></span>(<span class='no'>cents</span>)
-<span class='no'>zones_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>zones</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='no'>zones</span></div><div class='output co'>#&gt; class       : SpatialPolygonsDataFrame 
+#&gt; features    : 8 
+#&gt; extent      : -1.568904, -1.499425, 53.79758, 53.83613  (xmin, xmax, ymin, ymax)
+#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#&gt; variables   : 4
+#&gt; names       :  geo_code, geo_label, geo_labelw,  avslope 
+#&gt; min values  : E02002361, Leeds 032,         NA, 2.284782 
+#&gt; max values  : E02002393, Leeds 064,         NA, 5.091685 </div><div class='input'><span class='no'>zones_sf</span></div><div class='output co'>#&gt; Simple feature collection with 8 features and 4 fields
+#&gt; geometry type:  POLYGON
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -1.568904 ymin: 53.79758 xmax: -1.499425 ymax: 53.83613
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt;       geo_code geo_label geo_labelw  avslope                       geometry
+#&gt; 654  E02002382 Leeds 053       &lt;NA&gt; 2.284782 POLYGON ((-1.513589 53.8157...
+#&gt; 1466 E02002367 Leeds 038       &lt;NA&gt; 5.091685 POLYGON ((-1.553587 53.8308...
+#&gt; 1803 E02002393 Leeds 064       &lt;NA&gt; 2.361707 POLYGON ((-1.530424 53.8109...
+#&gt; 3093 E02002361 Leeds 032       &lt;NA&gt; 3.589363 POLYGON ((-1.533519 53.8338...
+#&gt; 4500 E02002371 Leeds 042       &lt;NA&gt; 2.814496 POLYGON ((-1.545994 53.8249...
+#&gt; 6251 E02002363 Leeds 034       &lt;NA&gt; 3.076791 POLYGON ((-1.54344 53.83331...
+#&gt; 7422 E02002384 Leeds 055       &lt;NA&gt; 2.856563 POLYGON ((-1.546022 53.8170...
+#&gt; 7750 E02002377 Leeds 048       &lt;NA&gt; 2.762529 POLYGON ((-1.515997 53.8217...</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>zones_sf</span>)</div><div class='img'><img src='zones-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
