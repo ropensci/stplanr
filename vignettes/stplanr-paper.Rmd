@@ -451,7 +451,7 @@ These two layers are overlayed to calculate statistics for the desired catchment
 
 To illustrate how catchment areas can be calculated, **stplanr** contains some sample datasets stored in ESRI Shapefile format (a commonly used format for distributing GIS layers) that can together be used to calculate sample catchment areas.
 One of these datasets (`smallsa1`) contains population data for Statistical Area 1 (SA1) zones in Sydney, Australia.
-The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles using the `readOGR` function of \CRANpkg{rgdal}.
+The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles.
 
 ```{r loadshapefiles, results='hide',message='hide'}
 data_dir <- system.file("extdata", package = "stplanr")
