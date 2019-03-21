@@ -141,7 +141,7 @@ Plans for the next release
 ## NEW FEATURES
 
 * There is a new vignette! See [vignettes/stplanr-paper.Rmd](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) and `vignette("stplanr-paper")` for details.
-* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/introducing-stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
+* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
 * `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
 * `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
 * **RCurl** and **data.table** dependencies have been [removed](https://github.com/ropensci/stplanr/pull/169)
