@@ -13,6 +13,10 @@
 - The package has a shiny new website thanks to `@maelle`: https://ropensci.github.io/stplanr/
 - The package looses its dependency on rgdal, which should make installation quicker/easier
 
+## BUG FIXES
+
+- An issue with `route_graphhopper()` has been fixed, see https://github.com/ropensci/stplanr/pull/297
+
 # stplanr 0.2.7
 
 ## NEW FEATURES
