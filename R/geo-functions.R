@@ -1,6 +1,6 @@
 #' Write to geojson easily
 #'
-#' Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
+#' Provides a user-friendly wrapper for `sf::st_write()`. Note,
 #' `geojson_write` from the geojsonio package
 #' provides the same functionality <https://github.com/ropensci/geojsonio>.
 #'
@@ -8,9 +8,8 @@
 #' @param filename File name of the output geojson
 writeGeoJSON <- function(shp, filename) {
   name <- nm <- deparse(substitute(shp))
-  rgdal::writeOGR(obj = shp, layer = name, dsn = filename, driver = "GeoJSON")
   newname <- paste0(filename, ".geojson")
-  file.rename(filename, newname)
+  sf::st_write(sf::st_as_sf(shp), newname)
 }
 
 #' Simplify geometry of spatial objects with the mapshaper library

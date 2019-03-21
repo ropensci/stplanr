@@ -51,8 +51,8 @@
 #' data_dir <- system.file("extdata", package = "stplanr")
 #' unzip(file.path(data_dir, "smallsa1.zip"))
 #' unzip(file.path(data_dir, "testcycleway.zip"))
-#' sa1income <- rgdal::readOGR(".", "smallsa1")
-#' testcycleway <- rgdal::readOGR(".", "testcycleway")
+#' sa1income <- as(sf::read_sf("smallsa1.shp"), "Spatial")
+#' testcycleway <- as(sf::read_sf("testcycleway.shp"), "Spatial")
 #' cway_catch <- calc_catchment(
 #'   polygonlayer = sa1income,
 #'   targetlayer = testcycleway,
