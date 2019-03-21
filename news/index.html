@@ -150,6 +150,14 @@
 <li>The package looses its dependency on rgdal, which should make installation quicker/easier</li>
 </ul>
 </div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>An issue with <code><a href="../reference/route_graphhopper.html">route_graphhopper()</a></code> has been fixed, see <a href="https://github.com/ropensci/stplanr/pull/297" class="uri">https://github.com/ropensci/stplanr/pull/297</a>
+</li>
+</ul>
+</div>
 </div>
     <div id="stplanr-0-2-7" class="section level1">
 <h1 class="page-header">
@@ -163,9 +171,9 @@
 </li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Fixed <a href="https://github.com/ropensci/stplanr/issues/272"><a href='https://github.com/ropensci/stplanr/issues/272'>#272</a></a> by removing byvars argument of overline in preparation for overdue overhaul of overline function.</li>
 </ul>
@@ -191,9 +199,9 @@
 <li>New argument in <code><a href="../reference/line2route.html">line2route()</a></code>: <code>time_sleep</code> waits a period between each route request</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Issue with <code><a href="../reference/dl_stats19.html">dl_stats19()</a></code>, see <a href="https://github.com/ropensci/stplanr/issues/270"><a href='https://github.com/ropensci/stplanr/issues/270'>#270</a></a>
 </li>
@@ -214,9 +222,9 @@
 <li>New function <code><a href="../reference/line_via.html">line_via()</a></code> for identifying intermediary points on a transport network</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Bug associated with <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> fixed (see <a href="https://github.com/ropensci/stplanr/issues/249"><a href='https://github.com/ropensci/stplanr/issues/249'>#249</a></a>)</li>
 </ul>
@@ -261,9 +269,9 @@
 <li>Improved documentation for <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> and <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> for spatial networks.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-4" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Bug in <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code> fixed (see <a href="https://github.com/ropensci/stplanr/issues/240"><a href='https://github.com/ropensci/stplanr/issues/240'>#240</a></a>).</li>
 </ul>
@@ -280,9 +288,9 @@
 <li>In this release <strong>sp</strong> is demoted from a Depends to an Imports, meaning that all its functions will not be attached to your namespace (it will not be loaded) when you run <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(stplanr)</a></code>, making it less tied to <strong>sp</strong>. This is a continuation of the work to support <strong>sf</strong> and will make it easier for the package to work with alternative representations of geographic data.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-5" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Bug in <code>geo_select_aeq.sf()</code> was fixed by Jakub Nowosad in pull <a href="https://github.com/ropensci/stplanr/pull/238"><a href='https://github.com/ropensci/stplanr/issues/238'>#238</a></a>
 </li>
@@ -331,9 +339,9 @@
 <li>New <code><a href="../reference/geo_code.html">geo_code()</a></code> function replaces dependency on RGoogleMaps</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-6" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>See issues closed after the last release with this search term: <a href="https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&amp;q=is%3Aissue%20closed%3A%3E2017-06-01%20">https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&amp;q=is%3Aissue%20closed%3A%3E2017-06-01%20</a>
 </li>
@@ -357,9 +365,9 @@
 <strong>stplanr</strong> now has a website! See <a href="https://ropensci.github.io/stplanr/">ropensci.github.io/stplanr/</a>.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-7" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Serious bug with <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> <a href="https://github.com/ropensci/stplanr/pull/186">fixed</a>.</li>
 <li>Depreciated <code>_each()</code> <strong>dplyr</strong> functions replaced with equivalent <code>_at</code> or <code>_all</code> functions. See <a href="https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/">here</a> for more.</li>
@@ -388,9 +396,9 @@
 <li>New functions <code><a href="../reference/od_aggregate.html">od_aggregate()</a></code> and <code><a href="../reference/sp_aggregate.html">sp_aggregate()</a></code> have been <a href="https://github.com/ropensci/stplanr/pull/165">added</a>, to enable OD data to be aggregated to new geographic levels.</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-8" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>
 <code><a href='https://github.com/ropensci/stplanr/issues/141'>#141</a></code> fixed: <code><a href="../reference/viaroute.html">viaroute()</a></code> works again.</li>
@@ -420,9 +428,9 @@
 <li>New function <code><a href="../reference/od_id_order.html">od_id_order()</a></code> to put origin-destination ids in order, to identify 2 way duplicates (split out from <code><a href="../reference/onewayid.html">onewayid()</a></code>)</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-9" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>See the <a href="https://github.com/ropensci/stplanr/issues?q=is%3Aissue+is%3Aclosed">issue tracker</a>
 </li>
