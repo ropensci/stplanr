@@ -125,6 +125,10 @@ a:focus, a:hover {
   content: "🚦️ ";
 }
 
+#sidebar .citation h2::before{
+  content: "✍️ ";
+}
+
 /* reference navbar ----------------------------------------------- */
 .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
   color: #fff;
