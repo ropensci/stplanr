@@ -15,7 +15,9 @@ author:
     email:  richard.ellison@sydney.edu.au
 abstract: >
   Tools for transport planning should be flexible, scalable and transparent. The **stplanr** package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes. **stplanr** facilitates common transport planning tasks including: downloading and cleaning transport datasets; creating geographic 'desire lines from origin-destination (OD) data; route assignment, via the `SpatialLinesNetwork` class and interfaces to routing services such as CycleStreets.net; calculation of route segment attributes such as bearing and aggregate flow; and `travel watershed' analysis. This paper demonstrates this functionality using reproducible examples on real transport datasets. More broadly, the experience shows open source software can form the basis of a reproducible transport planning workflow. **stplanr**, alongside other packages and open source projects, could provide a more transparent and democratically accountable alternative to the current approach which is heavily reliant on proprietary and technically and financially inaccessible software.
-bibliography: references.bib
+bibliography:
+  - references.bib
+  - stplanr-citation.bib
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{stplanr A Package for Transport Planning}
@@ -29,7 +31,8 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 
 ## Note
 
-This vignette is under peer review and was submitted in pdf form to the [R Journal](https://journal.r-project.org/). Please see its [source code](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) for comments and suggestions.
+This paper has now been peer reviewed and published by the R Journal.
+Please see the published version at [journal.r-project.org](https://journal.r-project.org/archive/2018/RJ-2018-053/index.html) and cite it as @lovelace_stplanr_2018.
 
 # Introduction
 
@@ -448,14 +451,14 @@ These two layers are overlayed to calculate statistics for the desired catchment
 
 To illustrate how catchment areas can be calculated, **stplanr** contains some sample datasets stored in ESRI Shapefile format (a commonly used format for distributing GIS layers) that can together be used to calculate sample catchment areas.
 One of these datasets (`smallsa1`) contains population data for Statistical Area 1 (SA1) zones in Sydney, Australia.
-The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles using the `readOGR` function of \CRANpkg{rgdal}.
+The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles.
 
 ```{r loadshapefiles, results='hide',message='hide'}
 data_dir <- system.file("extdata", package = "stplanr")
 unzip(file.path(data_dir, 'smallsa1.zip'))
 unzip(file.path(data_dir, 'testcycleway.zip'))
-sa1income <- rgdal::readOGR(".", "smallsa1")
-testcycleway <- rgdal::readOGR(".", "testcycleway")
+sa1income <- as(sf::read_sf("smallsa1.shp"), "Spatial")
+testcycleway <- as(sf::read_sf("testcycleway.shp"), "Spatial")
 # Remove unzipped files
 file.remove(list.files(pattern = "^(smallsa1|testcycleway).*"))
 ```
@@ -497,7 +500,7 @@ This process involves the following code:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 unzip(file.path(data_dir, 'sydroads.zip'))
-sydroads <- rgdal::readOGR(".", "roads")
+sydroads <- as(sf::read_sf(".", "roads"), "Spatial")
 file.remove(list.files(pattern = "^(roads).*"))
 sydnetwork <- SpatialLinesNetwork(sydroads)
 ```

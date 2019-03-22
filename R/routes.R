@@ -45,11 +45,7 @@
 #'
 #' if you want the API key to be available in future
 #' sessions, set it using the .Renviron file
-#' e.g. on Linux machines in bash via:
-#'
-#' `
-#' echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
-#' `
+#' with `usethis::edit_r_environ()`
 #'
 #' Read more about the .Renviron here: `?.Renviron`
 #'
@@ -60,11 +56,12 @@
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).
 #' should report errors (FALSE by default).
 #' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
+#' @family routes
 #' @export
 #' @seealso line2route
 #' @aliases route_cyclestreets
 #' @examples
-#' 
+#'
 #' \dontrun{
 #' from <- c(-1.55, 53.80) # geo_code("leeds")
 #' to <- c(-1.76, 53.80) # geo_code("bradford uk")
@@ -78,7 +75,7 @@
 #' # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
 #' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", "balanced")
 #' }
-#' 
+#'
 route_cyclestreet <-
   route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                                    base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
@@ -224,6 +221,7 @@ route_cyclestreet <-
 #'
 #' @inheritParams route_cyclestreet
 #' @inheritParams od_coords
+#' @family routes
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
@@ -281,7 +279,7 @@ route_graphhopper <- function(from, to, l = NULL, vehicle = "bike", silent = TRU
       stop("Invalid API key")
     }
   }
-  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[1]][[1]][, 1:2])), ID = "1")))
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[2]][[1]][, 1:2])), ID = "1")))
 
   climb <- NA # to set elev variable up
 

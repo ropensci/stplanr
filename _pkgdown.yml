@@ -1,0 +1,32 @@
+url: https://ropensci.github.io/stplanr
+
+template:
+  package: rotemplate
+
+destination: docs
+
+reference:
+- title: Work with OD data
+  contents:
+  - has_concept("od")
+- title: Work with (desire) lines
+  contents:
+  - has_concept("lines")
+- title: Routing
+  contents:
+  - has_concept("routes")
+- title: Work with nodes
+  contents:
+  - has_concept("nodes")
+- title: Route network functions
+  contents:
+  - has_concept("rnet")
+- title: Geographic functions
+  contents:
+  - has_concept("geo")
+- title: Get transport data
+  contents:
+  - has_concept("data")
+- title: Example data
+  contents:
+  - has_concept("example travel data")

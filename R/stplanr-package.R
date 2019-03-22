@@ -17,7 +17,6 @@
 #'  \item [route_cyclestreet()] - Finds the fastest routes for cyclists between two places.
 #' }
 #'
-#' @import rgdal
 #' @import curl
 #' @importFrom sp bbox plot spTransform Lines SpatialLines spChFIDs proj4string proj4string<- CRS coordinates
 #' @importFrom rgeos gBuffer gLength gIntersects gIntersection gArea gSimplify

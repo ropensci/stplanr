@@ -33,17 +33,21 @@
 #' character strings (instead of lon/lat pairs), Google's
 #' geo-coding services are used via `geo_code`.
 #'
+#' Note: there is now a dedicated transportAPI package:
+#' https://github.com/ITSLeeds/transportAPI
+#'
 #' @inheritParams line2route
+#' @family routes
 #' @export
 #' @seealso line2route
 #' @examples
-#' 
+#'
 #' \dontrun{
 #' # Plan the 'public' route from Hereford to Leeds
 #' rqh <- route_transportapi_public(from = "Hereford", to = "Leeds")
 #' plot(rq_hfd)
 #' }
-#' 
+#'
 #' # Aim plan public transport routes with transportAPI
 route_transportapi_public <- function(from, to, silent = FALSE,
                                       region = "southeast", modes = NA, not_modes = NA) {

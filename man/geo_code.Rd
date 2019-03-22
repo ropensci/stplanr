@@ -33,3 +33,8 @@ geo_code("hereford", return_all = TRUE)
 geo_code("hereford", service = "google", pat = Sys.getenv("GOOGLE"), return_all = TRUE)
 }
 }
+\seealso{
+Other nodes: \code{\link{locate2spdf}},
+  \code{\link{nearest_google}}, \code{\link{nearest_osm}}
+}
+\concept{nodes}

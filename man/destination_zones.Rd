@@ -11,8 +11,7 @@
 data(destination_zones)
 }
 \description{
-This dataset represents trip destinations on a different geographic
-level than the origins stored in the \code{cents}.
+example destinations data
 }
 \examples{
 \dontrun{
@@ -39,4 +38,8 @@ destinations_sf <- sf::st_as_sf(destinations)
 devtools::use_data(destinations_sf)
 }
 }
+\concept{example destinations
+
+This dataset represents trip destinations on a different geographic
+level than the origins stored in the `cents`.}
 \keyword{datasets}

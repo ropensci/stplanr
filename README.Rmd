@@ -4,11 +4,12 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "vignettes/README-"
+  fig.path = "man/figures/README-",
+  out.width = "100%"
 )
 ```
 
@@ -108,7 +109,7 @@ routes <- line2route(desire_lines, route_fun = route_osrm)
 
 The resulting routes will look something like this:
 
-```{r}
+```{r routes}
 routes = routes_fast_sf[2:5, ]
 plot(routes$geometry)
 ```
@@ -116,7 +117,7 @@ plot(routes$geometry)
 
 Another way to visualise this is with the leaflet package:
 
-```{r}
+```{r, routes-leaf}
 library(leaflet)
 leaflet() %>% addTiles() %>% addPolylines(data = routes)
 ```
@@ -172,7 +173,7 @@ Instructions to install `gdal` and `Quartz` are provided at https://github.com/r
 
 ## Funtions, help and contributing
 
-The current list of available functions can be seen with:
+The current list of available functions can be seen on the package's website at [ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/), or with the following command:
 
 ```{r, eval=FALSE}
 lsf.str("package:stplanr", all = TRUE)
@@ -184,21 +185,16 @@ To get internal help on a specific function, use the standard way.
 ?od2line
 ```
 
-## Dependencies
+To contribute, report bugs or request features, see the [issue tracker](https://github.com/ropensci/stplanr/issues).
 
-**stplanr** imports many great packages that it depends on. Many thanks to the developers of these tools:
-
-```{r}
+```{r, eval=FALSE, echo=FALSE}
+# Aim: explore dependencies
 desc = read.dcf("DESCRIPTION")
 headings = dimnames(desc)[[2]]
 fields = which(headings %in% c("Depends", "Imports", "Suggests"))
 pkgs = paste(desc[fields], collapse = ", ")
 pkgs = gsub("\n", " ", pkgs)
 strsplit(pkgs, ",")[[1]]
-```
-
-```{r, eval=FALSE, echo=FALSE}
-# Aim: explore dependencies
 install.packages("miniCRAN")
 library(miniCRAN)
 tags <- "stplanr"
@@ -210,6 +206,17 @@ library(DiagrammeR)
 DiagrammeR::visnetwork(dg)
 visNetwork::visIgraph(dg)
 ```
+
+## Further resources / tutorials
+
+Want to learn how to use open source software for reproducible sustainable transport planning work?
+Now is a great time to learn.
+Transport planning is a relatively new field of application in R.
+However, there are already some good resources on the topic, including (any further suggestions: welcome):
+
+- The Transport chapter of *Geocomputation with R*, which provides a broad introduction from a geographic data perspective: https://geocompr.robinlovelace.net/transport.html
+- The `stplanr` paper, which describes the context in which the package was developed: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html
+- The `dodgr` vignette, which provides an introduction to routing in R: https://cran.r-project.org/web/packages/dodgr/vignettes/dodgr.html
 
 ## Meta
 

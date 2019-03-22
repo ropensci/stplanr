@@ -27,6 +27,9 @@ Generate nearest point on the route network of a point using the CycleStreets.ne
 
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
+
+Note: there is now a dedicated cyclestreets package:
+https://github.com/Robinlovelace/cyclestreets
 }
 
 \examples{

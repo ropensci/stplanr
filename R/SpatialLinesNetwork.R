@@ -77,6 +77,7 @@ validity = function(object) {
 #'
 #' Janoska, Z. (2013). Find shortest path in spatial network,
 #' URL:http://rpubs.com/janoskaz/10396.
+#' @family rnet
 #' @export
 #' @examples
 #' SLN <- SpatialLinesNetwork(route_network)
@@ -168,11 +169,12 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' for the geographic (SpatialLines) representation or "graph" for the graph
 #' representation.
 #' @param ... Arguments to pass to relevant plot function.
+#' @export
+#' @family rnet
 #' @examples
 #' SLN <- SpatialLinesNetwork(route_network)
 #' plot(SLN)
 #' plot(SLN, component = "graph")
-#' @export
 setMethod("plot",
   signature = c(x = "SpatialLinesNetwork"),
   definition = function(x, component = "sl", ...) {
@@ -195,10 +197,11 @@ setMethod("plot",
 #' for the geographic (sf) representation or "graph" for the graph
 #' representation.
 #' @param ... Arguments to pass to relevant plot function.
+#' @family rnet
+#' @export
 #' @examples
 #' SLN_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(SLN_sf)
-#' @export
 setMethod("plot",
   signature = c(x = "sfNetwork"),
   definition = function(x, component = "sl", ...) {
@@ -398,6 +401,7 @@ setMethod("summary",
 #' rnet <- overline(routes_fast, attrib = "length")
 #' SLN <- SpatialLinesNetwork(rnet)
 #' find_network_nodes(SLN, -1.516734, 53.828)
+#' @family rnet
 #' @export
 find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
   if (!is(sln, "SpatialLinesNetwork") & !is(sln, "sfNetwork")) {
@@ -483,6 +487,7 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' and ends should be calculated. If TRUE then every start Node ID will be routed
 #' to every end Node ID. This is faster than passing every combination to start
 #' and end. Default is FALSE.
+#' @family rnet
 #'
 #' @examples
 #' data(routes_fast)
@@ -644,6 +649,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 #' or sfNetwork.
 #'
 #' @inheritParams sum_network_routes
+#' @family rnet
 #' @export
 #' @examples
 #' data(routes_fast)
@@ -679,6 +685,7 @@ sln2points <- function(sln) {
 #' of the start of the routes, the second column indicates the Node ID(s) of
 #' the end of the routes, and any additional columns are summarised by link.
 #' If there are no additional colums, then overlapping routes are counted.
+#' @family rnet
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")

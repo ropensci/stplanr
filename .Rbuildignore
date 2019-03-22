@@ -12,4 +12,6 @@ log-latest
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
-^stplanr-citation.bib$
+^pkgdown$
+^_pkgdown.yml$
+data-raw/

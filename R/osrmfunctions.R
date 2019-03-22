@@ -5,12 +5,16 @@
 #' strings. Returns a dataframe if polyline is of length 1 and a list of
 #' dataframes otherwise.
 #'
+#' See the more recent googlePolylines package, which is faster:
+#' https://github.com/SymbolixAU/googlePolylines
+#'
 #' @param polyline A character string or vector of character strings containing
 #' the encoded polyline to be decoded.
 #' @param precision An integer indicating the number of decimals in the
 #' initial encoded coordinates. Default is 6 (for OSRM default).
 #' @param forceline Boolean value indicating if the returned coordinates should
 #' be a line (i.e., minimum two points) Default is TRUE.
+#' @family geo
 #' @export
 #' @examples
 #' \dontrun{
@@ -65,6 +69,8 @@ decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
 #' or vector of strings with the json-encoded results. Can be used in
 #' conjunction with the viaroute2sldf function.
 #'
+#' See also https://cran.r-project.org/web/packages/osrm/index.html
+#'
 #' @param startlat A single value or vector containing latitude(s) of the start
 #' of routes.
 #' @param startlng A single value or vector containing longitude(s) of the end
@@ -89,7 +95,7 @@ decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
 #' @param alt Boolean value to return alternative routes (default = TRUE).
 #' @param geometry Boolean value to return route geometries (default = TRUE).
 #' @param uturns Boolean value to allow uturns at via points (default = TRUE).
-#'
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -376,6 +382,7 @@ viaroute <- function(startlat = NULL, startlng = NULL, endlat = NULL,
 #' encoded json result(s) of OSRM routing queries.
 #' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -688,6 +695,7 @@ viaroute2sldf_instructv5 <- function(routeinst, startrouteid = 1, return_sf = FA
 #' @param osrmurl Base URL of the OSRM service
 #' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
+#' @family nodes
 #' @export
 #' @examples
 #' \dontrun{
@@ -769,6 +777,7 @@ nearest_osm <- function(lat, lng, number = 1,
 #' @param osrmurl Base URL of the OSRM service
 #' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
+#' @family nodes
 #' @export
 #' @examples
 #' \dontrun{
@@ -801,6 +810,7 @@ locate2spdf <- function(lat, lng = lng, osrmurl = "http://router.project-osrm.or
 #' @param osrmurl Base URL of the OSRM service
 #' @param return_sf Boolean value if this function should return an sf object, if
 #' FALSE returns sp object (default FALSE).
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -971,6 +981,7 @@ table2matrix <- function(lat, lng, destlat = NA, destlng = NA,
 #' @param ... Arguments passed to viaroute()
 #' @inheritParams route_graphhopper
 #' @inheritParams viaroute
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{

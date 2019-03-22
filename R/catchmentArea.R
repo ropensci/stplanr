@@ -44,14 +44,15 @@
 #' @param quadsegs Number of line segments to use to approximate a quarter
 #' circle. Parameter passed to buffer functions, default is 5 for sp and
 #' 30 for sf.
+#' @family rnet
 #' @export
 #' @examples
 #' \dontrun{
 #' data_dir <- system.file("extdata", package = "stplanr")
 #' unzip(file.path(data_dir, "smallsa1.zip"))
 #' unzip(file.path(data_dir, "testcycleway.zip"))
-#' sa1income <- rgdal::readOGR(".", "smallsa1")
-#' testcycleway <- rgdal::readOGR(".", "testcycleway")
+#' sa1income <- as(sf::read_sf("smallsa1.shp"), "Spatial")
+#' testcycleway <- as(sf::read_sf("testcycleway.shp"), "Spatial")
 #' cway_catch <- calc_catchment(
 #'   polygonlayer = sa1income,
 #'   targetlayer = testcycleway,
@@ -314,6 +315,7 @@ calc_catchment.sf <- function(
 #' @param quadsegs Number of line segments to use to approximate a quarter
 #' circle. Parameter passed to buffer functions, default is 5 for sp and
 #' 30 for sf.
+#' @family rnet
 #' @export
 #' @examples
 #' \dontrun{
@@ -462,6 +464,7 @@ calc_catchment_sum.sf <- function(
 #' @param retainAreaProportion Boolean value. If TRUE retains a variable in
 #' the resulting SpatialPolygonsDataFrame containing the proportion of the
 #' original area within the catchment area (Default = FALSE).
+#' @family rnet
 #' @export
 #' @examples
 #' \dontrun{
@@ -562,6 +565,7 @@ calc_moving_catchment <- function(
 #' @param dissolve Boolean value. If TRUE collapses the underlying zones
 #' within the catchment area into a single region with statistics for the
 #' whole catchment area.
+#' @family rnet
 #' @export
 #' @examples
 #' \dontrun{

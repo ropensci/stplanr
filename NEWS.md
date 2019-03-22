@@ -1,6 +1,21 @@
 # stplanr 0.2.8
 
+## NEW FEATURES
+
+- The stplanr paper has been published! See it here: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html
 - STATS19 functions such as `dl_stats19()` are depreciated. They have been split-out into the new package [`stats19`](https://github.com/ropensci/stats19)
+- `route_dodgr()` has now been implemented
+- A new function `overline2()` has been added, thanks to Malcolm Morgan. This is faster than `overline()`.
+- A substantial refactoring operation has begun. This has resulted in fewer lines of code in the `od` functions, a new `stplanr::od_coords2line()` function, and more support of `sf`
+- `route_dodgr()` has been added
+- A new example dataset, `osm_net_example`, has been added for local routing purposes.
+- A citation to the package has been added. Try `citation("stplanr")`
+- The package has a shiny new website thanks to `@maelle`: https://ropensci.github.io/stplanr/
+- The package looses its Imports dependency on rgdal, which has been demoted to a Suggests
+
+## BUG FIXES
+
+- An issue with `route_graphhopper()` has been fixed, see https://github.com/ropensci/stplanr/pull/297
 
 # stplanr 0.2.7
 
@@ -126,7 +141,7 @@ Plans for the next release
 ## NEW FEATURES
 
 * There is a new vignette! See [vignettes/stplanr-paper.Rmd](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd) and `vignette("stplanr-paper")` for details.
-* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/introducing-stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
+* The original [`introducing-stplanr`](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr.Rmd) vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.
 * `line2route()` has been refactored to improve error detection and allow `n_processes` arguments. Thanks @nikolai-b. See [pull/151](https://github.com/ropensci/stplanr/pull/151) for details.
 * `line_match()` function added, a wrapper around `rgeos::gDistance()`, to find similar routes.
 * **RCurl** and **data.table** dependencies have been [removed](https://github.com/ropensci/stplanr/pull/169)

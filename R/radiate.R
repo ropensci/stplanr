@@ -11,7 +11,7 @@
 #' @references
 #' Simini, F., Gonzalez, M.C., Maritan, A., Barabasi, A.L., 2012. A universal model for
 #' mobility and migration patterns. Nature. doi:10.1038/nature10856
-#'
+#' @family od
 #' @export
 #' @examples
 #' # load some points data

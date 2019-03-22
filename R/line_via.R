@@ -1,7 +1,8 @@
 #' Convert 2 matrices to lines
 #'
 #' @param mat1 Matrix representing origins
-#' @param mat2 Matrix representing origins
+#' @param mat2 Matrix representing destinations
+#' @family lines
 #'
 #' @export
 #' @examples {
@@ -34,6 +35,7 @@ mats2line <- function(mat1, mat2) {
 #'
 #' @inheritParams points2odf
 #' @inheritParams line2df
+#' @family lines
 #' @export
 #' @examples {
 #' l <- flowlines_sf[2:4, ]

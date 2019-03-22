@@ -19,7 +19,7 @@
 #' @param FUN Function to use on aggregation. Default is sum.
 #' @inheritParams sp_aggregate
 #' @return data.frame containing the aggregated od flows.
-#'
+#' @family od
 #' @export
 #' @examples
 #' zones$quadrant <- c(1, 2, 1, 4, 5, 6, 7, 1)
@@ -199,6 +199,7 @@ od_aggregate.Spatial <- function(flow, zones, aggzones,
 #' values based on area. Default is the value of getOption("digits").
 #'
 #' @return SpatialPolygonsDataFrame
+#' @family od
 #'
 #' @export
 #' @examples

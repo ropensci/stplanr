@@ -6,6 +6,7 @@
 #' centroids. This can be tricky to plot and link-up with geographical data.
 #' This function makes the task easier.
 #' @inheritParams od2line
+#' @family od
 #' @export
 #' @examples
 #' data(flow)
@@ -34,6 +35,7 @@ od2odf <- function(flow, zones) {
 #' @param to An object representing destinations
 #' @param l Only needed if from and to are empty, in which case this
 #' should be a spatial object representing desire lines
+#' @family od
 #' @export
 #' @examples
 #' od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
@@ -92,6 +94,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' (in the same CRS). Each row represents travel from origin to destination.
 #' @param crs A number representing the coordinate reference system
 #' of the result.
+#' @family od
 #' @export
 #' @examples
 #' odf <- od_coords(l = flowlines_sf)
@@ -141,6 +144,7 @@ od_coords2line <- function(odc, crs = sf::st_crs()) {
 #' @param zone_code_d Name of the variable in `destinations` containing the ids of the zone.
 #' By default this is the first column names in the destinations.
 #' @param silent TRUE by default, setting it to TRUE will show you the matching columns
+#' @family od
 #' @export
 #' @examples
 #' l <- od2line(flow = flow, zones = cents)
@@ -274,6 +278,7 @@ od2line2 <- function(flow, zones) {
 #' representing the beginning and end points of spatial line features respectively.
 #'
 #' @param l A spatial lines object
+#' @family lines
 #' @export
 #' @examples
 #' data(flowlines)
@@ -399,6 +404,7 @@ line2pointsn <- function(l) {
 #' @param time_delay Number or seconds to wait between each query
 #' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
 #' @inheritParams route_cyclestreet
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -499,6 +505,7 @@ line2route <- function(l, route_fun = stplanr::route_cyclestreet, n_print = 10, 
 #' @param pattern A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "
 #' @param n_retry Number of times to retry
 #' @inheritParams line2route
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -534,6 +541,7 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' of points.
 #'
 #' @param p A spatial points object
+#' @family od
 #' @export
 #' @examples
 #' data(cents)
@@ -574,6 +582,7 @@ points2odf.Spatial <- function(p) {
 #' of points.
 #'
 #' @param p SpatialPointsDataFrame
+#' @family od
 #'
 #' @export
 #' @examples
@@ -595,6 +604,7 @@ points2flow <- function(p) {
 #'
 #' @param l A SpatialLines object, whose geometry is to be modified
 #' @param nl A SpatialLines object of the same length as `l` to provide the new geometry
+#' @family lines
 #'
 #' @export
 #' @examples
@@ -628,6 +638,7 @@ update_line_geometry <- function(l, nl) {
 #' (lat/lon) CRS.
 #'
 #' @inheritParams od2line
+#' @family od
 #' @export
 #' @examples
 #' data(flow)
@@ -647,6 +658,7 @@ od_dist <- function(flow, zones) {
 #' `SpatialLines` objects easy and intuitive
 #'
 #' @param p A SpatialPoints obect or matrix representing the coordinates of points.
+#' @family lines
 #' @export
 #' @examples
 #' p <- matrix(1:4, ncol = 2)

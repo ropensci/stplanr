@@ -8,6 +8,7 @@
 #' See <http://gis.stackexchange.com/questions/58147/> for more information.
 #'
 #' @param l A SpatialLines or SpatalPolygons object
+#' @family lines
 #'
 #' @export
 #' @examples
@@ -42,6 +43,7 @@ n_vertices.sf <- function(l) {
 #' (has no distance). This can be useful for removing data that will not be plotted.
 #'
 #' @inheritParams line2df
+#' @family lines
 #' @export
 #' @examples
 #' data(flowlines)
@@ -68,6 +70,7 @@ is_linepoint <- function(l) {
 #' @inheritParams line2df
 #' @param bidirectional Should the result be returned in a bidirectional format?
 #' Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing
+#' @family lines
 #' @export
 #' @examples
 #' data(flowlines)
@@ -106,11 +109,10 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' @param absolute If TRUE (the default) only positive values can be returned
 #' @param angle an angle in degrees relative to North, with 90 being East and -90 being West.
 #'  (direction of rotation is ignored).
+#' @family lines
 #'
-#' @author Robin Lovelace and Malcolm Morgan
 #' @export
 #' @examples
-#' data(flowlines)
 #' # Find all routes going North-South
 #' a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 #' plot(flowlines)
@@ -150,6 +152,7 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 #' This is a wrapper around [SpatialLinesMidPoints()] that allows it to find the midpoint
 #' of lines that are not projected, which have a lat/long CRS.
 #' @inheritParams line2df
+#' @family lines
 #' @export
 #' @examples
 #' data(routes_fast)
@@ -179,6 +182,7 @@ line_length <- function(l, byid = TRUE) {
 #' @inheritParams line2df
 #' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
+#' @family lines
 #' @export
 #' @examples
 #' data(routes_fast)

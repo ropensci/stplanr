@@ -12,7 +12,7 @@ writeGeoJSON(shp, filename)
 \item{filename}{File name of the output geojson}
 }
 \description{
-Provides a user-friendly wrapper for rgdal::writeOGR(). Note,
+Provides a user-friendly wrapper for \code{sf::st_write()}. Note,
 \code{geojson_write} from the geojsonio package
 provides the same functionality \url{https://github.com/ropensci/geojsonio}.
 }

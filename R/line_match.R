@@ -6,6 +6,7 @@
 #' @param l2 A spatial object
 #' @param threshold The threshold for a match - distances greater than this will not count as matches
 #' @param return_sp Should the function return a spatial result (FALSE by default)
+#' @family lines
 #' @export
 #' @examples
 #' x1 <- 2:4
