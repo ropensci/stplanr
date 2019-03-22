@@ -46,8 +46,8 @@ plot(r_many$geometry)
 \seealso{
 Other routes: \code{\link{line2routeRetry}},
   \code{\link{line2route}}, \code{\link{nearest2spdf}},
-  \code{\link{osm_net_example}},
   \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
   \code{\link{route_graphhopper}},
   \code{\link{route_local}},
   \code{\link{route_transportapi_public}},
