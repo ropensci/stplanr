@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plan a single route with TransportAPI.com — route_transportapi_public • stplanr</title>
+<title>Example of OpenStreetMap road network — osm_net_example • stplanr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,13 +42,9 @@
 
 
 
-<meta property="og:title" content="Plan a single route with TransportAPI.com — route_transportapi_public" />
+<meta property="og:title" content="Example of OpenStreetMap road network — osm_net_example" />
 
-<meta property="og:description" content="Provides an R interface to the TransportAPI.com public transport API.
-The function returns a SpatialLinesDataFrame object representing the
-public route.
-Currently only works for the United Kingdom.
-See https://developer.transportapi.com/documentationfor more information." />
+<meta property="og:description" content="Example of OpenStreetMap road network" />
 
 <meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -125,103 +121,59 @@ See https://developer.transportapi.com/documentationfor more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plan a single route with TransportAPI.com</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/route-transport-api.R'><code>R/route-transport-api.R</code></a></small>
-    <div class="hidden name"><code>route_transportapi_public.Rd</code></div>
+    <h1>Example of OpenStreetMap road network</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/data.r'><code>R/data.r</code></a></small>
+    <div class="hidden name"><code>osm_net_example.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Provides an R interface to the TransportAPI.com public transport API.
-The function returns a SpatialLinesDataFrame object representing the
-public route.
-Currently only works for the United Kingdom.
-See <a href='https://developer.transportapi.com/documentation'>https://developer.transportapi.com/documentation</a>for more information.</p>
+    <p>Example of OpenStreetMap road network</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>route_transportapi_public</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>region</span> <span class='kw'>=</span> <span class='st'>"southeast"</span>, <span class='kw'>modes</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>not_modes</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>from</th>
-      <td><p>Text string or coordinates (a numeric vector of
-<code>length = 2</code> representing latitude and longitude) representing a point
-on Earth.</p></td>
-    </tr>
-    <tr>
-      <th>to</th>
-      <td><p>Text string or coordinates (a numeric vector of
-<code>length = 2</code> representing latitude and longitude) representing a point
-on Earth. This represents the destination of the trip.</p></td>
-    </tr>
-    <tr>
-      <th>silent</th>
-      <td><p>Logical (default is FALSE). TRUE hides request sent.</p></td>
-    </tr>
-    <tr>
-      <th>region</th>
-      <td><p>String for the active region to use for journey plans.
-Possible values are 'southeast' (default) or 'tfl'.</p></td>
-    </tr>
-    <tr>
-      <th>modes</th>
-      <td><p>Vector of character strings containing modes to use. Default is
-to use all modes.</p></td>
-    </tr>
-    <tr>
-      <th>not_modes</th>
-      <td><p>Vector of character strings containing modes not to use.
-Not used if <code>modes</code> is set.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>This function uses the online routing service
-TransportAPI.com to find public routes
-between origins and destinations. It does not require
-any key to access the API.</p>
-<p>Note that if <code>from</code> and <code>to</code> are supplied as
-character strings (instead of lon/lat pairs), Google's
-geo-coding services are used via <code>geo_code</code>.</p>
-<p>Note: there is now a dedicated transportAPI package:
-https://github.com/ITSLeeds/transportAPI</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>line2route</p>
-<p>Other routes: <code><a href='line2routeRetry.html'>line2routeRetry</a></code>,
-  <code><a href='line2route.html'>line2route</a></code>, <code><a href='nearest2spdf.html'>nearest2spdf</a></code>,
-  <code><a href='route_cyclestreet.html'>route_cyclestreet</a></code>,
-  <code><a href='route_dodgr.html'>route_dodgr</a></code>,
-  <code><a href='route_graphhopper.html'>route_graphhopper</a></code>,
-  <code><a href='route_local.html'>route_local</a></code>, <code><a href='route_osrm.html'>route_osrm</a></code>,
-  <code><a href='route.html'>route</a></code>, <code><a href='viaroute2sldf.html'>viaroute2sldf</a></code>,
-  <code><a href='viaroute.html'>viaroute</a></code></p></div>
+    <p>An sf object</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-</div><span class='co'># NOT RUN {</span>
-<span class='co'># Plan the 'public' route from Hereford to Leeds</span>
-<span class='no'>rqh</span> <span class='kw'>&lt;-</span> <span class='fu'>route_transportapi_public</span>(<span class='kw'>from</span> <span class='kw'>=</span> <span class='st'>"Hereford"</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='st'>"Leeds"</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rq_hfd</span>)
-<span class='co'># }</span><div class='input'>
-# Aim plan public transport routes with transportAPI
-</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>osm_net_example</span></div><div class='output co'>#&gt; Simple feature collection with 71 features and 4 fields
+#&gt; geometry type:  LINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -1.535904 ymin: 53.79979 xmax: -1.524435 ymax: 53.80682
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt; First 10 features:
+#&gt;               highway                   name lanes maxspeed
+#&gt; 5082947      tertiary  Cross Stamford Street  &lt;NA&gt;     &lt;NA&gt;
+#&gt; 6013279         trunk Sheepscar Street South     2   30 mph
+#&gt; 6018346      tertiary                   &lt;NA&gt;     1     &lt;NA&gt;
+#&gt; 6018347      tertiary  Cross Stamford Street     2     &lt;NA&gt;
+#&gt; 6072857  unclassified                Mabgate  &lt;NA&gt;   30 mph
+#&gt; 6072858   residential            Bell Street  &lt;NA&gt;     &lt;NA&gt;
+#&gt; 6072859  unclassified           Byron Street  &lt;NA&gt;     &lt;NA&gt;
+#&gt; 6242167      tertiary           Skinner Lane     1     &lt;NA&gt;
+#&gt; 23091062     tertiary             Cherry Row     2   30 mph
+#&gt; 23091370      footway            Hill Street  &lt;NA&gt;     &lt;NA&gt;
+#&gt;                                geometry
+#&gt; 5082947  LINESTRING (-1.531854 53.80...
+#&gt; 6013279  LINESTRING (-1.532834 53.80...
+#&gt; 6018346  LINESTRING (-1.532293 53.80...
+#&gt; 6018347  LINESTRING (-1.531854 53.80...
+#&gt; 6072857  LINESTRING (-1.533278 53.79...
+#&gt; 6072858  LINESTRING (-1.532694 53.80...
+#&gt; 6072859  LINESTRING (-1.532978 53.80...
+#&gt; 6242167  LINESTRING (-1.532765 53.80...
+#&gt; 23091062 LINESTRING (-1.529449 53.80...
+#&gt; 23091370 LINESTRING (-1.527111 53.80...</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#format">Format</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
