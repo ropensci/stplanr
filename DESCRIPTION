@@ -14,9 +14,14 @@ Authors@R: c(
      person("Mark", "Padgham", email="mark.padgham@email.com", role=c("ctb"))
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
-Description: Functionality and data access tools for transport planning,
-    including origin-destination analysis, route allocation and modelling travel
-    patterns.
+Description: Tools for transport planning with an emphasis on spatial transport
+    data and non-motorized modes. Enables common transport planning tasks including:
+    downloading and cleaning transport datasets; creating geographic "desire lines"
+    from origin-destination (OD) data; route assignment, locally and via
+    interfaces to routing services such as <http://cyclestreets.net/>;
+    calculation of route segment attributes such as bearing and aggregate flow;
+    and 'travel watershed' analysis.
+    See Lovelace and Ellison (2018) <doi:10.32614/RJ-2018-053>.
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
