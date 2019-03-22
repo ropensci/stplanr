@@ -278,7 +278,6 @@ NULL
 #' @keywords datasets
 #' @name osm_net_example
 #' @format An sf object
-#' @rdname route_dodgr
 #' @examples
 #' osm_net_example
 NULL
