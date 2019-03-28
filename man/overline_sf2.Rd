@@ -32,16 +32,21 @@ routes_fast_sf$value = 1
 sl = routes_fast_sf[2, ]
 sl2 = routes_fast_sf[3, ]
 rnet = overline_sf2(sl, sl2, attrib = "value")
-sf::st_geometry_type(rnet)
+unique(sf::st_geometry_type(rnet))
 plot(rnet, lwd = rnet$value)
 rnet2 = overline_sf2(sl, sl2, attrib = c("value", "length"))
 plot(rnet2)
-sl <- routes_fast_sf[2:6, ]
-rnet3 = overline_sf(sl = sl, attrib = c("value", "length"))
-sel_over = overlaps(rnet3, routes_fast_sf[7, ])
-sl1 = rnet3[sel_over, ][1, ]
-rnet4 = overline_sf2(sl1, routes_fast_sf[7, ], "value")
-plot(rnet3$geometry, lwd = rnet3$value)
-plot(sl1$geometry, lwd = 9, add = TRUE)
-plot(rnet4, add = TRUE, col = "red", lwd = rnet4$value)
+rnet = overline_sf(routes_fast_sf[2:6, "value"], "value")
+plot(rnet$geometry, lwd = rnet$value)
+plot(routes_fast_sf[7, ], add = TRUE, col = "red")
+sel_o = overlaps(rnet, routes_fast_sf[7, ])
+rnet_sub = rnet[sel_o, ]
+plot(rnet_sub$geometry, lwd = rnet_sub$value)
+plot(routes_fast_sf[7, ], add = TRUE, col = "red")
+rnet_new = overline_sf2(rnet_sub[1, ], routes_fast_sf[7, ])
+plot(rnet_new$geometry, lwd = 8)
+plot(rnet_new[1, ], add = TRUE, col = "red")
+plot(rnet_new[2, ], add = TRUE, col = "red")
+plot(rnet_new[3, ], add = TRUE, col = "red")
+plot(rnet_new[4, ], add = TRUE, col = "red")
 }

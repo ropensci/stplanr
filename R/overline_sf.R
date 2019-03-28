@@ -9,21 +9,20 @@
 #' @export
 #' @examples \dontrun{
 #' routes_fast_sf$value = 1
-#' sl <- routes_fast_sf[2:6, ]
+#' sl <- routes_fast_sf[4:6, ]
 #' rnet = overline_sf(sl = sl, attrib = c("value", "length"))
 #' plot(rnet, lwd = rnet$value)
 #' # A larger example
-#' sl <- routes_fast_sf[2:7, ]
+#' sl <- routes_fast_sf[4:7, ]
 #' rnet = overline_sf(sl = sl, attrib = c("value", "length"))
 #' plot(rnet, lwd = rnet$value)
-#' # rnet_sf <- overline(routes_fast_sf, attrib = "length", buff_dist = 10)
-#' # plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
+#' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
+#' plot(rnet_sf, lwd = rnet$value)
 #' }
 overline_sf <- function(sl, attrib, fun = sum) {
   # initiate line to join-on
   rnet = sl[1, attrib]
   for(i in 2:nrow(sl)) {
-    # for(i in 2:5) {
     # relate_rnet = sf::st_relate(rnet, sl[i, ], pattern = "1F1F00102")
     # sel_overlaps = lengths(relate_rnet) > 0
     sel_overlaps = overlaps(rnet, sl[i, ])
@@ -35,21 +34,27 @@ overline_sf <- function(sl, attrib, fun = sum) {
       if(sum(sel_overlaps) == 1) {
         rnet_new = overline_sf2(rnet_overlap, sl[i, ], attrib = attrib, fun = fun)
       } else {
-        message("Multiple intersections for route ", i)
+        message(sum(sel_overlaps), " intersections for route ", i)
+        rnet_multi = overline_sf2(rnet_overlap[1, ], sl[i, ], attrib = attrib, fun = fun)
+        for(j in 2:sum(sel_overlaps)) {
+          rnet_multi_new = overline_sf2(rnet_multi[j, ], sl[i, ], attrib = attrib, fun = fun)
+          rnet_multi = rbind(rnet_multi, rnet_multi_new)
+        }
         rnet_new = overline_sf2(rnet_overlap[1,], sl[i,], attrib = attrib, fun = fun)
         # sel_overlaps2 = overlaps(rnet_new, sl[i, ])
         # rnet_new = rnet_new_over[sel_overlaps2, ]
-        rnet_new_ls = rnet_new[is_linestring(rnet_new), ] # save 'easy' part
-        sl$geometry[i] = rnet_new$geometry[!is_linestring(rnet_new)]
-        for(j in 2:nrow(rnet_overlap)) {
-          rnet_new_over = overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib, fun = fun)
-          sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
-          rnet_new2 = rnet_new_over[sel_overlaps2, ]
-          rnet_new = rbind(rnet_new, rnet_new2)
-          sl$geometry[i] = sf::st_difference(sl$geometry[i], rnet_new$geometry)
-        }
+        # plot(rnet_new$geometry, lwd = rnet_new$value * 5)
+        # plot(rnet_new$geometry, lwd = rnet_new$value * 5)
+        # sl$geometry[i] = rnet_new$geometry[!is_linestring(rnet_new)]
+        # for(j in 2:nrow(rnet_overlap)) {
+        #   rnet_new_over = overline_sf2(rnet_overlap[j, ], sl[i, ], attrib = attrib, fun = fun)
+        #   sel_overlaps2 = overlaps(rnet_new_over, sl[i, ])
+        #   rnet_new2 = rnet_new_over[sel_overlaps2, ]
+        #   rnet_new = rbind(rnet_new, rnet_new2)
+        #   sl$geometry[i] = sf::st_difference(sl$geometry[i], rnet_new$geometry)
+        # }
       }
-      rnet = rbind(rnet_no_overlap, rnet_new)
+      rnet = rbind(rnet, rnet_new)
     }
     # plot(rnet, lwd = rnet$value, main = "yes")
     # Sys.sleep(1)
@@ -72,18 +77,23 @@ overline_sf <- function(sl, attrib, fun = sum) {
 #' sl = routes_fast_sf[2, ]
 #' sl2 = routes_fast_sf[3, ]
 #' rnet = overline_sf2(sl, sl2, attrib = "value")
-#' sf::st_geometry_type(rnet)
+#' unique(sf::st_geometry_type(rnet))
 #' plot(rnet, lwd = rnet$value)
 #' rnet2 = overline_sf2(sl, sl2, attrib = c("value", "length"))
 #' plot(rnet2)
-#' sl <- routes_fast_sf[2:6, ]
-#' rnet3 = overline_sf(sl = sl, attrib = c("value", "length"))
-#' sel_over = overlaps(rnet3, routes_fast_sf[7, ])
-#' sl1 = rnet3[sel_over, ][1, ]
-#' rnet4 = overline_sf2(sl1, routes_fast_sf[7, ], "value")
-#' plot(rnet3$geometry, lwd = rnet3$value)
-#' plot(sl1$geometry, lwd = 9, add = TRUE)
-#' plot(rnet4, add = TRUE, col = "red", lwd = rnet4$value)
+#' rnet = overline_sf(routes_fast_sf[2:6, "value"], "value")
+#' plot(rnet$geometry, lwd = rnet$value)
+#' plot(routes_fast_sf[7, ], add = TRUE, col = "red")
+#' sel_o = overlaps(rnet, routes_fast_sf[7, ])
+#' rnet_sub = rnet[sel_o, ]
+#' plot(rnet_sub$geometry, lwd = rnet_sub$value)
+#' plot(routes_fast_sf[7, ], add = TRUE, col = "red")
+#' rnet_new = overline_sf2(rnet_sub[1, ], routes_fast_sf[7, ])
+#' plot(rnet_new$geometry, lwd = 8)
+#' plot(rnet_new[1, ], add = TRUE, col = "red")
+#' plot(rnet_new[2, ], add = TRUE, col = "red")
+#' plot(rnet_new[3, ], add = TRUE, col = "red")
+#' plot(rnet_new[4, ], add = TRUE, col = "red")
 overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring = FALSE) {
   attrib1 = paste0(attrib, ".1")
   suppressMessages({
@@ -103,7 +113,7 @@ overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring 
     })
   })
   rnet = rbind(sl_seg1, sl_seg2, sl_intersection)
-  if(return_linestring && any(!is_linestring(rnet))) {
+  if(!return_linestring && any(!is_linestring(rnet))) {
     rnet = to_linestring(rnet)
   }
   return(rnet)
@@ -117,9 +127,8 @@ overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring 
 #' @inheritParams overline_sf2
 #' @param pattern DE-9IM patterns to match. Default: `1F1F00102|1F10F0102|1FF0FF102|1FF00F102`
 #' @examples
+#' routes_fast_sf$value = 1
 #' plot(routes_fast_sf[2:3, 4])
-#' overlaps(routes_fast_sf[2, ], routes_fast_sf[3, ])
-#' plot(routes_fast_sf[:3, 4])
 #' overlaps(routes_fast_sf[2, ], routes_fast_sf[3, ])
 #' @export
 overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102") {

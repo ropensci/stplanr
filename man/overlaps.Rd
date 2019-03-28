@@ -19,3 +19,8 @@ messages when done on non projected data, and which has
 default \href{https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates}{DE-9IM}
 values.
 }
+\examples{
+routes_fast_sf$value = 1
+plot(routes_fast_sf[2:3, 4])
+overlaps(routes_fast_sf[2, ], routes_fast_sf[3, ])
+}
