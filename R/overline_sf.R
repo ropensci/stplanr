@@ -116,6 +116,11 @@ overline_sf2 = function(sl, sl2, attrib = "value", fun = sum, return_linestring 
 #' values.
 #' @inheritParams overline_sf2
 #' @param pattern DE-9IM patterns to match. Default: `1F1F00102|1F10F0102|1FF0FF102|1FF00F102`
+#' @examples
+#' plot(routes_fast_sf[2:3, 4])
+#' overlaps(routes_fast_sf[2, ], routes_fast_sf[3, ])
+#' plot(routes_fast_sf[:3, 4])
+#' overlaps(routes_fast_sf[2, ], routes_fast_sf[3, ])
 #' @export
 overlaps = function(sl, sl2, pattern = "1F1F00102|1F10F0102|1FF0FF102|1FF00F102") {
   suppressMessages({

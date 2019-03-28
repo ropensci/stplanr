@@ -40,3 +40,11 @@ points(cents, cex = cents$population / 100)
 Simini, F., Gonzalez, M.C., Maritan, A., Barabasi, A.L., 2012. A universal model for
 mobility and migration patterns. Nature. doi:10.1038/nature10856
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_dist}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

@@ -13,8 +13,8 @@ to the first column of the data in the zones. Thus in \code{\link[=cents]{cents(
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins and destinations of travel flows.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 }
 \description{
 Extract coordinates from OD data
@@ -30,10 +30,13 @@ This function makes the task easier.
 \examples{
 data(flow)
 data(zones)
-od2odf(flow, zones)
+od2odf(flow[1:2, ], zones)
 }
-\references{
-Rae, A. (2009). From spatial interaction data to spatial interaction information?
-Geovisualisation and spatial structures of migration from the 2001 UK census.
-Computers, Environment and Urban Systems, 33(3). doi:10.1016/j.compenvurbsys.2009.01.007
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
 }
+\concept{od}

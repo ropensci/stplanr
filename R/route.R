@@ -6,6 +6,7 @@
 #'
 #' @inheritParams od_coords
 #' @inheritParams line2route
+#' @family routes
 #' @export
 #' @examples
 #' \dontrun{
@@ -16,7 +17,7 @@
 #' route(flowlines_sf[2:4, ]) # lines
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = route_cyclestreet,
+                  route_fun = stplanr::route_cyclestreet,
                   n_print = 10, list_output = FALSE, ...) {
 
   # generate od coordinates
@@ -64,4 +65,73 @@ route <- function(from = NULL, to = NULL, l = NULL,
   }
 
   r
+}
+
+#' Route on local data using the dodgr package
+#'
+#' @inheritParams route
+#' @param net sf object representing the route network
+#' @family routes
+#' @export
+#' @examples
+#' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
+#' from <- matrix(c(-1.5327711, 53.8006988), ncol = 2)
+#' # to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
+#' to <- matrix(c(-1.527937, 53.8044309), ncol = 2)
+#' pts <- rbind(from, to)
+#' colnames(pts) = c("X", "Y")
+#' # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
+#' # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
+#' r <- route_dodgr(from, to, net = osm_net_example)
+#' plot(osm_net_example$geometry)
+#' plot(r, add = TRUE, col = "red", lwd = 5)
+route_dodgr <-
+  function(from = NULL,
+           to = NULL,
+           l = NULL,
+           net = NULL
+           # ,
+           # return_net = FALSE
+
+           ) {
+
+  if(is.numeric(from) & is.numeric(to)) {
+    from_coords <- from
+    to_coords <- to
+  }
+
+  # Try to get route network if net not provided
+  if(is.null(net)) {
+      pts <- rbind(from_coords, to_coords)
+      net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
+  }
+
+  suppressMessages (
+    ways_dg <- dodgr::weight_streetnet(net)
+  )
+
+  verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
+  #suppressMessages ({
+    from_id <- verts$id[dodgr::match_pts_to_graph(verts, from_coords)]
+    to_id <- verts$id[dodgr::match_pts_to_graph(verts, to_coords)]
+  #})
+  dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
+  paths <- lapply(dp, function (i)
+                   lapply(i, function (j) {
+                             res <- verts[match (j, verts$id), c("x", "y")]
+                             sf::st_linestring(as.matrix(res))
+    }))
+  nms <- unlist(lapply(paths, function (i) names (i)))
+  from_to <- do.call(rbind, strsplit(nms, "-"))
+  from_xy <- from_coords[match(from_to[, 1], unique(from_to[, 1])), , drop = FALSE]
+  to_xy <- from_coords[match(from_to[, 2], unique(from_to[, 2])), , drop = FALSE]
+
+  paths <- sf::st_sfc(unlist(paths, recursive = FALSE), crs = 4326)
+  sf::st_sf(from = from_to[, 1],
+            from_x = from_xy [, 1],
+            from_y = from_xy [, 2],
+            to = from_to[, 2],
+            to_x = to_xy [, 1],
+            to_y = to_xy [, 2],
+            geometry = paths)
 }

@@ -16,11 +16,8 @@ to the first column of the data in the zones. Thus in \code{\link[=cents]{cents(
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing the original centroids or boundaries of the travel flow data.
-Note that in the case of a SpatialPointsDataFrame, the entirety of the flow
-will be allocated to the polygon in which the point is located rather than
-being distributed by area.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}
@@ -71,3 +68,11 @@ od_sf_agg <- od2line(od_agg, aggzones_sf)
 plot(flowlines, lwd = flowlines$Bicycle)
 plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

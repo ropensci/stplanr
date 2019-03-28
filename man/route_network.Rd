@@ -19,7 +19,7 @@ route_network <- overline(routes_fast, "All", fun = sum)
 route_network_sf <- sf::st_as_sf(route_network)
 }
 }
-\concept{example of route network data (sometimes called flow data)
+\concept{example travel data
 
 The flow of commuters using different segments of the road network represented in the
 [flowlines()] and [routes_fast()] datasets}

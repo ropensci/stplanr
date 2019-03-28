@@ -13,9 +13,8 @@ to the first column of the data in the zones. Thus in \code{\link[=cents]{cents(
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins (and destinations if no separate destinations object is provided)
-of travel flows.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 }
 \description{
 It is common to want to know the Euclidean distance between origins and destinations
@@ -32,3 +31,11 @@ data(flow)
 data(cents)
 od_dist(flow, cents)
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

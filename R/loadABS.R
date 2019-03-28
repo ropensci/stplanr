@@ -20,6 +20,7 @@
 #' xlsx file (default = 1).
 #' @param removeTotal A boolean value. If TRUE removes the rows and columns
 #' with totals (default = TRUE).
+#' @family data
 #' @export
 #' @examples
 #' data_dir <- system.file("extdata", package = "stplanr")

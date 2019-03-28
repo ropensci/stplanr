@@ -7,6 +7,7 @@
 #'
 #' @param sp_obj Spatial object
 #' @param number_out Should the output be numbers from 1:4 (FALSE by default)
+#' @family geo
 #'
 #' @export
 #' @examples

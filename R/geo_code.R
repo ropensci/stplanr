@@ -8,6 +8,7 @@
 #'  The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order
 #' @param service Which service to use? Nominatim by default
 #' @inheritParams route_cyclestreet
+#' @family nodes
 #' @export
 #' @examples
 #' \dontrun{

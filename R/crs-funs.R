@@ -9,6 +9,7 @@
 #' <http://gis.stackexchange.com/questions/121489>
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
+#' @family geo
 #' @export
 #' @examples
 #' data("routes_fast")
@@ -35,6 +36,7 @@ crs_select_aeq <- function(shp) {
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @param crs An optional coordinate reference system (if not provided it is set
 #' automatically by [crs_select_aeq()]).
+#' @family geo
 #' @export
 #' @examples
 #' data(routes_fast)

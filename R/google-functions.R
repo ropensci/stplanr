@@ -10,6 +10,7 @@
 #' @param lng Numeric vector containing longitude coordinate for each
 #' coordinate to map.
 #' @param google_api String value containing the Google API key to use.
+#' @family nodes
 #' @export
 #' @examples
 #' \dontrun{
@@ -39,6 +40,7 @@ nearest_google <- function(lat, lng, google_api) {
 #' @param mode Text string specifying the mode of transport. Can be
 #' bicycling (default), walking, driving or transit
 #' @param arrival_time Time of arrival in date format.
+#' @family od
 #' @export
 #'
 #' @details

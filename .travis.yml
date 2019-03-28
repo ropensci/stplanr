@@ -10,10 +10,13 @@ before_install:
 
 warnings_are_errors: true
 
-r_packages:
-  - rgdal
+before_deploy: Rscript -e 'remotes::install_cran("pkgdown");remotes::install_github("ropensci/rotemplate")'
+deploy:
+  provider: script
+  script: Rscript -e 'pkgdown::deploy_site_github()'
+  skip_cleanup: true
 
 notifications:
     email:
       on_success: change
-      on_failure: change
+on_failure: change

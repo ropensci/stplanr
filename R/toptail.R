@@ -13,6 +13,7 @@
 #' SpatialLines object.
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @aliases toptail
+#' @family lines
 #' @export
 #' @examples
 #' l <- routes_fast[2:4, ]
@@ -76,9 +77,8 @@ geo_toptail.sf <- function(l, toptail_dist, ...) {
 #' Solves the problem that buffers will not be circular when used on
 #' non-projected data.
 #'
-#' Returns a
-#'
 #' @inheritParams geo_buffer
+#' @family geo
 #' @export
 #' @examples
 #' r <- routes_fast[1:3, ]
@@ -109,6 +109,7 @@ buff_geo <- function(shp, width, ...) {
 #' @param tail_dist The distance (in metres) to tail the line by. Can be
 #' either a single value or a vector of the same length as the SpatialLines
 #' object.
+#' @family lines
 #' @export
 #' @examples
 #' data("routes_fast")
@@ -173,10 +174,10 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the nearest polygon border.
 #'
-#'
 #' @param l A SpatialLines object
 #' @param buff A SpatialPolygons object to act as the buffer
 #' @param ... Arguments passed to rgeos::gBuffer()
+#' @family lines
 #' @export
 #' @examples
 #' r_toptail <- toptail_buff(routes_fast, zones)

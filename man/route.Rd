@@ -5,8 +5,8 @@
 \title{Plan routes on the transport network}
 \usage{
 route(from = NULL, to = NULL, l = NULL,
-  route_fun = route_cyclestreet, n_print = 10, list_output = FALSE,
-  ...)
+  route_fun = stplanr::route_cyclestreet, n_print = 10,
+  list_output = FALSE, ...)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -41,3 +41,14 @@ route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{viaroute2sldf}}, \code{\link{viaroute}}
+}
+\concept{routes}

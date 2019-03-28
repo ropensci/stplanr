@@ -62,9 +62,7 @@ is available on any computer:
 
 if you want the API key to be available in future
 sessions, set it using the .Renviron file
-e.g. on Linux machines in bash via:
-
-\code{echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron}
+with \code{usethis::edit_r_environ()}
 
 Read more about the .Renviron here: \code{?.Renviron}
 }
@@ -87,4 +85,14 @@ rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", 
 }
 \seealso{
 line2route
+
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
 }
+\concept{routes}

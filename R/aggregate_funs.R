@@ -5,17 +5,7 @@
 #' in the form of 1 line per flow with zone codes of origin and destination
 #' centroids. This function aggregates OD flows between polygon geometries
 #' allocating the original flows to larger zones based on area.
-#'
-#' @param flow A data frame representing the flow between two points
-#' or zones. The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in [cents()],
-#' the first column is geo_code. This corresponds to the first two columns
-#' of [flow()].
-#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-#' representing the original centroids or boundaries of the travel flow data.
-#' Note that in the case of a SpatialPointsDataFrame, the entirety of the flow
-#' will be allocated to the polygon in which the point is located rather than
-#' being distributed by area.
+#' @inheritParams od2line
 #' @param aggzones A SpatialPolygonsDataFrame containing the new
 #' boundaries to aggregate to.
 #' @param aggzone_points Points representing origins of OD flows
@@ -29,7 +19,7 @@
 #' @param FUN Function to use on aggregation. Default is sum.
 #' @inheritParams sp_aggregate
 #' @return data.frame containing the aggregated od flows.
-#'
+#' @family od
 #' @export
 #' @examples
 #' zones$quadrant <- c(1, 2, 1, 4, 5, 6, 7, 1)
@@ -197,12 +187,7 @@ od_aggregate.Spatial <- function(flow, zones, aggzones,
 #' @section Details:
 #' This function performs aggregation on a SpatialPolygonsDataFrame to a
 #' different geometry specified by another SpatialPolygons object.
-#'
-#' @param zones A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-#' representing the original centroids or boundaries.
-#' Note that in the case of a SpatialPointsDataFrame, the original value
-#' will be allocated to the polygon in which the point is located rather than
-#' being distributed by area.
+#' @inheritParams od2line
 #' @param aggzones A SpatialPolygonsDataFrame containing the new
 #' boundaries to aggregate to.
 #' @param cols A character vector containing the names of columns on which to
@@ -214,6 +199,7 @@ od_aggregate.Spatial <- function(flow, zones, aggzones,
 #' values based on area. Default is the value of getOption("digits").
 #'
 #' @return SpatialPolygonsDataFrame
+#' @family od
 #'
 #' @export
 #' @examples

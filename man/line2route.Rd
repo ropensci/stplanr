@@ -4,7 +4,7 @@
 \alias{line2route}
 \title{Convert straight OD data (desire lines) into routes}
 \usage{
-line2route(l, route_fun = "route_cyclestreet", n_print = 10,
+line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
   list_output = FALSE, l_id = NA, time_delay = 0, ...)
 }
 \arguments{
@@ -41,7 +41,7 @@ See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da15
 \examples{
 \dontrun{
 l <- flowlines[2:5, ]
-r <- line2route(l, "route_osrm")
+r <- line2route(l)
 rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = l, plan = "quietest", silent = TRUE)
 plot(r)
@@ -60,3 +60,15 @@ rf_list <- line2route(l = l, list_output = TRUE)
 line2route(l[1, ], route_graphhopper)
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
+}
+\concept{routes}

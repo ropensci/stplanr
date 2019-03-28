@@ -12,3 +12,6 @@ log-latest
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
+^pkgdown$
+^_pkgdown.yml$
+data-raw/

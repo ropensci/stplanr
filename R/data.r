@@ -13,26 +13,8 @@
 #' @aliases cents_sf
 #' @examples
 #' \dontrun{
-#' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
-#' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
-#' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
-#' crs <- sp::CRS("+init=epsg:4326")
-#' crsuk <- sp::CRS("+init=epsg:27700")
-#' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
-#' home <- geo_code("LS7 3HB")
-#' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
-#' home <- sp::spTransform(x = home, CRSobj = crsuk)
-#' buf <- rgeos::gBuffer(home, width = 2000)
-#' # Check it saved the points OK
-#' cents <- cents[buf, ]
-#' plot(buf)
-#' points(cents)
-#' cents <- sp::spTransform(x = cents, CRSobj = crs)
-#' cents$geo_code <- as.character(cents$geo_code)
-#' library(devtools)
-#' # use_data(cents, overwrite = TRUE)
-#' cents_sf <- sf::st_as_sf(cents)
-#' devtools::use_data(cents_sf)
+#' cents
+#' plot(cents)
 #' }
 #'
 #' @docType data
@@ -44,7 +26,7 @@ NULL
 
 #' data frame of commuter flows
 #'
-# @family example flow data
+#' @family example travel data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see [cents()]).
@@ -100,7 +82,7 @@ NULL
 #' data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
-# @family example flow data
+#' @family example travel data
 #'
 #' @examples
 #' \dontrun{
@@ -119,7 +101,7 @@ NULL
 NULL
 #' example destinations data
 #'
-# @family example destinations
+#' @family example destinations
 #'
 #' This dataset represents trip destinations on a different geographic
 #' level than the origins stored in the `cents`.
@@ -156,7 +138,7 @@ NULL
 NULL
 #' spatial lines dataset of commuter flows
 #'
-# @family example flow data
+#' @family example travel data
 #'
 #' Flow data after conversion to a spatial format
 #' with [od2line()] (see [flow()]).
@@ -170,7 +152,7 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example flow data
+#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between [cents()]
@@ -187,7 +169,7 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example flow data
+#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between [cents()]
@@ -211,14 +193,9 @@ NULL
 #' }
 #'
 #' @examples
-#' \dontrun{
-#' zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
-#' proj4string(zones) <- proj4string(cents)
-#' zones <- zones[cents, ]
-#' plot(zones)
-#' points(cents)
-#' zones_sf <- sf::st_as_sf(zones)
-#' }
+#' zones
+#' zones_sf
+#' plot(zones_sf)
 #' @docType data
 #' @keywords datasets
 #' @name zones
@@ -227,7 +204,7 @@ NULL
 
 #' spatial lines dataset representing a route network
 #'
-#' @family example of route network data (sometimes called flow data)
+#' @family example travel data
 #'
 #' The flow of commuters using different segments of the road network represented in the
 #' [flowlines()] and [routes_fast()] datasets
@@ -294,4 +271,13 @@ NULL
 #' # allocate road width to relevant line
 #' devtools::use_data(l_poly)
 #' }
+NULL
+
+#' Example of OpenStreetMap road network
+#' @docType data
+#' @keywords datasets
+#' @name osm_net_example
+#' @format An sf object
+#' @examples
+#' osm_net_example
 NULL

@@ -7,7 +7,7 @@
 \usage{
 od2line(flow, zones, destinations = NULL, zone_code = names(zones)[1],
   origin_code = names(flow)[1], dest_code = names(flow)[2],
-  zone_code_d = NA, silent = TRUE)
+  zone_code_d = NA, silent = FALSE)
 
 od2line2(flow, zones)
 }
@@ -18,9 +18,8 @@ to the first column of the data in the zones. Thus in \code{\link[=cents]{cents(
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins (and destinations if no separate destinations object is provided)
-of travel flows.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 
 \item{destinations}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
 representing destinations of travel flows.}
@@ -57,20 +56,22 @@ only when there is no destinations dataset (i.e. when the geography of
 origins is the same as that of destinations).
 }
 \examples{
-data(flow) # load example data - see ?flow for mor information
-data(cents)
-newflowlines <- od2line(flow = flow, zones = cents)
-newflowlines2 <- od2line2(flow = flow, zones = cents)
+l <- od2line(flow = flow, zones = cents)
 plot(cents)
-lines(newflowlines, lwd = 3)
-lines(newflowlines2, col = "white")
-nfl_sldf <- sp::SpatialLinesDataFrame(newflowlines, flow, match.ID = FALSE)
-identical(nfl_sldf, newflowlines)
+plot(l, lwd = l$All / mean(l$All), add = TRUE)
 # When destinations are different
-data(destinations)
 head(flow_dests[1:5]) # check data
-head(destinations@data[1:5])
-flowlines_dests <- od2line(flow_dests, cents, destinations = destinations, silent = FALSE)
+head(destinations[1:5])
+flowlines_dests <- od2line(flow_dests, cents, destinations = destinations)
 plot(flowlines_dests)
-nfl_sf <- od2line(flow, zones_sf)
+l <- od2line(flow, zones_sf)
+plot(l["All"], lwd = l$All/mean(l$All))
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2odf}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

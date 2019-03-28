@@ -57,6 +57,8 @@ Query OSRM service and return json string result
 Constructs the query URL used with the OSRM HTTP API and returns a string
 or vector of strings with the json-encoded results. Can be used in
 conjunction with the viaroute2sldf function.
+
+See also https://cran.r-project.org/web/packages/osrm/index.html
 }
 
 \examples{
@@ -71,3 +73,14 @@ r <- viaroute2sldf(exroutes)
 plot(r)
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}}
+}
+\concept{routes}

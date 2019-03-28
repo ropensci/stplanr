@@ -18,7 +18,8 @@ repeated for subsequent attributes.}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
 
-\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
+If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
 \description{
 This function takes a series of Lines stored in a
@@ -44,6 +45,22 @@ Rowlingson, B (2015). Overlaying lines and aggregating their values for
 overlapping segments. Reproducible question from
 \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
 \author{
 Barry Rowlingson
 }
+\concept{rnet}
