@@ -473,14 +473,69 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
   }
 }
 
-# devtools::install_github("ropensci/stplanr", "refactor-overlineII")
-# library(stplanr)
-# sl = routes_fast_sf[!is.na(routes_fast_sf$length), ]
-# sl$bicycle = 1
-# system.time({rnet1 = overline2(sl, "bicycle")})
-# system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
-# plot(rnet1, lwd = rnet1$bicycle)
-# nrow(rnet1)
-# rnet1_2 = rnet1[rnet1$bicycle == 2, ]
-# plot(rnet1_2)
-# plot(rnet1_2[7, ])
+
+#' Convert series of overlapping lines into a route network
+#'
+#' This function takes overlapping `LINESTRING`s stored in an
+#' `sf` object and returns a route network composed of non-overlapping
+#' geometries and aggregated values.
+#'
+#' @param sl An `sf` `LINESTRING` object with overlapping elements
+#' @inheritParams overline
+#' @export
+#' @examples
+#' routes_fast_sf$value = 1
+#' sl <- routes_fast_sf[4:6, ]
+#' attrib = c("value", "length")
+#' rnet = overline_intersection(sl = sl, attrib)
+#' plot(rnet, lwd = rnet$value)
+#' # A larger example
+#' sl <- routes_fast_sf[4:7, ]
+#' rnet = overline_intersection(sl = sl, attrib = c("value", "length"))
+#' plot(rnet, lwd = rnet$value)
+#' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
+#' plot(rnet_sf, lwd = rnet_sf$value)
+#'
+#' # An even larger example (not shown, takes time to run)
+#' # rnet = overline_intersection(routes_fast_sf, attrib = c("value", "length"))
+#' # rnet_sf <- overline(routes_fast_sf, attrib = c("value", "length"), buff_dist = 10)
+#' # plot(rnet$geometry, lwd = rnet$value * 2, col = "grey")
+#' # plot(rnet_sf$geometry,  lwd = rnet_sf$value, add = TRUE)
+overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0){
+  sl = sl[attrib]
+  sli = sf::st_intersection(sl)
+
+  # check it's all in there:
+  # sli_union = sf::st_union(sli)
+  # plot(sli_union, lwd = 9)
+  # plot(sl$geometry, add = T, col = "red")
+  # sl_difference = sf::st_difference(sl, sli)
+
+  gtypes = sf::st_geometry_type(sli)
+  sli_lines = sli[gtypes == "LINESTRING", ]
+  sli_mlines = sli[gtypes == "MULTILINESTRING", ]
+
+  if(any(gtypes == "GEOMETRYCOLLECTION")) {
+    sli_collections = sli[gtypes == "GEOMETRYCOLLECTION", ]
+    sli_clines = sf::st_collection_extract(sli_collections, "LINESTRING")
+    sli_lines = rbind(sli_lines, sli_clines)
+  }
+
+  # # Test plots:
+  # plot(sli_lines$geometry, lwd = sli_lines$n.overlaps * 2, col = "grey")
+  # plot(sli_mlines$geometry, add = TRUE, lwd = sli_mlines$n.overlaps)
+  # plot(sl$geometry, col = "red", add = TRUE)
+
+  # # removes many lines!
+  l_mlines = lapply(sli_mlines$geometry, sf::st_line_merge)
+  l_mlines_sfc = sf::st_sfc(l_mlines, crs = sf::st_crs(sl))
+  # plot(l_mlines_sfc)
+
+  l_mlines_data = lapply(attrib, function(a) {
+    vapply(sli_mlines$origins, function(i) fun(sl[[a]][i]), FUN.VALUE = numeric(1))
+  })
+  names(l_mlines_data) = attrib
+  mlines = sf::st_sf(l_mlines_data, geometry = l_mlines_sfc)
+  slines = sli_lines[attrib]
+  rbind(mlines, slines)
+}
