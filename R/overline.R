@@ -311,7 +311,7 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' lwd = rnet1$bicycle / mean(rnet1$bicycle)
 #' plot(rnet1, lwd = lwd)
 #' }
-overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4) {
+overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6) {
 
   # Defensive programming checks:
   if (all(sf::st_geometry_type(x) != "LINESTRING")) {
@@ -411,7 +411,7 @@ overline2 <- function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4)
       message(paste0("large data detected, using regionalisation"))
       suppressWarnings(cents <- sf::st_centroid(x_split))
       grid <- sf::st_make_grid(cents, what = "polygons")
-      inter <- unlist(sf::st_intersects(cents, grid))
+      inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1))
       x_split$grid <- inter
       rm(cents, grid, inter)
       # split into a list of df by grid
