@@ -5,7 +5,7 @@
 \title{Overlay duplicated lines}
 \usage{
 overline2(x, attrib, ncores = 1, simplify = TRUE,
-  regionalise = 10000)
+  regionalise = 1e+06)
 }
 \arguments{
 \item{x}{SF data frame of linestrings}
