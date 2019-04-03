@@ -696,3 +696,33 @@ points2line.matrix <- function(p) {
   l <- raster::spLines(p)
   l
 }
+#' Summary statistics of trips originating from zones in OD data
+#'
+#' This function takes a data frame of OD data and
+#' returns a data frame reporting summary statistics for each unique zone of origin.
+#'
+#' It has some default settings: the default summary statistic is `sum()`.
+#' If the third column is numeric, it returns a data frame with the total number of trips
+#' originating from each zone, as illustrated in the examples below.
+#'
+#' @inheritParams od_coords
+#' @inheritParams overline
+#' @param from_col The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)
+#' @param ... Additional arguments passed to `FUN`
+#' @export
+#' @examples
+#' od_aggregate_from(flow)
+od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., from_col = 1) {
+  if(is.character(attrib)) {
+    attrib_lgl <- grepl(pattern = attrib, x = names(flow))
+    if(sum(attrib_lgl) == 0){
+      stop("No columns match the attribute ", attrib)
+    }
+    attrib = which(attrib_lgl)
+  }
+  if(!is.null(attrib)) {
+    flow <- flow[attrib]
+  }
+  flow_grouped <- dplyr::group_by_at(flow, from_col)
+  summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
+}
