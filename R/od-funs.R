@@ -705,8 +705,9 @@ points2line.matrix <- function(p) {
 #' If the third column is numeric, it returns a data frame with the total number of trips
 #' originating from each zone, as illustrated in the examples below.
 #'
-#' @inheritParams od_coords
+#' @inheritParams od2odf
 #' @inheritParams overline
+#' @param FUN A function to summarise OD data by
 #' @param from_col The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)
 #' @param ... Additional arguments passed to `FUN`
 #' @export
@@ -724,5 +725,5 @@ od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., from_col = 1)
     flow <- flow[attrib]
   }
   flow_grouped <- dplyr::group_by_at(flow, from_col)
-  summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
+  dplyr::summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
 }
