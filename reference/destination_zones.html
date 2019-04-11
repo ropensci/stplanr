@@ -157,13 +157,13 @@
 <span class='no'>wz</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/spTransform'>spTransform</a></span>(<span class='no'>wz</span>, <span class='fu'>proj4string</span>(<span class='no'>zones</span>))
 <span class='no'>destination_zones</span> <span class='kw'>&lt;-</span> <span class='no'>wz</span>[<span class='no'>zones</span>, ]
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>destination_zones</span>)
-<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>destination_zones</span>)
+<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'>use_data</span>(<span class='no'>destination_zones</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>destination_zones</span>@<span class='kw'>data</span>)
 <span class='no'>destinations</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgeos</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rgeos/topics/topo-unary-gCentroid'>gCentroid</a></span>(<span class='no'>destinations</span>, <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>destinations</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sp</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sp/topics/SpatialPoints'>SpatialPointsDataFrame</a></span>(<span class='no'>destinations</span>, <span class='no'>destination_zones</span>@<span class='kw'>data</span>)
-<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>destinations</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'>use_data</span>(<span class='no'>destinations</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>destinations_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>destinations</span>)
-<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>destinations_sf</span>)
+<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'>use_data</span>(<span class='no'>destinations_sf</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

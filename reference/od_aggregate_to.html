@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Print a summary of a sfNetwork — summary,sfNetwork-method • stplanr</title>
+<title>Summary statistics of trips arriving at destination zones in OD data — od_aggregate_to • stplanr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -44,9 +44,10 @@
 
 
 
-<meta property="og:title" content="Print a summary of a sfNetwork — summary,sfNetwork-method" />
+<meta property="og:title" content="Summary statistics of trips arriving at destination zones in OD data — od_aggregate_to" />
 
-<meta property="og:description" content="Print a summary of a sfNetwork" />
+<meta property="og:description" content="This function takes a data frame of OD data and
+returns a data frame reporting summary statistics for each unique zone of destination." />
 
 <meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -123,47 +124,80 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Print a summary of a sfNetwork</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/SpatialLinesNetwork.R'><code>R/SpatialLinesNetwork.R</code></a></small>
-    <div class="hidden name"><code>summary-sfNetwork-method.Rd</code></div>
+    <h1>Summary statistics of trips arriving at destination zones in OD data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/od-funs.R'><code>R/od-funs.R</code></a></small>
+    <div class="hidden name"><code>od_aggregate_to.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Print a summary of a sfNetwork</p>
+    <p>This function takes a data frame of OD data and
+returns a data frame reporting summary statistics for each unique zone of destination.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for sfNetwork</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>od_aggregate_to</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>FUN</span> <span class='kw'>=</span> <span class='no'>sum</span>, <span class='no'>...</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>The sfNetwork</p></td>
+      <th>flow</th>
+      <td><p>A data frame representing the flow between two points
+or zones. The first two columns of this data frame should correspond
+to the first column of the data in the zones. Thus in <code><a href='cents.html'>cents()</a></code>,
+the first column is geo_code. This corresponds to the first two columns
+of <code><a href='flow.html'>flow()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>attrib</th>
+      <td><p>A character vector corresponding to the variables in
+<code>sl$</code> on which the function(s) will operate.</p></td>
+    </tr>
+    <tr>
+      <th>FUN</th>
+      <td><p>A function to summarise OD data by</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments to pass to relevant summary function.</p></td>
+      <td><p>Additional arguments passed to <code>FUN</code></p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>It has some default settings: it assumes the destination ID column is the 2nd
+and the default summary statistic is <code><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum()</a></code>.
+By default, if <code>attrib</code> is not set, it summarises all numeric columns.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
-<span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
-<span class='no'>SLN</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>SLN</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 1843cd7 U-W- 52 80 -- 
-#&gt; + attr: x (g/n), y (g/n), n (g/n), weight (e/n)</div><div class='output co'>#&gt;                Length                 Class                  Mode 
-#&gt;                    80 SpatialLinesDataFrame                    S4 </div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>od_aggregate_to</span>(<span class='no'>flow</span>)</div><div class='output co'>#&gt; # A tibble: 7 x 13
+#&gt;   Area.of.workpla…   All Work.mainly.at.… Underground..me… Train
+#&gt;   &lt;chr&gt;            &lt;int&gt;            &lt;int&gt;            &lt;int&gt; &lt;int&gt;
+#&gt; 1 E02002361          207                0                0     0
+#&gt; 2 E02002363          467                0                0     5
+#&gt; 3 E02002367          115                0                0     1
+#&gt; 4 E02002371          539                0                0     2
+#&gt; 5 E02002377          324                0                0     0
+#&gt; 6 E02002382          209                0                1     0
+#&gt; 7 E02002393          955                0                0     4
+#&gt; # … with 8 more variables: Bus..minibus.or.coach &lt;int&gt;, Taxi &lt;int&gt;,
+#&gt; #   Motorcycle..scooter.or.moped &lt;int&gt;, Driving.a.car.or.van &lt;int&gt;,
+#&gt; #   Passenger.in.a.car.or.van &lt;int&gt;, Bicycle &lt;int&gt;, On.foot &lt;int&gt;,
+#&gt; #   Other.method.of.travel.to.work &lt;int&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

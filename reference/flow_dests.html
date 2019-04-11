@@ -152,7 +152,7 @@ commuter flows with destinations in a different layer than the origins</p>
 <span class='no'>flow_dests</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>
 <span class='no'>flow_dests</span>$<span class='no'>Area.of.workplace</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>destinations</span>$<span class='no'>WZ11CD</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>flow</span>))
 <span class='no'>flow_dests</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>rename</a></span>(<span class='no'>flow_dests</span>, <span class='kw'>WZ11CD</span> <span class='kw'>=</span> <span class='no'>Area.of.workplace</span>)
-<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>flow_dests</span>)
+<span class='kw pkg'>devtools</span><span class='kw ns'>::</span><span class='fu'>use_data</span>(<span class='no'>flow_dests</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

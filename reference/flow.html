@@ -152,7 +152,7 @@
 <span class='no'>flow</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>[<span class='no'>o</span> <span class='kw'>&amp;</span> <span class='no'>d</span>, ] <span class='co'># subset flows with o and d in study area</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>devtools</span>)
 <span class='no'>flow</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>flow</span>$<span class='no'>Area.of.residence</span>, <span class='no'>flow</span>$<span class='no'>Area.of.workplace</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>flow</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>use_data</span>(<span class='no'>flow</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='co'># Convert flows to spatial lines dataset</span>
 <span class='no'>flowlines</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='od2line.html'>od2line</a></span>(<span class='kw'>flow</span> <span class='kw'>=</span> <span class='no'>flow</span>, <span class='kw'>zones</span> <span class='kw'>=</span> <span class='no'>cents</span>)
@@ -162,8 +162,8 @@
 <span class='no'>routes_fast</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>)
 <span class='no'>routes_slow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>)
 
-<span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>routes_fast</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/devtools/topics/devtools-deprecated'>use_data</a></span>(<span class='no'>routes_slow</span>)
+<span class='fu'>use_data</span>(<span class='no'>routes_fast</span>)
+<span class='fu'>use_data</span>(<span class='no'>routes_slow</span>)
 <span class='no'>routes_fast_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>routes_fast</span>)
 <span class='no'>routes_slow_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>routes_slow</span>)
 <span class='co'># }</span><div class='input'>
