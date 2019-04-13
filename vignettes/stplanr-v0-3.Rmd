@@ -1,0 +1,93 @@
+---
+title: "Using open source software to influence policy"
+subtitle: "A reflective case study of stplanr"
+author: "Robin Lovelace"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{stplanr Version 0.3.0}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+# Todo: create proper ref file
+bibliography: /home/robin/uaf/allrefs.bib
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The release of the R package `stplanr` version `v0.3.0` may not sound momentous.
+But it represents a major milestone on the way towards the mythical 'v1', at which it can be considered 'production ready'.^[
+By convention, developers signify the production-readiness of their code with a major release, typically `v1.0.0`.
+Of course, this is subjective:
+the `sf` package, for example, which has been out for , is at the time of writing only at version `0.7.4`
+]
+
+The release of version `0.2.8` went without announcement in March 2019 but contained a few notable features, so I thought I'd take the release of this new 'minor' (the precise definition of which be clarified in the next section) release to explain all the recent, and possible future, changes to [`stplanr`](https://ropensci.github.io/stplanr/).
+It's also a chance to reflect on the history of the package, with a view to guide where it will go in the future, and my own journey from novice R user towards someone who can build something that is of useful to others.
+More ambitiously, I hope that the package can eventually be classified as an 'Ecotechnology', a phrase coined by John Michael Greer, something I'll return to towards the end of the post.
+
+## SemVer
+
+Although this article is primarily about the 'big picture' (or the 30,000 feet view, as Randal Schwartz from FOSS Weekly would put it), I want to start by getting something off my chest: semantic versioning (as known as SemVer) is awesome!
+
+It's a beautifully simple concept which I first discovered in a post by Yihui Xie called, appropriately, ....
+This was still early days in the development of `stplanr`, which I only started as package for myself, or rather a particular government-funded project (more on this in the next section), so I decided to start as conservatively as possible.
+The first version released on CRAN was ... and it was only in ... that it reached the grand old age of 0.2.0!
+
+Despite using SemVer informally (well, keeping the numbers as low as possible to show my reticence in saying it was anyway near 'ready' at least!), its importance only dawned on me recently, thanks to [@klabnik_rust_2018].
+
+
+## The history of stplanr
+
+To understand the present and future possibilities you need a good grasp on the past, as students of history keep trying (but failing) to tell us.
+So before diving into future directions for `stplanr`, it's worth winding the clock backwards before gazing into the future, in the penultimate section.
+
+When `stplanr` began, I was an R programming novice.
+Sure, I used R to solve everyday problems at work.
+However, I had paid little attention to my code's level of reproducibility, let alone efficiency or scalability.
+All that changed when I suddenly found myself in the position of Lead Developer of a central government contract to deliver a web application.
+
+<!-- Something about underlying climate mitigation motivation? -->
+
+As I pointed out in my recent keynote speech at SatRdays Newcastle, my first reaction was to be fearful: I had barely a year's experience of postdoctorate research experience, and no experience of leading any research projects (other than my own Phd), let alone of leading the development of a web application.
+After pulling myself together, I decided that the best course of action would be not to learn software development project management skills 
+<!-- something about making things happen book -->
+but to actually learn to program myself.
+The urgency of learning to program was enhanced by the fact that I was, initially at least, the only person who wrote code on the team.^[
+I was subsequently joined by Ali Abbas, Nikolai Berkoff, Ilan Fridman-Rojas, Malcolm Morgan and Anna Goodman who impressively picked-up programming within a matter of months, all of did amazingly.
+]
+
+How do you learn to code?
+Everyone learns in different ways, but for me one of the surest way to take something else is to:
+
+1. Read how to do it
+1. Do it
+1. Teach others to do
+
+I find that just doing steps 1 and 2 means that the 
+
+<!-- Add learning teaching quote -->
+
+```{r, engine='bash', eval=FALSE}
+git log --until="2015-02-01" >> commit-msgs-until-feb-2015.txt
+```
+
+```{r, engine='bash'}
+cat commit-msgs-until-feb-2015.txt
+```
+
+
+## What's new?
+
+
+## Directions of (s)t(plan)ravel?
+
+Something about wanting to get into a higher level of thinking.
+
+Quote from Bertrand Russel?
+
+## References
