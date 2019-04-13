@@ -1,6 +1,6 @@
 ---
 title: "Using open source software to influence policy"
-subtitle: "A reflective case study of stplanr"
+subtitle: "A reflective case study of the development of stplanr to support evidence-based transport planning"
 author: "Robin Lovelace"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -8,7 +8,6 @@ vignette: >
   %\VignetteIndexEntry{stplanr Version 0.3.0}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-# Todo: create proper ref file
 bibliography: /home/robin/uaf/allrefs.bib
 ---
 
