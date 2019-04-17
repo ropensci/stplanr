@@ -279,7 +279,7 @@ onewaygeo.Spatial <- function(x, attrib) {
   return(singlelines)
 }
 
-' Convert series of overlapping lines into a route network (new method)
+#' Convert series of overlapping lines into a route network (new method)
 #'
 #' @description This function is intended as a replacement for overline() and is significantly faster
 #' especially on large datasets. However, it also uses more memory.
