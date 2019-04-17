@@ -4,22 +4,20 @@
 \alias{od_aggregate}
 \title{Aggregate OD data between polygon geometries}
 \usage{
-od_aggregate(flow, zones, aggzones, aggzone_points = NULL, cols = FALSE,
-  aggcols = FALSE, FUN = sum, prop_by_area = ifelse(identical(FUN, mean)
-  == FALSE, TRUE, FALSE), digits = getOption("digits"))
+od_aggregate(flow, zones, aggzones, aggzone_points = NULL,
+  cols = FALSE, aggcols = FALSE, FUN = sum,
+  prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
+  digits = getOption("digits"))
 }
 \arguments{
 \item{flow}{A data frame representing the flow between two points
 or zones. The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link{cents}},
+to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
-of \code{\link{flow}}.}
+of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing the original centroids or boundaries of the travel flow data.
-Note that in the case of a SpatialPointsDataFrame, the entirety of the flow
-will be allocated to the polygon in which the point is located rather than
-being distributed by area.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 
 \item{aggzones}{A SpatialPolygonsDataFrame containing the new
 boundaries to aggregate to.}
@@ -58,10 +56,10 @@ allocating the original flows to larger zones based on area.
 }
 
 \examples{
-zones$quadrant = c(1, 2, 1, 4, 5, 6, 7, 1)
+zones$quadrant <- c(1, 2, 1, 4, 5, 6, 7, 1)
 aggzones <- rgeos::gUnaryUnion(zones, id = zones@data$quadrant)
 aggzones <- sp::SpatialPolygonsDataFrame(aggzones, data.frame(region = c(1:6)), match.ID = FALSE)
-sp::proj4string(aggzones) = sp::proj4string(zones)
+sp::proj4string(aggzones) <- sp::proj4string(zones)
 aggzones_sf <- sf::st_as_sf(aggzones)
 aggzones_sf <- sf::st_set_crs(aggzones_sf, sf::st_crs(zones_sf))
 od_agg <- od_aggregate(flow, zones_sf, aggzones_sf)
@@ -70,3 +68,11 @@ od_sf_agg <- od2line(od_agg, aggzones_sf)
 plot(flowlines, lwd = flowlines$Bicycle)
 plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

@@ -4,10 +4,11 @@
 \alias{viaroute}
 \title{Query OSRM service and return json string result}
 \usage{
-viaroute(startlat = NULL, startlng = NULL, endlat = NULL, endlng = NULL,
-  viapoints = NULL, api = 5, profile = "driving", protocol = "v1",
-  osrmurl = "http://router.project-osrm.org", zoom = 18,
-  instructions = TRUE, alt = TRUE, geometry = TRUE, uturns = "default")
+viaroute(startlat = NULL, startlng = NULL, endlat = NULL,
+  endlng = NULL, viapoints = NULL, api = 5, profile = "driving",
+  protocol = "v1", osrmurl = "http://router.project-osrm.org",
+  zoom = 18, instructions = TRUE, alt = TRUE, geometry = TRUE,
+  uturns = "default")
 }
 \arguments{
 \item{startlat}{A single value or vector containing latitude(s) of the start
@@ -56,17 +57,30 @@ Query OSRM service and return json string result
 Constructs the query URL used with the OSRM HTTP API and returns a string
 or vector of strings with the json-encoded results. Can be used in
 conjunction with the viaroute2sldf function.
+
+See also https://cran.r-project.org/web/packages/osrm/index.html
 }
 
 \examples{
 \dontrun{
-  exroutes <- viaroute(50, 0, 51, 1)
-  r <- viaroute2sldf(exroutes)
-  plot(r)
-  lngs <- c(-33.5,-33.6,-33.7)
-  lats <- c(150,150.1,150.2)
-  exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
-  r <- viaroute2sldf(exroutes)
-  plot(r)
+exroutes <- viaroute(50, 0, 51, 1)
+r <- viaroute2sldf(exroutes)
+plot(r)
+lngs <- c(-33.5, -33.6, -33.7)
+lats <- c(150, 150.1, 150.2)
+exroutes <- viaroute(viapoints = list(data.frame(x = lngs, y = lats)))
+r <- viaroute2sldf(exroutes)
+plot(r)
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}}
+}
+\concept{routes}

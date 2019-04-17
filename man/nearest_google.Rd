@@ -27,6 +27,11 @@ passed to functions.
 
 \examples{
 \dontrun{
- nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
+nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
 }
 }
+\seealso{
+Other nodes: \code{\link{geo_code}},
+  \code{\link{locate2spdf}}, \code{\link{nearest_osm}}
+}
+\concept{nodes}

@@ -16,11 +16,12 @@ commuter flows with destinations in a different layer than the origins
 \examples{
 \dontrun{
 # This is how the dataset was constructed
-flow_dests = flow
-flow_dests$Area.of.workplace = sample(x = destinations$WZ11CD, size = nrow(flow))
-flow_dests = dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
+flow_dests <- flow
+flow_dests$Area.of.workplace <- sample(x = destinations$WZ11CD, size = nrow(flow))
+flow_dests <- dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
 devtools::use_data(flow_dests)
 }
 
 }
+\concept{example travel data}
 \keyword{datasets}

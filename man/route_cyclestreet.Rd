@@ -5,9 +5,9 @@
 \alias{route_cyclestreets}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE, pat = NULL,
-  base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
-  save_raw = "FALSE")
+route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
+  pat = NULL, base_url = "https://www.cyclestreets.net",
+  reporterrors = TRUE, save_raw = "FALSE")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -58,27 +58,20 @@ Loading a locally saved copy of the api key text string
 before running the function, for example, will ensure it
 is available on any computer:
 
-\code{
-mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-Sys.setenv(CYCLESTREET = mytoken)
-}
+\code{mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREET = mytoken)}
 
 if you want the API key to be available in future
 sessions, set it using the .Renviron file
-e.g. on Linux machines in bash via:
-
-\code{
-echo "CYCLESTREET=f3fe3d078ac34737" >> ~/.Renviron
-}
+with \code{usethis::edit_r_environ()}
 
 Read more about the .Renviron here: \code{?.Renviron}
 }
 \examples{
 
 \dontrun{
-from = c(-1.55, 53.80) # geo_code("leeds")
-to = c(-1.76, 53.80) # geo_code("bradford uk")
-json_output = route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
+from <- c(-1.55, 53.80) # geo_code("leeds")
+to <- c(-1.76, 53.80) # geo_code("bradford uk")
+json_output <- route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
 str(json_output) # what does cyclestreets give you?
 rf_lb <- route_cyclestreet(from, to, plan = "fastest")
 rf_lb@data
@@ -92,4 +85,14 @@ rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", 
 }
 \seealso{
 line2route
+
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
 }
+\concept{routes}

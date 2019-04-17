@@ -4,8 +4,8 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, l = NULL, vehicle = "bike", silent = TRUE,
-  pat = NULL, base_url = "https://graphhopper.com")
+route_graphhopper(from, to, l = NULL, vehicle = "bike",
+  silent = TRUE, pat = NULL, base_url = "https://graphhopper.com")
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -38,8 +38,6 @@ an open source route planning service.
 The function returns a SpatialLinesDataFrame object.
 See \url{https://github.com/graphhopper} for more information.
 
-
-
 To test graphopper is working for you, try something like this, but with
 your own API key:
 To use this function you will need to obtain an API key from
@@ -57,18 +55,30 @@ for more on this):
 \code{obj <- jsonlite::fromJSON(url)}
 
 Where \code{url} is an example api request from
- \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
+\url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
 \dontrun{
-from = c(-0.12, 51.5); to = c(-0.14, 51.5)
-r1 = route_graphhopper(from = from, to = to, silent = FALSE)
-r2 = route_graphhopper("London Eye", "Westminster", vehicle = "foot")
-r3 = route_graphhopper("London Eye", "Westminster", vehicle = "car")
-plot(r1); plot(r2, add = TRUE, col = "blue") # compare routes
+from <- c(-0.12, 51.5)
+to <- c(-0.14, 51.5)
+r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
+r2 <- route_graphhopper("London Eye", "Westminster", vehicle = "foot")
+r3 <- route_graphhopper("London Eye", "Westminster", vehicle = "car")
+plot(r1)
+plot(r2, add = TRUE, col = "blue") # compare routes
 plot(r3, add = TRUE, col = "red")
 }
 }
 \seealso{
 route_cyclestreet
+
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}}, \code{\link{route_local}},
+  \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
 }
+\concept{routes}

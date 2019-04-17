@@ -2,12 +2,12 @@
 % Please edit documentation in R/od-funs.R
 \name{line2df}
 \alias{line2df}
-\title{Convert SpatialLinesDataFrame objects to a data.frame with from and to coords}
+\title{Convert geographic line objects to a data.frame with from and to coords}
 \usage{
 line2df(l)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 }
 \description{
 This function returns a data frame with fx and fy and tx and ty variables
@@ -15,8 +15,21 @@ representing the beginning and end points of spatial line features respectively.
 }
 \examples{
 data(flowlines)
-line2df(flowlines[5,]) # beginning and end of a single straight line
+line2df(flowlines[5, ]) # beginning and end of a single straight line
 line2df(flowlines) # on multiple lines
-line2df(routes_fast[5:6,]) # beginning and end of routes
-line2df(routes_fast_sf[5:6,]) # beginning and end of routes
+line2df(routes_fast[5:6, ]) # beginning and end of routes
+line2df(routes_fast_sf[5:6, ]) # beginning and end of routes
 }
+\seealso{
+Other lines: \code{\link{angle_diff}},
+  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
+  \code{\link{line_bearing}}, \code{\link{line_match}},
+  \code{\link{line_midpoint}}, \code{\link{line_sample}},
+  \code{\link{line_segment}}, \code{\link{line_via}},
+  \code{\link{mats2line}}, \code{\link{n_sample_length}},
+  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
+  \code{\link{onewayid}}, \code{\link{points2line}},
+  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{update_line_geometry}}
+}
+\concept{lines}

@@ -1,60 +1,73 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.2.4
+Version: 0.2.8
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre"),
-    comment = c(ORCID = "0000-0001-5679-6536")),
+      comment = c(ORCID = "0000-0001-5679-6536")),
     person("Richard", "Ellison", role = c("aut")),
+    person("Malcolm", "Morgan", role = c("aut"),
+      comment = c(ORCID = "0000-0001-5679-6536")),
     person("Barry", "Rowlingson", role = c("ctb"), comment = "Author of overline"),
     person("Nick", "Bearman", role = c("ctb"), comment = "Co-author of gclip"),
-    person("Malcolm", "Morgan", role = c("ctb"), comment = "Co-author of angle_diff"),
     person("Nikolai", "Berkoff", role = c("ctb"), comment = "Co-author of line2route"),
-    person("Scott ", "Chamberlin", role = c("rev"), comment = "Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10")
+    person("Scott ", "Chamberlin", role = c("rev"), comment = "Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10"),
+    person("Mark", "Padgham", email="mark.padgham@email.com", role=c("ctb"))
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
-Description: Functionality and data access tools for transport planning,
-    including origin-destination analysis, route allocation and modelling travel
-    patterns.
+Description: Tools for transport planning with an emphasis on spatial transport
+    data and non-motorized modes. Enables common transport planning tasks including:
+    downloading and cleaning transport datasets; creating geographic "desire lines"
+    from origin-destination (OD) data; route assignment, locally and via
+    interfaces to routing services such as <http://cyclestreets.net/>;
+    calculation of route segment attributes such as bearing and aggregate flow;
+    and 'travel watershed' analysis.
+    See Lovelace and Ellison (2018) <doi:10.32614/RJ-2018-053>.
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
 Depends:
-    R (>= 3.0)
+    R (>= 3.0.2)
 Imports:
-    sp,
-    curl,
-    readr,
-    dplyr,
-    httr,
-    jsonlite,
-    stringi,
-    stringr,
-    lubridate,
-    maptools,
-    raster,
-    rgdal,
-    rgeos,
-    openxlsx,
+    sp (>= 1.3.1),
+    curl (>= 3.2),
+    readr (>= 1.1.1),
+    dplyr (>= 0.7.6),
+    httr (>= 1.3.1),
+    jsonlite (>= 1.5),
+    stringi (>= 1.2.4),
+    stringr (>= 1.3.1),
+    lubridate (>= 1.7.4),
+    maptools (>= 0.9.3),
+    raster (>= 2.6.7),
+    rgeos (>= 0.3.28),
+    openxlsx (>= 4.1.0),
     methods,
-    R.utils,
-    geosphere,
+    R.utils (>= 2.7.0),
+    geosphere (>= 1.5.7),
     Rcpp (>= 0.12.1),
-    igraph,
-    nabor,
-    rlang,
-    lwgeom,
-    sf
-LinkingTo: RcppArmadillo,
-    Rcpp
+    igraph (>= 1.2.2),
+    nabor (>= 0.5.0),
+    rlang (>= 0.2.2),
+    lwgeom (>= 0.1.4),
+    sf (>= 0.6.3),
+    magrittr
+LinkingTo: 
+    RcppArmadillo (>= 0.9.100.5.0),
+    Rcpp (>= 0.12.18)
 Suggests:
-    testthat,
-    knitr,
-    rmarkdown,
-    dodgr
-Enhances:
-    tmap
+    testthat (>= 2.0.0),
+    knitr (>= 1.20),
+    rmarkdown (>= 1.10),
+    dodgr (>= 0.0.3),
+    stats19,
+    cyclestreets,
+    pbapply,
+    leaflet,
+    rgdal
 VignetteBuilder: knitr
-URL: https://github.com/ropensci/stplanr
+URL: https://github.com/ropensci/stplanr, https://ropensci.github.io/stplanr/
 SystemRequirements: GNU make
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+Encoding: UTF-8

@@ -7,7 +7,7 @@
 points2odf(p)
 }
 \arguments{
-\item{p}{SpatialPointsDataFrame or data.frame}
+\item{p}{A spatial points object}
 }
 \description{
 Takes a series of geographical points and converts them into a data.frame
@@ -21,3 +21,11 @@ cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
 df2 <- points2odf(cents_centroids)
 df3 <- points2odf(cents_sf)
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_dist}}, \code{\link{od_radiation}},
+  \code{\link{points2flow}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

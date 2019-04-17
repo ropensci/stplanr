@@ -4,7 +4,8 @@
 \alias{nearest_cyclestreets}
 \title{Generate nearest point on the route network of a point using the CycleStreets.net}
 \usage{
-nearest_cyclestreets(shp = NULL, lat, lng, pat = api_pat("cyclestreet"))
+nearest_cyclestreets(shp = NULL, lat, lng,
+  pat = api_pat("cyclestreet"))
 }
 \arguments{
 \item{shp}{A spatial object}
@@ -26,12 +27,15 @@ Generate nearest point on the route network of a point using the CycleStreets.ne
 
 Retrieve coordinates of the node(s) on the network mapped from coordinates
 passed to functions.
+
+Note: there is now a dedicated cyclestreets package:
+https://github.com/Robinlovelace/cyclestreets
 }
 
 \examples{
 \dontrun{
- nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
- nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
- nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
+nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
+nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
+nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
 }
 }

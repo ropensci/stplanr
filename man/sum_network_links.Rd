@@ -30,12 +30,26 @@ rnet <- overline(routes_fast, attrib = "length")
 SLN <- SpatialLinesNetwork(rnet)
 weightfield(SLN) # field used to determine shortest path
 shortpath <- sum_network_links(
-    SLN,
-    data.frame(
-        start=rep(c(1,2,3,4,5),each=4),
-        end=rep(c(50,51,52,33),times=5)
-    )
+  SLN,
+  data.frame(
+    start = rep(c(1, 2, 3, 4, 5), each = 4),
+    end = rep(c(50, 51, 52, 33), times = 5)
+  )
 )
-plot(shortpath, lwd=shortpath$count)
-
+plot(shortpath, lwd = shortpath$count)
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}}, \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

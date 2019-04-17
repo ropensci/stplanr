@@ -64,24 +64,39 @@ length = 1, or a named vector otherwise.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'))
-unzip(file.path(data_dir, 'testcycleway.zip'))
-sa1income <- readOGR(".","smallsa1")
-testcycleway <- readOGR(".","testcycleway")
+unzip(file.path(data_dir, "smallsa1.zip"))
+unzip(file.path(data_dir, "testcycleway.zip"))
+sa1income <- readOGR(".", "smallsa1")
+testcycleway <- readOGR(".", "testcycleway")
 calc_catchment_sum(
-   polygonlayer = sa1income,
-   targetlayer = testcycleway,
-   calccols = c('Total'),
-   distance = 800,
-   projection = 'austalbers'
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  distance = 800,
+  projection = "austalbers"
 )
 
 calc_catchment_sum(
-polygonlayer = sa1income,
-targetlayer = testcycleway,
-calccols = c('Total'),
-distance = 800,
-projection = 'austalbers'
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  distance = 800,
+  projection = "austalbers"
 )
 }
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}}, \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

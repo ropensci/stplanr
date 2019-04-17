@@ -15,8 +15,12 @@ spatial lines dataset representing a route network
 \examples{
 \dontrun{
 # Generate route network
-route_network = overline(routes_fast, "All", fun = sum)
+route_network <- overline(routes_fast, "All", fun = sum)
 route_network_sf <- sf::st_as_sf(route_network)
 }
 }
+\concept{example travel data
+
+The flow of commuters using different segments of the road network represented in the
+[flowlines()] and [routes_fast()] datasets}
 \keyword{datasets}

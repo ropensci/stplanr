@@ -7,7 +7,7 @@
 angle_diff(l, angle, bidirectional = FALSE, absolute = TRUE)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial lines object}
 
 \item{angle}{an angle in degrees relative to North, with 90 being East and -90 being West.
 (direction of rotation is ignored).}
@@ -24,19 +24,28 @@ on the direction of turn, i.e. + or - values for clockwise/anticlockwise),
 bidirectional (which mean values greater than +/- 90 are impossible).
 }
 \details{
-Building on the convention used in \code{\link{bearing}} and in many applications,
+Building on the convention used in \code{\link[=bearing]{bearing()}} and in many applications,
 North is definied as 0, East as 90 and West as -90.
 }
 \examples{
-data(flowlines)
 # Find all routes going North-South
-a = angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
+a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 plot(flowlines)
-plot(flowlines[a < 15,], add = TRUE, lwd = 3, col = "red")
+plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
 # East-West
-plot(flowlines[a > 75,], add = TRUE, lwd = 3, col = "green")
+plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
 angle_diff(flowlines_sf[2, ], angle = 0)
 }
-\author{
-Robin Lovelace and Malcolm Morgan
+\seealso{
+Other lines: \code{\link{geo_toptail}},
+  \code{\link{is_linepoint}}, \code{\link{line2df}},
+  \code{\link{line_bearing}}, \code{\link{line_match}},
+  \code{\link{line_midpoint}}, \code{\link{line_sample}},
+  \code{\link{line_segment}}, \code{\link{line_via}},
+  \code{\link{mats2line}}, \code{\link{n_sample_length}},
+  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
+  \code{\link{onewayid}}, \code{\link{points2line}},
+  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{update_line_geometry}}
 }
+\concept{lines}

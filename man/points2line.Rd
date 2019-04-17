@@ -10,19 +10,32 @@ points2line(p)
 \item{p}{A SpatialPoints obect or matrix representing the coordinates of points.}
 }
 \description{
-This is a simple wrapper around \code{\link{spLines}} that makes the creation of
+This is a simple wrapper around \code{\link[=spLines]{spLines()}} that makes the creation of
 \code{SpatialLines} objects easy and intuitive
 }
 \examples{
-p = matrix(1:4, ncol = 2)
+p <- matrix(1:4, ncol = 2)
 library(sp)
-l = points2line(p)
+l <- points2line(p)
 plot(l)
-l = points2line(cents)
+l <- points2line(cents)
 plot(l)
-p = line2points(routes_fast)
-l = points2line(p)
+p <- line2points(routes_fast)
+l <- points2line(p)
 plot(l)
-l_sf = points2line(cents_sf)
+l_sf <- points2line(cents_sf)
 plot(l_sf)
 }
+\seealso{
+Other lines: \code{\link{angle_diff}},
+  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
+  \code{\link{line2df}}, \code{\link{line_bearing}},
+  \code{\link{line_match}}, \code{\link{line_midpoint}},
+  \code{\link{line_sample}}, \code{\link{line_segment}},
+  \code{\link{line_via}}, \code{\link{mats2line}},
+  \code{\link{n_sample_length}}, \code{\link{n_vertices}},
+  \code{\link{onewaygeo}}, \code{\link{onewayid}},
+  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{update_line_geometry}}
+}
+\concept{lines}

@@ -10,13 +10,22 @@ reproject(shp, crs = crs_select_aeq(shp))
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
-automatically by \code{\link{crs_select_aeq}}).}
+automatically by \code{\link[=crs_select_aeq]{crs_select_aeq()}}).}
 }
 \description{
 Many GIS functions (e.g. finding the area)
 }
 \examples{
 data(routes_fast)
-rf_aeq = reproject(routes_fast[1:3, ])
-rf_osgb = reproject(routes_fast[1:3, ], 27700)
+rf_aeq <- reproject(routes_fast[1:3, ])
+rf_osgb <- reproject(routes_fast[1:3, ], 27700)
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
+  \code{\link{mapshape_available}}, \code{\link{mapshape}},
+  \code{\link{quadrant}}
+}
+\concept{geo}

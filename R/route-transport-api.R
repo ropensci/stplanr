@@ -4,14 +4,14 @@
 #' The function returns a SpatialLinesDataFrame object representing the
 #' public route.
 #' Currently only works for the United Kingdom.
-#' See \url{https://developer.transportapi.com/documentation}for more information.
+#' See <https://developer.transportapi.com/documentation>for more information.
 #'
 #' @param from Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth.
 #'
 #' @param to Text string or coordinates (a numeric vector of
-#'  \code{length = 2} representing latitude and longitude) representing a point
+#'  `length = 2` representing latitude and longitude) representing a point
 #'  on Earth. This represents the destination of the trip.
 #'
 #' @param silent Logical (default is FALSE). TRUE hides request sent.
@@ -20,7 +20,7 @@
 #' @param modes Vector of character strings containing modes to use. Default is
 #' to use all modes.
 #' @param not_modes Vector of character strings containing modes not to use.
-#' Not used if \code{modes} is set.
+#' Not used if `modes` is set.
 #'
 #' @details
 #'
@@ -29,11 +29,15 @@
 #' between origins and destinations. It does not require
 #' any key to access the API.
 #'
-#' Note that if \code{from} and \code{to} are supplied as
+#' Note that if `from` and `to` are supplied as
 #' character strings (instead of lon/lat pairs), Google's
-#' geo-coding services are used via \code{geo_code}.
+#' geo-coding services are used via `geo_code`.
+#'
+#' Note: there is now a dedicated transportAPI package:
+#' https://github.com/ITSLeeds/transportAPI
 #'
 #' @inheritParams line2route
+#' @family routes
 #' @export
 #' @seealso line2route
 #' @examples
@@ -44,41 +48,44 @@
 #' plot(rq_hfd)
 #' }
 #'
-# Aim plan public transport routes with transportAPI
-
+#' # Aim plan public transport routes with transportAPI
 route_transportapi_public <- function(from, to, silent = FALSE,
-                                      region = 'southeast', modes = NA, not_modes = NA){
+                                      region = "southeast", modes = NA, not_modes = NA) {
 
   # Convert sp object to lat/lon vector
-  if(class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame" )
+  if (class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame") {
     from <- coordinates(from)
-  if(class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame" )
+  }
+  if (class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame") {
     to <- coordinates(to)
+  }
 
   # Convert character strings to lon/lat if needs be
-  if(is.character(from))
+  if (is.character(from)) {
     from <- geo_code(from)
-  if(is.character(to))
+  }
+  if (is.character(to)) {
     to <- geo_code(to)
+  }
 
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
 
-  api_base = "http://fcc.transportapi.com"
+  api_base <- "http://fcc.transportapi.com"
   ft_string <- paste0("/from/lonlat:", orig, "/to/lonlat:", dest)
 
   queryattrs <- list(region = region)
   if (is.na(modes) == FALSE) {
-    queryattrs[['modes']] = paste0(modes, collapse = "-")
+    queryattrs[["modes"]] <- paste0(modes, collapse = "-")
   } else {
     if (is.na(not_modes) == FALSE) {
-      queryattrs[['not_modes']] = paste0(not_modes, collapse = "-")
+      queryattrs[["not_modes"]] <- paste0(not_modes, collapse = "-")
     }
   }
 
   httrreq <- httr::GET(
     url = api_base,
-    path = paste0("/v3/uk/public/journey",ft_string, ".json"),
+    path = paste0("/v3/uk/public/journey", ft_string, ".json"),
     query = queryattrs
   )
 
@@ -86,8 +93,8 @@ route_transportapi_public <- function(from, to, silent = FALSE,
     print(paste0("The request sent to transportapi was: ", httrreq$request$url))
   }
 
-  if (grepl('application/json',httrreq$headers$`content-type`) == FALSE &
-      grepl('js',httrreq$headers$`content-type`) == FALSE) {
+  if (grepl("application/json", httrreq$headers$`content-type`) == FALSE &
+    grepl("js", httrreq$headers$`content-type`) == FALSE) {
     stop("Error: Transportapi did not return a valid result")
   }
 

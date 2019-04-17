@@ -8,4 +8,5 @@ test_that(
     l <- od2line(flow = flow, zones = cents)
     data("flowlines")
     expect_true(class(l) == "SpatialLinesDataFrame")
-  })
+  }
+)

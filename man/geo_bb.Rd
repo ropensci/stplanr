@@ -36,11 +36,16 @@ plot(bb_sf2, add = TRUE)
 plot(routes_fast, add = TRUE)
 plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
 bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
-if(require(tmap)) { # as input into tmap plot
-tm_shape(shp = routes_fast_sf[2:5, ], bbox = bb_matrix) +
-  tm_lines()
-}
+plot(routes_fast_sf[2:5, ], bbox = bb_matrix)
 }
 \seealso{
 bb_scale
+
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
+  \code{\link{decode_gl}}, \code{\link{gclip}},
+  \code{\link{geo_bb_matrix}},
+  \code{\link{mapshape_available}}, \code{\link{mapshape}},
+  \code{\link{quadrant}}, \code{\link{reproject}}
 }
+\concept{geo}

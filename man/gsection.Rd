@@ -10,7 +10,8 @@ gsection(sl, buff_dist = 0)
 \item{sl}{SpatialLinesDataFrame with overlapping Lines to split by
 number of overlapping features.}
 
-\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
+If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
 \description{
 Divides SpatialLinesDataFrame objects into separate Lines.
@@ -18,15 +19,31 @@ Each new Lines object is the aggregate of a single number
 of aggregated lines.
 }
 \examples{
-sl <- routes_fast[2:4,]
+sl <- routes_fast[2:4, ]
 rsec <- gsection(sl)
 rsec_buff <- gsection(sl, buff_dist = 1)
 plot(sl[1], lwd = 9, col = 1:nrow(sl))
 plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
 plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 \dontrun{
-  sl <- routes_fast_sf[2:4,]
-  rsec <- gsection(sl)
-  rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
+sl <- routes_fast_sf[2:4, ]
+rsec <- gsection(sl)
+rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
 }
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{islines}},
+  \code{\link{lineLabels}}, \code{\link{overline2}},
+  \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

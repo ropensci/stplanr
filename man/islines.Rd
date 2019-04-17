@@ -12,19 +12,35 @@ islines(g1, g2)
 \item{g2}{A spatial object}
 }
 \description{
-This is a function required in \code{\link{overline}}. It identifies
+This is a function required in \code{\link[=overline]{overline()}}. It identifies
 whether sets of lines overlap (beyond shared points) or
 not.
 }
 \examples{
 \dontrun{
-rnet <- overline(routes_fast[c(2, 3, 22),], attrib = "length")
+rnet <- overline(routes_fast[c(2, 3, 22), ], attrib = "length")
 plot(rnet)
-lines(routes_fast[22,], col = "red") # line without overlaps
-islines(routes_fast[2,], routes_fast[3,])
-islines(routes_fast[2,], routes_fast[22,])
+lines(routes_fast[22, ], col = "red") # line without overlaps
+islines(routes_fast[2, ], routes_fast[3, ])
+islines(routes_fast[2, ], routes_fast[22, ])
 # sf implementation
-islines(routes_fast_sf[2,], routes_fast_sf[3,])
-islines(routes_fast_sf[2,], routes_fast_sf[22,])
+islines(routes_fast_sf[2, ], routes_fast_sf[3, ])
+islines(routes_fast_sf[2, ], routes_fast_sf[22, ])
 }
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{lineLabels}}, \code{\link{overline2}},
+  \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

@@ -40,11 +40,12 @@ SLN <- SpatialLinesNetwork(route_network)
 class(SLN)
 weightfield(SLN) # field used to determine shortest path
 plot(SLN)
-points(sln2points(SLN)[1,], cex = 5)
-points(sln2points(SLN)[50,], cex = 5)
+\dontrun{
+points(sln2points(SLN)[1, ], cex = 5)
+points(sln2points(SLN)[50, ], cex = 5)
 shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
-points(sln2points(SLN)[35,], cex = 5)
+points(sln2points(SLN)[35, ], cex = 5)
 shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
 library(sf)
@@ -53,9 +54,25 @@ plot(SLN_sf)
 shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
 plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 }
+}
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.
 
 Janoska, Z. (2013). Find shortest path in spatial network,
 URL:http://rpubs.com/janoskaz/10396.
 }
+\seealso{
+Other rnet: \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}}, \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

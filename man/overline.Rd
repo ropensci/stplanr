@@ -4,8 +4,7 @@
 \alias{overline}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sl, attrib, fun = sum, na.zero = FALSE, byvars = NA,
-  buff_dist = 0)
+overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 }
 \arguments{
 \item{sl}{A SpatialLinesDataFrame with overlapping elements}
@@ -19,38 +18,49 @@ repeated for subsequent attributes.}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
 
-\item{byvars}{Character vector containing the column names to use for grouping}
-
-\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation. If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
+If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 }
 \description{
 This function takes a series of Lines stored in a
- \code{SpatialLinesDataFrame}
+\code{SpatialLinesDataFrame}
 and converts these into a single route network.
 }
 \examples{
-sl <- routes_fast[2:4,]
+sl <- routes_fast[2:4, ]
 rnet1 <- overline(sl = sl, attrib = "length")
 rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 \dontrun{
-routes_fast$group = rep(1:3, length.out = nrow(routes_fast))
-rnet_grouped = overline(routes_fast, attrib = "length", byvars = "group", buff_dist = 1)
-plot(rnet_grouped, col = rnet_grouped$group, lwd =
-  rnet_grouped$length / mean(rnet_grouped$length) * 3)
 # sf methods
-sl = routes_fast_sf[2:4, ]
+sl <- routes_fast_sf[2:4, ]
 overline(sl = sl, attrib = "length", buff_dist = 10)
-rnet_sf = overline(routes_fast_sf, attrib = "length", buff_dist = 10)
+rnet_sf <- overline(routes_fast_sf, attrib = "length", buff_dist = 10)
 plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
 }
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
- overlapping segments. Reproducible question from
- \url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+overlapping segments. Reproducible question from
+\url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+}
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{calc_network_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
 }
 \author{
 Barry Rowlingson
 }
+\concept{rnet}

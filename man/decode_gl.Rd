@@ -24,10 +24,22 @@ Decode Google polyline compressed string
 An implementation of the Google Maps Encoded Polyline Algorithm for decoding
 strings. Returns a dataframe if polyline is of length 1 and a list of
 dataframes otherwise.
+
+See the more recent googlePolylines package, which is faster:
+https://github.com/SymbolixAU/googlePolylines
 }
 
 \examples{
 \dontrun{
- decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@", precision = 5)
+decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@", precision = 5)
 }
 }
+\seealso{
+Other geo: \code{\link{bbox_scale}},
+  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
+  \code{\link{gclip}}, \code{\link{geo_bb_matrix}},
+  \code{\link{geo_bb}}, \code{\link{mapshape_available}},
+  \code{\link{mapshape}}, \code{\link{quadrant}},
+  \code{\link{reproject}}
+}
+\concept{geo}

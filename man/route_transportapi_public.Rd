@@ -4,8 +4,8 @@
 \alias{route_transportapi_public}
 \title{Plan a single route with TransportAPI.com}
 \usage{
-route_transportapi_public(from, to, silent = FALSE, region = "southeast",
-  modes = NA, not_modes = NA)
+route_transportapi_public(from, to, silent = FALSE,
+  region = "southeast", modes = NA, not_modes = NA)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -43,6 +43,9 @@ any key to access the API.
 Note that if \code{from} and \code{to} are supplied as
 character strings (instead of lon/lat pairs), Google's
 geo-coding services are used via \code{geo_code}.
+
+Note: there is now a dedicated transportAPI package:
+https://github.com/ITSLeeds/transportAPI
 }
 \examples{
 
@@ -52,7 +55,18 @@ rqh <- route_transportapi_public(from = "Hereford", to = "Leeds")
 plot(rq_hfd)
 }
 
+# Aim plan public transport routes with transportAPI
 }
 \seealso{
 line2route
+
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
 }
+\concept{routes}

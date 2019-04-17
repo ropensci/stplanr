@@ -18,11 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="data frame of commuter flows — flow" />
+
+<meta property="og:description" content="This dataset represents commuter flows (work travel) between origin
+and destination zones (see cents()).
+The data is from the UK and is available as open data:
+http://wicid.ukdataservice.ac.uk/." />
+<meta name="twitter:card" content="summary" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +62,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +107,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,18 +115,22 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>data frame of commuter flows</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/data.r'><code>R/data.r</code></a></small>
+    <div class="hidden name"><code>flow.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This dataset represents commuter flows (work travel) between origin
-and destination zones (see <code><a href='cents.html'>cents</a></code>).
+and destination zones (see <code><a href='cents.html'>cents()</a></code>).
 The data is from the UK and is available as open data:
-<a href = 'http://wicid.ukdataservice.ac.uk/'>http://wicid.ukdataservice.ac.uk/</a>.</p>
+<a href='http://wicid.ukdataservice.ac.uk/'>http://wicid.ukdataservice.ac.uk/</a>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>data</span>(<span class='no'>flow</span>)</pre>
         
@@ -97,11 +140,12 @@ The data is from the UK and is available as open data:
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The variables are as follows:</p><ul>
+    <p>The variables are as follows:</p>
+<ul>
 <li><p>Area.of.residence. id of origin zone</p></li>
 <li><p>Area.of.workplace id of destination zone</p></li>
 <li><p>All. Travel to work flows by all modes</p></li>
-<li><p>[,4:15]. Flows for different modes</p></li>
+<li><p><code>[,4:15]</code>. Flows for different modes</p></li>
 <li><p>id. unique id of flow</p></li>
 </ul><p>Although these variable names are unique to UK data, the data
 structure is generalisable and typical of flow data from any source.
@@ -110,29 +154,32 @@ the <code>cents</code> georeferenced spatial objects.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-  <span class='co'># This is how the dataset was constructed - see</span>
-  <span class='co'># https://github.com/npct/pct - if download to ~/repos</span>
-  <span class='no'>flow</span> <span class='kw'>&lt;-</span> <span class='fu'>readRDS</span>(<span class='st'>"~/repos/pct/pct-data/national/flow.Rds"</span>)
-  <span class='fu'>data</span>(<span class='no'>cents</span>)
-  <span class='no'>o</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>$<span class='no'>Area.of.residence</span> <span class='kw'>%in%</span> <span class='no'>cents</span>$<span class='no'>geo_code</span>[-<span class='fl'>1</span>]
-  <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>$<span class='no'>Area.of.workplace</span> <span class='kw'>%in%</span> <span class='no'>cents</span>$<span class='no'>geo_code</span>[-<span class='fl'>1</span>]
-  <span class='no'>flow</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>[<span class='no'>o</span> <span class='kw'>&amp;</span> <span class='no'>d</span>, ] <span class='co'># subset flows with o and d in study area</span>
-  <span class='fu'>library</span>(<span class='no'>devtools</span>)
-  <span class='no'>flow</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste</span>(<span class='no'>flow</span>$<span class='no'>Area.of.residence</span>, <span class='no'>flow</span>$<span class='no'>Area.of.workplace</span>)
-  <span class='fu'>use_data</span>(<span class='no'>flow</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># This is how the dataset was constructed - see</span>
+<span class='co'># https://github.com/npct/pct - if download to ~/repos</span>
+<span class='no'>flow</span> <span class='kw'>&lt;-</span> <span class='fu'>readRDS</span>(<span class='st'>"~/repos/pct/pct-data/national/flow.Rds"</span>)
+<span class='fu'>data</span>(<span class='no'>cents</span>)
+<span class='no'>o</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>$<span class='no'>Area.of.residence</span> <span class='kw'>%in%</span> <span class='no'>cents</span>$<span class='no'>geo_code</span>[-<span class='fl'>1</span>]
+<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>$<span class='no'>Area.of.workplace</span> <span class='kw'>%in%</span> <span class='no'>cents</span>$<span class='no'>geo_code</span>[-<span class='fl'>1</span>]
+<span class='no'>flow</span> <span class='kw'>&lt;-</span> <span class='no'>flow</span>[<span class='no'>o</span> <span class='kw'>&amp;</span> <span class='no'>d</span>, ] <span class='co'># subset flows with o and d in study area</span>
+<span class='fu'>library</span>(<span class='no'>devtools</span>)
+<span class='no'>flow</span>$<span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>paste</span>(<span class='no'>flow</span>$<span class='no'>Area.of.residence</span>, <span class='no'>flow</span>$<span class='no'>Area.of.workplace</span>)
+<span class='fu'><a href='http://www.rdocumentation.org/packages/devtools/topics/use_data'>use_data</a></span>(<span class='no'>flow</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-  <span class='co'># Convert flows to SpatialLinesDataFrame</span>
-  <span class='no'>flowlines</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='od2line.html'>od2line</a></span>(<span class='kw'>flow</span> <span class='kw'>=</span> <span class='no'>flow</span>, <span class='kw'>zones</span> <span class='kw'>=</span> <span class='no'>cents</span>)
-  <span class='co'># use_data(flowlines, overwrite = TRUE)</span>
+<span class='co'># Convert flows to spatial lines dataset</span>
+<span class='no'>flowlines</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='od2line.html'>od2line</a></span>(<span class='kw'>flow</span> <span class='kw'>=</span> <span class='no'>flow</span>, <span class='kw'>zones</span> <span class='kw'>=</span> <span class='no'>cents</span>)
+<span class='co'># use_data(flowlines, overwrite = TRUE)</span>
 
-  <span class='co'># Convert flows to routes</span>
-  <span class='no'>routes_fast</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>)
-  <span class='no'>routes_slow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>)
+<span class='co'># Convert flows to routes</span>
+<span class='no'>routes_fast</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"fastest"</span>)
+<span class='no'>routes_slow</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='line2route.html'>line2route</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines</span>, <span class='kw'>plan</span> <span class='kw'>=</span> <span class='st'>"quietest"</span>)
 
-  <span class='fu'>use_data</span>(<span class='no'>routes_fast</span>)
-  <span class='fu'>use_data</span>(<span class='no'>routes_slow</span>)
-})</div></pre>
+<span class='fu'><a href='http://www.rdocumentation.org/packages/devtools/topics/use_data'>use_data</a></span>(<span class='no'>routes_fast</span>)
+<span class='fu'><a href='http://www.rdocumentation.org/packages/devtools/topics/use_data'>use_data</a></span>(<span class='no'>routes_slow</span>)
+<span class='no'>routes_fast_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>routes_fast</span>)
+<span class='no'>routes_slow_sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sf/topics/st_as_sf'>st_as_sf</a></span>(<span class='no'>routes_slow</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -154,11 +201,14 @@ the <code>cents</code> georeferenced spatial objects.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

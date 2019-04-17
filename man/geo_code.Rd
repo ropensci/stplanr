@@ -16,7 +16,7 @@ geo_code(address, service = "nominatim",
 \item{base_url}{The base url to query}
 
 \item{return_all}{Should the request return all information returned by Google Maps?
-The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order}
+The default is \code{FALSE}: to return only two numbers: the longitude and latitude, in that order}
 
 \item{pat}{The API key used. By default this is set to NULL and
 this is usually aquired automatically through a helper, api_pat().}
@@ -33,3 +33,8 @@ geo_code("hereford", return_all = TRUE)
 geo_code("hereford", service = "google", pat = Sys.getenv("GOOGLE"), return_all = TRUE)
 }
 }
+\seealso{
+Other nodes: \code{\link{locate2spdf}},
+  \code{\link{nearest_google}}, \code{\link{nearest_osm}}
+}
+\concept{nodes}

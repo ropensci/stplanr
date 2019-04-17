@@ -6,21 +6,16 @@
 \alias{zones_sf}
 \title{Spatial polygons of home locations for flow analysis.}
 \description{
-These correspond to the \code{\link{cents}} data.
+These correspond to the \code{\link[=cents]{cents()}} data.
 }
 \details{
 \itemize{
-  \item geo_code. the official code of the zone
+\item geo_code. the official code of the zone
 }
 }
 \examples{
-\dontrun{
-zones <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/msoas.geojson", layer = "OGRGeoJSON")
-proj4string(zones) <- proj4string(cents)
-zones <- zones[cents,]
-plot(zones)
-points(cents)
-zones_sf = sf::st_as_sf(zones)
-}
+zones
+zones_sf
+plot(zones_sf)
 }
 \keyword{datasets}

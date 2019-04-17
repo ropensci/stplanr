@@ -34,12 +34,24 @@ only provides routing for cars by default. For details, see
 }
 \examples{
 \dontrun{
-from = c(-1.55, 53.80) # geo_code("leeds")
-to = c(-1.76, 53.80) # geo_code("bradford uk")
-r = route_osrm(from, to)
+from <- c(-1.55, 53.80) # geo_code("leeds")
+to <- c(-1.76, 53.80) # geo_code("bradford uk")
+r <- route_osrm(from, to)
 plot(r)
-r_many <- line2route(flowlines_sf[2:9,], route_osrm)
+r_many <- line2route(flowlines_sf[2:9, ], route_osrm, time_delay = 1)
 plot(cents)
-plot(r_many, add = TRUE)
+plot(r_many$geometry)
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute2sldf}},
+  \code{\link{viaroute}}
+}
+\concept{routes}

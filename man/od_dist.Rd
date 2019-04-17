@@ -9,18 +9,17 @@ od_dist(flow, zones)
 \arguments{
 \item{flow}{A data frame representing the flow between two points
 or zones. The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link{cents}},
+to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
-of \code{\link{flow}}.}
+of \code{\link[=flow]{flow()}}.}
 
-\item{zones}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
-representing origins (and destinations if no separate destinations object is provided)
-of travel flows.}
+\item{zones}{A spatial object representing origins (and destinations
+if no separate destinations object is provided) of travel.}
 }
 \description{
 It is common to want to know the Euclidean distance between origins and destinations
 in OD data. You can calculate this by first converting OD data to SpatialLines data,
-e.g. with \code{\link{od2line}}. However this can be slow and overkill if you just
+e.g. with \code{\link[=od2line]{od2line()}}. However this can be slow and overkill if you just
 want to know the distance. This function is a few orders of magnitude faster.
 }
 \details{
@@ -32,3 +31,11 @@ data(flow)
 data(cents)
 od_dist(flow, cents)
 }
+\seealso{
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+}
+\concept{od}

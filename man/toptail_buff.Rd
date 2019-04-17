@@ -20,10 +20,23 @@ by the nearest polygon border.
 \examples{
 r_toptail <- toptail_buff(routes_fast, zones)
 sel <- row.names(routes_fast) \%in\% row.names(r_toptail)
-rf_cross_poly <- routes_fast[sel,]
+rf_cross_poly <- routes_fast[sel, ]
 plot(zones)
 plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
 # note adjacent lines removed
 plot(rf_cross_poly, add = TRUE, lwd = 2)
 plot(r_toptail, col = "red", add = TRUE)
 }
+\seealso{
+Other lines: \code{\link{angle_diff}},
+  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
+  \code{\link{line2df}}, \code{\link{line_bearing}},
+  \code{\link{line_match}}, \code{\link{line_midpoint}},
+  \code{\link{line_sample}}, \code{\link{line_segment}},
+  \code{\link{line_via}}, \code{\link{mats2line}},
+  \code{\link{n_sample_length}}, \code{\link{n_vertices}},
+  \code{\link{onewaygeo}}, \code{\link{onewayid}},
+  \code{\link{points2line}}, \code{\link{toptailgs}},
+  \code{\link{update_line_geometry}}
+}
+\concept{lines}

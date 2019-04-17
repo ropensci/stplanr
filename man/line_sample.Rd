@@ -17,12 +17,25 @@ line_sample(l, n, weights)
 Sample n points along lines with density proportional to a weight
 }
 \examples{
-l = flowlines[2:5,]
-n = 100
-l_lengths = line_length(l)
-weights = l$All
-p = line_sample(l, 50, weights)
+l <- flowlines[2:5, ]
+n <- 100
+l_lengths <- line_length(l)
+weights <- l$All
+p <- line_sample(l, 50, weights)
 plot(p)
-p = line_sample(l, 50, weights = 1:length(l))
+p <- line_sample(l, 50, weights = 1:length(l))
 plot(p)
 }
+\seealso{
+Other lines: \code{\link{angle_diff}},
+  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
+  \code{\link{line2df}}, \code{\link{line_bearing}},
+  \code{\link{line_match}}, \code{\link{line_midpoint}},
+  \code{\link{line_segment}}, \code{\link{line_via}},
+  \code{\link{mats2line}}, \code{\link{n_sample_length}},
+  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
+  \code{\link{onewayid}}, \code{\link{points2line}},
+  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{update_line_geometry}}
+}
+\concept{lines}

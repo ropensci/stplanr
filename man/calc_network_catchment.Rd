@@ -70,22 +70,37 @@ distributed throughout the zone. Returns a SpatialPolygonsDataFrame.
 \examples{
 \dontrun{
 data_dir <- system.file("extdata", package = "stplanr")
-unzip(file.path(data_dir, 'smallsa1.zip'), exdir=tempdir())
-unzip(file.path(data_dir, 'testcycleway.zip'), exdir=tempdir())
-unzip(file.path(data_dir, 'sydroads.zip'), exdir=tempdir())
-sa1income <- readOGR(tempdir(),"smallsa1")
-testcycleway <- readOGR(tempdir(),"testcycleway")
-sydroads <- readOGR(tempdir(),"roads")
+unzip(file.path(data_dir, "smallsa1.zip"), exdir = tempdir())
+unzip(file.path(data_dir, "testcycleway.zip"), exdir = tempdir())
+unzip(file.path(data_dir, "sydroads.zip"), exdir = tempdir())
+sa1income <- readOGR(tempdir(), "smallsa1")
+testcycleway <- readOGR(tempdir(), "testcycleway")
+sydroads <- readOGR(tempdir(), "roads")
 sydnetwork <- SpatialLinesNetwork(sydroads)
 calc_network_catchment(
-   sln = sydnetwork,
-   polygonlayer = sa1income,
-   targetlayer = testcycleway,
-   calccols = c('Total'),
-   maximpedance = 800,
-   distance = 200,
-   projection = 'austalbers',
-   dissolve = TRUE
+  sln = sydnetwork,
+  polygonlayer = sa1income,
+  targetlayer = testcycleway,
+  calccols = c("Total"),
+  maximpedance = 800,
+  distance = 200,
+  projection = "austalbers",
+  dissolve = TRUE
 )
 }
 }
+\seealso{
+Other rnet: \code{\link{SpatialLinesNetwork}},
+  \code{\link{calc_catchment_sum}},
+  \code{\link{calc_catchment}},
+  \code{\link{calc_moving_catchment}},
+  \code{\link{find_network_nodes}}, \code{\link{gsection}},
+  \code{\link{islines}}, \code{\link{lineLabels}},
+  \code{\link{overline2}}, \code{\link{overline}},
+  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
+  \code{\link{plot,sfNetwork,ANY-method}},
+  \code{\link{sln2points}},
+  \code{\link{sum_network_links}},
+  \code{\link{sum_network_routes}}
+}
+\concept{rnet}

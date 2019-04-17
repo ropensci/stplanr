@@ -1,24 +1,22 @@
-* This is a minor update with a few bug fixes and new features.
-
 ## Test environments
 
 * Linux
-  - Local
-  - Travis: https://travis-ci.org/ropensci/stplanr/builds/252840164?utm_source=github_status&utm_medium=notification
-
-* MacOS
-  - elcapitan on rhub: https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-bc643a88aeeb4be18dc13a1097a1ef38
-
-* Windows
-  - rhub release (warning due to pandoc): https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-9a4bc29713d44514b6589b043ff5b15d
-  - rhub devel (fail due to dependency issues): https://builder.r-hub.io/status/stplanr_0.2.1.tar.gz-3655ad52ae97420bba8ad925eff71778
+  - Local (Ubuntu 18.04) with dev versions
+  - Travis: https://travis-ci.org/ropensci/stplanr
   
-    
+* MacOS
+  - elcapitan on rhub: https://builder.r-hub.io/status/stplanr_0.2.7.tar.gz-e014aa2b38e545ba97c5cafb5e030106
+
+* Windows - win-builder: https://win-builder.r-project.org/cidUL4Z01KCo
+  - one note (submitter) 
+  
 ## R CMD check:
 
-OK - but a note about package reviewer:
-
-```
-Authors@R field gives persons with non-standard roles:
-  Scott  Chamberlin [rev] (Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10): rev
-```
+NOTE
+Versioned 'LinkingTo' values for
+  ‘RcppArmadillo’ ‘Rcpp’
+  
+WARNING
+checking compilation flags used ... WARNING
+Compilation used the following non-portable flag(s):
+  ‘-Wdate-time’ ‘-Werror=format-security’ ‘-Wformat’

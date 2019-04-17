@@ -12,4 +12,10 @@ data(routes_fast)
 \description{
 spatial lines dataset of commuter flows on the travel network
 }
+\concept{example travel data
+
+Simulated travel route allocated to the transport network
+representing the 'fastest' between [cents()]
+objects
+with [od2line()] (see [flow()]).}
 \keyword{datasets}

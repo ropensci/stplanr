@@ -1,0 +1,8 @@
+pandoc: 2.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+template:
+  package: rotemplate
+articles:
+  stplanr-paper: stplanr-paper.html
+

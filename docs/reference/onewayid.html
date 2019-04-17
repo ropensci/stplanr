@@ -18,11 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="Aggregate ods so they become non-directional — onewayid" />
+
+<meta property="og:description" content="For example, sum total travel in both directions." />
+<meta name="twitter:card" content="summary" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +59,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +104,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,27 +112,32 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Aggregate ods so they become non-directional</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/oneway.R'><code>R/oneway.R</code></a></small>
+    <div class="hidden name"><code>onewayid.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>For example, sum total travel in both directions.</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>onewayid</span>(<span class='no'>x</span>, <span class='no'>attrib</span>, <span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>1</span>], <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>])
+    <pre class="usage"><span class='fu'>onewayid</span>(<span class='no'>x</span>, <span class='no'>attrib</span>, <span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>1</span>], <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>],
+  <span class='kw'>stplanr.key</span> <span class='kw'>=</span> <span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>x</span>, <span class='no'>id1</span>, <span class='no'>id2</span>))
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>onewayid</span>(<span class='no'>x</span>, <span class='no'>attrib</span>, <span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>1</span>],
-  <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>])
+  <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>], <span class='kw'>stplanr.key</span> <span class='kw'>=</span> <span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>x</span>, <span class='no'>id1</span>, <span class='no'>id2</span>))
 
 <span class='co'># S3 method for SpatialLines</span>
 <span class='fu'>onewayid</span>(<span class='no'>x</span>, <span class='no'>attrib</span>, <span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>1</span>],
-  <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>])</pre>
+  <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'>names</span>(<span class='no'>x</span>)[<span class='fl'>2</span>], <span class='kw'>stplanr.key</span> <span class='kw'>=</span> <span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>x</span>, <span class='no'>id1</span>, <span class='no'>id2</span>))</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -121,6 +162,11 @@ the unique id of the origin</p></td>
 text string referring to the name of the variable containing
 the unique id of the destination</p></td>
     </tr>
+    <tr>
+      <th>stplanr.key</th>
+      <td><p>A key of unique OD pairs regardless of the order,
+autogenerated by <code><a href='od_id_order.html'>od_id_order()</a></code></p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -137,30 +183,30 @@ If only the largest flow in either direction is captured in an analysis, for
 example, the true extent of travel will by heavily under-estimated for
 OD pairs which have similar amounts of travel in both directions.
 Flows in both direction are often represented by overlapping lines with
-identical geometries (see <code><a href='flowlines.html'>flowlines</a></code>) which can be confusing
+identical geometries (see <code><a href='flowlines.html'>flowlines()</a></code>) which can be confusing
 for users and are difficult to plot.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>flow</span>)
-<span class='no'>flow_oneway</span> <span class='kw'>=</span> <span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='no'>flow_oneway</span> <span class='kw'>&lt;-</span> <span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 <span class='fu'>nrow</span>(<span class='no'>flow_oneway</span>) <span class='kw'>&lt;</span> <span class='fu'>nrow</span>(<span class='no'>flow</span>) <span class='co'># result has fewer rows</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>sum</span>(<span class='no'>flow</span>$<span class='no'>All</span>) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='no'>flow_oneway</span>$<span class='no'>All</span>) <span class='co'># but the same total flow</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># using names instead of index for attribute</span>
 <span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"All"</span>)</div><div class='output co'>#&gt; # A tibble: 28 x 4
 #&gt;    Area.of.residence Area.of.workplace   All is_two_way
-#&gt;                &lt;chr&gt;             &lt;chr&gt; &lt;int&gt;      &lt;lgl&gt;
-#&gt;  1         E02002361         E02002361   109      FALSE
-#&gt;  2         E02002361         E02002363    68       TRUE
-#&gt;  3         E02002361         E02002367    15       TRUE
-#&gt;  4         E02002361         E02002371    64       TRUE
-#&gt;  5         E02002361         E02002377    55       TRUE
-#&gt;  6         E02002361         E02002382    15       TRUE
-#&gt;  7         E02002361         E02002393   108       TRUE
-#&gt;  8         E02002363         E02002363   183      FALSE
-#&gt;  9         E02002363         E02002367    95       TRUE
-#&gt; 10         E02002363         E02002371   182       TRUE
+#&gt;    &lt;chr&gt;             &lt;chr&gt;             &lt;int&gt; &lt;lgl&gt;     
+#&gt;  1 E02002361         E02002361           109 FALSE     
+#&gt;  2 E02002361         E02002363            68 TRUE      
+#&gt;  3 E02002361         E02002367            15 TRUE      
+#&gt;  4 E02002361         E02002371            64 TRUE      
+#&gt;  5 E02002361         E02002377            55 TRUE      
+#&gt;  6 E02002361         E02002382            15 TRUE      
+#&gt;  7 E02002361         E02002393           108 TRUE      
+#&gt;  8 E02002363         E02002363           183 FALSE     
+#&gt;  9 E02002363         E02002367            95 TRUE      
+#&gt; 10 E02002363         E02002371           182 TRUE      
 #&gt; # ... with 18 more rows</div><div class='input'><span class='co'># using many attributes to aggregate</span>
-<span class='no'>attrib</span> <span class='kw'>=</span> <span class='fu'>which</span>(<span class='fu'>vapply</span>(<span class='no'>flow</span>, <span class='no'>is.numeric</span>, <span class='fl'>TRUE</span>))
-<span class='no'>flow_oneway</span> <span class='kw'>=</span> <span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='no'>attrib</span>)
+<span class='no'>attrib</span> <span class='kw'>&lt;-</span> <span class='fu'>which</span>(<span class='fu'>vapply</span>(<span class='no'>flow</span>, <span class='no'>is.numeric</span>, <span class='fl'>TRUE</span>))
+<span class='no'>flow_oneway</span> <span class='kw'>&lt;-</span> <span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='no'>attrib</span>)
 <span class='fu'>colSums</span>(<span class='no'>flow_oneway</span>[<span class='no'>attrib</span>]) <span class='kw'>==</span> <span class='fu'>colSums</span>(<span class='no'>flow</span>[<span class='no'>attrib</span>]) <span class='co'># test if the colSums are equal</span></div><div class='output co'>#&gt;                                  All          Work.mainly.at.or.from.home 
 #&gt;                                 TRUE                                 TRUE 
 #&gt; Underground..metro..light.rail..tram                                Train 
@@ -173,37 +219,43 @@ for users and are difficult to plot.</p>
 #&gt;                                 TRUE                                 TRUE 
 #&gt;                              On.foot       Other.method.of.travel.to.work 
 #&gt;                                 TRUE                                 TRUE </div><div class='input'><span class='co'># Demonstrate the results from onewayid and onewaygeo are identical</span>
-<span class='no'>flow_oneway_geo</span> <span class='kw'>=</span> <span class='fu'><a href='onewaygeo.html'>onewaygeo</a></span>(<span class='no'>flowlines</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='no'>attrib</span>)
-<span class='fu'>plot</span>(<span class='no'>flow_oneway</span>$<span class='no'>All</span>, <span class='no'>flow_oneway_geo</span>$<span class='no'>All</span>)</div><img src='onewayid-10.png' alt='' width='540' height='400' /><div class='input'><span class='co'># With spaces in id names</span>
-<span class='fu'>names</span>(<span class='no'>flow</span>)[<span class='fl'>1</span>] <span class='kw'>=</span> <span class='st'>"Area of residence"</span>
-<span class='fu'>onewayid</span>(<span class='no'>flow</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; # A tibble: 28 x 4
-#&gt;    `Area of residence` Area.of.workplace   All is_two_way
-#&gt;                  &lt;chr&gt;             &lt;chr&gt; &lt;int&gt;      &lt;lgl&gt;
-#&gt;  1           E02002361         E02002361   109      FALSE
-#&gt;  2           E02002361         E02002363    68       TRUE
-#&gt;  3           E02002361         E02002367    15       TRUE
-#&gt;  4           E02002361         E02002371    64       TRUE
-#&gt;  5           E02002361         E02002377    55       TRUE
-#&gt;  6           E02002361         E02002382    15       TRUE
-#&gt;  7           E02002361         E02002393   108       TRUE
-#&gt;  8           E02002363         E02002363   183      FALSE
-#&gt;  9           E02002363         E02002367    95       TRUE
-#&gt; 10           E02002363         E02002371   182       TRUE
-#&gt; # ... with 18 more rows</div><div class='input'><span class='co'># with spatial data</span>
+<span class='no'>flow_oneway_geo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='onewaygeo.html'>onewaygeo</a></span>(<span class='no'>flowlines</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='no'>attrib</span>)
+<span class='fu'>plot</span>(<span class='no'>flow_oneway</span>$<span class='no'>All</span>, <span class='no'>flow_oneway_geo</span>$<span class='no'>All</span>)</div><div class='img'><img src='onewayid-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>onewayid</span>(<span class='no'>flowlines_sf</span>, <span class='st'>"all"</span>)</div><div class='output co'>#&gt; Simple feature collection with 28 features and 3 fields
+#&gt; Active geometry column: geometry (with 7 geometries empty)
+#&gt; geometry type:  GEOMETRY
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: -1.550807 ymin: 53.8041 xmax: -1.511861 ymax: 53.82887
+#&gt; epsg (SRID):    4326
+#&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#&gt; # A tibble: 28 x 6
+#&gt;    Area.of.residen… Area.of.workpla…                  geometry
+#&gt;    &lt;chr&gt;            &lt;chr&gt;                       &lt;GEOMETRY [°]&gt;
+#&gt;  1 E02002361        E02002361         GEOMETRYCOLLECTION EMPTY
+#&gt;  2 E02002361        E02002363        LINESTRING (-1.516734 53…
+#&gt;  3 E02002361        E02002367        LINESTRING (-1.516734 53…
+#&gt;  4 E02002361        E02002371        LINESTRING (-1.516734 53…
+#&gt;  5 E02002361        E02002377        LINESTRING (-1.516734 53…
+#&gt;  6 E02002361        E02002382        LINESTRING (-1.516734 53…
+#&gt;  7 E02002361        E02002393        LINESTRING (-1.516734 53…
+#&gt;  8 E02002363        E02002363         GEOMETRYCOLLECTION EMPTY
+#&gt;  9 E02002363        E02002367        LINESTRING (-1.535617 53…
+#&gt; 10 E02002363        E02002371        LINESTRING (-1.535617 53…
+#&gt; # ... with 18 more rows, and 3 more variables: geometry1 &lt;GEOMETRY [°]&gt;,
+#&gt; #   is_two_way &lt;lgl&gt;, geometry2 &lt;GEOMETRY [°]&gt;</div><div class='input'><span class='co'># with spatial data</span>
 <span class='fu'>data</span>(<span class='no'>flowlines</span>)
 <span class='no'>fo</span> <span class='kw'>&lt;-</span> <span class='fu'>onewayid</span>(<span class='no'>flowlines</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"All"</span>)
-<span class='fu'>head</span>(<span class='no'>fo</span>@<span class='kw'>data</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 4
-#&gt;   Area.of.residence Area.of.workplace   All is_two_way
-#&gt;               &lt;chr&gt;             &lt;chr&gt; &lt;int&gt;      &lt;lgl&gt;
-#&gt; 1         E02002361         E02002361   109      FALSE
-#&gt; 2         E02002361         E02002363    68       TRUE
-#&gt; 3         E02002361         E02002367    15       TRUE
-#&gt; 4         E02002361         E02002371    64       TRUE
-#&gt; 5         E02002361         E02002377    55       TRUE
-#&gt; 6         E02002361         E02002382    15       TRUE</div><div class='input'><span class='fu'>plot</span>(<span class='no'>fo</span>)</div><div class='input'><span class='fu'>sum</span>(<span class='no'>fo</span>$<span class='no'>All</span>) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='no'>flowlines</span>$<span class='no'>All</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># test results for one line</span>
+<span class='fu'>head</span>(<span class='no'>fo</span>@<span class='kw'>data</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 5
+#&gt;   Area.of.residence Area.of.workplace   All is_two_way stplanr.key        
+#&gt;   &lt;chr&gt;             &lt;chr&gt;             &lt;int&gt; &lt;lgl&gt;      &lt;chr&gt;              
+#&gt; 1 E02002361         E02002361           109 FALSE      E02002361 E02002361
+#&gt; 2 E02002361         E02002363            68 TRUE       E02002361 E02002363
+#&gt; 3 E02002361         E02002367            15 TRUE       E02002361 E02002367
+#&gt; 4 E02002361         E02002371            64 TRUE       E02002361 E02002371
+#&gt; 5 E02002361         E02002377            55 TRUE       E02002361 E02002377
+#&gt; 6 E02002361         E02002382            15 TRUE       E02002361 E02002382</div><div class='input'><span class='fu'>plot</span>(<span class='no'>fo</span>)</div><div class='input'><span class='fu'>sum</span>(<span class='no'>fo</span>$<span class='no'>All</span>) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='no'>flowlines</span>$<span class='no'>All</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># test results for one line</span>
 <span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>3</span>
-<span class='fu'>plot</span>(<span class='no'>fo</span>[<span class='no'>n</span>,], <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='no'>f_over_n</span> <span class='kw'>&lt;-</span> <span class='kw'>rgeos</span><span class='kw'>::</span><span class='fu'>gEquals</span>(<span class='no'>fo</span>[<span class='no'>n</span>,], <span class='no'>flowlines</span>[<span class='st'>"All"</span>], <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>sum</span>(<span class='no'>flowlines</span>$<span class='no'>All</span>[<span class='no'>f_over_n</span>]) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='no'>fo</span>$<span class='no'>All</span>[<span class='no'>n</span>]) <span class='co'># check aggregation worked</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='fu'>which</span>(<span class='no'>f_over_n</span>)[<span class='fl'>1</span>],], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"white"</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='fu'>which</span>(<span class='no'>f_over_n</span>)[<span class='fl'>2</span>],], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><img src='onewayid-23.png' alt='' width='540' height='400' /></pre>
+<span class='fu'>plot</span>(<span class='no'>fo</span>[<span class='no'>n</span>, ], <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'><span class='no'>f_over_n</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rgeos</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/rgeos/topics/pred-binary-gEquals'>gEquals</a></span>(<span class='no'>fo</span>[<span class='no'>n</span>, ], <span class='no'>flowlines</span>[<span class='st'>"All"</span>], <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>sum</span>(<span class='no'>flowlines</span>$<span class='no'>All</span>[<span class='no'>f_over_n</span>]) <span class='kw'>==</span> <span class='fu'>sum</span>(<span class='no'>fo</span>$<span class='no'>All</span>[<span class='no'>n</span>]) <span class='co'># check aggregation worked</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='fu'>which</span>(<span class='no'>f_over_n</span>)[<span class='fl'>1</span>], ], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"white"</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>flowlines</span>[<span class='fu'>which</span>(<span class='no'>f_over_n</span>)[<span class='fl'>2</span>], ], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='onewayid-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -226,11 +278,14 @@ for users and are difficult to plot.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

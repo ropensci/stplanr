@@ -24,11 +24,24 @@ SpatialLinesDataFrame containing the route, route summary and instructions.
 
 \examples{
 \dontrun{
- viaroute2sldf(
-   viaroute(startlat = 52.503033,
-            startlng = 13.420526,
-            endlat = 52.516582,
-            endlng = 13.429290)
- )
+viaroute2sldf(
+  viaroute(
+    startlat = 52.503033,
+    startlng = 13.420526,
+    endlat = 52.516582,
+    endlng = 13.429290
+  )
+)
 }
 }
+\seealso{
+Other routes: \code{\link{line2routeRetry}},
+  \code{\link{line2route}}, \code{\link{nearest2spdf}},
+  \code{\link{route_cyclestreet}},
+  \code{\link{route_dodgr}},
+  \code{\link{route_graphhopper}},
+  \code{\link{route_local}}, \code{\link{route_osrm}},
+  \code{\link{route_transportapi_public}},
+  \code{\link{route}}, \code{\link{viaroute}}
+}
+\concept{routes}

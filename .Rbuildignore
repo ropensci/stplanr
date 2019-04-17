@@ -1,3 +1,4 @@
+^CRAN-RELEASE$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 README.Rmd
@@ -11,3 +12,6 @@ log-latest
 ^README\.Rmd$
 ^README-.*\.png$
 ^docs$
+^pkgdown$
+^_pkgdown.yml$
+data-raw/

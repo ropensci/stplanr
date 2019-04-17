@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • stplanr</title>
+<title>Changelog • stplanr</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,11 +18,21 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
+<meta property="og:title" content="Changelog" />
+
+
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -46,18 +56,40 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">stplanr</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">stplanr</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.5</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introducing-stplanr.html">Introducing stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -69,6 +101,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -76,29 +109,170 @@
       
       </header>
 
-      <div class="row">
-
-  <div class="col-md-9">
+<div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/ropensci/stplanr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="contents">
-    <div id="stplanr-0-1-8" class="section level1">
-<h1 class="hasAnchor">
-<a href="#stplanr-0-1-8" class="anchor"></a>stplanr 0.1.8</h1>
+    <div id="stplanr-0-2-5" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-2-5" class="anchor"></a>stplanr 0.2.5<small> 2018-06-02 </small>
+</h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
 <ul>
-<li>New argument <code>combinations</code> added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code> so it runs quicker - see <a href="https://github.com/ropensci/stplanr/pull/177">pull/177</a>.</li>
-<li>New examples added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code>, <code><a href="../reference/weightfield.html">weightfield()</a></code> and <code><a href="../reference/find_network_nodes.html">find_network_nodes()</a></code> - see e.g. <code>example(sum_network_routes)</code> for details.</li>
-<li>New dataset <code>l_poly</code> <a href="https://github.com/ropensci/stplanr/commit/7641760fbd6718352ed74142e5c339f6216afea4">added</a>.</li>
+<li>New function <code><a href="../reference/line_via.html">line_via()</a></code> for identifying intermediary points on a transport network</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Bug associated with <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> fixed (see <a href="https://github.com/ropensci/stplanr/issues/249"><a href='https://github.com/ropensci/stplanr/issues/249'>#249</a></a>)</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-2-4" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-2-4" class="anchor"></a>stplanr 0.2.4<small> 2018-05-19 </small>
+</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>New function <code><a href="../reference/geo_length.html">geo_length()</a></code> returns numeric vector of line lengths from <strong>sp</strong> or <strong>sf</strong> objects.</li>
+</ul>
+</div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>DOCUMENTATION</h2>
+<ul>
+<li>
+<code><a href="../reference/route_graphhopper.html">?route_graphhopper</a></code> no longer mentions the depreciated ‘bike2’ profile - see <a href="https://github.com/ropensci/stplanr/issues/246"><a href='https://github.com/ropensci/stplanr/issues/246'>#246</a></a>
+</li>
+<li>
+<code><a href="../reference/route_osrm.html">?route_osrm</a></code> mentions that the public API only routes for cars - see <a href="https://github.com/ropensci/stplanr/issues/246"><a href='https://github.com/ropensci/stplanr/issues/246'>#246</a></a>
+</li>
+<li>Updated <code>introducing-stplanr</code> vignette to show new function and make more robust</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-2-3" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-2-3" class="anchor"></a>stplanr 0.2.3<small> 2018-03-06 </small>
+</h1>
+<div id="new-features-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>
+<strong>stplanr</strong> now imports <strong>lwgeom</strong>, needed for <code><a href="http://www.rdocumentation.org/packages/sf/topics/geos_measures">sf::st_length()</a></code>, used in <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code>.</li>
+<li>Plotting behaviour updated for <code>sfNetwork</code> objects: now only plots the geometry by default.</li>
+<li>Improved documentation for <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> and <code>plot()</code> for spatial networks.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Bug in <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code> fixed (see <a href="https://github.com/ropensci/stplanr/issues/240"><a href='https://github.com/ropensci/stplanr/issues/240'>#240</a></a>).</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-2-2" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-2-2" class="anchor"></a>stplanr 0.2.2<small> 2017-12-19 </small>
+</h1>
+<div id="new-features-3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-3" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>In this release <strong>sp</strong> is demoted from a Depends to an Imports, meaning that all its functions will not be attached to your namespace (it will not be loaded) when you run <code>library(stplanr)</code>, making it less tied to <strong>sp</strong>. This is a continuation of the work to support <strong>sf</strong> and will make it easier for the package to work with alternative representations of geographic data.</li>
+</ul>
+</div>
+<div id="bug-fixes-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Bug in <code>geo_select_aeq.sf()</code> was fixed by Jakub Nowosad in pull <a href="https://github.com/ropensci/stplanr/pull/238"><a href='https://github.com/ropensci/stplanr/issues/238'>#238</a></a>
+</li>
+<li>An issue with <code>od_aggregate.sf()</code> was fixed making it much faster</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-2-0" class="anchor"></a>stplanr 0.2.0<small> Unreleased </small>
+</h1>
+<div id="new-features-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-4" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>This is the largest release since the package was created, with dozens of changes to support simple features - see <a href="https://github.com/ropensci/stplanr/pull/198" class="uri">https://github.com/ropensci/stplanr/pull/198</a> for details.</li>
+<li>Support for <strong>sf</strong>. The package now support the new spatial class system for most functions.</li>
+<li>New function <code><a href="../reference/geo_bb.html">geo_bb()</a></code> supercedes <code><a href="../reference/geo_bb.html">bb2poly()</a></code>. The new function can return polygons, points and matrix objects determined by the <code>output</code> argument. It also allows bounding boxes to be extended in metres, and scaled in x and y dimensions.</li>
+<li>
+<code><a href="../reference/geo_code.html">geo_code()</a></code> now uses nominatim by default to find locations on the maps.</li>
+<li>New function <code><a href="../reference/od_coords.html">od_coords()</a></code> takes a wide range of input data types to return a consistent output representing OD data as a data frame of origin and destination coordinates. This is used behind the scenes to make other functions more modular.</li>
+</ul>
+</div>
+<div id="work-in-progress" class="section level2">
+<h2 class="hasAnchor">
+<a href="#work-in-progress" class="anchor"></a>WORK IN PROGRESS</h2>
+<p>Plans for the next release</p>
+<ul>
+<li>New generic <code><a href="../reference/route.html">route()</a></code> function for routing. This is more flexible and user-friendly than the existing <code><a href="../reference/line2route.html">line2route()</a></code> and <code>route_*()</code> functions it enhances.</li>
+<li>Updated function names to make using <strong>stplanr</strong> easier and more intuitive.</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-1-9" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-1-9" class="anchor"></a>stplanr 0.1.9<small> 2017-07-12 </small>
+</h1>
+<div id="new-features-5" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-5" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>Dependency cull: we have removed dependencies on foreach and doParallel</li>
+<li>
+<code><a href="../reference/route_cyclestreet.html">route_cyclestreet()</a></code> now also called (correctly) <code><a href="../reference/route_cyclestreet.html">route_cyclestreets()</a></code>
+</li>
+<li>New <code><a href="../reference/geo_code.html">geo_code()</a></code> function replaces dependency on RGoogleMaps</li>
+</ul>
+</div>
+<div id="bug-fixes-3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>See issues closed after the last release with this search term: <a href="https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&amp;q=is%3Aissue%20closed%3A%3E2017-06-01%20">https://github.com/ropensci/stplanr/issues?utf8=%E2%9C%93&amp;q=is%3Aissue%20closed%3A%3E2017-06-01%20</a>
+</li>
+<li>Bug with <code>google_dist()</code> fixed</li>
+<li>Fixed fails due to breaking changes in dplyr</li>
+</ul>
+</div>
+</div>
+    <div id="stplanr-0-1-8" class="section level1">
+<h1 class="page-header">
+<a href="#stplanr-0-1-8" class="anchor"></a>stplanr 0.1.8<small> 2017-06-02 </small>
+</h1>
+<div id="new-features-6" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-6" class="anchor"></a>NEW FEATURES</h2>
+<ul>
+<li>New argument <code>combinations</code> added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code> so it runs quicker - see <a href="https://github.com/ropensci/stplanr/pull/177">pull/177</a>.</li>
+<li>New examples added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code>, <code><a href="../reference/weightfield.html">weightfield()</a></code> and <code><a href="../reference/find_network_nodes.html">find_network_nodes()</a></code> - see e.g. <code>example(sum_network_routes)</code> for details.</li>
+<li>New dataset <code>l_poly</code> <a href="https://github.com/ropensci/stplanr/commit/7641760fbd6718352ed74142e5c339f6216afea4">added</a>.</li>
+<li>
+<strong>stplanr</strong> now has a website! See <a href="https://ropensci.github.io/stplanr/">ropensci.github.io/stplanr/</a>.</li>
+</ul>
+</div>
+<div id="bug-fixes-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-4" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Serious bug with <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code> <a href="https://github.com/ropensci/stplanr/pull/186">fixed</a>.</li>
 <li>Depreciated <code>_each()</code> <strong>dplyr</strong> functions replaced with equivalent <code>_at</code> or <code>_all</code> functions. See <a href="https://blog.rstudio.org/2016/06/27/dplyr-0-5-0/">here</a> for more.</li>
@@ -106,18 +280,19 @@
 </div>
 </div>
     <div id="stplanr-0-1-7" class="section level1">
-<h1 class="hasAnchor">
-<a href="#stplanr-0-1-7" class="anchor"></a>stplanr 0.1.7</h1>
-<div id="new-features-1" class="section level2">
+<h1 class="page-header">
+<a href="#stplanr-0-1-7" class="anchor"></a>stplanr 0.1.7<small> 2016-12-23 </small>
+</h1>
+<div id="new-features-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-7" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>There is a new vignette! See <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd">vignettes/stplanr-paper.Rmd</a> and <code><a href="../articles/stplanr-paper.html">vignette("stplanr-paper")</a></code> for details.</li>
 <li>The original <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/introducing-stplanr.Rmd"><code>introducing-stplanr</code></a> vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.</li>
 <li>
-<code><a href="../reference/line2route.html">line2route()</a></code> has been refactored to improve error detection and allow <code>n_processes</code> arguments. Thanks @nikolai-b. See <a href="https://github.com/ropensci/stplanr/pull/151">pull/151</a> for details.</li>
+<code><a href="../reference/line2route.html">line2route()</a></code> has been refactored to improve error detection and allow <code>n_processes</code> arguments. Thanks <a href='http://github.com/nikolai'>@nikolai</a>-b. See <a href="https://github.com/ropensci/stplanr/pull/151">pull/151</a> for details.</li>
 <li>
-<code><a href="../reference/line_match.html">line_match()</a></code> function added, a wrapper around <code>rgeos::gDistance()</code>, to find similar routes.</li>
+<code><a href="../reference/line_match.html">line_match()</a></code> function added, a wrapper around <code><a href="http://www.rdocumentation.org/packages/rgeos/topics/misc-gDistance">rgeos::gDistance()</a></code>, to find similar routes.</li>
 <li>
 <strong>RCurl</strong> and <strong>data.table</strong> dependencies have been <a href="https://github.com/ropensci/stplanr/pull/169">removed</a>
 </li>
@@ -126,14 +301,14 @@
 <li>New functions <code><a href="../reference/od_aggregate.html">od_aggregate()</a></code> and <code><a href="../reference/sp_aggregate.html">sp_aggregate()</a></code> have been <a href="https://github.com/ropensci/stplanr/pull/165">added</a>, to enable OD data to be aggregated to new geographic levels.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-5" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>
-<code>#141</code> fixed: <code><a href="../reference/viaroute.html">viaroute()</a></code> works again.</li>
+<code><a href='https://github.com/ropensci/stplanr/issues/141'>#141</a></code> fixed: <code><a href="../reference/viaroute.html">viaroute()</a></code> works again.</li>
 <li>
-<a href="https://github.com/ropensci/stplanr/issues/153">#153</a> fixed: <code>bidirectional = TRUE</code> returns a different result in <code><a href="../reference/line_bearing.html">line_bearing()</a></code> now.</li>
+<a href="https://github.com/ropensci/stplanr/issues/153"><a href='https://github.com/ropensci/stplanr/issues/153'>#153</a></a> fixed: <code>bidirectional = TRUE</code> returns a different result in <code><a href="../reference/line_bearing.html">line_bearing()</a></code> now.</li>
 </ul>
 </div>
 <div id="future-plans" class="section level2">
@@ -145,11 +320,12 @@
 </div>
 </div>
     <div id="stplanr-0-1-6" class="section level1">
-<h1 class="hasAnchor">
-<a href="#stplanr-0-1-6" class="anchor"></a>stplanr 0.1.6</h1>
-<div id="new-features-2" class="section level2">
+<h1 class="page-header">
+<a href="#stplanr-0-1-6" class="anchor"></a>stplanr 0.1.6<small> 2016-11-11 </small>
+</h1>
+<div id="new-features-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-8" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
 <code><a href="../reference/onewayid.html">onewayid()</a></code> is now a generic function, meaning it can handle spatial and non-spatial data</li>
@@ -157,14 +333,14 @@
 <li>New function <code><a href="../reference/od_id_order.html">od_id_order()</a></code> to put origin-destination ids in order, to identify 2 way duplicates (split out from <code><a href="../reference/onewayid.html">onewayid()</a></code>)</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-6" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>See the <a href="https://github.com/ropensci/stplanr/issues?q=is%3Aissue+is%3Aclosed">issue tracker</a>
 </li>
 <li>Bug in <code><a href="../reference/route_cyclestreet.html">route_cyclestreet()</a></code> leading <code>change_elev</code> and <code>av_incline</code> being wrong now fixed</li>
-<li>Bug making variable names with spaces in the id columns failed - now fixed <a href="https://github.com/ropensci/stplanr/issues/138">#138</a>
+<li>Bug making variable names with spaces in the id columns failed - now fixed <a href="https://github.com/ropensci/stplanr/issues/138"><a href='https://github.com/ropensci/stplanr/issues/138'>#138</a></a>
 </li>
 </ul>
 </div>
@@ -180,7 +356,7 @@
 </ul>
 <p>BUG FIXES</p>
 <ul>
-<li>Bug with <code><a href="../reference/line2route.html">line2route()</a></code> (#124) fixed</li>
+<li>Bug with <code><a href="../reference/line2route.html">line2route()</a></code> (<a href='https://github.com/ropensci/stplanr/issues/124'>#124</a>) fixed</li>
 <li>Various improvements to documentation</li>
 </ul>
 </div>
@@ -190,7 +366,7 @@
 <p>NEW FEATURES</p>
 <ul>
 <li><p>New function <code><a href="../reference/reproject.html">reproject()</a></code> is a simple wrapper around <code>spTransform()</code> that uses <code><a href="../reference/crs_select_aeq.html">crs_select_aeq()</a></code> to convert a spatial object in geographic (lat/lon) coordinates into on with projected coordinates, with units of 1 m. This is useful for various spatial operations, such as finding the length and area of an object.</p></li>
-<li><p>Implement <code><a href="../reference/gprojected.html">gprojected()</a></code>, a function for performing GIS operations on a temporary, projected, version of spatial objects.</p></li>
+<li><p>Implement <code><a href="../reference/geo_projected.html">gprojected()</a></code>, a function for performing GIS operations on a temporary, projected, version of spatial objects.</p></li>
 <li><p>Addition of <code><a href="../reference/line_bearing.html">line_bearing()</a></code> to return the bearing of lines based on start and end points.</p></li>
 <li><p>Addition of <code><a href="../reference/angle_diff.html">angle_diff()</a></code> for finding the angular difference between lines: are they roughly parallel or perpendicular?</p></li>
 </ul>
@@ -210,7 +386,7 @@
 <li><p>Faster implementation of <code><a href="../reference/od2line.html">od2line()</a></code>: <code><a href="../reference/od2line.html">od2line2()</a></code>. Plan is to replace the original if no issues are found with new implementation.</p></li>
 <li><p>New function <code><a href="../reference/od2odf.html">od2odf()</a></code> which converts OD data into a dataframe of origins and destinations (feeds <code><a href="../reference/od2line.html">od2line2()</a></code> but also useful as self-standing function).</p></li>
 <li><p>New argument <code>new_proj</code> in <code><a href="../reference/buff_geo.html">buff_geo()</a></code> allows the results to be exported to any coordinate reference system (CRS).</p></li>
-<li><p>New function <code><a href="../reference/gprojected.html">gprojected()</a></code> generalises concept of <code><a href="../reference/buff_geo.html">buff_geo()</a></code>, building on <code><a href="../reference/crs_select_aeq.html">crs_select_aeq()</a></code> to allow any GIS query to be conducted on a temporary projected version of spatial objects with geographical CRSs.</p></li>
+<li><p>New function <code><a href="../reference/geo_projected.html">gprojected()</a></code> generalises concept of <code><a href="../reference/buff_geo.html">buff_geo()</a></code>, building on <code><a href="../reference/crs_select_aeq.html">crs_select_aeq()</a></code> to allow any GIS query to be conducted on a temporary projected version of spatial objects with geographical CRSs.</p></li>
 <li><p>New function <code><a href="../reference/od_dist.html">od_dist()</a></code> can quickly calculate Euclidean distances of OD pairs without converting to spatial objects.</p></li>
 </ul>
 <p>BUG FIXES</p>
@@ -257,13 +433,18 @@
 </ul>
 </div>
 </div>
-    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#stplanr-0-2-5">0.2.5</a></li>
+        <li><a href="#stplanr-0-2-4">0.2.4</a></li>
+        <li><a href="#stplanr-0-2-3">0.2.3</a></li>
+        <li><a href="#stplanr-0-2-2">0.2.2</a></li>
+        <li><a href="#stplanr-0-2-0">0.2.0</a></li>
+        <li><a href="#stplanr-0-1-9">0.1.9</a></li>
         <li><a href="#stplanr-0-1-8">0.1.8</a></li>
         <li><a href="#stplanr-0-1-7">0.1.7</a></li>
         <li><a href="#stplanr-0-1-6">0.1.6</a></li>
@@ -279,11 +460,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

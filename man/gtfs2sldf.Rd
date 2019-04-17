@@ -22,12 +22,14 @@ u <- "http://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.z
 # download.file(u, f)
 gtfs <- gtfs2sldf(gtfszip = f)
 plot(gtfs, col = gtfs$route_long_name)
-plot(gtfs[gtfs$route_long_name == "Central Campus",])
+plot(gtfs[gtfs$route_long_name == "Central Campus", ])
 \dontrun{
 # An example of a larger gtfs feed
-download.file("http://www.yrt.ca/google/google_transit.zip",
-                     paste0(tempdir(),"/gtfsfeed.zip"))
-yrtgtfs <- gtfs2sldf(paste0(tempdir(),"/gtfsfeed.zip"))
-sp::plot(yrtgtfs,col=paste0("#",yrtgtfs$route_color))
+download.file(
+  "http://www.yrt.ca/google/google_transit.zip",
+  paste0(tempdir(), "/gtfsfeed.zip")
+)
+yrtgtfs <- gtfs2sldf(paste0(tempdir(), "/gtfsfeed.zip"))
+sp::plot(yrtgtfs, col = paste0("#", yrtgtfs$route_color))
 }
 }
