@@ -451,7 +451,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4){
       overlined_simple$grid = NULL
     } else{
       message(paste0(Sys.time(), " aggregating flows"))
-      overlined_simple <- dplyr::group_by_at(overlined_simple, attrib)
+      overlined_simple <- dplyr::group_by_at(x, attrib)
       overlined_simple <- dplyr::summarise(overlined_simple)
       rm(x)
     }
