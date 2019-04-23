@@ -332,7 +332,7 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' lwd = rnet1$bicycle / mean(rnet1$bicycle)
 #' plot(rnet1, lwd = lwd)
 #' }
-overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4){
+overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
   if(all(sf::st_geometry_type(x) != "LINESTRING")){
     stop("Only LINESTRING is supported")
   }
@@ -420,14 +420,14 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4){
         })
         overlined_simple = pbapply::pblapply(x, function(y) {
           y <- dplyr::group_by_at(y, attrib)
-          y <- dplyr::summarise(y)
+          y <- dplyr::summarise(y, do_union = FALSE)
         }, cl = cl)
         parallel::stopCluster(cl)
         rm(cl)
       } else{
         overlined_simple = pbapply::pblapply(x, function(y) {
           y <- dplyr::group_by_at(y, attrib)
-          y <- dplyr::summarise(y)
+          y <- dplyr::summarise(y, do_union = FALSE)
         })
       }
       rm(x)
@@ -440,22 +440,22 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4){
     } else{
       message(paste0(Sys.time(), " aggregating flows"))
       overlined_simple <- dplyr::group_by_at(x, attrib)
-      overlined_simple <- dplyr::summarise(overlined_simple)
+      overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE)
       rm(x)
     }
 
     #Separate our the linestrings and the mulilinestrings
     message(paste0(Sys.time(), " rejoining segments into linestrings"))
+    overlined_simple <- sf::st_line_merge(overlined_simple)
     geom_types = sf::st_geometry_type(overlined_simple)
     overlined_simple_l = overlined_simple[geom_types == "LINESTRING", ]
     overlined_simple_ml = overlined_simple[geom_types == "MULTILINESTRING", ]
-    rm(overlined_simple, geom_types)
-    overlined_simple_ml = sf::st_line_merge(overlined_simple_ml)
     suppressWarnings(overlined_simple_ml <-
                        sf::st_cast(
                          sf::st_cast(overlined_simple_ml, "MULTILINESTRING"),
                          "LINESTRING"
                        ))
+
     return(rbind(overlined_simple_l, overlined_simple_ml))
   }else{
     return(x)
