@@ -381,32 +381,20 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e4){
   }))
 
   message(paste0(Sys.time(), " removing duplicates"))
-  c3 <- as.data.frame(c3)
-  names(c3) = c("X1", "Y1", "X2", "Y2")
-  c3 <- dplyr::group_by(c3, X1, Y1, X2, Y2)
-  matchID <- dplyr::group_indices(c3)
-  c3$matchingID <- matchID
-  c3 <- c3[!duplicated(c3$matchingID),]
-  c3 <- c3[order(c3$matchingID),]
-  c3_nodup <- as.matrix(c3[,c("X1", "Y1", "X2", "Y2")])
+  x <- cbind(c3, x)
   rm(c3)
-
-  # Calcualte the attributes
-  message(paste0(Sys.time(), " restructuring attributes"))
-  x$matchingID = matchID
-  x <- x %>%
-    dplyr::group_by(matchingID) %>%
-    dplyr::summarise_all(dplyr::funs(sum), na.rm = TRUE) %>%
-    dplyr::arrange(matchingID)
-  x$matchingID = NULL
+  x <- dplyr::group_by_at(x, c("1","2","3","4"))
+  x <- dplyr::summarise_all(x, .funs = sum)
+  coords <- as.matrix(x[,1:4])
+  x <- x[,attrib]
 
   # Make Geometry
   message(paste0(Sys.time(), " building geometry"))
-  sf::st_geometry(x) <- sf::st_as_sfc(pbapply::pblapply(1:nrow(c3_nodup), function(y) {
-    sf::st_linestring(matrix(c3_nodup[y, ], ncol = 2, byrow = T))
+  sf::st_geometry(x) <- sf::st_as_sfc(pbapply::pblapply(1:nrow(coords), function(y) {
+    sf::st_linestring(matrix(coords[y,], ncol = 2, byrow = T))
   }), crs = x_crs)
+  rm(coords)
 
-  rm(matchID, c3_nodup)
   # Recombine into fewer lines
   if(simplify){
 
