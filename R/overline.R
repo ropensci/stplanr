@@ -333,11 +333,11 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' plot(rnet1, lwd = lwd)
 #' }
 overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
-  if(all(sf::st_geometry_type(x) != "LINESTRING")){
+  if(!"sfc_LINESTRING" %in%  class(x$geometry)){
     stop("Only LINESTRING is supported")
   }
-  if("matchingID" %in% attrib){
-    stop("matchingID is not a permitted column name, please rename that column")
+  if(any(c("1","2","3","4","grid") %in% attrib)){
+    stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
 
   x = x[, attrib]
