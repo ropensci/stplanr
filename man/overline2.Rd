@@ -5,7 +5,7 @@
 \title{Convert series of overlapping lines into a route network (new method)}
 \usage{
 overline2(x, attrib, ncores = 1, simplify = TRUE,
-  regionalise = 1e+06)
+  regionalise = 1e+05)
 }
 \arguments{
 \item{x}{An SF data.frame of LINESTRINGS}
@@ -32,12 +32,17 @@ recombined into linestrings.
 
 Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
 This significantly reduces computation time for large datasets, but slightly increases the final file size.
+For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
 
 A known limitation of this method is that overlapping segments of different lengths are not aggregated.
 This can occur when lines stop halfway down a road. Typically these errors are small,
 but some artefacts may remain within the resulting data.
 
-Multicore support is only enabled for the egionalised simplification stage as it does not help with other stages.
+For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
+to overline subsets of the dataset, rbind the results together, and then overline again, to produce
+a final result.
+
+Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
 }
 \examples{
 sl = routes_fast_sf[routes_fast_sf$length > 0, ]

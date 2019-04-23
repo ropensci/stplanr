@@ -38,5 +38,5 @@
 #' @importFrom dplyr first last n
 #' @useDynLib stplanr
 NULL
-utils::globalVariables(c(".", "n", "matchingID", "X1", "Y1", "X2", "Y2"))
+utils::globalVariables(c(".", "n"))
 

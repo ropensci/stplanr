@@ -301,12 +301,17 @@ onewaygeo.Spatial <- function(x, attrib) {
 #'
 #' Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
 #' This significantly reduces computation time for large datasets, but slightly increases the final file size.
+#' For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
 #'
 #' A known limitation of this method is that overlapping segments of different lengths are not aggregated.
 #' This can occur when lines stop halfway down a road. Typically these errors are small,
 #' but some artefacts may remain within the resulting data.
 #'
-#' Multicore support is only enabled for the egionalised simplification stage as it does not help with other stages.
+#' For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
+#' to overline subsets of the dataset, rbind the results together, and then overline again, to produce
+#' a final result.
+#'
+#' Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
 #'
 #' @examples
 #' sl = routes_fast_sf[routes_fast_sf$length > 0, ]
@@ -332,7 +337,7 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' lwd = rnet1$bicycle / mean(rnet1$bicycle)
 #' plot(rnet1, lwd = lwd)
 #' }
-overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
+overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
   if(!"sfc_LINESTRING" %in%  class(x$geometry)){
     stop("Only LINESTRING is supported")
   }
@@ -361,7 +366,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
   x = x[l1[l1_start], , drop = FALSE] # repeate attributes
   rm(l1, l1_start)
 
-  message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
+  #message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
   attributes(c3)$dimnames <- NULL
   c3 <- t(apply(c3, MARGIN = 1, FUN = function(y) {
     if(y[1] != y[3]){
@@ -380,7 +385,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
 
   }))
 
-  message(paste0(Sys.time(), " removing duplicates"))
+  #message(paste0(Sys.time(), " removing duplicates"))
   x <- cbind(c3, x)
   rm(c3)
   x <- dplyr::group_by_at(x, c("1","2","3","4"))
@@ -400,7 +405,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e6){
 
     message(paste0(Sys.time(), " simplifying geometry"))
     if (nrow(x) > regionalise) {
-      message(paste0("large data detected, using regionalisation ",nrow(x)))
+      message(paste0("large data detected, using regionalisation, nrow = ",nrow(x)))
       suppressWarnings( cents <- sf::st_centroid(x))
       grid <- sf::st_make_grid(cents, what = "polygons")
       inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1))
