@@ -20,8 +20,8 @@ representation.}
 Plot an sfNetwork
 }
 \examples{
-SLN_sf <- SpatialLinesNetwork(route_network_sf)
-plot(SLN_sf)
+sln_sf <- SpatialLinesNetwork(route_network_sf)
+plot(sln_sf)
 }
 \seealso{
 Other rnet: \code{\link{SpatialLinesNetwork}},

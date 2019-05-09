@@ -40,8 +40,8 @@ set of coordinates) from a SpatialLinesNetwork.
 \examples{
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-find_network_nodes(SLN, -1.516734, 53.828)
+sln <- SpatialLinesNetwork(rnet)
+find_network_nodes(sln, -1.516734, 53.828)
 }
 \seealso{
 Other rnet: \code{\link{SpatialLinesNetwork}},

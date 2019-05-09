@@ -10,7 +10,7 @@ before_install:
 
 warnings_are_errors: true
 
-before_deploy: Rscript -e 'remotes::install_cran("pkgdown");remotes::install_github("ropenscilabs/rotemplate")'
+before_deploy: Rscript -e 'remotes::install_cran("pkgdown");remotes::install_github("ropensci/rotemplate")'
 deploy:
   provider: script
   script: Rscript -e 'pkgdown::deploy_site_github()'

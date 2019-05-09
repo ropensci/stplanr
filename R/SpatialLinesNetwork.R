@@ -80,24 +80,22 @@ validity = function(object) {
 #' @family rnet
 #' @export
 #' @examples
-#' SLN <- SpatialLinesNetwork(route_network)
-#' class(SLN)
-#' weightfield(SLN) # field used to determine shortest path
-#' plot(SLN)
-#' \dontrun{
-#' points(sln2points(SLN)[1, ], cex = 5)
-#' points(sln2points(SLN)[50, ], cex = 5)
-#' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
+#' sln <- SpatialLinesNetwork(route_network)
+#' class(sln)
+#' weightfield(sln) # field used to determine shortest path
+#' plot(sln)
+#' points(sln2points(sln)[1, ], cex = 5)
+#' points(sln2points(sln)[50, ], cex = 5)
+#' shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
-#' points(sln2points(SLN)[35, ], cex = 5)
-#' shortpath <- sum_network_routes(SLN, 1, 35, sumvars = "length")
+#' points(sln2points(sln)[35, ], cex = 5)
+#' shortpath <- sum_network_routes(sln, 1, 35, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
 #' library(sf)
-#' SLN_sf <- SpatialLinesNetwork(route_network_sf)
-#' plot(SLN_sf)
-#' shortpath <- sum_network_routes(SLN_sf, 1, 50, sumvars = "length")
+#' sln_sf <- SpatialLinesNetwork(route_network_sf)
+#' plot(sln_sf)
+#' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
-#' }
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
@@ -172,9 +170,9 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' @export
 #' @family rnet
 #' @examples
-#' SLN <- SpatialLinesNetwork(route_network)
-#' plot(SLN)
-#' plot(SLN, component = "graph")
+#' sln <- SpatialLinesNetwork(route_network)
+#' plot(sln)
+#' plot(sln, component = "graph")
 setMethod("plot",
   signature = c(x = "SpatialLinesNetwork"),
   definition = function(x, component = "sl", ...) {
@@ -200,8 +198,8 @@ setMethod("plot",
 #' @family rnet
 #' @export
 #' @examples
-#' SLN_sf <- SpatialLinesNetwork(route_network_sf)
-#' plot(SLN_sf)
+#' sln_sf <- SpatialLinesNetwork(route_network_sf)
+#' plot(sln_sf)
 setMethod("plot",
   signature = c(x = "sfNetwork"),
   definition = function(x, component = "sl", ...) {
@@ -236,9 +234,9 @@ setMethod("plot",
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' weightfield(SLN) <- "length"
-#' weightfield(SLN, "randomnum") <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
+#' sln <- SpatialLinesNetwork(rnet)
+#' weightfield(sln) <- "length"
+#' weightfield(sln, "randomnum") <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
 #' @name weightfield
 NULL
 
@@ -344,8 +342,8 @@ setReplaceMethod("weightfield", signature(x = "sfNetwork", varname = "character"
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' summary(SLN)
+#' sln <- SpatialLinesNetwork(rnet)
+#' summary(sln)
 #' @export
 setMethod("summary",
   signature = c(object = "SpatialLinesNetwork"),
@@ -363,8 +361,8 @@ setMethod("summary",
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' summary(SLN)
+#' sln <- SpatialLinesNetwork(rnet)
+#' summary(sln)
 #' @export
 setMethod("summary",
   signature = c(object = "sfNetwork"),
@@ -399,8 +397,8 @@ setMethod("summary",
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' find_network_nodes(SLN, -1.516734, 53.828)
+#' sln <- SpatialLinesNetwork(rnet)
+#' find_network_nodes(sln, -1.516734, 53.828)
 #' @family rnet
 #' @export
 find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
@@ -490,13 +488,11 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @family rnet
 #'
 #' @examples
-#' data(routes_fast)
-#' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' weightfield(SLN) # field used to determine shortest path
-#' shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
+#' sln <- SpatialLinesNetwork(route_network)
+#' weightfield(sln) # field used to determine shortest path
+#' shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
-#' plot(SLN, add = TRUE)
+#' plot(sln, add = TRUE)
 #' @export
 sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (!is(sln, "SpatialLinesNetwork") & !is(sln, "sfNetwork")) {
@@ -612,7 +608,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
       dplyr::summarise(do_union = FALSE) %>%
       sf::st_cast("LINESTRING") %>%
       dplyr::bind_cols(routedata) %>%
-      dplyr::select(-.data$linenum, -.data$do_union)
+      dplyr::select(-.data$linenum)
   } else {
     routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {
       matrix(
@@ -654,9 +650,9 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
 #' @examples
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' (sln_nodes <- sln2points(SLN))
-#' plot(SLN)
+#' sln <- SpatialLinesNetwork(rnet)
+#' (sln_nodes <- sln2points(sln))
+#' plot(sln)
 #' plot(sln_nodes, add = TRUE)
 sln2points <- function(sln) {
   coords <- cbind(sln@g$x, sln@g$y)
@@ -687,18 +683,16 @@ sln2points <- function(sln) {
 #' If there are no additional colums, then overlapping routes are counted.
 #' @family rnet
 #' @examples
-#' data(routes_fast)
-#' rnet <- overline(routes_fast, attrib = "length")
-#' SLN <- SpatialLinesNetwork(rnet)
-#' weightfield(SLN) # field used to determine shortest path
-#' shortpath <- sum_network_links(
-#'   SLN,
-#'   data.frame(
+#' sln_sf <- SpatialLinesNetwork(route_network_sf)
+#' plot(sln_sf)
+#' nodes_df <- data.frame(
 #'     start = rep(c(1, 2, 3, 4, 5), each = 4),
 #'     end = rep(c(50, 51, 52, 33), times = 5)
 #'   )
-#' )
-#' plot(shortpath, lwd = shortpath$count)
+#' weightfield(sln_sf) # field used to determine shortest path
+#' library(sf)
+#' shortpath_sf <- sum_network_links(sln_sf, nodes_df)
+#' plot(shortpath_sf["count"], lwd = shortpath_sf$count, add = TRUE)
 #' @export
 sum_network_links <- function(sln, routedata) {
   if (!is(sln, "SpatialLinesNetwork") & !is(sln, "sfNetwork")) {
@@ -716,7 +710,9 @@ sum_network_links <- function(sln, routedata) {
   if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
     stop("sf package must be loaded first. Run library(sf)")
   }
-
+  if (is(sln, "SpatialLinesNetwork")) {
+    stop("SpatialLinesNetwork not supported. Use newer sfNetwork class instead")
+  }
   if (ncol(routedata) < 3) {
     routedata$count <- 1
   }

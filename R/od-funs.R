@@ -696,3 +696,61 @@ points2line.matrix <- function(p) {
   l <- raster::spLines(p)
   l
 }
+#' Summary statistics of trips originating from zones in OD data
+#'
+#' This function takes a data frame of OD data and
+#' returns a data frame reporting summary statistics for each unique zone of origin.
+#'
+#' It has some default settings: the default summary statistic is `sum()` and the
+#' first column in the OD data is assumed to represent the zone of origin.
+#' By default, if `attrib` is not set, it summarises all numeric columns.
+#'
+#' @inheritParams od2odf
+#' @inheritParams overline
+#' @param FUN A function to summarise OD data by
+#' @param col The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)
+#' @param ... Additional arguments passed to `FUN`
+#' @export
+#' @examples
+#' od_aggregate_from(flow)
+od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., col = 1) {
+  if(is.character(attrib)) {
+    attrib_lgl <- grepl(pattern = attrib, x = names(flow))
+    if(sum(attrib_lgl) == 0){
+      stop("No columns match the attribute ", attrib)
+    }
+    attrib = which(attrib_lgl)
+  }
+  if(!is.null(attrib)) {
+    flow <- flow[attrib]
+  }
+  flow_grouped <- dplyr::group_by_at(flow, col)
+  dplyr::summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
+}
+#' Summary statistics of trips arriving at destination zones in OD data
+#'
+#' This function takes a data frame of OD data and
+#' returns a data frame reporting summary statistics for each unique zone of destination.
+#'
+#' It has some default settings: it assumes the destination ID column is the 2nd
+#' and the default summary statistic is `sum()`.
+#' By default, if `attrib` is not set, it summarises all numeric columns.
+#'
+#' @inheritParams od_aggregate_from
+#' @export
+#' @examples
+#' od_aggregate_to(flow)
+od_aggregate_to <- function(flow, attrib = NULL, FUN = sum, ..., col = 2) {
+  if(is.character(attrib)) {
+    attrib_lgl <- grepl(pattern = attrib, x = names(flow))
+    if(sum(attrib_lgl) == 0){
+      stop("No columns match the attribute ", attrib)
+    }
+    attrib = which(attrib_lgl)
+  }
+  if(!is.null(attrib)) {
+    flow <- flow[attrib]
+  }
+  flow_grouped <- dplyr::group_by_at(flow, col)
+  dplyr::summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
+}

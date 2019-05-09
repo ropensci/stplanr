@@ -2,24 +2,47 @@
 % Please edit documentation in R/overline.R
 \name{overline2}
 \alias{overline2}
-\title{Overlay duplicated lines}
+\title{Convert series of overlapping lines into a route network (new method)}
 \usage{
 overline2(x, attrib, ncores = 1, simplify = TRUE,
-  regionalise = 10000)
+  regionalise = 1e+05)
 }
 \arguments{
-\item{x}{SF data frame of linestrings}
+\item{x}{An SF data.frame of LINESTRINGS}
 
-\item{attrib}{character, column name to be summed}
+\item{attrib}{character, column names in x to be summed}
 
-\item{ncores}{integer, how many cores to use in parallel processing}
+\item{ncores}{integer, how many cores to use in parallel processing, default = 1}
 
-\item{simplify, }{logical, if TRUE group final segments back into lines}
+\item{simplify}{logical, if TRUE group final segments back into lines, default = TRUE}
 
-\item{regionalise, }{integer, during simplification regonalisation is used if the number of segments exceeds this value}
+\item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
+}
+\value{
+An SF data.frame of LINESTRINGS
 }
 \description{
-Overlay duplicated lines
+This function is intended as a replacement for overline() and is significantly faster
+especially on large datasets. However, it also uses more memory.
+}
+\details{
+The overline2 function breaks each line into many straight segments and then looks for duplicated segments.
+Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
+recombined into linestrings.
+
+Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
+This significantly reduces computation time for large datasets, but slightly increases the final file size.
+For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
+
+A known limitation of this method is that overlapping segments of different lengths are not aggregated.
+This can occur when lines stop halfway down a road. Typically these errors are small,
+but some artefacts may remain within the resulting data.
+
+For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
+to overline subsets of the dataset, rbind the results together, and then overline again, to produce
+a final result.
+
+Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
 }
 \examples{
 sl = routes_fast_sf[routes_fast_sf$length > 0, ]
@@ -60,5 +83,8 @@ Other rnet: \code{\link{SpatialLinesNetwork}},
   \code{\link{sln2points}},
   \code{\link{sum_network_links}},
   \code{\link{sum_network_routes}}
+}
+\author{
+Malcolm Morgan
 }
 \concept{rnet}

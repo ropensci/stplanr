@@ -56,7 +56,7 @@ variables.
 \examples{
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-weightfield(SLN) <- "length"
-weightfield(SLN, "randomnum") <- sample(1:10, size = nrow(SLN@sl), replace = TRUE)
+sln <- SpatialLinesNetwork(rnet)
+weightfield(sln) <- "length"
+weightfield(sln, "randomnum") <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
 }

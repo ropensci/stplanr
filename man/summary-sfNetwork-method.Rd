@@ -18,6 +18,6 @@ Print a summary of a sfNetwork
 \examples{
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-summary(SLN)
+sln <- SpatialLinesNetwork(rnet)
+summary(sln)
 }
