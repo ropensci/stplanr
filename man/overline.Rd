@@ -35,9 +35,8 @@ plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 \dontrun{
 # sf methods
 sl <- routes_fast_sf[2:4, ]
-overline(sl = sl, attrib = "length", buff_dist = 10)
-rnet_sf <- overline(routes_fast_sf, attrib = "length", buff_dist = 10)
-plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
+rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
+plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 }
 }
 \references{

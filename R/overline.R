@@ -128,23 +128,17 @@ lineLabels <- function(sl, attrib) {
 #' \dontrun{
 #' # sf methods
 #' sl <- routes_fast_sf[2:4, ]
-#' overline(sl = sl, attrib = "length", buff_dist = 10)
-#' rnet_sf <- overline(routes_fast_sf, attrib = "length", buff_dist = 10)
-#' plot(rnet_sf$geometry, lwd = rnet_sf$length / mean(rnet_sf$length))
+#' rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
+#' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 #' }
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   UseMethod("overline")
 }
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
-  sl_spatial <- sp::SpatialLinesDataFrame(sl = sf::as_Spatial(sl$geometry), data = sf::st_set_geometry(sl, NULL), match.ID = FALSE)
-  rnet_sp <- overline(sl_spatial, attrib, fun = fun, na.zero = na.zero, buff_dist = buff_dist)
-  sf::st_as_sf(rnet_sp)
 
-  # attempt to run with sf funs
-  # slu <- gsection(sl, buff_dist = buff_dist)
-  # aggs <- aggregate(sl[attrib], slu, FUN = fun, join = sf::st_overlaps, na.rm = FALSE)
-  # aggs
+  overline2(x = sl, attrib = attrib)
+
 }
 #' @export
 overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
