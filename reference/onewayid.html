@@ -21,9 +21,7 @@
 
 
 <!-- Bootstrap -->
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<link href="../ropensci.css" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -37,12 +35,12 @@
 <!-- sticky kit -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
 
-
+<!-- ropensci -->
+<link href="../ropensci.css" rel="stylesheet">
 
 <meta property="og:title" content="Aggregate ods so they become non-directional — onewayid" />
 
@@ -69,11 +67,8 @@
       </button>
 
       <div class="navbar-brand-container">
-        <a class="navbar-brand" href="../index.html">stplanr</a>
-        <div class="info">
-          <span class="partof">part of  <a href="https://ropensci.org"><img src='https://d33wubrfki0l68.cloudfront.net/88338b7637e084df5c43e7a9e6293719dbaf10e2/30903/img/icon_lettering_white.svg' height=24 alt = 'rOpenSci'/></a></span>
-          <span class="version label label-default version-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.8</span>
-        </div>
+        <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -242,27 +237,27 @@ for users and are difficult to plot.</p>
 #&gt;                                 TRUE                                 TRUE </div><div class='input'><span class='co'># Demonstrate the results from onewayid and onewaygeo are identical</span>
 <span class='no'>flow_oneway_geo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='onewaygeo.html'>onewaygeo</a></span>(<span class='no'>flowlines</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='no'>attrib</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>flow_oneway</span>$<span class='no'>All</span>, <span class='no'>flow_oneway_geo</span>$<span class='no'>All</span>)</div><div class='img'><img src='onewayid-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>onewayid</span>(<span class='no'>flowlines_sf</span>, <span class='st'>"all"</span>)</div><div class='output co'>#&gt; Simple feature collection with 28 features and 3 fields
-#&gt; Active geometry column: geometry (with 7 geometries empty)
-#&gt; geometry type:  GEOMETRY
+#&gt; Active geometry column: geometry
+#&gt; geometry type:  LINESTRING
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -1.550807 ymin: 53.8041 xmax: -1.511861 ymax: 53.82887
 #&gt; epsg (SRID):    4326
 #&gt; proj4string:    +proj=longlat +datum=WGS84 +no_defs
 #&gt; # A tibble: 28 x 6
 #&gt;    Area.of.residen… Area.of.workpla…                  geometry
-#&gt;    &lt;chr&gt;            &lt;chr&gt;                       &lt;GEOMETRY [°]&gt;
-#&gt;  1 E02002361        E02002361         GEOMETRYCOLLECTION EMPTY
-#&gt;  2 E02002361        E02002363        LINESTRING (-1.516734 53…
-#&gt;  3 E02002361        E02002367        LINESTRING (-1.516734 53…
-#&gt;  4 E02002361        E02002371        LINESTRING (-1.516734 53…
-#&gt;  5 E02002361        E02002377        LINESTRING (-1.516734 53…
-#&gt;  6 E02002361        E02002382        LINESTRING (-1.516734 53…
-#&gt;  7 E02002361        E02002393        LINESTRING (-1.516734 53…
-#&gt;  8 E02002363        E02002363         GEOMETRYCOLLECTION EMPTY
-#&gt;  9 E02002363        E02002367        LINESTRING (-1.535617 53…
-#&gt; 10 E02002363        E02002371        LINESTRING (-1.535617 53…
-#&gt; # … with 18 more rows, and 3 more variables: geometry1 &lt;GEOMETRY [°]&gt;,
-#&gt; #   is_two_way &lt;lgl&gt;, geometry2 &lt;GEOMETRY [°]&gt;</div><div class='input'><span class='co'># with spatial data</span>
+#&gt;    &lt;chr&gt;            &lt;chr&gt;                     &lt;LINESTRING [°]&gt;
+#&gt;  1 E02002361        E02002361        (-1.516734 53.82887, -1.…
+#&gt;  2 E02002361        E02002363        (-1.516734 53.82887, -1.…
+#&gt;  3 E02002361        E02002367        (-1.516734 53.82887, -1.…
+#&gt;  4 E02002361        E02002371        (-1.516734 53.82887, -1.…
+#&gt;  5 E02002361        E02002377        (-1.516734 53.82887, -1.…
+#&gt;  6 E02002361        E02002382        (-1.516734 53.82887, -1.…
+#&gt;  7 E02002361        E02002393        (-1.516734 53.82887, -1.…
+#&gt;  8 E02002363        E02002363        (-1.535617 53.82847, -1.…
+#&gt;  9 E02002363        E02002367        (-1.535617 53.82847, -1.…
+#&gt; 10 E02002363        E02002371        (-1.535617 53.82847, -1.…
+#&gt; # … with 18 more rows, and 3 more variables: geometry1 &lt;LINESTRING [°]&gt;,
+#&gt; #   is_two_way &lt;lgl&gt;, geometry2 &lt;LINESTRING [°]&gt;</div><div class='input'><span class='co'># with spatial data</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>flowlines</span>)
 <span class='no'>fo</span> <span class='kw'>&lt;-</span> <span class='fu'>onewayid</span>(<span class='no'>flowlines</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"All"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>fo</span>@<span class='kw'>data</span>)</div><div class='output co'>#&gt; # A tibble: 6 x 5
