@@ -50,10 +50,8 @@ plot(shortpath, col = "red", lwd = 4, add = TRUE)
 library(sf)
 sln_sf <- SpatialLinesNetwork(route_network_sf)
 plot(sln_sf)
-# \dontrun{
 shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
-}
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.

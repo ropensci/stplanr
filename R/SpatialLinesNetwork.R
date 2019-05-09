@@ -94,10 +94,8 @@ validity = function(object) {
 #' library(sf)
 #' sln_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(sln_sf)
-#' # \dontrun{
 #' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
-#' }
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
@@ -610,7 +608,7 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
       dplyr::summarise(do_union = FALSE) %>%
       sf::st_cast("LINESTRING") %>%
       dplyr::bind_cols(routedata) %>%
-      dplyr::select(-.data$linenum, -.data$do_union)
+      dplyr::select(-.data$linenum)
   } else {
     routedata <- setNames(data.frame(cbind(1:length(routesegs), do.call(rbind, lapply(routesegs, function(routesegs, sumvars) {
       matrix(
