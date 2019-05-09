@@ -167,16 +167,17 @@ should be a spatial object representing desire lines</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># from &lt;- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)</span>
-<span class='no'>from</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1.5327711</span>, <span class='fl'>53.8006988</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='co'># to &lt;- matrix(stplanr::geo_code("gzing"), ncol = 2)</span>
-<span class='no'>to</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1.527937</span>, <span class='fl'>53.8044309</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+    <pre class="examples"><div class='input'><span class='co'># from &lt;- geo_code("pedallers arms leeds")</span>
+<span class='no'>from</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1.5327</span>, <span class='fl'>53.8006</span>)
+<span class='co'># to &lt;- geo_code("gzing")</span>
+<span class='no'>to</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1.5279</span>, <span class='fl'>53.8044</span>)
 <span class='co'># next 4 lines recreate `stplanr::osm_net_example`</span>
 <span class='co'># pts &lt;- rbind(from, to)</span>
-<span class='co'># colnames(pts) = c("X", "Y")</span>
-<span class='co'># net &lt;- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)</span>
+<span class='co'># colnames(pts) &lt;- c("X", "Y")</span>
+<span class='co'># net &lt;- dodgr::dodgr_streetnet(pts = rbind(from, to), expand = 0.1)</span>
 <span class='co'># osm_net_example &lt;- net[c("highway", "name", "lanes", "maxspeed")]</span>
-<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'>route_dodgr</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>net</span> <span class='kw'>=</span> <span class='no'>osm_net_example</span>)</div><div class='output co'>#&gt; <span class='message'>xy has no named columns; assuming order is x then y</span></div><div class='output co'>#&gt; <span class='message'>xy has no named columns; assuming order is x then y</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>osm_net_example</span>$<span class='no'>geometry</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>r</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring all but the first attribute</span></div><div class='img'><img src='route_dodgr-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'>route_dodgr</span>(<span class='no'>from</span>, <span class='no'>to</span>, <span class='kw'>net</span> <span class='kw'>=</span> <span class='no'>osm_net_example</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>osm_net_example</span>$<span class='no'>geometry</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>r</span>$<span class='no'>geometry</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='route_dodgr-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
