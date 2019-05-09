@@ -9,6 +9,9 @@
 - The `sf` method for `overline()` has been updated so it calls the much faster `overline2()` function
 - Updated documentation for `route_local()`
 
+## BUG FIXES
+
+- Bug in `sum_network_routes()` fixed. See [#267](https://github.com/ropensci/stplanr/issues/267)
 
 # stplanr 0.2.8
 
