@@ -32,13 +32,11 @@ each one.
 }
 
 \examples{
-data(routes_fast)
-rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-weightfield(SLN) # field used to determine shortest path
-shortpath <- sum_network_routes(SLN, 1, 50, sumvars = "length")
+sln <- SpatialLinesNetwork(route_network)
+weightfield(sln) # field used to determine shortest path
+shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4)
-plot(SLN, add = TRUE)
+plot(sln, add = TRUE)
 }
 \seealso{
 Other rnet: \code{\link{SpatialLinesNetwork}},

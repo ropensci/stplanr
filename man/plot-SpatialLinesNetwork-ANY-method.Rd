@@ -20,9 +20,9 @@ representation.}
 Plot a SpatialLinesNetwork
 }
 \examples{
-SLN <- SpatialLinesNetwork(route_network)
-plot(SLN)
-plot(SLN, component = "graph")
+sln <- SpatialLinesNetwork(route_network)
+plot(sln)
+plot(sln, component = "graph")
 }
 \seealso{
 Other rnet: \code{\link{SpatialLinesNetwork}},

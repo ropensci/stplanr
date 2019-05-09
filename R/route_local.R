@@ -8,27 +8,20 @@
 #' @family routes
 #' @export
 #' @examples
-#' # from <- matrix(stplanr::geo_code("pedallers arms leeds"), ncol = 2)
-#' from <-c(-1.5327711, 53.8006988)
-#' # to <- matrix(stplanr::geo_code("gzing"), ncol = 2)
-#' to <- c(-1.527937, 53.8044309)
-#' sln <- SpatialLinesNetwork(osm_net_example)
-#' \dontrun{
+#' from <- c(-1.535181, 53.82534)
+#' to <- c(-1.52446, 53.80949)
+#' sln <- SpatialLinesNetwork(route_network_sf)
 #' r <- route_local(sln, from, to)
-#' plot(r)
-#' # todo: next code chunk is not currently working:
-#' r2 <- route_local(sln = sln, cents_sf[5, ], cents_sf[6, ])
-#' plot(r2)
-#' r_many <- line2route(flowlines_sf[2:9, ], route_local, sln = sln)
-#' plot(cents)
-#' plot(sln@sl, add = TRUE)
-#' plot(r_many, add = TRUE)
-#' }
+#' plot(sln)
+#' plot(r$geometry, add = TRUE, col = "red", lwd = 5)
+#' plot(cents[c(3, 4), ], add = TRUE)
+#' r2 <- route_local(sln = sln, cents_sf[3, ], cents_sf[4, ])
+#' plot(r2$geometry, add = TRUE, col = "blue", lwd = 3)
 route_local <- function(sln, from, to, l = NULL) {
 
   coords <- od_coords(from, to, l)
-  from_sln <- find_network_nodes(sln, coords[1, "fx"], coords[1, "fy"])
-  to_sln <- find_network_nodes(sln, coords[1, "tx"], coords[1, "ty"])
+  # from_sln <- find_network_nodes(sln, coords[1, "fx"], coords[1, "fy"])
+  # to_sln <- find_network_nodes(sln, coords[1, "tx"], coords[1, "ty"])
   nodes_near = find_network_nodes(sln = sln, x = as.vector(coords[, c(1, 3)]),
                                   y = as.vector(coords[, c(2, 4)]), maxdist = 2000)
   od_df <- data.frame(start = nodes_near[1], end = nodes_near[2])

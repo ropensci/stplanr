@@ -17,9 +17,9 @@ or sfNetwork.
 \examples{
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
-SLN <- SpatialLinesNetwork(rnet)
-(sln_nodes <- sln2points(SLN))
-plot(SLN)
+sln <- SpatialLinesNetwork(rnet)
+(sln_nodes <- sln2points(sln))
+plot(sln)
 plot(sln_nodes, add = TRUE)
 }
 \seealso{
