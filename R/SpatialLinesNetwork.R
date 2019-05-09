@@ -84,7 +84,6 @@ validity = function(object) {
 #' class(sln)
 #' weightfield(sln) # field used to determine shortest path
 #' plot(sln)
-#' \dontrun{
 #' points(sln2points(sln)[1, ], cex = 5)
 #' points(sln2points(sln)[50, ], cex = 5)
 #' shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
@@ -95,6 +94,7 @@ validity = function(object) {
 #' library(sf)
 #' sln_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(sln_sf)
+#' # \dontrun{
 #' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
 #' }
