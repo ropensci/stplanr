@@ -1,6 +1,5 @@
 ---
 output: github_document
-always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -116,29 +115,27 @@ routes = routes_fast_sf[2:5, ]
 plot(routes$geometry)
 ```
 
-
-Another way to visualise this is with the leaflet package:
-
-```{r, routes-leaf}
-library(leaflet)
-leaflet() %>% addTiles() %>% addPolylines(data = routes)
-```
-
 For more examples, `example("line2route")`.
 
 `overline` is a function which takes a series of route-allocated lines,
 splits them into unique segments and aggregates
 the values of overlapping lines. This can represent where there will be
-most traffic on the transport system, as illustrated
-below. 
+most traffic on the transport system, as demonstrated in the following code chunk. 
 
 ```{r rnet, warning=FALSE}
 routes$All <- desire_lines$All
 rnet <- overline2(routes, attrib = "All")
+```
 
-lwd <- rnet$All / mean(rnet$All)
-plot(rnet, lwd = lwd, reset = FALSE)
-plot(cents_sf, add = TRUE)
+The route network can be visualised as follows:
+
+```{r, routes-leaf}
+library(leaflet)
+pal = leaflet::colorNumeric(palette = "YlGnBu", domain = rnet$All)
+leaflet(data = rnet) %>%
+  addProviderTiles(providers$OpenStreetMap.BlackAndWhite) %>%
+  addPolylines(weight = rnet$All / 3, color = ~pal(All), opacity = 0.9) %>% 
+  addLegend(pal = pal, values = ~All)
 ```
 
 ## Installation
