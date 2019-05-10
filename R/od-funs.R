@@ -710,6 +710,7 @@ points2line.matrix <- function(p) {
 #' @param FUN A function to summarise OD data by
 #' @param col The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)
 #' @param ... Additional arguments passed to `FUN`
+#' @family od
 #' @export
 #' @examples
 #' od_aggregate_from(flow)
@@ -737,6 +738,7 @@ od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., col = 1) {
 #' By default, if `attrib` is not set, it summarises all numeric columns.
 #'
 #' @inheritParams od_aggregate_from
+#' @family od
 #' @export
 #' @examples
 #' od_aggregate_to(flow)
