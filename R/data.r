@@ -281,3 +281,15 @@ NULL
 #' @examples
 #' osm_net_example
 NULL
+
+#' Example of origin-destination data from UK Census
+#'
+#' See the `stplanr-1-od` vignette for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name od_data_sample
+#' @format A data frame (tibble) object
+#' @examples
+#' od_data_sample
+NULL

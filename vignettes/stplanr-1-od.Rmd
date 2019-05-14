@@ -1,0 +1,72 @@
+---
+title: "Origin-destination data in R: examples with stplanr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Origin-destination data in R: examples with stplanr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction: what is OD data?
+
+```{r setup}
+library(stplanr)
+```
+
+# Representations of OD data
+
+
+## Origin-destination pairs (long form)
+
+Perhaps the most common and straightforward representation of OD data is a 'long thin' data frame.
+This is increasingly the format used by official statistical agencies, including the UK's Office for National Statistics (ONS), who provide origin destination data as a `.csv` file.
+Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as shown in the code chunk below, which creates an object called `od_data_sample` using the [`pct` package](https://itsleeds.github.io/pct/) (chunk not evaluated for speed):
+
+```{r, eval=FALSE}
+remotes::install_github("ITSLeeds/pct")
+library(pct)
+od_data_all = pct::get_od()
+sel_local = 
+  od_data_all$geo_code1 %in% cents_sf$geo_code &
+  od_data_all$geo_code2 %in% cents_sf$geo_code 
+od_data_sample = od_data_all[sel_local, ]
+```
+
+```{r, echo=FALSE, eval=FALSE}
+usethis::use_data(od_data_sample)
+```
+
+Data in this form usually has at least one other colum, representing the amount of travel between the zones.
+Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose.
+As shown in the output of printing the sample dataset, the dataset we have downloaded contains column names representing mode of travel (car, bicycle etc):
+
+```{r}
+names(od_data_sample)
+```
+
+Each 'mode' column contains an integer, while additional columns contain characters, as demonstrated by printing the data frame:
+
+```{r}
+od_data_sample
+```
+
+
+
+
+
+
+```{r, echo=FALSE, eval=FALSE}
+# out-takes and test code
+u = "http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/commodity_flow_survey/2007/zip/origin_destination_files.zip"
+f =  file.path(tempdir(), "origin_destination_files.zip")
+download.file(u, f)
+unzip(f)
+```
+
