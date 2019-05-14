@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find graph node ID of closest node to given coordinates — find_network_nodes • stplanr</title>
+<title>Example of origin-destination data from UK Census — od_data_sample • stplanr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,9 +42,9 @@
 <!-- ropensci -->
 <link href="../ropensci.css" rel="stylesheet">
 
-<meta property="og:title" content="Find graph node ID of closest node to given coordinates — find_network_nodes" />
+<meta property="og:title" content="Example of origin-destination data from UK Census — od_data_sample" />
 
-<meta property="og:description" content="Find graph node ID of closest node to given coordinates" />
+<meta property="og:description" content="See the stplanr-1-od vignette for details on how this was created." />
 
 <meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -121,93 +121,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find graph node ID of closest node to given coordinates</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/SpatialLinesNetwork.R'><code>R/SpatialLinesNetwork.R</code></a></small>
-    <div class="hidden name"><code>find_network_nodes.Rd</code></div>
+    <h1>Example of origin-destination data from UK Census</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/data.r'><code>R/data.r</code></a></small>
+    <div class="hidden name"><code>od_data_sample.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Find graph node ID of closest node to given coordinates</p>
+    <p>See the <code>stplanr-1-od</code> vignette for details on how this was created.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>find_network_nodes</span>(<span class='no'>sln</span>, <span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>maxdist</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>sln</th>
-      <td><p>SpatialLinesNetwork to search.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>Either the x (longitude) coordinate value, a vector of x values,
-a dataframe or matrix with (at least) two columns, the first for coordinate
-for x (longitude) values and a second for y (latitude) values, or a named
-vector of length two with values of 'lat' and 'lon'. The output of
-geo_code() either as a single result or as multiple (using
-rbind() ) can also be used.</p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>Either the y (latitude) coordinate value or a vector of y values.</p></td>
-    </tr>
-    <tr>
-      <th>maxdist</th>
-      <td><p>The maximum distance within which to match the nodes to
-coordinates. If the SpatialLinesNetwork is projected then distance should
-be in the same units as the projection. If longlat, then distance is in
-metres. Default is 1000.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An integer value with the ID of the node closest to <code>(x,y)</code>
-with a value of <code>NA</code> the closest node is further than <code>maxdist</code>
-from <code>(x,y)</code>. If <code>x</code> is a vector, returns a vector of Node IDs.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-    <p>Finds the node ID of the closest point to a single coordinate pair (or a
-set of coordinates) from a SpatialLinesNetwork.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other rnet: <code><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></code>,
-  <code><a href='calc_catchment_sum.html'>calc_catchment_sum</a></code>,
-  <code><a href='calc_catchment.html'>calc_catchment</a></code>,
-  <code><a href='calc_moving_catchment.html'>calc_moving_catchment</a></code>,
-  <code><a href='calc_network_catchment.html'>calc_network_catchment</a></code>,
-  <code><a href='gsection.html'>gsection</a></code>, <code><a href='islines.html'>islines</a></code>,
-  <code><a href='lineLabels.html'>lineLabels</a></code>, <code><a href='overline2.html'>overline2</a></code>,
-  <code><a href='overline.html'>overline</a></code>,
-  <code><a href='plot-SpatialLinesNetwork-ANY-method.html'>plot,SpatialLinesNetwork,ANY-method</a></code>,
-  <code><a href='plot-sfNetwork-ANY-method.html'>plot,sfNetwork,ANY-method</a></code>,
-  <code><a href='sln2points.html'>sln2points</a></code>,
-  <code><a href='sum_network_links.html'>sum_network_links</a></code>,
-  <code><a href='sum_network_routes.html'>sum_network_routes</a></code></p></div>
+    <p>A data frame (tibble) object</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
-<span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
-<span class='no'>sln</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'>find_network_nodes</span>(<span class='no'>sln</span>, -<span class='fl'>1.516734</span>, <span class='fl'>53.828</span>)</div><div class='output co'>#&gt; [1] 27</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>od_data_sample</span></div><div class='output co'>#&gt; # A tibble: 64 x 18
+#&gt;    geo_code1 geo_code2   all from_home light_rail train   bus  taxi motorbike
+#&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+#&gt;  1 E02002361 E02002361   109         0          0     0     4     2         0
+#&gt;  2 E02002361 E02002363    38         0          0     1     4     1         0
+#&gt;  3 E02002361 E02002367    10         0          0     0     1     0         0
+#&gt;  4 E02002361 E02002371    44         0          0     0     2     2         0
+#&gt;  5 E02002361 E02002377    34         0          0     0     0     1         2
+#&gt;  6 E02002361 E02002382     7         0          0     0     1     0         0
+#&gt;  7 E02002361 E02002384    53         0          0     1    10     1         0
+#&gt;  8 E02002361 E02002393    94         0          0     0    17     1         0
+#&gt;  9 E02002363 E02002361    30         0          0     0     0     1         1
+#&gt; 10 E02002363 E02002363   183         0          0     2    13     3         0
+#&gt; # … with 54 more rows, and 9 more variables: car_driver &lt;dbl&gt;,
+#&gt; #   car_passenger &lt;dbl&gt;, bicycle &lt;dbl&gt;, foot &lt;dbl&gt;, other &lt;dbl&gt;,
+#&gt; #   geo_name1 &lt;chr&gt;, geo_name2 &lt;chr&gt;, la_1 &lt;chr&gt;, la_2 &lt;chr&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#format">Format</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

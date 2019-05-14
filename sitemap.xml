@@ -208,6 +208,9 @@
     <loc>https://ropensci.github.io/stplanr/reference/od_coords2line.html</loc>
   </url>
   <url>
+    <loc>https://ropensci.github.io/stplanr/reference/od_data_sample.html</loc>
+  </url>
+  <url>
     <loc>https://ropensci.github.io/stplanr/reference/od_dist.html</loc>
   </url>
   <url>
@@ -353,6 +356,9 @@
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/reference/zones.html</loc>
+  </url>
+  <url>
+    <loc>https://ropensci.github.io/stplanr/articles/stplanr-1-od.html</loc>
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/articles/stplanr-paper.html</loc>
