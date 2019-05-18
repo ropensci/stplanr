@@ -1,3 +1,5 @@
+Fixes documentation issue with concept entries
+
 ## Test environments
 
 * Linux
