@@ -1,3 +1,5 @@
+# stplanr 0.2.10
+
 # stplanr (development version)
 
 # stplanr 0.2.9
