@@ -32,9 +32,6 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -70,7 +67,7 @@ geometries and aggregated values." />
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -94,9 +91,6 @@ geometries and aggregated values." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/stplanr-1-od.html">Origin-destination data in R: examples with stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -177,7 +171,7 @@ If the distance is zero (the default) touching but non-overlapping lines may be 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rnet</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>rnet</span>$<span class='no'>value</span>)</div><div class='img'><img src='overline_intersection-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># A larger example</span>
 <span class='no'>sl</span> <span class='kw'>&lt;-</span> <span class='no'>routes_fast_sf</span>[<span class='fl'>4</span>:<span class='fl'>7</span>, ]
 <span class='no'>rnet</span> <span class='kw'>=</span> <span class='fu'>overline_intersection</span>(<span class='kw'>sl</span> <span class='kw'>=</span> <span class='no'>sl</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"value"</span>, <span class='st'>"length"</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rnet</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>rnet</span>$<span class='no'>value</span>)</div><div class='img'><img src='overline_intersection-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>rnet_sf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast_sf</span>[<span class='fl'>4</span>:<span class='fl'>7</span>, ], <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"value"</span>, <span class='st'>"length"</span>), <span class='kw'>buff_dist</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>2019-05-14 21:13:45 constructing segments</span></div><div class='output co'>#&gt; <span class='message'>2019-05-14 21:13:45 building geometry</span></div><div class='output co'>#&gt; <span class='message'>2019-05-14 21:13:45 simplifying geometry</span></div><div class='output co'>#&gt; <span class='message'>2019-05-14 21:13:45 aggregating flows</span></div><div class='output co'>#&gt; <span class='message'>2019-05-14 21:13:45 rejoining segments into linestrings</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rnet_sf</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>rnet_sf</span>$<span class='no'>value</span>)</div><div class='img'><img src='overline_intersection-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rnet</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>rnet</span>$<span class='no'>value</span>)</div><div class='img'><img src='overline_intersection-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>rnet_sf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast_sf</span>[<span class='fl'>4</span>:<span class='fl'>7</span>, ], <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"value"</span>, <span class='st'>"length"</span>), <span class='kw'>buff_dist</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; <span class='message'>2019-05-19 07:00:58 constructing segments</span></div><div class='output co'>#&gt; <span class='message'>2019-05-19 07:00:58 building geometry</span></div><div class='output co'>#&gt; <span class='message'>2019-05-19 07:00:58 simplifying geometry</span></div><div class='output co'>#&gt; <span class='message'>2019-05-19 07:00:58 aggregating flows</span></div><div class='output co'>#&gt; <span class='message'>2019-05-19 07:00:58 rejoining segments into linestrings</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>rnet_sf</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='no'>rnet_sf</span>$<span class='no'>value</span>)</div><div class='img'><img src='overline_intersection-3.png' alt='' width='700' height='433' /></div><div class='input'>
 # An even larger example (not shown, takes time to run)
 # rnet = overline_intersection(routes_fast_sf, attrib = c("value", "length"))
 # rnet_sf <- overline(routes_fast_sf, attrib = c("value", "length"), buff_dist = 10)

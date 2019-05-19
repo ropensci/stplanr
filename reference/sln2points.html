@@ -33,9 +33,6 @@ or sfNetwork. — sln2points • stplanr</title>
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -71,7 +68,7 @@ or sfNetwork." />
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -95,9 +92,6 @@ or sfNetwork." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/stplanr-1-od.html">Origin-destination data in R: examples with stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -171,7 +165,7 @@ or sfNetwork.</p>
 (<span class='no'>sln_nodes</span> <span class='kw'>&lt;-</span> <span class='fu'>sln2points</span>(<span class='no'>sln</span>))</div><div class='output co'>#&gt; class       : SpatialPoints 
 #&gt; features    : 52 
 #&gt; extent      : -1.550964, -1.512596, 53.80432, 53.82957  (xmin, xmax, ymin, ymax)
-#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>sln</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>sln_nodes</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='sln2points-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; crs         : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>sln</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>sln_nodes</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='sln2points-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

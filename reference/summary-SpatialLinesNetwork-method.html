@@ -32,9 +32,6 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -68,7 +65,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -92,9 +89,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/stplanr-1-od.html">Origin-destination data in R: examples with stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -153,7 +147,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
 <span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
 <span class='no'>sln</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>sln</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 134a0be U-W- 52 80 -- 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>sln</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 1ea02e4 U-W- 52 80 -- 
 #&gt; + attr: x (g/n), y (g/n), n (g/n), weight (e/n)</div><div class='output co'>#&gt;                Length                 Class                  Mode 
 #&gt;                    80 SpatialLinesDataFrame                    S4 </div></pre>
   </div>

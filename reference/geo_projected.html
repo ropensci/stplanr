@@ -32,9 +32,6 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -68,7 +65,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -92,9 +89,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/stplanr-1-od.html">Origin-destination data in R: examples with stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -167,7 +161,7 @@ automatically by <code><a href='crs_select_aeq.html'>crs_select_aeq()</a></code>
 <span class='fu'>geo_projected</span>(<span class='no'>shp</span>, <span class='kw'>fun</span> <span class='kw'>=</span> <span class='kw pkg'>rgeos</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/rgeos/topics/misc-gBuffer'>gBuffer</a></span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>byid</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Transforming to CRS +proj=aeqd +lat_0=53.82545717 +lon_0=-1.52764769 +x_0=0 +y_0=0 +ellps=WGS84</span></div><div class='output co'>#&gt; class       : SpatialPolygonsDataFrame 
 #&gt; features    : 3 
 #&gt; extent      : -1.552481, -1.511084, 53.81661, 53.8313  (xmin, xmax, ymin, ymax)
-#&gt; coord. ref. : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+#&gt; crs         : +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
 #&gt; variables   : 16
 #&gt; names       : plan, start, finish, length, time, waypoint, cum_hill, change_elev, dif_max_min, up_tot, down_tot,         av_incline, co2_saving, calories, busyness, ... 
 #&gt; min values  :    1,     1,      1,   1535,  464,       37,       87,         -45,          39,     29,       47, 0.0376344086021505,        286,       38,     3327, ... 

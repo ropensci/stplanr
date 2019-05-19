@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>example destinations data — destination_zones • stplanr</title>
+<title>Example destinations data — destination_zones • stplanr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -32,9 +32,6 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -42,9 +39,10 @@
 <!-- ropensci -->
 <link href="../ropensci.css" rel="stylesheet">
 
-<meta property="og:title" content="example destinations data — destination_zones" />
+<meta property="og:title" content="Example destinations data — destination_zones" />
 
-<meta property="og:description" content="example destinations data" />
+<meta property="og:description" content="This dataset represents trip destinations on a different geographic
+level than the origins stored in the object cents." />
 
 <meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -68,7 +66,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.9.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -92,9 +90,6 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/stplanr-1-od.html">Origin-destination data in R: examples with stplanr</a>
-    </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
     </li>
@@ -121,14 +116,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>example destinations data</h1>
+    <h1>Example destinations data</h1>
     <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/data.r'><code>R/data.r</code></a></small>
     <div class="hidden name"><code>destination_zones.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>example destinations data</p>
+    <p>This dataset represents trip destinations on a different geographic
+level than the origins stored in the object <code>cents</code>.</p>
     
     </div>
 
@@ -137,6 +133,13 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A spatial dataset with 87 features</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other example data: <code><a href='flow_dests.html'>flow_dests</a></code>,
+  <code><a href='flowlines.html'>flowlines</a></code>, <code><a href='flow.html'>flow</a></code>,
+  <code><a href='route_network.html'>route_network</a></code>, <code><a href='routes_fast.html'>routes_fast</a></code>,
+  <code><a href='routes_slow.html'>routes_slow</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -169,6 +172,8 @@
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#format">Format</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
