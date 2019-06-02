@@ -1,3 +1,7 @@
+# stplanr 0.3.0
+
+- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data.
+
 # stplanr 0.2.10
 
 - Fix in documentation. See [#311](https://github.com/ropensci/stplanr/issues/311)

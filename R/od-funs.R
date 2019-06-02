@@ -756,3 +756,60 @@ od_aggregate_to <- function(flow, attrib = NULL, FUN = sum, ..., col = 2) {
   flow_grouped <- dplyr::group_by_at(flow, col)
   dplyr::summarise_if(flow_grouped, is.numeric, .funs = FUN, ...)
 }
+
+#' Convert origin-destination data from long to wide format
+#'
+#' This function takes a data frame representing travel between origins
+#' (with origin codes in `name_orig`, typically the 1st column)
+#' and destinations
+#' (with destination codes in `name_dest`, typically the second column) and returns a matrix
+#' with cell values (from `attrib`, the third column by default) representing travel between
+#' origins and destinations.
+#'
+#' @param flow A data frame representing flows between origin and destinations
+#' @param attrib A number or character string representing the column containing the attribute data
+#' of interest from the `flow` data frame
+#' @param name_orig A number or character string representing the zone of origin
+#' @param name_dest A number or character string representing the zone of destination
+#' @family od
+#' @export
+#' @examples
+#' od_to_odmatrix(flow)
+#' od_to_odmatrix(flow[1:9, ])
+#' od_to_odmatrix(flow[1:9, ], attrib = "Bicycle")
+od_to_odmatrix <- function(flow, attrib = 3, name_orig = 1, name_dest = 2) {
+  out <- matrix(
+    nrow = length(unique(flow[[name_orig]])),
+    ncol = length(unique(flow[[name_dest]])),
+    dimnames = list(unique(flow[[name_orig]]), unique(flow[[name_dest]]))
+  )
+  out[cbind(flow[[name_orig]], flow[[name_dest]])] <- flow[[attrib]]
+  out
+}
+
+#' Convert origin-destination data from wide to long format
+#'
+#' This function takes a matrix representing travel between origins
+#' (with origin codes in the `rownames` of the matrix)
+#' and destinations
+#' (with destination codes in the `colnames` of the matrix)
+#' and returns a data frame representing origin-destination pairs.
+#'
+#' The function returns a data frame with rows ordered by origin and then destination
+#' zone code values and with names `orig`, `dest` and `flow`.
+#'
+#' @param odmatrix A matrix with row and columns representing origin and destination zone codes
+#' and cells representing the flow between these zones.
+#' @family od
+#' @export
+#' @examples
+#' odmatrix <- od_to_odmatrix(flow)
+#' odmatrix_to_od(odmatrix)
+#' flow[1:9, 1:3]
+#' odmatrix_to_od(od_to_odmatrix(flow[1:9, 1:3]))
+odmatrix_to_od <- function(odmatrix) {
+  od <- as.data.frame(as.table(odmatrix))
+  names(od) <- c("orig", "dest", "flow")
+  od <- stats::na.omit(od)
+  od[order(paste0(od$orig, od$dest)), ]
+}
