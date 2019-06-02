@@ -42,6 +42,19 @@ a:focus, a:hover {
   min-height: 40px;
 }
 
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+    color: #1b6ada;
+    background-color: #fff;
+}
+
+.dropdown-menu > li > a:hover {
+    text-decoration: none;
+    color: #1b6ada;
+    background-color: #fff;
+}
+
+.co {color: #474747;} /* comment */
+
 .navbar a {
   font-size: 14px;
   padding-bottom: 10px !important;
@@ -95,24 +108,24 @@ a:focus, a:hover {
 }
 
 #sidebar .links h2::before{
-  content: "🔗 ";
+  content: "\01f517 ";
 }
 
 
 #sidebar .developers h2::before{
-  content: "🏭 ";
+  content: "\01f3ed ";
 }
 
 #sidebar .license h2::before{
-  content: "©️ ";
+  content: "\00a9\fe0f ";
 }
 
 #sidebar .dev-status h2::before{
-  content: "🚦️ ";
+  content: "\01f6a6\fe0f ";
 }
 
 #sidebar .citation h2::before{
-  content: "✍️ ";
+  content: "\270d\fe0f ";
 }
 
 /* reference navbar ----------------------------------------------- */
@@ -144,5 +157,16 @@ a:focus, a:hover {
   }
   .navbar .navbar-brand {
     line-height: 19px;
+  }
+  .navbar .navbar-form {
+    margin: 3px 5px 3px 5px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .navbar .navbar-brand {
+    padding-left: 5px;
+    padding-right: 0;
+    margin-right: -120px;
   }
 }

@@ -220,6 +220,12 @@
     <loc>https://ropensci.github.io/stplanr/reference/od_radiation.html</loc>
   </url>
   <url>
+    <loc>https://ropensci.github.io/stplanr/reference/od_to_odmatrix.html</loc>
+  </url>
+  <url>
+    <loc>https://ropensci.github.io/stplanr/reference/odmatrix_to_od.html</loc>
+  </url>
+  <url>
     <loc>https://ropensci.github.io/stplanr/reference/onewaygeo.html</loc>
   </url>
   <url>
