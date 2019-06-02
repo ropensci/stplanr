@@ -1,3 +1,5 @@
+# stplanr (development version)
+
 # stplanr 0.3.0
 
 - New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data.
