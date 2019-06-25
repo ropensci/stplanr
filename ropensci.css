@@ -111,6 +111,10 @@ a:focus, a:hover {
   content: "\01f517 ";
 }
 
+#sidebar .community h2::before{
+  content: "\01f44b "
+}
+
 
 #sidebar .developers h2::before{
   content: "\01f3ed ";
