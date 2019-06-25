@@ -443,6 +443,8 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
       rm(x)
     }
 
+    overlined_simple <- dplyr::ungroup(overlined_simple)
+    
     #Separate our the linestrings and the mulilinestrings
     message(paste0(Sys.time(), " rejoining segments into linestrings"))
     overlined_simple <- sf::st_line_merge(overlined_simple)
