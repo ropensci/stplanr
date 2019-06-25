@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.rstudio.com/web/packages/stplanr/index.html)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/onboarding/issues/10)
@@ -27,7 +27,8 @@ library(stplanr)
 
 **stplanr** is a package for sustainable transport planning with R.
 
-It provides functions for solving common problems in transport planning and modelling, such as how to best get from point A to point B. The overall aim is to provide a reproducible, transparent and accessible toolkit to help people better understand transport systems and inform policy, as outlined in a [paper](https://journal.r-project.org/archive/2018/RJ-2018-053/index.html) about the package, and the potential for open source software in transport planning in general, published in the [R Journal](http://journal.r-project.org/).
+It provides functions for solving common problems in transport planning and modelling, such as how to best get from point A to point B.
+The overall aim is to provide a reproducible, transparent and accessible toolkit to help people better understand transport systems and inform policy, as outlined in a [paper](https://journal.r-project.org/archive/2018/RJ-2018-053/index.html) about the package, and the potential for open source software in transport planning in general, published in the [R Journal](https://journal.r-project.org/).
 
 The initial work on the project was funded by the Department of Transport
 ([DfT](https://www.gov.uk/government/organisations/department-for-transport))
@@ -114,29 +115,27 @@ routes = routes_fast_sf[2:5, ]
 plot(routes$geometry)
 ```
 
-
-Another way to visualise this is with the leaflet package:
-
-```{r, routes-leaf}
-library(leaflet)
-leaflet() %>% addTiles() %>% addPolylines(data = routes)
-```
-
 For more examples, `example("line2route")`.
 
 `overline` is a function which takes a series of route-allocated lines,
 splits them into unique segments and aggregates
 the values of overlapping lines. This can represent where there will be
-most traffic on the transport system, as illustrated
-below. 
+most traffic on the transport system, as demonstrated in the following code chunk. 
 
 ```{r rnet, warning=FALSE}
 routes$All <- desire_lines$All
 rnet <- overline2(routes, attrib = "All")
+```
 
-lwd <- rnet$All / mean(rnet$All)
-plot(rnet, lwd = lwd, reset = FALSE)
-plot(cents_sf, add = TRUE)
+The route network can be visualised as follows:
+
+```{r, routes-leaf}
+library(leaflet)
+pal = leaflet::colorNumeric(palette = "YlGnBu", domain = rnet$All)
+leaflet(data = rnet) %>%
+  addProviderTiles(providers$OpenStreetMap.BlackAndWhite) %>%
+  addPolylines(weight = rnet$All / 3, color = ~pal(All), opacity = 0.9) %>% 
+  addLegend(pal = pal, values = ~All)
 ```
 
 ## Installation
@@ -216,7 +215,7 @@ However, there are already some good resources on the topic, including (any furt
 
 - The Transport chapter of *Geocomputation with R*, which provides a broad introduction from a geographic data perspective: https://geocompr.robinlovelace.net/transport.html
 - The `stplanr` paper, which describes the context in which the package was developed: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html
-- The `dodgr` vignette, which provides an introduction to routing in R: https://cran.r-project.org/web/packages/dodgr/vignettes/dodgr.html
+- The `dodgr` vignette, which provides an introduction to routing in R: https://cran.r-project.org/package=dodgr/vignettes/dodgr.html
 
 ## Meta
 

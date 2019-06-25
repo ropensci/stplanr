@@ -5,13 +5,14 @@
 \alias{destination_zones}
 \alias{destinations}
 \alias{destinations_sf}
-\title{example destinations data}
+\title{Example destinations data}
 \format{A spatial dataset with 87 features}
 \usage{
 data(destination_zones)
 }
 \description{
-example destinations data
+This dataset represents trip destinations on a different geographic
+level than the origins stored in the object \code{cents}.
 }
 \examples{
 \dontrun{
@@ -38,8 +39,11 @@ destinations_sf <- sf::st_as_sf(destinations)
 devtools::use_data(destinations_sf)
 }
 }
-\concept{example destinations
-
-This dataset represents trip destinations on a different geographic
-level than the origins stored in the `cents`.}
+\seealso{
+Other example data: \code{\link{flow_dests}},
+  \code{\link{flowlines}}, \code{\link{flow}},
+  \code{\link{route_network}}, \code{\link{routes_fast}},
+  \code{\link{routes_slow}}
+}
+\concept{example data}
 \keyword{datasets}

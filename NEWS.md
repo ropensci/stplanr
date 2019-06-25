@@ -1,3 +1,28 @@
+# stplanr (development version)
+
+# stplanr 0.3.0
+
+- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data.
+
+# stplanr 0.2.10
+
+- Fix in documentation. See [#311](https://github.com/ropensci/stplanr/issues/311)
+
+# stplanr 0.2.9
+
+## NEW FEATURES
+
+- New functions `od_aggregate_from()` and `od_aggregate_to()` provide easy ways to aggregate origin-destination pairs. See [#303](https://github.com/ropensci/stplanr/pull/303).
+- Updated `overline2()` is now faster and better documented, thanks to [#307](https://github.com/ropensci/stplanr/pull/307)
+- Updates to `route_dodgr()` function, which provides an interface to the [dodgr](https://github.com/ATFutures/dodgr) package, accepts wider range of inputs
+- Better website and updated function list. See https://ropensci.github.io/stplanr/index.html
+- The `sf` method for `overline()` has been updated so it calls the much faster `overline2()` function
+- Updated documentation for `route_local()`
+
+## BUG FIXES
+
+- Bug in `sum_network_routes()` fixed. See [#267](https://github.com/ropensci/stplanr/issues/267)
+
 # stplanr 0.2.8
 
 ## NEW FEATURES

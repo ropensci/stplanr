@@ -26,7 +26,6 @@ NULL
 
 #' data frame of commuter flows
 #'
-#' @family example travel data
 #'
 #' This dataset represents commuter flows (work travel) between origin
 #' and destination zones (see [cents()]).
@@ -46,6 +45,7 @@ NULL
 #' structure is generalisable and typical of flow data from any source.
 #' The key variables are the origin and destination ids, which link to
 #' the `cents` georeferenced spatial objects.
+#' @family example data
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed - see
@@ -82,8 +82,7 @@ NULL
 #' data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
-#' @family example travel data
-#'
+#' @family example data
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed
@@ -99,12 +98,11 @@ NULL
 #' @usage data(flow_dests)
 #' @format A data frame with 49 rows and 15 columns
 NULL
-#' example destinations data
-#'
-#' @family example destinations
+#' Example destinations data
 #'
 #' This dataset represents trip destinations on a different geographic
-#' level than the origins stored in the `cents`.
+#' level than the origins stored in the object `cents`.
+#' @family example data
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed - see
@@ -138,11 +136,11 @@ NULL
 NULL
 #' spatial lines dataset of commuter flows
 #'
-#' @family example travel data
 #'
 #' Flow data after conversion to a spatial format
 #' with [od2line()] (see [flow()]).
 #'
+#' @family example data
 #' @docType data
 #' @keywords datasets
 #' @name flowlines
@@ -152,13 +150,13 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'fastest' between [cents()]
 #' objects
 #' with [od2line()] (see [flow()]).
 #'
+#' @family example data
 #' @docType data
 #' @keywords datasets
 #' @name routes_fast
@@ -169,13 +167,13 @@ NULL
 
 #' spatial lines dataset of commuter flows on the travel network
 #'
-#' @family example travel data
 #'
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between [cents()]
 #' objects
 #' with [od2line()] (see [flow()]).
 #'
+#' @family example data
 #' @docType data
 #' @keywords datasets
 #' @name routes_slow
@@ -204,11 +202,11 @@ NULL
 
 #' spatial lines dataset representing a route network
 #'
-#' @family example travel data
 #'
 #' The flow of commuters using different segments of the road network represented in the
 #' [flowlines()] and [routes_fast()] datasets
 #'
+#' @family example data
 #' @docType data
 #' @keywords datasets
 #' @name route_network
@@ -280,4 +278,16 @@ NULL
 #' @format An sf object
 #' @examples
 #' osm_net_example
+NULL
+
+#' Example of origin-destination data from UK Census
+#'
+#' See the `stplanr-1-od` vignette for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name od_data_sample
+#' @format A data frame (tibble) object
+#' @examples
+#' od_data_sample
 NULL

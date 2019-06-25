@@ -70,9 +70,12 @@ plot(od_sf_agg$geometry, lwd = od_sf_agg$Bicycle, add = TRUE, col = "red")
 }
 \seealso{
 Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_radiation}}, \code{\link{points2flow}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
+  \code{\link{od_aggregate_to}},
+  \code{\link{od_coords2line}}, \code{\link{od_coords}},
+  \code{\link{od_dist}}, \code{\link{od_radiation}},
+  \code{\link{od_to_odmatrix}},
+  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
   \code{\link{points2odf}}, \code{\link{sp_aggregate}}
 }
 \concept{od}

@@ -7,10 +7,14 @@
 \title{spatial lines dataset of commuter flows}
 \format{A spatial lines dataset with 49 rows and 15 columns}
 \description{
-spatial lines dataset of commuter flows
-}
-\concept{example travel data
-
 Flow data after conversion to a spatial format
-with [od2line()] (see [flow()]).}
+with \code{\link[=od2line]{od2line()}} (see \code{\link[=flow]{flow()}}).
+}
+\seealso{
+Other example data: \code{\link{destination_zones}},
+  \code{\link{flow_dests}}, \code{\link{flow}},
+  \code{\link{route_network}}, \code{\link{routes_fast}},
+  \code{\link{routes_slow}}
+}
+\concept{example data}
 \keyword{datasets}
