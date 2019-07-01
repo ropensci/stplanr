@@ -31,23 +31,22 @@ b = 0:6
 bb = tmaptools::bb(rnet, ext = 1.1)
 
 m2 = tm_shape(sample_routes[1:2, ], bbox = bb) +
-  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b) +
-  tm_layout(title = "Routes", legend.show = FALSE)
+  tm_lines(col = "value", lwd = "value", palette = "magma", scale = 8, alpha = 0.5, breaks = b) +
+  tm_layout(title = "2 Routes", legend.show = FALSE)
 r2 = tm_shape(rnet2, bbox = bb) + 
-  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b,
-           legend.lwd.show = FALSE, labels = as.character(1:6)) +
-  tm_layout("Route network")
+  tm_lines(col = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b,
+           legend.lwd.show = FALSE, labels = as.character(1:6)) 
 m3 = tm_shape(sample_routes[1:3, ], bbox = bb) +
   tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 15, alpha = 0.5, breaks = b) +
-  tm_layout(legend.show = FALSE)
+  tm_layout(title = "3 Routes", legend.show = FALSE)
 r3 = tm_shape(rnet3, bbox = bb) +
-  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 20, alpha = 0.5, breaks = b) +
+  tm_lines(col = "value", palette = "viridis", scale = 8, alpha = 0.5, breaks = b) +
   tm_layout(legend.show = FALSE)
 m6 = tm_shape(sample_routes, bbox = bb) +
-  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 20, alpha = 0.5, breaks = b) +
-  tm_layout(legend.show = FALSE)
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b) +
+  tm_layout(title = "6 Routes", legend.show = FALSE)
 r6 = tm_shape(rnet, bbox = bb) +
-  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 40, alpha = 0.5, breaks = b) +
+  tm_lines(col = "value", palette = "viridis", scale = 8, alpha = 0.5, breaks = b) +
   tm_layout(legend.show = FALSE) 
 
 
