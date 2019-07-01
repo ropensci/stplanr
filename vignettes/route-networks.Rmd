@@ -14,21 +14,88 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message=FALSE}
 library(stplanr)
 ```
 
-```{r}
-library(stplanr)
-library(tmap)
-sample_routes = routes_fast_sf[2:6, ]
-sample_routes$value = c(1, 2, 3, 1, 2)
+Route networks represent the network of highways, cycleways, footways and other ways along which transport happens.
+Unlike routes, each segment on the network can only appear once.
+
+**stplanr** can be used to convert a series of routes into a route network, using the function `overline2()`, as illustrated below:
+
+```{r, out.width="40%", fig.show='hold', fig.width=5, message=FALSE}
+sample_routes = routes_fast_sf[2:6, NULL]
+sample_routes$value = rep(1:3, length.out = 5)
 rnet = overline2(sample_routes, attrib = "value")
-rnet2 = overline2(sample_routes[1:2, ], attrib = "value")
-rnet3 = overline2(sample_routes[1:3, ], attrib = "value")
+plot(sample_routes["value"], lwd = sample_routes$value, main = "Routes")
+plot(rnet["value"], lwd = rnet$value, main = "Route network")
+```
+
+The above figure shows how `overline2()` breaks the routes into segments with the same values and removes overlapping segments.
+It is a form of geographic aggregation.
+
+<!-- The figure below shows in more detail how the function works with 2, 3 and then 6 lines (see the vignette's source code to reproduce the plot): -->
+
+```{r rnets1, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE}
+# knitr::include_graphics("route-networks.png")
+```
+
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE, eval=FALSE}
+library(tmap)
+sample_routes = routes_fast_sf[2:6, NULL]
+sample_routes$type = " Routes"
+v = 1:3
+n = c(2, 3, 5)
+# route_list = purrr::map(n, ~sample_routes[1:., ])
+route_list = lapply(n, function(x) {
+  l = sample_routes[1:x, ]
+  l$n = x
+  l$value = rep(v, length.out = x)
+  l
+  }
+)
+routes_all = do.call(rbind, route_list)
+# rnet_list = purrr::map(route_list, function(x) {
+rnet_list = lapply(route_list, function(x) {
+  l = overline2(x, "value")
+  l$n = mean(x$n)
+  l
+  } 
+)
+rnet_all = do.call(rbind, rnet_list)
+rnet_all$type = "Route network"
+all_routes = rbind(routes_all, rnet_all)
+p = sf::st_centroid(all_routes)
+
+m = tm_shape(all_routes, bbox = tmaptools::bb(all_routes)) +
+  tm_lines(col = "red", lwd = "value", palette = "inferno", scale = 40, alpha = 0.2, breaks = 0:6,
+           legend.lwd.show = FALSE, labels = as.character(1:6)) +
+  tm_text("value") +
+  tm_facets(by = c("n", "type")) +
+  tm_layout(scale = 1.5)
+# m 
+tmap_save(m, "vignettes/route-networks.png")
+```
+
+```{r, eval=FALSE, echo=FALSE}
+# test code:
+
+sample_routes2 = sample_routes5[2:3, ]
+sample_routes3 = sample_routes5[2:4, ]
+rnet2 = overline2(sample_routes2, attrib = "value")
+rnet3 = overline2(sample_routes3, attrib = "value")
+rnet5 = overline2(sample_routes5, attrib = "value")
 
 b = 0:6
 bb = tmaptools::bb(rnet, ext = 1.1)
+
+rnet5$n = 5
+rnet5$type = "Route network"
+sample_routes5$n = 5
+sample_routes5$type = " Routes"
+
+all_routes = rbind(rnet5, sample_routes5)
 
 m2 = tm_shape(sample_routes[1:2, ], bbox = bb) +
   tm_lines(col = "value", lwd = "value", palette = "magma", scale = 8, alpha = 0.5, breaks = b) +
@@ -52,5 +119,6 @@ r6 = tm_shape(rnet, bbox = bb) +
 
 
 tmap_arrange(m2, r2, m3, r3, m6, r6, nrow = 3)
+
 ```
 
