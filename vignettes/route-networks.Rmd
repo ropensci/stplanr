@@ -1,0 +1,57 @@
+---
+title: "Route networks with stplanr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Route networks with stplanr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(stplanr)
+```
+
+```{r}
+library(stplanr)
+library(tmap)
+sample_routes = routes_fast_sf[2:6, ]
+sample_routes$value = c(1, 2, 3, 1, 2)
+rnet = overline2(sample_routes, attrib = "value")
+rnet2 = overline2(sample_routes[1:2, ], attrib = "value")
+rnet3 = overline2(sample_routes[1:3, ], attrib = "value")
+
+b = 0:6
+bb = tmaptools::bb(rnet, ext = 1.1)
+
+m2 = tm_shape(sample_routes[1:2, ], bbox = bb) +
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b) +
+  tm_layout(title = "Routes", legend.show = FALSE)
+r2 = tm_shape(rnet2, bbox = bb) + 
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 10, alpha = 0.5, breaks = b,
+           legend.lwd.show = FALSE, labels = as.character(1:6)) +
+  tm_layout("Route network")
+m3 = tm_shape(sample_routes[1:3, ], bbox = bb) +
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 15, alpha = 0.5, breaks = b) +
+  tm_layout(legend.show = FALSE)
+r3 = tm_shape(rnet3, bbox = bb) +
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 20, alpha = 0.5, breaks = b) +
+  tm_layout(legend.show = FALSE)
+m6 = tm_shape(sample_routes, bbox = bb) +
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 20, alpha = 0.5, breaks = b) +
+  tm_layout(legend.show = FALSE)
+r6 = tm_shape(rnet, bbox = bb) +
+  tm_lines(col = "value", lwd = "value", palette = "viridis", scale = 40, alpha = 0.5, breaks = b) +
+  tm_layout(legend.show = FALSE) 
+
+
+
+tmap_arrange(m2, r2, m3, r3, m6, r6, nrow = 3)
+```
+
