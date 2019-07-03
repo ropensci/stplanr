@@ -139,3 +139,46 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
     stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))
   )
 }
+
+#' Generate ordered ids of OD pairs so lowest is always first
+#' Implements Szudzik pairing function
+#' Significantly faster on large datasets
+#'
+#' @inheritParams onewayid
+#' @param ordermatters logical, does the order of values matter to pairing, default = FALSE
+#' @param simple logial, if false return in same fromat as od_id_order, if true return just vector of ID values, this is faster but not back compatible
+#'
+#' @examples
+#' ids <- as.character(runif(4000, 1e6, 1e7 - 1))
+#' x <- data.frame(id1 = rep(ids, times = 4000),
+#'                 id2 = rep(ids, each = 4000),
+#'                 val = 1,
+#'                 stringsAsFactors = FALSE)
+#' system.time(od_id_order(x))
+#' system.time(szudzik_pairing(x))
+#' system.time(szudzik_pairing(x, simple = TRUE))
+#' @export
+szudzik_pairing <- function(x, id1 = names(x)[1], id2 = names(x)[2], ordermatters = FALSE, simple = FALSE) {
+  val1 <- x[,id1]
+  val2 <- x[,id2]
+  lvls <- unique(c(val1, val2))
+  val1 <- as.integer(factor(val1, levels = lvls))
+  val2 <- as.integer(factor(val2, levels = lvls))
+  if(ordermatters){
+    ismax <- val1 > val2
+    stplanr.key <- (ismax * 1) * (val1^2 + val1 + val2) + ((!ismax) * 1) * (val2^2 + val1)
+  }else{
+    a <- ifelse(val1 > val2, val2, val1)
+    b <- ifelse(val1 > val2, val1, val2)
+    stplanr.key <- b^2 + a
+  }
+  if(simple){
+    return(stplanr.key)
+  }else{
+    return(data.frame(stplanr.id1 = x[,id1],
+                      stplanr.id2 = x[,id2],
+                      stplanr.key = stplanr.key))
+  }
+
+
+}
