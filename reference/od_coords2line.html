@@ -138,23 +138,23 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>od_coords2line</span>(<span class='no'>odc</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/sf/topics/st_crs'>st_crs</a></span>())</pre>
+    <pre class="usage"><span class='fu'>od_coords2line</span>(<span class='no'>odc</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>odc</th>
-      <td><p>A data frame or matrix of representing the coordinates
+      <td><p>A data frame or matrix representing the coordinates
 of origin-destination data. The first two columns represent the
 coordinates of the origin (typically longitude and latitude) points;
-the second two columns represent the coordinates of the destination
+the third and fourth columns represent the coordinates of the destination
 (in the same CRS). Each row represents travel from origin to destination.</p></td>
     </tr>
     <tr>
       <th>crs</th>
       <td><p>A number representing the coordinate reference system
-of the result.</p></td>
+of the result, 4326 by default.</p></td>
     </tr>
     </table>
     
@@ -174,7 +174,11 @@ of the result.</p></td>
     <pre class="examples"><div class='input'><span class='no'>odf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='od_coords.html'>od_coords</a></span>(<span class='kw'>l</span> <span class='kw'>=</span> <span class='no'>flowlines_sf</span>)
 <span class='no'>odlines</span> <span class='kw'>&lt;-</span> <span class='fu'>od_coords2line</span>(<span class='no'>odf</span>)
 <span class='no'>odlines</span> <span class='kw'>&lt;-</span> <span class='fu'>od_coords2line</span>(<span class='no'>odf</span>, <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>odlines</span>)</div><div class='img'><img src='od_coords2line-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>odlines</span>)</div><div class='img'><img src='od_coords2line-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>x_coords</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>
+<span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>
+<span class='no'>d</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>lapply</a></span>(<span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sample'>sample</a></span>(<span class='no'>x_coords</span>, <span class='no'>n</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>d</span>) <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fx"</span>, <span class='st'>"fy"</span>, <span class='st'>"tx"</span>, <span class='st'>"ty"</span>)
+<span class='no'>l</span> <span class='kw'>=</span> <span class='fu'>od_coords2line</span>(<span class='no'>d</span>)</div><div class='output co'>#&gt; <span class='message'>Duplicate OD pairs identified, removing 27 rows</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>l</span>)</div><div class='img'><img src='od_coords2line-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
