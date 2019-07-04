@@ -26,14 +26,8 @@ odlines <- od_coords2line(odf, crs = 4326)
 plot(odlines)
 x_coords = 1:5
 n = 200
-
-d = data.frame(
-  lon_orig = sample(x_coords, n, replace = T),
-  lat_orig = sample(x_coords, n, replace = T),
-  lon_dest = sample(x_coords, n, replace = T),
-  lat_dest = sample(x_coords, n, replace = T)
-)
-
+d = data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
+names(d) = c("fx", "fy", "tx", "ty")
 l = od_coords2line(d)
 plot(l)
 }
