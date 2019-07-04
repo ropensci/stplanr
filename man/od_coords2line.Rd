@@ -7,14 +7,14 @@
 od_coords2line(odc, crs = sf::st_crs())
 }
 \arguments{
-\item{odc}{A data frame or matrix of representing the coordinates
+\item{odc}{A data frame or matrix representing the coordinates
 of origin-destination data. The first two columns represent the
 coordinates of the origin (typically longitude and latitude) points;
-the second two columns represent the coordinates of the destination
+the third and fourth columns represent the coordinates of the destination
 (in the same CRS). Each row represents travel from origin to destination.}
 
 \item{crs}{A number representing the coordinate reference system
-of the result.}
+of the result, 4326 by default.}
 }
 \description{
 Convert origin-destination coordinates into desire lines
@@ -24,6 +24,18 @@ odf <- od_coords(l = flowlines_sf)
 odlines <- od_coords2line(odf)
 odlines <- od_coords2line(odf, crs = 4326)
 plot(odlines)
+x_coords = 1:5
+n = 200
+
+d = data.frame(
+  lon_orig = sample(x_coords, n, replace = T),
+  lat_orig = sample(x_coords, n, replace = T),
+  lon_dest = sample(x_coords, n, replace = T),
+  lat_dest = sample(x_coords, n, replace = T)
+)
+
+l = od_coords2line(d)
+plot(l)
 }
 \seealso{
 Other od: \code{\link{dist_google}}, \code{\link{od2line}},

@@ -87,13 +87,13 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
 #' Convert origin-destination coordinates into desire lines
 #'
-#' @param odc A data frame or matrix of representing the coordinates
+#' @param odc A data frame or matrix representing the coordinates
 #' of origin-destination data. The first two columns represent the
 #' coordinates of the origin (typically longitude and latitude) points;
-#' the second two columns represent the coordinates of the destination
+#' the third and fourth columns represent the coordinates of the destination
 #' (in the same CRS). Each row represents travel from origin to destination.
 #' @param crs A number representing the coordinate reference system
-#' of the result.
+#' of the result, 4326 by default.
 #' @family od
 #' @export
 #' @examples
@@ -101,12 +101,29 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' odlines <- od_coords2line(odf)
 #' odlines <- od_coords2line(odf, crs = 4326)
 #' plot(odlines)
+#' x_coords = 1:5
+#' n = 200
+#'
+#' d = data.frame(
+#'   lon_orig = sample(x_coords, n, replace = TRUE),
+#'   lat_orig = sample(x_coords, n, replace = TRUE),
+#'   lon_dest = sample(x_coords, n, replace = TRUE),
+#'   lat_dest = sample(x_coords, n, replace = TRUE)
+#' )
+#'
+#' l = od_coords2line(d)
+#' plot(l)
 od_coords2line <- function(odc, crs = sf::st_crs()) {
-  odm <- as.matrix(odc)
+  odc_unique <- unique(odc[, 1:4])
+  odm <- as.matrix(odc_unique)
+  if(nrow(odm) < nrow(odc)) {
+    message("Duplicate OD pairs identified, removing ", nrow(odc) - nrow(odm), " rows")
+    odc_unique$n = dplyr::group_size(dplyr::group_by_all(odc[, 1:4]))
+  }
   linestring_list <- lapply(seq(nrow(odm)), function(i) {
     sf::st_linestring(rbind(odm[i, 1:2], odm[i, 3:4]))
   })
-  sf::st_sfc(linestring_list, crs = crs)
+  sf::st_sf(odc_unique, geometry = sf::st_sfc(linestring_list, crs = crs))
 }
 #' Convert flow data to SpatialLinesDataFrame
 #'
@@ -199,7 +216,7 @@ od2line.sf <- function(flow, zones, destinations = NULL,
   odm = cbind(origin_points, dest_points)
 
   odsfc <- od_coords2line(odm, crs = sf::st_crs(zones))
-  sf::st_sf(flow, geometry = odsfc)
+  sf::st_sf(flow, geometry = odsfc$geometry)
 
 }
 #' @export
