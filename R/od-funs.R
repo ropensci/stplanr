@@ -107,7 +107,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' names(d) = c("fx", "fy", "tx", "ty")
 #' l = od_coords2line(d)
 #' plot(l)
-od_coords2line <- function(odc, crs = sf::st_crs()) {
+od_coords2line <- function(odc, crs = 4326) {
   odc_unique <- unique(odc[, 1:4])
   odm <- as.matrix(odc_unique)
   if(nrow(odm) < nrow(odc)) {
