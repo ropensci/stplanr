@@ -4,7 +4,7 @@
 \alias{od_coords2line}
 \title{Convert origin-destination coordinates into desire lines}
 \usage{
-od_coords2line(odc, crs = sf::st_crs())
+od_coords2line(odc, crs = 4326)
 }
 \arguments{
 \item{odc}{A data frame or matrix representing the coordinates
