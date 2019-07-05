@@ -159,6 +159,9 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' system.time(szudzik_pairing(x, simple = TRUE))
 #' @export
 szudzik_pairing <- function(x, id1 = names(x)[1], id2 = names(x)[2], ordermatters = FALSE, simple = FALSE) {
+  if("tbl" %in% class(x)){
+    x <- as.data.frame(x)
+  }
   val1 <- x[,id1]
   val2 <- x[,id2]
   if(class(val1) == "factor"){
