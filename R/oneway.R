@@ -161,6 +161,12 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 szudzik_pairing <- function(x, id1 = names(x)[1], id2 = names(x)[2], ordermatters = FALSE, simple = FALSE) {
   val1 <- x[,id1]
   val2 <- x[,id2]
+  if(class(val1) == "factor"){
+    val1 <- as.character(val1)
+  }
+  if(class(val2) == "factor"){
+    val2 <- as.character(val2)
+  }
   lvls <- unique(c(val1, val2))
   val1 <- as.integer(factor(val1, levels = lvls))
   val2 <- as.integer(factor(val2, levels = lvls))
