@@ -158,12 +158,7 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' system.time(szudzik_pairing(x))
 #' system.time(szudzik_pairing(x, simple = TRUE))
 #' @export
-szudzik_pairing <- function(x, id1 = names(x)[1], id2 = names(x)[2], ordermatters = FALSE, simple = FALSE) {
-  if("tbl" %in% class(x)){
-    x <- as.data.frame(x)
-  }
-  val1 <- x[,id1]
-  val2 <- x[,id2]
+szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
   if(class(val1) == "factor"){
     val1 <- as.character(val1)
   }
@@ -181,13 +176,42 @@ szudzik_pairing <- function(x, id1 = names(x)[1], id2 = names(x)[2], ordermatter
     b <- ifelse(val1 > val2, val1, val2)
     stplanr.key <- b^2 + a
   }
-  if(simple){
-    return(stplanr.key)
-  }else{
-    return(data.frame(stplanr.id1 = x[,id1],
-                      stplanr.id2 = x[,id2],
-                      stplanr.key = stplanr.key))
+  return(stplanr.key)
+
+}
+
+
+onewayid2.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) {
+  if (is.numeric(attrib)) {
+    attrib <- names(x)[attrib]
   }
 
+  if(class(x[[id1]]) == "factor"){
+    x[[id1]] <- as.character(x[[id1]])
+  }
+  if(class(x[[id2]]) == "factor"){
+    x[[id2]] <- as.character(x[[id2]])
+  }
 
+  x <- x[,c(id1,id2,attrib)]
+  x <- dplyr::rename(x, id1 = !!id1)
+  x <- dplyr::rename(x, id2 = !!id2)
+
+  x$stplanr.key <- szudzik_pairing(val1 = x$id1, val2 = x$id2, ordermatters = FALSE)
+  x$is_two_way <- duplicated(x$stplanr.key)
+
+  x <- dplyr::group_by(x, stplanr.key)
+  x1 <- dplyr::summarise(x,
+                         id1 = dplyr::first(id1),
+                         id2 = dplyr::first(id2),
+                         is_two_way = dplyr::last(is_two_way)
+                         )
+  x2 <- dplyr::summarise_at(x,
+                            attrib,
+                            sum)
+
+  x_oneway <- dplyr::inner_join(x1, x2, by = "stplanr.key")
+  x_oneway$stplanr.key <- NULL
+
+  return(x_oneway)
 }
