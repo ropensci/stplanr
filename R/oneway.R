@@ -168,6 +168,10 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #'
 #' @export
 szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
+  if(length(val1) != length(val2)){
+    stop("val1 and val2 are not of equal length")
+  }
+
   if(class(val1) == "factor"){
     val1 <- as.character(val1)
   }
