@@ -44,15 +44,57 @@ library(dplyr)
 od = pct::wight_od %>% 
   select(-matches("rail|name|moto|car|tax|home")) %>% 
   top_n(n = 5, wt = all)
+class(od)
+od
 ```
+
+The next section discusses this, and other, representations of OD data.
+
+# Representations of OD data
+
+Like all datasets the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://census.ukdataservice.ac.uk/media/50966/2011_england_household.pdf) questions:
+
+- In your main job, what is the address of your workplace?
+- How do you usually travel to work (for the longest part, by distance, of your usual journey to work)?
+  - Work mainly at or from home
+  - Underground, metro, light rail, tram
+  - Train
+  - ...
+  
+The object `od` contains aggregated answers to these question, counting how many people travel from each origin zone to each destination zone, in the 'long' form, where each row is an 'od pair'.
+OD data can also bee represented as an 'OD matrix', as illustrated below withe the **stplanr** function `od_to_odmatrix()`:
+
+```{r}
+od_matrix = od_to_odmatrix(od[1:3])
+class(od_matrix)
+od_matrix
+```
+
+Intead of creating a new column for each *OD pair*, this matrix representation creates a new row for each *zone of origin*.
+It is a simpler data structure, containing only counts, and was popular in the origin origins of transport planning: 'OD matrix' is still sometimes used informally to any OD data.
+However, I recommend using the long OD pair representation: OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many NAs.
+Furthermore, multiple lists of OD matrices or 'OD arrays' must be created to represent multiple attributes.
+This is demonstrated in the code chunk below, which represents travel between OD pairs by all modes and by bike:
+
+```{r}
+lapply(c("all", "bicycle"), function(x) od_to_odmatrix(od[c("geo_code1", "geo_code2", x)]))
+```
+
+The function `odmatrix_to_od()` can help get your data into the more convenient long form:
+
+```{r}
+odmatrix_to_od(od_matrix)
+```
+
+Another common (and sometimes problematic) feature of OD data is 'intra-zonal flows'.
+These are trips that start and end in the same zone.
+It is often useful to separate intra-zonal and inter-zonal flows at the outset, as demonstrated below:
+
 
 ```{r}
 (od_inter = od %>% filter(geo_code1 != geo_code2))
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
-
-
-# Representations of OD data
 
 
 ## Origin-destination pairs (long form)
