@@ -116,10 +116,7 @@
 <div id="introduction-what-is-od-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction-what-is-od-data" class="anchor"></a>Introduction: what is OD data?</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(stplanr)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#&gt; Registered S3 method overwritten by 'R.oo':</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt;   method        from       </span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt;   throw.default R.methodsS3</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(stplanr)</a></code></pre></div>
 </div>
 <div id="representations-of-od-data" class="section level1">
 <h1 class="hasAnchor">
@@ -136,30 +133,9 @@
 <a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">  </span>od_data_all<span class="op">$</span>geo_code2 <span class="op">%in%</span><span class="st"> </span>cents_sf<span class="op">$</span>geo_code </a>
 <a class="sourceLine" id="cb2-7" data-line-number="7">od_data_sample =<span class="st"> </span>od_data_all[sel_local, ]</a></code></pre></div>
 <p>Data in this form usually has at least one other colum, representing the amount of travel between the zones. Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose. As shown in the output of printing the sample dataset, the dataset we have downloaded contains column names representing mode of travel (car, bicycle etc):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(od_data_sample)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;  [1] "geo_code1"     "geo_code2"     "all"           "from_home"    </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;  [5] "light_rail"    "train"         "bus"           "taxi"         </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;  [9] "motorbike"     "car_driver"    "car_passenger" "bicycle"      </span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; [13] "foot"          "other"         "geo_name1"     "geo_name2"    </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [17] "la_1"          "la_2"</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(od_data_sample)</a></code></pre></div>
 <p>Each ‘mode’ column contains an integer, while additional columns contain characters, as demonstrated by printing the data frame:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">od_data_sample</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; # A tibble: 64 x 18</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;    geo_code1 geo_code2   all from_home light_rail train   bus  taxi</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;  1 E02002361 E02002361   109         0          0     0     4     2</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;  2 E02002361 E02002363    38         0          0     1     4     1</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;  3 E02002361 E02002367    10         0          0     0     1     0</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;  4 E02002361 E02002371    44         0          0     0     2     2</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;  5 E02002361 E02002377    34         0          0     0     0     1</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt;  6 E02002361 E02002382     7         0          0     0     1     0</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  7 E02002361 E02002384    53         0          0     1    10     1</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  8 E02002361 E02002393    94         0          0     0    17     1</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  9 E02002363 E02002361    30         0          0     0     0     1</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; 10 E02002363 E02002363   183         0          0     2    13     3</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; # … with 54 more rows, and 10 more variables: motorbike &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; #   car_driver &lt;dbl&gt;, car_passenger &lt;dbl&gt;, bicycle &lt;dbl&gt;, foot &lt;dbl&gt;,</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; #   other &lt;dbl&gt;, geo_name1 &lt;chr&gt;, geo_name2 &lt;chr&gt;, la_1 &lt;chr&gt;, la_2 &lt;chr&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">od_data_sample</a></code></pre></div>
 </div>
 <div id="origin-destination-matrices" class="section level2">
 <h2 class="hasAnchor">
@@ -175,10 +151,8 @@
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/download.file">download.file</a></span>(u, f)</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">lines_cars =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS</a></span>(f)</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(lines_cars[<span class="st">"car_km"</span>], <span class="dt">lwd =</span> lines_cars<span class="op">$</span>car_km <span class="op">/</span><span class="st"> </span><span class="dv">1000</span>)</a></code></pre></div>
-<p><img src="stplanr-od_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 <p>Based on the estimate of the average energy use per km being 2.5 MJ, and that these return trips are made on average 200 times per year, with a circuity of 1.3, we can estimate the total energy use of the ‘high energy commutes’ as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(lines_cars<span class="op">$</span>car_km <span class="op">*</span><span class="st"> </span><span class="fl">2.5</span> <span class="op">*</span><span class="st"> </span><span class="dv">200</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1e9</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; [1] 10.62515</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(lines_cars<span class="op">$</span>car_km <span class="op">*</span><span class="st"> </span><span class="fl">2.5</span> <span class="op">*</span><span class="st"> </span><span class="dv">200</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1e9</span></a></code></pre></div>
 <p>That represents ~10 petajoules (PJ), only for the top 20,000 most energy intensive commutes. That may seem like alot, but represents only a fraction of the UK’s total energy use of <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/729451/DUKES_PN.pdf">~200 Mtoe</a> (8400 PJ).</p>
 </div>
 </div>
