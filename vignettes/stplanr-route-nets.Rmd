@@ -2,7 +2,7 @@
 title: "Route networks with stplanr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Route networks with stplanr}
+  %\VignetteIndexEntry{stplanr vignette 3: route networks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
