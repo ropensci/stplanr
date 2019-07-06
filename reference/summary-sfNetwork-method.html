@@ -99,10 +99,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/route-networks.html">Route networks with stplanr</a>
+      <a href="../articles/stplanr-od.html">Origin-destination data in R: examples with stplanr</a>
     </li>
     <li>
       <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-route-nets.html">Route networks with stplanr</a>
+    </li>
+    <li>
+      <a href="../articles/stplanr-routing.html">Transport routing with stplanr</a>
     </li>
   </ul>
 </li>
@@ -159,7 +165,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
 <span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
 <span class='no'>sln</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>sln</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 43c937b U-W- 52 80 -- 
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>sln</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH bd9de97 U-W- 52 80 -- 
 #&gt; + attr: x (g/n), y (g/n), n (g/n), weight (e/n)</div><div class='output co'>#&gt;                Length                 Class                  Mode 
 #&gt;                    80 SpatialLinesDataFrame                    S4 </div></pre>
   </div>

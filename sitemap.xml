@@ -364,10 +364,16 @@
     <loc>https://ropensci.github.io/stplanr/reference/zones.html</loc>
   </url>
   <url>
-    <loc>https://ropensci.github.io/stplanr/articles/route-networks.html</loc>
+    <loc>https://ropensci.github.io/stplanr/articles/stplanr-od.html</loc>
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/articles/stplanr-paper.html</loc>
+  </url>
+  <url>
+    <loc>https://ropensci.github.io/stplanr/articles/stplanr-route-nets.html</loc>
+  </url>
+  <url>
+    <loc>https://ropensci.github.io/stplanr/articles/stplanr-routing.html</loc>
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/articles/stplanr.html</loc>
