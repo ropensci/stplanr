@@ -15,7 +15,7 @@ bibliography:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE
+  eval = TRUE
 )
 ```
 
@@ -38,7 +38,7 @@ This vignette will not cover cleaning OD, we assume you know R and come with cle
 In simple terms OD data looks like this:
 
 
-```{r setup}
+```{r setup, message=FALSE}
 library(stplanr)
 library(dplyr)
 od = pct::wight_od %>% 
@@ -119,7 +119,7 @@ A useful way of representing OD data that overcomes this issue is `desire_line` 
 This is represented in the file `lines_cars.Rds`, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows:
 
 
-```{r, out.width="100%", warning=FALSE}
+```{r, out.width="100%", warning=FALSE, eval=FALSE}
 u = "https://github.com/ropensci/stplanr/releases/download/0.2.9/lines_cars.Rds"
 f = file.path(tempdir(), "lines_cars.Rds")
 download.file(u, f)
@@ -129,7 +129,7 @@ plot(lines_cars["car_km"], lwd = lines_cars$car_km / 1000)
 
 Based on the estimate of the average energy use per km being 2.5 MJ, and that these return trips are made on average 200 times per year, with a circuity of 1.3, we can estimate the total energy use of the 'high energy commutes' as follows:
 
-```{r}
+```{r, eval=FALSE}
 sum(lines_cars$car_km * 2.5 * 200) / 1e9
 ```
 
