@@ -1,5 +1,5 @@
 ---
-title: "Origin-destination data in R: examples with stplanr"
+title: "Origin-destination data with stplanr"
 output: rmarkdown::html_vignette
 author: "Robin Lovelace"
 vignette: >
