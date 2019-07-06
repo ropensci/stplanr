@@ -17,3 +17,5 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(stplanr)
 ```
+
+## This vignette is work in progress - watch this space!
