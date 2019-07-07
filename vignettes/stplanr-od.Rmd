@@ -29,14 +29,15 @@ If you, like many others, are frustrated by the car dominated nature of most cit
 If you are under any illusion that this healthy outcome of 20^th^ Century transport planning, consider this: roads are now the largest cause of death and injury for young people worldwide, killing and maiming more than more than 1 million and 10 million people each year according to data from the [World Health Organization](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/).
 Even ignoring other problems such as air pollution, an obesity crisis driven by physical inactivity and climate change, it is clear that current transport systems, and the models that have helped to design them, are unsustainable.
 There are other reasons why transport data analysis is important, as outlined in the 'stplanr paper' [@lovelace_stplanr_2018].
+The purpose of this vignette is to introduce OD data, with examples based on data and functions from the stplanr package.
 
-The purpose of this paper is to provide an introduction to OD paper, with examples based on data and functions from the stplanr package.
+# An minimal example OD dataset
+
 OD data can be accessed from a range of sources (we will see code that downloads millions of OD pairs later in this vignette).
 Generally you will need to do some 'data carpentry' before the OD data is 'clean' and ready for analysis.
 This vignette will not cover cleaning OD, we assume you know R and come with clean (if not 'tidy') data!
 
 In simple terms OD data looks like this:
-
 
 ```{r setup, message=FALSE}
 library(stplanr)
@@ -48,11 +49,11 @@ class(od)
 od
 ```
 
-The next section discusses this, and other, representations of OD data.
+<!-- The next section discusses this, and other, representations of OD data. -->
 
-# Representations of OD data
+<!-- # Representations of OD data -->
 
-Like all datasets the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://census.ukdataservice.ac.uk/media/50966/2011_england_household.pdf) questions:
+Like all data, the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://census.ukdataservice.ac.uk/media/50966/2011_england_household.pdf) questions:
 
 - In your main job, what is the address of your workplace?
 - How do you usually travel to work (for the longest part, by distance, of your usual journey to work)?
@@ -61,11 +62,39 @@ Like all datasets the object `od`, created in the preceding code chunk, comes fr
   - Train
   - ...
   
-The object `od` contains aggregated answers to these question, counting how many people travel from each origin zone to each destination zone, in the 'long' form, where each row is an 'od pair'.
-OD data can also bee represented as an 'OD matrix', as demonstrated in the next subsection.
+The object `od` is a data frame containing aggregated answers to these questions (see `?pct::get_od()` for details).
+It is *implicitly geographic*: the first two columns refer to geographic entities but do not contain coordinates themselves (OD coordinates are covered below).
+Other columns contain attributes associated with each OD pair, typically counting how many people travel by mode of transport.
+OD data can be represented in a number of ways, as outlined in the next sections.
 
+# Origin-destination pairs (long form)
 
-The long form of  below with the **stplanr** function `od_to_odmatrix()`:
+The most useful way of representing OD data is the 'long' data frame format described above.
+This is increasingly the format used by official statistical agencies, including the UK's Office for National Statistics (ONS), who provide origin destination data as a `.csv` file.
+Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object `od`:
+
+```{r}
+od[1:2]
+```
+
+`geo_code1` refers to the origin, `geo_code2` refers to the destination.
+
+Data in this form usually has at least one other colum, representing the amount of travel between the zones.
+Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose.
+The `od` dataset contains column names representing mode of travel (train, bus, bicycle etc):
+
+```{r}
+names(od[-(1:2)])
+```
+
+These 'mode' columns contain integers.
+While additional columns can contain characters, dates and other data types, taking advantage of the flexibility of data frames.
+
+# Origin destination matrices
+
+The 'OD matrix' representation of OD data represents each attribute column in the long form as a separate matrix.
+Instead of rows representing OD pairs, rows represent all travel from each origin to all destinations (represented as columns).
+The **stplanr** function `od_to_odmatrix()` converts between the 'long' to the 'matrix' form on a per column basis, as illustrated below:
 
 ```{r}
 od_matrix = od_to_odmatrix(od[1:3])
@@ -73,8 +102,11 @@ class(od_matrix)
 od_matrix
 ```
 
-Instead of creating a new column for each *OD pair*, this matrix representation creates a new row for each *zone of origin*.
-It is a simpler data structure, containing only counts, and was popular in the origin origins of transport planning: 'OD matrix' is still sometimes used informally to any OD data.
+Note that row and column names are now zone codes.
+The cell in row 2 and column 1 (`od_matrix[2, 1]`) means that `831` people travel from zone `E02003591` to zone `E02003588`.
+It is a simpler data structure, usually only containing only counts, and was popular in 20^th^ Century transport models. 
+'OD matrix' is still sometimes used informally to any OD data.
+
 However, I recommend using the long OD pair representation: OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many NAs.
 Furthermore, multiple lists of OD matrices or 'OD arrays' must be created to represent multiple attributes.
 This is demonstrated in the code chunk below, which represents travel between OD pairs by all modes and by bike:
@@ -83,13 +115,15 @@ This is demonstrated in the code chunk below, which represents travel between OD
 lapply(c("all", "bicycle"), function(x) od_to_odmatrix(od[c("geo_code1", "geo_code2", x)]))
 ```
 
-The function `odmatrix_to_od()` can help get your data into the more convenient long form:
+The function `odmatrix_to_od()` converts OD matrices back into the more convenient long form:
 
 ```{r}
 odmatrix_to_od(od_matrix)
 ```
 
-Another common (and sometimes problematic) feature of OD data is 'intra-zonal flows'.
+# Intra-zonal flows
+
+Another common, and sometimes problematic, feature of OD data is 'intra-zonal flows'.
 These are trips that start and end in the same zone.
 It is often useful to separate intra-zonal and inter-zonal flows at the outset, as demonstrated below:
 
@@ -99,9 +133,8 @@ It is often useful to separate intra-zonal and inter-zonal flows at the outset, 
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
 
-## Origin destination matrices
 
-## Desire lines
+# Desire lines
 
 The previous two representations of OD data are 'implicitly geographic': their coordinates are not contained in the data, but associated with another data object, typically a zone or a zone centroid.
 This is clearly problematic because it makes OD data less modular and self standing.
@@ -160,3 +193,34 @@ plot(l)
 
 
 
+
+```{r, eval=FALSE, echo=FALSE}
+remotes::install_github("ITSLeeds/pct")
+library(pct)
+od_data_all = pct::get_od()
+sel_local = 
+  od_data_all$geo_code1 %in% cents_sf$geo_code &
+  od_data_all$geo_code2 %in% cents_sf$geo_code 
+od_data_sample = od_data_all[sel_local, ]
+```
+
+```{r, echo=FALSE, eval=FALSE}
+usethis::use_data(od_data_sample)
+# aim: get top flows by car use multiplied by distance
+# subset flows with more than n people driving:
+od_cars = od_data_all[od_data_all$car_driver >= 50, ]
+cents_ew = pct::get_centroids_ew()
+od_cars = od_cars[
+  od_cars$geo_code1 %in% cents_ew$msoa11cd &
+  od_cars$geo_code2 %in% cents_ew$msoa11cd ,
+  ]
+desire_lines_cars = od2line(od_cars, cents_ew)
+plot(desire_lines_cars[1:999, ])
+desire_lines_cars$euclidean_distance_m = as.numeric(sf::st_length(desire_lines_cars)) / 1000
+desire_lines_cars$car_km = desire_lines_cars$car_driver * desire_lines_cars$euclidean_distance_m
+lines_cars = dplyr::top_n(desire_lines_cars, 20000, car_km)
+summary(lines_cars$car_driver)
+plot(lines_cars["car_km"])
+saveRDS(lines_cars, "lines_cars.Rds")
+piggyback::pb_upload("lines_cars.Rds")
+```
