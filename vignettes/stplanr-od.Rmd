@@ -123,22 +123,66 @@ odmatrix_to_od(od_matrix)
 
 # Intra-zonal flows
 
-Another common, and sometimes problematic, feature of OD data is 'intra-zonal flows'.
+A common, and sometimes problematic, feature of OD data is 'intra-zonal flows'.
 These are trips that start and end in the same zone.
+The proportion of travel that is intra-zonal depends largely on the size of the zones used.
 It is often useful to separate intra-zonal and inter-zonal flows at the outset, as demonstrated below:
-
 
 ```{r}
 (od_inter = od %>% filter(geo_code1 != geo_code2))
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
 
-
 # Desire lines
 
-The previous two representations of OD data are 'implicitly geographic': their coordinates are not contained in the data, but associated with another data object, typically a zone or a zone centroid.
-This is clearly problematic because it makes OD data less modular and self standing.
-A useful way of representing OD data that overcomes this issue is `desire_line` data: geographic lines between origin and destination, with information on flow levels between the two.
+The previous representations of OD data are all implicitly geographic: their coordinates are not contained in the data, but associated with another object that *is* geographic, typically a zone or a zone centroid.
+This is problematic, meaning that multiple objects or files are required to fully represent the same data.
+Desire line representations overcome this issue.
+They are geographic lines between origin and destination, with the same attributes as in the 'long' representation.
+
+`od2line()` can convert long form OD data to desire lines.
+The second argument is a zone or a centroid dataset that contains 'zone IDs' that match the IDs in the first and second columns of the OD data, as illustrated below:
+
+```{r}
+z = pct::wight_centroids
+class(z)
+l = od2line(flow = od_inter, zones = z)
+```
+
+The preceding code chunk created a zones object called `z`, the coordinates of which were used to convert the object `od` into `l`, which are geographic desire lines.
+The desire line object is stored in as a geographic simple features object, which has the same number of rows as does the object `od` and one more column:
+
+```{r}
+class(l)
+nrow(l) - nrow(od)
+ncol(l) - ncol(od)
+```
+
+The new column is the geometry column, which can be plotted as follows:
+
+```{r}
+plot(l$geometry)
+```
+
+By default, plotting `l` shows the attributes for each line:
+
+```{r}
+plot(l)
+```
+
+Because these lines have a coordinate reference system (CRS) inherited from the zones data, they can also be plotted on an interactive map, as follows:
+
+```{r}
+library(leaflet)
+leaflet() %>% 
+  addTiles() %>% 
+  addPolygons(data = l)
+```
+
+
+# Oneway lines
+
+# Applications
 
 This is represented in the file `lines_cars.Rds`, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows:
 
