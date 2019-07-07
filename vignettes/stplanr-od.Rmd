@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 Origin-destination (OD) data is data that has not just one geographic location, but two.
 As the name suggests, OD data represents movement through geographic space, from an origin (O) to a destination (D).
 Despite the rather dull name, OD datasets are a vital part of the modern world, underpinning the transport models that influence current *and future* systems.
-If you, like many others, are frustrated by the car dominated nature of most cities, OD datasets should be of great interest: they underlied the car-centric transport models that were helped inform and justify the vast expansion of highways that happened in the 20^th^ Century [@boyce_forecasting_2015].
+If you, like many others, are frustrated by the car dominated nature of most cities, OD datasets should be of great interest: they underlie the car-centric transport models that inform and helped justify the vast expansion of highways that happened in the 20^th^ Century [@boyce_forecasting_2015].
 
 If you are under any illusion that this healthy outcome of 20^th^ Century transport planning, consider this: roads are now the largest cause of death and injury for young people worldwide, killing and maiming more than more than 1 million and 10 million people each year according to data from the [World Health Organization](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/).
 Even ignoring other problems such as air pollution, an obesity crisis driven by physical inactivity and climate change, it is clear that current transport systems, and the models that have helped to design them, are unsustainable.
@@ -62,7 +62,10 @@ Like all datasets the object `od`, created in the preceding code chunk, comes fr
   - ...
   
 The object `od` contains aggregated answers to these question, counting how many people travel from each origin zone to each destination zone, in the 'long' form, where each row is an 'od pair'.
-OD data can also bee represented as an 'OD matrix', as illustrated below withe the **stplanr** function `od_to_odmatrix()`:
+OD data can also bee represented as an 'OD matrix', as demonstrated in the next subsection.
+
+
+The long form of  below with the **stplanr** function `od_to_odmatrix()`:
 
 ```{r}
 od_matrix = od_to_odmatrix(od[1:3])
@@ -70,7 +73,7 @@ class(od_matrix)
 od_matrix
 ```
 
-Intead of creating a new column for each *OD pair*, this matrix representation creates a new row for each *zone of origin*.
+Instead of creating a new column for each *OD pair*, this matrix representation creates a new row for each *zone of origin*.
 It is a simpler data structure, containing only counts, and was popular in the origin origins of transport planning: 'OD matrix' is still sometimes used informally to any OD data.
 However, I recommend using the long OD pair representation: OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many NAs.
 Furthermore, multiple lists of OD matrices or 'OD arrays' must be created to represent multiple attributes.
@@ -95,60 +98,6 @@ It is often useful to separate intra-zonal and inter-zonal flows at the outset, 
 (od_inter = od %>% filter(geo_code1 != geo_code2))
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
-
-
-## Origin-destination pairs (long form)
-
-Perhaps the most common and straightforward representation of OD data is a 'long thin' data frame.
-This is increasingly the format used by official statistical agencies, including the UK's Office for National Statistics (ONS), who provide origin destination data as a `.csv` file.
-Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as shown in the code chunk below, which creates an object called `od_data_sample` using the [`pct` package](https://itsleeds.github.io/pct/) (chunk not evaluated for speed):
-
-```{r, eval=FALSE}
-remotes::install_github("ITSLeeds/pct")
-library(pct)
-od_data_all = pct::get_od()
-sel_local = 
-  od_data_all$geo_code1 %in% cents_sf$geo_code &
-  od_data_all$geo_code2 %in% cents_sf$geo_code 
-od_data_sample = od_data_all[sel_local, ]
-```
-
-```{r, echo=FALSE, eval=FALSE}
-usethis::use_data(od_data_sample)
-# aim: get top flows by car use multiplied by distance
-# subset flows with more than n people driving:
-od_cars = od_data_all[od_data_all$car_driver >= 50, ]
-cents_ew = pct::get_centroids_ew()
-od_cars = od_cars[
-  od_cars$geo_code1 %in% cents_ew$msoa11cd &
-  od_cars$geo_code2 %in% cents_ew$msoa11cd ,
-  ]
-desire_lines_cars = od2line(od_cars, cents_ew)
-plot(desire_lines_cars[1:999, ])
-desire_lines_cars$euclidean_distance_m = as.numeric(sf::st_length(desire_lines_cars)) / 1000
-desire_lines_cars$car_km = desire_lines_cars$car_driver * desire_lines_cars$euclidean_distance_m
-lines_cars = dplyr::top_n(desire_lines_cars, 20000, car_km)
-summary(lines_cars$car_driver)
-plot(lines_cars["car_km"])
-
-saveRDS(lines_cars, "lines_cars.Rds")
-piggyback::pb_upload("lines_cars.Rds")
-```
-
-Data in this form usually has at least one other colum, representing the amount of travel between the zones.
-Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose.
-As shown in the output of printing the sample dataset, the dataset we have downloaded contains column names representing mode of travel (car, bicycle etc):
-
-```{r}
-names(od_data_sample)
-```
-
-Each 'mode' column contains an integer, while additional columns contain characters, as demonstrated by printing the data frame:
-
-```{r}
-od_data_sample
-```
-
 
 ## Origin destination matrices
 
@@ -176,7 +125,7 @@ sum(lines_cars$car_km * 2.5 * 200) / 1e9
 ```
 
 That represents ~10 petajoules (PJ), only for the top 20,000 most energy intensive commutes.
-That may seem like alot, but represents only a fraction of the UK's total energy use of [~200 Mtoe](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/729451/DUKES_PN.pdf) (8400 PJ).
+That may seem like a lot, but represents only a fraction of the UK's total energy use of [~200 Mtoe](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/729451/DUKES_PN.pdf) (8400 PJ).
 
 
 ```{r, echo=FALSE, eval=FALSE}
@@ -185,5 +134,29 @@ u = "http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/commo
 f =  file.path(tempdir(), "origin_destination_files.zip")
 download.file(u, f)
 unzip(f)
+
+# demonstrate bug/feature in sf
+library(sf)
+m = matrix(c(0, 0,
+             1, 0,
+             0, 1,
+             0, 0), ncol = 2)
+p = st_polygon(list(m))
+
+m = matrix(c(0, 0,
+             1, 0,
+             0, NA,
+             0, 0), ncol = 2)
+p = st_polygon(list(m))
+plot(p)
+
+l = st_linestring(m)
+plot(l)
+plot(p)
+m = matrix(c(0, 0, 0, NA), ncol = 2)
+l = st_linestring(m)
+plot(l)
 ```
+
+
 
