@@ -20,7 +20,8 @@ of \code{\link[=flow]{flow()}}.}
 
 \item{...}{Additional arguments passed to \code{FUN}}
 
-\item{col}{The column that the OD dataset is grouped by (1 by default, the first column usually represents the origin)}
+\item{col}{The column that the OD dataset is grouped by
+(1 by default, the first column usually represents the origin)}
 }
 \description{
 This function takes a data frame of OD data and

@@ -10,7 +10,8 @@ line2routeRetry(lines, pattern = "^Error: ", n_retry = 3, ...)
 \arguments{
 \item{lines}{A SpatialLinesDataFrame}
 
-\item{pattern}{A regex that the error messages must not match to be retried, default "^Error: " i.e. do not retry errors starting with "Error: "}
+\item{pattern}{A regex that the error messages must not match to be retried, default
+"^Error: " i.e. do not retry errors starting with "Error: "}
 
 \item{n_retry}{Number of times to retry}
 

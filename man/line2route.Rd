@@ -35,7 +35,6 @@ Convert straight OD data (desire lines) into routes
 See \code{\link[=route_cyclestreet]{route_cyclestreet()}} and other route functions for details.
 
 A parallel implementation of this was available until version 0.1.8.
-See \href{https://github.com/ropensci/stplanr/blob/18a598674bb378d5577050178da1561489496157/R/od-funs.R}{github.com/ropensci/stplanr} for details.
 }
 
 \examples{

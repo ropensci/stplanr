@@ -71,24 +71,18 @@ OD data can be represented in a number of ways, as outlined in the next sections
 
 The most useful way of representing OD data is the 'long' data frame format described above.
 This is increasingly the format used by official statistical agencies, including the UK's Office for National Statistics (ONS), who provide origin destination data as a `.csv` file.
-Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object `od`:
+Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object `od`.
+Subsequent columns contain attributes such as `all`, meaning all travel between zones, as illustrated below (we will see a matrix representation of this subset of the data in the next section):
 
 ```{r}
-od[1:2]
+od[1:3]
 ```
 
 `geo_code1` refers to the origin, `geo_code2` refers to the destination.
 
-Data in this form usually has at least one other colum, representing the amount of travel between the zones.
-Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose.
-The `od` dataset contains column names representing mode of travel (train, bus, bicycle etc):
-
-```{r}
-names(od[-(1:2)])
-```
-
-These 'mode' columns contain integers.
-While additional columns can contain characters, dates and other data types, taking advantage of the flexibility of data frames.
+Additional columns can represent addition attributes, such as number of trips by time, mode of travel, type of person, or trip purpose.
+The `od` dataset contains column names representing mode of travel (train, bus, bicycle etc), as can be seen with `names(od[-(1:2)])`.
+These 'mode' columns contain integers in the example data, but contain characters, dates and other data types, taking advantage of the flexibility of data frames.
 
 # Origin destination matrices
 
@@ -121,7 +115,7 @@ The function `odmatrix_to_od()` converts OD matrices back into the more convenie
 odmatrix_to_od(od_matrix)
 ```
 
-# Intra-zonal flows
+# Intrer and intra-zonal flows
 
 A common, and sometimes problematic, feature of OD data is 'intra-zonal flows'.
 These are trips that start and end in the same zone.
@@ -184,10 +178,130 @@ leaflet() %>%
 The minimal example dataset we've been using so far is fine for demonstrating the key concepts of OD data.
 But for more advanced topic, and to get an idea of what is possible with OD data at a city level, it helps to have a larger dataset.
 
-We will use and example dataset representing commuting in London, accessed as follows (note: these code chunks are not evaluated in the vignette to reduce the package's build times):
+We will use an example dataset representing commuting in London, accessed as follows (note: these code chunks are not evaluated in the vignette because it starts by downloading 2.4 million rows and could take a few minutes to run).
+First, we can use the `pct` package to download official data from the UK (note the addition of the % active column):
 
 ```{r, eval=FALSE}
+library(dplyr)
+
+# get nationwide OD data
 od_all = pct::get_od()
+nrow(od_all)
+#> 2402201
+od_all$Active = (od_all$bicycle + od_all$foot) /
+    od_all$all * 100
+centroids_all = pct::get_centroids_ew() %>% sf::st_transform(4326)
+nrow(centroids_all)
+#> 7201
+london = pct::pct_regions %>% filter(region_name == "london")
+centroids_london = centroids_all[london, ]
+od_london = od_all %>%
+  filter(geo_code1 %in% centroids_london$msoa11cd) %>% 
+  filter(geo_code2 %in% centroids_london$msoa11cd)
+```
+
+Now that we have the input OD data (in `od_london`) and zones (population-weighted centroids in `cents_london` in this case), can can convert them to desire lines:
+
+```{r, eval=FALSE}
+desire_lines_london = od2line(od_london, centroids_london)
+nrow(desire_lines_london)
+#> 352654
+```
+
+Even after filering flows to keep only those with origins *and* destinations in London, there are still more than 300k flows. That is a lot to plot.
+So we'll further subset them, first so they only contain inter-zonal flows (which are actually lines, intrazonal flows are lines with length 0, which are essentially points) and second to contain only flows containing above a threshold level of flows:
+
+```{r, eval=FALSE}
+min_trips_threshold = 20
+desire_lines_inter = desire_lines_london %>% filter(geo_code1 != geo_code2)
+desire_lines_intra = desire_lines_london %>% filter(geo_code1 == geo_code2)
+desire_lines_top = desire_lines_inter %>% filter(all >= min_trips_threshold)
+nrow(desire_lines_top)
+#> 28879
+```
+
+If we do any analysis on this dataset, it's important to know how representative it is of all flows.
+A crude way to do this is to calculate the proportion of lines and trips that are covered in the dataset:
+
+```{r, eval=FALSE}
+nrow(desire_lines_top) / nrow(desire_lines_london)
+#> 0.08189046
+sum(desire_lines_top$all) / sum(desire_lines_london$all)
+#> 0.557343
+```
+
+This shows that only 8% of the lines contain more than half (55%) of the total number of trips.
+
+# Plotting origin-destination data
+
+Once you have an OD dataset of a size that can be plotted (20,000 desire lines is quick to plot on most computers) a logical next stage is to plot it, e.g. with `sf`'s `plot()` method:
+
+```{r, eval=FALSE}
+plot(desire_lines_top["All"])
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61058906-030a5c80-a3f0-11e9-90b5-d216964e9681.png")
+```
+You may be disapointed by the result, which is more of a 'hay stack' plot than an intuitive illustration of flows across the city.
+To overcome this issue, you can set the aesthetics to emphasize with important flows, e.g. by line width in `sf`'s plotting system:
+
+```{r, eval=FALSE}
+lwd = desire_lines_top$all / mean(desire_lines_top$all)
+q = quantile(desire_lines_top$all)
+col_labs = sf::sf.colors(n = length(q) - 1, alpha = 0.05)
+col = cut(desire_lines_top$all, breaks = q, labels = col_labs) %>% 
+  as.character()
+plot(desire_lines_top[, "all"], col = col, lwd = lwd)
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61061859-f9cfbe80-a3f4-11e9-9340-e53cd39c9ef7.png")
+```
+
+This is better, but is still not idea: the code was not intuitive to write, and the result is still not publication quality.
+Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](http://geocompr.robinlovelace.net/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
+As shown in the transport chapter of that book, OD flows can be visualised with the following code:
+
+```{r, eval=FALSE}
+library(tmap)
+desire_lines_top = desire_lines_top %>% 
+  arrange(Active) 
+tm_shape(london) + tm_borders() +
+  tm_shape(desire_lines_top) +
+  tm_lines(palette = "plasma", breaks = c(0, 5, 10, 20, 40, 100),
+    lwd = "all",
+    scale = 9,
+    title.lwd = "Number of trips",
+    alpha = 0.5,
+    col = "Active",
+    title = "Active travel (%)",
+    legend.lwd.show = FALSE
+  ) +
+  tm_scale_bar() +
+  tm_layout(
+    legend.bg.alpha = 0.5,
+    legend.bg.color = "white"
+    )
+```
+
+```{r, echo=FALSE}
+# tmap_save(.Last.value, "tmap-london.png")
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61066243-12dc6d80-a3fd-11e9-8805-826a47c553f6.png")
+```
+
+The above plot contains much information, providing a visual overview of the transport pattern in the city, telling us that:
+
+- It is a monocentric city, with most flows going to the centre.
+- Active transport is geographically dependent, dominating in the central north of the city and with limited uptake on the outskirts of the city.
+- Although the city centre dominates, there are many small clusters of flows in the outer region, for example near Heathrow airport, which is located in the far East of the map.
+
+Plotting OD data in this way can tell us much about cities, each of which has a different travel pattern.
+The below figure, for example, shows the same plotting code applied to Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
+See Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* for details.
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://geocompr.robinlovelace.net/figures/desire-1.png")
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
@@ -196,19 +310,65 @@ saveRDS(od_all, "od_all.Rds")
 piggyback::pb_upload("od_all.Rds")
 ```
 
+# Summaries by origin and destination
+
+It is possible to group OD data by origin and destination to gain information at the zone level.
+The code and resulting plot below, for example, summarises the number of people departing from each zone by mode:
+
+```{r, eval=FALSE}
+zones_london = pct::get_pct_zones("london") %>% 
+  select("geo_code")
+origin_attributes = desire_lines_top %>% 
+  sf::st_drop_geometry() %>% 
+  group_by(geo_code1) %>% 
+  summarize_if(is.numeric, sum) %>% 
+  dplyr::rename(geo_code = geo_code1)
+zones_origins = left_join(zones_london, origin_attributes, by = "geo_code")
+plot(zones_origins)
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61066243-12dc6d80-a3fd-11e9-8805-826a47c553f6.png")
+```
+
+We can observe a number of features, including that:
+
+- Rail is much more common in the south, reflecting the greater density of the local rail network, with short distances between stops, in the South of the city.
+- Cars dominat in the outer fringes, especiall in the West.
+- Taxi and motorbike use have intriguing clusters in the West (perhaps around the wealthy Kensington area for taxis).
+
+The pattern is quite different when we calculate the destinations:
+
+```{r, eval=FALSE}
+destination_attributes = desire_lines_top %>% 
+  sf::st_drop_geometry() %>% 
+  group_by(geo_code2) %>% 
+  summarize_if(is.numeric, sum) %>%
+  dplyr::rename(geo_code = geo_code2) %>% 
+  mutate_at(vars(-matches("geo_|all")), funs( . / all)) %>% 
+  left_join(zones_london, ., by = "geo_code")
+
+plot(zones_destinations, border = NA)
+```
 
 
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61069409-27703400-a404-11e9-9c83-1cd5f2397260.png")
+```
 
 
 
 # Oneway lines
 
-# Applications
+The previous plot looks good but has issues.
+One is that, for 'symetric' OD pairs, in which origin zones/points can be the same as destinations, flows overlap.
 
-This is represented in the file `lines_cars.Rds`, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows:
+<!-- # Applications -->
+
+<!-- This is represented in the file `lines_cars.Rds`, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows: -->
 
 
-```{r, out.width="100%", warning=FALSE, eval=FALSE}
+```{r, out.width="100%", warning=FALSE, eval=FALSE, echo=FALSE}
 u = "https://github.com/ropensci/stplanr/releases/download/0.2.9/lines_cars.Rds"
 f = file.path(tempdir(), "lines_cars.Rds")
 download.file(u, f)

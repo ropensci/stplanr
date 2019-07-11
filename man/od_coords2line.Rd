@@ -4,7 +4,7 @@
 \alias{od_coords2line}
 \title{Convert origin-destination coordinates into desire lines}
 \usage{
-od_coords2line(odc, crs = 4326)
+od_coords2line(odc, crs = 4326, remove_duplicates = TRUE)
 }
 \arguments{
 \item{odc}{A data frame or matrix representing the coordinates
@@ -15,6 +15,8 @@ the third and fourth columns represent the coordinates of the destination
 
 \item{crs}{A number representing the coordinate reference system
 of the result, 4326 by default.}
+
+\item{remove_duplicates}{Should rows with duplicated rows be removed? \code{TRUE} by default.}
 }
 \description{
 Convert origin-destination coordinates into desire lines
@@ -24,12 +26,16 @@ odf <- od_coords(l = flowlines_sf)
 odlines <- od_coords2line(odf)
 odlines <- od_coords2line(odf, crs = 4326)
 plot(odlines)
-x_coords = 1:5
-n = 200
+x_coords = 1:3
+n = 50
 d = data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
 names(d) = c("fx", "fy", "tx", "ty")
 l = od_coords2line(d)
 plot(l)
+nrow(l)
+l_with_duplicates = od_coords2line(d, remove_duplicates = FALSE)
+plot(l_with_duplicates)
+nrow(l_with_duplicates)
 }
 \seealso{
 Other od: \code{\link{dist_google}}, \code{\link{od2line}},
