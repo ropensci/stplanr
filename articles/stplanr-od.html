@@ -162,125 +162,222 @@
 <div id="origin-destination-pairs-long-form" class="section level1">
 <h1 class="hasAnchor">
 <a href="#origin-destination-pairs-long-form" class="anchor"></a>Origin-destination pairs (long form)</h1>
-<p>The most useful way of representing OD data is the ‘long’ data frame format described above. This is increasingly the format used by official statistical agencies, including the UK’s Office for National Statistics (ONS), who provide origin destination data as a <code>.csv</code> file. Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object <code>od</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">od[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; # A tibble: 5 x 2</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;   geo_code1 geo_code2</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;    </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 1 E02003589 E02003588</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 2 E02003589 E02003589</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 3 E02003591 E02003588</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 4 E02003591 E02003589</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 5 E02003592 E02003592</span></a></code></pre></div>
+<p>The most useful way of representing OD data is the ‘long’ data frame format described above. This is increasingly the format used by official statistical agencies, including the UK’s Office for National Statistics (ONS), who provide origin destination data as a <code>.csv</code> file. Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object <code>od</code>. Subsequent columns contain attributes such as <code>all</code>, meaning all travel between zones, as illustrated below (we will see a matrix representation of this subset of the data in the next section):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">od[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; # A tibble: 5 x 3</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;   geo_code1 geo_code2   all</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 1 E02003589 E02003588   809</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 2 E02003589 E02003589   875</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 3 E02003591 E02003588   831</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 4 E02003591 E02003589   852</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 5 E02003592 E02003592  1164</span></a></code></pre></div>
 <p><code>geo_code1</code> refers to the origin, <code>geo_code2</code> refers to the destination.</p>
-<p>Data in this form usually has at least one other colum, representing the amount of travel between the zones. Additional columns represent addition attributes, e.g. a breakdown of flow by time, mode of travel, type of person, or trip purpose. The <code>od</code> dataset contains column names representing mode of travel (train, bus, bicycle etc):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(od[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)])</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "all"     "train"   "bus"     "bicycle" "foot"    "other"</span></a></code></pre></div>
-<p>These ‘mode’ columns contain integers. While additional columns can contain characters, dates and other data types, taking advantage of the flexibility of data frames.</p>
+<p>Additional columns can represent addition attributes, such as number of trips by time, mode of travel, type of person, or trip purpose. The <code>od</code> dataset contains column names representing mode of travel (train, bus, bicycle etc), as can be seen with <code><a href="https://www.rdocumentation.org/packages/base/topics/names">names(od[-(1:2)])</a></code>. These ‘mode’ columns contain integers in the example data, but contain characters, dates and other data types, taking advantage of the flexibility of data frames.</p>
 </div>
 <div id="origin-destination-matrices" class="section level1">
 <h1 class="hasAnchor">
 <a href="#origin-destination-matrices" class="anchor"></a>Origin destination matrices</h1>
 <p>The ‘OD matrix’ representation of OD data represents each attribute column in the long form as a separate matrix. Instead of rows representing OD pairs, rows represent all travel from each origin to all destinations (represented as columns). The <strong>stplanr</strong> function <code><a href="../reference/od_to_odmatrix.html">od_to_odmatrix()</a></code> converts between the ‘long’ to the ‘matrix’ form on a per column basis, as illustrated below:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">od_matrix =<span class="st"> </span><span class="kw"><a href="../reference/od_to_odmatrix.html">od_to_odmatrix</a></span>(od[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(od_matrix)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; [1] "matrix"</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">od_matrix</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; E02003589       809       875        NA</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; E02003591       831       852        NA</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; E02003592        NA        NA      1164</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">od_matrix =<span class="st"> </span><span class="kw"><a href="../reference/od_to_odmatrix.html">od_to_odmatrix</a></span>(od[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(od_matrix)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] "matrix"</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">od_matrix</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; E02003589       809       875        NA</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; E02003591       831       852        NA</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; E02003592        NA        NA      1164</span></a></code></pre></div>
 <p>Note that row and column names are now zone codes. The cell in row 2 and column 1 (<code>od_matrix[2, 1]</code>) means that <code>831</code> people travel from zone <code>E02003591</code> to zone <code>E02003588</code>. It is a simpler data structure, usually only containing only counts, and was popular in 20<sup>th</sup> Century transport models. ‘OD matrix’ is still sometimes used informally to any OD data.</p>
 <p>However, I recommend using the long OD pair representation: OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many NAs. Furthermore, multiple lists of OD matrices or ‘OD arrays’ must be created to represent multiple attributes. This is demonstrated in the code chunk below, which represents travel between OD pairs by all modes and by bike:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"all"</span>, <span class="st">"bicycle"</span>), <span class="cf">function</span>(x) <span class="kw"><a href="../reference/od_to_odmatrix.html">od_to_odmatrix</a></span>(od[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"geo_code1"</span>, <span class="st">"geo_code2"</span>, x)]))</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; E02003589       809       875        NA</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; E02003591       831       852        NA</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; E02003592        NA        NA      1164</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [[2]]</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; E02003589        47        35        NA</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; E02003591        70        38        NA</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; E02003592        NA        NA        72</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"all"</span>, <span class="st">"bicycle"</span>), <span class="cf">function</span>(x) <span class="kw"><a href="../reference/od_to_odmatrix.html">od_to_odmatrix</a></span>(od[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"geo_code1"</span>, <span class="st">"geo_code2"</span>, x)]))</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; E02003589       809       875        NA</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; E02003591       831       852        NA</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; E02003592        NA        NA      1164</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt;           E02003588 E02003589 E02003592</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; E02003589        47        35        NA</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; E02003591        70        38        NA</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; E02003592        NA        NA        72</span></a></code></pre></div>
 <p>The function <code><a href="../reference/odmatrix_to_od.html">odmatrix_to_od()</a></code> converts OD matrices back into the more convenient long form:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/odmatrix_to_od.html">odmatrix_to_od</a></span>(od_matrix)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;        orig      dest flow</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; 1 E02003589 E02003588  809</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 4 E02003589 E02003589  875</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 2 E02003591 E02003588  831</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 5 E02003591 E02003589  852</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 9 E02003592 E02003592 1164</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/odmatrix_to_od.html">odmatrix_to_od</a></span>(od_matrix)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt;        orig      dest flow</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; 1 E02003589 E02003588  809</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; 4 E02003589 E02003589  875</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; 2 E02003591 E02003588  831</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; 5 E02003591 E02003589  852</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; 9 E02003592 E02003592 1164</span></a></code></pre></div>
 </div>
-<div id="intra-zonal-flows" class="section level1">
+<div id="intrer-and-intra-zonal-flows" class="section level1">
 <h1 class="hasAnchor">
-<a href="#intra-zonal-flows" class="anchor"></a>Intra-zonal flows</h1>
+<a href="#intrer-and-intra-zonal-flows" class="anchor"></a>Intrer and intra-zonal flows</h1>
 <p>A common, and sometimes problematic, feature of OD data is ‘intra-zonal flows’. These are trips that start and end in the same zone. The proportion of travel that is intra-zonal depends largely on the size of the zones used. It is often useful to separate intra-zonal and inter-zonal flows at the outset, as demonstrated below:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">(<span class="dt">od_inter =</span> od <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">!=</span><span class="st"> </span>geo_code2))</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; # A tibble: 3 x 8</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;   geo_code1 geo_code2   all train   bus bicycle  foot other</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 1 E02003589 E02003588   809     0    32      47   283     2</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 2 E02003591 E02003588   831     1    14      70   145     1</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; 3 E02003591 E02003589   852     1     6      38   457     1</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">(<span class="dt">od_intra =</span> od <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">==</span><span class="st"> </span>geo_code2))</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; # A tibble: 2 x 8</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   geo_code1 geo_code2   all train   bus bicycle  foot other</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; 1 E02003589 E02003589   875     0    12      35   581     3</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; 2 E02003592 E02003592  1164     1    41      72   439     5</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">(<span class="dt">od_inter =</span> od <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">!=</span><span class="st"> </span>geo_code2))</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; # A tibble: 3 x 8</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;   geo_code1 geo_code2   all train   bus bicycle  foot other</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 1 E02003589 E02003588   809     0    32      47   283     2</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 2 E02003591 E02003588   831     1    14      70   145     1</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 3 E02003591 E02003589   852     1     6      38   457     1</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">(<span class="dt">od_intra =</span> od <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">==</span><span class="st"> </span>geo_code2))</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; # A tibble: 2 x 8</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;   geo_code1 geo_code2   all train   bus bicycle  foot other</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; 1 E02003589 E02003589   875     0    12      35   581     3</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; 2 E02003592 E02003592  1164     1    41      72   439     5</span></a></code></pre></div>
 </div>
 <div id="desire-lines" class="section level1">
 <h1 class="hasAnchor">
 <a href="#desire-lines" class="anchor"></a>Desire lines</h1>
 <p>The previous representations of OD data are all implicitly geographic: their coordinates are not contained in the data, but associated with another object that <em>is</em> geographic, typically a zone or a zone centroid. This is problematic, meaning that multiple objects or files are required to fully represent the same data. Desire line representations overcome this issue. They are geographic lines between origin and destination, with the same attributes as in the ‘long’ representation.</p>
 <p><code><a href="../reference/od2line.html">od2line()</a></code> can convert long form OD data to desire lines. The second argument is a zone or a centroid dataset that contains ‘zone IDs’ that match the IDs in the first and second columns of the OD data, as illustrated below:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">z =<span class="st"> </span>pct<span class="op">::</span>wight_centroids</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(z)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] "sf"         "data.frame"</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">l =<span class="st"> </span><span class="kw"><a href="../reference/od2line.html">od2line</a></span>(<span class="dt">flow =</span> od_inter, <span class="dt">zones =</span> z)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">z =<span class="st"> </span>pct<span class="op">::</span>wight_centroids</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(z)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; [1] "sf"         "data.frame"</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">l =<span class="st"> </span><span class="kw"><a href="../reference/od2line.html">od2line</a></span>(<span class="dt">flow =</span> od_inter, <span class="dt">zones =</span> z)</a></code></pre></div>
 <p>The preceding code chunk created a zones object called <code>z</code>, the coordinates of which were used to convert the object <code>od</code> into <code>l</code>, which are geographic desire lines. The desire line object is stored in as a geographic simple features object, which has the same number of rows as does the object <code>od</code> and one more column:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(l)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; [1] "sf"         "data.frame"</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(l) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(od)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; [1] -2</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(l) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(od)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; [1] 1</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(l)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] "sf"         "data.frame"</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(l) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(od)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; [1] -2</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(l) <span class="op">-</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">ncol</a></span>(od)</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; [1] 1</span></a></code></pre></div>
 <p>The new column is the geometry column, which can be plotted as follows:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(l<span class="op">$</span>geometry)</a></code></pre></div>
-<p><img src="stplanr-od_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(l<span class="op">$</span>geometry)</a></code></pre></div>
+<p><img src="stplanr-od_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>By default, plotting <code>l</code> shows the attributes for each line:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(l)</a></code></pre></div>
-<p><img src="stplanr-od_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(l)</a></code></pre></div>
+<p><img src="stplanr-od_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Because these lines have a coordinate reference system (CRS) inherited from the zones data, they can also be plotted on an interactive map, as follows:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(leaflet)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/leaflet">leaflet</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/map-layers">addTiles</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/map-layers">addPolygons</a></span>(<span class="dt">data =</span> l)</a></code></pre></div>
-<div id="htmlwidget-3ee674045455d066453a" style="width:700px;height:432.632880098888px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3ee674045455d066453a">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addPolygons","args":[[[[{"lng":[-1.3023447729013,-1.28428479295049],"lat":[50.7026730223134,50.7032568564458]}]],[[{"lng":[-1.30109588996732,-1.28428479295049],"lat":[50.694111412435,50.7032568564458]}]],[[{"lng":[-1.30109588996732,-1.3023447729013],"lat":[50.694111412435,50.7026730223134]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[50.694111412435,50.7032568564458],"lng":[-1.3023447729013,-1.28428479295049]}},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(leaflet)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/leaflet">leaflet</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/map-layers">addTiles</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/leaflet/topics/map-layers">addPolygons</a></span>(<span class="dt">data =</span> l)</a></code></pre></div>
+<div id="htmlwidget-6580056d49de9e4f7694" style="width:700px;height:432.632880098888px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6580056d49de9e4f7694">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addPolygons","args":[[[[{"lng":[-1.3023447729013,-1.28428479295049],"lat":[50.7026730223134,50.7032568564458]}]],[[{"lng":[-1.30109588996732,-1.28428479295049],"lat":[50.694111412435,50.7032568564458]}]],[[{"lng":[-1.30109588996732,-1.3023447729013],"lat":[50.694111412435,50.7026730223134]}]]],null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[50.694111412435,50.7032568564458],"lng":[-1.3023447729013,-1.28428479295049]}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="a-larger-example" class="section level1">
 <h1 class="hasAnchor">
 <a href="#a-larger-example" class="anchor"></a>A larger example</h1>
 <p>The minimal example dataset we’ve been using so far is fine for demonstrating the key concepts of OD data. But for more advanced topic, and to get an idea of what is possible with OD data at a city level, it helps to have a larger dataset.</p>
-<p>We will use and example dataset representing commuting in London, accessed as follows (note: these code chunks are not evaluated in the vignette to reduce the package’s build times):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">od_all =<span class="st"> </span>pct<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pct/topics/get_od">get_od</a></span>()</a></code></pre></div>
+<p>We will use an example dataset representing commuting in London, accessed as follows (note: these code chunks are not evaluated in the vignette because it starts by downloading 2.4 million rows and could take a few minutes to run). First, we can use the <code>pct</code> package to download official data from the UK (note the addition of the % active column):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co"># get nationwide OD data</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">od_all =<span class="st"> </span>pct<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pct/topics/get_od">get_od</a></span>()</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(od_all)</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 2402201</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">od_all<span class="op">$</span>Active =<span class="st"> </span>(od_all<span class="op">$</span>bicycle <span class="op">+</span><span class="st"> </span>od_all<span class="op">$</span>foot) <span class="op">/</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">    </span>od_all<span class="op">$</span>all <span class="op">*</span><span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">centroids_all =<span class="st"> </span>pct<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pct/topics/get_centroids_ew">get_centroids_ew</a></span>() <span class="op">%&gt;%</span><span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_transform">st_transform</a></span>(<span class="dv">4326</span>)</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(centroids_all)</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt; 7201</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">london =<span class="st"> </span>pct<span class="op">::</span>pct_regions <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(region_name <span class="op">==</span><span class="st"> "london"</span>)</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">centroids_london =<span class="st"> </span>centroids_all[london, ]</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">od_london =<span class="st"> </span>od_all <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">%in%</span><span class="st"> </span>centroids_london<span class="op">$</span>msoa11cd) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code2 <span class="op">%in%</span><span class="st"> </span>centroids_london<span class="op">$</span>msoa11cd)</a></code></pre></div>
+<p>Now that we have the input OD data (in <code>od_london</code>) and zones (population-weighted centroids in <code>cents_london</code> in this case), can can convert them to desire lines:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">desire_lines_london =<span class="st"> </span><span class="kw"><a href="../reference/od2line.html">od2line</a></span>(od_london, centroids_london)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(desire_lines_london)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; 352654</span></a></code></pre></div>
+<p>Even after filering flows to keep only those with origins <em>and</em> destinations in London, there are still more than 300k flows. That is a lot to plot. So we’ll further subset them, first so they only contain inter-zonal flows (which are actually lines, intrazonal flows are lines with length 0, which are essentially points) and second to contain only flows containing above a threshold level of flows:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">min_trips_threshold =<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">desire_lines_inter =<span class="st"> </span>desire_lines_london <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">!=</span><span class="st"> </span>geo_code2)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">desire_lines_intra =<span class="st"> </span>desire_lines_london <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(geo_code1 <span class="op">==</span><span class="st"> </span>geo_code2)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">desire_lines_top =<span class="st"> </span>desire_lines_inter <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(all <span class="op">&gt;=</span><span class="st"> </span>min_trips_threshold)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(desire_lines_top)</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; 28879</span></a></code></pre></div>
+<p>If we do any analysis on this dataset, it’s important to know how representative it is of all flows. A crude way to do this is to calculate the proportion of lines and trips that are covered in the dataset:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(desire_lines_top) <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(desire_lines_london)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; 0.08189046</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(desire_lines_top<span class="op">$</span>all) <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(desire_lines_london<span class="op">$</span>all)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 0.557343</span></a></code></pre></div>
+<p>This shows that only 8% of the lines contain more than half (55%) of the total number of trips.</p>
+</div>
+<div id="plotting-origin-destination-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#plotting-origin-destination-data" class="anchor"></a>Plotting origin-destination data</h1>
+<p>Once you have an OD dataset of a size that can be plotted (20,000 desire lines is quick to plot on most computers) a logical next stage is to plot it, e.g. with <code>sf</code>’s <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> method:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(desire_lines_top[<span class="st">"All"</span>])</a></code></pre></div>
+<p><img src="https://user-images.githubusercontent.com/1825120/61058906-030a5c80-a3f0-11e9-90b5-d216964e9681.png"><!-- --> You may be disapointed by the result, which is more of a ‘hay stack’ plot than an intuitive illustration of flows across the city. To overcome this issue, you can set the aesthetics to emphasize with important flows, e.g. by line width in <code>sf</code>’s plotting system:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">lwd =<span class="st"> </span>desire_lines_top<span class="op">$</span>all <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(desire_lines_top<span class="op">$</span>all)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">q =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/quantile">quantile</a></span>(desire_lines_top<span class="op">$</span>all)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">col_labs =<span class="st"> </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">sf.colors</a></span>(<span class="dt">n =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(q) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">col =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cut">cut</a></span>(desire_lines_top<span class="op">$</span>all, <span class="dt">breaks =</span> q, <span class="dt">labels =</span> col_labs) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>()</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(desire_lines_top[, <span class="st">"all"</span>], <span class="dt">col =</span> col, <span class="dt">lwd =</span> lwd)</a></code></pre></div>
+<p><img src="https://user-images.githubusercontent.com/1825120/61061859-f9cfbe80-a3f4-11e9-9340-e53cd39c9ef7.png"><!-- --></p>
+<p>This is better, but is still not idea: the code was not intuitive to write, and the result is still not publication quality. Instead, it makes sense to make a dedicated mapping package such <strong>tmap</strong>, as outlined in the <a href="http://geocompr.robinlovelace.net/adv-map.html">visualisation chapter</a> of the open source book <em>Geocomputation with R</em> <span class="citation">(Lovelace, Nowosad, and Meunchow 2019)</span>. As shown in the transport chapter of that book, OD flows can be visualised with the following code:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tmap)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">desire_lines_top =<span class="st"> </span>desire_lines_top <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(Active) </a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_shape">tm_shape</a></span>(london) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_polygons">tm_borders</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_shape">tm_shape</a></span>(desire_lines_top) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_lines">tm_lines</a></span>(<span class="dt">palette =</span> <span class="st">"plasma"</span>, <span class="dt">breaks =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">    <span class="dt">lwd =</span> <span class="st">"all"</span>,</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8">    <span class="dt">scale =</span> <span class="dv">9</span>,</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9">    <span class="dt">title.lwd =</span> <span class="st">"Number of trips"</span>,</a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">    <span class="dt">alpha =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">    <span class="dt">col =</span> <span class="st">"Active"</span>,</a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">    <span class="dt">title =</span> <span class="st">"Active travel (%)"</span>,</a>
+<a class="sourceLine" id="cb18-13" data-line-number="13">    <span class="dt">legend.lwd.show =</span> <span class="ot">FALSE</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">  ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_scale_bar">tm_scale_bar</a></span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/tmap/topics/tm_layout">tm_layout</a></span>(</a>
+<a class="sourceLine" id="cb18-17" data-line-number="17">    <span class="dt">legend.bg.alpha =</span> <span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb18-18" data-line-number="18">    <span class="dt">legend.bg.color =</span> <span class="st">"white"</span></a>
+<a class="sourceLine" id="cb18-19" data-line-number="19">    )</a></code></pre></div>
+<p><img src="https://user-images.githubusercontent.com/1825120/61066243-12dc6d80-a3fd-11e9-8805-826a47c553f6.png"><!-- --></p>
+<p>The above plot contains much information, providing a visual overview of the transport pattern in the city, telling us that:</p>
+<ul>
+<li>It is a monocentric city, with most flows going to the centre.</li>
+<li>Active transport is geographically dependent, dominating in the central north of the city and with limited uptake on the outskirts of the city.</li>
+<li>Although the city centre dominates, there are many small clusters of flows in the outer region, for example near Heathrow airport, which is located in the far East of the map.</li>
+</ul>
+<p>Plotting OD data in this way can tell us much about cities, each of which has a different travel pattern. The below figure, for example, shows the same plotting code applied to Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling. See Section <a href="https://geocompr.robinlovelace.net/transport.html#desire-lines">12.4</a> of <em>Geocomputation with R</em> for details.</p>
+<p><img src="https://geocompr.robinlovelace.net/figures/desire-1.png"><!-- --></p>
+</div>
+<div id="summaries-by-origin-and-destination" class="section level1">
+<h1 class="hasAnchor">
+<a href="#summaries-by-origin-and-destination" class="anchor"></a>Summaries by origin and destination</h1>
+<p>It is possible to group OD data by origin and destination to gain information at the zone level. The code and resulting plot below, for example, summarises the number of people departing from each zone by mode:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">zones_london =<span class="st"> </span>pct<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/pct/topics/get_pct_zones">get_pct_zones</a></span>(<span class="st">"london"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="st">"geo_code"</span>)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">origin_attributes =<span class="st"> </span>desire_lines_top <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="st">  </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_drop_geometry</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(geo_code1) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarize_if</a></span>(is.numeric, sum) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">geo_code =</span> geo_code1)</a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">zones_origins =<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(zones_london, origin_attributes, <span class="dt">by =</span> <span class="st">"geo_code"</span>)</a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(zones_origins)</a></code></pre></div>
+<p><img src="https://user-images.githubusercontent.com/1825120/61066243-12dc6d80-a3fd-11e9-8805-826a47c553f6.png"><!-- --></p>
+<p>We can observe a number of features, including that:</p>
+<ul>
+<li>Rail is much more common in the south, reflecting the greater density of the local rail network, with short distances between stops, in the South of the city.</li>
+<li>Cars dominat in the outer fringes, especiall in the West.</li>
+<li>Taxi and motorbike use have intriguing clusters in the West (perhaps around the wealthy Kensington area for taxis).</li>
+</ul>
+<p>The pattern is quite different when we calculate the destinations:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">destination_attributes =<span class="st"> </span>desire_lines_top <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="st">  </span>sf<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_drop_geometry</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(geo_code2) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarize_if</a></span>(is.numeric, sum) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">geo_code =</span> geo_code2) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/vars.html">vars</a></span>(<span class="op">-</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">matches</a></span>(<span class="st">"geo_|all"</span>)), <span class="kw"><a href="https://dplyr.tidyverse.org/reference/funs.html">funs</a></span>( . <span class="op">/</span><span class="st"> </span>all)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(zones_london, ., <span class="dt">by =</span> <span class="st">"geo_code"</span>)</a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(zones_destinations, <span class="dt">border =</span> <span class="ot">NA</span>)</a></code></pre></div>
+<p><img src="https://user-images.githubusercontent.com/1825120/61069409-27703400-a404-11e9-9c83-1cd5f2397260.png"><!-- --></p>
 </div>
 <div id="oneway-lines" class="section level1">
 <h1 class="hasAnchor">
 <a href="#oneway-lines" class="anchor"></a>Oneway lines</h1>
-</div>
-<div id="applications" class="section level1">
-<h1 class="hasAnchor">
-<a href="#applications" class="anchor"></a>Applications</h1>
-<p>This is represented in the file <code>lines_cars.Rds</code>, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">u =<span class="st"> "https://github.com/ropensci/stplanr/releases/download/0.2.9/lines_cars.Rds"</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">f =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span>(), <span class="st">"lines_cars.Rds"</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/download.file">download.file</a></span>(u, f)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">lines_cars =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS</a></span>(f)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(lines_cars[<span class="st">"car_km"</span>], <span class="dt">lwd =</span> lines_cars<span class="op">$</span>car_km <span class="op">/</span><span class="st"> </span><span class="dv">1000</span>)</a></code></pre></div>
+<p>The previous plot looks good but has issues. One is that, for ‘symetric’ OD pairs, in which origin zones/points can be the same as destinations, flows overlap.</p>
+<!-- # Applications -->
+<!-- This is represented in the file `lines_cars.Rds`, representing the top 20,000 desire lines at the MSOA-MSOA level in England and Wales by the number of car km used for travel to work, which can be downloaded, read-in and plotted as follows: -->
 <!-- Based on the estimate of the average energy use per km being 2.5 MJ, and that these return trips are made on average 200 times per year, with a circuity of 1.3, we can estimate the total energy use of the 'high energy commutes' as follows: -->
 <!-- That represents ~10 petajoules (PJ), only for the top 20,000 most energy intensive commutes. -->
 <!-- That may seem like a lot, but represents only a fraction of the UK's total energy use of [~200 Mtoe](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/729451/DUKES_PN.pdf) (8400 PJ). -->
@@ -295,6 +392,9 @@
 <div id="ref-lovelace_stplanr_2018">
 <p>Lovelace, Robin, and Richard Ellison. 2018. “Stplanr: A Package for Transport Planning.” <em>The R Journal</em> 10 (2): 7–23. <a href="https://doi.org/10.32614/RJ-2018-053" class="uri">https://doi.org/10.32614/RJ-2018-053</a>.</p>
 </div>
+<div id="ref-lovelace_geocomputation_2019">
+<p>Lovelace, Robin, Jakub Nowosad, and Jannes Meunchow. 2019. <em>Geocomputation with R</em>. CRC Press. <a href="http://robinlovelace.net/geocompr" class="uri">http://robinlovelace.net/geocompr</a>.</p>
+</div>
 </div>
 </div>
   </div>
@@ -308,11 +408,12 @@
       <li><a href="#an-minimal-example-od-dataset">An minimal example OD dataset</a></li>
       <li><a href="#origin-destination-pairs-long-form">Origin-destination pairs (long form)</a></li>
       <li><a href="#origin-destination-matrices">Origin destination matrices</a></li>
-      <li><a href="#intra-zonal-flows">Intra-zonal flows</a></li>
+      <li><a href="#intrer-and-intra-zonal-flows">Intrer and intra-zonal flows</a></li>
       <li><a href="#desire-lines">Desire lines</a></li>
       <li><a href="#a-larger-example">A larger example</a></li>
+      <li><a href="#plotting-origin-destination-data">Plotting origin-destination data</a></li>
+      <li><a href="#summaries-by-origin-and-destination">Summaries by origin and destination</a></li>
       <li><a href="#oneway-lines">Oneway lines</a></li>
-      <li><a href="#applications">Applications</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>
