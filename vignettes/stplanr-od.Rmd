@@ -328,7 +328,7 @@ plot(zones_origins)
 ```
 
 ```{r, echo=FALSE}
-knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61066243-12dc6d80-a3fd-11e9-8805-826a47c553f6.png")
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61067619-e7a74d80-a3ff-11e9-8c15-7467717b36ec.png")
 ```
 
 We can observe a number of features, including that:
