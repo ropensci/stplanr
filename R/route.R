@@ -105,32 +105,41 @@ route_dodgr <-
       net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
   }
 
+  ckh <- dodgr::dodgr_cache_off()
   suppressMessages (
     ways_dg <- dodgr::weight_streetnet(net)
   )
 
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
   #suppressMessages ({
-    from_id <- verts$id[dodgr::match_pts_to_graph(verts, fm_coords)]
-    to_id <- verts$id[dodgr::match_pts_to_graph(verts, to_coords)]
+    from_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, fm_coords)])
+    to_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, to_coords)])
   #})
   dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
   paths <- lapply(dp, function (i)
                    lapply(i, function (j) {
+                             if (is.null (j)) return (NULL)
                              res <- verts[match (j, verts$id), c("x", "y")]
                              sf::st_linestring(as.matrix(res))
     }))
-  nms <- unlist(lapply(paths, function (i) names (i)))
+  nms <- as.character (unlist(lapply(paths, function (i) names (i))))
   from_to <- do.call(rbind, strsplit(nms, "-"))
   from_xy <- fm_coords[match(from_to[, 1], unique(from_to[, 1])), , drop = FALSE]
   to_xy <- fm_coords[match(from_to[, 2], unique(from_to[, 2])), , drop = FALSE]
 
-  paths <- sf::st_sfc(unlist(paths, recursive = FALSE), crs = 4326)
-  sf::st_sf(from = from_to[, 1],
-            from_x = from_xy [, 1],
-            from_y = from_xy [, 2],
-            to = from_to[, 2],
-            to_x = to_xy [, 1],
-            to_y = to_xy [, 2],
+  # remove any NULL paths:
+  paths <- unlist(paths, recursive = FALSE)
+  index <- which (vapply (paths, is.null, logical (1)))
+  if (any (index))
+      message ("unable to trace path number ", as.integer (index))
+  index <- which (!seq (paths) %in% index)
+
+  paths <- sf::st_sfc(paths[index], crs = 4326)
+  sf::st_sf(from = from_to[index, 1],
+            from_x = from_xy [index, 1],
+            from_y = from_xy [index, 2],
+            to = from_to[index, 2],
+            to_x = to_xy [index, 1],
+            to_y = to_xy [index, 2],
             geometry = paths)
 }
