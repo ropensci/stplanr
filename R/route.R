@@ -112,8 +112,10 @@ route_dodgr <-
 
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
   #suppressMessages ({
-    from_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, fm_coords)])
-    to_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, to_coords)])
+    from_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, fm_coords,
+                                                          connected = TRUE)])
+    to_id <- unique (verts$id[dodgr::match_pts_to_graph(verts, to_coords,
+                                                        connected = TRUE)])
   #})
   dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
   paths <- lapply(dp, function (i)
