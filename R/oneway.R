@@ -125,6 +125,7 @@ onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2
 }
 
 #' Generate ordered ids of OD pairs so lowest is always first
+#' This function is slow on large datasets, see szudzik_pairing for faster alternative
 #'
 #' @inheritParams onewayid
 #'
@@ -138,4 +139,133 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
     stplanr.id2 = as.name(id2),
     stplanr.key = ~paste(pmin(stplanr.id1, stplanr.id2), pmax(stplanr.id1, stplanr.id2))
   )
+}
+
+#' Combines two ID values to create a single ID number
+#'
+#' @details
+#' In OD data it is common to have many flows from "A to B" and "B to A".
+#' It can be useful to group these an have a single ID that represents pairs of IDs
+#' with or without directionality.
+#'
+#' This function implements the Szudzik pairing function, on two vectors of equal
+#' length. It returns a vector of ID numbers.
+#'
+#' This function superseeds od_id_order as it is faster on large datasets
+#'
+#' @param val1 a vector of numeric, character, or factor values
+#' @param val2 a vector of numeric, character, or factor values
+#' @param ordermatters logical, does the order of values matter to pairing, default = FALSE
+#'
+#' @examples
+#' ids <- as.character(runif(4000, 1e6, 1e7 - 1))
+#' x <- data.frame(id1 = rep(ids, times = 4000),
+#'                 id2 = rep(ids, each = 4000),
+#'                 val = 1,
+#'                 stringsAsFactors = FALSE)
+#' system.time(od_id_order(x))
+#' system.time(szudzik_pairing(x$id1, x$id2))
+#'
+#' @export
+szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
+  if(length(val1) != length(val2)){
+    stop("val1 and val2 are not of equal length")
+  }
+
+  if(class(val1) == "factor"){
+    val1 <- as.character(val1)
+  }
+  if(class(val2) == "factor"){
+    val2 <- as.character(val2)
+  }
+  lvls <- unique(c(val1, val2))
+  val1 <- as.integer(factor(val1, levels = lvls))
+  val2 <- as.integer(factor(val2, levels = lvls))
+  if(ordermatters){
+    ismax <- val1 > val2
+    stplanr.key <- (ismax * 1) * (val1^2 + val1 + val2) + ((!ismax) * 1) * (val2^2 + val1)
+  }else{
+    a <- ifelse(val1 > val2, val2, val1)
+    b <- ifelse(val1 > val2, val1, val2)
+    stplanr.key <- b^2 + a
+  }
+  return(stplanr.key)
+
+}
+
+#' Aggregate ods so they become non-directional
+#'
+#' For example, sum total travel in both directions.
+#' @param x A data frame, representing an OD matrix
+#' @param attrib A vector of column numbers or names
+#' for deciding which attribute(s) of class numeric to
+#' aggregate
+#' @param id1 Optional (it is assumed to be the first column)
+#' text string referring to the name of the variable containing
+#' the unique id of the origin
+#' @param id2 Optional (it is assumed to be the second column)
+#' text string referring to the name of the variable containing
+#' the unique id of the destination
+#' @return outputs a data.frame with rows containing
+#' results for the user-selected attribute values that have been aggregated.
+#' @family lines
+#' @details
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see [flowlines()]) which can be confusing
+#' for users and are difficult to plot.
+#' @examples
+#' data(flow)
+#' flow_oneway <- onewayid(flow, attrib = 3)
+#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # using names instead of index for attribute
+#' onewayid(flow, attrib = "All")
+#' # using many attributes to aggregate
+#' attrib <- which(vapply(flow, is.numeric, TRUE))
+#' flow_oneway <- onewayid(flow, attrib = attrib)
+#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+#' # Demonstrate the results from onewayid and onewaygeo are identical
+#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
+#' plot(flow_oneway$All, flow_oneway_geo$All)
+#' onewayid(flowlines_sf, "all")
+#' @export
+onewayid2 <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) {
+  if (is.numeric(attrib)) {
+    attrib <- names(x)[attrib]
+  }
+
+  if(class(x[[id1]]) == "factor"){
+    x[[id1]] <- as.character(x[[id1]])
+  }
+  if(class(x[[id2]]) == "factor"){
+    x[[id2]] <- as.character(x[[id2]])
+  }
+
+  x <- x[,c(id1,id2,attrib)]
+  x <- dplyr::rename(x, id1 = !!id1)
+  x <- dplyr::rename(x, id2 = !!id2)
+
+  x$stplanr.key <- szudzik_pairing(val1 = x$id1, val2 = x$id2, ordermatters = FALSE)
+  x$is_two_way <- duplicated(x$stplanr.key)
+
+  x <- dplyr::group_by(x, stplanr.key)
+  x1 <- dplyr::summarise(x,
+                         id1 = dplyr::first(id1),
+                         id2 = dplyr::first(id2),
+                         is_two_way = dplyr::last(is_two_way)
+                         )
+  x2 <- dplyr::summarise_at(x,
+                            attrib,
+                            sum)
+
+  x_oneway <- dplyr::inner_join(x1, x2, by = "stplanr.key")
+  x_oneway$stplanr.key <- NULL
+
+  return(x_oneway)
 }

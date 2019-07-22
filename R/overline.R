@@ -339,6 +339,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
 
+  x = sf::st_zm(x)
   x = x[, attrib]
   x_crs = sf::st_crs(x)
 
@@ -444,7 +445,7 @@ overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
     }
 
     overlined_simple <- dplyr::ungroup(overlined_simple)
-    
+
     #Separate our the linestrings and the mulilinestrings
     message(paste0(Sys.time(), " rejoining segments into linestrings"))
     overlined_simple <- sf::st_line_merge(overlined_simple)
