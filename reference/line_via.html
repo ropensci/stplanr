@@ -193,8 +193,8 @@ lv <- line_via(l, p)
 #&gt; <span class='error'>5: </span>
 #&gt; <span class='error'>  ^</span></div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>mapview</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/mapview/topics/mapView'>mapview</a></span>(<span class='no'>lv</span>) +
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/mapview/topics/mapView'>mapview</a></span>(<span class='no'>lv</span>$<span class='no'>leg_orig</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>)
+<span class='fu'>mapview</span>(<span class='no'>lv</span>) +
+  <span class='fu'>mapview</span>(<span class='no'>lv</span>$<span class='no'>leg_orig</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"red"</span>)
 <span class='co'># }</span><div class='input'>library(sf)
 plot(lv[3], lwd = 9, reset = FALSE)
 plot(lv$leg_orig, col = "red", lwd = 5, add = TRUE)
