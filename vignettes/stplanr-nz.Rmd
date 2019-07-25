@@ -1,0 +1,75 @@
+---
+title: "Case study: analysing transport and health in New Zealand"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case study: analysing transport and health in New Zealand}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(stplanr)
+library(tmap)
+library(dplyr)
+library(sf)
+```
+
+
+```{r}
+z = spData::nz
+l = points2line(z)
+mapview::mapview(l)
+# idea: create spatial interaction mode
+```
+
+```{r}
+la_name = "cambridge"
+od = pct::get_od()
+centroids_ew = pct::get_centroids_ew()
+od
+summary(od$geo_code1 %in% centroids_ew$msoa11cd)
+od_city = od %>% 
+  filter(grepl(la_name, la_1, ignore.case = TRUE)) %>% 
+  filter(all > 99) %>% 
+  filter(geo_code2 %in% centroids_ew$msoa11cd)
+  
+desire_lines = od2line(od_city, centroids_ew)
+mapview::mapview(desire_lines)
+desire_lines$percent_walk = desire_lines$bicycle / desire_lines$all 
+tmap_mode("view")
+tm_shape(desire_lines) +
+  tm_lines(col = "percent_walk", lwd = "all", scale = 3, palette = "viridis")
+```
+
+
+```{r, eval=FALSE}
+# Get OD data nz
+# http://archive.stats.govt.nz/datavisualisation/commuterview/index.html?_ga=2.266465678.125723204.1564057090-1431656530.1564057090#
+if(!file.exists("Canterbury_L2_2006_NZMG_ArcShp.zip")) {
+  download.file(url = "http://www3.stats.govt.nz/digitalboundaries/census/Canterbury_L2_2006_NZMG_ArcShp.zip?_ga=2.257996170.125723204.1564057090-1431656530.1564057090", "Canterbury_L2_2006_NZMG_ArcShp.zip") 
+  unzip("Canterbury_L2_2006_NZMG_ArcShp.zip")
+}
+zones_canterbury = read_sf("AU_TA_Christchurch_CC.shp")
+plot(zones_canterbury)
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+if(!file.exists("Canterbury_L2_2006_NZMG_MapInfo.zip")) {
+  download.file(url = "http://www3.stats.govt.nz/digitalboundaries/census/Canterbury_L2_2006_NZMG_MapInfo.zip?_ga=2.257996170.125723204.1564057090-1431656530.1564057090", "Canterbury_L2_2006_NZMG_MapInfo.zip") 
+  unzip("Canterbury_L2_2006_NZMG_MapInfo.zip")
+}
+zones_canterbury = read_sf("AU_TA_Christchurch.tab")
+
+
+
+```
+
+
