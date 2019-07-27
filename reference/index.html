@@ -1099,7 +1099,8 @@ The points corresponding with a given line, <code>i</code>, will be <code>(2*i):
         <td>
           <p><code><a href="od_id_order.html">od_id_order()</a></code> </p>
         </td>
-        <td><p>Generate ordered ids of OD pairs so lowest is always first</p></td>
+        <td><p>Generate ordered ids of OD pairs so lowest is always first
+This function is slow on large datasets, see szudzik_pairing for faster alternative</p></td>
       </tr><tr>
         
         <td>
@@ -1335,6 +1336,12 @@ or sfNetwork.</p></td>
           <p><code><a href="summary-sfNetwork-method.html">summary(<i>&lt;sfNetwork&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print a summary of a sfNetwork</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="szudzik_pairing.html">szudzik_pairing()</a></code> </p>
+        </td>
+        <td><p>Combines two ID values to create a single ID number</p></td>
       </tr><tr>
         
         <td>
