@@ -2,46 +2,99 @@
 ## Create cents dataset
 
 ```{r}
-#' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
-#' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
-#' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
-#' crs <- sp::CRS("+init=epsg:4326")
-#' crsuk <- sp::CRS("+init=epsg:27700")
-#' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
-#' home <- geo_code("LS7 3HB")
-#' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
-#' home <- sp::spTransform(x = home, CRSobj = crsuk)
-#' buf <- rgeos::gBuffer(home, width = 2000)
-#' # Check it saved the points OK
-#' cents <- cents[buf, ]
-#' plot(buf)
-#' points(cents)
-#' cents <- sp::spTransform(x = cents, CRSobj = crs)
-#' cents$geo_code <- as.character(cents$geo_code)
-#' library(devtools)
-#' # use_data(cents, overwrite = TRUE)
-#' cents_sf <- sf::st_as_sf(cents)
-#' devtools::use_data(cents_sf)
+cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
+# library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
+# cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
+crs <- sp::CRS("+init=epsg:4326")
+crsuk <- sp::CRS("+init=epsg:27700")
+cents <- sp::spTransform(x = cents, CRSobj = crsuk)
+home <- geo_code("LS7 3HB")
+home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
+home <- sp::spTransform(x = home, CRSobj = crsuk)
+buf <- rgeos::gBuffer(home, width = 2000)
+# Check it saved the points OK
+cents <- cents[buf, ]
+plot(buf)
+points(cents)
+cents <- sp::spTransform(x = cents, CRSobj = crs)
+cents$geo_code <- as.character(cents$geo_code)
+library(devtools)
+# use_data(cents, overwrite = TRUE)
+cents_sf <- sf::st_as_sf(cents)
+devtools::use_data(cents_sf)
 
-#' cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
-#' # library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
-#' # cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
-#' crs <- sp::CRS("+init=epsg:4326")
-#' crsuk <- sp::CRS("+init=epsg:27700")
-#' cents <- sp::spTransform(x = cents, CRSobj = crsuk)
-#' home <- geo_code("LS7 3HB")
-#' home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
-#' home <- sp::spTransform(x = home, CRSobj = crsuk)
-#' buf <- rgeos::gBuffer(home, width = 2000)
-#' # Check it saved the points OK
-#' cents <- cents[buf, ]
-#' plot(buf)
-#' points(cents)
-#' cents <- sp::spTransform(x = cents, CRSobj = crs)
-#' cents$geo_code <- as.character(cents$geo_code)
-#' library(devtools)
-#' # use_data(cents, overwrite = TRUE)
-#' cents_sf <- sf::st_as_sf(cents)
-#' devtools::use_data(cents_sf)
+cents <- rgdal::readOGR(dsn = "/home/robin/npct/pct-bigdata/cents.geojson", layer = "OGRGeoJSON")
+# library(geojsonio) # load with the ropensci package geojsonio if rgdal fails
+# cents <- geojsonio::geojson_read(x = "~/repos/pct/pct-data/national/cents.geojson")
+crs <- sp::CRS("+init=epsg:4326")
+crsuk <- sp::CRS("+init=epsg:27700")
+cents <- sp::spTransform(x = cents, CRSobj = crsuk)
+home <- geo_code("LS7 3HB")
+home <- sp::SpatialPoints(matrix(home, ncol = 2), proj4string = crs)
+home <- sp::spTransform(x = home, CRSobj = crsuk)
+buf <- rgeos::gBuffer(home, width = 2000)
+# Check it saved the points OK
+cents <- cents[buf, ]
+plot(buf)
+points(cents)
+cents <- sp::spTransform(x = cents, CRSobj = crs)
+cents$geo_code <- as.character(cents$geo_code)
+library(devtools)
+# use_data(cents, overwrite = TRUE)
+cents_sf <- sf::st_as_sf(cents)
+devtools::use_data(cents_sf)
+```
+
+```{r, eval=FALSE, echo=FALSE}
+# sample od data
+remotes::install_github("ITSLeeds/pct")
+library(pct)
+od_data_all = pct::get_od()
+sel_local = 
+  od_data_all$geo_code1 %in% cents_sf$geo_code &
+  od_data_all$geo_code2 %in% cents_sf$geo_code 
+od_data_sample = od_data_all[sel_local, ]
+```
+
+The code below shows how the `od_lnd` and `c_lnd` datasets were created.
+
+```{r}
+library(dplyr)
+
+# get nationwide OD data
+od_all = pct::get_od()
+nrow(od_all)
+#> 2402201
+od_all$Active = (od_all$bicycle + od_all$foot) /
+    od_all$all * 100
+centroids_all = pct::get_centroids_ew() %>% sf::st_transform(4326)
+z_london = pct::get_pct_zones(region = "london") %>% 
+  select(geo_code, all, foot)
+nrow(centroids_all)
+#> 7201
+london = pct::pct_regions %>% filter(region_name == "london")
+centroids_london = centroids_all[london, ]
+od_london = od_all %>%
+  filter(geo_code1 %in% centroids_london$msoa11cd) %>% 
+  filter(geo_code2 %in% centroids_london$msoa11cd)
+od_london = od_all[
+  od_all$geo_code1 %in% centroids_london$msoa11cd &
+  od_all$geo_code2 %in% centroids_london$msoa11cd , 
+]
+```
+
+```{r}
+# aim: create a reproducible OD dataset
+od_lnd = od_london %>% 
+  select(-matches("rail|name|moto|car|tax|home|la_|Active")) %>% 
+  filter(geo_code2 == "E02000001") %>% 
+  top_n(4, wt = all)
+c_lnd = centroids_london %>% 
+  filter(msoa11cd %in% c(od$geo_code1, od$geo_code2))
+z_lnd = z_london %>% 
+  filter(geo_code %in% c_lnd$msoa11cd)
+usethis::use_data(od_lnd)
+usethis::use_data(c_lnd)
+usethis::use_data(z_lnd)
 ```
 

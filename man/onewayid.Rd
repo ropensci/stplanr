@@ -52,7 +52,6 @@ identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be co
 for users and are difficult to plot.
 }
 \examples{
-data(flow)
 flow_oneway <- onewayid(flow, attrib = 3)
 nrow(flow_oneway) < nrow(flow) # result has fewer rows
 sum(flow$All) == sum(flow_oneway$All) # but the same total flow
