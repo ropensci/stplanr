@@ -45,7 +45,9 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' # Demonstrate the results from onewayid and onewaygeo are identical
 #' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
-#' onewayid(flowlines_sf, "all")
+#' flow_oneway_sf <- onewayid(flowlines_sf, 3)
+#' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+#' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
                                 stplanr.key = od_id_order(x, id1, id2)) {
@@ -54,6 +56,13 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
   } else {
     attrib_names <- attrib
     attrib <- which(names(x) %in% attrib)
+  }
+
+  # separate geometry for sf objects
+  is_sf <- is(x, "sf")
+  if(is_sf) {
+    x_sf <- sf::st_sf(stplanr.key[3], geometry = sf::st_geometry(x))
+    x <- sf::st_drop_geometry(x)
   }
 
   x <- dplyr::bind_cols(x, stplanr.key)
@@ -81,6 +90,13 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
     x_oneway_numeric,
     x_oneway_binary
   )
+
+  x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
+
+  if(is_sf) {
+    x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
+    # class(x_oneway) # sf
+  }
 
   x_oneway$stplanr.key <- NULL
   names(x_oneway)[1:2] <- c(id1, id2)
