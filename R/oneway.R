@@ -158,14 +158,14 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' @param ordermatters logical, does the order of values matter to pairing, default = FALSE
 #'
 #' @examples
-#' ids <- as.character(runif(4000, 1e6, 1e7 - 1))
-#' x <- data.frame(id1 = rep(ids, times = 4000),
-#'                 id2 = rep(ids, each = 4000),
+#' n = 1000
+#' ids <- as.character(runif(n, 1e4, 1e7 - 1))
+#' x <- data.frame(id1 = rep(ids, times = n),
+#'                 id2 = rep(ids, each = n),
 #'                 val = 1,
 #'                 stringsAsFactors = FALSE)
 #' system.time(od_id_order(x))
 #' system.time(szudzik_pairing(x$id1, x$id2))
-#'
 #' @export
 szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
   if(length(val1) != length(val2)){
