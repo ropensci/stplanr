@@ -187,7 +187,7 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' system.time(od_id_order(x))
 #' system.time(szudzik_pairing(x$id1, x$id2))
 #' @export
-szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
+od_szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
   if(length(val1) != length(val2)){
     stop("val1 and val2 are not of equal length")
   }
@@ -210,4 +210,129 @@ szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
     stplanr.key <- b^2 + a
   }
   return(stplanr.key)
+}
+
+convert_to_numeric <- function(x, y) {
+  if (length(x) != length(y)) stop("x and y are not of equal length")
+  if (class(x) == "factor") x <- as.character(x)
+  if (class(y) == "factor") y <- as.character(y)
+  lvls <- unique(c(x, y))
+  x <- as.integer(factor(x, levels = lvls))
+  y <- as.integer(factor(y, levels = lvls))
+  list(x = x, y = y)
+}
+
+d_id_order_base <- function(x, y) {
+  d <- convert_to_numeric(x, y)
+  x <- d$x
+  y <- d$y
+  paste(pmin(x, y), pmax(x, y))
+}
+
+od_pairing_max_min <- function(x, y) {
+  d <- convert_to_numeric(x, y)
+  a <- pmax(d$x, d$y)
+  b <- pmin(d$x, d$y)
+  a * (a + 1) / 2 + b
+}
+#' Aggregate od pairs they become non-directional
+#'
+#' For example, sum total travel in both directions.
+#' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
+#' @param attrib A vector of column numbers or names
+#' for deciding which attribute(s) of class numeric to
+#' aggregate
+#' @param id1 Optional (it is assumed to be the first column)
+#' text string referring to the name of the variable containing
+#' the unique id of the origin
+#' @param id2 Optional (it is assumed to be the second column)
+#' text string referring to the name of the variable containing
+#' the unique id of the destination
+#' @return `onewayid` outputs a data frame (or `sf` data frame) with rows containing
+#' results for the user-selected attribute values that have been aggregated.
+#' @family lines
+#' @export
+od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
+                     stplanr.key = od_id_order(x, id1, id2)) UseMethod("onewayid")
+
+#' @name onewayid
+#' @details
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see [flowlines()]) which can be confusing
+#' for users and are difficult to plot.
+#' @examples
+#' flow_oneway <- onewayid(flow, attrib = 3)
+#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # using names instead of index for attribute
+#' onewayid(flow, attrib = "All")
+#' # using many attributes to aggregate
+#' attrib <- which(vapply(flow, is.numeric, TRUE))
+#' flow_oneway <- onewayid(flow, attrib = attrib)
+#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+#' # Demonstrate the results from onewayid and onewaygeo are identical
+#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
+#' plot(flow_oneway$All, flow_oneway_geo$All)
+#' flow_oneway_sf <- onewayid(flowlines_sf, 3)
+#' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+#' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
+#' @export
+onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
+                                stplanr.key = od_id_order(x, id1, id2)) {
+  if (is.numeric(attrib)) {
+    attrib_names <- names(x)[attrib]
+  } else {
+    attrib_names <- attrib
+    attrib <- which(names(x) %in% attrib)
+  }
+
+  # separate geometry for sf objects
+  is_sf <- is(x, "sf")
+  if(is_sf) {
+    x_sf <- sf::st_sf(stplanr.key[3], geometry = sf::st_geometry(x))
+    x <- sf::st_drop_geometry(x)
+  }
+
+  x <- dplyr::bind_cols(x, stplanr.key)
+
+  x_oneway_numeric <- dplyr::group_by(x, stplanr.key) %>%
+    dplyr::summarise_at(attrib, sum)
+
+  x_oneway_binary <- dplyr::mutate(x, is_two_way = duplicated(stplanr.key)) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(is_two_way = dplyr::last(.data$is_two_way)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway_character <- x %>%
+    dplyr::transmute(
+      id1 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 1],
+      id2 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 2],
+      stplanr.key = .data$stplanr.key
+    ) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(id1 = dplyr::first(id1), id2 = dplyr::first(id2)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway <- dplyr::bind_cols(
+    x_oneway_character,
+    x_oneway_numeric,
+    x_oneway_binary
+  )
+
+  if(is_sf) {
+    x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
+    x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
+    # class(x_oneway) # sf
+  }
+
+  x_oneway$stplanr.key <- NULL
+  names(x_oneway)[1:2] <- c(id1, id2)
+
+  return(x_oneway)
 }
