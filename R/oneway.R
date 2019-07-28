@@ -91,9 +91,8 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
     x_oneway_binary
   )
 
-  x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
-
   if(is_sf) {
+    x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
     x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
     # class(x_oneway) # sf
   }
