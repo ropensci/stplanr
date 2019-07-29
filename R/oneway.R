@@ -158,58 +158,77 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
     )
   )
 }
-#' Combines two ID values to create a single ID number
+#' Combine two ID values to create a single ID number
 #'
 #' @details
-#' In OD data it is common to have many flows from "A to B" and "B to A".
+#' In OD data it is common to have many 'oneway' flows from "A to B" and "B to A".
 #' It can be useful to group these an have a single ID that represents pairs of IDs
-#' with or without directionality.
+#' with or without directionality, so they contain 'twoway' or bi-directional values.
 #'
-#' This function implements the Szudzik pairing function, on two vectors of equal
+#' `od_id*` functions take two vectors of equal length and return a vector of IDs,
+#' which are unique for each combination but the same for twoway flows.
+#'
+#' -  the Szudzik pairing function, on two vectors of equal
 #' length. It returns a vector of ID numbers.
 #'
 #' This function superseeds od_id_order as it is faster on large datasets
-#'
-#' @param val1 a vector of numeric, character, or factor values
-#' @param val2 a vector of numeric, character, or factor values
+#' @param x a vector of numeric, character, or factor values
+#' @param y a vector of numeric, character, or factor values
 #' @param ordermatters logical, does the order of values matter to pairing, default = FALSE
 #'
+#' @name od_id
 #' @examples
 #'
-#' szudzik_pairing(od_data_sample[[1]], od_data_sample[[2]])
-#' od_id_order(od_data_sample)
+#' head(od_id_order(od_data_sample), 9)
+#' od_id_szudzik(od_data_sample[[1]], od_data_sample[[2]])
+#' od_id_max_min(od_data_sample[[1]], od_data_sample[[2]])
 #' n = 1000
 #' ids <- as.character(runif(n, 1e4, 1e7 - 1))
-#' x <- data.frame(id1 = rep(ids, times = n),
-#'                 id2 = rep(ids, each = n),
-#'                 val = 1,
-#'                 stringsAsFactors = FALSE)
-#' system.time(od_id_order(x))
-#' system.time(szudzik_pairing(x$id1, x$id2))
+#' # benchmark of methods:
+#' # x <- data.frame(id1 = rep(ids, times = n),
+#' #                 id2 = rep(ids, each = n),
+#' #                 val = 1,
+#' #                 stringsAsFactors = FALSE)
+#' # bench::mark(
+#' #   check = FALSE,
+#' #   od_id_order(x),
+#' #   od_id_szudzik(x$id1, x$id2),
+#' #   od_id_max_min(x$id1, x$id2)
+#' #   )
+NULL
+#' @rdname od_id
 #' @export
-od_szudzik_pairing <- function(val1, val2, ordermatters = FALSE) {
-  if(length(val1) != length(val2)){
-    stop("val1 and val2 are not of equal length")
+od_id_szudzik <- function(x, y, ordermatters = FALSE) {
+  if(length(x) != length(y)){
+    stop("x and y are not of equal length")
   }
 
-  if(class(val1) == "factor"){
-    val1 <- as.character(val1)
+  if(class(x) == "factor"){
+    x <- as.character(x)
   }
-  if(class(val2) == "factor"){
-    val2 <- as.character(val2)
+  if(class(y) == "factor"){
+    y <- as.character(y)
   }
-  lvls <- unique(c(val1, val2))
-  val1 <- as.integer(factor(val1, levels = lvls))
-  val2 <- as.integer(factor(val2, levels = lvls))
+  lvls <- unique(c(x, y))
+  x <- as.integer(factor(x, levels = lvls))
+  y <- as.integer(factor(y, levels = lvls))
   if(ordermatters){
-    ismax <- val1 > val2
-    stplanr.key <- (ismax * 1) * (val1^2 + val1 + val2) + ((!ismax) * 1) * (val2^2 + val1)
+    ismax <- x > y
+    stplanr.key <- (ismax * 1) * (x^2 + x + y) + ((!ismax) * 1) * (y^2 + x)
   }else{
-    a <- ifelse(val1 > val2, val2, val1)
-    b <- ifelse(val1 > val2, val1, val2)
+    a <- ifelse(x > y, y, x)
+    b <- ifelse(x > y, x, y)
     stplanr.key <- b^2 + a
   }
   return(stplanr.key)
+}
+#' @export
+#' @rdname od_id
+od_id_max_min <- function(x, y) {
+  d <- convert_to_numeric(x, y)
+  a <- pmax(d$x, d$y)
+  b <- pmin(d$x, d$y)
+  a * (a + 1) / 2 + b
 }
 
 convert_to_numeric <- function(x, y) {
@@ -227,13 +246,6 @@ od_id_order_base <- function(x, y) {
   x <- d$x
   y <- d$y
   paste(pmin(x, y), pmax(x, y))
-}
-
-od_id_max_min <- function(x, y) {
-  d <- convert_to_numeric(x, y)
-  a <- pmax(d$x, d$y)
-  b <- pmin(d$x, d$y)
-  a * (a + 1) / 2 + b
 }
 
 not_duplicated <- function(x) {
