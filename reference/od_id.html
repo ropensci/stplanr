@@ -195,26 +195,28 @@ length. It returns a vector of ID numbers.</p></li>
 #&gt; 8 E02002363 E02002361</div><div class='input'><span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>od_id_character</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])
 <span class='no'>id</span></div><div class='output co'>#&gt; [1] "E02002361 E02002363" "E02002361 E02002367" "E02002361 E02002371"
 #&gt; [4] "E02002361 E02002377" "E02002361 E02002382" "E02002361 E02002384"
-#&gt; [7] "E02002361 E02002393" "E02002361 E02002363"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/duplicated'>duplicated</a></span>(<span class='no'>id</span>)</div><div class='output co'>#&gt; [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</div><div class='input'><span class='fu'>od_id_szudzik</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  5 10 17 26 37 50 65  5</div><div class='input'><span class='fu'>od_id_max_min</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  4  7 11 16 22 29 37  4</div><div class='input'><span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+#&gt; [7] "E02002361 E02002393" "E02002361 E02002363"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/duplicated'>duplicated</a></span>(<span class='no'>id</span>)</div><div class='output co'>#&gt; [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</div><div class='input'><span class='fu'>od_id_szudzik</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  5 10 17 26 37 50 65  5</div><div class='input'><span class='fu'>od_id_max_min</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  4  7 11 16 22 29 37  4</div><div class='input'><span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='fl'>1000</span>
 <span class='no'>ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>n</span>, <span class='fl'>1e4</span>, <span class='fl'>1e7</span> - <span class='fl'>1</span>))
 <span class='co'># benchmark of methods:</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='no'>n</span>),
-                <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n</span>),
-                <span class='kw'>val</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='no'>n</span>),
+  <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n</span>),
+  <span class='kw'>val</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 <span class='kw pkg'>bench</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/bench/topics/mark'>mark</a></span>(
   <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>x</span>),
   <span class='fu'>od_id_character</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>),
   <span class='fu'>od_id_szudzik</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>),
   <span class='fu'>od_id_max_min</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>)
-  )</div><div class='output co'>#&gt; <span class='warning'>Warning: Some expressions had a GC in every iteration; so filtering is disabled.</span></div><div class='output co'>#&gt; # A tibble: 4 x 13
+)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some expressions had a GC in every iteration; so filtering is disabled.</span></div><div class='output co'>#&gt; # A tibble: 4 x 13
 #&gt;   expression                      min median `itr/sec` mem_alloc `gc/sec` n_itr
 #&gt;   &lt;bch:expr&gt;                    &lt;bch&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt;
-#&gt; 1 od_id_order(x)                877ms  877ms      1.14    29.9MB     1.14     1
-#&gt; 2 od_id_character(x$id1, x$id2) 838ms  838ms      1.19    22.9MB     0        1
-#&gt; 3 od_id_szudzik(x$id1, x$id2)   211ms  254ms      4.13     146MB    11.0      3
-#&gt; 4 od_id_max_min(x$id1, x$id2)   164ms  165ms      4.18    84.8MB     8.36     4
+#&gt; 1 od_id_order(x)                882ms  882ms      1.13    29.9MB     0        1
+#&gt; 2 od_id_character(x$id1, x$id2) 891ms  891ms      1.12    22.9MB     0        1
+#&gt; 3 od_id_szudzik(x$id1, x$id2)   276ms  281ms      3.55     146MB    10.7      2
+#&gt; 4 od_id_max_min(x$id1, x$id2)   143ms  184ms      5.78    84.8MB     9.64     3
 #&gt; # … with 6 more variables: n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;, result &lt;list&gt;,
 #&gt; #   memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
