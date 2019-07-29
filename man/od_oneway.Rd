@@ -69,16 +69,14 @@ bench::mark(
 )
 }
 \seealso{
-Other lines: \code{\link{angle_diff}},
-  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
-  \code{\link{line2df}}, \code{\link{line_bearing}},
-  \code{\link{line_match}}, \code{\link{line_midpoint}},
-  \code{\link{line_sample}}, \code{\link{line_segment}},
-  \code{\link{line_via}}, \code{\link{mats2line}},
-  \code{\link{n_sample_length}}, \code{\link{n_vertices}},
-  \code{\link{onewaygeo}}, \code{\link{onewayid}},
-  \code{\link{points2line}}, \code{\link{toptail_buff}},
-  \code{\link{toptailgs}},
-  \code{\link{update_line_geometry}}
+Other od: \code{\link{dist_google}}, \code{\link{od2line}},
+  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
+  \code{\link{od_aggregate_to}},
+  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
+  \code{\link{od_coords}}, \code{\link{od_dist}},
+  \code{\link{od_id}}, \code{\link{od_radiation}},
+  \code{\link{od_to_odmatrix}},
+  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
+  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
 }
-\concept{lines}
+\concept{od}
