@@ -211,10 +211,10 @@ length. It returns a vector of ID numbers.</p></li>
   )</div><div class='output co'>#&gt; <span class='warning'>Warning: Some expressions had a GC in every iteration; so filtering is disabled.</span></div><div class='output co'>#&gt; # A tibble: 4 x 13
 #&gt;   expression                      min median `itr/sec` mem_alloc `gc/sec` n_itr
 #&gt;   &lt;bch:expr&gt;                    &lt;bch&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt;
-#&gt; 1 od_id_order(x)                913ms  913ms      1.10    29.9MB     0        1
-#&gt; 2 od_id_character(x$id1, x$id2) 917ms  917ms      1.09    22.9MB     0        1
-#&gt; 3 od_id_szudzik(x$id1, x$id2)   288ms  294ms      3.40     146MB    10.2      2
-#&gt; 4 od_id_max_min(x$id1, x$id2)   148ms  194ms      5.58    84.8MB     9.30     3
+#&gt; 1 od_id_order(x)                911ms  911ms      1.10    29.9MB     0        1
+#&gt; 2 od_id_character(x$id1, x$id2) 907ms  907ms      1.10    22.9MB     0        1
+#&gt; 3 od_id_szudzik(x$id1, x$id2)   282ms  289ms      3.46     146MB    10.4      2
+#&gt; 4 od_id_max_min(x$id1, x$id2)   144ms  188ms      5.71    84.8MB     9.52     3
 #&gt; # … with 6 more variables: n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;, result &lt;list&gt;,
 #&gt; #   memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
