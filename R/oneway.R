@@ -267,8 +267,8 @@ not_duplicated <- function(x) {
 #'
 #' For example, sum total travel in both directions.
 #' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
-#' @param attrib A vector of column numbers or names
-#' for deciding which attribute(s) of class numeric to
+#' @param attrib A vector of column numbers or names, representing variables to be aggregated.
+#' By default, all numeric variables are selected.
 #' aggregate
 #' @param id1 Optional (it is assumed to be the first column)
 #' text string referring to the name of the variable containing
@@ -293,37 +293,36 @@ not_duplicated <- function(x) {
 #' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #' @examples
-#' flow_oneway <- od_oneway(flow, attrib = 3)
-#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
-#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
-#' # using names instead of index for attribute
-#' od_oneway(flow, attrib = "All")
-#' # using many attributes to aggregate
+#' (od_min = od_data_sample[c(1, 2, 9), 1:6])
+#' (od_oneway = od_oneway(od_min))
+#' nrow(od_oneway) < nrow(od_min) # result has fewer rows
+#' sum(od_min$all) == sum(od_oneway$all) # but the same total flow
+#' od_oneway(od_min, attrib = "all")
 #' attrib <- which(vapply(flow, is.numeric, TRUE))
 #' flow_oneway <- od_oneway(flow, attrib = attrib)
 #' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 #' # Demonstrate the results from oneway and onewaygeo are identical
 #' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
-#' plot(flow_oneway$All, flow_oneway_geo$All)
-#' flow_oneway_sf <- od_oneway(flowlines_sf, attrib)
-#' sum(flow_oneway$All) == sum(flow_oneway_sf$All) # but the same total flow
-#' summary(flow_oneway$All %in% flow_oneway_sf$All)
+#' flow_oneway_sf <- od_oneway(flowlines_sf)
+#' par(mfrow = c(1, 2))
 #' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 #' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-#' fr <- flowlines_sf[[1]]
-#' to <- flowlines_sf[[2]]
-#' flow_max_min <- od_oneway(flowlines_sf, attrib, stplanr.key = od_id_character(fr, to))
-#' cor(flow_max_min$All, flow_oneway_sf$All)
+#' par(mfrow = c(1, 1))
+#' od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
+#' cor(od_max_min$all, od_oneway$all)
 #' # benchmark performance
 #' bench::mark(
 #'   check = FALSE,
 #'   onewayid(flowlines_sf, attrib),
-#'   od_oneway(flowlines_sf, attrib),
-#'   od_oneway(flowlines_sf, attrib, stplanr.key = od_id_character(fr, to))
+#'   od_oneway(flowlines_sf)
 #' )
 #' @export
-od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2], stplanr.key = NULL) {
-  is_sf <- is(x, "sf")
+od_oneway <- function(x,
+           attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
+           id1 = names(x)[1],
+           id2 = names(x)[2],
+           stplanr.key = NULL) {
+    is_sf <- is(x, "sf")
 
   if (is.null(stplanr.key)) {
     id1_temp <- x[[id1]]
