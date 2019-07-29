@@ -146,7 +146,9 @@
 
     <pre class="usage"><span class='fu'>od_id_szudzik</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>ordermatters</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>od_id_max_min</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
+<span class='fu'>od_id_max_min</span>(<span class='no'>x</span>, <span class='no'>y</span>)
+
+<span class='fu'>od_id_character</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,33 +181,42 @@ length. It returns a vector of ID numbers.</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>od_data_sample</span>), <span class='fl'>9</span>)</div><div class='output co'>#&gt;   stplanr.id1 stplanr.id1.1         stplanr.key
-#&gt; 1   E02002361     E02002361 E02002361 E02002361
-#&gt; 2   E02002361     E02002363 E02002361 E02002363
-#&gt; 3   E02002361     E02002367 E02002361 E02002367
-#&gt; 4   E02002361     E02002371 E02002361 E02002371
-#&gt; 5   E02002361     E02002377 E02002361 E02002377
-#&gt; 6   E02002361     E02002382 E02002361 E02002382
-#&gt; 7   E02002361     E02002384 E02002361 E02002384
-#&gt; 8   E02002361     E02002393 E02002361 E02002393
-#&gt; 9   E02002363     E02002361 E02002361 E02002363</div><div class='input'><span class='fu'>od_id_szudzik</span>(<span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt;  [1]  2  5 10 17 26 37 50 65  5  6 11 18 27 38 51 66 10 11 12 19 28 39 52 67 17
-#&gt; [26] 18 19 20 29 40 53 68 26 27 28 29 30 41 54 69 37 38 39 40 41 42 55 70 50 51
-#&gt; [51] 52 53 54 55 56 71 65 66 67 68 69 70 71 72</div><div class='input'><span class='fu'>od_id_max_min</span>(<span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt;  [1]  2  4  7 11 16 22 29 37  4  5  8 12 17 23 30 38  7  8  9 13 18 24 31 39 11
-#&gt; [26] 12 13 14 19 25 32 40 16 17 18 19 20 26 33 41 22 23 24 25 26 27 34 42 29 30
-#&gt; [51] 31 32 33 34 35 43 37 38 39 40 41 42 43 44</div><div class='input'><span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+    <pre class="examples"><div class='input'><span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>od_data_sample</span>[<span class='fl'>2</span>:<span class='fl'>9</span>, <span class='fl'>1</span>:<span class='fl'>2</span>]
+<span class='no'>d</span></div><div class='output co'>#&gt; # A tibble: 8 x 2
+#&gt;   geo_code1 geo_code2
+#&gt;   &lt;chr&gt;     &lt;chr&gt;    
+#&gt; 1 E02002361 E02002363
+#&gt; 2 E02002361 E02002367
+#&gt; 3 E02002361 E02002371
+#&gt; 4 E02002361 E02002377
+#&gt; 5 E02002361 E02002382
+#&gt; 6 E02002361 E02002384
+#&gt; 7 E02002361 E02002393
+#&gt; 8 E02002363 E02002361</div><div class='input'><span class='no'>id</span> <span class='kw'>&lt;-</span> <span class='fu'>od_id_character</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])
+<span class='no'>id</span></div><div class='output co'>#&gt; [1] "E02002361 E02002363" "E02002361 E02002367" "E02002361 E02002371"
+#&gt; [4] "E02002361 E02002377" "E02002361 E02002382" "E02002361 E02002384"
+#&gt; [7] "E02002361 E02002393" "E02002361 E02002363"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/duplicated'>duplicated</a></span>(<span class='no'>id</span>)</div><div class='output co'>#&gt; [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</div><div class='input'><span class='fu'>od_id_szudzik</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  5 10 17 26 37 50 65  5</div><div class='input'><span class='fu'>od_id_max_min</span>(<span class='no'>d</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>d</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt; [1]  4  7 11 16 22 29 37  4</div><div class='input'><span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>
 <span class='no'>ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>n</span>, <span class='fl'>1e4</span>, <span class='fl'>1e7</span> - <span class='fl'>1</span>))
 <span class='co'># benchmark of methods:</span>
-<span class='co'># x &lt;- data.frame(id1 = rep(ids, times = n),</span>
-<span class='co'>#                 id2 = rep(ids, each = n),</span>
-<span class='co'>#                 val = 1,</span>
-<span class='co'>#                 stringsAsFactors = FALSE)</span>
-<span class='co'># bench::mark(</span>
-<span class='co'>#   check = FALSE,</span>
-<span class='co'>#   od_id_order(x),</span>
-<span class='co'>#   od_id_szudzik(x$id1, x$id2),</span>
-<span class='co'>#   od_id_max_min(x$id1, x$id2)</span>
-<span class='co'>#   )</span></div></pre>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>id1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>times</span> <span class='kw'>=</span> <span class='no'>n</span>),
+                <span class='kw'>id2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='no'>ids</span>, <span class='kw'>each</span> <span class='kw'>=</span> <span class='no'>n</span>),
+                <span class='kw'>val</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw pkg'>bench</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/bench/topics/mark'>mark</a></span>(
+  <span class='kw'>check</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>x</span>),
+  <span class='fu'>od_id_character</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>),
+  <span class='fu'>od_id_szudzik</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>),
+  <span class='fu'>od_id_max_min</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>)
+  )</div><div class='output co'>#&gt; <span class='warning'>Warning: Some expressions had a GC in every iteration; so filtering is disabled.</span></div><div class='output co'>#&gt; # A tibble: 4 x 13
+#&gt;   expression                      min median `itr/sec` mem_alloc `gc/sec` n_itr
+#&gt;   &lt;bch:expr&gt;                    &lt;bch&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt;
+#&gt; 1 od_id_order(x)                913ms  913ms      1.10    29.9MB     0        1
+#&gt; 2 od_id_character(x$id1, x$id2) 917ms  917ms      1.09    22.9MB     0        1
+#&gt; 3 od_id_szudzik(x$id1, x$id2)   288ms  294ms      3.40     146MB    10.2      2
+#&gt; 4 od_id_max_min(x$id1, x$id2)   148ms  194ms      5.58    84.8MB     9.30     3
+#&gt; # … with 6 more variables: n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;, result &lt;list&gt;,
+#&gt; #   memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
