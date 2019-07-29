@@ -64,17 +64,21 @@ library(stplanr)
 Let's take a look at this data:
 
 ```{r}
-flow[1:3, 1:3] # typical form of flow data
+od_data_sample[1:3, 1:3] # typical form of flow data
 cents_sf[1:3,] # points representing origins and destinations
 ```
 
 These datasets can be combined as follows:
 
 ```{r plot1, warning=FALSE}
-travel_network <- od2line(flow = flow, zones = cents_sf)
-w <- flow$All / max(flow$All) *10
+travel_network <- od2line(flow = od_data_sample, zones = cents_sf)
+w <- flow$all / max(flow$all) *10
 plot(travel_network, lwd = w)
 ```
+
+
+`stplanr` has many functions for working with OD data.
+See the [`stplanr-od`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html) vignette for details.
 
 The package can also allocate flows to the road network, e.g. with [CycleStreets.net](https://www.cyclestreets.net/api/) and the OpenStreetMap Routing Machine ([OSRM](https://github.com/Project-OSRM/osrm-backend)) API interfaces.
 These are supported in `route_*()` functions such as `route_cyclestreets` and `route_osrm()`:
@@ -98,7 +102,7 @@ We can replicate this call multiple times using `line2route`, in this case lines
 First we'll create a small subset of the lines:
 
 ```{r}
-desire_lines <- travel_network[2:5,]
+desire_lines <- travel_network[2:6,]
 ```
 
 
@@ -111,8 +115,10 @@ routes <- line2route(desire_lines, route_fun = route_osrm)
 The resulting routes will look something like this:
 
 ```{r routes}
-routes = routes_fast_sf[2:5, ]
-plot(routes$geometry)
+lwd <- desire_lines$foot
+routes <- routes_fast_sf[2:6, ]
+plot(routes$geometry, lwd = lwd)
+plot(desire_lines$geometry, col = "green", lwd = lwd, add = TRUE)
 ```
 
 For more examples, `example("line2route")`.
@@ -123,20 +129,36 @@ the values of overlapping lines. This can represent where there will be
 most traffic on the transport system, as demonstrated in the following code chunk. 
 
 ```{r rnet, warning=FALSE}
-routes$All <- desire_lines$All
-rnet <- overline2(routes, attrib = "All")
+routes$foot <- desire_lines$foot
+rnet <- overline2(routes, attrib = "foot")
 ```
 
-The route network can be visualised as follows:
+The resulting route network, with segment totals calculated from overlapping parts for the routes for walking, can be visualised as follows:
 
-```{r, routes-leaf}
+```{r}
+plot(rnet["foot"], lwd = rnet$foot)
+```
+
+The above plot represents the number of people who walk along particular routes (assuming the routes represent real routes).
+
+<!-- (results not shown): -->
+
+```{r, routes-leaf, eval=FALSE, echo=FALSE}
 library(leaflet)
-pal = leaflet::colorNumeric(palette = "YlGnBu", domain = rnet$All)
+pal = leaflet::colorNumeric(palette = "YlGnBu", domain = rnet$all)
 leaflet(data = rnet) %>%
   addProviderTiles(providers$OpenStreetMap.BlackAndWhite) %>%
-  addPolylines(weight = rnet$All / 3, color = ~pal(All), opacity = 0.9) %>% 
-  addLegend(pal = pal, values = ~All)
+  addPolylines(weight = rnet$all / 3, color = ~pal(all), opacity = 0.9) %>% 
+  addLegend(pal = pal, values = ~all)
 ```
+
+## Policy and research applications
+
+The example results may not seem particularly revolutionary.
+At the city scale, however, this type of analysis can be used to inform sustainable transport policies, as described in papers [describing the Propensity to Cycle Tool](https://www.jtlu.org/index.php/jtlu/article/view/862/859) (PCT), and its [application to calculate cycling to school potential](https://www.sciencedirect.com/science/article/pii/S2214140518301257) across England.
+In essence, stplanr was designed to help answer research and policy questions of the type raised in those papers.
+
+There are many other research applications that the functions in `stplanr` can help solve, most of which have yet to be thought of.
 
 ## Installation
 
@@ -158,17 +180,7 @@ stplanr depends on rgdal, which can be tricky to install.
 
 ### Installing stplanr on Linux and Mac
 
-**splanr** depends on **rgdal** which can be installed on Ubuntu, for example, with:
-
-```
-sudo apt install r-cran-rgdal
-```
-
-To install `gdal` binaries on other distributions please see here: http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries
-
-**stplanr** also depends on **sf**. Installation instructions for Mac, Ubuntu and other Linux distros can be found here: https://github.com/r-spatial/sf#installing
-
-Instructions to install `gdal` and `Quartz` are provided at https://github.com/ropensci/geojsonio#install and https://www.xquartz.org/ respectively (Quartz is required for R - as described [here](https://cran.r-project.org/bin/macosx/)).
+**stplanr** depends on **sf**. Installation instructions for Mac, Ubuntu and other Linux distros can be found here: https://github.com/r-spatial/sf#installing
 
 ## Funtions, help and contributing
 
@@ -214,7 +226,7 @@ Transport planning is a relatively new field of application in R.
 However, there are already some good resources on the topic, including (any further suggestions: welcome):
 
 - The Transport chapter of *Geocomputation with R*, which provides a broad introduction from a geographic data perspective: https://geocompr.robinlovelace.net/transport.html
-- The `stplanr` paper, which describes the context in which the package was developed: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html
+- The `stplanr` paper, which describes the context in which the package was developed: https://journal.r-project.org/archive/2018/RJ-2018-053/index.html (please cite this if you use `stplanr` in your work)
 - The `dodgr` vignette, which provides an introduction to routing in R: https://cran.r-project.org/package=dodgr/vignettes/dodgr.html
 
 ## Meta
