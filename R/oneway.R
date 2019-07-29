@@ -60,7 +60,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 
   # separate geometry for sf objects
   is_sf <- is(x, "sf")
-  if(is_sf) {
+  if (is_sf) {
     x_sf <- sf::st_sf(stplanr.key[3], geometry = sf::st_geometry(x))
     x <- sf::st_drop_geometry(x)
   }
@@ -91,7 +91,7 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
     x_oneway_binary
   )
 
-  if(is_sf) {
+  if (is_sf) {
     x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
     x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
     # class(x_oneway) # sf
@@ -182,41 +182,43 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' duplicated(id)
 #' od_id_szudzik(d[[1]], d[[2]])
 #' od_id_max_min(d[[1]], d[[2]])
-#' n = 1000
+#' n <- 1000
 #' ids <- as.character(runif(n, 1e4, 1e7 - 1))
 #' # benchmark of methods:
-#' x <- data.frame(id1 = rep(ids, times = n),
-#'                 id2 = rep(ids, each = n),
-#'                 val = 1,
-#'                 stringsAsFactors = FALSE)
+#' x <- data.frame(
+#'   id1 = rep(ids, times = n),
+#'   id2 = rep(ids, each = n),
+#'   val = 1,
+#'   stringsAsFactors = FALSE
+#' )
 #' bench::mark(
 #'   check = FALSE,
 #'   od_id_order(x),
 #'   od_id_character(x$id1, x$id2),
 #'   od_id_szudzik(x$id1, x$id2),
 #'   od_id_max_min(x$id1, x$id2)
-#'   )
+#' )
 NULL
 #' @rdname od_id
 #' @export
 od_id_szudzik <- function(x, y, ordermatters = FALSE) {
-  if(length(x) != length(y)){
+  if (length(x) != length(y)) {
     stop("x and y are not of equal length")
   }
 
-  if(class(x) == "factor"){
+  if (class(x) == "factor") {
     x <- as.character(x)
   }
-  if(class(y) == "factor"){
+  if (class(y) == "factor") {
     y <- as.character(y)
   }
   lvls <- unique(c(x, y))
   x <- as.integer(factor(x, levels = lvls))
   y <- as.integer(factor(y, levels = lvls))
-  if(ordermatters){
+  if (ordermatters) {
     ismax <- x > y
     stplanr.key <- (ismax * 1) * (x^2 + x + y) + ((!ismax) * 1) * (y^2 + x)
-  }else{
+  } else {
     a <- ifelse(x > y, y, x)
     b <- ifelse(x > y, x, y)
     stplanr.key <- b^2 + a
@@ -313,45 +315,44 @@ not_duplicated <- function(x) {
 #' flow_max_min <- od_oneway(flowlines_sf, attrib, stplanr.key = od_id_character(fr, to))
 #' cor(flow_max_min$All, flow_oneway_sf$All)
 #' # benchmark performance
-#' bench::mark(check = FALSE,
+#' bench::mark(
+#'   check = FALSE,
 #'   onewayid(flowlines_sf, attrib),
 #'   od_oneway(flowlines_sf, attrib),
 #'   od_oneway(flowlines_sf, attrib, stplanr.key = od_id_character(fr, to))
 #' )
 #' @export
 od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2], stplanr.key = NULL) {
-
   is_sf <- is(x, "sf")
 
-  if(is.null(stplanr.key)) {
-    id1_temp = x[[id1]]
-    x[[id1]] = pmin(x[[id1]], x[[id2]])
-    x[[id2]] = pmax(id1_temp, x[[id2]])
+  if (is.null(stplanr.key)) {
+    id1_temp <- x[[id1]]
+    x[[id1]] <- pmin(x[[id1]], x[[id2]])
+    x[[id2]] <- pmax(id1_temp, x[[id2]])
 
-    if(is_sf) {
+    if (is_sf) {
       duplicated_oneway <- duplicated(sf::st_drop_geometry(x[c(id1, id2)]))
     } else {
       duplicated_oneway <- duplicated(x[c(id1, id2)])
     }
 
-    if(is_sf) {
+    if (is_sf) {
       x_sf <- x[!duplicated_oneway, c(id1, id2)]
       x <- sf::st_drop_geometry(x)
     }
 
-    if(is.numeric(attrib)) {
+    if (is.numeric(attrib)) {
       attrib <- attrib - 2 # account for 1st 2 columns being ids
     }
-    x_grouped = dplyr::group_by(x, !!rlang::sym(id1), !!rlang::sym(id2))
-    x_oneway = dplyr::ungroup(dplyr::summarise_at(x_grouped, attrib, sum))
+    x_grouped <- dplyr::group_by(x, !!rlang::sym(id1), !!rlang::sym(id2))
+    x_oneway <- dplyr::ungroup(dplyr::summarise_at(x_grouped, attrib, sum))
 
-    if(is_sf) {
+    if (is_sf) {
       x_oneway <- sf::st_as_sf(dplyr::left_join(x_oneway, x_sf))
       # class(x_oneway) # sf
     }
 
     return(x_oneway)
-
   }
 
   if (is.numeric(attrib)) {
@@ -362,7 +363,7 @@ od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2], stplanr.k
   }
 
   # separate geometry for sf objects
-  if(is_sf) {
+  if (is_sf) {
     x_sf <- sf::st_sf(data.frame(stplanr.key, stringsAsFactors = FALSE), geometry = sf::st_geometry(x))
     x <- sf::st_drop_geometry(x)
   }
@@ -384,7 +385,7 @@ od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2], stplanr.k
   #   x_ids_grouped
   # )
 
-  if(is_sf) {
+  if (is_sf) {
     x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
     x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
     # class(x_oneway) # sf
