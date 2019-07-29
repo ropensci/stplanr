@@ -166,11 +166,11 @@
 <p><code>overline</code> is a function which takes a series of route-allocated lines, splits them into unique segments and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as demonstrated in the following code chunk.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">routes<span class="op">$</span>foot &lt;-<span class="st"> </span>desire_lines<span class="op">$</span>foot</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">rnet &lt;-<span class="st"> </span><span class="kw"><a href="reference/overline2.html">overline2</a></span>(routes, <span class="dt">attrib =</span> <span class="st">"foot"</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 2019-07-29 22:16:36 constructing segments</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2019-07-29 22:16:36 building geometry</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 2019-07-29 22:16:36 simplifying geometry</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 2019-07-29 22:16:36 aggregating flows</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 2019-07-29 22:16:37 rejoining segments into linestrings</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 2019-07-29 22:28:58 constructing segments</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2019-07-29 22:28:58 building geometry</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 2019-07-29 22:28:58 simplifying geometry</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 2019-07-29 22:28:58 aggregating flows</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 2019-07-29 22:28:58 rejoining segments into linestrings</span></a></code></pre></div>
 <p>The resulting route network, with segment totals calculated from overlapping parts for the routes for walking, can be visualised as follows:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(rnet[<span class="st">"foot"</span>], <span class="dt">lwd =</span> rnet<span class="op">$</span>foot)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
