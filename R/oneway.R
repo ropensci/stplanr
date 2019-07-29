@@ -222,18 +222,22 @@ convert_to_numeric <- function(x, y) {
   list(x = x, y = y)
 }
 
-d_id_order_base <- function(x, y) {
+od_id_order_base <- function(x, y) {
   d <- convert_to_numeric(x, y)
   x <- d$x
   y <- d$y
   paste(pmin(x, y), pmax(x, y))
 }
 
-od_pairing_max_min <- function(x, y) {
+od_id_max_min <- function(x, y) {
   d <- convert_to_numeric(x, y)
   a <- pmax(d$x, d$y)
   b <- pmin(d$x, d$y)
   a * (a + 1) / 2 + b
+}
+
+not_duplicated <- function(x) {
+  !duplicated(x)
 }
 #' Aggregate od pairs they become non-directional
 #'
@@ -248,14 +252,10 @@ od_pairing_max_min <- function(x, y) {
 #' @param id2 Optional (it is assumed to be the second column)
 #' text string referring to the name of the variable containing
 #' the unique id of the destination
-#' @return `onewayid` outputs a data frame (or `sf` data frame) with rows containing
+#' @return `oneway` outputs a data frame (or `sf` data frame) with rows containing
 #' results for the user-selected attribute values that have been aggregated.
 #' @family lines
 #' @export
-od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-                     stplanr.key = od_id_order(x, id1, id2)) UseMethod("onewayid")
-
-#' @name onewayid
 #' @details
 #' Flow data often contains movement in two directions: from point A to point B
 #' and then from B to A. This can be problematic for transport planning, because
@@ -267,24 +267,31 @@ od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #' @examples
-#' flow_oneway <- onewayid(flow, attrib = 3)
+#' flow_oneway <- od_oneway(flow, attrib = 3)
 #' nrow(flow_oneway) < nrow(flow) # result has fewer rows
 #' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
 #' # using names instead of index for attribute
-#' onewayid(flow, attrib = "All")
+#' od_oneway(flow, attrib = "All")
 #' # using many attributes to aggregate
 #' attrib <- which(vapply(flow, is.numeric, TRUE))
-#' flow_oneway <- onewayid(flow, attrib = attrib)
+#' flow_oneway <- od_oneway(flow, attrib = attrib)
 #' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
-#' # Demonstrate the results from onewayid and onewaygeo are identical
+#' # Demonstrate the results from oneway and onewaygeo are identical
 #' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 #' plot(flow_oneway$All, flow_oneway_geo$All)
-#' flow_oneway_sf <- onewayid(flowlines_sf, 3)
+#' flow_oneway_sf <- od_oneway(flowlines_sf, 3)
 #' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 #' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
+#' # benchmark performance
+#' # bench::mark(check = F,
+#' # onewayid(flowlines_sf, 3),
+#' # od_oneway(flowlines_sf, 3)
+#' # )
 #' @export
-onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-                                stplanr.key = od_id_order(x, id1, id2)) {
+od_oneway <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2]) {
+
+  stplanr.key = od_id_max_min(x[[id1]], x[[id2]])
+
   if (is.numeric(attrib)) {
     attrib_names <- names(x)[attrib]
   } else {
@@ -295,34 +302,23 @@ onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
   # separate geometry for sf objects
   is_sf <- is(x, "sf")
   if(is_sf) {
-    x_sf <- sf::st_sf(stplanr.key[3], geometry = sf::st_geometry(x))
+    x_sf <- sf::st_sf(data.frame(stplanr.key), geometry = sf::st_geometry(x))
     x <- sf::st_drop_geometry(x)
   }
 
-  x <- dplyr::bind_cols(x, stplanr.key)
+  x <- dplyr::bind_cols(x, stplanr.key = stplanr.key)
 
   x_oneway_numeric <- dplyr::group_by(x, stplanr.key) %>%
     dplyr::summarise_at(attrib, sum)
 
-  x_oneway_binary <- dplyr::mutate(x, is_two_way = duplicated(stplanr.key)) %>%
-    dplyr::group_by(stplanr.key) %>%
-    dplyr::summarise(is_two_way = dplyr::last(.data$is_two_way)) %>%
-    dplyr::select(-stplanr.key)
-
   x_oneway_character <- x %>%
-    dplyr::transmute(
-      id1 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 1],
-      id2 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 2],
-      stplanr.key = .data$stplanr.key
-    ) %>%
     dplyr::group_by(stplanr.key) %>%
-    dplyr::summarise(id1 = dplyr::first(id1), id2 = dplyr::first(id2)) %>%
+    dplyr::summarise(id1 = dplyr::first(!!rlang::sym(id1)), id2 = dplyr::first(!!rlang::sym(id2))) %>%
     dplyr::select(-stplanr.key)
 
   x_oneway <- dplyr::bind_cols(
     x_oneway_character,
-    x_oneway_numeric,
-    x_oneway_binary
+    x_oneway_numeric
   )
 
   if(is_sf) {

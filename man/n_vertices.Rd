@@ -27,9 +27,10 @@ Other lines: \code{\link{angle_diff}},
   \code{\link{line_match}}, \code{\link{line_midpoint}},
   \code{\link{line_sample}}, \code{\link{line_segment}},
   \code{\link{line_via}}, \code{\link{mats2line}},
-  \code{\link{n_sample_length}}, \code{\link{onewaygeo}},
-  \code{\link{onewayid}}, \code{\link{points2line}},
-  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{n_sample_length}}, \code{\link{od_oneway}},
+  \code{\link{onewaygeo}}, \code{\link{onewayid}},
+  \code{\link{points2line}}, \code{\link{toptail_buff}},
+  \code{\link{toptailgs}},
   \code{\link{update_line_geometry}}
 }
 \concept{lines}
