@@ -4,11 +4,14 @@
 \alias{od_id}
 \alias{od_id_szudzik}
 \alias{od_id_max_min}
+\alias{od_id_character}
 \title{Combine two ID values to create a single ID number}
 \usage{
 od_id_szudzik(x, y, ordermatters = FALSE)
 
 od_id_max_min(x, y)
+
+od_id_character(x, y)
 }
 \arguments{
 \item{x}{a vector of numeric, character, or factor values}
@@ -35,21 +38,25 @@ length. It returns a vector of ID numbers.
 This function superseeds od_id_order as it is faster on large datasets
 }
 \examples{
-
-head(od_id_order(od_data_sample), 9)
-od_id_szudzik(od_data_sample[[1]], od_data_sample[[2]])
-od_id_max_min(od_data_sample[[1]], od_data_sample[[2]])
+d <- od_data_sample[2:9, 1:2]
+d
+id <- od_id_character(d[[1]], d[[2]])
+id
+duplicated(id)
+od_id_szudzik(d[[1]], d[[2]])
+od_id_max_min(d[[1]], d[[2]])
 n = 1000
 ids <- as.character(runif(n, 1e4, 1e7 - 1))
 # benchmark of methods:
-# x <- data.frame(id1 = rep(ids, times = n),
-#                 id2 = rep(ids, each = n),
-#                 val = 1,
-#                 stringsAsFactors = FALSE)
-# bench::mark(
-#   check = FALSE,
-#   od_id_order(x),
-#   od_id_szudzik(x$id1, x$id2),
-#   od_id_max_min(x$id1, x$id2)
-#   )
+x <- data.frame(id1 = rep(ids, times = n),
+                id2 = rep(ids, each = n),
+                val = 1,
+                stringsAsFactors = FALSE)
+bench::mark(
+  check = FALSE,
+  od_id_order(x),
+  od_id_character(x$id1, x$id2),
+  od_id_szudzik(x$id1, x$id2),
+  od_id_max_min(x$id1, x$id2)
+  )
 }
