@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Print a summary of a SpatialLinesNetwork — summary,SpatialLinesNetwork-method • stplanr</title>
+<title>Combine two ID values to create a single ID number — od_id • stplanr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +39,9 @@
 <!-- ropensci -->
 <link href="../ropensci.css" rel="stylesheet">
 
-<meta property="og:title" content="Print a summary of a SpatialLinesNetwork — summary,SpatialLinesNetwork-method" />
+<meta property="og:title" content="Combine two ID values to create a single ID number — od_id" />
 
-<meta property="og:description" content="Print a summary of a SpatialLinesNetwork" />
+<meta property="og:description" content="Combine two ID values to create a single ID number" />
 
 <meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -133,47 +133,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Print a summary of a SpatialLinesNetwork</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/SpatialLinesNetwork.R'><code>R/SpatialLinesNetwork.R</code></a></small>
-    <div class="hidden name"><code>summary-SpatialLinesNetwork-method.Rd</code></div>
+    <h1>Combine two ID values to create a single ID number</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/stplanr/blob/master/R/oneway.R'><code>R/oneway.R</code></a></small>
+    <div class="hidden name"><code>od_id.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Print a summary of a SpatialLinesNetwork</p>
+    <p>Combine two ID values to create a single ID number</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S4 method for SpatialLinesNetwork</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>od_id_szudzik</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>ordermatters</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>od_id_max_min</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>object</th>
-      <td><p>The SpatialLinesNetwork</p></td>
+      <th>x</th>
+      <td><p>a vector of numeric, character, or factor values</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Arguments to pass to relevant summary function.</p></td>
+      <th>y</th>
+      <td><p>a vector of numeric, character, or factor values</p></td>
+    </tr>
+    <tr>
+      <th>ordermatters</th>
+      <td><p>logical, does the order of values matter to pairing, default = FALSE</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>In OD data it is common to have many 'oneway' flows from "A to B" and "B to A".
+It can be useful to group these an have a single ID that represents pairs of IDs
+with or without directionality, so they contain 'twoway' or bi-directional values.</p>
+<p><code>od_id*</code> functions take two vectors of equal length and return a vector of IDs,
+which are unique for each combination but the same for twoway flows.</p><ul>
+<li><p>the Szudzik pairing function, on two vectors of equal
+length. It returns a vector of ID numbers.</p></li>
+</ul>
+    <p>This function superseeds od_id_order as it is faster on large datasets</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>routes_fast</span>)
-<span class='no'>rnet</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='overline.html'>overline</a></span>(<span class='no'>routes_fast</span>, <span class='kw'>attrib</span> <span class='kw'>=</span> <span class='st'>"length"</span>)
-<span class='no'>sln</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='SpatialLinesNetwork.html'>SpatialLinesNetwork</a></span>(<span class='no'>rnet</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>sln</span>)</div><div class='output co'>#&gt; Weight attribute field: lengthIGRAPH 219e132 U-W- 52 80 -- 
-#&gt; + attr: x (g/n), y (g/n), n (g/n), weight (e/n)</div><div class='output co'>#&gt;                Length                 Class                  Mode 
-#&gt;                    80 SpatialLinesDataFrame                    S4 </div></pre>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'><a href='od_id_order.html'>od_id_order</a></span>(<span class='no'>od_data_sample</span>), <span class='fl'>9</span>)</div><div class='output co'>#&gt;   stplanr.id1 stplanr.id1.1         stplanr.key
+#&gt; 1   E02002361     E02002361 E02002361 E02002361
+#&gt; 2   E02002361     E02002363 E02002361 E02002363
+#&gt; 3   E02002361     E02002367 E02002361 E02002367
+#&gt; 4   E02002361     E02002371 E02002361 E02002371
+#&gt; 5   E02002361     E02002377 E02002361 E02002377
+#&gt; 6   E02002361     E02002382 E02002361 E02002382
+#&gt; 7   E02002361     E02002384 E02002361 E02002384
+#&gt; 8   E02002361     E02002393 E02002361 E02002393
+#&gt; 9   E02002363     E02002361 E02002361 E02002363</div><div class='input'><span class='fu'>od_id_szudzik</span>(<span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt;  [1]  2  5 10 17 26 37 50 65  5  6 11 18 27 38 51 66 10 11 12 19 28 39 52 67 17
+#&gt; [26] 18 19 20 29 40 53 68 26 27 28 29 30 41 54 69 37 38 39 40 41 42 55 70 50 51
+#&gt; [51] 52 53 54 55 56 71 65 66 67 68 69 70 71 72</div><div class='input'><span class='fu'>od_id_max_min</span>(<span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='no'>od_data_sample</span><span class='kw'>[[</span><span class='fl'>2</span>]])</div><div class='output co'>#&gt;  [1]  2  4  7 11 16 22 29 37  4  5  8 12 17 23 30 38  7  8  9 13 18 24 31 39 11
+#&gt; [26] 12 13 14 19 25 32 40 16 17 18 19 20 26 33 41 22 23 24 25 26 27 34 42 29 30
+#&gt; [51] 31 32 33 34 35 43 37 38 39 40 41 42 43 44</div><div class='input'><span class='no'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>
+<span class='no'>ids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='no'>n</span>, <span class='fl'>1e4</span>, <span class='fl'>1e7</span> - <span class='fl'>1</span>))
+<span class='co'># benchmark of methods:</span>
+<span class='co'># x &lt;- data.frame(id1 = rep(ids, times = n),</span>
+<span class='co'>#                 id2 = rep(ids, each = n),</span>
+<span class='co'>#                 val = 1,</span>
+<span class='co'>#                 stringsAsFactors = FALSE)</span>
+<span class='co'># bench::mark(</span>
+<span class='co'>#   check = FALSE,</span>
+<span class='co'>#   od_id_order(x),</span>
+<span class='co'>#   od_id_szudzik(x$id1, x$id2),</span>
+<span class='co'>#   od_id_max_min(x$id1, x$id2)</span>
+<span class='co'>#   )</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -214,7 +214,13 @@
     <loc>https://ropensci.github.io/stplanr/reference/od_dist.html</loc>
   </url>
   <url>
+    <loc>https://ropensci.github.io/stplanr/reference/od_id.html</loc>
+  </url>
+  <url>
     <loc>https://ropensci.github.io/stplanr/reference/od_id_order.html</loc>
+  </url>
+  <url>
+    <loc>https://ropensci.github.io/stplanr/reference/od_oneway.html</loc>
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/reference/od_radiation.html</loc>
@@ -335,9 +341,6 @@
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/reference/summary-sfNetwork-method.html</loc>
-  </url>
-  <url>
-    <loc>https://ropensci.github.io/stplanr/reference/szudzik_pairing.html</loc>
   </url>
   <url>
     <loc>https://ropensci.github.io/stplanr/reference/table2matrix.html</loc>
