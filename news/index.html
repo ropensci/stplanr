@@ -72,7 +72,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.2.10.9000</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.3.0</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -139,9 +139,17 @@
 <h1 class="page-header">
 <a href="#stplanr-0-3-0" class="anchor"></a>stplanr 0.3.0<small> Unreleased </small>
 </h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
 <ul>
-<li>New functions <code><a href="../reference/od_to_odmatrix.html">od_to_odmatrix()</a></code> and <code><a href="../reference/odmatrix_to_od.html">odmatrix_to_od()</a></code> to convert between matrix forms of origin-destination data.</li>
+<li>New functions <code><a href="../reference/od_to_odmatrix.html">od_to_odmatrix()</a></code> and <code><a href="../reference/odmatrix_to_od.html">odmatrix_to_od()</a></code> to convert between matrix forms of origin-destination data</li>
+<li>New function <code><a href="../reference/od_oneway.html">od_oneway()</a></code> replaces <code><a href="../reference/onewayid.html">onewayid()</a></code>, works better and is twice as fast</li>
+<li>New <code>od_id*()</code> functions provide a range of ways to convert origin-destination pair IDs into a single ID. See <a href="https://stackoverflow.com/questions/57235601/how-to-identify-duplicated-ordered-pairs-efficiently/57236658<a href='https://github.com/ropensci/stplanr/issues/57236658'>#57236658</a>">Stackoverflow</a> and the <a href="https://github.com/ropensci/stplanr/issues/321">issue tracker</a>
+</li>
+<li>New vignette <a href="https://docs.ropensci.org/stplanr/articles/stplanr-od.html"><code>stplanr-od</code></a> provides detailed documentation on the package’s OD data handling capabilities</li>
 </ul>
+</div>
 </div>
     <div id="stplanr-0-2-10" class="section level1">
 <h1 class="page-header">
@@ -156,9 +164,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-9" class="anchor"></a>stplanr 0.2.9<small> 2019-05-10 </small>
 </h1>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>New functions <code><a href="../reference/od_aggregate_from.html">od_aggregate_from()</a></code> and <code><a href="../reference/od_aggregate_to.html">od_aggregate_to()</a></code> provide easy ways to aggregate origin-destination pairs. See <a href="https://github.com/ropensci/stplanr/pull/303"><a href='https://github.com/ropensci/stplanr/issues/303'>#303</a></a>.</li>
 <li>Updated <code><a href="../reference/overline2.html">overline2()</a></code> is now faster and better documented, thanks to <a href="https://github.com/ropensci/stplanr/pull/307"><a href='https://github.com/ropensci/stplanr/issues/307'>#307</a></a>
@@ -184,9 +192,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-8" class="anchor"></a>stplanr 0.2.8<small> 2019-03-22 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>The stplanr paper has been published! See it here: <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html" class="uri">https://journal.r-project.org/archive/2018/RJ-2018-053/index.html</a>
 </li>
@@ -220,9 +228,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-7" class="anchor"></a>stplanr 0.2.7<small> 2019-01-07 </small>
 </h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-3" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>Various changes to support <code>dplyr</code> <a href="https://www.tidyverse.org/articles/2018/12/dplyr-0-8-0-release-candidate/">0.8.0</a>: <a href="https://github.com/ropensci/stplanr/pull/275" class="uri">https://github.com/ropensci/stplanr/pull/275</a>
 </li>
@@ -247,9 +255,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-6" class="anchor"></a>stplanr 0.2.6<small> 2018-10-20 </small>
 </h1>
-<div id="new-features-3" class="section level2">
+<div id="new-features-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-3" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-4" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>New function <code><a href="../reference/route_local.html">route_local()</a></code>
 </li>
@@ -272,9 +280,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-5" class="anchor"></a>stplanr 0.2.5<small> 2018-06-02 </small>
 </h1>
-<div id="new-features-4" class="section level2">
+<div id="new-features-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-4" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-5" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>New function <code><a href="../reference/line_via.html">line_via()</a></code> for identifying intermediary points on a transport network</li>
 </ul>
@@ -291,9 +299,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-4" class="anchor"></a>stplanr 0.2.4<small> 2018-05-19 </small>
 </h1>
-<div id="new-features-5" class="section level2">
+<div id="new-features-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-5" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-6" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>New function <code><a href="../reference/geo_length.html">geo_length()</a></code> returns numeric vector of line lengths from <strong>sp</strong> or <strong>sf</strong> objects.</li>
 </ul>
@@ -316,9 +324,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-3" class="anchor"></a>stplanr 0.2.3<small> 2018-03-06 </small>
 </h1>
-<div id="new-features-6" class="section level2">
+<div id="new-features-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-6" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-7" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
 <strong>stplanr</strong> now imports <strong>lwgeom</strong>, needed for <code><a href="https://www.rdocumentation.org/packages/sf/topics/geos_measures">sf::st_length()</a></code>, used in <code><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork()</a></code>.</li>
@@ -338,9 +346,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-2" class="anchor"></a>stplanr 0.2.2<small> 2017-12-19 </small>
 </h1>
-<div id="new-features-7" class="section level2">
+<div id="new-features-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-7" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-8" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>In this release <strong>sp</strong> is demoted from a Depends to an Imports, meaning that all its functions will not be attached to your namespace (it will not be loaded) when you run <code><a href="https://www.rdocumentation.org/packages/base/topics/library">library(stplanr)</a></code>, making it less tied to <strong>sp</strong>. This is a continuation of the work to support <strong>sf</strong> and will make it easier for the package to work with alternative representations of geographic data.</li>
 </ul>
@@ -359,9 +367,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-2-0" class="anchor"></a>stplanr 0.2.0<small> Unreleased </small>
 </h1>
-<div id="new-features-8" class="section level2">
+<div id="new-features-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-8" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-9" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>This is the largest release since the package was created, with dozens of changes to support simple features - see <a href="https://github.com/ropensci/stplanr/pull/198" class="uri">https://github.com/ropensci/stplanr/pull/198</a> for details.</li>
 <li>Support for <strong>sf</strong>. The package now support the new spatial class system for most functions.</li>
@@ -385,9 +393,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-1-9" class="anchor"></a>stplanr 0.1.9<small> 2017-07-12 </small>
 </h1>
-<div id="new-features-9" class="section level2">
+<div id="new-features-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-9" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-10" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>Dependency cull: we have removed dependencies on foreach and doParallel</li>
 <li>
@@ -411,9 +419,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-1-8" class="anchor"></a>stplanr 0.1.8<small> 2017-06-02 </small>
 </h1>
-<div id="new-features-10" class="section level2">
+<div id="new-features-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-10" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-11" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>New argument <code>combinations</code> added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code> so it runs quicker - see <a href="https://github.com/ropensci/stplanr/pull/177">pull/177</a>.</li>
 <li>New examples added to <code><a href="../reference/sum_network_routes.html">sum_network_routes()</a></code>, <code><a href="../reference/weightfield.html">weightfield()</a></code> and <code><a href="../reference/find_network_nodes.html">find_network_nodes()</a></code> - see e.g. <code><a href="https://www.rdocumentation.org/packages/utils/topics/example">example(sum_network_routes)</a></code> for details.</li>
@@ -435,9 +443,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-1-7" class="anchor"></a>stplanr 0.1.7<small> 2016-12-23 </small>
 </h1>
-<div id="new-features-11" class="section level2">
+<div id="new-features-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-11" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-12" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>There is a new vignette! See <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd">vignettes/stplanr-paper.Rmd</a> and <code><a href="../articles/stplanr-paper.html">vignette("stplanr-paper")</a></code> for details.</li>
 <li>The original <a href="https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr.Rmd"><code>introducing-stplanr</code></a> vignette has been updated. It now provides a more basic introduction for people new to R for spatial and transport data.</li>
@@ -475,9 +483,9 @@
 <h1 class="page-header">
 <a href="#stplanr-0-1-6" class="anchor"></a>stplanr 0.1.6<small> 2016-11-11 </small>
 </h1>
-<div id="new-features-12" class="section level2">
+<div id="new-features-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-12" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-13" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
 <code><a href="../reference/onewayid.html">onewayid()</a></code> is now a generic function, meaning it can handle spatial and non-spatial data</li>
