@@ -62,8 +62,7 @@ par(mfrow = c(1, 1))
 od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
 cor(od_max_min$all, od_oneway$all)
 # benchmark performance
-bench::mark(
-  check = FALSE,
+bench::mark(check = FALSE, iterations = 3,
   onewayid(flowlines_sf, attrib),
   od_oneway(flowlines_sf)
 )
