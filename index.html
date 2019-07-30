@@ -147,7 +147,7 @@
 <a class="sourceLine" id="cb3-2" data-line-number="2">w &lt;-<span class="st"> </span>flow<span class="op">$</span>all <span class="op">/</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(flow<span class="op">$</span>all) <span class="op">*</span><span class="dv">10</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(travel_network, <span class="dt">lwd =</span> w)</a></code></pre></div>
 <p><img src="reference/figures/README-plot1-1.png" width="100%"></p>
-<p><code>stplanr</code> has many functions for working with OD data. See the <a href="https://docs.ropensci.org/stplanr/articles/stplanr-od.html"><code>stplanr-od</code></a> vignette for details.</p>
+<p><strong>stplanr</strong> has many functions for working with OD data. See the <a href="https://docs.ropensci.org/stplanr/articles/stplanr-od.html"><code>stplanr-od</code></a> vignette for details.</p>
 <p>The package can also allocate flows to the road network, e.g. with <a href="https://www.cyclestreets.net/api/">CycleStreets.net</a> and the OpenStreetMap Routing Machine (<a href="https://github.com/Project-OSRM/osrm-backend">OSRM</a>) API interfaces. These are supported in <code>route_*()</code> functions such as <code>route_cyclestreets</code> and <code><a href="reference/route_osrm.html">route_osrm()</a></code>:</p>
 <p>Route functions take lat/lon inputs (results not calculated):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">trip &lt;-<span class="st"> </span><span class="kw"><a href="reference/route_osrm.html">route_osrm</a></span>(<span class="dt">from =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">53</span>), <span class="dt">to =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="op">-</span><span class="fl">1.1</span>, <span class="dv">53</span>))</a></code></pre></div>
@@ -166,22 +166,23 @@
 <p><code>overline</code> is a function which takes a series of route-allocated lines, splits them into unique segments and aggregates the values of overlapping lines. This can represent where there will be most traffic on the transport system, as demonstrated in the following code chunk.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">routes<span class="op">$</span>foot &lt;-<span class="st"> </span>desire_lines<span class="op">$</span>foot</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">rnet &lt;-<span class="st"> </span><span class="kw"><a href="reference/overline2.html">overline2</a></span>(routes, <span class="dt">attrib =</span> <span class="st">"foot"</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 2019-07-29 22:28:58 constructing segments</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2019-07-29 22:28:58 building geometry</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 2019-07-29 22:28:58 simplifying geometry</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 2019-07-29 22:28:58 aggregating flows</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 2019-07-29 22:28:58 rejoining segments into linestrings</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 2019-07-30 05:51:59 constructing segments</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2019-07-30 05:51:59 building geometry</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 2019-07-30 05:51:59 simplifying geometry</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 2019-07-30 05:51:59 aggregating flows</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 2019-07-30 05:51:59 rejoining segments into linestrings</span></a></code></pre></div>
 <p>The resulting route network, with segment totals calculated from overlapping parts for the routes for walking, can be visualised as follows:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(rnet[<span class="st">"foot"</span>], <span class="dt">lwd =</span> rnet<span class="op">$</span>foot)</a></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
-<p>The above plot represents the number of people who walk along particular routes (assuming the routes represent real routes).</p>
+<p>The above plot represents the number walking trips made (the ‘flow’) along particular segments of a transport network.</p>
 <!-- (results not shown): -->
 </div>
-<div id="policy-and-research-applications" class="section level2">
+<div id="policy-applications" class="section level2">
 <h2 class="hasAnchor">
-<a href="#policy-and-research-applications" class="anchor"></a>Policy and research applications</h2>
-<p>The example results may not seem particularly revolutionary. At the city scale, however, this type of analysis can be used to inform sustainable transport policies, as described in papers <a href="https://www.jtlu.org/index.php/jtlu/article/view/862/859">describing the Propensity to Cycle Tool</a> (PCT), and its <a href="https://www.sciencedirect.com/science/article/pii/S2214140518301257">application to calculate cycling to school potential</a> across England. In essence, stplanr was designed to help answer research and policy questions of the type raised in those papers.</p>
-<p>There are many other research applications that the functions in <code>stplanr</code> can help solve, most of which have yet to be thought of.</p>
+<a href="#policy-applications" class="anchor"></a>Policy applications</h2>
+<p>The examples shown above, based on tiny demonstration datasets, may not seem particularly revolutionary. At the city scale, however, this type of analysis can be used to inform sustainable transport policies, as described in papers <a href="https://www.jtlu.org/index.php/jtlu/article/view/862/859">describing the Propensity to Cycle Tool</a> (PCT), and its <a href="https://www.sciencedirect.com/science/article/pii/S2214140518301257">application to calculate cycling to school potential</a> across England.</p>
+<p>Results generated by <strong>stplanr</strong> are now part of national government policy: the PCT is the recommended tool for local and regional authorities developing strategic cycle network under the Cycling and Walking Infrastructure Strategy (<a href="https://www.gov.uk/government/publications/cycling-and-walking-investment-strategy">CWIS</a>), which is part of the Infrastructure Act <a href="http://www.legislation.gov.uk/ukpga/2015/7/contents/enacted">2015</a>. <strong>stplanr</strong> is helping dozens of local authorities across the UK to answer the question: where to prioritise investment in cycling? In essence, stplanr was designed to support sustainable transport policies.</p>
+<p>There are many other research and policy questions that functions in <strong>stplanr</strong>, and other open source software libraries and packages, can help answer. At a time of climate, health and social crises, it is important that technology is not only sustainable itself (e.g. as enabled by open source communities and licenses) but that it contributes to a sustainable future.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -215,7 +216,7 @@
 <ul>
 <li>The Transport chapter of <em>Geocomputation with R</em>, which provides a broad introduction from a geographic data perspective: <a href="https://geocompr.robinlovelace.net/transport.html" class="uri">https://geocompr.robinlovelace.net/transport.html</a>
 </li>
-<li>The <code>stplanr</code> paper, which describes the context in which the package was developed: <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html" class="uri">https://journal.r-project.org/archive/2018/RJ-2018-053/index.html</a> (please cite this if you use <code>stplanr</code> in your work)</li>
+<li>The <strong>stplanr</strong> paper, which describes the context in which the package was developed: <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html" class="uri">https://journal.r-project.org/archive/2018/RJ-2018-053/index.html</a> (please cite this if you use <strong>stplanr</strong> in your work)</li>
 <li>The <code>dodgr</code> vignette, which provides an introduction to routing in R: <a href="https://cran.r-project.org/package=dodgr/vignettes/dodgr.html" class="uri">https://cran.r-project.org/package=dodgr/vignettes/dodgr.html</a>
 </li>
 </ul>
@@ -227,9 +228,9 @@
 <li>Please report issues, feature requests and questions to the <a href="https://github.com/ropensci/stplanr/issues">github issue tracker</a>
 </li>
 <li>License: MIT</li>
-<li>Get citation information for <code>stplanr</code> in R doing <code><a href="https://www.rdocumentation.org/packages/utils/topics/citation">citation(package = 'stplanr')</a></code>
+<li>Get citation information for <strong>stplanr</strong> in R doing <code><a href="https://www.rdocumentation.org/packages/utils/topics/citation">citation(package = 'stplanr')</a></code>
 </li>
-<li>This project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
+<li>This project is released with a <a href="https://github.com/ropensci/stplanr/blob/master/CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
 </ul>
 <p><a href="http://ropensci.org"><img src="http://ropensci.org/public_images/github_footer.png" alt="rofooter"></a></p>
 </div>
