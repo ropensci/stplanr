@@ -74,7 +74,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.3.0</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.3.1</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -221,14 +221,14 @@ length. It returns a vector of ID numbers.</p></li>
   <span class='fu'>od_id_szudzik</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>),
   <span class='fu'>od_id_max_min</span>(<span class='no'>x</span>$<span class='no'>id1</span>, <span class='no'>x</span>$<span class='no'>id2</span>)
 )</div><div class='output co'>#&gt; # A tibble: 4 x 13
-#&gt;   expression                         min median `itr/sec` mem_alloc `gc/sec`
-#&gt;   &lt;bch:expr&gt;                    &lt;bch:tm&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-#&gt; 1 od_id_order(x)                  6.73ms 6.97ms      141.  234.52KB      0  
-#&gt; 2 od_id_character(x$id1, x$id2)   6.21ms 6.45ms      155.  234.52KB      0  
-#&gt; 3 od_id_szudzik(x$id1, x$id2)     1.36ms 1.68ms      599.    1.68MB      0  
-#&gt; 4 od_id_max_min(x$id1, x$id2)   935.12µs 1.25ms      853.   976.5KB     94.8
-#&gt; # … with 7 more variables: n_itr &lt;int&gt;, n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;,
-#&gt; #   result &lt;list&gt;, memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
+#&gt;   expression                       min median `itr/sec` mem_alloc `gc/sec` n_itr
+#&gt;   &lt;bch:expr&gt;                    &lt;bch:&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt;
+#&gt; 1 od_id_order(x)                7.67ms 7.92ms      126.  234.52KB      0      10
+#&gt; 2 od_id_character(x$id1, x$id2) 6.63ms 6.76ms      144.  234.52KB      0      10
+#&gt; 3 od_id_szudzik(x$id1, x$id2)    1.5ms 1.82ms      545.    1.68MB      0      10
+#&gt; 4 od_id_max_min(x$id1, x$id2)   1.04ms 1.32ms      794.   976.5KB     88.2     9
+#&gt; # … with 6 more variables: n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;, result &lt;list&gt;,
+#&gt; #   memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

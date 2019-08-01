@@ -74,7 +74,7 @@
 
       <div class="navbar-brand-container">
         <a href="https://ropensci.org"><img src="../hexlogo.png" id="hexlogo" alt="rOpenSci" /></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.3.0</small></i></a>
+        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.3.1</small></i></a>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -247,10 +247,10 @@ for users and are difficult to plot.</p>
   <span class='fu'><a href='onewayid.html'>onewayid</a></span>(<span class='no'>flowlines_sf</span>, <span class='no'>attrib</span>),
   <span class='fu'>od_oneway</span>(<span class='no'>flowlines_sf</span>)
 )</div><div class='output co'>#&gt; <span class='message'>Joining, by = "stplanr.key"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Area.of.residence", "Area.of.workplace")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "stplanr.key"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "stplanr.key"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "stplanr.key"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Area.of.residence", "Area.of.workplace")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Area.of.residence", "Area.of.workplace")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = c("Area.of.residence", "Area.of.workplace")</span></div><div class='output co'>#&gt; # A tibble: 2 x 13
-#&gt;   expression                         min  median `itr/sec` mem_alloc `gc/sec`
-#&gt;   &lt;bch:expr&gt;                     &lt;bch:t&gt; &lt;bch:t&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
-#&gt; 1 onewayid(flowlines_sf, attrib) 14.84ms 27.75ms      36.0   129.4KB     18.0
-#&gt; 2 od_oneway(flowlines_sf)         8.35ms  9.21ms     109.     22.7KB      0  
+#&gt;   expression                         min median `itr/sec` mem_alloc `gc/sec`
+#&gt;   &lt;bch:expr&gt;                     &lt;bch:t&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;
+#&gt; 1 onewayid(flowlines_sf, attrib)  17.1ms   31ms      32.2   129.4KB     16.1
+#&gt; 2 od_oneway(flowlines_sf)         8.97ms 11.4ms      93.3    22.7KB      0  
 #&gt; # … with 7 more variables: n_itr &lt;int&gt;, n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;,
 #&gt; #   result &lt;list&gt;, memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
