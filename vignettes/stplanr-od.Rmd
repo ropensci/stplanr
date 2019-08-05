@@ -1,7 +1,6 @@
 ---
 title: "Origin-destination data with stplanr"
-output: word_document
-# output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 author: "Robin Lovelace"
 vignette: >
   %\VignetteIndexEntry{stplanr vignette 2: origin-destination data}
