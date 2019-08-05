@@ -32,6 +32,10 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
@@ -223,10 +227,10 @@ length. It returns a vector of ID numbers.</p></li>
 )</div><div class='output co'>#&gt; # A tibble: 4 x 13
 #&gt;   expression                       min median `itr/sec` mem_alloc `gc/sec` n_itr
 #&gt;   &lt;bch:expr&gt;                    &lt;bch:&gt; &lt;bch:&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt; &lt;int&gt;
-#&gt; 1 od_id_order(x)                7.67ms 7.92ms      126.  234.52KB      0      10
-#&gt; 2 od_id_character(x$id1, x$id2) 6.63ms 6.76ms      144.  234.52KB      0      10
-#&gt; 3 od_id_szudzik(x$id1, x$id2)    1.5ms 1.82ms      545.    1.68MB      0      10
-#&gt; 4 od_id_max_min(x$id1, x$id2)   1.04ms 1.32ms      794.   976.5KB     88.2     9
+#&gt; 1 od_id_order(x)                7.28ms 7.62ms      131.  234.52KB      0      10
+#&gt; 2 od_id_character(x$id1, x$id2) 6.47ms 6.65ms      150.  234.52KB      0      10
+#&gt; 3 od_id_szudzik(x$id1, x$id2)   1.53ms 1.76ms      554.    1.68MB      0      10
+#&gt; 4 od_id_max_min(x$id1, x$id2)   1.02ms 1.24ms      791.   976.5KB     87.9     9
 #&gt; # … with 6 more variables: n_gc &lt;dbl&gt;, total_time &lt;bch:tm&gt;, result &lt;list&gt;,
 #&gt; #   memory &lt;list&gt;, time &lt;list&gt;, gc &lt;list&gt;</div></pre>
   </div>
