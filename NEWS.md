@@ -1,5 +1,10 @@
 # stplanr 0.3.1
 
+
+## OTHER
+
+- Various improvements made to the `stplanr-od` vignette, thanks to Edward Leigh.
+
 # stplanr 0.3.0
 
 ## NEW FEATURES

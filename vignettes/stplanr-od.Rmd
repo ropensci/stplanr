@@ -1,7 +1,7 @@
 ---
 title: "Origin-destination data with stplanr"
 output: rmarkdown::html_vignette
-author: "Robin Lovelace"
+author: "Robin Lovelace and Edward Leigh"
 vignette: >
   %\VignetteIndexEntry{stplanr vignette 2: origin-destination data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,12 +22,15 @@ knitr::opts_chunk$set(
 # Introduction: what is OD data?
 
 As the name suggests, origin-destination (OD) data represents movement through geographic space, from an origin (O) to a destination (D).
-Origin-destination (OD) datasets contain details of trips between two geographic points.
-The start and end points are known.
-Usually there is a limited knowledge about the mode(s), though usually only whichever mode the agent regards as the "principle" mode.
-There may be trip counts at different time periods.
+OD datasets contain details of trips between two geographic points or, more commonly, zones (which are often represented by a zone centroid).
+Most OD datasets are *implicitly geographic*, with start and end points locations referred to by 'IDs', character strings such as `zone1` that refer to a geographic feature in a separate geographic dataset.
+Coordinates of origins and destinations are sometimes included.
+
+OD datasets also typically contain multiple non geographic attributes.
+These usually include, at a minimum, the number of trips that take place from the origin to the destination over a given time period (e.g. a typical work day).
+Additional attributes can include breakdown by the mode(s) of transport used for the trips, although usually only a single mode is captured (trips made by a combination of cycle-train-walk modes are often counted only as 'train' trips).
+Additional disaggregations of overall counts may include trip counts at different time periods.
 If there is only one time period, then this resides in the metadata for the whole data set.
-That might be train in a cycle-train-walk trip.
 There is rarely any information about the path taken between the start and end points.
 It is typically the job of an assignment model (such as SATURN, Visum, Google Maps or a routing service such as CycleStreets.net) to identify the most likely path to be taken, based on minimising generalised cost (monetary plus time and quality 'costs').
 
@@ -43,10 +46,10 @@ There are other reasons why transport data analysis and software are important [
 The purpose of this vignette is to introduce OD data, an important component of many transport planning models, with examples based on data and functions from the stplanr package.
 The aim is to enable you to use OD data to inform more sustainable transport plans, for example by identifying 'desire lines' along which policies could cause a modal switch away from cars and towards lower energy modes such as walking, cycling, or publich transport.
 
-# An minimal example OD dataset
+# An example OD dataset
 
 OD data can be accessed from a range of sources (we will see code that downloads many thousands of OD pairs later in this vignette).
-You may need to do some 'data carpentry' before the OD data is and ready for analysis.
+Some 'data carpentry' may be needed before the OD data is ready for analysis.
 This vignette does not cover cleaning OD data: we assume you know R and come with 'tidy' data [@wickham_tidy_2014], in which each row represents travel between an origin and a destination (typically zones represented by zone IDs), and each column represents an attribute such as number of trips or vehichle counts by mode or straight line distance.^[
 It may be difficult to convert between 'number of trip' and 'number of vehicle' counts for modes in which a single vehicle can contain many people, such as cars (a problem that can be overcome when surveys differentiate between car driver and 'car passenger' as distinct modes), buses and trams if occupancy levels are unknown.
 Typically OD data only report single stage trips, but multi-modal trips such as walk-rail-cycle can be represented when such a combination of modes is represented by a new, unique, mode.
