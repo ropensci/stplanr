@@ -27,13 +27,13 @@ Specifically, how can origin-destination (OD) data, such as the open datasets pr
 The research project that the initial work on **stplanr** was funded by was called the Propensity to Cycle Tool (PCT), which has now been deployed as a web application hosted at www.pct.bike and written-up as an academic paper [@lovelace_propensity_2017].
 
 Since this basic functionality has been implemented (with the function `od2line()`) there have been many further developments in **stplanr**.
-The package was reviewed through the rOpenSci package review process (see here for the details) and the package is now hosted on their site. See the website at [ropensci.github.io/stplanr](https://ropensci.github.io/stplanr/).
+The package was reviewed through the rOpenSci package review process (see here for the details) and the package is now hosted on their site. See the website at [docs.ropensci.org/stplanr](https://docs.ropensci.org/stplanr/).
 A more detailed overview of the package's aims and capabilities is contained in a [longer vignette](https://github.com/ropensci/stplanr/blob/master/vignettes/stplanr-paper.Rmd), which has since been published in the R Journal [@lovelace_stplanr_2018].
 
 # Installing stplanr
 
 If you're new to programming and transport data, we recommend using **stplanr** interactively in an Integrated Development Environment (IDE) such as RStudio to make life easier.
-Steps to set-up a suitable R/RStudio environment are described in the package's [README](https://ropensci.github.io/stplanr/#installation).
+Steps to set-up a suitable R/RStudio environment are described in the package's [README](https://docs.ropensci.org/stplanr/#installation).
 Broader guidance on R set-up can be found in sections [2.3](https://csgillespie.github.io/efficientR/set-up.html#r-version) and [2.5](https://csgillespie.github.io/efficientR/set-up.html#rstudio) of the book [Efficient R Programming](https://csgillespie.github.io/efficientR/set-up.html) [@gillespie_efficient_2016].
 
 Once you have an R set-up you are happy with, the latest version can be installed from CRAN in the usual way:
@@ -61,7 +61,7 @@ The names of these datasets (which are loaded 'lazily' into your namespace when 
 data(package = "stplanr")$result[, "Item"]
 ```
 
-A more complete list of functions in the package can be found here: https://ropensci.github.io/stplanr/reference/index.html.
+A more complete list of functions in the package can be found here: https://docs.ropensci.org/stplanr/reference/index.html.
 
 # OD data to desire lines and routes
 

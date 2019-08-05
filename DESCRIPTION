@@ -69,7 +69,7 @@ Suggests:
     tmap,
     bench
 VignetteBuilder: knitr
-URL: https://github.com/ropensci/stplanr, https://ropensci.github.io/stplanr/
+URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)

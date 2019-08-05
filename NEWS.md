@@ -3,7 +3,8 @@
 
 ## OTHER
 
-- Various improvements made to the `stplanr-od` vignette, thanks to Edward Leigh.
+- Various improvements made to the `stplanr-od` vignette, thanks to Edward Leigh
+- URLs updated to link to stplanr's new, official website: https://docs.ropensci.org/stplanr/
 
 # stplanr 0.3.0
 
