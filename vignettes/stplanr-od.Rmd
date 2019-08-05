@@ -22,17 +22,23 @@ knitr::opts_chunk$set(
 # Introduction: what is OD data?
 
 As the name suggests, origin-destination (OD) data represents movement through geographic space, from an origin (O) to a destination (D).
-OD datasets contain details of trips between two geographic points or, more commonly, zones (which are often represented by a zone centroid).
-Most OD datasets are *implicitly geographic*, with start and end points locations referred to by 'IDs', character strings such as `zone1` that refer to a geographic feature in a separate geographic dataset.
-Coordinates of origins and destinations are sometimes included.
+Sometimes also called '[flow data](https://www.ons.gov.uk/census/2011census/2011censusdata/originanddestinationdata)', OD datasets contain details of trips between two geographic points or, more commonly, zones (which are often represented by a zone centroid).
+Most OD datasets refer to start and end locations with 'ID' columns containing character strings such as `zone1`.
+These IDs refer to a geographic feature in a separate geographic dataset.
+Origin and destination locations are sometimes represented as geographic coordinates.
 
-OD datasets also typically contain multiple non geographic attributes.
+OD datasets typically contain multiple non geographic attributes.
 These usually include, at a minimum, the number of trips that take place from the origin to the destination over a given time period (e.g. a typical work day).
-Additional attributes can include breakdown by the mode(s) of transport used for the trips, although usually only a single mode is captured (trips made by a combination of cycle-train-walk modes are often counted only as 'train' trips).
+Additional attributes can include breakdown by the mode(s) of transport used for the trips.
+Usually only a single mode is captured (trips made by a combination of cycle-train-walk modes are often counted only as 'train' trips).
 Additional disaggregations of overall counts may include trip counts at different time periods.
+
+Many OD datasets omit information.
 If there is only one time period, then this resides in the metadata for the whole data set.
 There is rarely any information about the path taken between the start and end points.
-It is typically the job of an assignment model (such as SATURN, Visum, Google Maps or a routing service such as CycleStreets.net) to identify the most likely path to be taken, based on minimising generalised cost (monetary plus time and quality 'costs').
+It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/rCarto/osrm), [Google Directions API](http://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](http://vision-traffic.ptvgroup.com/en-us/products/ptv-visum/functions/)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
+
+# The importance of OD data
 
 Despite the rather dull name, OD datasets are a vital part of the modern world: they underpin analysis and models that influence current *and future* transport systems.
 Historically, these models, and the OD datasets that drove them, were used to plan for car-dominated cities [@boyce_forecasting_2015].
@@ -44,7 +50,7 @@ Even ignoring problems such as air pollution, obesity and climate change, it is 
 There are other reasons why transport data analysis and software are important [@lovelace_stplanr_2018].
 
 The purpose of this vignette is to introduce OD data, an important component of many transport planning models, with examples based on data and functions from the stplanr package.
-The aim is to enable you to use OD data to inform more sustainable transport plans, for example by identifying 'desire lines' along which policies could cause a modal switch away from cars and towards lower energy modes such as walking, cycling, or publich transport.
+The aim is to enable you to use OD data to inform more sustainable transport plans, for example by identifying 'desire lines' along which policies could cause a modal switch away from cars and towards lower energy modes such as walking, cycling, and public transport.
 
 # An example OD dataset
 
@@ -115,9 +121,9 @@ od_matrix
 ```
 
 Note that row and column names are now zone codes.
-The cell in row 2 and column 1 (`od_matrix[2, 1]`) means that `831` people travel from zone `E02003591` to zone `E02003588`.
+The cell in row 1 and column 2 (`od_matrix[1, 2]`), for example, reports that there are 94 trips from zone `E02002361` to zone `E02002393`.
 In the case above, no people travel between the majority of the OD pair combinations, as represented by the `NA`s.
-OD matrices are a more rudimentary data structure that pre-date R's `data.frame` class.
+OD matrices are a relatively rudimentary data structure that pre-date R's `data.frame` class.
 Typically, they only contained integer counts, providing small and simple datasets that could be used in 20^th^ Century transport modelling software running on limited 20^th^ Century hardware. 
 
 Although 'OD matrix' is still sometimes used informally to refer to any OD datadset, the long OD pair representation is recommended:
