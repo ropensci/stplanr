@@ -159,7 +159,7 @@ However, intra-zonal flows can be valuable, for example in measuring the amount 
 # Oneway lines
 
 Another subtly with some ([symetric](https://icaci.org/files/documents/ICC_proceedings/ICC2013/_extendedAbstract/393_proceeding.pdf), where origins and destinations can be the same points) OD data is that oneway flows can hide the extent of bidirectional flows in plots and other types of analysis.
-This is illustrated below for a tiny OD dataset shown below:
+This is illustrated below for a sample of the `od` dataset:
 
 ```{r}
 (od_min = od_data_sample[c(1, 2, 9), 1:6])
