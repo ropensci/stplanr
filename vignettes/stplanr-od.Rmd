@@ -424,7 +424,8 @@ The following suggestions are based on my own reading  --- if you have any other
 
 # Summary
 
-In summary, `stplanr` provides many functions for working with OD data that should allow you to make better use of your valuable data.
+In summary, `stplanr` provides many functions for working with OD data.
+OD data is an important component in transport planning and modelling that can, if used with creativity and skill, could assist with sustainable transport planning and the global [transition away from fossil fuels](https://www.sei.org/wp-content/uploads/2019/01/realizing-a-just-and-equitable-transition-away-from-fossil-fuels.pdf).
 There are many other things can be done with OD data, some of which could be supported by future versions of this package.
 To suggest new features of otherwise get in touch, see the `stplanr` issue tracker at [github.com/ropensci/stplanr](https://github.com/ropensci/stplanr/issues).
 
