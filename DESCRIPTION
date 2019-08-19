@@ -7,7 +7,7 @@ Authors@R: c(
       comment = c(ORCID = "0000-0001-5679-6536")),
     person("Richard", "Ellison", role = c("aut")),
     person("Malcolm", "Morgan", role = c("aut"),
-      comment = c(ORCID = "0000-0001-5679-6536")),
+      comment = c(ORCID = "0000-0002-9488-9183")),
     person("Barry", "Rowlingson", role = c("ctb"), comment = "Author of overline"),
     person("Nick", "Bearman", role = c("ctb"), comment = "Co-author of gclip"),
     person("Nikolai", "Berkoff", role = c("ctb"), comment = "Co-author of line2route"),
