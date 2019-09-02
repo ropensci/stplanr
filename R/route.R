@@ -103,6 +103,7 @@ route_dodgr <-
   if(is.null(net)) {
       pts <- rbind(fm_coords, to_coords)
       net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
+      message("Network not provided, fetching network using dodgr_streetnet")
   }
 
   ckh <- dodgr::dodgr_cache_off()
@@ -133,7 +134,9 @@ route_dodgr <-
   paths <- unlist(paths, recursive = FALSE)
   index <- which (vapply (paths, is.null, logical (1)))
   if (any (index))
-      message ("unable to trace path number ", as.integer (index))
+        message("unable to trace ", length(index), " path(s)")
+        message("Failed path index numbers are:")
+        message(list(as.integer(index)))
   index <- which (!seq (paths) %in% index)
 
   paths <- sf::st_sfc(paths[index], crs = 4326)
