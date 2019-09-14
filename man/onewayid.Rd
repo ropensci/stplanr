@@ -52,7 +52,6 @@ identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be co
 for users and are difficult to plot.
 }
 \examples{
-data(flow)
 flow_oneway <- onewayid(flow, attrib = 3)
 nrow(flow_oneway) < nrow(flow) # result has fewer rows
 sum(flow$All) == sum(flow_oneway$All) # but the same total flow
@@ -65,7 +64,9 @@ colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are 
 # Demonstrate the results from onewayid and onewaygeo are identical
 flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 plot(flow_oneway$All, flow_oneway_geo$All)
-onewayid(flowlines_sf, "all")
+flow_oneway_sf <- onewayid(flowlines_sf, 3)
+plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
 # with spatial data
 data(flowlines)
 fo <- onewayid(flowlines, attrib = "All")

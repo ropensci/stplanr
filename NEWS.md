@@ -1,8 +1,13 @@
-# stplanr (development version)
+# stplanr 0.3.1
 
 # stplanr 0.3.0
 
-- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data.
+## NEW FEATURES
+
+- New functions `od_to_odmatrix()` and `odmatrix_to_od()` to convert between matrix forms of origin-destination data
+- New function `od_oneway()` replaces `onewayid()`, works better and is twice as fast
+- New `od_id*()` functions provide a range of ways to convert origin-destination pair IDs into a single ID. See [Stackoverflow](https://stackoverflow.com/questions/57235601/how-to-identify-duplicated-ordered-pairs-efficiently/57236658#57236658) and the [issue tracker](https://github.com/ropensci/stplanr/issues/321)
+- New vignette [`stplanr-od`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html) provides detailed documentation on the package's OD data handling capabilities
 
 # stplanr 0.2.10
 

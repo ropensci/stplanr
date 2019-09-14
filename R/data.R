@@ -282,7 +282,7 @@ NULL
 
 #' Example of origin-destination data from UK Census
 #'
-#' See the `stplanr-1-od` vignette for details on how this was created.
+#' See `data-raw/generate-data.Rmd` for details on how this was created.
 #'
 #' @docType data
 #' @keywords datasets

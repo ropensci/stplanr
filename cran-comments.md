@@ -8,15 +8,19 @@ Fixes documentation issue with concept entries
   
 * MacOS
 
-* Windows - win-builder: https://win-builder.r-project.org/cidUL4Z01KCo
+* Windows - win-builder: https://win-builder.r-project.org/7bG310v4igog/00check.log
   
 ## R CMD check:
 
-NOTE
-Versioned 'LinkingTo' values for
-  ‘RcppArmadillo’ ‘Rcpp’
+── R CMD check results ────────────────────────────────────── stplanr 0.3.0 ────
+Duration: 1m 33.5s
+
+❯ checking installed package size ... NOTE
+    installed size is  7.3Mb
+    sub-directories of 1Mb or more:
+      doc    3.5Mb
+      libs   1.9Mb
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
   
-WARNING
-checking compilation flags used ... WARNING
-Compilation used the following non-portable flag(s):
-  ‘-Wdate-time’ ‘-Werror=format-security’ ‘-Wformat’
+NOTES in winbuild have been fixed

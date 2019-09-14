@@ -26,7 +26,7 @@ As the name suggests, OD data represents movement through geographic space, from
 Despite the rather dull name, OD datasets are a vital part of the modern world, underpinning the transport models that influence current *and future* systems.
 If you, like many others, are frustrated by the car dominated nature of most cities, OD datasets should be of great interest: they underlie the car-centric transport models that inform and helped justify the vast expansion of highways that happened in the 20^th^ Century [@boyce_forecasting_2015].
 
-If you are under any illusion that this healthy outcome of 20^th^ Century transport planning, consider this: roads are now the largest cause of death and injury for young people worldwide, killing and maiming more than more than 1 million and 10 million people each year according to data from the [World Health Organization](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/).
+From a health perspective transport planning, supported by OD data and analysed primarily using proprietary software and opaque methods, has failed: roads are now the largest cause of death and injury for young people worldwide, killing and maiming more than more than 1 million and 10 million people each year according to data from the [World Health Organization](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/).
 Even ignoring other problems such as air pollution, an obesity crisis driven by physical inactivity and climate change, it is clear that current transport systems, and the models that have helped to design them, are unsustainable.
 There are other reasons why transport data analysis is important, as outlined in the 'stplanr paper' [@lovelace_stplanr_2018].
 The purpose of this vignette is to introduce OD data, with examples based on data and functions from the stplanr package.
@@ -42,9 +42,9 @@ In simple terms OD data looks like this:
 ```{r setup, message=FALSE}
 library(stplanr)
 library(dplyr)
-od = pct::wight_od %>% 
-  select(-matches("rail|name|moto|car|tax|home")) %>% 
-  top_n(n = 5, wt = all)
+od = stplanr::od_data_sample %>% 
+  select(-matches("rail|name|moto|car|tax|home|la_")) %>% 
+  top_n(n = 14, wt = all)
 class(od)
 od
 ```
@@ -115,7 +115,7 @@ The function `odmatrix_to_od()` converts OD matrices back into the more convenie
 odmatrix_to_od(od_matrix)
 ```
 
-# Intrer and intra-zonal flows
+# Inter and intra-zonal flows
 
 A common, and sometimes problematic, feature of OD data is 'intra-zonal flows'.
 These are trips that start and end in the same zone.
@@ -126,6 +126,20 @@ It is often useful to separate intra-zonal and inter-zonal flows at the outset, 
 (od_inter = od %>% filter(geo_code1 != geo_code2))
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
+
+# Oneway lines
+
+Another subtly with some ([symetric](https://icaci.org/files/documents/ICC_proceedings/ICC2013/_extendedAbstract/393_proceeding.pdf), where origins and destinations can be the same points) OD data is that oneway flows can hide the extent of bidirectional flows in plots and other types of analysis.
+This is illustrated below for a tiny OD dataset shown below:
+
+```{r}
+(od_min = od_data_sample[c(1, 2, 9), 1:6])
+(od_oneway = od_oneway(od_min))
+```
+
+Note that in the second dataset there are only 2 rows instead of 3.
+The function `od_oneway()` aggregates oneway lines to produce bidirectional flows.
+By default, it returns the sum of each numeric column for each bidirectional origin-destination pair.
 
 # Desire lines
 
@@ -138,7 +152,7 @@ They are geographic lines between origin and destination, with the same attribut
 The second argument is a zone or a centroid dataset that contains 'zone IDs' that match the IDs in the first and second columns of the OD data, as illustrated below:
 
 ```{r}
-z = pct::wight_centroids
+z = zones_sf
 class(z)
 l = od2line(flow = od_inter, zones = z)
 ```
@@ -148,7 +162,7 @@ The desire line object is stored in as a geographic simple features object, whic
 
 ```{r}
 class(l)
-nrow(l) - nrow(od)
+nrow(od) - nrow(l) 
 ncol(l) - ncol(od)
 ```
 
@@ -198,7 +212,22 @@ centroids_london = centroids_all[london, ]
 od_london = od_all %>%
   filter(geo_code1 %in% centroids_london$msoa11cd) %>% 
   filter(geo_code2 %in% centroids_london$msoa11cd)
+od_london = od_all[
+  od_all$geo_code1 %in% centroids_london$msoa11cd &
+  od_all$geo_code2 %in% centroids_london$msoa11cd , 
+]
 ```
+
+```{r, eval=FALSE, echo=FALSE}
+# aim: create a reproducible OD dataset
+od_lnd = od_london %>% 
+  select(-matches("rail|name|moto|car|tax|home")) %>% 
+  filter(geo_code2 == "E02000001") %>% 
+  top_n(4, wt = all)
+z_lnd = centroids_london %>% 
+  filter(msoa11cd %in% c(od$geo_code1, od$geo_code2))
+```
+
 
 Now that we have the input OD data (in `od_london`) and zones (population-weighted centroids in `cents_london` in this case), can can convert them to desire lines:
 
@@ -237,7 +266,7 @@ This shows that only 8% of the lines contain more than half (55%) of the total n
 Once you have an OD dataset of a size that can be plotted (20,000 desire lines is quick to plot on most computers) a logical next stage is to plot it, e.g. with `sf`'s `plot()` method:
 
 ```{r, eval=FALSE}
-plot(desire_lines_top["All"])
+plot(desire_lines_top["all"])
 ```
 
 ```{r, echo=FALSE}
@@ -247,19 +276,16 @@ You may be disapointed by the result, which is more of a 'hay stack' plot than a
 To overcome this issue, you can set the aesthetics to emphasize with important flows, e.g. by line width in `sf`'s plotting system:
 
 ```{r, eval=FALSE}
-lwd = desire_lines_top$all / mean(desire_lines_top$all)
-q = quantile(desire_lines_top$all)
-col_labs = sf::sf.colors(n = length(q) - 1, alpha = 0.05)
-col = cut(desire_lines_top$all, breaks = q, labels = col_labs) %>% 
-  as.character()
-plot(desire_lines_top[, "all"], col = col, lwd = lwd)
+lwd = desire_lines_top$all / mean(desire_lines_top$all) / 10
+desire_lines_top$percent_dont_drive = 100 - desire_lines_top$car_driver / desire_lines_top$all * 100
+plot(desire_lines_top["percent_dont_drive"], lwd = lwd, breaks = c(0, 50, 70, 80, 90, 95, 100))
 ```
 
 ```{r, echo=FALSE}
-knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61061859-f9cfbe80-a3f4-11e9-9340-e53cd39c9ef7.png")
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/62073083-e5ceee00-b237-11e9-9cc7-8bf62d0e9b3f.png")
 ```
 
-This is better, but is still not idea: the code was not intuitive to write, and the result is still not publication quality.
+This is better, but is still not ideal: the code was not intuitive to write, and the result is still not publication quality.
 Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](http://geocompr.robinlovelace.net/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
 As shown in the transport chapter of that book, OD flows can be visualised with the following code:
 
@@ -323,8 +349,9 @@ origin_attributes = desire_lines_top %>%
   group_by(geo_code1) %>% 
   summarize_if(is.numeric, sum) %>% 
   dplyr::rename(geo_code = geo_code1)
+# origin_attributes <-
 zones_origins = left_join(zones_london, origin_attributes, by = "geo_code")
-plot(zones_origins)
+plot(zones_origins, border = NA)
 ```
 
 ```{r, echo=FALSE}
@@ -348,7 +375,7 @@ destination_attributes = desire_lines_top %>%
   mutate_at(vars(-matches("geo_|all")), funs( . / all)) %>% 
   left_join(zones_london, ., by = "geo_code")
 
-plot(zones_destinations, border = NA)
+plot(destination_attributes, border = NA)
 ```
 
 
@@ -356,12 +383,23 @@ plot(zones_destinations, border = NA)
 knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61069409-27703400-a404-11e9-9c83-1cd5f2397260.png")
 ```
 
+# Further reading
 
+Despite the importance of origin-destination datasets for transport research, there are surprisingly few guides dedicated to working with them using open source software.
+The following suggestions are based on my own reading  --- if you have any other suggestions of good resources for working with OD data, let me know!
 
-# Oneway lines
+- Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* [@lovelace_geocomputation_2019] puts OD data in the wider context of geographic transport data.
+- @martin_origin-destination_2018 describe methods for classifying OD pairs based on demographic data.
+- The [kepler.gl](https://kepler.gl/demo/ukcommute) website provides a nifty web application for visualising OD data.
+- Documentation for the open source microscopic transport modelling software [SUMO](https://sumo.dlr.de/userdoc/Demand/Importing_O/D_Matrices.html) describes ways of reading-in OD file formats not covered in this vignette.
 
-The previous plot looks good but has issues.
-One is that, for 'symetric' OD pairs, in which origin zones/points can be the same as destinations, flows overlap.
+# Summary
+
+In summary, `stplanr` provides many functions for working with OD data that should allow you to make better use of your valuable data.
+Please let me know of any new OD data features you'd like to see in the package.
+I'd be very interested to know how you use the package, so please let me know if you use the functions described here via email, GitHub issues or, for academic work, by citing the stplanr paper.
+Thanks for reading!
+
 
 <!-- # Applications -->
 
@@ -414,19 +452,6 @@ plot(p)
 m = matrix(c(0, 0, 0, NA), ncol = 2)
 l = st_linestring(m)
 plot(l)
-```
-
-
-
-
-```{r, eval=FALSE, echo=FALSE}
-remotes::install_github("ITSLeeds/pct")
-library(pct)
-od_data_all = pct::get_od()
-sel_local = 
-  od_data_all$geo_code1 %in% cents_sf$geo_code &
-  od_data_all$geo_code2 %in% cents_sf$geo_code 
-od_data_sample = od_data_all[sel_local, ]
 ```
 
 ```{r, echo=FALSE, eval=FALSE}

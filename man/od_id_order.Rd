@@ -2,7 +2,8 @@
 % Please edit documentation in R/oneway.R
 \name{od_id_order}
 \alias{od_id_order}
-\title{Generate ordered ids of OD pairs so lowest is always first}
+\title{Generate ordered ids of OD pairs so lowest is always first
+This function is slow on large datasets, see szudzik_pairing for faster alternative}
 \usage{
 od_id_order(x, id1 = names(x)[1], id2 = names(x)[2])
 }
@@ -19,6 +20,7 @@ the unique id of the destination}
 }
 \description{
 Generate ordered ids of OD pairs so lowest is always first
+This function is slow on large datasets, see szudzik_pairing for faster alternative
 }
 \examples{
 x <- data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
