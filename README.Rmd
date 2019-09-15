@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+# dplyr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right"/></a>
+
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
