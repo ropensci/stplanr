@@ -1,10 +1,15 @@
 #' Extract coordinates from OD data
 #'
-#' @section Details:
-#' Origin-destination ('OD') flow data is often provided
-#' in the form of 1 line per flow with zone codes of origin and destination
-#' centroids. This can be tricky to plot and link-up with geographical data.
-#' This function makes the task easier.
+#' @details
+#' Origin-destination (OD) data is often provided
+#' in the form of 1 line per OD pair, with zone codes of the trip origin in the first
+#' column and the zone codes of the destination in the second column
+#' (see the [`vignette("stplanr-od")`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html)) for details.
+#' `od2odf()` creates an 'origin-destination data frame', based on a data frame containing
+#' origin and destination cones (`flow`) that match the first column in a
+#' a spatial (polygon or point) object (`zones`).
+#'
+#' The function returns a data frame with coordinates for the origin and destination.
 #' @inheritParams od2line
 #' @family od
 #' @export
@@ -125,7 +130,7 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
   })
   sf::st_sf(odc, geometry = sf::st_sfc(linestring_list, crs = crs))
 }
-#' Convert flow data to SpatialLinesDataFrame
+#' Convert origin-destination data to spatial lines
 #'
 #' Origin-destination ('OD') flow data is often provided
 #' in the form of 1 line per flow with zone codes of origin and destination
@@ -133,23 +138,24 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #' This function makes the task easier.
 #'
 #' @details
-#' The function expects zone codes to be in the 1st column of the zones/destinations
-#' datasets and the 1st and 2nd columns of the flow data, respectively.
+#' Origin-destination (OD) data is often provided
+#' in the form of 1 line per OD pair, with zone codes of the trip origin in the first
+#' column and the zone codes of the destination in the second column
+#' (see the [`vignette("stplanr-od")`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html)) for details.
+#' `od2line()` creates a spatial (linestring) object representing movement from the origin
+#' to the destination for each OD pair.
+#' It takes data frame containing
+#' origin and destination cones (`flow`) that match the first column in a
+#' a spatial (polygon or point) object (`zones`).
 #'
-#' [od2line2()] is a faster implementation
-#' (around 6 times faster on large datasets)
-#' that returns a `SpatialLines` object, omitting the data and working
-#' only when there is no destinations dataset (i.e. when the geography of
-#' origins is the same as that of destinations).
-#'
-#' @param flow A data frame representing the flow between two points
-#' or zones. The first two columns of this data frame should correspond
+#' @param flow A data frame representing origin-destination data.
+#'  The first two columns of this data frame should correspond
 #' to the first column of the data in the zones. Thus in [cents()],
 #' the first column is geo_code. This corresponds to the first two columns
 #' of [flow()].
 #' @param zones A spatial object representing origins (and destinations
 #' if no separate destinations object is provided) of travel.
-#' @param destinations A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+#' @param destinations A spatial object
 #' representing destinations of travel flows.
 #' @param zone_code Name of the variable in `zones` containing the ids of the zone.
 #' By default this is the first column names in the zones.
@@ -330,23 +336,29 @@ line2df.Spatial <- function(l) {
 	tx = quote(dplyr::last(x)), ty = quote(dplyr::last(y)))
 }
 
-#' Convert a SpatialLinesDataFrame to points
+#' Convert a spatial (linestring) object to points
 #' The number of points will be double the number of lines with `line2points`.
 #' A closely related function, `line2pointsn` returns all the points that were line vertices.
 #' The points corresponding with a given line, `i`, will be `(2*i):((2*i)+1)`.
-#' @param l A SpatialLinesDataFrame
+#' @param l An `sf` object or a `SpatialLinesDataFrame` from the older `sp` package
 #' @param ids Vector of ids (by default `1:nrow(l)`)
 #' @export
 #' @examples
+#' l <- routes_fast_sf[2:4, ]
+#' lpoints <- line2points(l)
+#' lpoints2 <- line2pointsn(l)
+#' plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
+#' plot(lpoints2$geometry, add = TRUE)
+#' # in sp data forms (may be depreciated)
 #' l <- routes_fast[2:4, ]
-#' lpoints <- line_to_points(l)
+#' lpoints <- line2points(l)
 #' lpoints2 <- line2pointsn(l)
 #' plot(lpoints, pch = lpoints$id, cex = lpoints$id)
-#' points(lpoints2, add = TRUE)
-#' line_to_points(routes_fast_sf[2:4, ])
+#' points(lpoints2)
 #' @aliases line2points
 #' @export
 line_to_points <- function(l, ids = rep(1:nrow(l), each = 2)) {
+  .Deprecated(new = "line2points")
   UseMethod("line_to_points")
 }
 #' @export
@@ -520,13 +532,13 @@ line2route <-
   r
 }
 
-#' Convert straight SpatialLinesDataFrame from flow data into routes retrying
+#' Convert straight spatial (linestring) object from flow data into routes retrying
 #' on connection (or other) intermittent failures
 #'
 #' @section Details:
 #'
 #' See [line2route()] for the version that is not retried on errors.
-#' @param lines A SpatialLinesDataFrame
+#' @param lines A spatial (linestring) object
 #' @param pattern A regex that the error messages must not match to be retried, default
 #'  "^Error: " i.e. do not retry errors starting with "Error: "
 #' @param n_retry Number of times to retry
@@ -604,11 +616,11 @@ points2odf.Spatial <- function(p) {
 }
 #' Convert a series of points into geographical flows
 #'
-#' Takes a series of geographical points and converts them into a SpatialLinesDataFrame
+#' Takes a series of geographical points and converts them into a spatial (linestring) object
 #' representing the potential flows, or 'spatial interaction', between every combination
 #' of points.
 #'
-#' @param p SpatialPointsDataFrame
+#' @param p A spatial (point) object
 #' @family od
 #'
 #' @export
@@ -684,7 +696,7 @@ od_dist <- function(flow, zones) {
 #' This is a simple wrapper around [spLines()] that makes the creation of
 #' `SpatialLines` objects easy and intuitive
 #'
-#' @param p A SpatialPoints obect or matrix representing the coordinates of points.
+#' @param p A spatial (points) obect or matrix representing the coordinates of points.
 #' @family lines
 #' @export
 #' @examples
