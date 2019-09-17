@@ -3,7 +3,7 @@
 \name{od2line}
 \alias{od2line}
 \alias{od2line2}
-\title{Convert flow data to SpatialLinesDataFrame}
+\title{Convert origin-destination data to spatial lines}
 \usage{
 od2line(flow, zones, destinations = NULL, zone_code = names(zones)[1],
   origin_code = names(flow)[1], dest_code = names(flow)[2],
@@ -12,8 +12,8 @@ od2line(flow, zones, destinations = NULL, zone_code = names(zones)[1],
 od2line2(flow, zones)
 }
 \arguments{
-\item{flow}{A data frame representing the flow between two points
-or zones. The first two columns of this data frame should correspond
+\item{flow}{A data frame representing origin-destination data.
+The first two columns of this data frame should correspond
 to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
@@ -21,7 +21,7 @@ of \code{\link[=flow]{flow()}}.}
 \item{zones}{A spatial object representing origins (and destinations
 if no separate destinations object is provided) of travel.}
 
-\item{destinations}{A SpatialPolygonsDataFrame or SpatialPointsDataFrame
+\item{destinations}{A spatial object
 representing destinations of travel flows.}
 
 \item{zone_code}{Name of the variable in \code{zones} containing the ids of the zone.
@@ -46,14 +46,15 @@ centroids. This can be tricky to plot and link-up with geographical data.
 This function makes the task easier.
 }
 \details{
-The function expects zone codes to be in the 1st column of the zones/destinations
-datasets and the 1st and 2nd columns of the flow data, respectively.
-
-\code{\link[=od2line2]{od2line2()}} is a faster implementation
-(around 6 times faster on large datasets)
-that returns a \code{SpatialLines} object, omitting the data and working
-only when there is no destinations dataset (i.e. when the geography of
-origins is the same as that of destinations).
+Origin-destination (OD) data is often provided
+in the form of 1 line per OD pair, with zone codes of the trip origin in the first
+column and the zone codes of the destination in the second column
+(see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{vignette("stplanr-od")}) for details.
+\code{od2line()} creates a spatial (linestring) object representing movement from the origin
+to the destination for each OD pair.
+It takes data frame containing
+origin and destination cones (\code{flow}) that match the first column in a
+a spatial (polygon or point) object (\code{zones}).
 }
 \examples{
 l <- od2line(flow = flow, zones = cents)

@@ -391,28 +391,54 @@ line_to_points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
   out
 }
 #' @export
-line2points <- function(l) {
+line2points <- function(l, ids = rep(1:nrow(l))) {
+  UseMethod("line2points")
+}
+#' @export
+line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
   for (i in 1:length(l)) {
-    l1 <- l[i, ]
-    lcoords <- sp::coordinates(l1)[[1]][[1]]
-    lpoints <- sp::SpatialPoints(matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2))
-    sp::proj4string(lpoints) <- sp::proj4string(l)
+    lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
+    pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
+    lpoints <- sp::SpatialPoints(pmat)
     if (i == 1) {
       out <- lpoints
     } else {
       out <- raster::bind(out, lpoints)
     }
   }
+  sp::proj4string(out) <- sp::proj4string(l)
+  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
   out
+}
+#' @export
+line2points.sf <- function(l, ids = rep(1:nrow(l))) {
+  y_coords <- x_coords <- double(length = length(ids)) # initiate coords
+  d_indices <- 1:nrow(l) * 2
+  o_indices <- d_indices - 1
+  x_coords[o_indices] <- sapply(l$geometry, `[[`, 1) # first (x) element of each line
+  x_coords[d_indices] <- sapply(l$geometry, function(x) x[length(x) / 2]) # last (x) element of each line
+  y_coords[o_indices] <- sapply(l$geometry, function(x) x[length(x) / 2 + 1]) # first (y) element of each line
+  y_coords[d_indices] <- sapply(l$geometry, tail, n = 1) # last (y) element of each line
+  p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
+  p <- sf::st_cast(sf::st_sfc(p_multi), "POINT")
+  sf::st_sf(data.frame(id = ids), p)
 }
 
 #' @rdname line_to_points
 #' @export
 line2pointsn <- function(l) {
+  UseMethod("line2pointsn")
+}
+#' @export
+line2pointsn.Spatial <- function(l) {
   spdf <- raster::geom(l)
   p <- sp::SpatialPoints(coords = spdf[, c("x", "y")])
   raster::crs(p) <- raster::crs(l)
   p
+}
+#' @export
+line2pointsn.sf <- function(l) {
+  suppressWarnings(sf::st_cast(l, "POINT"))
 }
 #' Convert straight OD data (desire lines) into routes
 #'
@@ -422,12 +448,12 @@ line2pointsn <- function(l) {
 #'
 #' A parallel implementation of this was available until version 0.1.8.
 #'
-#' @param l A SpatialLinesDataFrame
+#' @param l A spatial (linestring) object
 #' @param route_fun A routing function to be used for converting the straight lines to routes
 #' [od2line()]
 #' @param n_print A number specifying how frequently progress updates
 #' should be shown
-#' @param list_output If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.
+#' @param list_output If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.
 #' @param l_id Character string naming the id field from the input lines data,
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.

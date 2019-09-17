@@ -7,10 +7,10 @@
 points2flow(p)
 }
 \arguments{
-\item{p}{SpatialPointsDataFrame}
+\item{p}{A spatial (point) object}
 }
 \description{
-Takes a series of geographical points and converts them into a SpatialLinesDataFrame
+Takes a series of geographical points and converts them into a spatial (linestring) object
 representing the potential flows, or 'spatial interaction', between every combination
 of points.
 }

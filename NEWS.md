@@ -1,5 +1,9 @@
 # stplanr 0.3.1
 
+- stplanr now has a logo! See [#334](https://github.com/ropensci/stplanr/issues/334)
+- `line_to_points()` depreciated in favour of `od2line()`, the latter function name being more consistent with the package's other functions
+- `line2pointsn()` now works with `sf` objects
+- Documentation fixes - see [#329](https://github.com/ropensci/stplanr/issues/329)
 
 ## OTHER
 

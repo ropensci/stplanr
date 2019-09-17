@@ -4,7 +4,7 @@
 \alias{line_to_points}
 \alias{line2points}
 \alias{line2pointsn}
-\title{Convert a SpatialLinesDataFrame to points
+\title{Convert a spatial (linestring) object to points
 The number of points will be double the number of lines with \code{line2points}.
 A closely related function, \code{line2pointsn} returns all the points that were line vertices.
 The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.}
@@ -14,21 +14,26 @@ line_to_points(l, ids = rep(1:nrow(l), each = 2))
 line2pointsn(l)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{An \code{sf} object or a \code{SpatialLinesDataFrame} from the older \code{sp} package}
 
 \item{ids}{Vector of ids (by default \code{1:nrow(l)})}
 }
 \description{
-Convert a SpatialLinesDataFrame to points
+Convert a spatial (linestring) object to points
 The number of points will be double the number of lines with \code{line2points}.
 A closely related function, \code{line2pointsn} returns all the points that were line vertices.
 The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
 }
 \examples{
+l <- routes_fast_sf[2:4, ]
+lpoints <- line2points(l)
+lpoints2 <- line2pointsn(l)
+plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
+plot(lpoints2$geometry, add = TRUE)
+# in sp data forms (may be depreciated)
 l <- routes_fast[2:4, ]
-lpoints <- line_to_points(l)
+lpoints <- line2points(l)
 lpoints2 <- line2pointsn(l)
 plot(lpoints, pch = lpoints$id, cex = lpoints$id)
-points(lpoints2, add = TRUE)
-line_to_points(routes_fast_sf[2:4, ])
+points(lpoints2)
 }

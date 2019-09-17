@@ -34,7 +34,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
     stop("toptail_dist is vector but not of equal length to spatial object")
   }
 
-  lpoints <- line_to_points(l)
+  lpoints <- line2points(l)
 
   if (length(toptail_dist) == 1) {
     toptail_dist <- rep(toptail_dist, length(l))
