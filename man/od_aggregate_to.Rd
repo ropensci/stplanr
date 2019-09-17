@@ -7,8 +7,8 @@
 od_aggregate_to(flow, attrib = NULL, FUN = sum, ..., col = 2)
 }
 \arguments{
-\item{flow}{A data frame representing the flow between two points
-or zones. The first two columns of this data frame should correspond
+\item{flow}{A data frame representing origin-destination data.
+The first two columns of this data frame should correspond
 to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}

@@ -7,8 +7,8 @@
 od2odf(flow, zones)
 }
 \arguments{
-\item{flow}{A data frame representing the flow between two points
-or zones. The first two columns of this data frame should correspond
+\item{flow}{A data frame representing origin-destination data.
+The first two columns of this data frame should correspond
 to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
@@ -19,14 +19,17 @@ if no separate destinations object is provided) of travel.}
 \description{
 Extract coordinates from OD data
 }
-\section{Details}{
+\details{
+Origin-destination (OD) data is often provided
+in the form of 1 line per OD pair, with zone codes of the trip origin in the first
+column and the zone codes of the destination in the second column
+(see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{vignette("stplanr-od")}) for details.
+\code{od2odf()} creates an 'origin-destination data frame', based on a data frame containing
+origin and destination cones (\code{flow}) that match the first column in a
+a spatial (polygon or point) object (\code{zones}).
 
-Origin-destination ('OD') flow data is often provided
-in the form of 1 line per flow with zone codes of origin and destination
-centroids. This can be tricky to plot and link-up with geographical data.
-This function makes the task easier.
+The function returns a data frame with coordinates for the origin and destination.
 }
-
 \examples{
 data(flow)
 data(zones)

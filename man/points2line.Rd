@@ -7,7 +7,7 @@
 points2line(p)
 }
 \arguments{
-\item{p}{A SpatialPoints obect or matrix representing the coordinates of points.}
+\item{p}{A spatial (points) obect or matrix representing the coordinates of points.}
 }
 \description{
 This is a simple wrapper around \code{\link[=spLines]{spLines()}} that makes the creation of

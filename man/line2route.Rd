@@ -8,7 +8,7 @@ line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
   list_output = FALSE, l_id = NA, time_delay = 0, ...)
 }
 \arguments{
-\item{l}{A SpatialLinesDataFrame}
+\item{l}{A spatial (linestring) object}
 
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link[=od2line]{od2line()}}}
@@ -16,7 +16,7 @@ line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{list_output}{If FALSE (default) assumes SpatialLinesDataFrame output. Set to TRUE to save output as a list.}
+\item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
 
 \item{l_id}{Character string naming the id field from the input lines data,
 typically the origin and destination ids pasted together. If absent, the row name of the
