@@ -226,7 +226,7 @@ and other Linux distros can be found here:
 
 The current list of available functions can be seen on the package’s
 website at
-[ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/), or
+[docs.ropensci.org/stplanr/](https://docs.ropensci.org/stplanr/), or
 with the following command:
 
 ``` r

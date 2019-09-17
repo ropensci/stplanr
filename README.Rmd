@@ -190,7 +190,7 @@ stplanr depends on rgdal, which can be tricky to install.
 
 ## Funtions, help and contributing
 
-The current list of available functions can be seen on the package's website at [ropensci.github.io/stplanr/](https://ropensci.github.io/stplanr/), or with the following command:
+The current list of available functions can be seen on the package's website at [docs.ropensci.org/stplanr/](https://docs.ropensci.org/stplanr/), or with the following command:
 
 ```{r, eval=FALSE}
 lsf.str("package:stplanr", all = TRUE)

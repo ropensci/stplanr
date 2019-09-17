@@ -1,7 +1,7 @@
 ---
 title: "Origin-destination data with stplanr"
 output: rmarkdown::html_vignette
-author: "Robin Lovelace"
+author: "Robin Lovelace and Edward Leigh"
 vignette: >
   %\VignetteIndexEntry{stplanr vignette 2: origin-destination data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -21,21 +21,45 @@ knitr::opts_chunk$set(
 
 # Introduction: what is OD data?
 
-Origin-destination (OD) data is data that has not just one geographic location, but two.
-As the name suggests, OD data represents movement through geographic space, from an origin (O) to a destination (D).
-Despite the rather dull name, OD datasets are a vital part of the modern world, underpinning the transport models that influence current *and future* systems.
-If you, like many others, are frustrated by the car dominated nature of most cities, OD datasets should be of great interest: they underlie the car-centric transport models that inform and helped justify the vast expansion of highways that happened in the 20^th^ Century [@boyce_forecasting_2015].
+As the name suggests, origin-destination (OD) data represents movement through geographic space, from an origin (O) to a destination (D).
+Sometimes also called '[flow data](https://www.ons.gov.uk/census/2011census/2011censusdata/originanddestinationdata)', OD datasets contain details of trips between two geographic points or, more commonly, zones (which are often represented by a zone centroid).
+Most OD datasets refer to start and end locations with 'ID' columns containing character strings such as `zone1`.
+These IDs refer to a geographic feature in a separate geographic dataset.
+Origin and destination locations are sometimes represented as geographic coordinates.
 
-From a health perspective transport planning, supported by OD data and analysed primarily using proprietary software and opaque methods, has failed: roads are now the largest cause of death and injury for young people worldwide, killing and maiming more than more than 1 million and 10 million people each year according to data from the [World Health Organization](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/).
-Even ignoring other problems such as air pollution, an obesity crisis driven by physical inactivity and climate change, it is clear that current transport systems, and the models that have helped to design them, are unsustainable.
-There are other reasons why transport data analysis is important, as outlined in the 'stplanr paper' [@lovelace_stplanr_2018].
-The purpose of this vignette is to introduce OD data, with examples based on data and functions from the stplanr package.
+OD datasets typically contain multiple non geographic attributes.
+These usually include, at a minimum, the number of trips that take place from the origin to the destination over a given time period (e.g. a typical work day).
+Additional attributes can include breakdown by the mode(s) of transport used for the trips.
+Usually only a single mode is captured (trips made by a combination of cycle-train-walk modes are often counted only as 'train' trips).
+Additional disaggregations of overall counts may include trip counts at different time periods.
 
-# An minimal example OD dataset
+Many OD datasets omit information.
+If there is only one time period, then this resides in the metadata for the whole data set.
+There is rarely any information about the path taken between the start and end points.
+It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/rCarto/osrm), [Google Directions API](http://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](http://vision-traffic.ptvgroup.com/en-us/products/ptv-visum/functions/)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
 
-OD data can be accessed from a range of sources (we will see code that downloads millions of OD pairs later in this vignette).
-Generally you will need to do some 'data carpentry' before the OD data is 'clean' and ready for analysis.
-This vignette will not cover cleaning OD, we assume you know R and come with clean (if not 'tidy') data!
+# The importance of OD data
+
+Despite the rather dull name, OD datasets are a vital part of the modern world: they underpin analysis and models that influence current *and future* transport systems.
+Historically, these models, and the OD datasets that drove them, were used to plan for car-dominated cities [@boyce_forecasting_2015].
+Now that there is growing evidence of the negative impacts car domination, however, there is a strong argument for transport models being repurposed.
+Origin-destination data can be part of the solution.
+
+From a health perspective transport planning, supported by OD data and analysed primarily using proprietary software and opaque methods, has failed: roads are now the largest cause of death of young people worldwide, killing more than [1 million](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/) people each year [@world_health_organization_global_2018].
+Even ignoring problems such as air pollution, obesity and climate change, it is clear that current transport systems are unsustainable.
+There are other reasons why transport data analysis and software are important [@lovelace_stplanr_2018].
+
+The purpose of this vignette is to introduce OD data, an important component of many transport planning models, with examples based on data and functions from the stplanr package.
+The aim is to enable you to use OD data to inform more sustainable transport plans, for example by identifying 'desire lines' along which policies could cause a modal switch away from cars and towards lower energy modes such as walking, cycling, and public transport.
+
+# An example OD dataset
+
+OD data can be accessed from a range of sources (we will see code that downloads many thousands of OD pairs later in this vignette).
+Some 'data carpentry' may be needed before the OD data is ready for analysis.
+This vignette does not cover cleaning OD data: we assume you know R and come with 'tidy' data [@wickham_tidy_2014], in which each row represents travel between an origin and a destination (typically zones represented by zone IDs), and each column represents an attribute such as number of trips or vehichle counts by mode or straight line distance.^[
+It may be difficult to convert between 'number of trip' and 'number of vehicle' counts for modes in which a single vehicle can contain many people, such as cars (a problem that can be overcome when surveys differentiate between car driver and 'car passenger' as distinct modes), buses and trams if occupancy levels are unknown.
+Typically OD data only report single stage trips, but multi-modal trips such as walk-rail-cycle can be represented when such a combination of modes is represented by a new, unique, mode.
+]
 
 In simple terms OD data looks like this:
 
@@ -72,7 +96,7 @@ OD data can be represented in a number of ways, as outlined in the next sections
 The most useful way of representing OD data is the 'long' data frame format described above.
 This is increasingly the format used by official statistical agencies, including the UK's Office for National Statistics (ONS), who provide origin destination data as a `.csv` file.
 Typically, the first column is the zone code of origin and the second column is the zone code of the destination, as is the case with the object `od`.
-Subsequent columns contain attributes such as `all`, meaning all travel between zones, as illustrated below (we will see a matrix representation of this subset of the data in the next section):
+Subsequent columns contain attributes such as `all`, meaning trips by all modes, as illustrated below (we will see a matrix representation of this subset of the data in the next section):
 
 ```{r}
 od[1:3]
@@ -97,19 +121,21 @@ od_matrix
 ```
 
 Note that row and column names are now zone codes.
-The cell in row 2 and column 1 (`od_matrix[2, 1]`) means that `831` people travel from zone `E02003591` to zone `E02003588`.
-It is a simpler data structure, usually only containing only counts, and was popular in 20^th^ Century transport models. 
-'OD matrix' is still sometimes used informally to any OD data.
+The cell in row 1 and column 2 (`od_matrix[1, 2]`), for example, reports that there are 94 trips from zone `E02002361` to zone `E02002393`.
+In the case above, no people travel between the majority of the OD pair combinations, as represented by the `NA`s.
+OD matrices are a relatively rudimentary data structure that pre-date R's `data.frame` class.
+Typically, they only contained integer counts, providing small and simple datasets that could be used in 20^th^ Century transport modelling software running on limited 20^th^ Century hardware. 
 
-However, I recommend using the long OD pair representation: OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many NAs.
-Furthermore, multiple lists of OD matrices or 'OD arrays' must be created to represent multiple attributes.
+Although 'OD matrix' is still sometimes used informally to refer to any OD datadset, the long OD pair representation is recommended:
+OD matrices become unwieldy for large OD datasets, which are likely to be sparse, with many empty cells represented by NAs.
+Furthermore, to represent many attributes in matix format, multiple lists of OD matrices or 'OD arrays' must be created.
 This is demonstrated in the code chunk below, which represents travel between OD pairs by all modes and by bike:
 
 ```{r}
 lapply(c("all", "bicycle"), function(x) od_to_odmatrix(od[c("geo_code1", "geo_code2", x)]))
 ```
 
-The function `odmatrix_to_od()` converts OD matrices back into the more convenient long form:
+The function `odmatrix_to_od()` can converts OD matrices back into the more convenient long form:
 
 ```{r}
 odmatrix_to_od(od_matrix)
@@ -127,10 +153,13 @@ It is often useful to separate intra-zonal and inter-zonal flows at the outset, 
 (od_intra = od %>% filter(geo_code1 == geo_code2))
 ```
 
+Intra-zonal OD pairs represent short trips (up to the size of the zone within which the trips take place) so are sometimes ignored in OD data analyis.
+However, intra-zonal flows can be valuable, for example in measuring the amount of localised transport activity and as a sign of local economies.
+
 # Oneway lines
 
 Another subtly with some ([symetric](https://icaci.org/files/documents/ICC_proceedings/ICC2013/_extendedAbstract/393_proceeding.pdf), where origins and destinations can be the same points) OD data is that oneway flows can hide the extent of bidirectional flows in plots and other types of analysis.
-This is illustrated below for a tiny OD dataset shown below:
+This is illustrated below for a sample of the `od` dataset:
 
 ```{r}
 (od_min = od_data_sample[c(1, 2, 9), 1:6])
@@ -187,7 +216,7 @@ leaflet() %>%
   addPolygons(data = l)
 ```
 
-# A larger example
+# A larger example: commuter trips in London
 
 The minimal example dataset we've been using so far is fine for demonstrating the key concepts of OD data.
 But for more advanced topic, and to get an idea of what is possible with OD data at a city level, it helps to have a larger dataset.
@@ -238,7 +267,7 @@ nrow(desire_lines_london)
 ```
 
 Even after filering flows to keep only those with origins *and* destinations in London, there are still more than 300k flows. That is a lot to plot.
-So we'll further subset them, first so they only contain inter-zonal flows (which are actually lines, intrazonal flows are lines with length 0, which are essentially points) and second to contain only flows containing above a threshold level of flows:
+So we'll further subset them, first so they only contain inter-zonal flows (which are actually lines, intra-zonal flows are lines with length 0, which are essentially points) and second to contain only flows containing above a threshold level of flows:
 
 ```{r, eval=FALSE}
 min_trips_threshold = 20
@@ -320,7 +349,7 @@ The above plot contains much information, providing a visual overview of the tra
 
 - It is a monocentric city, with most flows going to the centre.
 - Active transport is geographically dependent, dominating in the central north of the city and with limited uptake on the outskirts of the city.
-- Although the city centre dominates, there are many small clusters of flows in the outer region, for example near Heathrow airport, which is located in the far East of the map.
+- Although the city centre dominates, there are many small clusters of flows in the outer region, for example near Heathrow airport, which is located in the far west of the map.
 
 Plotting OD data in this way can tell us much about cities, each of which has a different travel pattern.
 The below figure, for example, shows the same plotting code applied to Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
@@ -395,11 +424,10 @@ The following suggestions are based on my own reading  --- if you have any other
 
 # Summary
 
-In summary, `stplanr` provides many functions for working with OD data that should allow you to make better use of your valuable data.
-Please let me know of any new OD data features you'd like to see in the package.
-I'd be very interested to know how you use the package, so please let me know if you use the functions described here via email, GitHub issues or, for academic work, by citing the stplanr paper.
-Thanks for reading!
-
+In summary, `stplanr` provides many functions for working with OD data.
+OD data is an important component in transport planning and modelling that can, if used with creativity and skill, could assist with sustainable transport planning and the global [transition away from fossil fuels](https://www.sei.org/wp-content/uploads/2019/01/realizing-a-just-and-equitable-transition-away-from-fossil-fuels.pdf).
+There are many other things can be done with OD data, some of which could be supported by future versions of this package.
+To suggest new features of otherwise get in touch, see the `stplanr` issue tracker at [github.com/ropensci/stplanr](https://github.com/ropensci/stplanr/issues).
 
 <!-- # Applications -->
 
