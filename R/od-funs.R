@@ -411,7 +411,7 @@ line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
   out
 }
 #' @export
-line2points.sf <- function(l, ids = rep(1:nrow(l))) {
+line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
   d_indices <- 1:nrow(l) * 2
   o_indices <- d_indices - 1
@@ -421,7 +421,7 @@ line2points.sf <- function(l, ids = rep(1:nrow(l))) {
   y_coords[d_indices] <- sapply(l$geometry, tail, n = 1) # last (y) element of each line
   p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
   p <- sf::st_cast(sf::st_sfc(p_multi), "POINT")
-  sf::st_sf(data.frame(id = ids), p)
+  sf::st_sf(data.frame(id = ids), geometry = p, crs = sf::st_crs(l))
 }
 
 #' @rdname line_to_points
