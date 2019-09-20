@@ -37,7 +37,7 @@ roads_iow = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/0
 
 # osrm
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 if(!file.exists("iow.pbf"))
   download.file("http://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf", "iow.pbf")
 options(osrm.server = "http://0.0.0.0:5000/", osrm.profile = "driving")

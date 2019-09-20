@@ -33,7 +33,7 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-\dontrun{
+\donttest{
 from <- "Leek, UK"
 to <- "Hereford, UK"
 route_leek_to_hereford <- route(from, to)

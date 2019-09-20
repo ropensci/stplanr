@@ -9,7 +9,7 @@
 #' @family routes
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' from <- "Leek, UK"
 #' to <- "Hereford, UK"
 #' route_leek_to_hereford <- route(from, to)
@@ -22,9 +22,8 @@ route <- function(from = NULL, to = NULL, l = NULL,
 
   # generate od coordinates
   FUN <- match.fun(route_fun)
-  ldf <- od_coords(from, to, l) %>%
-    dplyr::as_data_frame()
-
+  # calculate line data frame
+  ldf <- data.frame(od_coords(from, to, l))
   error_fun <- function(e) {
     warning(paste("Fail for line number", i))
     e
@@ -32,11 +31,14 @@ route <- function(from = NULL, to = NULL, l = NULL,
 
   # pre-allocate objects
   rc <- as.list(rep(NA, nrow(ldf)))
-  rg <- sf::st_sfc(lapply(1:nrow(ldf), function(x)
-    sf::st_linestring(matrix(as.numeric(NA), ncol = 2))))
+  # route geometry
+  rg <- sf::st_geometry(od_coords2line(odc = ldf))
 
+  # calculate first route
   rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
-  rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
+  if(is(object = rc[[1]], class2 = "Spatial")) {
+    rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
+  }
   names(rdf) <- names(rc[[1]])
 
   rdf[1, ] <- rc[[1]]@data[1, ]
