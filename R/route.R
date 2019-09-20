@@ -33,12 +33,9 @@ route <- function(from = NULL, to = NULL, l = NULL,
   }
 
   # calculate sf routes - to split out into generic?
-  if(is(l, "sf")) {
-    p = line2points(l)
-    if(point_input){
-      s = (1:nrow(l)) * 2 - 1
-      list_out = lapply(s, function(i) FUN(p[i, ], dst = p[i + 1, ], returnclass = "sf"))
-    }
+  if(is(l, "sf") && point_input) {
+    s = (1:nrow(l)) * 2 - 1
+    list_out = lapply(s, function(i) FUN(p[i, ], dst = p[i + 1, ], returnclass = "sf"))
     ldf <- sf::st_drop_geometry(l)
     route_sf <- do.call(rbind, list_out)
     route_df <- sf::st_drop_geometry(route_sf)
