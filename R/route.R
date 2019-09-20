@@ -12,18 +12,43 @@
 #' \donttest{
 #' from <- "Leek, UK"
 #' to <- "Hereford, UK"
-#' route_leek_to_hereford <- route(from, to)
+#' route_leek_to_hereford <- route(from = from, to = to)
+#' plot(route_leek_to_hereford)
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' route(flowlines_sf[2:4, ]) # lines
+#' # with osrm backend - need to set-up osrm first - see routing vignette
+#' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreet,
-                  n_print = 10, list_output = FALSE, ...) {
+                  n_print = 10, list_output = FALSE, ..., point_input = FALSE) {
 
   # generate od coordinates
   FUN <- match.fun(route_fun)
+  # set l if not named
+  if(is(from, "sf")) {
+    if(unique(sf::st_geometry_type(from)) == "LINESTRING") {
+      l <- from
+    }
+  }
+
+  # calculate sf routes - to split out into generic?
+  if(is(l, "sf")) {
+    p = line2points(l)
+    if(point_input){
+      s = (1:nrow(l)) * 2 - 1
+      list_out = lapply(s, function(i) FUN(p[i, ], dst = p[i + 1, ], returnclass = "sf"))
+    }
+    ldf <- sf::st_drop_geometry(l)
+    route_sf <- do.call(rbind, list_out)
+    route_df <- sf::st_drop_geometry(route_sf)
+    route_df <- cbind(ldf, route_df)
+    route_out <- sf::st_sf(route_df, geometry = sf::st_geometry(route_sf))
+    return(route_out)
+  }
+
   # calculate line data frame
-  ldf <- data.frame(od_coords(from, to, l))
+  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
   error_fun <- function(e) {
     warning(paste("Fail for line number", i))
     e
@@ -32,17 +57,32 @@ route <- function(from = NULL, to = NULL, l = NULL,
   # pre-allocate objects
   rc <- as.list(rep(NA, nrow(ldf)))
   # route geometry
-  rg <- sf::st_geometry(od_coords2line(odc = ldf))
+  if(is.null(l)) {
+    l <- od_coords2line(odc = ldf)
+    rg <- sf::st_geometry(l)
+  } else {
+    rg <- sf::st_geometry(od_coords2line(odc = ldf))
+  }
 
   # calculate first route
-  rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
+  if(point_input) {
+    p <- line2points(l)
+    s <- (1:nrow(l)) * 2 - 1
+    rc[[1]] <- osrm::osrmRoute(p[1, ], dst = p[1 + 1, ], returnclass = "sf")
+  } else {
+    rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
+  }
   if(is(object = rc[[1]], class2 = "Spatial")) {
     rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
+    names(rdf) <- names(rc[[1]])
+    rdf[1, ] <- rc[[1]]@data[1, ]
+    rg[1] <- sf::st_as_sfc(rc[[1]])
+  } else if(is(object = rc[[1]], class2 = "sf")) {
+    rdf <- sf::st_drop_geometry(rc[[1]])
+    rg[1] <- sf::st_geometry(rc[[1]])
   }
-  names(rdf) <- names(rc[[1]])
 
-  rdf[1, ] <- rc[[1]]@data[1, ]
-  rg[1] <- sf::st_as_sfc(rc[[1]])
+
 
   if (nrow(ldf) > 1) {
     for (i in 2:nrow(ldf)) {
