@@ -20,8 +20,10 @@ knitr::opts_chunk$set(
 library(stplanr)
 ```
 
+# Introduction
+
 Route networks represent the network of highways, cycleways, footways and other ways along which transport happens.
-Unlike routes, each segment on the network can only appear once.
+Unlike routes, each segment geometry the network can only appear once in a single route network.
 
 **stplanr** can be used to convert a series of routes into a route network, using the function `overline2()`, as illustrated below:
 
@@ -41,6 +43,20 @@ It is a form of geographic aggregation.
 ```{r rnets1, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE}
 # knitr::include_graphics("route-networks.png")
 ```
+
+# Routing on route networks
+
+# Other approaches
+
+Other approaches to working with route networks include:
+
+- [sDNA](https://github.com/fiftysevendegreesofrad/sdna_open), an open source C++ library for analysing route networks and estimating flows at segments across network segments
+- [sfnetworks](https://github.com/luukvdmeer/sfnetworks), an R package that provides an alternative igraph/sf spatial network class
+- [dodgr](https://github.com/ATFutures/dodgr), an R package providing functions for calculating distances on directed graphs
+- [cppRouting](https://github.com/vlarmet/cppRouting), a package for routing in C++
+- Chapter [10 of Geocomputation with R](https://geocompr.robinlovelace.net/transport.html), which provides context and demonstrates a transport planning workflow in R.
+
+
 
 
 ```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE, eval=FALSE}
