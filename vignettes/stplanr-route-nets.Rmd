@@ -60,6 +60,8 @@ Other approaches to working with route networks include:
 
 
 ```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE, eval=FALSE}
+# Show solutions to https://github.com/ropensci/stplanr/issues/237
+
 library(tmap)
 # sample_routes = routes_fast_sf
 # sample_routes$id <- 1:nrow(sample_routes)
