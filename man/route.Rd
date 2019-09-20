@@ -6,7 +6,7 @@
 \usage{
 route(from = NULL, to = NULL, l = NULL,
   route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, ...)
+  list_output = FALSE, ..., point_input = FALSE)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -36,9 +36,12 @@ The definition of optimal depends on the routing function used
 \donttest{
 from <- "Leek, UK"
 to <- "Hereford, UK"
-route_leek_to_hereford <- route(from, to)
+route_leek_to_hereford <- route(from = from, to = to)
+plot(route_leek_to_hereford)
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
+# with osrm backend - need to set-up osrm first - see routing vignette
+route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 }
 }
 \seealso{
