@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right"/></a>
+# stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right" height=215/></a>
 
 [![Build
 Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr)
@@ -147,11 +147,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2019-09-18 09:32:56 constructing segments
-#> 2019-09-18 09:32:56 building geometry
-#> 2019-09-18 09:32:56 simplifying geometry
-#> 2019-09-18 09:32:56 aggregating flows
-#> 2019-09-18 09:32:56 rejoining segments into linestrings
+#> 2019-09-20 22:15:16 constructing segments
+#> 2019-09-20 22:15:17 building geometry
+#> 2019-09-20 22:15:17 simplifying geometry
+#> 2019-09-20 22:15:17 aggregating flows
+#> 2019-09-20 22:15:17 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from

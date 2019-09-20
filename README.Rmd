@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right"/></a>
+# stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right" height=215/></a>
 
 [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/onboarding/issues/10)
 
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(stplanr)
 ```
 
