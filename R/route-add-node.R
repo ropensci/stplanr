@@ -1,0 +1,45 @@
+#' Split route in two at point on or near network
+#'
+#' @param r An `sf` object with one feature containing a linestring geometry to be split
+#' @param p A point represented by an `sf` object the will split the `route`
+#'
+#' @return An sf object with 2 feature
+#' @export
+#'
+#' @examples
+#' sample_routes = routes_fast_sf[2:6, NULL]
+#' sample_routes$value = rep(1:3, length.out = 5)
+#' r = sample_routes[2, ]
+#' p = sf::st_sfc(sf::st_point(c(-1.540, 53.826)), crs = sf::st_crs(r))
+#' plot(r$geometry, lwd = 9, col = "grey")
+#' plot(p, add = TRUE)
+#' r_split = route_split(r, p)
+#' plot(r_split, col = c("red", "blue"), add = TRUE)
+route_split = function(r, p){
+  pmat =  st_coordinates(p)
+  r_coordinates = sf::st_coordinates(r)
+  rmat = nabor::knn(data = r_coordinates[, 1:2], query = pmat, k = 1)
+  p_in_r = sf::st_sfc(sf::st_point(r_coordinates[rmat$nn.idx, 1:2]), crs = st_crs(r))
+  route_split_id(r = r, p = p_in_r)
+}
+#' Split route based on the id or coordinates of one of its vertices
+#' @inheritParams route_split
+#' @param id The index of the point on the number to be split
+#' @export
+#' @examples
+#' sample_routes = routes_fast_sf[2:6, 3]
+#' r = sample_routes[2, ]
+#' id = round(n_vertices(r) / 2)
+#' r_split = route_split_id(r, id = id)
+#' plot(r$geometry, lwd = 9, col = "grey")
+#' plot(r_split, col = c("red", "blue"), add = TRUE)
+route_split_id = function(r, id = NULL, p = NULL) {
+  if(is.null(id) && is.null(p)) {
+    id = round(n_vertices(r) / 2)
+  }
+  if(is.null(p)) {
+    p = sf::st_sfc(sf::st_point(sf::st_coordinates(r)[id, 1:2]))
+  }
+  r_new_geometry_collection = lwgeom::st_split(r, p)
+  sf::st_collection_extract(r_new_geometry_collection, "LINESTRING")
+}
