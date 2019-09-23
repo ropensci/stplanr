@@ -44,7 +44,43 @@ It is a form of geographic aggregation.
 # knitr::include_graphics("route-networks.png")
 ```
 
+# SpatialLineNetworks
+
+An important feature of route networks is that they are simultaneously spatial and graph entities.
+This duality is captured in `sfNetwork` objects, which can be created by the function `SpatialLinesNetwork()`:
+
+```{r rnet-routing1}
+sln = SpatialLinesNetwork(rnet)
+class(sln)
+```
+
+`sln` has both spatial and graph components, with the number of lines equal to the number graph edges:
+
+```{r}
+class(sln@sl); nrow(sln@sl)
+class(sln@g); length(igraph::edge.attributes(sln@g)[["weight"]])
+class(sln@nb); length(unique(unlist(sln@nb)))
+identical(sln@sl$geometry, rnet$geometry)
+```
+
+```{r}
+rnet_coordinates = sf::st_coordinates(rnet)
+set.seed(85)
+x = runif(n = 2, min = min(rnet_coordinates[, 1]), max = max(rnet_coordinates[, 1]))
+y = runif(n = 2, min = min(rnet_coordinates[, 2]), max = max(rnet_coordinates[, 2]))
+xy_sf = sf::st_as_sf(data.frame(n = 1:2, x, y), coords = c("x", "y"), crs = sf::st_crs(rnet))
+xy_nodes = stplanr::find_network_nodes(sln = sln, x = x, y = y)
+```
+
 # Routing on route networks
+
+```{r}
+xy_path = sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
+# xy_path = sum_network_links(sln = sln, start = xy_nodes[1], end = xy_nodes[2])
+plot(rnet$geometry)
+plot(xy_sf$geometry, add = TRUE)
+plot(xy_path$geometry, add = TRUE, lwd = 5)
+```
 
 # Other approaches
 
