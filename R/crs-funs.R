@@ -13,7 +13,9 @@
 #' @export
 #' @examples
 #' data("routes_fast")
-#' new_crs <- crs_select_aeq(routes_fast)
+#' new_crs <- geo_select_aeq(routes_fast)
+#' new_crs2 <- crs_select_aeq(routes_fast) # to be deprecated
+#' identical(new_crs, new_crs2)
 #' plot(routes_fast)
 #' rf_projected <- sp::spTransform(routes_fast, new_crs)
 #' plot(rf_projected)
@@ -22,6 +24,7 @@
 #' plot(line_length, rf_projected$length)
 #' cor(line_length, rf_projected$length)
 crs_select_aeq <- function(shp) {
+  # .Deprecated(new = "geo_select_aeq")
   cent <- rgeos::gCentroid(shp)
   aeqd <- sprintf(
     "+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
