@@ -9,7 +9,6 @@
 #'
 #' @param l A SpatialLines or SpatalPolygons object
 #' @family lines
-#'
 #' @export
 #' @examples
 #' n_vertices(routes_fast)

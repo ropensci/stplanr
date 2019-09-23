@@ -342,6 +342,7 @@ line2df.Spatial <- function(l) {
 #' The points corresponding with a given line, `i`, will be `(2*i):((2*i)+1)`.
 #' @param l An `sf` object or a `SpatialLinesDataFrame` from the older `sp` package
 #' @param ids Vector of ids (by default `1:nrow(l)`)
+#' @family lines
 #' @export
 #' @examples
 #' l <- routes_fast_sf[2:4, ]
@@ -355,41 +356,6 @@ line2df.Spatial <- function(l) {
 #' lpoints2 <- line2pointsn(l)
 #' plot(lpoints, pch = lpoints$id, cex = lpoints$id)
 #' points(lpoints2)
-#' @aliases line2points
-#' @export
-line_to_points <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  .Deprecated(new = "line2points")
-  UseMethod("line_to_points")
-}
-#' @export
-line_to_points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  y_coords <- x_coords <- double(length = length(ids)) # initiate coords
-  d_indices <- 1:nrow(l) * 2
-  o_indices <- d_indices - 1
-  x_coords[o_indices] <- sapply(l$geometry, `[[`, 1) # first (x) element of each line
-  x_coords[d_indices] <- sapply(l$geometry, function(x) x[length(x) / 2]) # last (x) element of each line
-  y_coords[o_indices] <- sapply(l$geometry, function(x) x[length(x) / 2 + 1]) # first (y) element of each line
-  y_coords[d_indices] <- sapply(l$geometry, tail, n = 1) # last (y) element of each line
-  p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
-  p <- sf::st_cast(sf::st_sfc(p_multi), "POINT")
-  sf::st_sf(data.frame(id = ids), p)
-}
-#' @export
-line_to_points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  for (i in 1:length(l)) {
-    lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
-    pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
-    lpoints <- sp::SpatialPoints(pmat)
-    if (i == 1) {
-      out <- lpoints
-    } else {
-      out <- raster::bind(out, lpoints)
-    }
-  }
-  sp::proj4string(out) <- sp::proj4string(l)
-  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
-  out
-}
 #' @export
 line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
@@ -424,7 +390,7 @@ line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   sf::st_sf(data.frame(id = ids), geometry = p, crs = sf::st_crs(l))
 }
 
-#' @rdname line_to_points
+#' @rdname line2points
 #' @export
 line2pointsn <- function(l) {
   UseMethod("line2pointsn")
