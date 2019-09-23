@@ -37,13 +37,14 @@ line_match(l1, l2, threshold = 0.003)
 \seealso{
 Other lines: \code{\link{angle_diff}},
   \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
-  \code{\link{line2df}}, \code{\link{line_bearing}},
-  \code{\link{line_midpoint}}, \code{\link{line_sample}},
-  \code{\link{line_segment}}, \code{\link{line_via}},
-  \code{\link{mats2line}}, \code{\link{n_sample_length}},
-  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
-  \code{\link{onewayid}}, \code{\link{points2line}},
-  \code{\link{toptail_buff}}, \code{\link{toptailgs}},
+  \code{\link{line2df}}, \code{\link{line2points}},
+  \code{\link{line_bearing}}, \code{\link{line_midpoint}},
+  \code{\link{line_sample}}, \code{\link{line_segment}},
+  \code{\link{line_via}}, \code{\link{mats2line}},
+  \code{\link{n_sample_length}}, \code{\link{n_vertices}},
+  \code{\link{onewaygeo}}, \code{\link{onewayid}},
+  \code{\link{points2line}}, \code{\link{toptail_buff}},
+  \code{\link{toptailgs}},
   \code{\link{update_line_geometry}}
 }
 \concept{lines}
