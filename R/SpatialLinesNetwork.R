@@ -511,9 +511,6 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
     })
 
     if (is(sln, "sfNetwork")) {
-      if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
-        stop("Load the sf package, e.g. with\nlibrary(sf)")
-      }
       routecoords <- mapply(function(routesegs, start) {
         linecoords <- sf::st_coordinates(sln@sl[routesegs, ])
         linecoords <- lapply(1:max(linecoords[, "L1"]), function(x) {
@@ -706,9 +703,6 @@ sum_network_links <- function(sln, routedata) {
   }
   if (ncol(routedata) < 2) {
     stop("routedata has fewer than 2 columns.")
-  }
-  if (is(sln, "sfNetwork") & "sf" %in% (.packages()) == FALSE) {
-    stop("sf package must be loaded first. Run library(sf)")
   }
   if (is(sln, "SpatialLinesNetwork")) {
     stop("SpatialLinesNetwork not supported. Use newer sfNetwork class instead")

@@ -72,8 +72,8 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
     if (is(object = to, "Spatial")) to <- sp::coordinates(to)
 
     # sf objects
-    if (is(object = from, "sf")) from <- sf::st_coordinates(from)
-    if (is(object = to, "sf")) to <- sf::st_coordinates(to)
+    if (is(object = from, "sf") | is(object = from, "sfc")) from <- sf::st_coordinates(from)
+    if (is(object = to, "sf") | is(object = to, "sfc")) to <- sf::st_coordinates(to)
 
     # Convert character strings to lon/lat if needs be
     if (is.character(from)) from <- matrix(geo_code(from), ncol = 2)
