@@ -81,7 +81,7 @@ xy_nodes = stplanr::find_network_nodes(sln = sln, x = x, y = y)
 
 # Routing on route networks
 
-```{r}
+```{r, out.width="49%", fig.show='hide'}
 plot(rnet$geometry)
 plot(sln_nodes, add = TRUE)
 xy_path = sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
@@ -103,33 +103,12 @@ p = sf::st_sf(geometry = sf::st_sfc(sf::st_point(new_point_coordinates)), crs = 
 
 We can identify the nearest point on the network at this point and use that to split the associated linestring:
 
-```{r, fig.show='hold'}
-pmat = matrix(new_point_coordinates, ncol = 2)
-rmat = nabor::knn(data = rnet_coordinates[, 1:2], query = pmat, k = 1)
-rnet_point_nearst_p = sf::st_sfc(sf::st_point(rnet_coordinates[rmat$nn.idx, 1:2]), crs = crs)
-rnet_intersecting_p = lengths(st_intersects(rnet, rnet_point_nearst_p)) > 0
-rnet_line_near_p = rnet[rnet_intersecting_p, ]
-rnet_lines_far_p = rnet[!rnet_intersecting_p, ]
-rnet_new_geometry_collection = lwgeom::st_split(rnet_line_near_p, rnet_point_nearst_p)
-rnet_new_linestrings = sf::st_cast(rnet_new_geometry_collection)
-rnet_new = rbind(rnet_lines_far_p, rnet_new_linestrings)
-plot(rnet_lines_far_p$geometry)
-plot(rnet_line_near_p$geometry, col = "grey", lwd = 6, add = TRUE)
-plot(rnet_new_linestrings, col = "blue", lwd = c(1, 4), add = TRUE)
-sln_new = SpatialLinesNetwork(rnet_new)
-node_new = find_network_nodes(sln = sln_new, x = new_point_coordinates[1], y = new_point_coordinates[2])
-node_xy2 = find_network_nodes(sln = sln_new, x = x[1], y = y[1])
-sln_new_path = sum_network_routes(sln = sln_new, start = node_new[1], end = node_xy2, sumvars = "length")
-plot(rnet_new$geometry)
-plot(sln_nodes$geometry, col = "red", add = TRUE)
-plot(p$geometry, cex = 5, add = TRUE)
-plot(sln_new_path$geometry, lwd = 5, add = TRUE)
-```
-
-
-
-```{r newnetplot}
-
+```{r, fig.show='hold', out.width="49%"}
+sln_new = sln_add_node(sln = sln, p = p)
+route_new = route_local(sln = sln_new, from = p, to = xy_sf[1, ])
+plot(sln_new)
+plot(p, add = TRUE)
+plot(route_new, lwd = 5, add = TRUE)
 ```
 
 # Other approaches
