@@ -48,7 +48,11 @@ rnet_get_nodes = function(rnet, p = NULL) {
 #' @export
 #'
 rnet_add_node = function(rnet, p) {
-  i_nearest = sf::st_nearest_feature(p, rnet)
+  if(sf::sf_extSoftVersion()["GEOS"] > "3.6.1") {
+    i_nearest = sf::st_nearest_feature(p, rnet)
+  } else {
+    i_nearest = route_nearest_point(r = rnet, p = p, id_out = TRUE)
+  }
   r = rnet[i_nearest, ]
   rnet_except_r = rnet[-i_nearest, ]
   r_split = route_split(r, p)
@@ -98,4 +102,31 @@ route_split_id = function(r, id = NULL, p = NULL) {
   }
   r_new_geometry_collection = lwgeom::st_split(r, p)
   sf::st_collection_extract(r_new_geometry_collection, "LINESTRING")
+}
+#' Find nearest route to a given point
+#'
+#' This function was written as a drop-in replacement for `sf::st_nearest_feature()`,
+#' which only works with recent versions of GEOS.
+#'
+#' @inheritParams route_split
+#' @param id_out Should the index of the matching feature be returned? `FALSE` by default
+#' @export
+#' @examples
+#' r = routes_fast_sf[2:6, NULL]
+#' p = sf::st_sfc(sf::st_point(c(-1.540, 53.826)), crs = sf::st_crs(r))
+#' route_nearest_point(r, p, id_out = TRUE)
+#' r_nearest = route_nearest_point(r, p)
+#' plot(r$geometry)
+#' plot(p, add = TRUE)
+#' plot(r_nearest, lwd = 5, add = TRUE)
+route_nearest_point = function(r, p, id_out = FALSE) {
+  r_coordinates = sf::st_coordinates(r)
+  p_coordinates = sf::st_coordinates(p)
+  rmat = nabor::knn(data = r_coordinates[, 1:2], query = p_coordinates[, 1:2, drop = FALSE], k = 1)
+  r_nearest_id = r_coordinates[rmat$nn.idx, 3]
+  if(id_out) {
+    return(r_nearest_id)
+  } else {
+    r[r_nearest_id, ]
+  }
 }
