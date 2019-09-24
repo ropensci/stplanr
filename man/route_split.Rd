@@ -19,7 +19,6 @@ Split route in two at point on or near network
 }
 \examples{
 sample_routes = routes_fast_sf[2:6, NULL]
-sample_routes$value = rep(1:3, length.out = 5)
 r = sample_routes[2, ]
 p = sf::st_sfc(sf::st_point(c(-1.540, 53.826)), crs = sf::st_crs(r))
 plot(r$geometry, lwd = 9, col = "grey")
