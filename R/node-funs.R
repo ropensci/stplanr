@@ -41,7 +41,11 @@ rnet_get_nodes <- function(rnet, p = NULL) {
 #' sample_routes$value <- rep(1:3, length.out = 5)
 #' rnet <- overline2(sample_routes, attrib = "value")
 #' p <- sf::st_sfc(sf::st_point(c(-1.540, 53.826)), crs = sf::st_crs(rnet))
-#' r_split <- route_split(rnet, p)
+#' p2 <- sf::st_sfc(sf::st_point(c(-1.542, 53.82)), crs = sf::st_crs(rnet))
+#' pn = c(p, p2)
+#' class(pn)
+#' # fails with multiple points
+#' r_split <- route_split(rnet, pn)
 #' plot(rnet$geometry, lwd = rnet$value * 5, col = "grey")
 #' plot(p, cex = 9, add = TRUE)
 #' plot(r_split, col = 1:nrow(r_split), add = TRUE, lwd = r_split$value)
@@ -87,19 +91,28 @@ route_split <- function(r, p) {
 #' @param id The index of the point on the number to be split
 #' @export
 #' @examples
-#' sample_routes <- routes_fast_sf[2:6, 3]
+#' r <- route_network_sf[2:6, ]
+#' r_split <- rnet_split_id(r)
+#' nrow(r)
+#' nrow(r_split) # has split into multiple segments (13)
+#' plot(r$geometry, lwd = 9, col = 1:nrow(r))
+#' plot(r_split, lwd = 3, col = 1:nrow(r_split), add = TRUE)
 #' r <- sample_routes[2, ]
 #' id <- round(n_vertices(r) / 2)
+#' plot(r, lwd = 1:nrow(r), )
 #' r_split <- route_split_id(r, id = id)
 #' plot(r$geometry, lwd = 9, col = "grey")
 #' plot(r_split, col = c("red", "blue"), add = TRUE)
-route_split_id <- function(r, id = NULL, p = NULL) {
-  if (is.null(id) && is.null(p)) {
-    id <- round(n_vertices(r) / 2)
-  }
-  if (is.null(p)) {
-    p <- sf::st_sfc(sf::st_point(sf::st_coordinates(r)[id, 1:2]))
-  }
+#' names(r_split)
+#' names(r)
+rnet_split_id <- function(r, p = NULL) {
+  # if (is.null(id) && is.null(p)) {
+  #   id <- round(n_vertices(r) / 2)
+  # }
+  # if (is.null(p)) {
+  #   p_df <- data.frame(sf::st_coordinates(r)[id, ])
+  #   p <- sf::st_as_sf(p_df, coords = c("X", "Y"))
+  # }
   r_new_geometry_collection <- lwgeom::st_split(r, p)
   sf::st_collection_extract(r_new_geometry_collection, "LINESTRING")
 }
