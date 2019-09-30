@@ -157,7 +157,36 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
 
   sl$length <- sf::st_length(sl)
   igraph::E(g)$weight <- sl$length
+  # check it is a single graph
+  is_connected <- igraph::is_connected(g)
+  if(!is_connected) {
+    warning("Graph composed of multiple subgraphs, consider cleaning it with sln_clean_graph().")
+  }
+  # largest_group = names(which.max(graph_membership_table))
+  # connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
   new("sfNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
+}
+
+#' Clean spatial network - return an sln with a single connected graph
+#'
+#' See https://github.com/ropensci/stplanr/issues/344
+#'
+#' @inheritParams sln_add_node
+#'
+#' @return An sfNetwork object
+#' @export
+sln_clean_graph <- function(sln) {
+  g <- sln@g
+  graph_membership = igraph::components(g)$membership
+  graph_membership_table = table(graph_membership)
+  if(length(graph_membership_table) > 1) {
+    message("Input sln composed of ", length(graph_membership_table), " graphs. Selecting the largest.")
+    }
+  largest_group = names(which.max(graph_membership_table))
+  connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
+  connected_edges <- igraph::E(g)[.inc(connected_vertexes)]
+  temp_sl <- sln@sl[as.numeric(connected_edges), ]
+  SpatialLinesNetwork(temp_sl)
 }
 
 #' Plot a SpatialLinesNetwork
