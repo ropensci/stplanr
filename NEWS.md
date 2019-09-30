@@ -6,6 +6,7 @@
 - Updated vignette on route networks, solving [#237](https://github.com/ropensci/stplanr/issues/237), which can be found here: https://docs.ropensci.org/stplanr/articles/stplanr-route-nets.html
 - [Fix](https://github.com/ropensci/stplanr/commit/592fba2a6d191135d036af73e7c902c3ef4f758c) in `line2points()`
 - `line_to_points()` function removed in favour of `line2point()`.
+- New function `sln_clean_graph()` removes unconnected elements of `sfNetwork` objects (#344)
 
 # stplanr 0.3.1
 
