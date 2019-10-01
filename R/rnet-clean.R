@@ -20,7 +20,15 @@
 #' col = c(1, 2, "darkred", 3:8),
 #' lwd = c(1, 1, 2, rep(1, 6))
 #' )
-
+#' \donttest{
+#' library(geofabric)
+#' iow <- geofabric::get_geofabric("isle wight")
+#'
+#' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
+#' iow <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
+#' system.time(iow_clean <- rnet_clean_vertices(iow))
+#' plot(iow_clean$geometry)
+#' }
 
 rnet_clean_vertices <- function(rnet) {
   rnet_nodes <- line2points(rnet)
