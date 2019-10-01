@@ -291,3 +291,15 @@ NULL
 #' @examples
 #' od_data_sample
 NULL
+
+#' Example of roundabout data show problems for SpatialLinesNetwork objects
+#'
+#' See `data-raw/generate-data.Rmd` for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name rnet_roundabout
+#' @format A sf object
+#' @examples
+#' rnet_roundabout
+NULL
