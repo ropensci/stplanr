@@ -294,7 +294,7 @@ NULL
 
 #' Example of roundabout data show problems for SpatialLinesNetwork objects
 #'
-#' See `data-raw/generate-data.Rmd` for details on how this was created.
+#' See `data-raw/rnet_roundabout.R` for details on how this was created.
 #'
 #' @docType data
 #' @keywords datasets
@@ -302,4 +302,16 @@ NULL
 #' @format A sf object
 #' @examples
 #' rnet_roundabout
+NULL
+
+#' Example of roundabout data show problems for SpatialLinesNetwork objects
+#'
+#' See `data-raw/rnet_overpass.R` for details on how this was created.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name rnet_overpass
+#' @format A sf object
+#' @examples
+#' rnet_overpass
 NULL
