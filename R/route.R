@@ -95,10 +95,13 @@ route_dodgr <-
            # return_net = FALSE
            ) {
 
-  od_coordinate_matrix <- od_coords(from, to)
-  fm_coords <- od_coordinate_matrix[, 1:2, drop = FALSE]
-  to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
+  if (!requireNamespace("dodgr", quietly = TRUE)) {
+    stop("dodgr must be installed for this function to work.")
+  }
 
+  to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
+  fm_coords <- od_coordinate_matrix[, 1:2, drop = FALSE]
+  od_coordinate_matrix <- od_coords(from, to)
   # Try to get route network if net not provided
   if(is.null(net)) {
       pts <- rbind(fm_coords, to_coords)
