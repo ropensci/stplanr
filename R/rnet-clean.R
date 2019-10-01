@@ -6,11 +6,20 @@
 #' @export
 #'
 #' @examples
+#' library(sf)
 #' par(mar = rep(0, 4))
 #' plot(rnet_roundabout$geometry, col = c(1, rainbow(nrow(rnet_roundabout) - 1)), lwd = 2)
 #'
 #' rnet_roundabout_clean <- rnet_clean_vertices(rnet_roundabout)
 #' plot(rnet_roundabout_clean$geometry, col = c(1, rainbow(nrow(rnet_roundabout_clean) - 1)), lwd = 2)
+#'
+#' plot(rnet_overpass$geometry, col = seq_len(nrow(rnet_overpass)))
+#' rnet_overpass_clean <- rnet_clean_vertices(rnet_overpass)
+#' plot(
+#' rnet_overpass_clean$geometry,
+#' col = c(1, 2, "darkred", 3:8),
+#' lwd = c(1, 1, 2, rep(1, 6))
+#' )
 
 
 rnet_clean_vertices <- function(rnet) {
