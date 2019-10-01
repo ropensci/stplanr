@@ -74,18 +74,19 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' @family routes
 #' @export
 #' @examples
-#' # from <- geo_code("pedallers arms leeds")
-#' from <- c(-1.5327, 53.8006)
-#' # to <- geo_code("gzing")
-#' to <- c(-1.5279, 53.8044)
-#' # next 4 lines recreate `stplanr::osm_net_example`
+#' \donttest{
+#' from <- c(-1.5327, 53.8006) # from <- geo_code("pedallers arms leeds")
+#' to <- c(-1.5279, 53.8044) # to <- geo_code("gzing")
+#' # next 4 lines were used to generate `stplanr::osm_net_example`
 #' # pts <- rbind(from, to)
 #' # colnames(pts) <- c("X", "Y")
 #' # net <- dodgr::dodgr_streetnet(pts = rbind(from, to), expand = 0.1)
 #' # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
+#' # note: currently fails - dodgr issue?
 #' r <- route_dodgr(from, to, net = osm_net_example)
 #' plot(osm_net_example$geometry)
 #' plot(r$geometry, add = TRUE, col = "red", lwd = 5)
+#' }
 route_dodgr <-
   function(from = NULL,
            to = NULL,
