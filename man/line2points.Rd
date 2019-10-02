@@ -3,14 +3,14 @@
 \name{line2points}
 \alias{line2points}
 \alias{line2pointsn}
-\title{Convert a spatial (linestring) object to points
-The number of points will be double the number of lines with \code{line2points}.
-A closely related function, \code{line2pointsn} returns all the points that were line vertices.
-The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.}
+\alias{line2vertices}
+\title{Convert a spatial (linestring) object to points}
 \usage{
 line2points(l, ids = rep(1:nrow(l)))
 
 line2pointsn(l)
+
+line2vertices(l)
 }
 \arguments{
 \item{l}{An \code{sf} object or a \code{SpatialLinesDataFrame} from the older \code{sp} package}
@@ -18,7 +18,6 @@ line2pointsn(l)
 \item{ids}{Vector of ids (by default \code{1:nrow(l)})}
 }
 \description{
-Convert a spatial (linestring) object to points
 The number of points will be double the number of lines with \code{line2points}.
 A closely related function, \code{line2pointsn} returns all the points that were line vertices.
 The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
