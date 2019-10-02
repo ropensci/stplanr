@@ -6,7 +6,12 @@
 - Updated vignette on route networks, solving [#237](https://github.com/ropensci/stplanr/issues/237), which can be found here: https://docs.ropensci.org/stplanr/articles/stplanr-route-nets.html
 - [Fix](https://github.com/ropensci/stplanr/commit/592fba2a6d191135d036af73e7c902c3ef4f758c) in `line2points()`
 - `line_to_points()` function removed in favour of `line2point()`.
-- New function `sln_clean_graph()` removes unconnected elements of `sfNetwork` objects. Credit to Andrea Gilardi. See (#344)
+- New function `sln_clean_graph()` removes unconnected elements of `sfNetwork` objects. Credit to Andrea Gilardi. See (#344).
+- New functions `rnet_breakup_vertices()` and `line2vertices()` for breaking up linestrings representing route networks into smaller segments, in preparation for routing. See (#282) (which these functions address) and PR [347](https://github.com/ropensci/stplanr/pull/347) for details.
+
+## OTHER
+
+- Andrea Gilardi added as author.
 
 # stplanr 0.3.1
 

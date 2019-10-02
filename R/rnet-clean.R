@@ -1,9 +1,12 @@
 #' Break up an sf object with LINESTRING geometry by vertex/nodes intersections
 #'
 #' @param rnet An sf LINESTRING object representing a route network.
-#'
-#' @return The same sf LINESTRING object with more rows (the result
-#'   of the splitting) when there are intersecting (and internal) vertices.
+#' @param breakup_internal_vertex_matches Should breaks be made at internal
+#'   vertex matches? `TRUE` by default. Internal vertices are vertices (but not
+#'   start or end points) of two or more different linestrings that meet at the
+#'   same point.
+#' @return The same sf LINESTRING object with more rows (the result of the
+#'   splitting) when there are intersecting (and internal) vertices.
 #' @export
 #'
 #' @examples
@@ -13,12 +16,12 @@
 #' # Check for roundabout
 #' plot(rnet_roundabout$geometry, lwd = 2, col = rainbow(nrow(rnet_roundabout)))
 #'
-#' rnet_roundabout_clean <- rnet_clean_vertices(rnet_roundabout)
+#' rnet_roundabout_clean <- rnet_breakup_vertices(rnet_roundabout)
 #' plot(rnet_roundabout_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_roundabout_clean)))
 #' # Check for overpasses
 #' plot(rnet_overpass$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass)))
 #'
-#' rnet_overpass_clean <- rnet_clean_vertices(rnet_overpass)
+#' rnet_overpass_clean <- rnet_breakup_vertices(rnet_overpass)
 #' plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
 #' \donttest{
 #' # mapview(rnet_overpass_clean)
@@ -27,24 +30,24 @@
 #' plot(rnet_cycleway_intersection$geometry, lwd = 2,
 #'      col = rainbow(nrow(rnet_cycleway_intersection)))
 #'
-#' rnet_cycleway_intersection_clean <- rnet_clean_vertices(rnet_cycleway_intersection)
+#' rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 #' plot(rnet_cycleway_intersection_clean$geometry,
 #'      lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
 #'
 #' # Bigger example
 #' \donttest{
-#' iow <- sf::st_read("https://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf")
+#' u <- "https://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf"
+#' iow <- sf::st_read(u)
 #'
 #' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
 #' iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
-#' system.time(iow_clean <- rnet_clean_vertices(iow_small))
+#' system.time(iow_clean <- rnet_breakup_vertices(iow_small))
 #' # Should be quite faster than the old version we could always profile it.
 #'
 #' plot(iow_small$geometry)
 #' plot(iow_clean$geometry)
 #' }
-
-rnet_clean_vertices <- function(rnet) {
+rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) {
   rnet_nodes <- sf::st_geometry(line2points(rnet))
   rnet_internal_vertexes <- sf::st_geometry(line2vertices(rnet))
 
@@ -70,8 +73,8 @@ rnet_clean_vertices <- function(rnet) {
     )
 
     message("Splitting rnet object at the intersection points between nodes and internal vertexes")
-    rnet_clean_collection <- lwgeom::st_split(rnet, intersection_points$geometry)
-    rnet_clean <- sf::st_collection_extract(rnet_clean_collection, "LINESTRING")
+    rnet_breakup_collection <- lwgeom::st_split(rnet, intersection_points$geometry)
+    rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
   } else {
     rnet_clean <- rnet
   }
@@ -79,10 +82,12 @@ rnet_clean_vertices <- function(rnet) {
   # Split again at the duplicated internal vertexes
   rnet_internal_vertexes_duplicated <- rnet_internal_vertexes[duplicated(rnet_internal_vertexes)]
 
-  if (length(rnet_internal_vertexes_duplicated) > 0) {
+  if (length(rnet_internal_vertexes_duplicated) > 0 & breakup_internal_vertex_matches) {
     message("Splitting rnet object at the duplicated internal vertexes")
-    rnet_clean_collection <- lwgeom::st_split(rnet, rnet_internal_vertexes_duplicated)
-    rnet_clean <- sf::st_collection_extract(rnet_clean_collection, "LINESTRING")
+    rnet_breakup_collection <- lwgeom::st_split(rnet, rnet_internal_vertexes_duplicated)
+    rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
+  } else {
+    rnet_clean <- rnet
   }
 
   rnet_clean
