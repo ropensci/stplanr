@@ -38,6 +38,7 @@
 #' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
 #' iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
 #' system.time(iow_clean <- rnet_clean_vertices(iow_small))
+#' # Should be quite faster than the old version we could always profile it.
 #'
 #' plot(iow_small$geometry)
 #' plot(iow_clean$geometry)
@@ -53,11 +54,23 @@ rnet_clean_vertices <- function(rnet) {
   unique_rnet_internal_vertexes <- do.call("c", unique(rnet_internal_vertexes))
 
   # Intersection between nodes and internal vertexes
-  intersection_point <- sf::st_intersection(unique_rnet_nodes, unique_rnet_internal_vertexes)
+  # The following code is the same as
+  # intersection_point <- sf::st_intersection(unique_rnet_nodes, unique_rnet_internal_vertexes)
+  # but faster since we are dealing only with points
 
-  if (length(intersection_point) > 0) {
+  rbind_nodes_internal_vertexes <- rbind(unique_rnet_nodes, unique_rnet_internal_vertexes)
+  index_intersection_points <- duplicated(rbind_nodes_internal_vertexes)
+
+  if (any(index_intersection_points)) {
+
+    intersection_points <- sf::st_as_sf(
+      data.frame(rbind_nodes_internal_vertexes[index_intersection_points, , drop = FALSE]),
+      coords = c("x_coords", "y_coords"),
+      crs = sf::st_crs(rnet)
+    )
+
     message("Splitting rnet object at the intersection points between nodes and internal vertexes")
-    rnet_clean_collection <- lwgeom::st_split(rnet, intersection_point)
+    rnet_clean_collection <- lwgeom::st_split(rnet, intersection_points$geometry)
     rnet_clean <- sf::st_collection_extract(rnet_clean_collection, "LINESTRING")
   } else {
     rnet_clean <- rnet

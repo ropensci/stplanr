@@ -43,11 +43,12 @@ plot(rnet_cycleway_intersection_clean$geometry,
 # Bigger example
 \donttest{
 library(geofabric)
-iow <- geofabric::get_geofabric("isle wight")
+iow <- get_geofabric("isle wight")
 
 key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
 iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
 system.time(iow_clean <- rnet_clean_vertices(iow_small))
+# Should be quite faster than the old version we could always profile it.
 
 plot(iow_small$geometry)
 plot(iow_clean$geometry)
