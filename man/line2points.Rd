@@ -18,9 +18,11 @@ line2vertices(l)
 \item{ids}{Vector of ids (by default \code{1:nrow(l)})}
 }
 \description{
-The number of points will be double the number of lines with \code{line2points}.
-A closely related function, \code{line2pointsn} returns all the points that were line vertices.
-The points corresponding with a given line, \code{i}, will be \code{(2*i):((2*i)+1)}.
+The number of points will be double the number of lines with \code{line2points}. A
+closely related function, \code{line2pointsn} returns all the points that were
+line vertices. #' The points corresponding with a given line, \code{i}, will be
+\code{(2*i):((2*i)+1)}. The last function, \code{line2vertices}, returns all the points
+that are vertices but not nodes.
 }
 \examples{
 l <- routes_fast_sf[2:4, ]
