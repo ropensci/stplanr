@@ -337,9 +337,11 @@ line2df.Spatial <- function(l) {
 }
 
 #' Convert a spatial (linestring) object to points
+#'
 #' The number of points will be double the number of lines with `line2points`.
 #' A closely related function, `line2pointsn` returns all the points that were line vertices.
 #' The points corresponding with a given line, `i`, will be `(2*i):((2*i)+1)`.
+#'
 #' @param l An `sf` object or a `SpatialLinesDataFrame` from the older `sp` package
 #' @param ids Vector of ids (by default `1:nrow(l)`)
 #' @family lines
@@ -406,6 +408,29 @@ line2pointsn.Spatial <- function(l) {
 line2pointsn.sf <- function(l) {
   suppressWarnings(sf::st_cast(l, "POINT"))
 }
+
+#' @rdname line2points
+#' @export
+line2vertices <- function(l) {
+  UseMethod("line2vertices")
+}
+#' @export
+line2vertices.sf <- function(l) {
+  all_vertexes <- sf::st_coordinates(l)
+  indexes_of_internal_vertexes <- lapply(
+    split(1:nrow(all_vertexes), all_vertexes[, "L1"]),
+    function(x) x[-c(1, length(x))] # exclude starting and ending point
+  )
+  # extract those indexes
+  internal_vertexes <- all_vertexes[do.call("c", indexes_of_internal_vertexes), ]
+
+  # transform back to sf
+  internal_vertexes_sf <- sf::st_as_sf(data.frame(internal_vertexes),
+    coords = c("X", "Y"), crs = sf::st_crs(l)
+  )
+  internal_vertexes_sf
+}
+
 #' Convert straight OD data (desire lines) into routes
 #'
 #' @section Details:
