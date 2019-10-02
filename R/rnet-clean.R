@@ -19,7 +19,7 @@
 #'
 #' rnet_overpass_clean <- rnet_clean_vertices(rnet_overpass)
 #' plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-#' #' \donttest{
+#' \donttest{
 #' mapview::mapview(rnet_overpass_clean)
 #' }
 #' # Check for intersection with no node
