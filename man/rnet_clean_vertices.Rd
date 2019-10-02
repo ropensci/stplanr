@@ -29,14 +29,16 @@ plot(rnet_overpass$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass)))
 
 rnet_overpass_clean <- rnet_clean_vertices(rnet_overpass)
 plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-#' \donttest{
+\donttest{
 mapview::mapview(rnet_overpass_clean)
 }
 # Check for intersection with no node
-plot(rnet_cycleway_intersection$geometry, lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection)))
+plot(rnet_cycleway_intersection$geometry, lwd = 2,
+     col = rainbow(nrow(rnet_cycleway_intersection)))
 
 rnet_cycleway_intersection_clean <- rnet_clean_vertices(rnet_cycleway_intersection)
-plot(rnet_cycleway_intersection_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
+plot(rnet_cycleway_intersection_clean$geometry,
+     lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
 
 # Bigger example
 \donttest{

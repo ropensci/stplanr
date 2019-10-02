@@ -3,7 +3,7 @@
 \docType{data}
 \name{rnet_overpass}
 \alias{rnet_overpass}
-\title{Example of roundabout data show problems for SpatialLinesNetwork objects}
+\title{Example of overpass data showing problems for SpatialLinesNetwork objects}
 \format{A sf object}
 \description{
 See \code{data-raw/rnet_overpass.R} for details on how this was created.

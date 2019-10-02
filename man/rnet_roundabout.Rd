@@ -3,7 +3,7 @@
 \docType{data}
 \name{rnet_roundabout}
 \alias{rnet_roundabout}
-\title{Example of roundabout data show problems for SpatialLinesNetwork objects}
+\title{Example of roundabout data showing problems for SpatialLinesNetwork objects}
 \format{A sf object}
 \description{
 See \code{data-raw/rnet_roundabout.R} for details on how this was created.

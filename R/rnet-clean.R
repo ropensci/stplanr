@@ -33,7 +33,7 @@
 #' # Bigger example
 #' \donttest{
 #' library(geofabric)
-#' iow <- geofabric::get_geofabric("isle wight")
+#' iow <- get_geofabric("isle wight")
 #'
 #' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
 #' iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
@@ -56,6 +56,7 @@ rnet_clean_vertices <- function(rnet) {
   intersection_point <- sf::st_intersection(unique_rnet_nodes, unique_rnet_internal_vertexes)
 
   if (length(intersection_point) > 0) {
+    message("Splitting rnet object at the intersection points between nodes and internal vertexes")
     rnet_clean_collection <- lwgeom::st_split(rnet, intersection_point)
     rnet_clean <- sf::st_collection_extract(rnet_clean_collection, "LINESTRING")
   } else {
@@ -66,6 +67,7 @@ rnet_clean_vertices <- function(rnet) {
   rnet_internal_vertexes_duplicated <- rnet_internal_vertexes[duplicated(rnet_internal_vertexes)]
 
   if (length(rnet_internal_vertexes_duplicated) > 0) {
+    message("Splitting rnet object at the duplicated internal vertexes")
     rnet_clean_collection <- lwgeom::st_split(rnet, rnet_internal_vertexes_duplicated)
     rnet_clean <- sf::st_collection_extract(rnet_clean_collection, "LINESTRING")
   }
