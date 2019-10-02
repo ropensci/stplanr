@@ -22,6 +22,6 @@ overpass_sf <- sf::st_as_sf(
 )
 overpass_buffer <- stplanr::geo_projected(overpass_sf, sf::st_buffer, dist = 25)
 rnet_overpass <- roads_chapeltown_leeds[overpass_buffer, ]
-plot(rnet_overpass$geometry)
+# plot(rnet_overpass$geometry)
 
 usethis::use_data(rnet_overpass, overwrite = TRUE)
