@@ -1,8 +1,9 @@
-#' Cleanr a sf object with LINESTRING geometry such that
+#' Break up an sf object with LINESTRING geometry by vertex/nodes intersections
 #'
-#' @param rnet a sf LINESTRING object that ...
+#' @param rnet An sf LINESTRING object representing a route network.
 #'
-#' @return sf object
+#' @return The same sf LINESTRING object with more rows (the result
+#'   of the splitting) when there are intersecting (and internal) vertices.
 #' @export
 #'
 #' @examples
@@ -20,7 +21,7 @@
 #' rnet_overpass_clean <- rnet_clean_vertices(rnet_overpass)
 #' plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
 #' \donttest{
-#' mapview::mapview(rnet_overpass_clean)
+#' # mapview(rnet_overpass_clean)
 #' }
 #' # Check for intersection with no node
 #' plot(rnet_cycleway_intersection$geometry, lwd = 2,
@@ -32,8 +33,7 @@
 #'
 #' # Bigger example
 #' \donttest{
-#' library(geofabric)
-#' iow <- get_geofabric("isle wight")
+#' iow <- sf::st_read("https://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf")
 #'
 #' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
 #' iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
