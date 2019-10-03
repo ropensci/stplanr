@@ -8,5 +8,3 @@ src/*.o
 src/*.so
 src/*.dll
 *.html
-iow.*
-roads_iow.*
