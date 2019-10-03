@@ -1,4 +1,4 @@
-Fixes documentation issue with concept entries
+Makes route_dodgr code and examples conditional on requireNamespace("dodgr") 
 
 ## Test environments
 
