@@ -33,9 +33,10 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-\dontrun{
-from <- "Leek, UK"
-to <- "Hereford, UK"
+\donttest{
+# requires CycleStreets.net API key
+from <- "Leeds Rail Station"
+to <- "University of Leeds, UK"
 route_leek_to_hereford <- route(from, to)
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines

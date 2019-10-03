@@ -9,9 +9,10 @@
 #' @family routes
 #' @export
 #' @examples
-#' \dontrun{
-#' from <- "Leek, UK"
-#' to <- "Hereford, UK"
+#' \donttest{
+#' # requires CycleStreets.net API key
+#' from <- c(-1.5327, 53.8006) # from <- geo_code("leeds rail station")
+#' to <- c(-1.5279, 53.8044) # to <- geo_code("university of leeds")
 #' route_leek_to_hereford <- route(from, to)
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' route(flowlines_sf[2:4, ]) # lines
@@ -74,15 +75,14 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #' @family routes
 #' @export
 #' @examples
-#' \donttest{
-#' from <- c(-1.5327, 53.8006) # from <- geo_code("pedallers arms leeds")
-#' to <- c(-1.5279, 53.8044) # to <- geo_code("gzing")
+#' if(requireNamespace("dodgr")) {
+#' from <- c(-1.5327, 53.8006) # from <- geo_code("leeds rail station")
+#' to <- c(-1.5279, 53.8044) # to <- geo_code("university of leeds")
 #' # next 4 lines were used to generate `stplanr::osm_net_example`
 #' # pts <- rbind(from, to)
 #' # colnames(pts) <- c("X", "Y")
 #' # net <- dodgr::dodgr_streetnet(pts = rbind(from, to), expand = 0.1)
 #' # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
-#' # note: currently fails - dodgr issue?
 #' r <- route_dodgr(from, to, net = osm_net_example)
 #' plot(osm_net_example$geometry)
 #' plot(r$geometry, add = TRUE, col = "red", lwd = 5)
@@ -99,10 +99,9 @@ route_dodgr <-
   if (!requireNamespace("dodgr", quietly = TRUE)) {
     stop("dodgr must be installed for this function to work.")
   }
-
+  od_coordinate_matrix <- od_coords(from, to, l)
   to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
   fm_coords <- od_coordinate_matrix[, 1:2, drop = FALSE]
-  od_coordinate_matrix <- od_coords(from, to)
   # Try to get route network if net not provided
   if(is.null(net)) {
       pts <- rbind(fm_coords, to_coords)
@@ -137,12 +136,12 @@ route_dodgr <-
   # remove any NULL paths:
   paths <- unlist(paths, recursive = FALSE)
   index <- which (vapply (paths, is.null, logical (1)))
-  if (any (index))
-        message("unable to trace ", length(index), " path(s)")
-        message("Failed path index numbers are:")
-        message(list(as.integer(index)))
+  if (any (index)) {
+    message("unable to trace ", length(index), " path(s)")
+    message("Failed path index numbers are:")
+    message(list(as.integer(index)))
+  }
   index <- which (!seq (paths) %in% index)
-
   paths <- sf::st_sfc(paths[index], crs = 4326)
   sf::st_sf(from = from_to[index, 1],
             from_x = from_xy [index, 1],
