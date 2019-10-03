@@ -97,7 +97,8 @@ route_dodgr <-
            ) {
 
   if (!requireNamespace("dodgr", quietly = TRUE)) {
-    stop("dodgr must be installed for this function to work.")
+    message("dodgr must be installed for this function to work.")
+    return(NULL)
   }
 
   to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
