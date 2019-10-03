@@ -1,4 +1,4 @@
-# stplanr 0.3.2
+# stplanr 0.4.0
 
 ## NEW FEATURES
 
@@ -8,6 +8,10 @@
 - `line_to_points()` function removed in favour of `line2point()`.
 - New function `sln_clean_graph()` removes unconnected elements of `sfNetwork` objects. Credit to Andrea Gilardi. See (#344).
 - New functions `rnet_breakup_vertices()` and `line2vertices()` for breaking up linestrings representing route networks into smaller segments, in preparation for routing. See (#282) (which these functions address) and PR [347](https://github.com/ropensci/stplanr/pull/347) for details.
+
+## BUG FIXES
+
+- Bugs in `route_dodgr()` and associated examples fixed (#348)
 
 ## OTHER
 
