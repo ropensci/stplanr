@@ -18,11 +18,13 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' decode_gl("_p~iF~ps|U_ulLnnqC_mqNvxq`@@", precision = 5)
+#' decode_gl(polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@@", precision = 5)
 #' }
 decode_gl <- function(polyline, precision = 6, forceline = TRUE) {
   latlngsets <- lapply(polyline, function(polyline, precision) {
     binvals <- R.utils::intToBin(stringi::stri_enc_toutf32(polyline)[[1]] - 63)
+    vapply(stringi::stri_enc_toutf32(polyline)[[1]] - 63, FUN = int2bin,
+           FUN.VALUE = vector(mode = "character", length = 1) )
     lastbinvals <- which(substr(binvals, 1, 1) == 0)
 
     vseq <- Vectorize(seq)
@@ -1012,4 +1014,18 @@ route_osrm <- function(from, to, l = NULL, alt = FALSE, ..., singleline = TRUE) 
   }
 
   return(r)
+}
+
+# note: this function is from:
+#   https://stackoverflow.com/questions/12088080/how-to-convert-integer-number-into-binary-vector
+int2bin <- function(x) {
+  i <- 0
+  string <- numeric(32)
+  while(x > 0) {
+    string[32 - i] <- x %% 2
+    x <- x %/% 2
+    i <- i + 1
+  }
+  first <- match(1, string)
+  paste0(string[first:32], collapse = "")
 }
