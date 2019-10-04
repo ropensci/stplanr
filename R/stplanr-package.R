@@ -26,7 +26,6 @@
 #' @importFrom utils read.csv
 #' @importFrom openxlsx readWorkbook
 #' @importFrom raster extent crop
-#' @importFrom R.utils intToBin
 #' @importFrom geosphere distHaversine
 #' @importFrom Rcpp evalCpp
 #' @importFrom igraph graph E
