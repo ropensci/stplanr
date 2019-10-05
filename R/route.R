@@ -16,16 +16,36 @@
 #' route_leek_to_hereford <- route(from, to)
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' route(flowlines_sf[2:4, ]) # lines
+#' # with osrm backend - need to set-up osrm first - see routing vignette
+#' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreet,
-                  n_print = 10, list_output = FALSE, ...) {
+                  n_print = 10, list_output = FALSE, ..., point_input = FALSE) {
 
   # generate od coordinates
   FUN <- match.fun(route_fun)
-  ldf <- od_coords(from, to, l) %>%
-    dplyr::as_data_frame()
+  # set l if not named
+  if(is(from, "sf")) {
+    if(unique(sf::st_geometry_type(from)) == "LINESTRING") {
+      l <- from
+    }
+  }
 
+  # calculate sf routes - to split out into generic?
+  if(is(l, "sf") && point_input) {
+    s = (1:nrow(l)) * 2 - 1
+    list_out = lapply(s, function(i) FUN(p[i, ], dst = p[i + 1, ], returnclass = "sf"))
+    ldf <- sf::st_drop_geometry(l)
+    route_sf <- do.call(rbind, list_out)
+    route_df <- sf::st_drop_geometry(route_sf)
+    route_df <- cbind(ldf, route_df)
+    route_out <- sf::st_sf(route_df, geometry = sf::st_geometry(route_sf))
+    return(route_out)
+  }
+
+  # calculate line data frame
+  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
   error_fun <- function(e) {
     warning(paste("Fail for line number", i))
     e
@@ -46,12 +66,9 @@ route <- function(from = NULL, to = NULL, l = NULL,
 
   if (nrow(ldf) > 1) {
     for (i in 2:nrow(ldf)) {
-      rc[[i]] <- tryCatch(
-        {
-          FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        },
-        error = error_fun
-      )
+      rc[[i]] <- tryCatch({
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+      }, error = error_fun)
       perc_temp <- i %% round(nrow(ldf) / n_print)
       # print % of distances calculated
       if (!is.na(perc_temp) & perc_temp == 0) {

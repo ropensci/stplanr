@@ -67,7 +67,8 @@ Suggests:
     rgdal,
     pct,
     tmap,
-    bench
+    bench,
+    osrm
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make
