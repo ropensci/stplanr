@@ -215,7 +215,7 @@ For ease of use, functions focussed on each data type have been developed with n
 # sel_core = grep(pattern = "od_|^line_|route_", x = stplanr_funs)
 # core_funs = stplanr_funs[sel_core]
 # args(name = core_funs[1])
-fun_table <- readr::read_csv("fun_table.csv")
+fun_table <- read.csv("fun_table.csv", stringsAsFactors = FALSE, check.names = FALSE)
 knitr::kable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.")
 ```
 
