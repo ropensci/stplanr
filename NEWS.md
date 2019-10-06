@@ -12,10 +12,12 @@
 ## BUG FIXES
 
 - Bugs in `route_dodgr()` and associated examples fixed (#348)
+- Annoying message printed on load removed (#355)
 
 ## OTHER
 
 - Andrea Gilardi added as author.
+- Deprecated functions related to road crash (STATS19) data removed
 
 # stplanr 0.3.1
 
