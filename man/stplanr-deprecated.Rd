@@ -6,8 +6,3 @@
 \description{
 These functions are depreciated and will be removed:
 }
-\details{
-\itemize{
-\item \code{\link[=dl_stats19]{dl_stats19()}}: see the \href{https://github.com/ropensci/stats19}{stats19} package
-}
-}
