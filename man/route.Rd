@@ -6,7 +6,7 @@
 \usage{
 route(from = NULL, to = NULL, l = NULL,
   route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, ..., point_input = FALSE)
+  list_output = FALSE, ...)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -34,14 +34,18 @@ The definition of optimal depends on the routing function used
 }
 \examples{
 \donttest{
-# requires CycleStreets.net API key
-from <- c(-1.5327, 53.8006) # from <- geo_code("leeds rail station")
-to <- c(-1.5279, 53.8044) # to <- geo_code("university of leeds")
-route_leek_to_hereford <- route(from, to)
+# these lines require API keys/osrm instances
+from <- c(-1.5484, 53.7941) # from <- geo_code("leeds rail station")
+to <-   c(-1.5524, 53.8038) # to <- geo_code("university of leeds")
+r <- route(from, to, route_fun = cyclestreets::journey)
+plot(r)
+# mapview::mapview(r) # for interactive map
 route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 route(flowlines_sf[2:4, ]) # lines
 # with osrm backend - need to set-up osrm first - see routing vignette
 route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
+# with cyclestreets backend - need to set-up osrm first - see routing vignette
+route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
 }
 }
 \seealso{

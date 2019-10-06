@@ -118,7 +118,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' plot(l_with_duplicates)
 #' nrow(l_with_duplicates)
 od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
-  odc_unique <- odc[!duplicated(odc[, 1:4]), ]
+  odc_unique <- odc[!duplicated(odc[, 1:4, drop = FALSE]), , drop = FALSE]
   if(nrow(odc_unique) < nrow(odc) && remove_duplicates) {
     message("Duplicate OD pairs identified, removing ", nrow(odc) - nrow(odc_unique), " rows")
     odc <- odc_unique

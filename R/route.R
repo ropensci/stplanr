@@ -10,46 +10,71 @@
 #' @export
 #' @examples
 #' \donttest{
-#' # requires CycleStreets.net API key
-#' from <- c(-1.5327, 53.8006) # from <- geo_code("leeds rail station")
-#' to <- c(-1.5279, 53.8044) # to <- geo_code("university of leeds")
-#' route_leek_to_hereford <- route(from, to)
+#' # these lines require API keys/osrm instances
+#' from <- c(-1.5484, 53.7941) # from <- geo_code("leeds rail station")
+#' to <-   c(-1.5524, 53.8038) # to <- geo_code("university of leeds")
+#' r <- route(from, to, route_fun = cyclestreets::journey)
+#' plot(r)
+#' # mapview::mapview(r) # for interactive map
 #' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' route(flowlines_sf[2:4, ]) # lines
 #' # with osrm backend - need to set-up osrm first - see routing vignette
 #' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
+#' # with cyclestreets backend - need to set-up osrm first - see routing vignette
+#' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreet,
-                  n_print = 10, list_output = FALSE, ..., point_input = FALSE) {
-
-  # generate od coordinates
+                  n_print = 10, list_output = FALSE, ...) {
+  UseMethod(generic = "route")
+}
+#' @export
+route.numeric <- function(from = NULL, to = NULL, l = NULL,
+                          route_fun = stplanr::route_cyclestreet,
+                          n_print = 10, list_output = FALSE, ...) {
+  odm <- od_coords(from, to)
+  l <- od_coords2line(odm)
+  route(l, route_fun = route_fun)
+}
+#' @export
+route.sf <- function(from = NULL, to = NULL, l = NULL,
+                     route_fun,
+                     n_print = 10, list_output = FALSE, ...) {
   FUN <- match.fun(route_fun)
-  # set l if not named
-  if(is(from, "sf")) {
-    if(unique(sf::st_geometry_type(from)) == "LINESTRING") {
-      l <- from
-    }
-  }
-
-  # calculate sf routes - to split out into generic?
-  if(is(l, "sf") && point_input) {
-    s = (1:nrow(l)) * 2 - 1
-    list_out = lapply(s, function(i) FUN(p[i, ], dst = p[i + 1, ], returnclass = "sf"))
-    ldf <- sf::st_drop_geometry(l)
-    route_sf <- do.call(rbind, list_out)
-    route_df <- sf::st_drop_geometry(route_sf)
-    route_df <- cbind(ldf, route_df)
-    route_out <- sf::st_sf(route_df, geometry = sf::st_geometry(route_sf))
-    return(route_out)
-  }
-
+  # generate od coordinates
+  ldf <- od_coords(from, to, l)
   # calculate line data frame
-  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
+  if(is.null(l)) {
+    l <- od_coords2line(ldf)
+  }
+  list_out <- lapply(1:nrow(l), function(i) {
+    single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4])
+    sf::st_sf(cbind(
+      sf::st_drop_geometry(single_route),
+      sf::st_drop_geometry(l)
+    ),
+    geometry = single_route$geometry)
+  })
+  do.call(rbind, list_out)
+}
+#' @export
+route.sp <- function(from = NULL, to = NULL, l = NULL,
+                     route_fun = stplanr::route_cyclestreet,
+                     n_print = 10, list_output = FALSE, ...) {
+
+  # error msg in case routing fails
   error_fun <- function(e) {
     warning(paste("Fail for line number", i))
     e
   }
+  FUN <- match.fun(route_fun)
+  # generate od coordinates
+  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
+  # calculate line data frame
+  if(is.null(l)) {
+    l <- od2line(ldf)
+  }
+
 
   # pre-allocate objects
   rc <- as.list(rep(NA, nrow(ldf)))
@@ -87,6 +112,8 @@ route <- function(from = NULL, to = NULL, l = NULL,
   }
 
   r
+
+
 }
 
 #' Route on local data using the dodgr package
@@ -108,8 +135,7 @@ route <- function(from = NULL, to = NULL, l = NULL,
 #'   plot(osm_net_example$geometry)
 #'   plot(r$geometry, add = TRUE, col = "red", lwd = 5)
 #' }
-route_dodgr <-
-  function(from = NULL,
+route_dodgr <- function(from = NULL,
            to = NULL,
            l = NULL,
            net = NULL

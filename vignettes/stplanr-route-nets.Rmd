@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, message=FALSE}
 library(stplanr)
+library(sf)
 ```
 
 # Introduction
@@ -28,7 +29,7 @@ Unlike routes, each segment geometry the network can only appear once in a singl
 **stplanr** can be used to convert a series of routes into a route network, using the function `overline2()`, as illustrated below:
 
 ```{r, out.width="40%", fig.show='hold', fig.width=5, message=FALSE}
-sample_routes <- routes_fast_sf[2:6, NULL]
+sample_routes <- routes_fast_sf[2:6, 1]
 sample_routes$value <- rep(1:3, length.out = 5)
 rnet <- overline2(sample_routes, attrib = "value")
 plot(sample_routes["value"], lwd = sample_routes$value, main = "Routes")
