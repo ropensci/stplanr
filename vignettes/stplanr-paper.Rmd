@@ -26,7 +26,7 @@ vignette: >
 ---
 
 ```{r, echo=FALSE}
-knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 5, eval = FALSE)
 ```
 
 ## Note
@@ -215,7 +215,7 @@ For ease of use, functions focussed on each data type have been developed with n
 # sel_core = grep(pattern = "od_|^line_|route_", x = stplanr_funs)
 # core_funs = stplanr_funs[sel_core]
 # args(name = core_funs[1])
-fun_table <- readr::read_csv("fun_table.csv")
+fun_table <- read.csv("fun_table.csv", stringsAsFactors = FALSE, check.names = FALSE)
 knitr::kable(fun_table, caption = "Selection of functions for working with or generating OD, line and route data types.")
 ```
 
@@ -285,7 +285,7 @@ load("reqfiles.RData")
 ```
 
 ```{r, message=FALSE}
-rnet_buff_100 <- buff_geo(route_network, width = 100)
+rnet_buff_100 <- geo_buffer(route_network, width = 100)
 ca_buff <- ca_local[rnet_buff_100, ]
 ```
 
@@ -478,7 +478,7 @@ catch800m <- calc_catchment(
 )
 ```
 
-By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be `r as.character(round(sum(catch800m@data$Total),0))` people.
+By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the `calc_catchment` function, the total population within the catchment area can be seen to be nearly 40,000 people.
 The catchment area can also be plotted as with any other `Spatial*` object using the `plot` function using the code below with the result shown in Figure \ref{fig:catchmentplot}.
 
 ```{r catchmentplot, fig.cap='An 800 metre catchment area (red) associated with a cycle path (green) using straight-line distance in Sydney.'}
@@ -523,7 +523,7 @@ netcatch800m <- calc_network_catchment(
 ```
 
 Once calculated, the network catchment area can be used just as the straight-line network catchment.
-This includes extracting the catchment population of `r as.character(round(sum(netcatch800m@data$Total),0))` and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
+This includes extracting the catchment population of 128,000 and plotting the original catchment area together with the original area with the results shown in Figure \ref{fig:netcatchplot}:
 
 ```{r netcatchplot, fig.cap='A 800 metre network catchment are (blue) compared with a catchment area based on Euclidean distance (red) associated with a cycle path (green).'}
 plot(sa1income, col = "light grey")

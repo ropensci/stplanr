@@ -17,6 +17,3 @@ and returns a numeric value representing distance in meters.
 geo_length(routes_fast)
 geo_length(routes_fast_sf)
 }
-\seealso{
-buff_geo
-}

@@ -18,20 +18,6 @@ around which a buffer should be drawn}
 Solves the problem that buffers will not be circular when used on
 non-projected data.
 }
-\examples{
-r <- routes_fast[1:3, ]
-buff <- buff_geo(r, width = 100)
-plot(buff)
-plot(r, add = TRUE)
-# Test it works the same on projected data
-shp <- sp::spTransform(r, sp::CRS("+init=epsg:27700"))
-buff2 <- buff_geo(shp, 50) # test if it works the same on projected data
-plot(buff2)
-plot(r, add = TRUE) # note they do not show
-buff3 <- sp::spTransform(buff2, sp::CRS("+init=epsg:4326"))
-plot(buff)
-plot(buff3, add = TRUE, col = "black")
-}
 \seealso{
 Other geo: \code{\link{bbox_scale}},
   \code{\link{crs_select_aeq}}, \code{\link{gclip}},

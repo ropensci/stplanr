@@ -12,7 +12,7 @@
 #' @export
 #' @examples
 #' sp::bbox(routes_fast)
-#' new_crs <- crs_select_aeq(routes_fast)
+#' new_crs <- geo_select_aeq(routes_fast)
 #' rf_projected <- sp::spTransform(routes_fast, new_crs)
 #' sp::bbox(rf_projected)
 #' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
@@ -24,7 +24,12 @@ geo_select_aeq <- function(shp) {
 }
 #' @export
 geo_select_aeq.Spatial <- function(shp) {
-  crs_select_aeq(shp)
+  cent <- rgeos::gCentroid(shp)
+  aeqd <- sprintf(
+    "+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
+    cent@coords[[2]], cent@coords[[1]]
+  )
+  sp::CRS(aeqd)
 }
 #' @export
 geo_select_aeq.sf <- function(shp) {
@@ -46,7 +51,7 @@ geo_select_aeq.sf <- function(shp) {
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @param fun A function to perform on the projected object (e.g. the the rgeos or sf packages)
 #' @param crs An optional coordinate reference system (if not provided it is set
-#' automatically by [crs_select_aeq()])
+#' automatically by [geo_select_aeq()])
 #' @param silent A binary value for printing the CRS details (default: TRUE)
 #' @param ... Arguments to pass to `fun`, e.g. `byid = TRUE` if the function is [rgeos::gLength()]))
 #' @aliases gprojected
@@ -117,7 +122,6 @@ gprojected <- geo_projected.Spatial
 #' @param dist The distance (in metres) of the buffer (when buffering simple features)
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
 #' @param ... Arguments passed to the buffer (see `?rgeos::gBuffer` or `?sf::st_buffer` for details)
-#' @seealso buff_geo
 #' @examples
 #' buff_sp <- geo_buffer(routes_fast, width = 100)
 #' class(buff_sp)
@@ -144,7 +148,6 @@ geo_buffer.Spatial <- function(shp, ...) {
 #' Takes a line (represented in sf or sp classes)
 #' and returns a numeric value representing distance in meters.
 #' @param shp A spatial line object
-#' @seealso buff_geo
 #' @examples
 #' geo_length(routes_fast)
 #' geo_length(routes_fast_sf)

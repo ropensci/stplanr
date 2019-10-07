@@ -22,7 +22,7 @@ The function is based on this stackexchange answer:
 \examples{
 data("routes_fast")
 new_crs <- geo_select_aeq(routes_fast)
-new_crs2 <- crs_select_aeq(routes_fast) # to be deprecated
+new_crs2 <- geo_select_aeq(routes_fast) # to be deprecated
 identical(new_crs, new_crs2)
 plot(routes_fast)
 rf_projected <- sp::spTransform(routes_fast, new_crs)

@@ -62,7 +62,7 @@ line_sample <- function(l, n, weights) {
     if (is.na(crs_orig)) {
       crs_orig <- sp::CRS("+init=epsg:4326")
     }
-    crs_new <- crs_select_aeq(l)
+    crs_new <- geo_select_aeq(l)
     l <- sp::spTransform(l, CRSobj = crs_new)
   }
   lsf <- sf::st_as_sf(l, "SpatialLinesDataFrame")

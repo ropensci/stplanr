@@ -13,7 +13,7 @@ geo_projected(shp, fun, crs, silent, ...)
 \item{fun}{A function to perform on the projected object (e.g. the the rgeos or sf packages)}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
-automatically by \code{\link[=crs_select_aeq]{crs_select_aeq()}})}
+automatically by \code{\link[=geo_select_aeq]{geo_select_aeq()}})}
 
 \item{silent}{A binary value for printing the CRS details (default: TRUE)}
 

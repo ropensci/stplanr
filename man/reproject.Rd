@@ -4,13 +4,13 @@
 \alias{reproject}
 \title{Reproject lat/long spatial object so that they are in units of 1m}
 \usage{
-reproject(shp, crs = crs_select_aeq(shp))
+reproject(shp, crs = geo_select_aeq(shp))
 }
 \arguments{
 \item{shp}{A spatial object with a geographic (WGS84) coordinate system}
 
 \item{crs}{An optional coordinate reference system (if not provided it is set
-automatically by \code{\link[=crs_select_aeq]{crs_select_aeq()}}).}
+automatically by \code{\link[=geo_select_aeq]{geo_select_aeq()}}).}
 }
 \description{
 Many GIS functions (e.g. finding the area)

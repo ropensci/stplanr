@@ -361,7 +361,6 @@ knitr::include_graphics("https://geocompr.robinlovelace.net/figures/desire-1.png
 ```
 
 ```{r, eval=FALSE, echo=FALSE}
-readr::write_csv(od_all, "od_all.csv")
 saveRDS(od_all, "od_all.Rds")
 piggyback::pb_upload("od_all.Rds")
 ```
