@@ -51,7 +51,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4])
     sf::st_sf(cbind(
       sf::st_drop_geometry(single_route),
-      sf::st_drop_geometry(l)
+      sf::st_drop_geometry(l[rep(i, nrow(single_route)), ])
     ),
     geometry = single_route$geometry)
   })
