@@ -84,11 +84,9 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
 
   if (length(rnet_internal_vertexes_duplicated) > 0 & breakup_internal_vertex_matches) {
     message("Splitting rnet object at the duplicated internal vertexes")
-    rnet_breakup_collection <- lwgeom::st_split(rnet, rnet_internal_vertexes_duplicated)
+    rnet_breakup_collection <- lwgeom::st_split(rnet_clean, rnet_internal_vertexes_duplicated)
     rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
-  } else {
-    rnet_clean <- rnet_clean
-  }
+  } 
 
   rnet_clean
 }
