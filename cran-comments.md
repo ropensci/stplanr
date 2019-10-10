@@ -1,5 +1,7 @@
 Makes route_dodgr code and examples conditional on requireNamespace("dodgr") 
 
+Resubmitting now dodgr is back on CRAN
+
 ## Test environments
 
 * Linux
