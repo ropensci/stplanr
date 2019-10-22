@@ -19,7 +19,9 @@ The same sf LINESTRING object with more rows (the result of the
 splitting) when there are intersecting (and internal) vertices.
 }
 \description{
-Break up an sf object with LINESTRING geometry by vertex/nodes intersections
+This function breaks-up a single linestrings into multiple linestring at points
+where vertices from other linestrings in the network intersect with vertices in the original linestring.
+See \href{https://github.com/ropensci/stplanr/issues/282}{github.com/ropensci/stplanr/issues/282} for details.
 }
 \examples{
 library(sf)
@@ -35,9 +37,7 @@ plot(rnet_overpass$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass)))
 
 rnet_overpass_clean <- rnet_breakup_vertices(rnet_overpass)
 plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-\donttest{
-# mapview(rnet_overpass_clean)
-}
+# mapview(rnet_overpass_clean) # to see interactively
 # Check for intersection with no node
 plot(rnet_cycleway_intersection$geometry, lwd = 2,
      col = rainbow(nrow(rnet_cycleway_intersection)))
@@ -45,18 +45,4 @@ plot(rnet_cycleway_intersection$geometry, lwd = 2,
 rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 plot(rnet_cycleway_intersection_clean$geometry,
      lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
-
-# Bigger example
-\donttest{
-u <- "https://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf"
-iow <- sf::st_read(u)
-
-key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
-iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
-system.time(iow_clean <- rnet_breakup_vertices(iow_small))
-# Should be quite faster than the old version we could always profile it.
-
-plot(iow_small$geometry)
-plot(iow_clean$geometry)
-}
 }

@@ -1,5 +1,9 @@
 #' Break up an sf object with LINESTRING geometry by vertex/nodes intersections
 #'
+#' This function breaks-up a single linestrings into multiple linestring at points
+#' where vertices from other linestrings in the network intersect with vertices in the original linestring.
+#' See [github.com/ropensci/stplanr/issues/282](https://github.com/ropensci/stplanr/issues/282) for details.
+#'
 #' @param rnet An sf LINESTRING object representing a route network.
 #' @param breakup_internal_vertex_matches Should breaks be made at internal
 #'   vertex matches? `TRUE` by default. Internal vertices are vertices (but not
@@ -23,9 +27,7 @@
 #'
 #' rnet_overpass_clean <- rnet_breakup_vertices(rnet_overpass)
 #' plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-#' \donttest{
-#' # mapview(rnet_overpass_clean)
-#' }
+#' # mapview(rnet_overpass_clean) # to see interactively
 #' # Check for intersection with no node
 #' plot(rnet_cycleway_intersection$geometry, lwd = 2,
 #'      col = rainbow(nrow(rnet_cycleway_intersection)))
@@ -33,20 +35,6 @@
 #' rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 #' plot(rnet_cycleway_intersection_clean$geometry,
 #'      lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
-#'
-#' # Bigger example
-#' \donttest{
-#' u <- "https://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf"
-#' iow <- sf::st_read(u)
-#'
-#' key_roads_text = "primary|secondary|tertiary|cycleway|trunk|motorway"
-#' iow_small <- iow[grepl(pattern = key_roads_text, x = iow$highway), ]
-#' system.time(iow_clean <- rnet_breakup_vertices(iow_small))
-#' # Should be quite faster than the old version we could always profile it.
-#'
-#' plot(iow_small$geometry)
-#' plot(iow_clean$geometry)
-#' }
 rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) {
   rnet_nodes <- sf::st_geometry(line2points(rnet))
   rnet_internal_vertexes <- sf::st_geometry(line2vertices(rnet))
@@ -86,7 +74,8 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
     message("Splitting rnet object at the duplicated internal vertexes")
     rnet_breakup_collection <- lwgeom::st_split(rnet_clean, rnet_internal_vertexes_duplicated)
     rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
-  } 
+  }
 
   rnet_clean
 }
+
