@@ -37,14 +37,18 @@ being made, and estimate how many could switch to cycling. The results
 help identify where cycleways are most needed, an important component of
 sustainable transport planning infrastructure engineering and policy
 [design](https://www.icevirtuallibrary.com/doi/abs/10.1680/dfct.63495.001).
+
 See the package vignette (e.g. via `vignette("introducing-stplanr")`) or
 an [academic paper on the Propensity to Cycle Tool
 (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on
 how it can be used. This README provides some basics.
 
-**stplanr** should be useful to researchers everywhere. The function
-`route_graphhopper()`, for example, works anywhere in the world using
-the [graphhopper](https://graphhopper.com/) routing API and
+Although much of the work supports research undertaken at the Leeds’
+Institute for Transport Studies
+([ITS](https://environment.leeds.ac.uk/transport)), **stplanr** should
+be useful to researchers everywhere. The function `route_graphhopper()`,
+for example, works anywhere in the world using the
+[graphhopper](https://graphhopper.com/) routing API and
 `read_table_builder()` reads-in Australian data. We welcome
 contributions that make transport research easier worldwide.
 
@@ -72,16 +76,10 @@ od_data_sample[1:3, 1:3] # typical form of flow data
 #> 2 E02002361 E02002363    38
 #> 3 E02002361 E02002367    10
 cents_sf[1:3,] # points representing origins and destinations
-#> Simple feature collection with 3 features and 4 fields
-#> geometry type:  POINT
-#> dimension:      XY
-#> bbox:           xmin: -1.546463 ymin: 53.8041 xmax: -1.511861 ymax: 53.81161
-#> epsg (SRID):    4326
-#> proj4string:    +proj=longlat +datum=WGS84 +no_defs
-#>       geo_code  MSOA11NM percent_fem  avslope                   geometry
-#> 1708 E02002384 Leeds 055    0.458721 2.856563 POINT (-1.546463 53.80952)
-#> 1712 E02002382 Leeds 053    0.438144 2.284782 POINT (-1.511861 53.81161)
-#> 1805 E02002393 Leeds 064    0.408759 2.361707  POINT (-1.524205 53.8041)
+#>       geo_code  MSOA11NM percent_fem  avslope             geometry
+#> 1708 E02002384 Leeds 055    0.458721 2.856563 -1.546463, 53.809517
+#> 1712 E02002382 Leeds 053    0.438144 2.284782 -1.511861, 53.811611
+#> 1805 E02002393 Leeds 064    0.408759 2.361707 -1.524205, 53.804098
 ```
 
 These datasets can be combined as follows:
@@ -147,11 +145,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2019-09-20 22:15:16 constructing segments
-#> 2019-09-20 22:15:17 building geometry
-#> 2019-09-20 22:15:17 simplifying geometry
-#> 2019-09-20 22:15:17 aggregating flows
-#> 2019-09-20 22:15:17 rejoining segments into linestrings
+#> 2019-11-14 16:08:24 constructing segments
+#> 2019-11-14 16:08:24 building geometry
+#> 2019-11-14 16:08:24 simplifying geometry
+#> 2019-11-14 16:08:24 aggregating flows
+#> 2019-11-14 16:08:24 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from
