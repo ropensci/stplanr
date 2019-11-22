@@ -4,8 +4,15 @@
 \alias{line2route}
 \title{Convert straight OD data (desire lines) into routes}
 \usage{
-line2route(l, route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, l_id = NA, time_delay = 0, ...)
+line2route(
+  l,
+  route_fun = stplanr::route_cyclestreet,
+  n_print = 10,
+  list_output = FALSE,
+  l_id = NA,
+  time_delay = 0,
+  ...
+)
 }
 \arguments{
 \item{l}{A spatial (linestring) object}
@@ -60,12 +67,13 @@ line2route(l[1, ], route_graphhopper)
 }
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

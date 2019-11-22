@@ -21,7 +21,7 @@ The variables are as follows:
 \item Area.of.residence. id of origin zone
 \item Area.of.workplace id of destination zone
 \item All. Travel to work flows by all modes
-\item \code{[,4:15]}. Flows for different modes
+\item \verb{[,4:15]}. Flows for different modes
 \item id. unique id of flow
 }
 Although these variable names are unique to UK data, the data
@@ -35,8 +35,8 @@ the \code{cents} georeferenced spatial objects.
 # https://github.com/npct/pct - if download to ~/repos
 flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
 data(cents)
-o <- flow$Area.of.residence \%in\% cents$geo_code[-1]
-d <- flow$Area.of.workplace \%in\% cents$geo_code[-1]
+o <- flow$Area.of.residence %in% cents$geo_code[-1]
+d <- flow$Area.of.workplace %in% cents$geo_code[-1]
 flow <- flow[o & d, ] # subset flows with o and d in study area
 library(devtools)
 flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
@@ -58,10 +58,13 @@ routes_slow_sf <- sf::st_as_sf(routes_slow)
 
 }
 \seealso{
-Other example data: \code{\link{destination_zones}},
-  \code{\link{flow_dests}}, \code{\link{flowlines}},
-  \code{\link{route_network}}, \code{\link{routes_fast}},
-  \code{\link{routes_slow}}
+Other example data: 
+\code{\link{destination_zones}},
+\code{\link{flow_dests}},
+\code{\link{flowlines}},
+\code{\link{route_network}},
+\code{\link{routes_fast}},
+\code{\link{routes_slow}}
 }
 \concept{example data}
 \keyword{datasets}

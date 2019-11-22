@@ -4,9 +4,15 @@
 \alias{route}
 \title{Plan routes on the transport network}
 \usage{
-route(from = NULL, to = NULL, l = NULL,
-  route_fun = stplanr::route_cyclestreet, n_print = 10,
-  list_output = FALSE, ...)
+route(
+  from = NULL,
+  to = NULL,
+  l = NULL,
+  route_fun = stplanr::route_cyclestreet,
+  n_print = 10,
+  list_output = FALSE,
+  ...
+)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -49,12 +55,13 @@ route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE
 }
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}},
-  \code{\link{route_transportapi_public}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()}
 }
 \concept{routes}

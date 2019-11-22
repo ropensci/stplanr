@@ -4,8 +4,7 @@
 \alias{overline2}
 \title{Convert series of overlapping lines into a route network (new method)}
 \usage{
-overline2(x, attrib, ncores = 1, simplify = TRUE,
-  regionalise = 1e+05)
+overline2(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e+05)
 }
 \arguments{
 \item{x}{An SF data.frame of LINESTRINGS}
@@ -70,19 +69,22 @@ plot(rnet1, lwd = lwd)
 }
 }
 \seealso{
-Other rnet: \code{\link{SpatialLinesNetwork}},
-  \code{\link{calc_catchment_sum}},
-  \code{\link{calc_catchment}},
-  \code{\link{calc_moving_catchment}},
-  \code{\link{calc_network_catchment}},
-  \code{\link{find_network_nodes}}, \code{\link{gsection}},
-  \code{\link{islines}}, \code{\link{lineLabels}},
-  \code{\link{overline}},
-  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
-  \code{\link{plot,sfNetwork,ANY-method}},
-  \code{\link{sln2points}},
-  \code{\link{sum_network_links}},
-  \code{\link{sum_network_routes}}
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_catchment}()},
+\code{\link{calc_moving_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{find_network_nodes}()},
+\code{\link{gsection}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
+\code{\link{overline}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
 }
 \author{
 Malcolm Morgan

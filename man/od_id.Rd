@@ -28,7 +28,7 @@ In OD data it is common to have many 'oneway' flows from "A to B" and "B to A".
 It can be useful to group these an have a single ID that represents pairs of IDs
 with or without directionality, so they contain 'twoway' or bi-directional values.
 
-\code{od_id*} functions take two vectors of equal length and return a vector of IDs,
+\verb{od_id*} functions take two vectors of equal length and return a vector of IDs,
 which are unique for each combination but the same for twoway flows.
 \itemize{
 \item the Szudzik pairing function, on two vectors of equal
@@ -62,14 +62,22 @@ bench::mark(check = FALSE, iterations = 10,
 \seealso{
 od_oneway
 
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_oneway}}, \code{\link{od_radiation}},
-  \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

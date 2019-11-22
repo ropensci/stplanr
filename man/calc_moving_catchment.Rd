@@ -4,9 +4,14 @@
 \alias{calc_moving_catchment}
 \title{Calculate summary statistics for all features independently.}
 \usage{
-calc_moving_catchment(polygonlayer, targetlayer, calccols,
-  distance = 500, projection = "worldalbers",
-  retainAreaProportion = FALSE)
+calc_moving_catchment(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
+  projection = "worldalbers",
+  retainAreaProportion = FALSE
+)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -69,17 +74,21 @@ calc_moving_catchment(
 }
 }
 \seealso{
-Other rnet: \code{\link{SpatialLinesNetwork}},
-  \code{\link{calc_catchment_sum}},
-  \code{\link{calc_catchment}},
-  \code{\link{calc_network_catchment}},
-  \code{\link{find_network_nodes}}, \code{\link{gsection}},
-  \code{\link{islines}}, \code{\link{lineLabels}},
-  \code{\link{overline2}}, \code{\link{overline}},
-  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
-  \code{\link{plot,sfNetwork,ANY-method}},
-  \code{\link{sln2points}},
-  \code{\link{sum_network_links}},
-  \code{\link{sum_network_routes}}
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{find_network_nodes}()},
+\code{\link{gsection}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
+\code{\link{overline2}()},
+\code{\link{overline}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
 }
 \concept{rnet}

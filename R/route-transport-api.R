@@ -36,7 +36,6 @@
 #' Note: there is now a dedicated transportAPI package:
 #' https://github.com/ITSLeeds/transportAPI
 #'
-#' @inheritParams line2route
 #' @family routes
 #' @export
 #' @seealso line2route

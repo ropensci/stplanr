@@ -4,8 +4,7 @@
 \alias{mapshape}
 \title{Simplify geometry of spatial objects with the mapshaper library}
 \usage{
-mapshape(shp, percent = 10, ms_options = "", dsn = "mapshape",
-  silent = FALSE)
+mapshape(shp, percent = 10, ms_options = "", dsn = "mapshape", silent = FALSE)
 }
 \arguments{
 \item{shp}{A spatial object to be simplified.}
@@ -62,10 +61,15 @@ mapshape(routes_fast_sf[2, ])
 }
 }
 \seealso{
-Other geo: \code{\link{bbox_scale}},
-  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
-  \code{\link{gclip}}, \code{\link{geo_bb_matrix}},
-  \code{\link{geo_bb}}, \code{\link{mapshape_available}},
-  \code{\link{quadrant}}, \code{\link{reproject}}
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{buff_geo}()},
+\code{\link{crs_select_aeq}()},
+\code{\link{gclip}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{geo_bb}()},
+\code{\link{mapshape_available}()},
+\code{\link{quadrant}()},
+\code{\link{reproject}()}
 }
 \concept{geo}

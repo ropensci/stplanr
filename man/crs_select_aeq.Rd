@@ -33,10 +33,15 @@ plot(line_length, rf_projected$length)
 cor(line_length, rf_projected$length)
 }
 \seealso{
-Other geo: \code{\link{bbox_scale}},
-  \code{\link{buff_geo}}, \code{\link{gclip}},
-  \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
-  \code{\link{mapshape_available}}, \code{\link{mapshape}},
-  \code{\link{quadrant}}, \code{\link{reproject}}
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{buff_geo}()},
+\code{\link{gclip}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{geo_bb}()},
+\code{\link{mapshape_available}()},
+\code{\link{mapshape}()},
+\code{\link{quadrant}()},
+\code{\link{reproject}()}
 }
 \concept{geo}

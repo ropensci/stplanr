@@ -4,8 +4,15 @@
 \alias{route_graphhopper}
 \title{Plan a route with the graphhopper routing engine}
 \usage{
-route_graphhopper(from, to, l = NULL, vehicle = "bike",
-  silent = TRUE, pat = NULL, base_url = "https://graphhopper.com")
+route_graphhopper(
+  from,
+  to,
+  l = NULL,
+  vehicle = "bike",
+  silent = TRUE,
+  pat = NULL,
+  base_url = "https://graphhopper.com"
+)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -72,11 +79,13 @@ plot(r3, add = TRUE, col = "red")
 \seealso{
 route_cyclestreet
 
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}}, \code{\link{route_local}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

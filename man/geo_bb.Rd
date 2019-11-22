@@ -5,8 +5,12 @@
 \alias{bb2poly}
 \title{Flexible function to generate bounding boxes}
 \usage{
-geo_bb(shp, scale_factor = 1, distance = 0, output = c("polygon",
-  "points", "bb"))
+geo_bb(
+  shp,
+  scale_factor = 1,
+  distance = 0,
+  output = c("polygon", "points", "bb")
+)
 }
 \arguments{
 \item{shp}{Spatial object (from sf or sp packages)}
@@ -24,27 +28,34 @@ Takes a geographic object or bounding box as an input and outputs a bounding box
 represented as a bounding box, corner points or rectangular polygon.
 }
 \examples{
-plot(geo_bb(routes_fast, distance = 100), col = "red")
+# Simple features implementation:
+shp <- routes_fast_sf
+shp_bb <- geo_bb(shp, distance = 100)
+plot(shp_bb, col = "red", reset = FALSE)
+plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
+plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
+plot(routes_fast_sf$geometry, add = TRUE)
+geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
+# sp implemantation
+shp <- routes_fast
+shp_bb <- geo_bb(shp, distance = 100)
+plot(shp_bb, col = "red")
 plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
 plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
 plot(geo_bb(routes_fast, output = "points"), add = TRUE)
-# Simple features implementation:
-bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5))
-bb_sf2 <- geo_bb(routes_fast_sf, c(2, 1.5), distance = 100)
-plot(bb_sf1)
-plot(bb_sf2, add = TRUE)
-plot(routes_fast, add = TRUE)
-plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
-bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
-plot(routes_fast_sf[2:5, ], bbox = bb_matrix)
 }
 \seealso{
 bb_scale
 
-Other geo: \code{\link{bbox_scale}},
-  \code{\link{buff_geo}}, \code{\link{crs_select_aeq}},
-  \code{\link{gclip}}, \code{\link{geo_bb_matrix}},
-  \code{\link{mapshape_available}}, \code{\link{mapshape}},
-  \code{\link{quadrant}}, \code{\link{reproject}}
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{buff_geo}()},
+\code{\link{crs_select_aeq}()},
+\code{\link{gclip}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{mapshape_available}()},
+\code{\link{mapshape}()},
+\code{\link{quadrant}()},
+\code{\link{reproject}()}
 }
 \concept{geo}

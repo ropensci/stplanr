@@ -16,10 +16,13 @@ objects
 with \code{\link[=od2line]{od2line()}} (see \code{\link[=flow]{flow()}}).
 }
 \seealso{
-Other example data: \code{\link{destination_zones}},
-  \code{\link{flow_dests}}, \code{\link{flowlines}},
-  \code{\link{flow}}, \code{\link{route_network}},
-  \code{\link{routes_slow}}
+Other example data: 
+\code{\link{destination_zones}},
+\code{\link{flow_dests}},
+\code{\link{flowlines}},
+\code{\link{flow}},
+\code{\link{route_network}},
+\code{\link{routes_slow}}
 }
 \concept{example data}
 \keyword{datasets}

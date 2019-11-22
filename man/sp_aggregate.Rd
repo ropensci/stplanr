@@ -4,9 +4,14 @@
 \alias{sp_aggregate}
 \title{Aggregate SpatialPolygonsDataFrame to new geometry.}
 \usage{
-sp_aggregate(zones, aggzones, cols = FALSE, FUN = sum,
+sp_aggregate(
+  zones,
+  aggzones,
+  cols = FALSE,
+  FUN = sum,
   prop_by_area = ifelse(identical(FUN, mean) == FALSE, TRUE, FALSE),
-  digits = getOption("digits"))
+  digits = getOption("digits")
+)
 }
 \arguments{
 \item{zones}{A spatial object representing origins (and destinations
@@ -53,14 +58,22 @@ sp_aggregate(zones, aggzones)
 }
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_id}}, \code{\link{od_oneway}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()}
 }
 \concept{od}

@@ -5,9 +5,16 @@
 \alias{od2line2}
 \title{Convert origin-destination data to spatial lines}
 \usage{
-od2line(flow, zones, destinations = NULL, zone_code = names(zones)[1],
-  origin_code = names(flow)[1], dest_code = names(flow)[2],
-  zone_code_d = NA, silent = FALSE)
+od2line(
+  flow,
+  zones,
+  destinations = NULL,
+  zone_code = names(zones)[1],
+  origin_code = names(flow)[1],
+  dest_code = names(flow)[2],
+  zone_code_d = NA,
+  silent = FALSE
+)
 
 od2line2(flow, zones)
 }
@@ -49,7 +56,7 @@ This function makes the task easier.
 Origin-destination (OD) data is often provided
 in the form of 1 line per OD pair, with zone codes of the trip origin in the first
 column and the zone codes of the destination in the second column
-(see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{vignette("stplanr-od")}) for details.
+(see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{\code{vignette("stplanr-od")}}) for details.
 \code{od2line()} creates a spatial (linestring) object representing movement from the origin
 to the destination for each OD pair.
 It takes data frame containing
@@ -69,14 +76,22 @@ l <- od2line(flow, zones_sf)
 plot(l["All"], lwd = l$All/mean(l$All))
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2odf}},
-  \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_id}}, \code{\link{od_oneway}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

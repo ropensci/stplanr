@@ -6,14 +6,29 @@
 \alias{onewayid.SpatialLines}
 \title{Aggregate ods so they become non-directional}
 \usage{
-onewayid(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
-  stplanr.key = od_id_order(x, id1, id2))
+onewayid(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 
-\method{onewayid}{data.frame}(x, attrib, id1 = names(x)[1],
-  id2 = names(x)[2], stplanr.key = od_id_order(x, id1, id2))
+\method{onewayid}{data.frame}(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 
-\method{onewayid}{SpatialLines}(x, attrib, id1 = names(x)[1],
-  id2 = names(x)[2], stplanr.key = od_id_order(x, id1, id2))
+\method{onewayid}{SpatialLines}(
+  x,
+  attrib,
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = od_id_order(x, id1, id2)
+)
 }
 \arguments{
 \item{x}{A data frame or SpatialLinesDataFrame, representing an OD matrix}
@@ -82,16 +97,25 @@ plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
 plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
 }
 \seealso{
-Other lines: \code{\link{angle_diff}},
-  \code{\link{geo_toptail}}, \code{\link{is_linepoint}},
-  \code{\link{line2df}}, \code{\link{line2points}},
-  \code{\link{line_bearing}}, \code{\link{line_match}},
-  \code{\link{line_midpoint}}, \code{\link{line_sample}},
-  \code{\link{line_segment}}, \code{\link{line_via}},
-  \code{\link{mats2line}}, \code{\link{n_sample_length}},
-  \code{\link{n_vertices}}, \code{\link{onewaygeo}},
-  \code{\link{points2line}}, \code{\link{toptail_buff}},
-  \code{\link{toptailgs}},
-  \code{\link{update_line_geometry}}
+Other lines: 
+\code{\link{angle_diff}()},
+\code{\link{geo_toptail}()},
+\code{\link{is_linepoint}()},
+\code{\link{line2df}()},
+\code{\link{line2points}()},
+\code{\link{line_bearing}()},
+\code{\link{line_match}()},
+\code{\link{line_midpoint}()},
+\code{\link{line_sample}()},
+\code{\link{line_segment}()},
+\code{\link{line_via}()},
+\code{\link{mats2line}()},
+\code{\link{n_sample_length}()},
+\code{\link{n_vertices}()},
+\code{\link{onewaygeo}()},
+\code{\link{points2line}()},
+\code{\link{toptail_buff}()},
+\code{\link{toptailgs}()},
+\code{\link{update_line_geometry}()}
 }
 \concept{lines}

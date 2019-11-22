@@ -460,7 +460,6 @@ line2vertices.sf <- function(l) {
 #' straight lines will be used.
 #' @param time_delay Number or seconds to wait between each query
 #' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
-#' @inheritParams route_cyclestreet
 #' @family routes
 #' @export
 #' @examples

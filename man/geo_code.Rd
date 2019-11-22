@@ -4,9 +4,13 @@
 \alias{geo_code}
 \title{Convert text strings into points on the map}
 \usage{
-geo_code(address, service = "nominatim",
+geo_code(
+  address,
+  service = "nominatim",
   base_url = "https://maps.google.com/maps/api/geocode/json",
-  return_all = FALSE, pat = NULL)
+  return_all = FALSE,
+  pat = NULL
+)
 }
 \arguments{
 \item{address}{Text string representing the address you want to geocode}
@@ -34,6 +38,7 @@ geo_code("hereford", service = "google", pat = Sys.getenv("GOOGLE"), return_all 
 }
 }
 \seealso{
-Other nodes: \code{\link{nearest_google}}
+Other nodes: 
+\code{\link{nearest_google}()}
 }
 \concept{nodes}

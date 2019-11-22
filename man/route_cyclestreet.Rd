@@ -5,9 +5,16 @@
 \alias{route_cyclestreets}
 \title{Plan a single route with CycleStreets.net}
 \usage{
-route_cyclestreet(from, to, plan = "fastest", silent = TRUE,
-  pat = NULL, base_url = "https://www.cyclestreets.net",
-  reporterrors = TRUE, save_raw = "FALSE")
+route_cyclestreet(
+  from,
+  to,
+  plan = "fastest",
+  silent = TRUE,
+  pat = NULL,
+  base_url = "https://www.cyclestreets.net",
+  reporterrors = TRUE,
+  save_raw = "FALSE"
+)
 }
 \arguments{
 \item{from}{Text string or coordinates (a numeric vector of
@@ -58,7 +65,7 @@ Loading a locally saved copy of the api key text string
 before running the function, for example, will ensure it
 is available on any computer:
 
-\code{mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREET = mytoken)}
+\verb{mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREET = mytoken)}
 
 if you want the API key to be available in future
 sessions, set it using the .Renviron file
@@ -86,11 +93,13 @@ rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", 
 \seealso{
 line2route
 
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}}, \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

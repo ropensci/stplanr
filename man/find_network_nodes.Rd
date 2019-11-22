@@ -24,9 +24,9 @@ be in the same units as the projection. If longlat, then distance is in
 metres. Default is 1000.}
 }
 \value{
-An integer value with the ID of the node closest to \code{(x,y)}
+An integer value with the ID of the node closest to \verb{(x,y)}
 with a value of \code{NA} the closest node is further than \code{maxdist}
-from \code{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
+from \verb{(x,y)}. If \code{x} is a vector, returns a vector of Node IDs.
 }
 \description{
 Find graph node ID of closest node to given coordinates
@@ -44,18 +44,21 @@ sln <- SpatialLinesNetwork(rnet)
 find_network_nodes(sln, -1.516734, 53.828)
 }
 \seealso{
-Other rnet: \code{\link{SpatialLinesNetwork}},
-  \code{\link{calc_catchment_sum}},
-  \code{\link{calc_catchment}},
-  \code{\link{calc_moving_catchment}},
-  \code{\link{calc_network_catchment}},
-  \code{\link{gsection}}, \code{\link{islines}},
-  \code{\link{lineLabels}}, \code{\link{overline2}},
-  \code{\link{overline}},
-  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
-  \code{\link{plot,sfNetwork,ANY-method}},
-  \code{\link{sln2points}},
-  \code{\link{sum_network_links}},
-  \code{\link{sum_network_routes}}
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_catchment}()},
+\code{\link{calc_moving_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{gsection}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
+\code{\link{overline2}()},
+\code{\link{overline}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
 }
 \concept{rnet}

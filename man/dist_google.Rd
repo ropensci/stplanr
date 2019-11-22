@@ -4,9 +4,14 @@
 \alias{dist_google}
 \title{Return travel network distances and time using the Google Maps API}
 \usage{
-dist_google(from, to, google_api = Sys.getenv("GOOGLEDIST"),
-  g_units = "metric", mode = c("bicycling", "walking", "driving",
-  "transit"), arrival_time = "")
+dist_google(
+  from,
+  to,
+  google_api = Sys.getenv("GOOGLEDIST"),
+  g_units = "metric",
+  mode = c("bicycling", "walking", "driving", "transit"),
+  arrival_time = ""
+)
 }
 \arguments{
 \item{from}{Two-column matrix or data frame of coordinates representing
@@ -54,7 +59,7 @@ dists_trans <- dist_google(cents, cents, mode = "transit")
 dists_trans_am <- dist_google(cents, cents,
   mode = "transit",
   arrival_time = strptime("2016-05-27 09:00:00",
-    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
+    format = "%Y-%m-%d %H:%M:%S", tz = "BST"
   )
 )
 # Find out how much longer (or shorter) cycling takes than walking
@@ -70,20 +75,28 @@ plot(flow, lwd = mean(odf$duration) / odf$duration)
 dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
 dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
   mode = "transit", arrival_time = strptime("2016-05-27 17:30:00",
-    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
+    format = "%Y-%m-%d %H:%M:%S", tz = "BST"
   )
 )
 }
 }
 \seealso{
-Other od: \code{\link{od2line}}, \code{\link{od2odf}},
-  \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_id}}, \code{\link{od_oneway}},
-  \code{\link{od_radiation}}, \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

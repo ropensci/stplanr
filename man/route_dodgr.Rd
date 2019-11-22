@@ -35,12 +35,13 @@ if (requireNamespace("dodgr")) {
 }
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_local}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_local}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

@@ -49,8 +49,6 @@
 #'
 #' Read more about the .Renviron here: `?.Renviron`
 #'
-#'
-#' @inheritParams line2route
 #' @param base_url The base url from which to construct API requests
 #' (with default set to main server)
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).

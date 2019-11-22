@@ -21,8 +21,8 @@ ca <- read_stats19_ca()
 ve <- read_stats19_ve()
 library(dplyr)
 ca_ac <- inner_join(ca, ac)
-ca_cycle <- ca_ac \%>\%
-  filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) \%>\%
+ca_cycle <- ca_ac %>%
+  filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) %>%
   select(Age = Age_of_Casualty, Mode = Casualty_Type, Longitude, Latitude)
 ca_sp <- sp::SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
 data("route_network")

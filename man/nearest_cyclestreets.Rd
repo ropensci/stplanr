@@ -4,8 +4,7 @@
 \alias{nearest_cyclestreets}
 \title{Generate nearest point on the route network of a point using the CycleStreets.net}
 \usage{
-nearest_cyclestreets(shp = NULL, lat, lng,
-  pat = api_pat("cyclestreet"))
+nearest_cyclestreets(shp = NULL, lat, lng, pat = api_pat("cyclestreet"))
 }
 \arguments{
 \item{shp}{A spatial object}

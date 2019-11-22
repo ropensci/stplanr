@@ -4,11 +4,18 @@
 \alias{calc_catchment}
 \title{Calculate catchment area and associated summary statistics.}
 \usage{
-calc_catchment(polygonlayer, targetlayer, calccols, distance = 500,
+calc_catchment(
+  polygonlayer,
+  targetlayer,
+  calccols,
+  distance = 500,
   projection = paste0("+proj=aea +lat_1=90 +lat_2=-18.416667 ",
-  "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
-  " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
-  retainAreaProportion = FALSE, dissolve = FALSE, quadsegs = NULL)
+    "+lat_0=0 +lon_0=10 +x_0=0 +y_0=0 +ellps=GRS80",
+    " +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"),
+  retainAreaProportion = FALSE,
+  dissolve = FALSE,
+  quadsegs = NULL
+)
 }
 \arguments{
 \item{polygonlayer}{A SpatialPolygonsDataFrame containing zones from which
@@ -104,17 +111,21 @@ plot(cway_catch["Total"], add = TRUE)
 }
 }
 \seealso{
-Other rnet: \code{\link{SpatialLinesNetwork}},
-  \code{\link{calc_catchment_sum}},
-  \code{\link{calc_moving_catchment}},
-  \code{\link{calc_network_catchment}},
-  \code{\link{find_network_nodes}}, \code{\link{gsection}},
-  \code{\link{islines}}, \code{\link{lineLabels}},
-  \code{\link{overline2}}, \code{\link{overline}},
-  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
-  \code{\link{plot,sfNetwork,ANY-method}},
-  \code{\link{sln2points}},
-  \code{\link{sum_network_links}},
-  \code{\link{sum_network_routes}}
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_moving_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{find_network_nodes}()},
+\code{\link{gsection}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
+\code{\link{overline2}()},
+\code{\link{overline}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
 }
 \concept{rnet}

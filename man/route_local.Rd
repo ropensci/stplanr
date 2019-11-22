@@ -36,12 +36,13 @@ r2 <- route_local(sln = sln, cents_sf[3, ], cents_sf[4, ])
 plot(r2$geometry, add = TRUE, col = "blue", lwd = 3)
 }
 \seealso{
-Other routes: \code{\link{line2routeRetry}},
-  \code{\link{line2route}},
-  \code{\link{route_cyclestreet}},
-  \code{\link{route_dodgr}},
-  \code{\link{route_graphhopper}},
-  \code{\link{route_transportapi_public}},
-  \code{\link{route}}
+Other routes: 
+\code{\link{line2routeRetry}()},
+\code{\link{line2route}()},
+\code{\link{route_cyclestreet}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_graphhopper}()},
+\code{\link{route_transportapi_public}()},
+\code{\link{route}()}
 }
 \concept{routes}

@@ -24,10 +24,13 @@ devtools::use_data(flow_dests)
 
 }
 \seealso{
-Other example data: \code{\link{destination_zones}},
-  \code{\link{flowlines}}, \code{\link{flow}},
-  \code{\link{route_network}}, \code{\link{routes_fast}},
-  \code{\link{routes_slow}}
+Other example data: 
+\code{\link{destination_zones}},
+\code{\link{flowlines}},
+\code{\link{flow}},
+\code{\link{route_network}},
+\code{\link{routes_fast}},
+\code{\link{routes_slow}}
 }
 \concept{example data}
 \keyword{datasets}

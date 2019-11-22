@@ -40,10 +40,13 @@ devtools::use_data(destinations_sf)
 }
 }
 \seealso{
-Other example data: \code{\link{flow_dests}},
-  \code{\link{flowlines}}, \code{\link{flow}},
-  \code{\link{route_network}}, \code{\link{routes_fast}},
-  \code{\link{routes_slow}}
+Other example data: 
+\code{\link{flow_dests}},
+\code{\link{flowlines}},
+\code{\link{flow}},
+\code{\link{route_network}},
+\code{\link{routes_fast}},
+\code{\link{routes_slow}}
 }
 \concept{example data}
 \keyword{datasets}

@@ -4,8 +4,7 @@
 \alias{read_table_builder}
 \title{Import and format Australian Bureau of Statistics (ABS) TableBuilder files}
 \usage{
-read_table_builder(dataset, filetype = "csv", sheet = 1,
-  removeTotal = TRUE)
+read_table_builder(dataset, filetype = "csv", sheet = 1, removeTotal = TRUE)
 }
 \arguments{
 \item{dataset}{Either a dataframe containing the original data from

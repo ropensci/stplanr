@@ -4,8 +4,13 @@
 \alias{od_oneway}
 \title{Aggregate od pairs they become non-directional}
 \usage{
-od_oneway(x, attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric,
-  TRUE)], id1 = names(x)[1], id2 = names(x)[2], stplanr.key = NULL)
+od_oneway(
+  x,
+  attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
+  id1 = names(x)[1],
+  id2 = names(x)[2],
+  stplanr.key = NULL
+)
 }
 \arguments{
 \item{x}{A data frame or SpatialLinesDataFrame, representing an OD matrix}
@@ -68,14 +73,22 @@ bench::mark(check = FALSE, iterations = 3,
 )
 }
 \seealso{
-Other od: \code{\link{dist_google}}, \code{\link{od2line}},
-  \code{\link{od2odf}}, \code{\link{od_aggregate_from}},
-  \code{\link{od_aggregate_to}},
-  \code{\link{od_aggregate}}, \code{\link{od_coords2line}},
-  \code{\link{od_coords}}, \code{\link{od_dist}},
-  \code{\link{od_id}}, \code{\link{od_radiation}},
-  \code{\link{od_to_odmatrix}},
-  \code{\link{odmatrix_to_od}}, \code{\link{points2flow}},
-  \code{\link{points2odf}}, \code{\link{sp_aggregate}}
+Other od: 
+\code{\link{dist_google}()},
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_aggregate}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_dist}()},
+\code{\link{od_id}},
+\code{\link{od_radiation}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()},
+\code{\link{sp_aggregate}()}
 }
 \concept{od}

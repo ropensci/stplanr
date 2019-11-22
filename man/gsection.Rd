@@ -32,18 +32,21 @@ rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
 }
 }
 \seealso{
-Other rnet: \code{\link{SpatialLinesNetwork}},
-  \code{\link{calc_catchment_sum}},
-  \code{\link{calc_catchment}},
-  \code{\link{calc_moving_catchment}},
-  \code{\link{calc_network_catchment}},
-  \code{\link{find_network_nodes}}, \code{\link{islines}},
-  \code{\link{lineLabels}}, \code{\link{overline2}},
-  \code{\link{overline}},
-  \code{\link{plot,SpatialLinesNetwork,ANY-method}},
-  \code{\link{plot,sfNetwork,ANY-method}},
-  \code{\link{sln2points}},
-  \code{\link{sum_network_links}},
-  \code{\link{sum_network_routes}}
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_catchment}()},
+\code{\link{calc_moving_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{find_network_nodes}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
+\code{\link{overline2}()},
+\code{\link{overline}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
 }
 \concept{rnet}
