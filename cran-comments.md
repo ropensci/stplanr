@@ -1,6 +1,4 @@
-Makes route_dodgr code and examples conditional on requireNamespace("dodgr") 
-
-Resubmitting now dodgr is back on CRAN
+I have removed a blank URL and have fixed an issue that was causing tests to fail
 
 ## Test environments
 
