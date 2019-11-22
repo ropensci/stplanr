@@ -118,6 +118,8 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' plot(l_with_duplicates)
 #' nrow(l_with_duplicates)
 od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
+  # check for illegal NAs in coordinates
+  odm_check(odc)
   odc_unique <- odc[!duplicated(odc[, 1:4, drop = FALSE]), , drop = FALSE]
   if(nrow(odc_unique) < nrow(odc) && remove_duplicates) {
     message("Duplicate OD pairs identified, removing ", nrow(odc) - nrow(odc_unique), " rows")
@@ -200,11 +202,15 @@ od2line.sf <- function(flow, zones, destinations = NULL,
                        zone_code_d = NA, silent = TRUE) {
   if (grepl(pattern = "POLYGON", x = unique(sf::st_geometry_type(zones)))) {
     message("Creating centroids representing desire line start and end points.")
-    zones <- sf::st_centroid(zones)
+    suppressWarnings(zones <- sf::st_centroid(zones))
   }
 
   coords_o <- sf::st_coordinates(zones)[, 1:2]
-  origin_points <- coords_o[match(flow[[origin_code]], zones[[zone_code]]), ]
+  origin_matches <- match(flow[[origin_code]], zones[[zone_code]])
+
+  # Check matches, provide message
+  od_matches_check(origin_matches, flow[[origin_code]])
+  origin_points <- coords_o[origin_matches, ]
 
   if (is.null(destinations)) {
     if (!silent) {
@@ -213,8 +219,10 @@ od2line.sf <- function(flow, zones, destinations = NULL,
         "for origins and destinations respectively"
       ))
     }
+    dest_matches <- match(flow[[dest_code]], zones[[zone_code]])
+    od_matches_check(dest_matches, flow[[dest_code]], type = "destination")
+    dest_points <- coords_o[dest_matches, ]
 
-    dest_points <- coords_o[match(flow[[dest_code]], zones[[zone_code]]), ]
   } else {
     dest_points <- coords_o[match(flow[[dest_code]], destinations[[zone_code_d]]), ]
   }
@@ -871,4 +879,30 @@ odmatrix_to_od <- function(odmatrix) {
   names(od) <- c("orig", "dest", "flow")
   od <- stats::na.omit(od)
   od[order(paste0(od$orig, od$dest)), ]
+}
+
+# Check for NAs in matrix
+odm_check <- function(odc) {
+  if(any(is.na(odc[, 1:2]))) {
+    na_row <- which(is.na(odc[, 1]) | is.na(odc[, 1]))
+    stop("NAs detected in the origin coordinates on row number ", na_row, call. = FALSE)
+  }
+  if(any(is.na(odc[, 3:4]))) {
+    na_row <- which(is.na(odc[, 3]) | is.na(odc[, 4]))
+    stop("NAs detected in the origin coordinates on row number ", na_row, call. = FALSE)
+  }
+}
+
+# Check for NAs in od matching
+od_matches_check <- function(origin_matches, origin_codes, type = "origin") {
+  if(anyNA(origin_matches)) {
+    n_failing <- sum(is.na(origin_matches))
+    first_offending_row <- which(is.na(origin_matches))[1]
+    stop(call. = FALSE,
+      n_failing, " non matching IDs in the ", type, ". ",
+      "ID on row ",
+      first_offending_row,
+      " does not match any zone.\n",
+      "The first offending id was ", origin_codes[first_offending_row])
+  }
 }

@@ -216,6 +216,19 @@ leaflet() %>%
   addPolygons(data = l)
 ```
 
+## Non-matching IDs
+
+Note that in some OD datasets there may be IDs that match no zone.
+We can simulate this situation by setting the third origin ID of `od` to `nomatch`, a string that is not in the zones ID:
+
+```{r, error=TRUE}
+od$geo_code2[3] <- "nomatch"
+od2line(od, z)
+```
+
+You should clean your OD data and ensure all ids in the first two columns match the ids in the first column of the zone data before running `od2line()`.
+
+
 # A larger example: commuter trips in London
 
 The minimal example dataset we've been using so far is fine for demonstrating the key concepts of OD data.
