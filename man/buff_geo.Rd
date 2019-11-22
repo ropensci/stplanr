@@ -19,8 +19,7 @@ Solves the problem that buffers will not be circular when used on
 non-projected data.
 }
 \seealso{
-Other geo: \code{\link{bbox_scale}},
-  \code{\link{crs_select_aeq}}, \code{\link{gclip}},
+Other geo: \code{\link{bbox_scale}}, \code{\link{gclip}},
   \code{\link{geo_bb_matrix}}, \code{\link{geo_bb}},
   \code{\link{mapshape_available}}, \code{\link{mapshape}},
   \code{\link{quadrant}}, \code{\link{reproject}}
