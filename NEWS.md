@@ -1,3 +1,10 @@
+# stplanr 0.4.1
+
+## NEW FEATURES
+
+- Better error messages if `od2line()` fails due to non-matching ids
+- Improved documentation of `od2line()` in the vignette: https://docs.ropensci.org/stplanr/articles/stplanr-od.html#non-matching-ids
+
 # stplanr 0.4.0
 
 ## NEW FEATURES
