@@ -200,19 +200,21 @@ bbox_scale <- function(bb, scale_factor) {
 #' @family geo
 #' @export
 #' @examples
-#' plot(geo_bb(routes_fast, distance = 100), col = "red")
+#' # Simple features implementation:
+#' shp <- routes_fast_sf
+#' shp_bb <- geo_bb(shp, distance = 100)
+#' plot(shp_bb, col = "red", reset = FALSE)
+#' plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
+#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
+#' plot(routes_fast_sf$geometry, add = TRUE)
+#' geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
+#' # sp implemantation
+#' shp <- routes_fast
+#' shp_bb <- geo_bb(shp, distance = 100)
+#' plot(shp_bb, col = "red")
 #' plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
 #' plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
 #' plot(geo_bb(routes_fast, output = "points"), add = TRUE)
-#' # Simple features implementation:
-#' bb_sf1 <- geo_bb(routes_fast_sf, scale_factor = c(2, 1.5))
-#' bb_sf2 <- geo_bb(routes_fast_sf, c(2, 1.5), distance = 100)
-#' plot(bb_sf1)
-#' plot(bb_sf2, add = TRUE)
-#' plot(routes_fast, add = TRUE)
-#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
-#' bb_matrix <- geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
-#' plot(routes_fast_sf[2:5, ], bbox = bb_matrix)
 geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
@@ -297,7 +299,7 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
 
 #' @export
 bb2poly <- function(bb, distance = 0) {
-  if (class(bb) == "matrix") {
+  if (is(bb, "matrix")) {
     b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
   } else {
     b_poly <- as(raster::extent(bb), "SpatialPolygons")
