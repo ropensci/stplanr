@@ -21,11 +21,13 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 (has no distance). This can be useful for removing data that will not be plotted.
 }
 \examples{
-data(flowlines)
-b1 <- line_bearing(flowlines)
-b2 <- line_bearing(flowlines, bidirectional = TRUE)
-plot(b1, b2)
-line_bearing(flowlines_sf[1:9, ])
+bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
+bearings_sf_1_9 # lines of 0 length have NaN bearing
+bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
+bearings_sp_1_9
+plot(bearings_sf_1_9, bearings_sp_1_9)
+line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
+line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 }
 \seealso{
 Other lines: 

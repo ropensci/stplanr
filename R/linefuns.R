@@ -72,11 +72,13 @@ is_linepoint <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' data(flowlines)
-#' b1 <- line_bearing(flowlines)
-#' b2 <- line_bearing(flowlines, bidirectional = TRUE)
-#' plot(b1, b2)
-#' line_bearing(flowlines_sf[1:9, ])
+#' bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
+#' bearings_sf_1_9 # lines of 0 length have NaN bearing
+#' bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
+#' bearings_sp_1_9
+#' plot(bearings_sf_1_9, bearings_sp_1_9)
+#' line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
+#' line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 line_bearing <- function(l, bidirectional = FALSE) {
   UseMethod("line_bearing")
 }
@@ -85,14 +87,20 @@ line_bearing.Spatial <- function(l, bidirectional = FALSE) {
   ldf <- line2df(l)
   bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[, c("tx", "ty")]))
   if (bidirectional) {
-    bearing[bearing > 90] <- bearing[bearing > 90] - 180
-    bearing[bearing < -90] <- bearing[bearing < -90] + 180
+    bearing <- make_bidirectional(bearing)
   }
   bearing
 }
 #' @export
 line_bearing.sf <- function(l, bidirectional = FALSE) {
-  line_bearing(as(l, "Spatial"), bidirectional)
+  p <- sf::st_geometry(line2points(l))
+  i_s <- 1:length(sf::st_geometry(l)) * 2 - 1
+  bearing_radians <- sapply(i_s, function(i) lwgeom::st_geod_azimuth(p[i:(i + 1)]))
+  bearing = bearing_radians * 180 / (pi)
+  if (bidirectional) {
+    bearing <- make_bidirectional(bearing)
+  }
+  bearing
 }
 #' Calculate the angular difference between lines and a predefined bearing
 #'
@@ -221,4 +229,12 @@ line_segment <- function(l, n_segments, segment_length = NA) {
   l_seg <- sp::SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
   raster::crs(l_seg) <- raster::crs(l)
   l_seg
+}
+make_bidirectional <- function(bearing) {
+  is_na_bearings <- is.na(bearing)
+  non_na_bearings <- bearing[!is_na_bearings]
+  non_na_bearings[non_na_bearings > 90] <- non_na_bearings[non_na_bearings > 90] - 180
+  non_na_bearings[non_na_bearings < -90] <- non_na_bearings[non_na_bearings < -90] + 180
+  bearing[!is_na_bearings] <- non_na_bearings
+  bearing
 }
