@@ -172,16 +172,18 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #' @family od
 #' @export
 #' @examples
-#' l <- od2line(flow = flow, zones = cents)
-#' plot(cents)
+#' od_data <- stplanr::flow[1:20, ]
+#' l <- od2line(flow = od_data, zones = cents_sf)
+#' plot(sf::st_geometry(cents_sf))
 #' plot(l, lwd = l$All / mean(l$All), add = TRUE)
+#' l <- od2line(flow = od_data, zones = cents)
 #' # When destinations are different
-#' head(flow_dests[1:5]) # check data
 #' head(destinations[1:5])
-#' flowlines_dests <- od2line(flow_dests, cents, destinations = destinations)
+#' od_data2 <- flow_dests[1:12, 1:3]
+#' od_data2
+#' flowlines_dests <- od2line(od_data2, cents_sf, destinations = destinations_sf)
+#' flowlines_dests
 #' plot(flowlines_dests)
-#' l <- od2line(flow, zones_sf)
-#' plot(l["All"], lwd = l$All/mean(l$All))
 #' @name od2line
 NULL
 
@@ -204,7 +206,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     message("Creating centroids representing desire line start and end points.")
     suppressWarnings(zones <- sf::st_centroid(zones))
   }
-
   coords_o <- sf::st_coordinates(zones)[, 1:2]
   origin_matches <- match(flow[[origin_code]], zones[[zone_code]])
 
@@ -224,7 +225,11 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     dest_points <- coords_o[dest_matches, ]
 
   } else {
-    dest_points <- coords_o[match(flow[[dest_code]], destinations[[zone_code_d]]), ]
+    if(is.na(zone_code_d)) {
+      zone_code_d <- names(destinations)[1]
+    }
+    coords_d <- sf::st_coordinates(destinations)[, 1:2]
+    dest_points <- coords_d[match(flow[[dest_code]], destinations[[zone_code_d]]), ]
   }
 
   odm = cbind(origin_points, dest_points)
