@@ -4,6 +4,7 @@
 
 - Better error messages if `od2line()` fails due to non-matching ids
 - Improved documentation of `od2line()` in the vignette: https://docs.ropensci.org/stplanr/articles/stplanr-od.html#non-matching-ids
+- `route_graphhopper()` should now work with a local graphhopper instance. See https://github.com/ropensci/stplanr/pull/369
 
 # stplanr 0.4.0
 
