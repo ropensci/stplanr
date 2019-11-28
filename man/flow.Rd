@@ -35,8 +35,8 @@ the \code{cents} georeferenced spatial objects.
 # https://github.com/npct/pct - if download to ~/repos
 flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
 data(cents)
-o <- flow$Area.of.residence %in% cents$geo_code[-1]
-d <- flow$Area.of.workplace %in% cents$geo_code[-1]
+o <- flow$Area.of.residence \%in\% cents$geo_code[-1]
+d <- flow$Area.of.workplace \%in\% cents$geo_code[-1]
 flow <- flow[o & d, ] # subset flows with o and d in study area
 library(devtools)
 flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)

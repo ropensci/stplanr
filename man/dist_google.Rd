@@ -59,7 +59,7 @@ dists_trans <- dist_google(cents, cents, mode = "transit")
 dists_trans_am <- dist_google(cents, cents,
   mode = "transit",
   arrival_time = strptime("2016-05-27 09:00:00",
-    format = "%Y-%m-%d %H:%M:%S", tz = "BST"
+    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
   )
 )
 # Find out how much longer (or shorter) cycling takes than walking
@@ -75,7 +75,7 @@ plot(flow, lwd = mean(odf$duration) / odf$duration)
 dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"))
 dist_google(c("Hereford"), c("Weobley", "Leominster", "Kington"),
   mode = "transit", arrival_time = strptime("2016-05-27 17:30:00",
-    format = "%Y-%m-%d %H:%M:%S", tz = "BST"
+    format = "\%Y-\%m-\%d \%H:\%M:\%S", tz = "BST"
   )
 )
 }
