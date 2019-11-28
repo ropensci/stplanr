@@ -6,6 +6,10 @@
 - Improved documentation of `od2line()` in the vignette: https://docs.ropensci.org/stplanr/articles/stplanr-od.html#non-matching-ids
 - `route_graphhopper()` should now work with a local graphhopper instance. See https://github.com/ropensci/stplanr/pull/369
 
+## BUG FIXES
+
+- `destination` now works as an argument in `line2route()` (#368)
+
 # stplanr 0.4.0
 
 ## NEW FEATURES
