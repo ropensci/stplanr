@@ -5,6 +5,7 @@
 ## BUG FIXES
 
 - `destination` now works as an argument in `line2route()` (#368)
+- `overline()` now accepts `sf` objects regardless of the name of the geometry column
 
 # stplanr 0.4.1
 
