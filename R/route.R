@@ -16,8 +16,9 @@
 #' r <- route(from, to, route_fun = cyclestreets::journey)
 #' plot(r)
 #' # mapview::mapview(r) # for interactive map
-#' route(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
-#' route(flowlines_sf[2:4, ]) # lines
+#' r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
+#' summary(r$route_number)
+#' route(flowlines_sf[2:4, ], route_fun = cyclestreets::journey) # lines
 #' # with osrm backend - need to set-up osrm first - see routing vignette
 #' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 #' # with cyclestreets backend - need to set-up osrm first - see routing vignette
@@ -47,14 +48,12 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   if(is.null(l)) {
     l <- od_coords2line(ldf)
   }
-  list_out <- lapply(1:nrow(l), function(i) {
-    single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4])
-    sf::st_sf(cbind(
-      sf::st_drop_geometry(single_route),
-      sf::st_drop_geometry(l[rep(i, nrow(single_route)), ])
-    ),
-    geometry = single_route$geometry)
-  })
+  list_out <- out <- if (requireNamespace("pbapply", quietly = TRUE)) {
+    pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l))
+  } else {
+    lapply(1:nrow(l), route_i, FUN = FUN, ldf = ldf, i = 1)
+  }
+
   do.call(rbind, list_out)
 }
 #' @export
@@ -203,4 +202,15 @@ route_dodgr <- function(from = NULL,
       to_y = to_xy [index, 2],
       geometry = paths
     )
-  }
+}
+
+route_i <- function(FUN, ldf, i, l){
+  single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4])
+  sf::st_sf(cbind(
+    sf::st_drop_geometry(single_route),
+    route_number = i,
+    sf::st_drop_geometry(l[rep(i, nrow(single_route)), ])
+  ),
+  geometry = single_route$geometry)
+}
+
