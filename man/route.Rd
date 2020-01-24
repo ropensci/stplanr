@@ -11,6 +11,7 @@ route(
   route_fun = stplanr::route_cyclestreet,
   n_print = 10,
   list_output = FALSE,
+  cl = NULL,
   ...
 )
 }
@@ -30,6 +31,8 @@ should be a spatial object representing desire lines}
 should be shown}
 
 \item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
+
+\item{cl}{Cluster}
 
 \item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
 }
@@ -53,6 +56,13 @@ route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey) # lines
 route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 # with cyclestreets backend - need to set-up osrm first - see routing vignette
 route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
+system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+library(parallel)
+library(cyclestreets)
+cl <- makeCluster(detectCores())
+clusterExport(cl, c("journey"))
+system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+stopCluster(cl)
 }
 }
 \seealso{

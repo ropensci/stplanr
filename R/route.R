@@ -6,6 +6,7 @@
 #'
 #' @inheritParams od_coords
 #' @inheritParams line2route
+#' @param cl Cluster
 #' @family routes
 #' @export
 #' @examples
@@ -23,16 +24,23 @@
 #' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 #' # with cyclestreets backend - need to set-up osrm first - see routing vignette
 #' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
+#' system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+#' library(parallel)
+#' library(cyclestreets)
+#' cl <- makeCluster(detectCores())
+#' clusterExport(cl, c("journey"))
+#' system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+#' stopCluster(cl)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreet,
-                  n_print = 10, list_output = FALSE, ...) {
+                  n_print = 10, list_output = FALSE, cl = NULL, ...) {
   UseMethod(generic = "route")
 }
 #' @export
 route.numeric <- function(from = NULL, to = NULL, l = NULL,
                           route_fun = stplanr::route_cyclestreet,
-                          n_print = 10, list_output = FALSE, ...) {
+                          n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
   route(l, route_fun = route_fun)
@@ -40,7 +48,7 @@ route.numeric <- function(from = NULL, to = NULL, l = NULL,
 #' @export
 route.sf <- function(from = NULL, to = NULL, l = NULL,
                      route_fun,
-                     n_print = 10, list_output = FALSE, ...) {
+                     n_print = 10, list_output = FALSE, cl = NULL, ...) {
   FUN <- match.fun(route_fun)
   # generate od coordinates
   ldf <- od_coords(from, to, l)
@@ -49,7 +57,11 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     l <- od_coords2line(ldf)
   }
   list_out <- out <- if (requireNamespace("pbapply", quietly = TRUE)) {
-    pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l))
+    if(is.null(cl)) {
+      pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l))
+    } else {
+      pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l), cl = cl)
+    }
   } else {
     lapply(1:nrow(l), route_i, FUN = FUN, ldf = ldf, i = 1)
   }
@@ -67,7 +79,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
                      route_fun = stplanr::route_cyclestreet,
-                     n_print = 10, list_output = FALSE, ...) {
+                     n_print = 10, list_output = FALSE, cl = NULL, ...) {
 
   # error msg in case routing fails
   error_fun <- function(e) {
