@@ -499,7 +499,7 @@ line2route <-
            ...) {
     return_sf <- is(l, "sf")
   if (return_sf) {
-    require(sf)
+    requireNamespace(sf)
     l <- as(l, "Spatial")
   }
   FUN <- match.fun(route_fun)
