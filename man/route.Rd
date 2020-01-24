@@ -48,7 +48,7 @@ plot(r)
 # mapview::mapview(r) # for interactive map
 r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 summary(r$route_number)
-route(flowlines_sf[2:4, ], route_fun = cyclestreets::journey) # lines
+route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey) # lines
 # with osrm backend - need to set-up osrm first - see routing vignette
 route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 # with cyclestreets backend - need to set-up osrm first - see routing vignette
