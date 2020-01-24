@@ -24,12 +24,14 @@
 #' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 #' # with cyclestreets backend - need to set-up osrm first - see routing vignette
 #' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
-#' system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+#' system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+#' plot(r)
 #' library(parallel)
 #' library(cyclestreets)
 #' cl <- makeCluster(detectCores())
 #' clusterExport(cl, c("journey"))
-#' system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+#' system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+#' plot(r)
 #' stopCluster(cl)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
