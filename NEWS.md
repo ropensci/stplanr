@@ -1,10 +1,12 @@
 # stplanr 0.4.1.9000
 
 - `route_graphhopper()` should now work with a local graphhopper instance. See https://github.com/ropensci/stplanr/pull/369
+- The old `line2route()` function now works with routing functions that return `sf` objects
+- The new `route()` function is now more resilient, providing a progress bar if you have `pbapply` package installed, returning a result even if some routes failed, and telling you which routes failed
 
 ## BUG FIXES
 
-- `destination` now works as an argument in `line2route()` (#368)
+- `destination` now works again as an argument in `line2route()` (#368)
 - `overline()` now accepts `sf` objects regardless of the name of the geometry column
 
 # stplanr 0.4.1
