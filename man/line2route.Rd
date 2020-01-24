@@ -48,11 +48,12 @@ A parallel implementation of this was available until version 0.1.8.
 \dontrun{
 l <- flowlines[2:5, ]
 r <- line2route(l)
-rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 rq <- line2route(l = l, plan = "quietest", silent = TRUE)
+rsc <- line2route(l = l, route_fun = cyclestreets::journey)
 plot(r)
-plot(rf, col = "red", add = TRUE)
+plot(r, col = "red", add = TRUE)
 plot(rq, col = "green", add = TRUE)
+plot(rsc)
 plot(l, add = T)
 line2route(flowlines_sf[2:3, ], route_osrm)
 # Plot for a single line to compare 'fastest' and 'quietest' route

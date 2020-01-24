@@ -471,11 +471,12 @@ line2vertices.sf <- function(l) {
 #' \dontrun{
 #' l <- flowlines[2:5, ]
 #' r <- line2route(l)
-#' rf <- line2route(l = l, "route_cyclestreet", plan = "fastest")
 #' rq <- line2route(l = l, plan = "quietest", silent = TRUE)
+#' rsc <- line2route(l = l, route_fun = cyclestreets::journey)
 #' plot(r)
-#' plot(rf, col = "red", add = TRUE)
+#' plot(r, col = "red", add = TRUE)
 #' plot(rq, col = "green", add = TRUE)
+#' plot(rsc)
 #' plot(l, add = T)
 #' line2route(flowlines_sf[2:3, ], route_osrm)
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
@@ -498,6 +499,7 @@ line2route <-
            ...) {
     return_sf <- is(l, "sf")
   if (return_sf) {
+    require(sf)
     l <- as(l, "Spatial")
   }
   FUN <- match.fun(route_fun)
@@ -520,6 +522,16 @@ line2route <-
       message(paste0(round(100 * i / n_ldf), " % out of ", n_ldf, " distances calculated"))
     }
     Sys.sleep(time = time_delay)
+  }
+
+  class_out <- sapply(rc, function(x) class(x)[1])
+  most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
+  if(most_common_class == "sf") {
+    message("Output is sf")
+    rc_is_sf <- class_out == "sf"
+    rc_sf <- rc[rc_is_sf]
+    r_sf <- do.call(rbind, rc_sf)
+    return(r_sf)
   }
 
   if (list_output) {
