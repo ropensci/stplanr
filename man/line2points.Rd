@@ -27,6 +27,8 @@ that are vertices but not nodes.
 \examples{
 l <- routes_fast_sf[2:4, ]
 lpoints <- line2points(l)
+lpoints_sfc <- line2points(sf::st_geometry(l))
+identical(lpoints, lpoints_sfc)
 lpoints2 <- line2pointsn(l)
 plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
 plot(lpoints2$geometry, add = TRUE)

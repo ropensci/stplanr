@@ -72,18 +72,6 @@ geo_toptail.sf <- function(l, toptail_dist, ...) {
   res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
   sf::st_as_sf(res_sp)
 }
-#' Create a buffer of n metres for non-projected 'geographical' spatial data
-#'
-#' Solves the problem that buffers will not be circular when used on
-#' non-projected data.
-#'
-#' @inheritParams geo_buffer
-#' @family geo
-#' @export
-buff_geo <- function(shp, width, ...) {
-  .Deprecated(new = "geo_buffer")
-  gprojected(shp = shp, fun = rgeos::gBuffer, width = width, ...)
-}
 #' Clip the first and last n metres of SpatialLines
 #'
 #' Takes lines and removes the start and end point, to a distance determined
