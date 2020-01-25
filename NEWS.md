@@ -8,6 +8,7 @@
 
 - `destination` now works again as an argument in `line2route()` (#368)
 - `overline()` now accepts `sf` objects regardless of the name of the geometry column
+- `line2points()` now works with `sfc` objects (#361)
 
 # stplanr 0.4.1
 
