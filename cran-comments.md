@@ -1,4 +1,4 @@
-I have removed a blank URL and have fixed an issue that was causing tests to fail
+This is a bug fix update with various improvements (see NEWS)
 
 ## Test environments
 
@@ -8,19 +8,19 @@ I have removed a blank URL and have fixed an issue that was causing tests to fai
   
 * MacOS
 
-* Windows - win-builder: https://win-builder.r-project.org/7bG310v4igog/00check.log
+* Windows - win-builder: https://win-builder.r-project.org/ijvlKUvo562U/00check.log
   
 ## R CMD check:
 
-── R CMD check results ────────────────────────────────────── stplanr 0.3.0 ────
-Duration: 1m 33.5s
+── R CMD check results ────────────────────────────────────── stplanr 0.5.0 ────
+Duration: 1m 27.2s
 
 ❯ checking installed package size ... NOTE
-    installed size is  7.3Mb
+    installed size is  7.0Mb
     sub-directories of 1Mb or more:
-      doc    3.5Mb
+      doc    3.0Mb
       libs   1.9Mb
 
 0 errors ✔ | 0 warnings ✔ | 1 note ✖
-  
-NOTES in winbuild have been fixed
+
+R CMD check succeeded
