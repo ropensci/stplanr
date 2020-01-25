@@ -22,7 +22,6 @@ geo_bb_matrix(sf::st_coordinates(cents_sf))
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{buff_geo}()},
 \code{\link{crs_select_aeq}()},
 \code{\link{gclip}()},
 \code{\link{geo_bb}()},

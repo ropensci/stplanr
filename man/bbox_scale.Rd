@@ -28,7 +28,6 @@ points(bb[1, ], bb[2, ], col = "red")
 }
 \seealso{
 Other geo: 
-\code{\link{buff_geo}()},
 \code{\link{crs_select_aeq}()},
 \code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
