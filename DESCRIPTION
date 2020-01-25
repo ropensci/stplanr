@@ -1,7 +1,7 @@
 Package: stplanr
 Type: Package
 Title: Sustainable Transport Planning
-Version: 0.4.1.9000
+Version: 0.5.0
 Authors@R: c(
     person("Robin", "Lovelace", email = "rob00x@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0001-5679-6536")),
@@ -40,7 +40,6 @@ Imports:
     maptools (>= 0.9.3),
     raster (>= 2.6.7),
     rgeos (>= 0.3.28),
-    openxlsx (>= 4.1.0),
     methods,
     geosphere (>= 1.5.7),
     Rcpp (>= 0.12.1),
@@ -66,6 +65,7 @@ Suggests:
     pct,
     tmap,
     bench,
+    openxlsx (>= 4.1.0),
     osrm
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
