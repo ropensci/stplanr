@@ -366,6 +366,7 @@ line2df.Spatial <- function(l) {
 #' lpoints <- line2points(l)
 #' lpoints_sfc <- line2points(sf::st_geometry(l))
 #' identical(lpoints, lpoints_sfc)
+#' line2points(sf::st_linestring(matrix(c(0, 0, 2, 2), ncol = 2, byrow = TRUE)))
 #' lpoints2 <- line2pointsn(l)
 #' plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
 #' plot(lpoints2$geometry, add = TRUE)
@@ -412,6 +413,11 @@ line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
 #' @export
 line2points.sfc <- function(l, ids = rep(1:nrow(l), each = 2)) {
   lsfc <- sf::st_as_sf(l)
+  line2points(lsfc)
+}
+#' @export
+line2points.sfg <- function(l, ids = rep(1:nrow(l), each = 2)) {
+  lsfc <- sf::st_sfc(l)
   line2points(lsfc)
 }
 
