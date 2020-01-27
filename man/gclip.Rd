@@ -34,7 +34,6 @@ gclip(cents_sf, cb)
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{crs_select_aeq}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
 \code{\link{mapshape_available}()},
