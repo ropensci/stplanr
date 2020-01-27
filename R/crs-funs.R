@@ -1,35 +1,3 @@
-#' Select a custom projected CRS for the area of interest
-#'
-#' This function takes a spatial object with a geographic (WGS84)
-#' CRS and returns a custom projected CRS focussed on the centroid of the object.
-#' This function is especially useful for using units of metres in all directions
-#' for data collected anywhere in the world.
-#'
-#' The function is based on this stackexchange answer:
-#' <http://gis.stackexchange.com/questions/121489>
-#'
-#' @param shp A spatial object with a geographic (WGS84) coordinate system
-#' @family geo
-#' @export
-#' @examples
-#' data("routes_fast")
-#' new_crs <- geo_select_aeq(routes_fast)
-#' plot(routes_fast)
-#' rf_projected <- sp::spTransform(routes_fast, new_crs)
-#' plot(rf_projected)
-#' sp::bbox(rf_projected)
-#' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
-#' plot(line_length, rf_projected$length)
-#' cor(line_length, rf_projected$length)
-crs_select_aeq <- function(shp) {
-  .Deprecated(new = "geo_select_aeq")
-  cent <- rgeos::gCentroid(shp)
-  aeqd <- sprintf(
-    "+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
-    cent@coords[[2]], cent@coords[[1]]
-  )
-  sp::CRS(aeqd)
-}
 #' Reproject lat/long spatial object so that they are in units of 1m
 #'
 #' Many GIS functions (e.g. finding the area)
