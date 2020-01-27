@@ -57,7 +57,6 @@
 #' @family routes
 #' @export
 #' @seealso line2route
-#' @aliases route_cyclestreets
 #' @examples
 #'
 #' \dontrun{
@@ -70,12 +69,9 @@
 #' plot(rf_lb)
 #' (rf_lb$length / (1000 * 1.61)) / # distance in miles
 #'   (rf_lb$time / (60 * 60)) # time in hours - average speed here: ~8mph
-#' # Plan a 'balanced' route from Pedaller's Arms to the University of Leeds
-#' rb_pa <- route_cyclestreet("Pedaller's Arms, Leeds", "University of Leeds, UK", "balanced")
 #' }
 #'
-route_cyclestreet <-
-  route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
+route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = NULL,
                                    base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                                    save_raw = "FALSE") {
 
