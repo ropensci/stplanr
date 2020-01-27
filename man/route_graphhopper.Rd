@@ -82,7 +82,7 @@ route_cyclestreet
 Other routes: 
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
-\code{\link{route_cyclestreet}()},
+\code{\link{route_cyclestreets}()},
 \code{\link{route_dodgr}()},
 \code{\link{route_local}()},
 \code{\link{route_transportapi_public}()},
