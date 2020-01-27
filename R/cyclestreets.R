@@ -18,9 +18,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
-#' nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
-#' nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
+#' nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREETS"))
+#' nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREETS"))
+#' nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREETS"))
 #' }
 nearest_cyclestreets <- function(shp = NULL, lat, lng, pat = api_pat("cyclestreet")) {
   UseMethod("nearest_cyclestreets", object = shp)

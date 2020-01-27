@@ -65,7 +65,7 @@ Loading a locally saved copy of the api key text string
 before running the function, for example, will ensure it
 is available on any computer:
 
-\verb{mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREET = mytoken)}
+\verb{mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl") Sys.setenv(CYCLESTREETS = mytoken)}
 
 if you want the API key to be available in future
 sessions, set it using the .Renviron file

@@ -33,8 +33,8 @@ https://github.com/Robinlovelace/cyclestreets
 
 \examples{
 \dontrun{
-nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
-nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
-nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
+nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREETS"))
+nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREETS"))
+nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREETS"))
 }
 }
