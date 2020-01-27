@@ -95,7 +95,7 @@ and place names, found using the Google Map API:
 
 ```{r cycle-trip, message=FALSE, warning=FALSE, eval=FALSE, echo=FALSE}
 if(!Sys.getenv("CYCLESTREETS") == ""){
-  trip <- route_cyclestreet("Bradford, UK", "Leeds, Yorkshire", plan = "balanced")
+  trip <- route_cyclestreets("Bradford, UK", "Leeds, Yorkshire", plan = "balanced")
   plot(trip)
 }
 ```

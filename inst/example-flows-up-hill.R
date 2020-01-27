@@ -14,8 +14,8 @@ r1@data
 r2@data
 
 # Now with CycleStreets.net
-r1 <- route_cyclestreet("Yeadon", to = "Leeds")
-r2 <- route_cyclestreet("Leeds", "Yeadon")
+r1 <- route_cyclestreets("Yeadon", to = "Leeds")
+r2 <- route_cyclestreets("Leeds", "Yeadon")
 
 # plot the data
 if(require(leaflet)) {

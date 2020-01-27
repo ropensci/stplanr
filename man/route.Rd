@@ -31,7 +31,7 @@ should be shown}
 
 \item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreets()}}}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them

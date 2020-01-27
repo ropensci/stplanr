@@ -464,7 +464,7 @@ line2vertices.sf <- function(l) {
 #'
 #' @section Details:
 #'
-#' See [route_cyclestreet()] and other route functions for details.
+#' See [route_cyclestreets()] and other route functions for details.
 #'
 #' A parallel implementation of this was available until version 0.1.8.
 #'
@@ -478,7 +478,7 @@ line2vertices.sf <- function(l) {
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
 #' @param time_delay Number or seconds to wait between each query
-#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
+#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreets()]
 #' @family routes
 #' @export
 #' @examples

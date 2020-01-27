@@ -14,7 +14,7 @@
 #' \itemize{
 #'  \item [overline()] - Aggregate overlaying route lines and data intelligently
 #'  \item [calc_catchment()] - Create a 'catchment area' to show the areas serving a destination
-#'  \item [route_cyclestreet()] - Finds the fastest routes for cyclists between two places.
+#'  \item [route_cyclestreets()] - Finds the fastest routes for cyclists between two places.
 #' }
 #'
 #' @import curl
