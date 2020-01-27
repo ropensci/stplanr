@@ -31,7 +31,7 @@ straight lines will be used.}
 
 \item{time_delay}{Number or seconds to wait between each query}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreets()}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
 }
 \description{
 Convert straight OD data (desire lines) into routes
@@ -39,7 +39,7 @@ Convert straight OD data (desire lines) into routes
 \section{Details}{
 
 
-See \code{\link[=route_cyclestreet]{route_cyclestreets()}} and other route functions for details.
+See \code{\link[=route_cyclestreets]{route_cyclestreets()}} and other route functions for details.
 
 A parallel implementation of this was available until version 0.1.8.
 }

@@ -15,7 +15,7 @@ line2routeRetry(lines, pattern = "^Error: ", n_retry = 3, ...)
 
 \item{n_retry}{Number of times to retry}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreets()}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
 }
 \description{
 Convert straight spatial (linestring) object from flow data into routes retrying
