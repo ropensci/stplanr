@@ -7,7 +7,7 @@
 #' Note: there is now a dedicated cyclestreets package:
 #' https://github.com/Robinlovelace/cyclestreets
 #'
-#' @inheritParams route_cyclestreet
+#' @inheritParams route_cyclestreets
 #' @param shp A spatial object
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to map. Also accepts dataframe with latitude in the first column and
