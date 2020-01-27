@@ -7,7 +7,7 @@
 #' @param return_all Should the request return all information returned by Google Maps?
 #'  The default is `FALSE`: to return only two numbers: the longitude and latitude, in that order
 #' @param service Which service to use? Nominatim by default
-#' @inheritParams route_cyclestreet
+#' @inheritParams route_cyclestreets
 #' @family nodes
 #' @export
 #' @examples

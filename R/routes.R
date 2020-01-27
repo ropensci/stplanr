@@ -213,7 +213,7 @@ route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = 
 #' Where `url` is an example api request from
 #'  <https://github.com/graphhopper/directions-api/blob/master/routing.md>.
 #'
-#' @inheritParams route_cyclestreet
+#' @inheritParams route_cyclestreets
 #' @inheritParams od_coords
 #' @family routes
 #' @export
