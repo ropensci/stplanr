@@ -40,7 +40,7 @@
 #'
 #' `
 #' mytoken <- readLines("~/Dropbox/dotfiles/cyclestreets-api-key-rl")
-#' Sys.setenv(CYCLESTREET = mytoken)
+#' Sys.setenv(CYCLESTREETS = mytoken)
 #' `
 #'
 #' if you want the API key to be available in future

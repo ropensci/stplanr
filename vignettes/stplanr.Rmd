@@ -171,7 +171,7 @@ Finally, we can convert these desire lines into routes as follows (other `route_
 ```{r, message=FALSE, warning=FALSE}
 # if the next line returns FALSE the code will not run
 (has_internet <- curl::has_internet())
-(cs_key <- nchar(Sys.getenv("CYCLESTREETS")))
+(cs_key <- nchar(Sys.getenv("CYCLESTREETSS")))
 if (has_internet & cs_key == 32) {
   r <- line2route(l, route_fun = route_cyclestreets)
 } else {
