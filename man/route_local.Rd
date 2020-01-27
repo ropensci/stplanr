@@ -39,7 +39,7 @@ plot(r2$geometry, add = TRUE, col = "blue", lwd = 3)
 Other routes: 
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
-\code{\link{route_cyclestreet}()},
+\code{\link{route_cyclestreets}()},
 \code{\link{route_dodgr}()},
 \code{\link{route_graphhopper}()},
 \code{\link{route_transportapi_public}()},

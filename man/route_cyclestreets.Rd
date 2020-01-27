@@ -77,9 +77,9 @@ Read more about the .Renviron here: \code{?.Renviron}
 \dontrun{
 from <- c(-1.55, 53.80) # geo_code("leeds")
 to <- c(-1.76, 53.80) # geo_code("bradford uk")
-json_output <- route_cyclestreets\(from = from, to = to, plan = "quietest", save_raw = TRUE)
+json_output <- route_cyclestreet(from = from, to = to, plan = "quietest", save_raw = TRUE)
 str(json_output) # what does cyclestreets give you?
-rf_lb <- route_cyclestreets\(from, to, plan = "fastest")
+rf_lb <- route_cyclestreet(from, to, plan = "fastest")
 rf_lb@data
 plot(rf_lb)
 (rf_lb$length / (1000 * 1.61)) / # distance in miles
