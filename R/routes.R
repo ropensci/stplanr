@@ -301,7 +301,7 @@ route_graphhopper <- function(from, to, l = NULL, vehicle = "bike",
 #' Retrieve personal access token.
 #'
 #' @param api_name Text string of the name of the API you are calling, e.g.
-#' cyclestreet, graphhopper etc.
+#' cyclestreets, graphhopper etc.
 #'
 #' @keywords internal
 #' @export
@@ -320,7 +320,7 @@ api_pat <- function(api_name, force = FALSE) {
     )
   }
 
-  message("Couldn't find the environment variable ", api_name_caps, ". See documentation, e.g. ?route_cyclestreet, for more details.")
+  message("Couldn't find the environment variable ", api_name_caps, ". See documentation, e.g. ?route_cyclestreets, for more details.")
   message("Please enter your API key to access the ", api_name, "and press enter:")
   pat <- readline(": ")
 

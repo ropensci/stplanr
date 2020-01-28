@@ -37,17 +37,17 @@
 #' stopCluster(cl)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = stplanr::route_cyclestreet,
+                  route_fun = stplanr::route_cyclestreets,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {
   UseMethod(generic = "route")
 }
 #' @export
 route.numeric <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = stplanr::route_cyclestreet,
+                          route_fun = stplanr::route_cyclestreets,
                           n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
-  route(l, route_fun = route_fun)
+  route(l, route_fun = route_fun, ...)
 }
 #' @export
 route.sf <- function(from = NULL, to = NULL, l = NULL,
@@ -82,7 +82,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                     route_fun = stplanr::route_cyclestreet,
+                     route_fun = stplanr::route_cyclestreets,
                      n_print = 10, list_output = FALSE, cl = NULL, ...) {
 
   # error msg in case routing fails

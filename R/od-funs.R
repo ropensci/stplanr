@@ -505,7 +505,7 @@ line2vertices.sf <- function(l) {
 #' }
 line2route <-
   function(l,
-           route_fun = stplanr::route_cyclestreet,
+           route_fun = stplanr::route_cyclestreets,
            n_print = 10,
            list_output = FALSE,
            l_id = NA,
