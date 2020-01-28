@@ -88,6 +88,8 @@ tm_shape(rnet_go_dutch_agg) +
   tm_lines(lwd = 5, col = "All", breaks = c(0, 10, 100, 500, 1000), palette = "viridis")
 ```
 
+# In parallel
+
 ## Tests
 
 ```{r}

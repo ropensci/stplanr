@@ -34,7 +34,7 @@ should be shown}
 
 \item{cl}{Cluster}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreet]{route_cyclestreet()}}}
+\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them
@@ -46,22 +46,26 @@ The definition of optimal depends on the routing function used
 # these lines require API keys/osrm instances
 from <- c(-1.5484, 53.7941) # from <- geo_code("leeds rail station")
 to <-   c(-1.5524, 53.8038) # to <- geo_code("university of leeds")
-r <- route(from, to, route_fun = cyclestreets::journey)
-plot(r)
-# mapview::mapview(r) # for interactive map
+r1 <- route(from, to, route_fun = cyclestreets::journey)
+r2 <- route(from, to, route_fun = cyclestreets::journey, plan = "quietest")
+plot(r1)
+plot(r2)
 r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 summary(r$route_number)
-route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey) # lines
+route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
+route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 # with osrm backend - need to set-up osrm first - see routing vignette
 route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
 # with cyclestreets backend - need to set-up osrm first - see routing vignette
 route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
-system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
+plot(r)
 library(parallel)
 library(cyclestreets)
 cl <- makeCluster(detectCores())
 clusterExport(cl, c("journey"))
-system.time(route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
+plot(r)
 stopCluster(cl)
 }
 }
@@ -69,7 +73,7 @@ stopCluster(cl)
 Other routes: 
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
-\code{\link{route_cyclestreet}()},
+\code{\link{route_cyclestreets}()},
 \code{\link{route_dodgr}()},
 \code{\link{route_graphhopper}()},
 \code{\link{route_local}()},

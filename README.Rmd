@@ -94,8 +94,8 @@ trip <- route_osrm(from = c(-1, 53), to = c(-1.1, 53))
 and place names, found using the Google Map API:
 
 ```{r cycle-trip, message=FALSE, warning=FALSE, eval=FALSE, echo=FALSE}
-if(!Sys.getenv("CYCLESTREET") == ""){
-  trip <- route_cyclestreet("Bradford, UK", "Leeds, Yorkshire", plan = "balanced")
+if(!Sys.getenv("CYCLESTREETS") == ""){
+  trip <- route_cyclestreets("Bradford, UK", "Leeds, Yorkshire", plan = "balanced")
   plot(trip)
 }
 ```

@@ -49,7 +49,6 @@ bb_scale
 
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{crs_select_aeq}()},
 \code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{mapshape_available}()},

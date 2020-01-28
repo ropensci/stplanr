@@ -366,6 +366,7 @@ line2df.Spatial <- function(l) {
 #' lpoints <- line2points(l)
 #' lpoints_sfc <- line2points(sf::st_geometry(l))
 #' identical(lpoints, lpoints_sfc)
+#' line2points(sf::st_linestring(matrix(c(0, 0, 2, 2), ncol = 2, byrow = TRUE)))
 #' lpoints2 <- line2pointsn(l)
 #' plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
 #' plot(lpoints2$geometry, add = TRUE)
@@ -414,6 +415,11 @@ line2points.sfc <- function(l, ids = rep(1:nrow(l), each = 2)) {
   lsfc <- sf::st_as_sf(l)
   line2points(lsfc)
 }
+#' @export
+line2points.sfg <- function(l, ids = rep(1:nrow(l), each = 2)) {
+  lsfc <- sf::st_sfc(l)
+  line2points(lsfc)
+}
 
 #' @rdname line2points
 #' @export
@@ -458,7 +464,7 @@ line2vertices.sf <- function(l) {
 #'
 #' @section Details:
 #'
-#' See [route_cyclestreet()] and other route functions for details.
+#' See [route_cyclestreets()] and other route functions for details.
 #'
 #' A parallel implementation of this was available until version 0.1.8.
 #'
@@ -472,7 +478,7 @@ line2vertices.sf <- function(l) {
 #' typically the origin and destination ids pasted together. If absent, the row name of the
 #' straight lines will be used.
 #' @param time_delay Number or seconds to wait between each query
-#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreet()]
+#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreets()]
 #' @family routes
 #' @export
 #' @examples

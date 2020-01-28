@@ -15,7 +15,7 @@ route allocation and modelling travel patterns.
 \itemize{
 \item \code{\link[=overline]{overline()}} - Aggregate overlaying route lines and data intelligently
 \item \code{\link[=calc_catchment]{calc_catchment()}} - Create a 'catchment area' to show the areas serving a destination
-\item \code{\link[=route_cyclestreet]{route_cyclestreet()}} - Finds the fastest routes for cyclists between two places.
+\item \code{\link[=route_cyclestreets]{route_cyclestreets()}} - Finds the fastest routes for cyclists between two places.
 }
 }
 

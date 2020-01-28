@@ -7,7 +7,7 @@
 #' Note: there is now a dedicated cyclestreets package:
 #' https://github.com/Robinlovelace/cyclestreets
 #'
-#' @inheritParams route_cyclestreet
+#' @inheritParams route_cyclestreets
 #' @param shp A spatial object
 #' @param lat Numeric vector containing latitude coordinate for each coordinate
 #' to map. Also accepts dataframe with latitude in the first column and
@@ -18,9 +18,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREET"))
-#' nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREET"))
-#' nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREET"))
+#' nearest_cyclestreets(53, 0.02, pat = Sys.getenv("CYCLESTREETS"))
+#' nearest_cyclestreets(cents[1, ], pat = Sys.getenv("CYCLESTREETS"))
+#' nearest_cyclestreets(cents_sf[1, ], pat = Sys.getenv("CYCLESTREETS"))
 #' }
 nearest_cyclestreets <- function(shp = NULL, lat, lng, pat = api_pat("cyclestreet")) {
   UseMethod("nearest_cyclestreets", object = shp)
