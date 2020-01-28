@@ -27,13 +27,13 @@
 #' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = stplanr::route_cyclestreet,
+                  route_fun = stplanr::route_cyclestreets,
                   n_print = 10, list_output = FALSE, ...) {
   UseMethod(generic = "route")
 }
 #' @export
 route.numeric <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = stplanr::route_cyclestreet,
+                          route_fun = stplanr::route_cyclestreets,
                           n_print = 10, list_output = FALSE, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
@@ -68,7 +68,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                     route_fun = stplanr::route_cyclestreet,
+                     route_fun = stplanr::route_cyclestreets,
                      n_print = 10, list_output = FALSE, ...) {
 
   # error msg in case routing fails
