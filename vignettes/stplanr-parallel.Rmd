@@ -14,8 +14,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r, eval=FALSE}
 devtools::install_github("ropensci/stplanr", "par")
+```
+
+
+```{r setup}
 library(stplanr)
 library(sf)
 library(dplyr)
@@ -88,7 +92,33 @@ tm_shape(rnet_go_dutch_agg) +
   tm_lines(lwd = 5, col = "All", breaks = c(0, 10, 100, 500, 1000), palette = "viridis")
 ```
 
-# In parallel
+# In parallel with quietness plan
+
+
+```{r}
+# ?route
+t1 = Sys.time()
+
+
+# load parallel stuff
+library(parallel)
+library(cyclestreets)
+cl <- makeCluster(detectCores())
+clusterExport(cl, c("journey"))
+Sys.time() - t1
+routes_journey_par = route(l = l, route_fun = cyclestreets::journey, cl = cl, plan = "quietest") # multi-core
+stopCluster(cl) # kill cluster
+
+Sys.time() - t1
+Sys.time() - t1
+names(routes_journey_par)
+rnet_go_dutch_journey = overline(routes_journey_par, "All")
+Sys.time() - t1
+rnet_go_dutch_agg = overline(routes_journey_par, "All")
+Sys.time() - t1
+tm_shape(rnet_go_dutch_agg) +
+  tm_lines(lwd = 5, col = "All", breaks = c(0, 10, 100, 500, 1000), palette = "viridis")
+```
 
 ## Tests
 
