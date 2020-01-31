@@ -8,7 +8,7 @@ route(
   from = NULL,
   to = NULL,
   l = NULL,
-  route_fun = stplanr::route_cyclestreet,
+  route_fun = stplanr::route_cyclestreets,
   n_print = 10,
   list_output = FALSE,
   ...

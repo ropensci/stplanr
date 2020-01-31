@@ -15,3 +15,5 @@ log-latest
 ^pkgdown$
 ^_pkgdown.yml$
 ^data-raw$
+^\.github/workflows/R-CMD-check\.yaml$
+^\.github/workflows/pr-commands\.yaml$

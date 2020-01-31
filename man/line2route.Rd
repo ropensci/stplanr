@@ -6,7 +6,7 @@
 \usage{
 line2route(
   l,
-  route_fun = stplanr::route_cyclestreet,
+  route_fun = stplanr::route_cyclestreets,
   n_print = 10,
   list_output = FALSE,
   l_id = NA,
