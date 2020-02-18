@@ -51,6 +51,14 @@ jobs:
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
 
+      - name: sf and system libraries
+        if: runner.os == 'Linux'
+        run: |
+          sudo add-apt-repository ppa:ubuntugis/ppa
+          sudo apt install libudunits2-dev \
+          libproj-dev libgeos-dev libgdal-dev
+          sudo R -e "install.packages('sf')"
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         env:
