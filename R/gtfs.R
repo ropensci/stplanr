@@ -34,17 +34,17 @@ gtfs2sldf <- function(gtfszip = "") {
 
   gtfsfiles <- unzip(gtfszip, exdir = tempdir())
 
-  gtfstrips <- read.csv(paste0(tempdir(), "/trips.txt"))
+  gtfstrips <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/trips.txt"))
   if (all(charToRaw(substr(colnames(gtfstrips)[1], 1, 3)) == c(as.raw(239), as.raw(46), as.raw(46)))) {
-    gtfstrips <- read.csv(paste0(tempdir(), "/trips.txt"), fileEncoding = "UTF-8-BOM")
-    gtfsroutes <- read.csv(paste0(tempdir(), "/routes.txt"), fileEncoding = "UTF-8-BOM")
-    gtfsagency <- read.csv(paste0(tempdir(), "/agency.txt"), fileEncoding = "UTF-8-BOM")
-    gtfsshape <- read.csv(paste0(tempdir(), "/shapes.txt"), fileEncoding = "UTF-8-BOM")
+    gtfstrips <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/trips.txt"), fileEncoding = "UTF-8-BOM")
+    gtfsroutes <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/routes.txt"), fileEncoding = "UTF-8-BOM")
+    gtfsagency <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/agency.txt"), fileEncoding = "UTF-8-BOM")
+    gtfsshape <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/shapes.txt"), fileEncoding = "UTF-8-BOM")
   }
   else {
-    gtfsroutes <- read.csv(paste0(tempdir(), "/routes.txt"))
-    gtfsagency <- read.csv(paste0(tempdir(), "/agency.txt"))
-    gtfsshape <- read.csv(paste0(tempdir(), "/shapes.txt"))
+    gtfsroutes <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/routes.txt"))
+    gtfsagency <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/agency.txt"))
+    gtfsshape <- read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/shapes.txt"))
   }
 
   if (nrow(gtfsshape) == 0) {

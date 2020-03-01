@@ -44,7 +44,8 @@ if(requireNamespace("openxlsx")) {
     filetype = "xlsx", sheet = 1, removeTotal = TRUE
 )
 }
-sa1pop <- read.csv(file.path(data_dir, "SA1Population.csv"), header = FALSE)
+f <- file.path(data_dir, "SA1Population.csv")
+sa1pop <- read.csv(f, stringsAsFactors = TRUE, header = FALSE)
 t3 <- read_table_builder(sa1pop)
 }
 \concept{data}

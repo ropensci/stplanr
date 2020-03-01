@@ -30,7 +30,8 @@
 #'     filetype = "xlsx", sheet = 1, removeTotal = TRUE
 #' )
 #' }
-#' sa1pop <- read.csv(file.path(data_dir, "SA1Population.csv"), header = FALSE)
+#' f <- file.path(data_dir, "SA1Population.csv")
+#' sa1pop <- read.csv(f, stringsAsFactors = TRUE, header = FALSE)
 #' t3 <- read_table_builder(sa1pop)
 read_table_builder <- function(dataset, filetype = "csv", sheet = 1, removeTotal = TRUE) {
   if (missing(dataset)) {
@@ -46,7 +47,7 @@ read_table_builder <- function(dataset, filetype = "csv", sheet = 1, removeTotal
         stop("Please install openxlsx for this to work")
       }
     } else {
-      tbfile <- read.csv(dataset, header = FALSE)
+      tbfile <- read.csv(stringsAsFactors = TRUE, dataset, header = FALSE)
     }
   } else {
     stop("Dataset not data.frame or character string")
