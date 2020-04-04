@@ -5,7 +5,9 @@
 \alias{cents}
 \alias{cents_sf}
 \title{Spatial points representing home locations}
-\format{A spatial dataset with 8 rows and 5 variables}
+\format{
+A spatial dataset with 8 rows and 5 variables
+}
 \usage{
 data(cents)
 }

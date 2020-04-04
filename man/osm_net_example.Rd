@@ -4,7 +4,9 @@
 \name{osm_net_example}
 \alias{osm_net_example}
 \title{Example of OpenStreetMap road network}
-\format{An sf object}
+\format{
+An sf object
+}
 \description{
 Example of OpenStreetMap road network
 }

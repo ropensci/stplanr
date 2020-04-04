@@ -5,7 +5,9 @@
 \alias{route_network}
 \alias{route_network_sf}
 \title{spatial lines dataset representing a route network}
-\format{A spatial lines dataset 80 rows and 1 column}
+\format{
+A spatial lines dataset 80 rows and 1 column
+}
 \usage{
 data(route_network)
 }

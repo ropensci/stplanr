@@ -6,7 +6,9 @@
 \alias{destinations}
 \alias{destinations_sf}
 \title{Example destinations data}
-\format{A spatial dataset with 87 features}
+\format{
+A spatial dataset with 87 features
+}
 \usage{
 data(destination_zones)
 }

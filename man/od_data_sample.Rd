@@ -4,7 +4,9 @@
 \name{od_data_sample}
 \alias{od_data_sample}
 \title{Example of origin-destination data from UK Census}
-\format{A data frame (tibble) object}
+\format{
+A data frame (tibble) object
+}
 \description{
 See \code{data-raw/generate-data.Rmd} for details on how this was created.
 }

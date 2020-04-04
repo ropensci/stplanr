@@ -5,7 +5,9 @@
 \alias{flowlines}
 \alias{flowlines_sf}
 \title{spatial lines dataset of commuter flows}
-\format{A spatial lines dataset with 49 rows and 15 columns}
+\format{
+A spatial lines dataset with 49 rows and 15 columns
+}
 \description{
 Flow data after conversion to a spatial format
 with \code{\link[=od2line]{od2line()}} (see \code{\link[=flow]{flow()}}).

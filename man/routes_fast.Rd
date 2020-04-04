@@ -5,7 +5,9 @@
 \alias{routes_fast}
 \alias{routes_fast_sf}
 \title{spatial lines dataset of commuter flows on the travel network}
-\format{A spatial lines dataset with 49 rows and 15 columns}
+\format{
+A spatial lines dataset with 49 rows and 15 columns
+}
 \usage{
 data(routes_fast)
 }

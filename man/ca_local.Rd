@@ -4,7 +4,9 @@
 \name{ca_local}
 \alias{ca_local}
 \title{SpatialPointsDataFrame representing road traffic deaths}
-\format{A SpatialPointsDataFrame with 11 rows and 2 columns}
+\format{
+A SpatialPointsDataFrame with 11 rows and 2 columns
+}
 \usage{
 data(ca_local)
 }

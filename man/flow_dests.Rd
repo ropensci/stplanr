@@ -5,7 +5,9 @@
 \alias{flow_dests}
 \title{data frame of invented
 commuter flows with destinations in a different layer than the origins}
-\format{A data frame with 49 rows and 15 columns}
+\format{
+A data frame with 49 rows and 15 columns
+}
 \usage{
 data(flow_dests)
 }

@@ -4,7 +4,9 @@
 \name{flow}
 \alias{flow}
 \title{data frame of commuter flows}
-\format{A data frame with 49 rows and 15 columns}
+\format{
+A data frame with 49 rows and 15 columns
+}
 \usage{
 data(flow)
 }
