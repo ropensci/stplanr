@@ -1,3 +1,5 @@
+# stplanr (development version)
+
 # stplanr 0.5.1
 
 - Changes for compatibility with R 4.0.0
