@@ -22,9 +22,16 @@
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 #' # with osrm backend - need to set-up osrm first - see routing vignette
-#' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
-#' # with cyclestreets backend - need to set-up osrm first - see routing vignette
-#' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
+#' if(require(osrm)) {
+#'   message("You have osrm installed")
+#'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81))
+#'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81), , returnclass = "sf")
+#'   # mapview::mapview(.Last.value) # check it's on the route network
+#'   route(pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
+#' }
+#' if(require(cyclestreets)) { # with cyclestreets backend
+#'   route(pct::wight_lines_30, route_fun = cyclestreets::journey)
+#' }
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreets,
@@ -84,7 +91,6 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
     l <- od2line(ldf)
   }
 
-
   # pre-allocate objects
   rc <- as.list(rep(NA, nrow(ldf)))
   rg <- sf::st_sfc(lapply(1:nrow(ldf), function(x) {
@@ -121,7 +127,6 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }
 
   r
-
 
 }
 
@@ -215,6 +220,7 @@ route_dodgr <- function(from = NULL,
 }
 
 route_i <- function(FUN, ldf, i, l, ...){
+  # browser()
   error_fun <- function(e) {
     e
   }
