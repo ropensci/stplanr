@@ -78,7 +78,7 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }
   FUN <- match.fun(route_fun)
   # generate od coordinates
-  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
+  ldf <- dplyr::as_tibble(od_coords(from, to, l))
   # calculate line data frame
   if(is.null(l)) {
     l <- od2line(ldf)
@@ -92,7 +92,7 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }))
 
   rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
-  rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
+  rdf <- dplyr::as_tibble(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
   names(rdf) <- names(rc[[1]])
 
   rdf[1, ] <- rc[[1]]@data[1, ]

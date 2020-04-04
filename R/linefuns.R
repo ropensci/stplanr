@@ -25,7 +25,7 @@ n_vertices.sf <- function(l) {
   geoms <- sf::st_coordinates(l)
   L1 <- rlang::quo(L1)
   geoms %>%
-    dplyr::as_data_frame() %>%
+    dplyr::as_tibble() %>%
     dplyr::group_by(!!L1) %>%
     dplyr::summarise(n_vertices = dplyr::n()) %>%
     dplyr::pull(n_vertices)
