@@ -60,7 +60,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   list_out <- out <- if (requireNamespace("pbapply", quietly = TRUE)) {
     pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
   } else {
-    lapply(1:nrow(l), route_i, FUN = FUN, ldf = ldf, i = 1, ...)
+    lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
   }
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
