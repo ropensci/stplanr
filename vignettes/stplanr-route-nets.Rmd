@@ -85,14 +85,18 @@ xy_nodes <- stplanr::find_network_nodes(sln = sln, x = x, y = y)
 
 # Routing on route networks
 
+Currently not running due to issues with dev version of `dplyr`:
+
+https://github.com/ropensci/stplanr/issues/383
+
 ```{r, out.width="49%", fig.show='hide'}
-plot(rnet$geometry)
-plot(sln_nodes, add = TRUE)
-xy_path <- sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
-# xy_path = sum_network_links(sln = sln, start = xy_nodes[1], end = xy_nodes[2])
-plot(rnet$geometry)
-plot(xy_sf$geometry, add = TRUE)
-plot(xy_path$geometry, add = TRUE, lwd = 5)
+# plot(rnet$geometry)
+# plot(sln_nodes, add = TRUE)
+# xy_path <- sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
+# # xy_path = sum_network_links(sln = sln, start = xy_nodes[1], end = xy_nodes[2])
+# plot(rnet$geometry)
+# plot(xy_sf$geometry, add = TRUE)
+# plot(xy_path$geometry, add = TRUE, lwd = 5)
 ```
 
 # Adding new nodes

@@ -32,11 +32,14 @@ each one.
 }
 
 \examples{
+\donttest{
+# tests fail on dev version of dplyr
 sln <- SpatialLinesNetwork(route_network)
 weightfield(sln) # field used to determine shortest path
 shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4)
 plot(sln, add = TRUE)
+}
 }
 \seealso{
 Other rnet: 

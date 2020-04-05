@@ -1,4 +1,11 @@
-# stplanr (development version)
+# stplanr 0.5.2
+
+## BUG FIXES
+
+- Documentation fixes (#384)
+- A bug affecting `route()` function calls when `pbapply` was not installed has been fixed (#386)
+- `oneway()` has been deprecated in favour of faster and easier-to-maintain function `od_oneway()` (also see the in-development `od` package): https://github.com/ropensci/stplanr/pull/387
+- Various other changes have been made to accomodate the dev version of `dplyr` (#383)
 
 # stplanr 0.5.1
 
