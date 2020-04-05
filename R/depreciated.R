@@ -27,6 +27,8 @@ NULL
 #' @export
 onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
                      stplanr.key = od_id_order(x, id1, id2)) {
+  .Deprecated(new = "od_oneway", package = "od",
+              msg = "See updated od_oneway function in stplanr, and the od package")
   UseMethod("onewayid")
 }
 
@@ -42,6 +44,9 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #' @examples
+#' \donttest{
+#' # this function is deprecated so examples are not expected to run
+#' # keeping the example code in there for now for posterity
 #' flow_oneway <- onewayid(flow, attrib = 3)
 #' nrow(flow_oneway) < nrow(flow) # result has fewer rows
 #' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
@@ -57,6 +62,7 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' flow_oneway_sf <- onewayid(flowlines_sf, 3)
 #' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 #' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
+#' }
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
                                 stplanr.key = od_id_order(x, id1, id2)) {
