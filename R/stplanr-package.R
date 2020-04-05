@@ -35,5 +35,5 @@
 #' @importFrom dplyr first last n
 #' @useDynLib stplanr
 NULL
-utils::globalVariables(c(".", "n", ".inc"))
+utils::globalVariables(c(".", "n", ".inc", "object", "x", "y"))
 

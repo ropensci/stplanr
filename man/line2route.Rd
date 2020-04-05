@@ -55,16 +55,11 @@ plot(r, col = "red", add = TRUE)
 plot(rq, col = "green", add = TRUE)
 plot(rsc)
 plot(l, add = T)
-line2route(flowlines_sf[2:3, ], route_osrm)
 # Plot for a single line to compare 'fastest' and 'quietest' route
 n <- 2
 plot(l[n, ])
-lines(rf[n, ], col = "red")
+lines(r[n, ], col = "red")
 lines(rq[n, ], col = "green")
-# Example with list output
-l <- l[1:3, ]
-rf_list <- line2route(l = l, list_output = TRUE)
-line2route(l[1, ], route_graphhopper)
 }
 }
 \seealso{
