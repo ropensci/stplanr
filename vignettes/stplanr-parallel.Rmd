@@ -15,6 +15,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+The code in this vignette provides a basic introduction to parallel routing.
+Routing is something that is highly parallelisable because each route can be calculated independently of the others.
+The code should be fairly self-explanatory.
+No results are shown and the code is not run to reduce package build times.
+
 ```{r setup}
 library(stplanr)
 library(sf)
