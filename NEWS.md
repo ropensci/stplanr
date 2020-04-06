@@ -1,5 +1,9 @@
 # stplanr (development version)
 
+## NEW FEATURES
+
+- New `cl` argument in `route()` for parallel routing (#388)
+
 # stplanr 0.5.2
 
 ## BUG FIXES
