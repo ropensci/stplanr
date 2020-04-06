@@ -1,3 +1,5 @@
+# stplanr (development version)
+
 # stplanr 0.5.2
 
 ## BUG FIXES
