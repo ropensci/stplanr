@@ -68,7 +68,7 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
 }
 #' @export
 geo_toptail.sf <- function(l, toptail_dist, ...) {
-  l_sp <- as(l, "Spatial")
+  l_sp <- sf::as_Spatial(l)
   res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
   sf::st_as_sf(res_sp)
 }

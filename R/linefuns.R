@@ -25,7 +25,7 @@ n_vertices.sf <- function(l) {
   geoms <- sf::st_coordinates(l)
   L1 <- rlang::quo(L1)
   geoms %>%
-    dplyr::as_data_frame() %>%
+    dplyr::as_tibble() %>%
     dplyr::group_by(!!L1) %>%
     dplyr::summarise(n_vertices = dplyr::n()) %>%
     dplyr::pull(n_vertices)
@@ -121,12 +121,14 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' @export
 #' @examples
 #' # Find all routes going North-South
+#' lines_sf = od2line(od_data_sample, zones = zones_sf)
+#' angle_diff(lines_sf[2, ], angle = 0)
+#' angle_diff(lines_sf[2:3, ], angle = 0)
 #' a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
 #' plot(flowlines)
 #' plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
 #' # East-West
 #' plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
-#' angle_diff(flowlines_sf[2, ], angle = 0)
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
 }
@@ -151,7 +153,7 @@ angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE)
 }
 #' @export
 angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
-  l_sp <- as(l, "Spatial")
+  l_sp <- sf::as_Spatial(sf::st_geometry(l))
   angle_diff.Spatial(l_sp, angle, bidirectional = FALSE, absolute = TRUE)
 }
 #' Find the mid-point of lines
@@ -173,7 +175,7 @@ line_midpoint.Spatial <- function(l) {
 }
 #' @export
 line_midpoint.sf <- function(l) {
-  l <- as(l, "Spatial")
+  l <- sf::as_Spatial(l)
   res_sp <- line_midpoint.Spatial(l)
   sf::st_as_sf(l)
 }

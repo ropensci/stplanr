@@ -85,14 +85,18 @@ xy_nodes <- stplanr::find_network_nodes(sln = sln, x = x, y = y)
 
 # Routing on route networks
 
+Currently not running due to issues with dev version of `dplyr`:
+
+https://github.com/ropensci/stplanr/issues/383
+
 ```{r, out.width="49%", fig.show='hide'}
-plot(rnet$geometry)
-plot(sln_nodes, add = TRUE)
-xy_path <- sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
-# xy_path = sum_network_links(sln = sln, start = xy_nodes[1], end = xy_nodes[2])
-plot(rnet$geometry)
-plot(xy_sf$geometry, add = TRUE)
-plot(xy_path$geometry, add = TRUE, lwd = 5)
+# plot(rnet$geometry)
+# plot(sln_nodes, add = TRUE)
+# xy_path <- sum_network_routes(sln = sln, start = xy_nodes[1], end = xy_nodes[2], sumvars = "length")
+# # xy_path = sum_network_links(sln = sln, start = xy_nodes[1], end = xy_nodes[2])
+# plot(rnet$geometry)
+# plot(xy_sf$geometry, add = TRUE)
+# plot(xy_path$geometry, add = TRUE, lwd = 5)
 ```
 
 # Adding new nodes
@@ -122,7 +126,7 @@ Other approaches to working with route networks include:
 - [sDNA](https://github.com/fiftysevendegreesofrad/sdna_open), an open source C++ library for analysing route networks and estimating flows at segments across network segments
 - [sfnetworks](https://github.com/luukvdmeer/sfnetworks), an R package that provides an alternative igraph/sf spatial network class
 - [dodgr](https://github.com/ATFutures/dodgr), an R package providing functions for calculating distances on directed graphs
-- [cppRouting](https://github.com/vlarmet/cppRouting), a package for routing in C++
+- [cppRouting](https://cran.r-project.org/package=cppRouting), a package for routing in C++
 - Chapter [10 of Geocomputation with R](https://geocompr.robinlovelace.net/transport.html), which provides context and demonstrates a transport planning workflow in R.
 
 ```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE, eval=FALSE}

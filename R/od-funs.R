@@ -335,7 +335,7 @@ line2df.sf <- function(l) {
   L1 <- rlang::quo(L1)
 
   ldf_geom <- sf::st_coordinates(l)
-  dplyr::group_by(dplyr::as_data_frame(ldf_geom), !!L1) %>%
+  dplyr::group_by(dplyr::as_tibble(ldf_geom), !!L1) %>%
     dplyr::summarise(
       fx = dplyr::first(!!X), fy = dplyr::first(!!Y),
       tx = dplyr::last(!!X), ty = dplyr::last(!!Y)
@@ -344,9 +344,13 @@ line2df.sf <- function(l) {
 #' @export
 line2df.Spatial <- function(l) {
   ldf_geom <- raster::geom(l)
-  dplyr::group_by_(dplyr::as_data_frame(ldf_geom), "object") %>%
-    dplyr::summarise_(fx = quote(dplyr::first(x)), fy = quote(dplyr::first(y)),
-	tx = quote(dplyr::last(x)), ty = quote(dplyr::last(y)))
+  dplyr::group_by(dplyr::as_tibble(ldf_geom), object) %>%
+    dplyr::summarise(
+      fx = dplyr::first(x),
+      fy = dplyr::first(y),
+      tx = dplyr::last(x),
+      ty = dplyr::last(y)
+      )
 }
 
 #' Convert a spatial (linestring) object to points
@@ -492,16 +496,11 @@ line2vertices.sf <- function(l) {
 #' plot(rq, col = "green", add = TRUE)
 #' plot(rsc)
 #' plot(l, add = T)
-#' line2route(flowlines_sf[2:3, ], route_osrm)
 #' # Plot for a single line to compare 'fastest' and 'quietest' route
 #' n <- 2
 #' plot(l[n, ])
-#' lines(rf[n, ], col = "red")
+#' lines(r[n, ], col = "red")
 #' lines(rq[n, ], col = "green")
-#' # Example with list output
-#' l <- l[1:3, ]
-#' rf_list <- line2route(l = l, list_output = TRUE)
-#' line2route(l[1, ], route_graphhopper)
 #' }
 line2route <-
   function(l,
@@ -514,7 +513,7 @@ line2route <-
     return_sf <- is(l, "sf")
   if (return_sf) {
     requireNamespace("sf")
-    l <- as(l, "Spatial")
+    l <- sf::as_Spatial(l)
   }
   FUN <- match.fun(route_fun)
   ldf <- line2df(l)

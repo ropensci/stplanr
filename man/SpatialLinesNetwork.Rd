@@ -42,6 +42,7 @@ weightfield(sln) # field used to determine shortest path
 plot(sln)
 points(sln2points(sln)[1, ], cex = 5)
 points(sln2points(sln)[50, ], cex = 5)
+\donttest{
 shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4, add = TRUE)
 points(sln2points(sln)[35, ], cex = 5)
@@ -52,6 +53,7 @@ sln_sf <- SpatialLinesNetwork(route_network_sf)
 plot(sln_sf)
 shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
+}
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:http://rpubs.com/edzer/6767.

@@ -4,7 +4,9 @@
 \name{l_poly}
 \alias{l_poly}
 \title{Line polygon}
-\format{A SpatialPolygon}
+\format{
+A SpatialPolygon
+}
 \usage{
 data(l_poly)
 }

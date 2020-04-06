@@ -9,21 +9,19 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  eval = FALSE,
   collapse = TRUE,
   comment = "#>"
 )
 ```
-
-```{r, eval=FALSE}
-devtools::install_github("ropensci/stplanr", "par")
-```
-
 
 ```{r setup}
 library(stplanr)
 library(sf)
 library(dplyr)
 library(tmap)
+library(parallel)
+library(cyclestreets)
 ```
 
 # With old route_cyclestreets function
@@ -73,8 +71,6 @@ t1 = Sys.time()
 
 
 # load parallel stuff
-library(parallel)
-library(cyclestreets)
 cl <- makeCluster(detectCores())
 clusterExport(cl, c("journey"))
 Sys.time() - t1

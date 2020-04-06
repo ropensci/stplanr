@@ -51,6 +51,7 @@ for users and are difficult to plot.
 \examples{
 (od_min = od_data_sample[c(1, 2, 9), 1:6])
 (od_oneway = od_oneway(od_min))
+# (od_oneway_old = onewayid(od_min, attrib = 3:6)) # old implementation
 nrow(od_oneway) < nrow(od_min) # result has fewer rows
 sum(od_min$all) == sum(od_oneway$all) # but the same total flow
 od_oneway(od_min, attrib = "all")
@@ -67,10 +68,10 @@ par(mfrow = c(1, 1))
 od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
 cor(od_max_min$all, od_oneway$all)
 # benchmark performance
-bench::mark(check = FALSE, iterations = 3,
-  onewayid(flowlines_sf, attrib),
-  od_oneway(flowlines_sf)
-)
+# bench::mark(check = FALSE, iterations = 3,
+#   onewayid(flowlines_sf, attrib),
+#   od_oneway(flowlines_sf)
+# )
 }
 \seealso{
 Other od: 

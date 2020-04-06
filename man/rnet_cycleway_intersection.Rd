@@ -4,7 +4,9 @@
 \name{rnet_cycleway_intersection}
 \alias{rnet_cycleway_intersection}
 \title{Example of cycleway intersection data showing problems for SpatialLinesNetwork objects}
-\format{A sf object}
+\format{
+A sf object
+}
 \description{
 See \code{data-raw/rnet_cycleway_intersection} for details on how this was created.
 }

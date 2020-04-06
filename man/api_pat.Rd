@@ -8,7 +8,7 @@ api_pat(api_name, force = FALSE)
 }
 \arguments{
 \item{api_name}{Text string of the name of the API you are calling, e.g.
-cyclestreet, graphhopper etc.}
+cyclestreets, graphhopper etc.}
 }
 \description{
 Retrieve personal access token.

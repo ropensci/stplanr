@@ -23,18 +23,26 @@
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 #' # with osrm backend - need to set-up osrm first - see routing vignette
-#' route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
-#' # with cyclestreets backend - need to set-up osrm first - see routing vignette
-#' route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
-#' system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
-#' plot(r)
-#' library(parallel)
-#' library(cyclestreets)
-#' cl <- makeCluster(detectCores())
-#' clusterExport(cl, c("journey"))
-#' system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
-#' plot(r)
-#' stopCluster(cl)
+#' if(require(osrm)) {
+#'   message("You have osrm installed")
+#'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81))
+#'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81), , returnclass = "sf")
+#'   # mapview::mapview(.Last.value) # check it's on the route network
+#'   route(pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
+#' }
+#' if(require(cyclestreets)) { # with cyclestreets backend
+#'   l <- pct::wight_lines_30
+#'   system.time(r <- route(l, route_fun = cyclestreets::journey))
+#'   plot(r)
+#'   library(parallel)
+#'   library(cyclestreets)
+#'   cl <- makeCluster(detectCores())
+#'   clusterExport(cl, c("journey"))
+#'   system.time(r2 <- route(l, route_fun = cyclestreets::journey, cl = cl))
+#'   plot(r2)
+#'   identical(r, r2)
+#'   stopCluster(cl)
+#' }
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreets,
@@ -67,7 +75,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
       pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...), cl = cl)
     }
   } else {
-    lapply(1:nrow(l), route_i, FUN = FUN, ldf = ldf, i = 1, ...)
+    lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
   }
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
@@ -92,7 +100,7 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }
   FUN <- match.fun(route_fun)
   # generate od coordinates
-  ldf <- dplyr::as_data_frame(od_coords(from, to, l))
+  ldf <- dplyr::as_tibble(od_coords(from, to, l))
   # calculate line data frame
   if(is.null(l)) {
     l <- od2line(ldf)
@@ -106,7 +114,7 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }))
 
   rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
-  rdf <- dplyr::as_data_frame(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
+  rdf <- dplyr::as_tibble(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
   names(rdf) <- names(rc[[1]])
 
   rdf[1, ] <- rc[[1]]@data[1, ]

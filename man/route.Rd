@@ -8,7 +8,7 @@ route(
   from = NULL,
   to = NULL,
   l = NULL,
-  route_fun = stplanr::route_cyclestreet,
+  route_fun = stplanr::route_cyclestreets,
   n_print = 10,
   list_output = FALSE,
   cl = NULL,
@@ -55,18 +55,26 @@ summary(r$route_number)
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 # with osrm backend - need to set-up osrm first - see routing vignette
-route(pct::wight_lines_30, route_fun = osrm::osrmRoute, point_input = TRUE)
-# with cyclestreets backend - need to set-up osrm first - see routing vignette
-route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE)
-system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE))
-plot(r)
-library(parallel)
-library(cyclestreets)
-cl <- makeCluster(detectCores())
-clusterExport(cl, c("journey"))
-system.time(r <- route(pct::wight_lines_30, route_fun = cyclestreets::journey, point_input = TRUE, cl = cl))
-plot(r)
-stopCluster(cl)
+if(require(osrm)) {
+  message("You have osrm installed")
+  osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81))
+  osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81), , returnclass = "sf")
+  # mapview::mapview(.Last.value) # check it's on the route network
+  route(pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
+}
+if(require(cyclestreets)) { # with cyclestreets backend
+  l <- pct::wight_lines_30
+  system.time(r <- route(l, route_fun = cyclestreets::journey))
+  plot(r)
+  library(parallel)
+  library(cyclestreets)
+  cl <- makeCluster(detectCores())
+  clusterExport(cl, c("journey"))
+  system.time(r2 <- route(l, route_fun = cyclestreets::journey, cl = cl))
+  plot(r2)
+  identical(r, r2)
+  stopCluster(cl)
+}
 }
 }
 \seealso{

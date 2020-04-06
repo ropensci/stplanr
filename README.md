@@ -11,6 +11,7 @@ downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacra
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/onboarding/issues/10)
+![R-CMD-check](https://github.com/ropensci/stplanr/workflows/R-CMD-check/badge.svg)
 
 **stplanr** is a package for sustainable transport planning with R.
 
@@ -76,10 +77,16 @@ od_data_sample[1:3, 1:3] # typical form of flow data
 #> 2 E02002361 E02002363    38
 #> 3 E02002361 E02002367    10
 cents_sf[1:3,] # points representing origins and destinations
-#>       geo_code  MSOA11NM percent_fem  avslope             geometry
-#> 1708 E02002384 Leeds 055    0.458721 2.856563 -1.546463, 53.809517
-#> 1712 E02002382 Leeds 053    0.438144 2.284782 -1.511861, 53.811611
-#> 1805 E02002393 Leeds 064    0.408759 2.361707 -1.524205, 53.804098
+#> Simple feature collection with 3 features and 4 fields
+#> geometry type:  POINT
+#> dimension:      XY
+#> bbox:           xmin: -1.546463 ymin: 53.8041 xmax: -1.511861 ymax: 53.81161
+#> epsg (SRID):    4326
+#> proj4string:    +proj=longlat +datum=WGS84 +no_defs
+#>       geo_code  MSOA11NM percent_fem  avslope                   geometry
+#> 1708 E02002384 Leeds 055    0.458721 2.856563 POINT (-1.546463 53.80952)
+#> 1712 E02002382 Leeds 053    0.438144 2.284782 POINT (-1.511861 53.81161)
+#> 1805 E02002393 Leeds 064    0.408759 2.361707  POINT (-1.524205 53.8041)
 ```
 
 These datasets can be combined as follows:
@@ -145,11 +152,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2019-11-14 16:08:24 constructing segments
-#> 2019-11-14 16:08:24 building geometry
-#> 2019-11-14 16:08:24 simplifying geometry
-#> 2019-11-14 16:08:24 aggregating flows
-#> 2019-11-14 16:08:24 rejoining segments into linestrings
+#> 2020-02-19 00:19:37 constructing segments
+#> 2020-02-19 00:19:37 building geometry
+#> 2020-02-19 00:19:37 simplifying geometry
+#> 2020-02-19 00:19:37 aggregating flows
+#> 2020-02-19 00:19:37 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from
@@ -267,7 +274,6 @@ However, there are already some good resources on the topic, including
     `citation(package = 'stplanr')`
   - This project is released with a [Contributor Code of
     Conduct](https://github.com/ropensci/stplanr/blob/master/CONDUCT.md).
-    By participating in this project you agree to abide by its
-terms.
+    By participating in this project you agree to abide by its terms.
 
 [![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)

@@ -86,6 +86,7 @@ validity = function(object) {
 #' plot(sln)
 #' points(sln2points(sln)[1, ], cex = 5)
 #' points(sln2points(sln)[50, ], cex = 5)
+#' \donttest{
 #' shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
 #' points(sln2points(sln)[35, ], cex = 5)
@@ -96,6 +97,7 @@ validity = function(object) {
 #' plot(sln_sf)
 #' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
+#' }
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
@@ -517,11 +519,14 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @family rnet
 #'
 #' @examples
+#' \donttest{
+#' # tests fail on dev version of dplyr
 #' sln <- SpatialLinesNetwork(route_network)
 #' weightfield(sln) # field used to determine shortest path
 #' shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
 #' plot(sln, add = TRUE)
+#' }
 #' @export
 sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (!is(sln, "SpatialLinesNetwork") & !is(sln, "sfNetwork")) {
