@@ -52,6 +52,7 @@ plot(r1)
 plot(r2)
 r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 summary(r$route_number)
+route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 # with osrm backend - need to set-up osrm first - see routing vignette
@@ -60,7 +61,7 @@ if(require(osrm)) {
   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81))
   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81), , returnclass = "sf")
   # mapview::mapview(.Last.value) # check it's on the route network
-  route(pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
+  route(l = pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
 }
 if(require(cyclestreets)) { # with cyclestreets backend
   l <- pct::wight_lines_30

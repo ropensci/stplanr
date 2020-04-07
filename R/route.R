@@ -20,6 +20,7 @@
 #' plot(r2)
 #' r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 #' summary(r$route_number)
+#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
 #' # with osrm backend - need to set-up osrm first - see routing vignette
@@ -28,7 +29,7 @@
 #'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81))
 #'   osrm::osrmRoute(c(-1.5, 53.8), c(-1.51, 53.81), , returnclass = "sf")
 #'   # mapview::mapview(.Last.value) # check it's on the route network
-#'   route(pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
+#'   route(l = pct::wight_lines_30[1:2, ], route_fun = osrm::osrmRoute, returnclass = "sf")
 #' }
 #' if(require(cyclestreets)) { # with cyclestreets backend
 #'   l <- pct::wight_lines_30
@@ -68,7 +69,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   if(is.null(l)) {
     l <- od_coords2line(ldf)
   }
-  list_out <- out <- if (requireNamespace("pbapply", quietly = TRUE)) {
+  list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
     if(is.null(cl)) {
       pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
     } else {
@@ -243,9 +244,9 @@ route_i <- function(FUN, ldf, i, l, ...){
   tryCatch({
     single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
     sf::st_sf(cbind(
-      sf::st_drop_geometry(single_route),
+      sf::st_drop_geometry(l[rep(i, nrow(single_route)), ]),
       route_number = i,
-      sf::st_drop_geometry(l[rep(i, nrow(single_route)), ])
+      sf::st_drop_geometry(single_route)
     ),
     geometry = single_route$geometry)
   }, error = error_fun)
