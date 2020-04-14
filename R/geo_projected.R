@@ -17,7 +17,8 @@
 #' sp::bbox(rf_projected)
 #' line_length <- rgeos::gLength(rf_projected, byid = TRUE)
 #' plot(line_length, rf_projected$length)
-#' geo_select_aeq(zones_sf)
+#' shp <- zones_sf
+#' geo_select_aeq(shp)
 #' @export
 geo_select_aeq <- function(shp) {
   UseMethod("geo_select_aeq")
@@ -70,7 +71,7 @@ geo_projected <- function(shp, fun, crs, silent, ...) {
 geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if (is.na(sf::st_crs(shp))) {
-    sf::st_crs(shp) <- 4326
+    sf::st_crs(shp) <- sf::st_crs(4326)
   }
   crs_orig <- sf::st_crs(shp)
   shp_projected <- sf::st_transform(shp, crs)

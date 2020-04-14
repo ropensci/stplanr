@@ -23,8 +23,13 @@
 #' plot(cents, col = "blue", add = TRUE, pch = 15)
 #' # Note the behaviour when the buffer size removes lines
 #' r_toptail <- geo_toptail(l, toptail_dist = 900)
+#' nrow(r_toptail)
 #' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
-#' geo_toptail(routes_fast_sf[2:4, ], 300)
+#' l <- sf::st_as_sf(l)
+#' l_top_tail <- geo_toptail(l, 300)
+#' l_top_tail
+#' plot(sf::st_geometry(l_top_tail))
+#' plot(sf::st_geometry(geo_toptail(l, 900)), lwd = 9, add = TRUE)
 geo_toptail <- function(l, toptail_dist, ...) {
   UseMethod("geo_toptail")
 }
@@ -68,9 +73,29 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
 }
 #' @export
 geo_toptail.sf <- function(l, toptail_dist, ...) {
-  l_sp <- sf::as_Spatial(l)
-  res_sp <- geo_toptail(l = l_sp, toptail_dist = toptail_dist, ...)
-  sf::st_as_sf(res_sp)
+  lpoints <- line2points(l)
+  suppressMessages(suppressWarnings({
+    line_list <- lapply(
+      seq(nrow(l)),
+      function(i) {
+        sel_points <- sf::st_sf(sf::st_union(lpoints[lpoints$id == i, ]))
+        sel <- geo_buffer(shp = sel_points, dist = toptail_dist)
+        li <- l[i, ]
+        if(any(sf::st_contains_properly(sel, li, sparse = FALSE))) {
+          message(
+            "Line ", i, " is completely removed by the clip and",
+            " is omitted from the results"
+          )
+          return()
+        }
+        sf::st_difference(x = li, y = sel)
+      }
+    )
+  }))
+  out <- do.call(rbind, line_list)
+  # out <- data.table::rbindlist(line_list)
+  # sf::st_sf(out)
+  out
 }
 #' Clip the first and last n metres of SpatialLines
 #'
