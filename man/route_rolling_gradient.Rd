@@ -4,7 +4,7 @@
 \alias{route_rolling_gradient}
 \title{Calculate rolling average gradient from elevation data at segment level}
 \usage{
-route_rolling_gradient(elevations, distances, lag = 1, n = 2)
+route_rolling_gradient(elevations, distances, lag = 1, n = 2, abs = TRUE)
 }
 \arguments{
 \item{elevations}{Elevations, e.g. those provided by the \code{cyclestreets} package}
@@ -17,6 +17,8 @@ the mean of values before, after and including each value.}
 \item{n}{The window size of the smoothing function.
 The default, 3, will take the mean of values before, after and including
 each value.}
+
+\item{abs}{Should the absolute (always positive) change be returned? True by default}
 }
 \description{
 Calculate rolling average gradient from elevation data at segment level
@@ -26,6 +28,7 @@ r1 <- od_data_routes[od_data_routes$route_number == 2, ]
 y <- r1$elevations
 distances <- r1$distances
 route_rolling_gradient(y, distances)
+route_rolling_gradient(y, distances, abs = FALSE)
 route_rolling_gradient(y, distances, n = 3)
 route_rolling_gradient(y, distances, n = 4)
 r1$elevations_diff_1 <- route_rolling_diff(y, lag = 1)
