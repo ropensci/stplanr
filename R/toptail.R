@@ -73,14 +73,16 @@ geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
 }
 #' @export
 geo_toptail.sf <- function(l, toptail_dist, ...) {
-  lpoints <- line2points(l)
   suppressMessages(suppressWarnings({
     line_list <- lapply(
       seq(nrow(l)),
       function(i) {
-        sel_points <- sf::st_sf(sf::st_union(lpoints[lpoints$id == i, ]))
-        sel <- geo_buffer(shp = sel_points, dist = toptail_dist)
         li <- l[i, ]
+        sel_points <- sf::st_union(
+          lwgeom::st_startpoint(li),
+          lwgeom::st_endpoint(li)
+        )
+        sel <- geo_buffer(shp = sel_points, dist = toptail_dist, nQuadSegs = 5)
         if(any(sf::st_contains_properly(sel, li, sparse = FALSE))) {
           message(
             "Line ", i, " is completely removed by the clip and",
