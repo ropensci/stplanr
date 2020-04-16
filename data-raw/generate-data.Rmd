@@ -59,10 +59,10 @@ plot(od_data_lines)
 od_data_routes_fast = route(l = od_data_lines, route_fun = cyclestreets::journey, plan = "fastest")
 pryr::object_size(od_data_routes_fast) # 500+ kB
 names(od_data_routes_fast)
-od_data_routes = od_data_routes_fast[c(1:3, 20, 21, 23)]
+od_data_routes = od_data_routes_fast[c(19:ncol(od_data_routes_fast))]
 plot(od_data_routes)
 pryr::object_size(od_data_routes) # 300+ kB
-usethis::use_data(od_data_routes)
+usethis::use_data(od_data_routes, overwrite = TRUE)
 usethis::use_data(od_data_lines)
 file.size("data/od_data_routes.rda") # 24 kB - it's fine
 system('ls -hal data/od_data_routes.rda')
