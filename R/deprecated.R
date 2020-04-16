@@ -330,3 +330,126 @@ od_radiation <- function(p, pop_var = "population", proportion = 1) {
   }
   l
 }
+
+#' Plan a route with the graphhopper routing engine
+#'
+#' **Note: See https://github.com/crazycapivara/graphhopper-r for modern interface**
+#'
+#' Provides an R interface to the graphhopper routing engine,
+#' an open source route planning service.
+#'
+#' The function returns a SpatialLinesDataFrame object.
+#' See <https://github.com/graphhopper> for more information.
+#'
+#' @param vehicle A text string representing the vehicle.
+#' Can be bike (default), car or foot. See <https://graphhopper.com/api/1/docs/supported-vehicle-profiles/> for further details.
+#'
+#' @details
+#'
+#' To test graphopper is working for you, try something like this, but with
+#' your own API key:
+#' To use this function you will need to obtain an API key from
+#' <https://graphhopper.com/#directions-api>.
+#' It is assumed that you have set your api key as a system environment
+#' for security reasons (so you avoid typing the API key in your code).
+#' Do this by adding the following to your .Renviron file (see `?.Renviron`
+#' or the 'api-packages' vignette at <https://cran.r-project.org/package=httr>
+#' for more on this):
+#'
+#' `GRAPHHOPPER='FALSE-Key-eccbf612-214e-437d-8b73-06bdf9e6877d'`.
+#'
+#' (Note: key not real, use your own key.)
+#'
+#' `obj <- jsonlite::fromJSON(url)`
+#'
+#' Where `url` is an example api request from
+#'  <https://github.com/graphhopper/directions-api/blob/master/routing.md>.
+#'
+#' @inheritParams route_cyclestreets
+#' @inheritParams od_coords
+#' @family routes
+#' @export
+#' @seealso route_cyclestreet
+#' @examples
+#' \dontrun{
+#' from <- c(-0.12, 51.5)
+#' to <- c(-0.14, 51.5)
+#' r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
+#' r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
+#' r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
+#' plot(r1)
+#' plot(r2, add = TRUE, col = "blue") # compare routes
+#' plot(r3, add = TRUE, col = "red")
+#' }
+route_graphhopper <- function(from, to, l = NULL, vehicle = "bike",
+                              silent = TRUE, pat = NULL,
+                              base_url = "https://graphhopper.com") {
+
+  .Deprecated(new = "gh_get_route", package = "graphhopper",
+              msg = "See github.com/crazycapivara/graphhopper-r")
+
+  # Convert character strings to lon/lat if needs be
+  coords <- od_coords(from, to, l)
+
+  if (is.null(pat)) {
+    pat <- api_pat("graphhopper")
+  }
+
+  httrmsg <- httr::modify_url(
+    base_url,
+    path = "/api/1/route",
+    query = list(
+      point = paste0(coords[1, c("fy", "fx")], collapse = ","),
+      point = paste0(coords[1, c("ty", "tx")], collapse = ","),
+      vehicle = vehicle,
+      locale = "en-US",
+      debug = "true",
+      points_encoded = "false",
+      key = pat
+    )
+  )
+  if (silent == FALSE) {
+    print(paste0("The request sent was: ", httrmsg))
+  }
+  httrreq <- httr::GET(httrmsg)
+  httr::stop_for_status(httrreq)
+
+  if (grepl("application/json", httrreq$headers$`content-type`) == FALSE) {
+    stop("Error: Graphhopper did not return a valid result")
+  }
+
+  txt <- httr::content(httrreq, as = "text", encoding = "UTF-8")
+  if (txt == "") {
+    stop("Error: Graphhopper did not return a valid result")
+  }
+
+  obj <- jsonlite::fromJSON(txt)
+
+  if (is.element("message", names(obj))) {
+    if (grepl("Wrong credentials", obj$message) == TRUE) {
+      stop("Invalid API key")
+    }
+  }
+  route <- sp::SpatialLines(list(sp::Lines(list(sp::Line(obj$paths$points[[2]][[1]][, 1:2])), ID = "1")))
+
+  climb <- NA # to set elev variable up
+
+  # get elevation data if it was a bike trip
+  if (vehicle == "bike") {
+    change_elev <- obj$path$descend + obj$paths$ascend
+  } else {
+    change_elev <- NA
+  }
+
+  # Attribute data for the route
+  df <- data.frame(
+    time = obj$paths$time / (1000 * 60),
+    dist = obj$paths$distance,
+    change_elev = change_elev
+  )
+
+  route <- sp::SpatialLinesDataFrame(route, df)
+  sp::proj4string(route) <- sp::CRS("+init=epsg:4326")
+  route
+}
+

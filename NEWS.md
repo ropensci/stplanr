@@ -5,6 +5,7 @@
 - `geo_toptail()` function now has `sf` implementation (#390)
 - New `cl` argument in `route()` for parallel routing (#388)
 - New and updated datasets representing `od_data_sample` in different ways: `od_data_lines` and `od_data_routes`
+- `route_graphhopper()` deprecated (#389)
 
 # stplanr 0.5.2
 
