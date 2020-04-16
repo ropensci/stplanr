@@ -49,3 +49,10 @@ points(c(0, d), c(0, r1$rolling_gradient3), col = "blue")
 points(c(0, d), c(0, r1$rolling_gradient4), col = "grey")
 par(mfrow = c(1, 1))
 }
+\seealso{
+Other route_funs: 
+\code{\link{route_average_gradient}()},
+\code{\link{route_rolling_average}()},
+\code{\link{route_rolling_diff}()}
+}
+\concept{route_funs}

@@ -20,3 +20,10 @@ elevations <- r1$elevations
 distances <- r1$distances
 route_average_gradient(elevations, distances) # an average of a 4\% gradient
 }
+\seealso{
+Other route_funs: 
+\code{\link{route_rolling_average}()},
+\code{\link{route_rolling_diff}()},
+\code{\link{route_rolling_gradient}()}
+}
+\concept{route_funs}

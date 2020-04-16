@@ -4,6 +4,7 @@
 #' @param distances Distances, e.g. those provided by the `cyclestreets` package
 #' @inheritParams route_rolling_average
 #' @inheritParams route_rolling_diff
+#' @family route_funs
 #' @export
 #' @examples
 #' r1 <- od_data_routes[od_data_routes$route_number == 2, ]
@@ -46,6 +47,7 @@ route_rolling_gradient <- function(elevations, distances, lag = 1, n = 2, abs = 
 #' @param n The window size of the smoothing function.
 #' The default, 3, will take the mean of values before, after and including
 #' each value.
+#' @family route_funs
 #' @export
 #' @examples
 #' y = od_data_routes$elevations[od_data_routes$route_number == 2]
@@ -68,6 +70,7 @@ route_rolling_average <- function(x, n = 3) {
 #' @param lag The window size of the smoothing function. The default, 3, will take
 #'   the mean of values before, after and including each value.
 #' @param abs Should the absolute (always positive) change be returned? True by default
+#' @family route_funs
 #' @export
 #' @examples
 #' r1 <- od_data_routes[od_data_routes$route_number == 2, ]
@@ -97,6 +100,7 @@ route_rolling_diff = function(x, lag = 1, abs = TRUE) {
 #' This function assumes that elevations and distances are in the same units.
 #'
 #' @inheritParams route_rolling_gradient
+#' @family route_funs
 #' @export
 #' @examples
 #' r1 <- od_data_routes[od_data_routes$route_number == 2, ]

@@ -12,6 +12,9 @@ reference:
 - title: Work with (desire) lines
   contents:
   - has_concept("lines")
+- title: Work with and analyse routes
+  contents:
+  - has_concept("route_funs")
 - title: Routing
   contents:
   - has_concept("routes")

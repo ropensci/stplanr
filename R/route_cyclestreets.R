@@ -54,7 +54,6 @@
 #' @param reporterrors Boolean value (TRUE/FALSE) indicating if cyclestreets (TRUE by default).
 #' should report errors (FALSE by default).
 #' @param save_raw Boolean value which returns raw list from the json if TRUE (FALSE by default).
-#' @family routes
 #' @export
 #' @seealso line2route
 #' @examples

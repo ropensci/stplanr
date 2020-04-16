@@ -26,3 +26,10 @@ route_rolling_average(y, n = 1)
 route_rolling_average(y, n = 2)
 route_rolling_average(y, n = 3)
 }
+\seealso{
+Other route_funs: 
+\code{\link{route_average_gradient}()},
+\code{\link{route_rolling_diff}()},
+\code{\link{route_rolling_gradient}()}
+}
+\concept{route_funs}

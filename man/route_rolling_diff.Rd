@@ -35,3 +35,10 @@ points(d, diff_above_mean)
 points(d, diff_above_mean_n, col = "blue")
 abline(h = mean(y))
 }
+\seealso{
+Other route_funs: 
+\code{\link{route_average_gradient}()},
+\code{\link{route_rolling_average}()},
+\code{\link{route_rolling_gradient}()}
+}
+\concept{route_funs}

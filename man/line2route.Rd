@@ -65,7 +65,6 @@ lines(rq[n, ], col = "green")
 \seealso{
 Other routes: 
 \code{\link{line2routeRetry}()},
-\code{\link{route_cyclestreets}()},
 \code{\link{route_dodgr}()},
 \code{\link{route_graphhopper}()},
 \code{\link{route_local}()},
