@@ -292,6 +292,34 @@ NULL
 #' od_data_sample
 NULL
 
+#' Example of desire line representations of origin-destination data from UK Census
+#'
+#' Derived from `od_data_sample` showing movement between points represented in `cents_sf`
+#'
+#' @docType data
+#' @keywords datasets
+#' @name od_data_lines
+#' @format A data frame (tibble) object
+#' @examples
+#' od_data_lines
+NULL
+
+
+#' Example segment-level route data
+#'
+#' See `data-raw/generate-data.Rmd` for details on how this was created.
+#' The dataset shows routes between origins and destinations represented in
+#' `od_data_lines`
+#'
+#' @docType data
+#' @keywords datasets
+#' @name od_data_routes
+#' @format A data frame (tibble) object
+#' @examples
+#' od_data_routes
+NULL
+
+
 #' Example of roundabout data showing problems for SpatialLinesNetwork objects
 #'
 #' See `data-raw/rnet_roundabout.R` for details on how this was created.

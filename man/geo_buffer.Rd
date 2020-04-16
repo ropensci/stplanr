@@ -27,4 +27,5 @@ plot(buff_sp, col = "red")
 routes_fast_sf <- sf::st_as_sf(routes_fast)
 buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
 plot(buff_sf$geometry, add = TRUE)
+geo_buffer(routes_fast_sf$geometry, dist = 50)
 }

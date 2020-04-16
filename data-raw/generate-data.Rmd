@@ -54,6 +54,18 @@ sel_local =
   od_data_all$geo_code1 %in% cents_sf$geo_code &
   od_data_all$geo_code2 %in% cents_sf$geo_code 
 od_data_sample = od_data_all[sel_local, ]
+od_data_lines = od2line(od_data_sample, cents_sf)
+plot(od_data_lines)
+od_data_routes_fast = route(l = od_data_lines, route_fun = cyclestreets::journey, plan = "fastest")
+pryr::object_size(od_data_routes_fast) # 500+ kB
+names(od_data_routes_fast)
+od_data_routes = od_data_routes_fast[c(1:3, 20, 21, 23)]
+plot(od_data_routes)
+pryr::object_size(od_data_routes) # 300+ kB
+usethis::use_data(od_data_routes)
+usethis::use_data(od_data_lines)
+file.size("data/od_data_routes.rda") # 24 kB - it's fine
+system('ls -hal data/od_data_routes.rda')
 ```
 
 The code below shows how the `od_lnd` and `c_lnd` datasets were created.
