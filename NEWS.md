@@ -2,6 +2,10 @@
 
 ## NEW FEATURES
 
+- A fleet of new `route_rolling_*()` functions have been added:
+  - `route_rolling_gradient()` calculates a rolling gradient from elevation and distance data at the segment level
+  - `route_rolling_average()` calculates the rolling average of values
+  - `route_rolling_diff()` calculates the rolling difference between each value and the next
 - `geo_toptail()` function now has `sf` implementation (#390)
 - New `cl` argument in `route()` for parallel routing (#388)
 - New and updated datasets representing `od_data_sample` in different ways: `od_data_lines` and `od_data_routes`
