@@ -44,6 +44,19 @@ geo_select_aeq.sf <- function(shp) {
   )
   sf::st_crs(aeqd)
 }
+#' @export
+geo_select_aeq.sfc <- function(shp) {
+  cent <- sf::st_geometry(shp)
+  coords <- sf::st_coordinates(shp)
+  coords_mat <- matrix(coords[, 1:2], ncol = 2)
+  midpoint <- apply(coords_mat, 2, mean)
+  aeqd <- sprintf(
+    "+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
+    midpoint[2], midpoint[1]
+  )
+  sf::st_crs(aeqd)
+}
+
 
 #' Perform GIS functions on a temporary, projected version of a spatial object
 #'
@@ -69,6 +82,22 @@ geo_projected <- function(shp, fun, crs, silent, ...) {
 }
 #' @export
 geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
+  # assume it's not projected  (i.e. lat/lon) if there is no CRS
+  if (is.na(sf::st_crs(shp))) {
+    sf::st_crs(shp) <- sf::st_crs(4326)
+  }
+  crs_orig <- sf::st_crs(shp)
+  shp_projected <- sf::st_transform(shp, crs)
+  if (!silent) {
+    message(paste0("Running function on a temporary projection: ", crs$proj4string))
+  }
+  res <- fun(shp_projected, ...)
+  if (grepl("sf", x = class(res)[1])) {
+    res <- sf::st_transform(res, crs_orig)
+  }
+  res
+}
+geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if (is.na(sf::st_crs(shp))) {
     sf::st_crs(shp) <- sf::st_crs(4326)
@@ -130,13 +159,17 @@ gprojected <- geo_projected.Spatial
 #' routes_fast_sf <- sf::st_as_sf(routes_fast)
 #' buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
 #' plot(buff_sf$geometry, add = TRUE)
+#' geo_buffer(routes_fast_sf$geometry, dist = 50)
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
   UseMethod("geo_buffer")
 }
-
 #' @export
 geo_buffer.sf <- function(shp, ...) {
+  geo_projected(shp, sf::st_buffer, ...)
+}
+#' @export
+geo_buffer.sfc <- function(shp, ...) {
   geo_projected(shp, sf::st_buffer, ...)
 }
 
