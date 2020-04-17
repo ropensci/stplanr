@@ -55,6 +55,7 @@ summary(r$route_number)
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
+route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, list_output = TRUE)
 # with osrm backend - need to set-up osrm first - see routing vignette
 if(require(osrm)) {
   message("You have osrm installed")

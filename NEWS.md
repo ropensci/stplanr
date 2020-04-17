@@ -2,6 +2,7 @@
 
 ## NEW FEATURES
 
+- Improvements to `route()` allowing you to save a list of raw outputs and use `data.table` for faster performance if available
 - A fleet of new `route_rolling_*()` functions have been added:
   - `route_rolling_gradient()` calculates a rolling gradient from elevation and distance data at the segment level
   - `route_rolling_average()` calculates the rolling average of values

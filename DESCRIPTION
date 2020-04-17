@@ -66,7 +66,8 @@ Suggests:
     tmap,
     bench,
     openxlsx (>= 4.1.0),
-    osrm
+    osrm,
+    data.table
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make

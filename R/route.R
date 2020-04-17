@@ -23,6 +23,7 @@
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
 #' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
+#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, list_output = TRUE)
 #' # with osrm backend - need to set-up osrm first - see routing vignette
 #' if(require(osrm)) {
 #'   message("You have osrm installed")
@@ -86,8 +87,16 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     message("The first of which was:")
     print(list_out[[failing_routes[1]]])
   }
-
-  do.call(rbind, list_out[list_elements_sf])
+  if(list_output | ! any(list_elements_sf)) {
+    message("Returning list")
+    return(list_out)
+  }
+  if(requireNamespace("data.table")) {
+    out_dt <- data.table::rbindlist(list_out[list_elements_sf])
+    return(sf::st_as_sf(out_dt))
+  } else {
+    do.call(rbind, list_out[list_elements_sf])
+  }
 }
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
