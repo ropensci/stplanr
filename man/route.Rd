@@ -52,10 +52,12 @@ plot(r1)
 plot(r2)
 r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 summary(r$route_number)
-route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
-route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
-route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
-route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, list_output = TRUE)
+dl <- od2line(od_data_sample[1:3, ], cents_sf)
+route(dl, route_fun = cyclestreets::journey)
+route(dl, route_fun = cyclestreets::journey, plan = "quietest")
+route(dl, route_fun = cyclestreets::journey, plan = "balanced")
+route(dl, route_fun = cyclestreets::journey, list_output = TRUE)
+route(dl, route_fun = cyclestreets::journey, save_raw = TRUE, list_output = TRUE)
 # with osrm backend - need to set-up osrm first - see routing vignette
 if(require(osrm)) {
   message("You have osrm installed")

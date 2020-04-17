@@ -20,10 +20,12 @@
 #' plot(r2)
 #' r = route(cents_sf[1:3, ], cents_sf[2:4, ], route_fun = cyclestreets::journey) # sf points
 #' summary(r$route_number)
-#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey)
-#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "quietest")
-#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, plan = "balanced")
-#' route(flowlines_sf[1:4, ], route_fun = cyclestreets::journey, list_output = TRUE)
+#' dl <- od2line(od_data_sample[1:3, ], cents_sf)
+#' route(dl, route_fun = cyclestreets::journey)
+#' route(dl, route_fun = cyclestreets::journey, plan = "quietest")
+#' route(dl, route_fun = cyclestreets::journey, plan = "balanced")
+#' route(dl, route_fun = cyclestreets::journey, list_output = TRUE)
+#' route(dl, route_fun = cyclestreets::journey, save_raw = TRUE, list_output = TRUE)
 #' # with osrm backend - need to set-up osrm first - see routing vignette
 #' if(require(osrm)) {
 #'   message("You have osrm installed")
@@ -70,15 +72,28 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   if(is.null(l)) {
     l <- od_coords2line(ldf)
   }
-  list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
-    if(is.null(cl)) {
-      pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
+  if(list_output) {
+    list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
+      if(is.null(cl)) {
+        pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
+      } else {
+        pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
+      }
     } else {
-      pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...), cl = cl)
+      lapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
     }
   } else {
-    lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
+    list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
+      if(is.null(cl)) {
+        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
+      } else {
+        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...), cl = cl)
+      }
+    } else {
+      lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
+    }
   }
+
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
   if(sum(list_elements_sf) < length(list_out)) {
@@ -258,6 +273,15 @@ route_i <- function(FUN, ldf, i, l, ...){
       sf::st_drop_geometry(single_route)
     ),
     geometry = single_route$geometry)
+  }, error = error_fun)
+}
+
+route_l <- function(FUN, ldf, i, l, ...){
+  error_fun <- function(e) {
+    e
+  }
+  tryCatch({
+    single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
   }, error = error_fun)
 }
 
