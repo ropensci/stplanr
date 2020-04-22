@@ -1,11 +1,13 @@
-This version works with the development version of dplyr
+This version passes tests with the development version of dplyr
 
 ## Test environments
 
 * Linux
   - Local (Ubuntu 18.04) 
-  - Travis: https://travis-ci.org/ropensci/stplanr
-* Winbuild: https://cran.r-project.org/package=cppRouting
+  - GH Actions: https://github.com/ropensci/stplanr/actions
+
+* Winbuild: https://win-builder.r-project.org/ok3D2ukM1cZG/
+  - Windows: https://github.com/ropensci/stplanr/actions 
 
 ## R CMD check:
 
