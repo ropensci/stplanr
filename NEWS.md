@@ -1,4 +1,4 @@
-# stplanr (development version)
+# stplanr 0.6.0
 
 ## NEW FEATURES
 
