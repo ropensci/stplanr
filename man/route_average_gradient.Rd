@@ -24,6 +24,9 @@ route_average_gradient(elevations, distances) # an average of a 4\% gradient
 Other route_funs: 
 \code{\link{route_rolling_average}()},
 \code{\link{route_rolling_diff}()},
-\code{\link{route_rolling_gradient}()}
+\code{\link{route_rolling_gradient}()},
+\code{\link{route_sequential_dist}()},
+\code{\link{route_slope_matrix}()},
+\code{\link{route_slope_vector}()}
 }
 \concept{route_funs}
