@@ -1,4 +1,6 @@
-This version passes tests with the development version of dplyr
+This version passes tests with the development version of dplyr.
+
+It also fixes an issue with winbuild.
 
 ## Test environments
 
