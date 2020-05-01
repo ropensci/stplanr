@@ -32,12 +32,10 @@ rnet1 <- overline(sl = sl, attrib = "length")
 rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-\dontrun{
 # sf methods
 sl <- routes_fast_sf[2:4, ]
 rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-}
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for

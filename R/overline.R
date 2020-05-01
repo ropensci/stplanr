@@ -49,11 +49,9 @@ islines.sf <- function(g1, g2) {
 #' plot(sl[1], lwd = 9, col = 1:nrow(sl))
 #' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
 #' plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
-#' \dontrun{
 #' sl <- routes_fast_sf[2:4, ]
 #' rsec <- gsection(sl)
 #' rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
-#' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
@@ -125,12 +123,10 @@ lineLabels <- function(sl, attrib) {
 #' rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 #' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 #' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-#' \dontrun{
 #' # sf methods
 #' sl <- routes_fast_sf[2:4, ]
 #' rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
 #' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-#' }
 overline <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   UseMethod("overline")
 }

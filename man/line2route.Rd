@@ -46,6 +46,7 @@ A parallel implementation of this was available until version 0.1.8.
 
 \examples{
 \dontrun{
+# does not run as requires API key
 l <- flowlines[2:5, ]
 r <- line2route(l)
 rq <- line2route(l = l, plan = "quietest", silent = TRUE)

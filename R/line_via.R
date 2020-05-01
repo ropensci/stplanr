@@ -5,7 +5,7 @@
 #' @family lines
 #'
 #' @export
-#' @examples {
+#' @examples
 #' m1 <- matrix(c(1, 2, 1, 2), ncol = 2)
 #' m2 <- matrix(c(9, 9, 9, 1), ncol = 2)
 #' l <- mats2line(m1, m2)
@@ -14,7 +14,6 @@
 #' class(lsf)
 #' plot(lsf)
 #' # mapview::mapview(lsf)
-#' }
 mats2line <- function(mat1, mat2) {
   l <- lapply(1:nrow(mat1), function(i) {
     mat_combined <- rbind(mat1[i, ], mat2[i, ])
@@ -37,21 +36,18 @@ mats2line <- function(mat1, mat2) {
 #' @inheritParams line2df
 #' @family lines
 #' @export
-#' @examples {
+#' @examples
 #' l <- flowlines_sf[2:4, ]
 #' p <- destinations_sf
 #' lv <- line_via(l, p)
-#' \dontrun{
-#' library(mapview)
-#' mapview(lv) +
-#'   mapview(lv$leg_orig, col = "red")
-#' }
+#' # library(mapview)
+#' # mapview(lv) +
+#' #    mapview(lv$leg_orig, col = "red")
 #' library(sf)
 #' plot(lv[3], lwd = 9, reset = FALSE)
 #' plot(lv$leg_orig, col = "red", lwd = 5, add = TRUE)
 #' plot(lv$leg_via, col = "black", add = TRUE)
 #' plot(lv$leg_dest, col = "green", lwd = 5, add = TRUE)
-#' }
 line_via <- function(l, p) {
   # mat_orig <- line2mat(l)
   mat_orig <- as.matrix(line2df(l)[c("fx", "fy")])

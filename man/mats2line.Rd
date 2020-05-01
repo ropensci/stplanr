@@ -15,7 +15,6 @@ mats2line(mat1, mat2)
 Convert 2 matrices to lines
 }
 \examples{
-{
 m1 <- matrix(c(1, 2, 1, 2), ncol = 2)
 m2 <- matrix(c(9, 9, 9, 1), ncol = 2)
 l <- mats2line(m1, m2)
@@ -24,7 +23,6 @@ lsf <- sf::st_sf(l, crs = 4326)
 class(lsf)
 plot(lsf)
 # mapview::mapview(lsf)
-}
 }
 \seealso{
 Other lines: 

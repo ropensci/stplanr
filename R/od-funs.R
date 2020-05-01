@@ -26,7 +26,7 @@ od2odf <- function(flow, zones) {
     stringsAsFactors = FALSE,
     code_o = as.character(flow[[1]]),
     code_d = as.character(flow[[2]])
-    )
+  )
   odf <- dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
   names(coords) <- c("code", "fx", "fy")
   odf <- dplyr::left_join(odf, coords, by = c("code_d" = "code"))
@@ -354,7 +354,7 @@ line2df.Spatial <- function(l) {
       fy = dplyr::first(y),
       tx = dplyr::last(x),
       ty = dplyr::last(y)
-      )
+    )
 }
 
 #' Convert a spatial (linestring) object to points
@@ -463,7 +463,7 @@ line2vertices.sf <- function(l) {
 
   # transform back to sf
   internal_vertexes_sf <- sf::st_as_sf(data.frame(internal_vertexes),
-    coords = c("X", "Y"), crs = sf::st_crs(l)
+                                       coords = c("X", "Y"), crs = sf::st_crs(l)
   )
   internal_vertexes_sf
 }
@@ -491,6 +491,7 @@ line2vertices.sf <- function(l) {
 #' @export
 #' @examples
 #' \dontrun{
+#' # does not run as requires API key
 #' l <- flowlines[2:5, ]
 #' r <- line2route(l)
 #' rq <- line2route(l = l, plan = "quietest", silent = TRUE)
@@ -515,82 +516,82 @@ line2route <-
            time_delay = 0,
            ...) {
     return_sf <- is(l, "sf")
-  if (return_sf) {
-    requireNamespace("sf")
-    l <- sf::as_Spatial(l)
-  }
-  FUN <- match.fun(route_fun)
-  ldf <- line2df(l)
-  n_ldf <- nrow(ldf)
-
-  error_fun <- function(e) {
-    warning(paste("Fail for line number", i))
-    e
-  }
-
-  rc <- as.list(rep(NA, length(l)))
-  for (i in 1:n_ldf) {
-    rc[[i]] <- tryCatch({
-      FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-    }, error = error_fun)
-    perc_temp <- i %% round(n_ldf / n_print)
-    # print % of distances calculated
-    if (!is.na(perc_temp) & perc_temp == 0) {
-      message(paste0(round(100 * i / n_ldf), " % out of ", n_ldf, " distances calculated"))
+    if (return_sf) {
+      requireNamespace("sf")
+      l <- sf::as_Spatial(l)
     }
-    Sys.sleep(time = time_delay)
-  }
+    FUN <- match.fun(route_fun)
+    ldf <- line2df(l)
+    n_ldf <- nrow(ldf)
 
-  class_out <- sapply(rc, function(x) class(x)[1])
-  most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
-  if(most_common_class == "sf") {
-    message("Output is sf")
-    rc_is_sf <- class_out == "sf"
-    rc_sf <- rc[rc_is_sf]
-    r_sf <- do.call(rbind, rc_sf)
-    return(r_sf)
-  }
+    error_fun <- function(e) {
+      warning(paste("Fail for line number", i))
+      e
+    }
 
-  if (list_output) {
-    r <- rc
-  } else {
-    # Set the names based on the first non failing line (then exit loop)
+    rc <- as.list(rep(NA, length(l)))
     for (i in 1:n_ldf) {
-      if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
-        rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc[[i]]) + 1))
-        names(rdata) <- c(names(rc[[i]]), "error")
-        r <- l
-        r@data <- rdata
-        break
+      rc[[i]] <- tryCatch({
+        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+      }, error = error_fun)
+      perc_temp <- i %% round(n_ldf / n_print)
+      # print % of distances calculated
+      if (!is.na(perc_temp) & perc_temp == 0) {
+        message(paste0(round(100 * i / n_ldf), " % out of ", n_ldf, " distances calculated"))
       }
       Sys.sleep(time = time_delay)
     }
 
-    # Copy rc into r including the data or copy the error into r
-    for (i in 1:n_ldf) {
-      if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
-        r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i, ]))
-        r@data[i, ] <- c(rc[[i]]@data, error = NA)
-      } else {
-        r@data[i, "error"] <- rc[[i]][1]
-      }
-      Sys.sleep(time = time_delay)
+    class_out <- sapply(rc, function(x) class(x)[1])
+    most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
+    if(most_common_class == "sf") {
+      message("Output is sf")
+      rc_is_sf <- class_out == "sf"
+      rc_sf <- rc[rc_is_sf]
+      r_sf <- do.call(rbind, rc_sf)
+      return(r_sf)
     }
 
-    # Set the id in r
-    l_ids <- c(l_id, "id")
-    l_id <- l_ids[!is.na(l_ids)][1]
-    r$id <- if (l_id %in% names(l)) {
-      l@data[[l_id]]
+    if (list_output) {
+      r <- rc
     } else {
-      row.names(l)
+      # Set the names based on the first non failing line (then exit loop)
+      for (i in 1:n_ldf) {
+        if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
+          rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc[[i]]) + 1))
+          names(rdata) <- c(names(rc[[i]]), "error")
+          r <- l
+          r@data <- rdata
+          break
+        }
+        Sys.sleep(time = time_delay)
+      }
+
+      # Copy rc into r including the data or copy the error into r
+      for (i in 1:n_ldf) {
+        if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
+          r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i, ]))
+          r@data[i, ] <- c(rc[[i]]@data, error = NA)
+        } else {
+          r@data[i, "error"] <- rc[[i]][1]
+        }
+        Sys.sleep(time = time_delay)
+      }
+
+      # Set the id in r
+      l_ids <- c(l_id, "id")
+      l_id <- l_ids[!is.na(l_ids)][1]
+      r$id <- if (l_id %in% names(l)) {
+        l@data[[l_id]]
+      } else {
+        row.names(l)
+      }
     }
+    if (return_sf) {
+      r <- sf::st_as_sf(r)
+    }
+    r
   }
-  if (return_sf) {
-    r <- sf::st_as_sf(r)
-  }
-  r
-}
 
 #' Convert straight spatial (linestring) object from flow data into routes retrying
 #' on connection (or other) intermittent failures
@@ -932,10 +933,10 @@ od_matches_check <- function(origin_matches, origin_codes, type = "origin") {
     n_failing <- sum(is.na(origin_matches))
     first_offending_row <- which(is.na(origin_matches))[1]
     stop(call. = FALSE,
-      n_failing, " non matching IDs in the ", type, ". ",
-      "ID on row ",
-      first_offending_row,
-      " does not match any zone.\n",
-      "The first offending id was ", origin_codes[first_offending_row])
+         n_failing, " non matching IDs in the ", type, ". ",
+         "ID on row ",
+         first_offending_row,
+         " does not match any zone.\n",
+         "The first offending id was ", origin_codes[first_offending_row])
   }
 }
