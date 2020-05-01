@@ -1,3 +1,9 @@
+# stplanr 0.6.1
+
+## BUG FIXES
+
+- Bug in `SpatialLinesNetwork()` fixed thanks to Andrea Gilardi (#394)
+
 # stplanr 0.6.0
 
 ## NEW FEATURES

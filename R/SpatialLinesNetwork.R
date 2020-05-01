@@ -263,11 +263,19 @@ setMethod("plot",
 #' columns, the column with the same name as `varname` is used,
 #' otherwise the first column is used.
 #' @examples
+#' # with sp objects
 #' data(routes_fast)
 #' rnet <- overline(routes_fast, attrib = "length")
 #' sln <- SpatialLinesNetwork(rnet)
 #' weightfield(sln) <- "length"
 #' weightfield(sln, "randomnum") <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
+#' data(routes_fast_sf)
+#' rnet <- overline(routes_fast_sf, attrib = "length")
+#' sln <- SpatialLinesNetwork(rnet)
+#' weightfield(sln) <- "length"
+#' sln@sl$randomnum <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
+#' weightfield(sln) <- "randomnum"
+#' # todo: show the difference that it makes
 #' @name weightfield
 NULL
 
@@ -320,7 +328,7 @@ setReplaceMethod("weightfield", signature(x = "sfNetwork", value = "ANY"), defin
     stop("x not sfNetwork")
   }
   x@weightfield <- value
-  igraph::E(x@g)$weight <- x@sl@data[, value]
+  igraph::E(x@g)$weight <- as.numeric(x@sl[[value]])
   x
 })
 

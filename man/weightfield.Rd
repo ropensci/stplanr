@@ -52,9 +52,17 @@ variables.
 }
 
 \examples{
+# with sp objects
 data(routes_fast)
 rnet <- overline(routes_fast, attrib = "length")
 sln <- SpatialLinesNetwork(rnet)
 weightfield(sln) <- "length"
 weightfield(sln, "randomnum") <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
+data(routes_fast_sf)
+rnet <- overline(routes_fast_sf, attrib = "length")
+sln <- SpatialLinesNetwork(rnet)
+weightfield(sln) <- "length"
+sln@sl$randomnum <- sample(1:10, size = nrow(sln@sl), replace = TRUE)
+weightfield(sln) <- "randomnum"
+# todo: show the difference that it makes
 }
