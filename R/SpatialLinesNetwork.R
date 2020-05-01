@@ -86,7 +86,6 @@ validity = function(object) {
 #' plot(sln)
 #' points(sln2points(sln)[1, ], cex = 5)
 #' points(sln2points(sln)[50, ], cex = 5)
-#' \donttest{
 #' shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4, add = TRUE)
 #' points(sln2points(sln)[35, ], cex = 5)
@@ -97,7 +96,6 @@ validity = function(object) {
 #' plot(sln_sf)
 #' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
-#' }
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
@@ -515,11 +513,14 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' a SpatialLinesdataFrame containing the path(s) and summary statistics of
 #' each one.
 #'
+#' The start and end arguments must be integers representing the node index.
+#' To find which node is closes to a geographic point, use `find_nearest_node()`
+#'
 #' @param sln The SpatialLinesNetwork to use.
-#' @param start Node ID(s) of route starts.
-#' @param end Node ID(s) of route ends.
+#' @param start Integer of node indices where route ends.
+#' @param end Integer of node indices where route ends.
 #' @param sumvars Character vector of variables for which to calculate
-#' summary statistics.
+#' summary statistics. The default value is `weightfield(sln)`.
 #' @param combinations Boolean value indicating if all combinations of start
 #' and ends should be calculated. If TRUE then every start Node ID will be routed
 #' to every end Node ID. This is faster than passing every combination to start
@@ -527,16 +528,30 @@ find_network_nodes <- function(sln, x, y = NULL, maxdist = 1000) {
 #' @family rnet
 #'
 #' @examples
-#' \donttest{
 #' # tests fail on dev version of dplyr
 #' sln <- SpatialLinesNetwork(route_network)
 #' weightfield(sln) # field used to determine shortest path
 #' shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 #' plot(shortpath, col = "red", lwd = 4)
 #' plot(sln, add = TRUE)
-#' }
+#' # with sf objects
+#' sln <- SpatialLinesNetwork(route_network_sf)
+#' weightfield(sln) # field used to determine shortest path
+#' shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
+#' plot(sf::st_geometry(shortpath), col = "red", lwd = 4)
+#' plot(sln, add = TRUE)
+#' # find shortest path between two coordinates
+#' sf::st_bbox(sln@sl)
+#' start_coords <- c(-1.546, 53.826)
+#' end_coords <- c(-1.519, 53.816)
+#' plot(sln)
+#' plot(sf::st_point(start_coords), cex = 3, add = TRUE)
+#' plot(sf::st_point(end_coords), cex = 3, add = TRUE)
+#' nodes <- find_network_nodes(sln, rbind(start_coords, end_coords))
+#' shortpath <- sum_network_routes(sln, nodes[1], nodes[2])
+#' plot(sf::st_geometry(shortpath), col = "red", lwd = 3, add = TRUE)
 #' @export
-sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
+sum_network_routes <- function(sln, start, end, sumvars = weightfield(sln), combinations = FALSE) {
   if (!is(sln, "SpatialLinesNetwork") & !is(sln, "sfNetwork")) {
     stop("sln is not a SpatialLinesNetwork or sfNetwork.")
   }
@@ -546,6 +561,10 @@ sum_network_routes <- function(sln, start, end, sumvars, combinations = FALSE) {
   if (length(start) != length(end) && combinations == FALSE) {
     stop("start and end not the same length.")
   }
+  if (!is.numeric(start) | !is.numeric(end)) {
+    stop("start and end must be numeric (integer) values")
+  }
+
 
   if (combinations == FALSE) {
     routesegs <- lapply(1:length(start), function(i) {
@@ -796,8 +815,8 @@ sum_network_links <- function(sln, routedata) {
       routedata,
       by = c("stplanr_start" = colnames(routedata)[1], "stplanr_end" = colnames(routedata)[2])
     ) %>%
-    dplyr::select_("-stplanr_start", "-stplanr_end") %>%
-    dplyr::group_by_("stplanr_linkid") %>%
+    dplyr::select(-stplanr_start, -stplanr_end) %>%
+    dplyr::group_by(stplanr_linkid) %>%
     dplyr::summarise_all(.funs = c("sum")) %>%
     dplyr::ungroup()
 

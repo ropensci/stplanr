@@ -18,13 +18,17 @@
 #' data(zones)
 #' od2odf(flow[1:2, ], zones)
 od2odf <- function(flow, zones) {
-  coords <- dplyr::data_frame(
+  coords <- data.frame(
     code = as.character(zones[[1]]),
     fx = coordinates(zones)[, 1], fy = coordinates(zones)[, 2]
   )
-  flowcode <- dplyr::data_frame(code_o = as.character(flow[[1]]), code_d = as.character(flow[[2]]))
+  flowcode <- data.frame(
+    stringsAsFactors = FALSE,
+    code_o = as.character(flow[[1]]),
+    code_d = as.character(flow[[2]])
+    )
   odf <- dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
-  coords <- dplyr::rename_(coords, tx = quote(fx), ty = quote(fy))
+  names(coords) <- c("code", "fx", "fy")
   odf <- dplyr::left_join(odf, coords, by = c("code_d" = "code"))
 
   data.frame(odf) # return data.frame as more compatible with spatial data

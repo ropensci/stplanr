@@ -1,10 +1,11 @@
-# stplanr 0.6.1
+# stplanr 0.6.0
 
 ## BUG FIXES
 
 - Bug in `SpatialLinesNetwork()` fixed thanks to Andrea Gilardi (#394)
+- Updated documentation for finding shortest paths
+- Check `start` and `end` arguments in short path calculations are numeric
 
-# stplanr 0.6.0
 
 ## NEW FEATURES
 
@@ -17,6 +18,7 @@
 - New `cl` argument in `route()` for parallel routing (#388)
 - New and updated datasets representing `od_data_sample` in different ways: `od_data_lines` and `od_data_routes`
 - `route_graphhopper()` deprecated (#389)
+- Old functions that use legacy `sp` and `dplyr` code, `sp_aggregate` and `od_aggregate`, have been deprecated
 - New work-in-progress `route_slope*()` functions
 
 # stplanr 0.5.2

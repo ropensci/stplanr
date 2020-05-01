@@ -4,17 +4,23 @@
 \alias{sum_network_routes}
 \title{Summarise shortest path between nodes on network}
 \usage{
-sum_network_routes(sln, start, end, sumvars, combinations = FALSE)
+sum_network_routes(
+  sln,
+  start,
+  end,
+  sumvars = weightfield(sln),
+  combinations = FALSE
+)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork to use.}
 
-\item{start}{Node ID(s) of route starts.}
+\item{start}{Integer of node indices where route ends.}
 
-\item{end}{Node ID(s) of route ends.}
+\item{end}{Integer of node indices where route ends.}
 
 \item{sumvars}{Character vector of variables for which to calculate
-summary statistics.}
+summary statistics. The default value is \code{weightfield(sln)}.}
 
 \item{combinations}{Boolean value indicating if all combinations of start
 and ends should be calculated. If TRUE then every start Node ID will be routed
@@ -29,17 +35,34 @@ Summarise shortest path between nodes on network
 Find the shortest path on the network between specified nodes and returns
 a SpatialLinesdataFrame containing the path(s) and summary statistics of
 each one.
+
+The start and end arguments must be integers representing the node index.
+To find which node is closes to a geographic point, use \code{find_nearest_node()}
 }
 
 \examples{
-\donttest{
 # tests fail on dev version of dplyr
 sln <- SpatialLinesNetwork(route_network)
 weightfield(sln) # field used to determine shortest path
 shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
 plot(shortpath, col = "red", lwd = 4)
 plot(sln, add = TRUE)
-}
+# with sf objects
+sln <- SpatialLinesNetwork(route_network_sf)
+weightfield(sln) # field used to determine shortest path
+shortpath <- sum_network_routes(sln, start = 1, end = 50, sumvars = "length")
+plot(sf::st_geometry(shortpath), col = "red", lwd = 4)
+plot(sln, add = TRUE)
+# find shortest path between two coordinates
+sf::st_bbox(sln@sl)
+start_coords <- c(-1.546, 53.826)
+end_coords <- c(-1.519, 53.816)
+plot(sln)
+plot(sf::st_point(start_coords), cex = 3, add = TRUE)
+plot(sf::st_point(end_coords), cex = 3, add = TRUE)
+nodes <- find_network_nodes(sln, rbind(start_coords, end_coords))
+shortpath <- sum_network_routes(sln, nodes[1], nodes[2])
+plot(sf::st_geometry(shortpath), col = "red", lwd = 3, add = TRUE)
 }
 \seealso{
 Other rnet: 
