@@ -5,7 +5,8 @@
 - Bug in `SpatialLinesNetwork()` fixed thanks to Andrea Gilardi (#394)
 - Updated documentation for finding shortest paths
 - Check `start` and `end` arguments in short path calculations are numeric
-
+- `dodgr` removed as Suggests until it's back on CRAN (#398)
+- Updates to `dplyr` code to prevent warnings when using the dev version (#395)
 
 ## NEW FEATURES
 

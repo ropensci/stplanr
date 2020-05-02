@@ -1,4 +1,4 @@
-This version passes tests with the development version of dplyr.
+This version passes tests with the development version of dplyr and fixes an issue with html links.
 
 It also fixes an issue with winbuild.
 
