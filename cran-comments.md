@@ -1,6 +1,6 @@
 This version passes tests with the development version of dplyr and fixes an issue with html links.
 
-It also fixes an issue with winbuild.
+It also fixes url issues identified thanks to the winbuild service.
 
 ## Test environments
 
@@ -8,7 +8,8 @@ It also fixes an issue with winbuild.
   - Local (Ubuntu 18.04) 
   - GH Actions: https://github.com/ropensci/stplanr/actions
 
-* Winbuild: https://win-builder.r-project.org/ok3D2ukM1cZG/
+* Windows
+  - Winbuild: https://win-builder.r-project.org/ppp25v7y6SH5/00check.log
   - Windows: https://github.com/ropensci/stplanr/actions 
 
 ## R CMD check:
