@@ -210,6 +210,7 @@ route_dodgr <- function(from = NULL,
            # ,
            # return_net = FALSE
   ) {
+  message("remotes::install_github('ropensci/stplanr', ref = 'dodgr') # working version")
     # if (!requireNamespace("dodgr", quietly = TRUE)) {
     #   stop("dodgr must be installed for this function to work.")
     # }
