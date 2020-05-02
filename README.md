@@ -146,11 +146,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2020-04-16 09:37:34 constructing segments
-#> 2020-04-16 09:37:35 building geometry
-#> 2020-04-16 09:37:35 simplifying geometry
-#> 2020-04-16 09:37:35 aggregating flows
-#> 2020-04-16 09:37:35 rejoining segments into linestrings
+#> 2020-05-02 18:31:15 constructing segments
+#> 2020-05-02 18:31:15 building geometry
+#> 2020-05-02 18:31:15 simplifying geometry
+#> 2020-05-02 18:31:15 aggregating flows
+#> 2020-05-02 18:31:15 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from
@@ -257,7 +257,7 @@ However, there are already some good resources on the topic, including
     <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
     (please cite this if you use **stplanr** in your work)
   - The `dodgr` vignette, which provides an introduction to routing in
-    R: <https://cran.r-project.org/package=dodgr/vignettes/dodgr.html>
+    R: <https://atfutures.github.io/dodgr/>
 
 ## Meta
 
