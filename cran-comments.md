@@ -2,6 +2,10 @@ This version passes tests with the development version of dplyr and fixes an iss
 
 It also fixes url issues identified thanks to the winbuild service.
 
+I fixed the missing URL reported here: https://win-builder.r-project.org/incoming_pretest/stplanr_0.6.0_20200502_190129/Debian/00check.log
+
+However I think the other check issues are not issues with the package: webshot not being installed on Solaris is not an issue that is in my sphere of influence. Happy to resubmit if there are further issues.
+
 ## Test environments
 
 * Linux
