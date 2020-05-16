@@ -1,16 +1,36 @@
-#' Break up an sf object with LINESTRING geometry by vertex/nodes intersections
+#' Break up an `sf` object with LINESTRING geometry.
 #'
-#' This function breaks-up a single linestrings into multiple linestring at points
-#' where vertices from other linestrings in the network intersect with vertices in the original linestring.
-#' See [github.com/ropensci/stplanr/issues/282](https://github.com/ropensci/stplanr/issues/282) for details.
+#' This function breaks up a single LINESTRING geometry into multiple
+#' LINESTRING(s) for preserving routability of an `sfNetwork` object created
+#' by [SpatialLinesNetwork()] function with Open Street Map data. See details
+#' and [stplanr/issues/282](https://github.com/ropensci/stplanr/issues/282).
 #'
-#' @param rnet An sf LINESTRING object representing a route network.
-#' @param breakup_internal_vertex_matches Should breaks be made at internal
-#'   vertex matches? `TRUE` by default. Internal vertices are vertices (but not
-#'   start or end points) of two or more different linestrings that meet at the
-#'   same point.
-#' @return The same sf LINESTRING object with more rows (the result of the
-#'   splitting) when there are intersecting (and internal) vertices.
+#' A LINESTRING geometry is break up when one of the following conditions is
+#' met:
+#' 1. two or more LINESTRINGS share a POINT that lies in the union of their
+#' boundaries (see the rnet_roundabout example);
+#' 2. two or more LINESTRINGS share a POINT which is not in the boundary of any
+#' LINESTRING (see the rnet_cycleway_intersection example).
+#'
+#' The problem with the first example is that, according to
+#' [SpatialLinesNetwork()] algorithm, two LINESTRINGS are connected if and only
+#' if they share at least one point in their boundaries. The roads and the
+#' roundabout are clearly connected in the "real" world but the corresponding
+#' LINESTRING objects do not share any boundary point. In fact, by Open Street
+#' Map standards, a roundabout is represented as a closed and circular
+#' LINESTRING and this implies that the roundabout is not connected to the other
+#' roads according to [SpatialLinesNetwork()] definition. By the same reasoning,
+#' the roads in the second example are clearly connected in the "real" world,
+#' but they do not share any point in their boundaries. This function is used to
+#' solve this type of problems.
+#'
+#' @param rnet An sf object with LINESTRING geometry representing a route
+#'   network.
+#' @param breakup_internal_vertex_matches Boolean. Should breaks be made at
+#'   shared internal points? `TRUE` by default. Internal points are points that
+#'   do not lie in the boundary of the LINESTRING.
+#' @return An sf object with LINESTRING geometry created after breaking up the
+#'   input object.
 #' @export
 #'
 #' @examples

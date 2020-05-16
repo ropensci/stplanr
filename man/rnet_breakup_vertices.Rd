@@ -2,26 +2,49 @@
 % Please edit documentation in R/rnet-clean.R
 \name{rnet_breakup_vertices}
 \alias{rnet_breakup_vertices}
-\title{Break up an sf object with LINESTRING geometry by vertex/nodes intersections}
+\title{Break up an \code{sf} object with LINESTRING geometry.}
 \usage{
 rnet_breakup_vertices(rnet, breakup_internal_vertex_matches = TRUE)
 }
 \arguments{
-\item{rnet}{An sf LINESTRING object representing a route network.}
+\item{rnet}{An sf object with LINESTRING geometry representing a route
+network.}
 
-\item{breakup_internal_vertex_matches}{Should breaks be made at internal
-vertex matches? \code{TRUE} by default. Internal vertices are vertices (but not
-start or end points) of two or more different linestrings that meet at the
-same point.}
+\item{breakup_internal_vertex_matches}{Boolean. Should breaks be made at
+shared internal points? \code{TRUE} by default. Internal points are points that
+do not lie in the boundary of the LINESTRING.}
 }
 \value{
-The same sf LINESTRING object with more rows (the result of the
-splitting) when there are intersecting (and internal) vertices.
+An sf object with LINESTRING geometry created after breaking up the
+input object.
 }
 \description{
-This function breaks-up a single linestrings into multiple linestring at points
-where vertices from other linestrings in the network intersect with vertices in the original linestring.
-See \href{https://github.com/ropensci/stplanr/issues/282}{github.com/ropensci/stplanr/issues/282} for details.
+This function breaks up a single LINESTRING geometry into multiple
+LINESTRING(s) for preserving routability of an \code{sfNetwork} object created
+by \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} function with Open Street Map data. See details
+and \href{https://github.com/ropensci/stplanr/issues/282}{stplanr/issues/282}.
+}
+\details{
+A LINESTRING geometry is break up when one of the following conditions is
+met:
+\enumerate{
+\item two or more LINESTRINGS share a POINT that lies in the union of their
+boundaries (see the rnet_roundabout example);
+\item two or more LINESTRINGS share a POINT which is not in the boundary of any
+LINESTRING (see the rnet_cycleway_intersection example).
+}
+
+The problem with the first example is that, according to
+\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} algorithm, two LINESTRINGS are connected if and only
+if they share at least one point in their boundaries. The roads and the
+roundabout are clearly connected in the "real" world but the corresponding
+LINESTRING objects do not share any boundary point. In fact, by Open Street
+Map standards, a roundabout is represented as a closed and circular
+LINESTRING and this implies that the roundabout is not connected to the other
+roads according to \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} definition. By the same reasoning,
+the roads in the second example are clearly connected in the "real" world,
+but they do not share any point in their boundaries. This function is used to
+solve this type of problems.
 }
 \examples{
 library(sf)
