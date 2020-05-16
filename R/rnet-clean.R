@@ -35,26 +35,64 @@
 #'
 #' @examples
 #' library(sf)
+#' def_par = par(no.readonly = TRUE)
 #' par(mar = rep(0, 4))
 #'
-#' # Check for roundabout
-#' plot(rnet_roundabout$geometry, lwd = 2, col = rainbow(nrow(rnet_roundabout)))
+#' # Check the geometry of the roundabout example. The dots represent the
+#' # boundary points of the LINESTRINGS. The "isolated" red point in the top-left
+#' # is the boundary point of the roundabout, and it is not shared with any
+#' # other street.
+#' plot(st_geometry(rnet_roundabout), lwd = 2, col = rainbow(nrow(rnet_roundabout)))
+#' boundary_points <- st_geometry(line2points(rnet_roundabout))
+#' points_cols <- rep(rainbow(nrow(rnet_roundabout)), each = 2)
+#' plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
 #'
+#' # Clean the roundabout example.
 #' rnet_roundabout_clean <- rnet_breakup_vertices(rnet_roundabout)
-#' plot(rnet_roundabout_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_roundabout_clean)))
-#' # Check for overpasses
-#' plot(rnet_overpass$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass)))
+#' plot(st_geometry(rnet_roundabout_clean), lwd = 2, col = rainbow(nrow(rnet_roundabout_clean)))
+#' boundary_points <- st_geometry(line2points(rnet_roundabout_clean))
+#' points_cols <- rep(rainbow(nrow(rnet_roundabout_clean)), each = 2)
+#' plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
+#' # The roundabout is now routable since it was divided into multiple pieces
+#' # (one for each colour), which, according to SpatialLinesNetwork() function,
+#' # are connected to the other streets.
 #'
+#' # Check the geometry of the overpasses example. This example is used to test
+#' # that this function does not create any spurious intersection.
+#' plot(st_geometry(rnet_overpass), lwd = 2, col = rainbow(nrow(rnet_overpass)))
+#' boundary_points <- st_geometry(line2points(rnet_overpass))
+#' points_cols <- rep(rainbow(nrow(rnet_overpass)), each = 2)
+#' plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
+#' # At the moment the network is not routable since one of the underpasses is
+#' # not connected to the other streets.
+#'
+#' # Check interactively.
+#' # mapview::mapview(rnet_overpass)
+#'
+#' # Clean the network. It should not create any spurious intersection between
+#' # roads located at different heights.
 #' rnet_overpass_clean <- rnet_breakup_vertices(rnet_overpass)
-#' plot(rnet_overpass_clean$geometry, lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-#' # mapview(rnet_overpass_clean) # to see interactively
-#' # Check for intersection with no node
+#' plot(st_geometry(rnet_overpass_clean), lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
+#' # Check interactively.
+#' # mapview::mapview(rnet_overpass)
+#'
+#' # Check the geometry of the cycleway_intersection example. The black dots
+#' # represent the boundary points and we can see that the two roads are not
+#' # connected according to SpatialLinesNetwork() function.
 #' plot(rnet_cycleway_intersection$geometry, lwd = 2,
 #'      col = rainbow(nrow(rnet_cycleway_intersection)))
+#' plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
+#' # Check interactively
+#' # mapview::mapview(rnet_overpass)
 #'
+#' # Clean the rnet object and plot the result.
 #' rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 #' plot(rnet_cycleway_intersection_clean$geometry,
 #'      lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
+#' plot(st_geometry(line2points(rnet_cycleway_intersection_clean)), pch = 16, add = TRUE)
+#'
+#' par(def_par)
+
 rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) {
   rnet_nodes <- sf::st_geometry(line2points(rnet))
   rnet_internal_vertexes <- sf::st_geometry(line2vertices(rnet))
@@ -80,7 +118,7 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
       crs = sf::st_crs(rnet)
     )
 
-    message("Splitting rnet object at the intersection points between nodes and internal vertexes")
+    message("Splitting rnet object at the shared boundary points.")
     rnet_breakup_collection <- lwgeom::st_split(rnet, intersection_points$geometry)
     rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
   } else {
@@ -91,7 +129,7 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
   rnet_internal_vertexes_duplicated <- rnet_internal_vertexes[duplicated(rnet_internal_vertexes)]
 
   if (length(rnet_internal_vertexes_duplicated) > 0 & breakup_internal_vertex_matches) {
-    message("Splitting rnet object at the duplicated internal vertexes")
+    message("Splitting rnet object at the shared internal points.")
     rnet_breakup_collection <- lwgeom::st_split(rnet_clean, rnet_internal_vertexes_duplicated)
     rnet_clean <- sf::st_collection_extract(rnet_breakup_collection, "LINESTRING")
   }
