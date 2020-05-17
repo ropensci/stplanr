@@ -25,7 +25,7 @@ by \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} function with Open 
 and \href{https://github.com/ropensci/stplanr/issues/282}{stplanr/issues/282}.
 }
 \details{
-A LINESTRING geometry is break up when one of the following conditions is
+A LINESTRING geometry is broken-up when one of the following conditions is
 met:
 \enumerate{
 \item two or more LINESTRINGS share a POINT that lies in the union of their
@@ -34,8 +34,8 @@ boundaries (see the rnet_roundabout example);
 LINESTRING (see the rnet_cycleway_intersection example).
 }
 
-The problem with the first example is that, according to
-\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} algorithm, two LINESTRINGS are connected if and only
+The problem with the first example is that, according to algorithm behind
+\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}}, two LINESTRINGS are connected if and only
 if they share at least one point in their boundaries. The roads and the
 roundabout are clearly connected in the "real" world but the corresponding
 LINESTRING objects do not share any boundary point. In fact, by Open Street
@@ -44,7 +44,7 @@ LINESTRING and this implies that the roundabout is not connected to the other
 roads according to \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} definition. By the same reasoning,
 the roads in the second example are clearly connected in the "real" world,
 but they do not share any point in their boundaries. This function is used to
-solve this type of problems.
+solve this type of problem.
 }
 \examples{
 library(sf)
@@ -76,21 +76,22 @@ plot(st_geometry(rnet_overpass), lwd = 2, col = rainbow(nrow(rnet_overpass)))
 boundary_points <- st_geometry(line2points(rnet_overpass))
 points_cols <- rep(rainbow(nrow(rnet_overpass)), each = 2)
 plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
-# Check the overpasses/underpasses relations interactively
-# mapview::mapview(rnet_overpass)
 # At the moment the network is not routable since one of the underpasses is
 # not connected to the other streets.
+
+# Check interactively.
+# mapview::mapview(rnet_overpass)
 
 # Clean the network. It should not create any spurious intersection between
 # roads located at different heights.
 rnet_overpass_clean <- rnet_breakup_vertices(rnet_overpass)
 plot(st_geometry(rnet_overpass_clean), lwd = 2, col = rainbow(nrow(rnet_overpass_clean)))
-# Check interactively
+# Check interactively.
 # mapview::mapview(rnet_overpass)
 
 # Check the geometry of the cycleway_intersection example. The black dots
-# represent the boundary point and we can see tht the two roads are not
-# connected according to SpatialLinesNetwork function.
+# represent the boundary points and we can see that the two roads are not
+# connected according to SpatialLinesNetwork() function.
 plot(rnet_cycleway_intersection$geometry, lwd = 2,
      col = rainbow(nrow(rnet_cycleway_intersection)))
 plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
