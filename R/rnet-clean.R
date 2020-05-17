@@ -5,15 +5,15 @@
 #' by [SpatialLinesNetwork()] function with Open Street Map data. See details
 #' and [stplanr/issues/282](https://github.com/ropensci/stplanr/issues/282).
 #'
-#' A LINESTRING geometry is break up when one of the following conditions is
+#' A LINESTRING geometry is broken-up when one of the following conditions is
 #' met:
 #' 1. two or more LINESTRINGS share a POINT that lies in the union of their
 #' boundaries (see the rnet_roundabout example);
 #' 2. two or more LINESTRINGS share a POINT which is not in the boundary of any
 #' LINESTRING (see the rnet_cycleway_intersection example).
 #'
-#' The problem with the first example is that, according to
-#' [SpatialLinesNetwork()] algorithm, two LINESTRINGS are connected if and only
+#' The problem with the first example is that, according to algorithm behind
+#' [SpatialLinesNetwork()], two LINESTRINGS are connected if and only
 #' if they share at least one point in their boundaries. The roads and the
 #' roundabout are clearly connected in the "real" world but the corresponding
 #' LINESTRING objects do not share any boundary point. In fact, by Open Street
@@ -22,7 +22,7 @@
 #' roads according to [SpatialLinesNetwork()] definition. By the same reasoning,
 #' the roads in the second example are clearly connected in the "real" world,
 #' but they do not share any point in their boundaries. This function is used to
-#' solve this type of problems.
+#' solve this type of problem.
 #'
 #' @param rnet An sf object with LINESTRING geometry representing a route
 #'   network.
