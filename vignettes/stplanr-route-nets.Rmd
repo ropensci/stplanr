@@ -24,14 +24,19 @@ library(sf)
 # Introduction
 
 Route networks represent the network of highways, cycleways, footways and other ways along which transport happens.
-Unlike routes, each segment geometry the network can only appear once in a single route network.
+You can get route network data from OpenStreetMap (e.g. via the `osmdata` R package) and other providers or transport network data.
 
-**stplanr** can be used to convert a series of routes into a route network, using the function `overline2()`, as illustrated below:
+
+# Creating route networks from overlapping routes
+
+Unlike routes, each segment geometry in a route network can only appear once.
+
+**stplanr** can be used to convert a series of routes into a route network, using the function `overline()`, as illustrated below:
 
 ```{r, out.width="40%", fig.show='hold', fig.width=5, message=FALSE}
 sample_routes <- routes_fast_sf[2:6, 1]
 sample_routes$value <- rep(1:3, length.out = 5)
-rnet <- overline2(sample_routes, attrib = "value")
+rnet <- overline(sample_routes, attrib = "value")
 plot(sample_routes["value"], lwd = sample_routes$value, main = "Routes")
 plot(rnet["value"], lwd = rnet$value, main = "Route network")
 ```
@@ -44,6 +49,35 @@ It is a form of geographic aggregation.
 ```{r rnets1, message=FALSE, warning=FALSE, out.width="100%", fig.width=6, fig.height=6, echo=FALSE}
 # knitr::include_graphics("route-networks.png")
 ```
+
+# Identifying route network groups
+
+Route networks can be represented as a graph.
+Usually all segments are connected together, meaning the graph is [connected](https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_graph).
+We can show that very simple network above is connected as follows:
+
+```{r}
+touching_list = st_intersects(sample_routes)
+g = igraph::graph.adjlist(touching_list)
+igraph::is_connected(g)
+```
+
+A more complex network may not be connected in this way, as shown in the example below:
+
+```{r, eval=FALSE}
+# piggyback::pb_download_url("r_key_roads_test.Rds")
+u = "https://github.com/ropensci/stplanr/releases/download/0.6.0/r_key_roads_test.Rds"
+rnet_disconnected = readRDS(url(u))
+touching_list = sf::st_intersects(rnet_disconnected)
+g = igraph::graph.adjlist(touching_list)
+igraph::is_connected(g)
+#> [1] FALSE
+sf:::plot.sfc_LINESTRING(rnet_disconnected$geometry)
+```
+
+![](https://i.imgur.com/827f761.png)
+
+
 
 # SpatialLineNetworks
 

@@ -37,6 +37,7 @@ Other rnet:
 \code{\link{overline}()},
 \code{\link{plot,SpatialLinesNetwork,ANY-method}},
 \code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{rnet_breakup_vertices}()},
 \code{\link{sum_network_links}()},
 \code{\link{sum_network_routes}()}
 }
