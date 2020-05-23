@@ -31,6 +31,7 @@
 #'   do not lie in the boundary of the LINESTRING.
 #' @return An sf object with LINESTRING geometry created after breaking up the
 #'   input object.
+#' @family rnet
 #' @export
 #'
 #' @examples
