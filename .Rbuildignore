@@ -17,3 +17,4 @@ log-latest
 ^data-raw$
 ^\.github/workflows/R-CMD-check\.yaml$
 ^\.github/workflows/pr-commands\.yaml$
+^\.github$
