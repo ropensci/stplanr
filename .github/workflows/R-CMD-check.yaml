@@ -73,14 +73,6 @@ jobs:
                   repos = r)
           EOT
 
-      - name: sf and system libraries
-        if: runner.os == 'Linux'
-        run: |
-          sudo add-apt-repository ppa:ubuntugis/ppa
-          sudo apt install libudunits2-dev \
-          libproj-dev libgeos-dev libgdal-dev
-          sudo R -e "install.packages('sf')"
-
       - name: Install system dependencies
         if: runner.os == 'Linux'
         env:
@@ -88,7 +80,16 @@ jobs:
         run: |
           Rscript -e "remotes::install_github('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo add-apt-repository -y ppa:cran/jq
           sudo -s eval "$sysreqs"
+          # install spatial dependencies
+          sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt update
+          sudo apt install \
+            libudunits2-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev
 
       - name: Install dependencies
         run: Rscript -e "library(remotes)" -e "update(readRDS('depends.Rds'))" -e "remotes::install_cran('rcmdcheck')"
