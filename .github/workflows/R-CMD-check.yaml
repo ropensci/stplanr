@@ -83,7 +83,6 @@ jobs:
           sudo add-apt-repository -y ppa:cran/jq
           sudo -s eval "$sysreqs"
           # install spatial dependencies
-          sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
           sudo apt update
           sudo apt install \
             libudunits2-dev \
