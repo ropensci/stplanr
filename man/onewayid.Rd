@@ -67,25 +67,23 @@ identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be co
 for users and are difficult to plot.
 }
 \examples{
-\donttest{
-# this function is deprecated so examples are not expected to run
-# keeping the example code in there for now for posterity
-flow_oneway <- onewayid(flow, attrib = 3)
-nrow(flow_oneway) < nrow(flow) # result has fewer rows
-sum(flow$All) == sum(flow_oneway$All) # but the same total flow
-# using names instead of index for attribute
-onewayid(flow, attrib = "All")
-# using many attributes to aggregate
-attrib <- which(vapply(flow, is.numeric, TRUE))
-flow_oneway <- onewayid(flow, attrib = attrib)
-colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
-# Demonstrate the results from onewayid and onewaygeo are identical
-flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
-plot(flow_oneway$All, flow_oneway_geo$All)
-flow_oneway_sf <- onewayid(flowlines_sf, 3)
-plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
-plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-}
+# # this function is deprecated so examples are not expected to run
+# # keeping the example code in there for now for posterity
+# flow_oneway <- onewayid(flow, attrib = 3)
+# nrow(flow_oneway) < nrow(flow) # result has fewer rows
+# sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+# # using names instead of index for attribute
+# onewayid(flow, attrib = "All")
+# # using many attributes to aggregate
+# attrib <- which(vapply(flow, is.numeric, TRUE))
+# flow_oneway <- onewayid(flow, attrib = attrib)
+# colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+# # Demonstrate the results from onewayid and onewaygeo are identical
+# flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
+# plot(flow_oneway$All, flow_oneway_geo$All)
+# flow_oneway_sf <- onewayid(flowlines_sf, 3)
+# plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+# plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
 # with spatial data
 data(flowlines)
 fo <- onewayid(flowlines, attrib = "All")

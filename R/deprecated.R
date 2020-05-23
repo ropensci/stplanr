@@ -44,25 +44,23 @@ onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
 #' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #' @examples
-#' \donttest{
-#' # this function is deprecated so examples are not expected to run
-#' # keeping the example code in there for now for posterity
-#' flow_oneway <- onewayid(flow, attrib = 3)
-#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
-#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
-#' # using names instead of index for attribute
-#' onewayid(flow, attrib = "All")
-#' # using many attributes to aggregate
-#' attrib <- which(vapply(flow, is.numeric, TRUE))
-#' flow_oneway <- onewayid(flow, attrib = attrib)
-#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
-#' # Demonstrate the results from onewayid and onewaygeo are identical
-#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
-#' plot(flow_oneway$All, flow_oneway_geo$All)
-#' flow_oneway_sf <- onewayid(flowlines_sf, 3)
-#' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
-#' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-#' }
+#' # # this function is deprecated so examples are not expected to run
+#' # # keeping the example code in there for now for posterity
+#' # flow_oneway <- onewayid(flow, attrib = 3)
+#' # nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' # sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # # using names instead of index for attribute
+#' # onewayid(flow, attrib = "All")
+#' # # using many attributes to aggregate
+#' # attrib <- which(vapply(flow, is.numeric, TRUE))
+#' # flow_oneway <- onewayid(flow, attrib = attrib)
+#' # colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+#' # # Demonstrate the results from onewayid and onewaygeo are identical
+#' # flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
+#' # plot(flow_oneway$All, flow_oneway_geo$All)
+#' # flow_oneway_sf <- onewayid(flowlines_sf, 3)
+#' # plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+#' # plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
 #' @export
 onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
                                 stplanr.key = od_id_order(x, id1, id2)) {
@@ -291,23 +289,21 @@ gtfs2sldf <- function(gtfszip = "") {
 #' @family od
 #' @export
 #' @examples
-#' \donttest{
-#' # load some points data
-#' data(cents)
-#' # plot the points to check they make sense
-#' plot(cents)
-#' class(cents)
-#' # Create test population to model flows
-#' set.seed(2050)
-#' cents$population <- runif(n = nrow(cents), min = 100, max = 1000)
-#' # estimate
-#' flowlines_radiation <- od_radiation(cents, pop_var = "population")
-#' flowlines_radiation$flow
-#' sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
-#' sum(cents$population) # the total inter-zonal flow
-#' plot(flowlines_radiation, lwd = flowlines_radiation$flow / 100)
-#' points(cents, cex = cents$population / 100)
-#' }
+#' # # load some points data
+#' # data(cents)
+#' # # plot the points to check they make sense
+#' # plot(cents)
+#' # class(cents)
+#' # # Create test population to model flows
+#' # set.seed(2050)
+#' # cents$population <- runif(n = nrow(cents), min = 100, max = 1000)
+#' # # estimate
+#' # flowlines_radiation <- od_radiation(cents, pop_var = "population")
+#' # flowlines_radiation$flow
+#' # sum(flowlines_radiation$flow, na.rm = TRUE) # the total flow in the system
+#' # sum(cents$population) # the total inter-zonal flow
+#' # plot(flowlines_radiation, lwd = flowlines_radiation$flow / 100)
+#' # points(cents, cex = cents$population / 100)
 od_radiation <- function(p, pop_var = "population", proportion = 1) {
   .Deprecated(msg = "See the od package")
   l <- points2flow(p)
@@ -371,16 +367,14 @@ od_radiation <- function(p, pop_var = "population", proportion = 1) {
 #' @export
 #' @seealso route_cyclestreet
 #' @examples
-#' \dontrun{
-#' from <- c(-0.12, 51.5)
-#' to <- c(-0.14, 51.5)
-#' r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
-#' r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
-#' r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
-#' plot(r1)
-#' plot(r2, add = TRUE, col = "blue") # compare routes
-#' plot(r3, add = TRUE, col = "red")
-#' }
+#' # from <- c(-0.12, 51.5)
+#' # to <- c(-0.14, 51.5)
+#' # r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
+#' # r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
+#' # r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
+#' # plot(r1)
+#' # plot(r2, add = TRUE, col = "blue") # compare routes
+#' # plot(r3, add = TRUE, col = "red")
 route_graphhopper <- function(from, to, l = NULL, vehicle = "bike",
                               silent = TRUE, pat = NULL,
                               base_url = "https://graphhopper.com") {
