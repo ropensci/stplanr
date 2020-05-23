@@ -22,7 +22,6 @@
 #'   sln = sln
 #' )
 #' plot(sp["all"], add = TRUE, lwd = 5)
-#'
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = stplanr::route_cyclestreets,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {

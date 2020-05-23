@@ -67,16 +67,14 @@ Where \code{url} is an example api request from
 \url{https://github.com/graphhopper/directions-api/blob/master/routing.md}.
 }
 \examples{
-\dontrun{
-from <- c(-0.12, 51.5)
-to <- c(-0.14, 51.5)
-r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
-r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
-r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
-plot(r1)
-plot(r2, add = TRUE, col = "blue") # compare routes
-plot(r3, add = TRUE, col = "red")
-}
+# from <- c(-0.12, 51.5)
+# to <- c(-0.14, 51.5)
+# r1 <- route_graphhopper(from = from, to = to, silent = FALSE)
+# r2 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "foot")
+# r3 <- route_graphhopper(from = from, to = to, silent = FALSE, vehicle = "car")
+# plot(r1)
+# plot(r2, add = TRUE, col = "blue") # compare routes
+# plot(r3, add = TRUE, col = "red")
 }
 \seealso{
 route_cyclestreet
