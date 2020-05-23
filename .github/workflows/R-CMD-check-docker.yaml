@@ -1,0 +1,30 @@
+
+on: [push, pull_request]
+
+name: R-CMD-check-docker
+
+jobs:
+  R-CMD-check-docker:
+    runs-on: ubuntu-latest
+    container: jakubnowosad/geocompr_proj6
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: |
+          install.packages('remotes')
+          install.packages('rcmdcheck')
+          remotes::install_deps(dependencies = TRUE, repos = "https://cran.rstudio.com", upgrade = TRUE)
+        shell: Rscript {0}
+
+      - name: Check
+        run: |
+          rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'warning', check_dir = 'check')
+        shell: Rscript {0}
+
+      - name: Upload check results
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ runner.os }}-docker-geocompr-results
+          path: check
