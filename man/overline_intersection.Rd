@@ -9,8 +9,7 @@ overline_intersection(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 \arguments{
 \item{sl}{An \code{sf} \code{LINESTRING} object with overlapping elements}
 
-\item{attrib}{A character vector corresponding to the variables in
-\verb{sl$} on which the function(s) will operate.}
+\item{attrib}{character, column names in sl to be summed}
 
 \item{fun}{The function(s) used to aggregate the grouped values (default: sum).
 If length of \code{fun} is smaller than \code{attrib} then the functions are

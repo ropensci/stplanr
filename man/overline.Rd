@@ -2,15 +2,17 @@
 % Please edit documentation in R/overline.R
 \name{overline}
 \alias{overline}
+\alias{overline2}
 \title{Convert series of overlapping lines into a route network}
 \usage{
 overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
+
+overline2(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e+05)
 }
 \arguments{
-\item{sl}{A SpatialLinesDataFrame with overlapping elements}
+\item{sl}{A spatial object representing routes on a transport network}
 
-\item{attrib}{A character vector corresponding to the variables in
-\verb{sl$} on which the function(s) will operate.}
+\item{attrib}{character, column names in sl to be summed}
 
 \item{fun}{The function(s) used to aggregate the grouped values (default: sum).
 If length of \code{fun} is smaller than \code{attrib} then the functions are
@@ -20,22 +22,82 @@ repeated for subsequent attributes.}
 
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
 If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+
+\item{ncores}{integer, how many cores to use in parallel processing, default = 1}
+
+\item{simplify}{logical, if TRUE group final segments back into lines, default = TRUE}
+
+\item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
+}
+\value{
+An \code{sf} object representing a route network
 }
 \description{
-This function takes a series of Lines stored in a
-\code{SpatialLinesDataFrame}
-and converts these into a single route network.
+This function takes a series of overlapping lines
+and converts them into a single route network.
+
+This function is intended as a replacement for overline() and is significantly faster
+especially on large datasets. However, it also uses more memory.
+}
+\details{
+The function can be used to estimate the amount of transport 'flow'
+at the route segment level based on input datasets from routing services,
+for example linestring geometries created with the \code{route()} function.
+
+The \code{overline()} function breaks each line into many straight segments and then looks for duplicated segments.
+Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
+recombined into linestrings.
+
+The following arguments only apply to \code{overline2()}:
+\itemize{
+\item \code{ncores}, the number of cores to use in parallel processing
+\item \code{simplify}, should the final segments be converted back into longer lines? The default setting.
+\item \code{regionalise} the threshold number of rows above which regionalisation is used (see details).
+}
+
+For \code{sf} objects
+Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
+This significantly reduces computation time for large datasets, but slightly increases the final file size.
+For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
+
+A known limitation of this method is that overlapping segments of different lengths are not aggregated.
+This can occur when lines stop halfway down a road. Typically these errors are small,
+but some artefacts may remain within the resulting data.
+
+For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
+to overline subsets of the dataset, rbind the results together, and then overline again, to produce
+a final result.
+
+Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
 }
 \examples{
+
+sl <- routes_fast_sf[2:4, ]
+rnet_sf <- overline(sl = sl, attrib = "length")
+plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
+
+# legacy implementation based on sp data
 sl <- routes_fast[2:4, ]
 rnet1 <- overline(sl = sl, attrib = "length")
 rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-# sf methods
-sl <- routes_fast_sf[2:4, ]
-rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
-plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
+
+sl = routes_fast_sf[routes_fast_sf$length > 0, ]
+sl$bicycle = 1
+rnet1 = overline(sl, "bicycle")
+lwd = rnet1$bicycle / mean(rnet1$bicycle)
+plot(rnet1, lwd = lwd)
+\donttest{
+# test on a larger dataset
+region = "isle-of-wight"
+
+u = paste0(
+  "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
+   region,
+  "/rf.geojson"
+)
+}
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
@@ -53,7 +115,23 @@ Other rnet:
 \code{\link{gsection}()},
 \code{\link{islines}()},
 \code{\link{lineLabels}()},
-\code{\link{overline2}()},
+\code{\link{plot,SpatialLinesNetwork,ANY-method}},
+\code{\link{plot,sfNetwork,ANY-method}},
+\code{\link{rnet_breakup_vertices}()},
+\code{\link{sln2points}()},
+\code{\link{sum_network_links}()},
+\code{\link{sum_network_routes}()}
+
+Other rnet: 
+\code{\link{SpatialLinesNetwork}},
+\code{\link{calc_catchment_sum}()},
+\code{\link{calc_catchment}()},
+\code{\link{calc_moving_catchment}()},
+\code{\link{calc_network_catchment}()},
+\code{\link{find_network_nodes}()},
+\code{\link{gsection}()},
+\code{\link{islines}()},
+\code{\link{lineLabels}()},
 \code{\link{plot,SpatialLinesNetwork,ANY-method}},
 \code{\link{plot,sfNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},
@@ -63,5 +141,7 @@ Other rnet:
 }
 \author{
 Barry Rowlingson
+
+Malcolm Morgan
 }
 \concept{rnet}

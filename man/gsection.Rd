@@ -39,7 +39,6 @@ Other rnet:
 \code{\link{find_network_nodes}()},
 \code{\link{islines}()},
 \code{\link{lineLabels}()},
-\code{\link{overline2}()},
 \code{\link{overline}()},
 \code{\link{plot,SpatialLinesNetwork,ANY-method}},
 \code{\link{plot,sfNetwork,ANY-method}},

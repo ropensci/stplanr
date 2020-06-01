@@ -98,11 +98,13 @@ lineLabels <- function(sl, attrib) {
 
 #' Convert series of overlapping lines into a route network
 #'
-#' This function takes a series of Lines stored in a
-#'  `SpatialLinesDataFrame`
-#' and converts these into a single route network.
+#' This function takes a series of overlapping lines
+#' and converts them into a single route network.
 #'
-#' @param sl A SpatialLinesDataFrame with overlapping elements
+#' The function can be used to estimate the amount of transport 'flow'
+#' at the route segment level based on input datasets from routing services,
+#' for example linestring geometries created with the `route()` function.
+#'
 #' @param attrib A character vector corresponding to the variables in
 #' `sl$` on which the function(s) will operate.
 #' @param fun The function(s) used to aggregate the grouped values (default: sum).
@@ -110,30 +112,87 @@ lineLabels <- function(sl, attrib) {
 #' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
 #' @inheritParams gsection
+#' @inheritParams overline2
 #' @author Barry Rowlingson
 #' @references
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
 #'  <http://gis.stackexchange.com>. See <http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
+#'
+#'
+#' @details
+#' The `overline()` function breaks each line into many straight segments and then looks for duplicated segments.
+#' Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
+#' recombined into linestrings.
+#'
+#' The following arguments only apply to `overline2()`:
+#'
+#' - `ncores`, the number of cores to use in parallel processing
+#' - `simplify`, should the final segments be converted back into longer lines? The default setting.
+#' - `regionalise` the threshold number of rows above which regionalisation is used (see details).
+#'
+#'
+#' For `sf` objects
+#' Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
+#' This significantly reduces computation time for large datasets, but slightly increases the final file size.
+#' For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
+#'
+#' A known limitation of this method is that overlapping segments of different lengths are not aggregated.
+#' This can occur when lines stop halfway down a road. Typically these errors are small,
+#' but some artefacts may remain within the resulting data.
+#'
+#' For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
+#' to overline subsets of the dataset, rbind the results together, and then overline again, to produce
+#' a final result.
+#'
+#' Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
+#'
 #' @family rnet
 #' @export
 #' @examples
+#'
+#' sl <- routes_fast_sf[2:4, ]
+#' rnet_sf <- overline(sl = sl, attrib = "length")
+#' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
+#'
+#' # legacy implementation based on sp data
 #' sl <- routes_fast[2:4, ]
 #' rnet1 <- overline(sl = sl, attrib = "length")
 #' rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 #' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 #' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-#' # sf methods
-#' sl <- routes_fast_sf[2:4, ]
-#' rnet_sf <- overline(sl = sl, attrib = "length", buff_dist = 10)
-#' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-overline <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
+#'
+#' sl = routes_fast_sf[routes_fast_sf$length > 0, ]
+#' sl$bicycle = 1
+#' rnet1 = overline(sl, "bicycle")
+#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
+#' plot(rnet1, lwd = lwd)
+#' \donttest{
+#' # test on a larger dataset
+#' region = "isle-of-wight"
+#'
+#' u = paste0(
+#'   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
+#'    region,
+#'   "/rf.geojson"
+#' )
+#' }
+overline <- function(sl,
+                     attrib,
+                     fun = sum,
+                     na.zero = FALSE,
+                     buff_dist = 0) {
   UseMethod("overline")
 }
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
 
-  overline2(x = sl, attrib = attrib)
+  overline2(sl,
+            attrib,
+            ncores = 1,
+            simplify = TRUE,
+            regionalise = 1e5
+            )
 
 }
 #' @export
@@ -205,7 +264,7 @@ overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist =
 #' potentially halving the number of lines objects and reducing the number
 #' of overlapping lines to zero.
 #'
-#' @param x A SpatialLinesDataFrame
+#' @param x A dataset containing linestring geometries
 #' @param attrib A text string containing the name of the line's attribute to
 #' aggregate or a numeric vector of the columns to be aggregated
 #'
@@ -274,68 +333,25 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @description This function is intended as a replacement for overline() and is significantly faster
 #' especially on large datasets. However, it also uses more memory.
 #'
-#' @param x An SF data.frame of LINESTRINGS
-#' @param attrib character, column names in x to be summed
+#' @param sl A spatial object representing routes on a transport network
+#' @param attrib character, column names in sl to be summed
 #' @param ncores integer, how many cores to use in parallel processing, default = 1
 #' @param simplify logical, if TRUE group final segments back into lines, default = TRUE
 #' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
 #' @family rnet
 #' @author Malcolm Morgan
 #' @export
-#' @return
-#' An SF data.frame of LINESTRINGS
-#' @details
-#' The overline2 function breaks each line into many straight segments and then looks for duplicated segments.
-#' Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
-#' recombined into linestrings.
-#'
-#' Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
-#' This significantly reduces computation time for large datasets, but slightly increases the final file size.
-#' For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
-#'
-#' A known limitation of this method is that overlapping segments of different lengths are not aggregated.
-#' This can occur when lines stop halfway down a road. Typically these errors are small,
-#' but some artefacts may remain within the resulting data.
-#'
-#' For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
-#' to overline subsets of the dataset, rbind the results together, and then overline again, to produce
-#' a final result.
-#'
-#' Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
-#'
-#' @examples
-#' sl = routes_fast_sf[routes_fast_sf$length > 0, ]
-#' sl$bicycle = 1
-#' system.time({rnet1 = overline2(sl, "bicycle")})
-#' system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
-#' identical(rnet1, rnet2)
-#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
-#' plot(rnet1, lwd = lwd)
-#' \donttest{
-#' region = "isle-of-wight"
-#'
-#' u = paste0(
-#'   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
-#'    region,
-#'   "/rf.geojson"
-#' )
-#'
-#' sl = sf::read_sf(u)
-#' system.time({rnet1 = overline2(sl, "bicycle")})
-#' system.time({rnet2 = overline2(sl, "bicycle", ncores = 4)})
-#' identical(rnet1, rnet2)
-#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
-#' plot(rnet1, lwd = lwd)
-#' }
-overline2 = function(x, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
-  if(!"sfc_LINESTRING" %in%  class(sf::st_geometry(x))){
+#' @return An `sf` object representing a route network
+#' @rdname overline
+overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
+  if(!"sfc_LINESTRING" %in%  class(sf::st_geometry(sl))){
     stop("Only LINESTRING is supported")
   }
   if(any(c("1","2","3","4","grid") %in% attrib)){
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
 
-  x = sf::st_zm(x)
+  x = sf::st_zm(sl)
   x = x[, attrib]
   x_crs = sf::st_crs(x)
 
