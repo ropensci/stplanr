@@ -5,16 +5,7 @@
 \alias{overline2}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(
-  sl,
-  attrib,
-  ncores = 1,
-  simplify = TRUE,
-  regionalise = 1e+05,
-  fun = sum,
-  na.zero = FALSE,
-  buff_dist = 0
-)
+overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 
 overline2(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e+05)
 }
@@ -22,12 +13,6 @@ overline2(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e+05)
 \item{sl}{A spatial object representing routes on a transport network}
 
 \item{attrib}{character, column names in sl to be summed}
-
-\item{ncores}{integer, how many cores to use in parallel processing, default = 1}
-
-\item{simplify}{logical, if TRUE group final segments back into lines, default = TRUE}
-
-\item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
 
 \item{fun}{The function(s) used to aggregate the grouped values (default: sum).
 If length of \code{fun} is smaller than \code{attrib} then the functions are
@@ -37,9 +22,15 @@ repeated for subsequent attributes.}
 
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
 If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+
+\item{ncores}{integer, how many cores to use in parallel processing, default = 1}
+
+\item{simplify}{logical, if TRUE group final segments back into lines, default = TRUE}
+
+\item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
 }
 \value{
-
+An \code{sf} object representing a route network
 }
 \description{
 This function takes a series of overlapping lines
@@ -57,7 +48,7 @@ The \code{overline()} function breaks each line into many straight segments and 
 Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
 recombined into linestrings.
 
-The following arguments only apply to the \code{sf} implementation of \code{overline()}:
+The following arguments only apply to \code{overline2()}:
 \itemize{
 \item \code{ncores}, the number of cores to use in parallel processing
 \item \code{simplify}, should the final segments be converted back into longer lines? The default setting.

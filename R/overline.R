@@ -125,7 +125,7 @@ lineLabels <- function(sl, attrib) {
 #' Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
 #' recombined into linestrings.
 #'
-#' The following arguments only apply to the `sf` implementation of `overline()`:
+#' The following arguments only apply to `overline2()`:
 #'
 #' - `ncores`, the number of cores to use in parallel processing
 #' - `simplify`, should the final segments be converted back into longer lines? The default setting.
@@ -179,9 +179,6 @@ lineLabels <- function(sl, attrib) {
 #' }
 overline <- function(sl,
                      attrib,
-                     ncores = 1,
-                     simplify = TRUE,
-                     regionalise = 1e5,
                      fun = sum,
                      na.zero = FALSE,
                      buff_dist = 0) {
@@ -190,7 +187,12 @@ overline <- function(sl,
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
 
-  overline2(sl, attrib = attrib)
+  overline2(sl,
+            attrib,
+            ncores = 1,
+            simplify = TRUE,
+            regionalise = 1e5
+            )
 
 }
 #' @export
@@ -339,7 +341,7 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @family rnet
 #' @author Malcolm Morgan
 #' @export
-#' @return
+#' @return An `sf` object representing a route network
 #' @rdname overline
 overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
   if(!"sfc_LINESTRING" %in%  class(sf::st_geometry(sl))){
