@@ -33,7 +33,6 @@ Other rnet:
 \code{\link{gsection}()},
 \code{\link{islines}()},
 \code{\link{lineLabels}()},
-\code{\link{overline2}()},
 \code{\link{overline}()},
 \code{\link{plot,SpatialLinesNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},

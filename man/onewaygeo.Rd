@@ -7,7 +7,7 @@
 onewaygeo(x, attrib)
 }
 \arguments{
-\item{x}{A SpatialLinesDataFrame}
+\item{x}{A dataset containing linestring geometries}
 
 \item{attrib}{A text string containing the name of the line's attribute to
 aggregate or a numeric vector of the columns to be aggregated}
