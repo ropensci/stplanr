@@ -1,3 +1,9 @@
+# stplanr 0.6.1
+
+## BUG FIXES
+
+- `route()` failed when `data.table` not installed (#408)
+
 # stplanr 0.6.0
 
 ## BUG FIXES
