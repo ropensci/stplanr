@@ -80,7 +80,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     message("Returning list")
     return(list_out)
   }
-  if(requireNamespace("data.table")) {
+  if(requireNamespace("data.table"), quietly = TRUE) {
     out_dt <- data.table::rbindlist(list_out[list_elements_sf])
     return(sf::st_as_sf(out_dt))
   } else {
