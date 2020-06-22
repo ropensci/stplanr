@@ -67,7 +67,7 @@ geo_select_aeq.sfc <- function(shp) {
 #' @param crs An optional coordinate reference system (if not provided it is set
 #' automatically by [geo_select_aeq()])
 #' @param silent A binary value for printing the CRS details (default: TRUE)
-#' @param ... Arguments to pass to `fun`, e.g. `byid = TRUE` if the function is [rgeos::gLength()]))
+#' @param ... Arguments to pass to `fun`, e.g. `byid = TRUE` if the function is `rgeos::gLength()`
 #' @aliases gprojected
 #' @export
 #' @examples

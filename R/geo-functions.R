@@ -39,7 +39,6 @@ writeGeoJSON <- function(shp, filename) {
 #' The percent argument refers to the percentage of removable points to retain.
 #' So `percent = 1` is a very aggressive simplication, saving a huge amount of
 #' hard-disk space.
-#' [rgeos::gSimplify()]
 #' @family geo
 #' @export
 #' @examples

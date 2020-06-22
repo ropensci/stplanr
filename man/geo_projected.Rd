@@ -17,7 +17,7 @@ automatically by \code{\link[=geo_select_aeq]{geo_select_aeq()}})}
 
 \item{silent}{A binary value for printing the CRS details (default: TRUE)}
 
-\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{\link[rgeos:gLength]{rgeos::gLength()}}))}
+\item{...}{Arguments to pass to \code{fun}, e.g. \code{byid = TRUE} if the function is \code{rgeos::gLength()}}
 }
 \description{
 This function performs operations on projected data.
