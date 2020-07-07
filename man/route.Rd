@@ -8,7 +8,7 @@ route(
   from = NULL,
   to = NULL,
   l = NULL,
-  route_fun = stplanr::route_cyclestreets,
+  route_fun = cyclestreets::journey,
   n_print = 10,
   list_output = FALSE,
   cl = NULL,
@@ -42,7 +42,7 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-r <- overline(routes_fast_sf, "length")
+r <- overline(routes_fast_sf[2:5, ], "length")
 l <- od2line(od_data_sample[2:5, 1:3], cents_sf)
 sln <- stplanr::SpatialLinesNetwork(r)
 # calculate shortest paths
