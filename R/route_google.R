@@ -9,7 +9,7 @@
 #' `usethis::edit_r_environ()`.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' from = "university of leeds"
 #' to = "pedallers arms leeds"
 #' r = route(from, to, route_fun = cyclestreets::journey)

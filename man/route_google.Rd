@@ -24,7 +24,7 @@ Find the shortest path using Google's services.
 See the \code{mapsapi} package for details.
 }
 \examples{
-\donttest{
+\dontrun{
 from = "university of leeds"
 to = "pedallers arms leeds"
 r = route(from, to, route_fun = cyclestreets::journey)
