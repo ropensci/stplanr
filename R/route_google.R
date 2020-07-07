@@ -5,7 +5,8 @@
 #'
 #' @inheritParams route
 #' @param mode Mode of transport, walking (default), bicycling, transit, or driving
-#'
+#' @param key Google key. By default it is `Sys.getenv("GOOGLE")`. Set it with:
+#' `usethis::edit_r_environ()`.
 #' @export
 #' @examples
 #' \donttest{
@@ -19,6 +20,11 @@
 #' r_google <- route(from, to, route_fun = route_google)
 #' }
 route_google <- function(from, to, mode = "walking", key = Sys.getenv("GOOGLE"), ...) {
-  doc <- mapsapi::mp_directions(origin = from, destination = to, mode = mode, key = key, ...)
-  mapsapi::mp_get_routes(doc)
+  out <- if (requireNamespace("mapsapi", quietly = TRUE)) {
+    doc <- mapsapi::mp_directions(origin = from, destination = to, mode = mode, key = key, ...)
+    res <- mapsapi::mp_get_routes(doc)
+  } else {
+    message("Dependency unmet. Run:\ninstall.packages('mapsapi')")
+  }
+  res
 }

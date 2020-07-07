@@ -14,6 +14,9 @@ route_google(from, to, mode = "walking", key = Sys.getenv("GOOGLE"), ...)
 
 \item{mode}{Mode of transport, walking (default), bicycling, transit, or driving}
 
+\item{key}{Google key. By default it is \code{Sys.getenv("GOOGLE")}. Set it with:
+\code{usethis::edit_r_environ()}.}
+
 \item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
 }
 \description{

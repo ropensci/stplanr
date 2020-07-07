@@ -68,7 +68,8 @@ Suggests:
     openxlsx (>= 4.1.0),
     osrm,
     data.table,
-    geodist
+    geodist,
+    mapsapi
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make
