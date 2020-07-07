@@ -1,3 +1,10 @@
+# stplanr 0.6.2
+
+
+## New features
+
+- New interface to Google Directions API via `mapsapi` package (#410)
+
 # stplanr 0.6.1
 
 ## BUG FIXES

@@ -10,7 +10,7 @@
 #' @family routes
 #' @export
 #' @examples
-#' r <- overline(routes_fast_sf, "length")
+#' r <- overline(routes_fast_sf[2:5, ], "length")
 #' l <- od2line(od_data_sample[2:5, 1:3], cents_sf)
 #' sln <- stplanr::SpatialLinesNetwork(r)
 #' # calculate shortest paths
@@ -23,13 +23,21 @@
 #' )
 #' plot(sp["all"], add = TRUE, lwd = 5)
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = stplanr::route_cyclestreets,
+                  route_fun = cyclestreets::journey,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {
   UseMethod(generic = "route")
 }
 #' @export
 route.numeric <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = stplanr::route_cyclestreets,
+                          route_fun = cyclestreets::journey,
+                          n_print = 10, list_output = FALSE, cl = NULL, ...) {
+  odm <- od_coords(from, to)
+  l <- od_coords2line(odm)
+  route(l, route_fun = route_fun, ...)
+}
+#' @export
+route.character <- function(from = NULL, to = NULL, l = NULL,
+                          route_fun = cyclestreets::journey,
                           n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
@@ -89,7 +97,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                     route_fun = stplanr::route_cyclestreets,
+                     route_fun = cyclestreets::journey,
                      n_print = 10, list_output = FALSE, cl = NULL, ...) {
 
   # error msg in case routing fails
