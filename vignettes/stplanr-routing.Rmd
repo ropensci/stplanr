@@ -2,7 +2,7 @@
 title: "Transport routing with stplanr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{stplanr vignette 3: routing}
+  %\VignetteIndexEntry{Transport routing with stplanr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,22 +18,23 @@ knitr::opts_chunk$set(
 library(stplanr)
 ```
 
-## This vignette is work in progress - watch this space!
+# Introduction
 
+Routing is the process of identifying routes that enable movement between two geographic locations along the shortest path (based on mode-specific routing profiles) or in some other 'optimal' way, based on route network data.
+Most open routing engines rely on OpenStreetMap (OSM) data.
 
-```{r, echo=FALSE, eval=FALSE}
-# upload roads data
-if(!file.exists("roads_iow.Rds")) {
-  download.file("https://github.com/ropensci/stplanr/releases/download/0.3.1/roads_iow.Rds", "roads_iow.Rds")
-}
-roads_iow = readRDS("roads_iow.Rds")
-sf::write_sf(roads_iow, "roads_iow.geojson")
-piggyback::pb_upload("roads_iow.geojson")
-```
+We will use the example of the Isle of Wight to demonstrate routing engines.
+To get OSM data for the Isle of Wight you can run the following commands:
 
 ```{r, eval=FALSE}
-roads_iow = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/0.3.1/roads_iow.geojson")
+remotes::install_github("itsleeds/geofabrik")
+library(geofabrik)
+roads_iow = get_geofabrik(name = "Isle of Wight")
+f = gf_filename("Isle of Wight")
+file.copy(f, "iow.pbf")
+options(osrm.server = "http://0.0.0.0:5000/", osrm.profile = "driving")
 ```
+
 
 # OSRM
 
@@ -45,24 +46,7 @@ We will use the `osrm` package:
 library(osrm)
 ```
 
-To get OSM data for the Isle of Wight, for example, you can run the following commands:
-
-```{r, eval=FALSE}
-remotes::install_github("itsleeds/geofabrik")
-library(geofabrik)
-iow = get_geofabrik(name = "Isle of Wight")
-f = gf_filename("Isle of Wight")
-file.copy(f, "iow.pbf")
-options(osrm.server = "http://0.0.0.0:5000/", osrm.profile = "driving")
-```
-
-
-```{r, echo=FALSE, eval=FALSE}
-if(!file.exists("iow.pbf"))
-  download.file("http://download.geofabrik.de/europe/great-britain/england/isle-of-wight-latest.osm.pbf", "iow.pbf")
-```
-
-Then in bash run the following commands to make the [OSRM docker image](https://hub.docker.com/r/osrm/osrm-backend/) work for you.
+In the system terminal run the following commands to make the [OSRM docker image](https://hub.docker.com/r/osrm/osrm-backend/) work for you.
 
 ```{r, engine='bash', eval=FALSE}
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /data/iow.pbf
@@ -76,11 +60,15 @@ Now we can do routing in R!
 
 On a single route:
 
-```{r}
+```{r, eval=FALSE}
 l = pct::wight_lines_30
 p = line2points(l)
 r = osrm::osrmRoute(src = p[1, ], dst = p[2, ], returnclass = "sf", overview = "full")
 plot(r)
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/86902789-577d1080-c106-11ea-91df-8d0180931562.png")
 ```
 
 And to find many routes via the `route()` function, resulting in something like the figure below.
