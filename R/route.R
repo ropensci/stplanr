@@ -90,7 +90,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   }
   if(requireNamespace("data.table", quietly = TRUE)) {
     out_dt <- data.table::rbindlist(list_out[list_elements_sf])
-    return(sf::st_as_sf(out_dt))
+    return(sf::st_sf(out_dt[, !names(out_dt) %in% "geometry"], geometry = out_dt$geometry))
   } else {
     do.call(rbind, list_out[list_elements_sf])
   }
@@ -150,7 +150,6 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }
 
   r
-
 
 }
 
