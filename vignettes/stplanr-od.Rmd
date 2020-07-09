@@ -3,7 +3,7 @@ title: "Origin-destination data with stplanr"
 output: rmarkdown::html_vignette
 author: "Robin Lovelace and Edward Leigh"
 vignette: >
-  %\VignetteIndexEntry{stplanr vignette 2: origin-destination data}
+  %\VignetteIndexEntry{Origin-destination data with stplanr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography:
