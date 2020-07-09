@@ -20,7 +20,7 @@ bibliography:
   - stplanr-citation.bib
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{stplanr A Package for Transport Planning}
+  %\VignetteIndexEntry{stplanr: A Package for Transport Planning}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
