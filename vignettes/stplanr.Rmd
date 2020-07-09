@@ -4,7 +4,7 @@ author: "Robin Lovelace"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{stplanr vignette 1: Introducing stplanr}
+  %\VignetteIndexEntry{Introducing stplanr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography:
