@@ -26,14 +26,14 @@ This function takes overlapping \code{LINESTRING}s stored in an
 geometries and aggregated values.
 }
 \examples{
-routes_fast_sf$value = 1
+routes_fast_sf$value <- 1
 sl <- routes_fast_sf[4:6, ]
-attrib = c("value", "length")
-rnet = overline_intersection(sl = sl, attrib)
+attrib <- c("value", "length")
+rnet <- overline_intersection(sl = sl, attrib)
 plot(rnet, lwd = rnet$value)
 # A larger example
 sl <- routes_fast_sf[4:7, ]
-rnet = overline_intersection(sl = sl, attrib = c("value", "length"))
+rnet <- overline_intersection(sl = sl, attrib = c("value", "length"))
 plot(rnet, lwd = rnet$value)
 rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
 plot(rnet_sf, lwd = rnet_sf$value)
