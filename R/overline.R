@@ -111,6 +111,7 @@ lineLabels <- function(sl, attrib) {
 #' If length of `fun` is smaller than `attrib` then the functions are
 #' repeated for subsequent attributes.
 #' @param na.zero Sets whether aggregated values with a value of zero are removed.
+#' @param ... Arguments passed to `overline2`
 #' @inheritParams gsection
 #' @inheritParams overline2
 #' @author Barry Rowlingson
@@ -152,7 +153,9 @@ lineLabels <- function(sl, attrib) {
 #' @examples
 #'
 #' sl <- routes_fast_sf[2:4, ]
-#' rnet_sf <- overline(sl = sl, attrib = "length")
+#' class(sl)
+#' class(sl$geometry)
+#' rnet_sf <- overline(sl = sl, attrib = "length", quiet = TRUE)
 #' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 #'
 #' # legacy implementation based on sp data
@@ -162,18 +165,18 @@ lineLabels <- function(sl, attrib) {
 #' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 #' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 #'
-#' sl = routes_fast_sf[routes_fast_sf$length > 0, ]
-#' sl$bicycle = 1
-#' rnet1 = overline(sl, "bicycle")
-#' lwd = rnet1$bicycle / mean(rnet1$bicycle)
+#' sl <- routes_fast_sf[routes_fast_sf$length > 0, ]
+#' sl$bicycle <- 1
+#' rnet1 <- overline(sl, "bicycle")
+#' lwd <- rnet1$bicycle / mean(rnet1$bicycle)
 #' plot(rnet1, lwd = lwd)
 #' \donttest{
 #' # test on a larger dataset
-#' region = "isle-of-wight"
+#' region <- "isle-of-wight"
 #'
-#' u = paste0(
+#' u <- paste0(
 #'   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
-#'    region,
+#'   region,
 #'   "/rf.geojson"
 #' )
 #' }
@@ -181,22 +184,24 @@ overline <- function(sl,
                      attrib,
                      fun = sum,
                      na.zero = FALSE,
-                     buff_dist = 0) {
+                     buff_dist = 0,
+                     ...) {
   UseMethod("overline")
 }
 #' @export
-overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
+overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
 
   overline2(sl,
-            attrib,
-            ncores = 1,
-            simplify = TRUE,
-            regionalise = 1e5
-            )
+    attrib,
+    ncores = 1,
+    simplify = TRUE,
+    regionalise = 1e5,
+    ...
+  )
 
 }
 #' @export
-overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
+overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
     fun <- rep(c(fun), length.out = length(attrib))
@@ -338,51 +343,53 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param ncores integer, how many cores to use in parallel processing, default = 1
 #' @param simplify logical, if TRUE group final segments back into lines, default = TRUE
 #' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
+#' @param quiet Should the the function omit messages? `FALSE` by default.
 #' @family rnet
 #' @author Malcolm Morgan
 #' @export
 #' @return An `sf` object representing a route network
 #' @rdname overline
-overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5){
-  if(!"sfc_LINESTRING" %in%  class(sf::st_geometry(sl))){
+overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = FALSE) {
+  if (!"sfc_LINESTRING" %in% class(sl$geometry)) {
     stop("Only LINESTRING is supported")
   }
-  if(any(c("1","2","3","4","grid") %in% attrib)){
+  if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
 
-  x = sf::st_zm(sl)
-  x = x[, attrib]
-  x_crs = sf::st_crs(x)
-
-  message(paste0(Sys.time(), " constructing segments"))
-  c1 = sf::st_coordinates(x)
-  sf::st_geometry(x) = NULL
-  l1 = c1[, 3] # Get which line each point is part of
-  c1 = c1[, 1:2]
-  l1_start = duplicated(l1) # find the break points between lines
-  l1_start = c(l1_start[2:length(l1)], FALSE)
-  c2 = c1[2:nrow(c1), 1:2] # Create new coords offset by one row
-  c2 = rbind(c2, c(NA, NA))
-  c2[nrow(c1), ] = c(NA, NA)
-  c2[!l1_start, 1] = NA
-  c2[!l1_start, 2] = NA
-  c3 = cbind(c1, c2) # make new matrix of start and end coords
+  x <- sf::st_zm(sl)
+  x <- x[, attrib]
+  x_crs <- sf::st_crs(x)
+  if (!quiet) {
+    message(paste0(Sys.time(), " constructing segments"))
+  }
+  c1 <- sf::st_coordinates(x)
+  sf::st_geometry(x) <- NULL
+  l1 <- c1[, 3] # Get which line each point is part of
+  c1 <- c1[, 1:2]
+  l1_start <- duplicated(l1) # find the break points between lines
+  l1_start <- c(l1_start[2:length(l1)], FALSE)
+  c2 <- c1[2:nrow(c1), 1:2] # Create new coords offset by one row
+  c2 <- rbind(c2, c(NA, NA))
+  c2[nrow(c1), ] <- c(NA, NA)
+  c2[!l1_start, 1] <- NA
+  c2[!l1_start, 2] <- NA
+  c3 <- cbind(c1, c2) # make new matrix of start and end coords
   rm(c1, c2)
-  c3 = c3[!is.na(c3[, 3]), ]
-  x = x[l1[l1_start], , drop = FALSE] # repeate attributes
+  c3 <- c3[!is.na(c3[, 3]), ]
+  x <- x[l1[l1_start], , drop = FALSE] # repeate attributes
   rm(l1, l1_start)
 
-  #message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
+  # message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
   attributes(c3)$dimnames <- NULL
   c3 <- t(apply(c3, MARGIN = 1, FUN = function(y) {
-    if(y[1] != y[3]){
+    if (y[1] != y[3]) {
       if (y[1] > y[3]) {
         c(y[3], y[4], y[1], y[2])
       } else {
         y
       }
-    } else{
+    } else {
       if (y[2] > y[4]) {
         c(y[3], y[4], y[1], y[2])
       } else {
@@ -392,65 +399,72 @@ overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5)
 
   }))
 
-  #message(paste0(Sys.time(), " removing duplicates"))
+  # message(paste0(Sys.time(), " removing duplicates"))
   x <- cbind(c3, x)
   rm(c3)
-  x <- dplyr::group_by_at(x, c("1","2","3","4"))
+  x <- dplyr::group_by_at(x, c("1", "2", "3", "4"))
   x <- dplyr::summarise_all(x, .funs = sum)
-  coords <- as.matrix(x[,1:4])
-  x <- x[,attrib]
+  coords <- as.matrix(x[, 1:4])
+  x <- x[, attrib]
 
   # Make Geometry
-  message(paste0(Sys.time(), " building geometry"))
+  if (!quiet) {
+    message(paste0(Sys.time(), " building geometry"))
+  }
   sf::st_geometry(x) <- sf::st_as_sfc(pbapply::pblapply(1:nrow(coords), function(y) {
-    sf::st_linestring(matrix(coords[y,], ncol = 2, byrow = T))
+    sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
   }), crs = x_crs)
   rm(coords)
 
   # Recombine into fewer lines
-  if(simplify){
-
-    message(paste0(Sys.time(), " simplifying geometry"))
+  if (simplify) {
+    if (!quiet) {
+      message(paste0(Sys.time(), " simplifying geometry"))
+    }
     if (nrow(x) > regionalise) {
-      message(paste0("large data detected, using regionalisation, nrow = ",nrow(x)))
-      suppressWarnings( cents <- sf::st_centroid(x))
+      message(paste0("large data detected, using regionalisation, nrow = ", nrow(x)))
+      suppressWarnings(cents <- sf::st_centroid(x))
       grid <- sf::st_make_grid(cents, what = "polygons")
       inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1))
       x$grid <- inter
       rm(cents, grid, inter)
       # split into a list of df by grid
-      x = split(x , f = x$grid)
+      x <- split(x, f = x$grid)
       message(paste0(Sys.time(), " regionalisation complete, aggregating flows"))
       if (ncores > 1) {
-        cl = parallel::makeCluster(ncores)
-        parallel::clusterExport(cl = cl,
-                                varlist = c("attrib"),
-                                envir = environment())
+        cl <- parallel::makeCluster(ncores)
+        parallel::clusterExport(
+          cl = cl,
+          varlist = c("attrib"),
+          envir = environment()
+        )
         parallel::clusterEvalQ(cl, {
           library(sf)
-          #library(dplyr)
+          # library(dplyr)
         })
-        overlined_simple = pbapply::pblapply(x, function(y) {
+        overlined_simple <- pbapply::pblapply(x, function(y) {
           y <- dplyr::group_by_at(y, attrib)
           y <- dplyr::summarise(y, do_union = FALSE)
         }, cl = cl)
         parallel::stopCluster(cl)
         rm(cl)
-      } else{
-        overlined_simple = pbapply::pblapply(x, function(y) {
+      } else {
+        overlined_simple <- pbapply::pblapply(x, function(y) {
           y <- dplyr::group_by_at(y, attrib)
           y <- dplyr::summarise(y, do_union = FALSE)
         })
       }
       rm(x)
       suppressWarnings(overlined_simple <-
-                         dplyr::bind_rows(overlined_simple))
-      overlined_simple = as.data.frame(overlined_simple)
-      overlined_simple = sf::st_sf(overlined_simple)
-      sf::st_crs(overlined_simple) = x_crs
-      overlined_simple$grid = NULL
-    } else{
-      message(paste0(Sys.time(), " aggregating flows"))
+        dplyr::bind_rows(overlined_simple))
+      overlined_simple <- as.data.frame(overlined_simple)
+      overlined_simple <- sf::st_sf(overlined_simple)
+      sf::st_crs(overlined_simple) <- x_crs
+      overlined_simple$grid <- NULL
+    } else {
+      if (!quiet) {
+        message(paste0(Sys.time(), " aggregating flows"))
+      }
       overlined_simple <- dplyr::group_by_at(x, attrib)
       overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE)
       rm(x)
@@ -458,20 +472,22 @@ overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5)
 
     overlined_simple <- dplyr::ungroup(overlined_simple)
 
-    #Separate our the linestrings and the mulilinestrings
-    message(paste0(Sys.time(), " rejoining segments into linestrings"))
+    # Separate our the linestrings and the mulilinestrings
+    if (!quiet) {
+      message(paste0(Sys.time(), " rejoining segments into linestrings"))
+    }
     overlined_simple <- sf::st_line_merge(overlined_simple)
-    geom_types = sf::st_geometry_type(overlined_simple)
-    overlined_simple_l = overlined_simple[geom_types == "LINESTRING", ]
-    overlined_simple_ml = overlined_simple[geom_types == "MULTILINESTRING", ]
+    geom_types <- sf::st_geometry_type(overlined_simple)
+    overlined_simple_l <- overlined_simple[geom_types == "LINESTRING", ]
+    overlined_simple_ml <- overlined_simple[geom_types == "MULTILINESTRING", ]
     suppressWarnings(overlined_simple_ml <-
-                       sf::st_cast(
-                         sf::st_cast(overlined_simple_ml, "MULTILINESTRING"),
-                         "LINESTRING"
-                       ))
+      sf::st_cast(
+        sf::st_cast(overlined_simple_ml, "MULTILINESTRING"),
+        "LINESTRING"
+      ))
 
     return(rbind(overlined_simple_l, overlined_simple_ml))
-  }else{
+  } else {
     return(x)
   }
 
@@ -488,14 +504,14 @@ overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5)
 #' @inheritParams overline
 #' @export
 #' @examples
-#' routes_fast_sf$value = 1
+#' routes_fast_sf$value <- 1
 #' sl <- routes_fast_sf[4:6, ]
-#' attrib = c("value", "length")
-#' rnet = overline_intersection(sl = sl, attrib)
+#' attrib <- c("value", "length")
+#' rnet <- overline_intersection(sl = sl, attrib)
 #' plot(rnet, lwd = rnet$value)
 #' # A larger example
 #' sl <- routes_fast_sf[4:7, ]
-#' rnet = overline_intersection(sl = sl, attrib = c("value", "length"))
+#' rnet <- overline_intersection(sl = sl, attrib = c("value", "length"))
 #' plot(rnet, lwd = rnet$value)
 #' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
 #' plot(rnet_sf, lwd = rnet_sf$value)
@@ -505,9 +521,9 @@ overline2 = function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5)
 #' # rnet_sf <- overline(routes_fast_sf, attrib = c("value", "length"), buff_dist = 10)
 #' # plot(rnet$geometry, lwd = rnet$value * 2, col = "grey")
 #' # plot(rnet_sf$geometry,  lwd = rnet_sf$value, add = TRUE)
-overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0){
-  sl = sl[attrib]
-  sli = sf::st_intersection(sl)
+overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
+  sl <- sl[attrib]
+  sli <- sf::st_intersection(sl)
 
   # check it's all in there:
   # sli_union = sf::st_union(sli)
@@ -515,14 +531,14 @@ overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_d
   # plot(sl$geometry, add = T, col = "red")
   # sl_difference = sf::st_difference(sl, sli)
 
-  gtypes = sf::st_geometry_type(sli)
-  sli_lines = sli[gtypes == "LINESTRING", ]
-  sli_mlines = sli[gtypes == "MULTILINESTRING", ]
+  gtypes <- sf::st_geometry_type(sli)
+  sli_lines <- sli[gtypes == "LINESTRING", ]
+  sli_mlines <- sli[gtypes == "MULTILINESTRING", ]
 
-  if(any(gtypes == "GEOMETRYCOLLECTION")) {
-    sli_collections = sli[gtypes == "GEOMETRYCOLLECTION", ]
-    sli_clines = sf::st_collection_extract(sli_collections, "LINESTRING")
-    sli_lines = rbind(sli_lines, sli_clines)
+  if (any(gtypes == "GEOMETRYCOLLECTION")) {
+    sli_collections <- sli[gtypes == "GEOMETRYCOLLECTION", ]
+    sli_clines <- sf::st_collection_extract(sli_collections, "LINESTRING")
+    sli_lines <- rbind(sli_lines, sli_clines)
   }
 
   # # Test plots:
@@ -531,15 +547,15 @@ overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_d
   # plot(sl$geometry, col = "red", add = TRUE)
 
   # # removes many lines!
-  l_mlines = lapply(sli_mlines$geometry, sf::st_line_merge)
-  l_mlines_sfc = sf::st_sfc(l_mlines, crs = sf::st_crs(sl))
+  l_mlines <- lapply(sli_mlines$geometry, sf::st_line_merge)
+  l_mlines_sfc <- sf::st_sfc(l_mlines, crs = sf::st_crs(sl))
   # plot(l_mlines_sfc)
 
-  l_mlines_data = lapply(attrib, function(a) {
+  l_mlines_data <- lapply(attrib, function(a) {
     vapply(sli_mlines$origins, function(i) fun(sl[[a]][i]), FUN.VALUE = numeric(1))
   })
-  names(l_mlines_data) = attrib
-  mlines = sf::st_sf(l_mlines_data, geometry = l_mlines_sfc)
-  slines = sli_lines[attrib]
+  names(l_mlines_data) <- attrib
+  mlines <- sf::st_sf(l_mlines_data, geometry = l_mlines_sfc)
+  slines <- sli_lines[attrib]
   rbind(mlines, slines)
 }

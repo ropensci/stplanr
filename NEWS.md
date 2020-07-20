@@ -1,9 +1,9 @@
 # stplanr 0.6.2
 
-
 ## New features
 
 - New interface to Google Directions API via `mapsapi` package (#410)
+- New `quiet` argument in `overline()` makes it less chatty
 
 # stplanr 0.6.1
 

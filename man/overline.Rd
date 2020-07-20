@@ -5,9 +5,16 @@
 \alias{overline2}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
+overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...)
 
-overline2(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e+05)
+overline2(
+  sl,
+  attrib,
+  ncores = 1,
+  simplify = TRUE,
+  regionalise = 1e+05,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{sl}{A spatial object representing routes on a transport network}
@@ -23,11 +30,15 @@ repeated for subsequent attributes.}
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
 If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
 
+\item{...}{Arguments passed to \code{overline2}}
+
 \item{ncores}{integer, how many cores to use in parallel processing, default = 1}
 
 \item{simplify}{logical, if TRUE group final segments back into lines, default = TRUE}
 
 \item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
+
+\item{quiet}{Should the the function omit messages? \code{FALSE} by default.}
 }
 \value{
 An \code{sf} object representing a route network
@@ -73,7 +84,9 @@ Multicore support is only enabled for the regionalised simplification stage as i
 \examples{
 
 sl <- routes_fast_sf[2:4, ]
-rnet_sf <- overline(sl = sl, attrib = "length")
+class(sl)
+class(sl$geometry)
+rnet_sf <- overline(sl = sl, attrib = "length", quiet = TRUE)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 
 # legacy implementation based on sp data
@@ -83,18 +96,18 @@ rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 
-sl = routes_fast_sf[routes_fast_sf$length > 0, ]
-sl$bicycle = 1
-rnet1 = overline(sl, "bicycle")
-lwd = rnet1$bicycle / mean(rnet1$bicycle)
+sl <- routes_fast_sf[routes_fast_sf$length > 0, ]
+sl$bicycle <- 1
+rnet1 <- overline(sl, "bicycle")
+lwd <- rnet1$bicycle / mean(rnet1$bicycle)
 plot(rnet1, lwd = lwd)
 \donttest{
 # test on a larger dataset
-region = "isle-of-wight"
+region <- "isle-of-wight"
 
-u = paste0(
+u <- paste0(
   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
-   region,
+  region,
   "/rf.geojson"
 )
 }
