@@ -13,7 +13,7 @@ overline2(
   ncores = 1,
   simplify = TRUE,
   regionalise = 1e+05,
-  quiet = FALSE
+  quiet = NULL
 )
 }
 \arguments{
@@ -38,7 +38,8 @@ If the distance is zero (the default) touching but non-overlapping lines may be 
 
 \item{regionalise}{integer, during simplification regonalisation is used if the number of segments exceeds this value}
 
-\item{quiet}{Should the the function omit messages? \code{FALSE} by default.}
+\item{quiet}{Should the the function omit messages? \code{NULL} by default,
+which means the output will only be shown if \code{sl} has more than 1000 rows.}
 }
 \value{
 An \code{sf} object representing a route network
@@ -86,7 +87,8 @@ Multicore support is only enabled for the regionalised simplification stage as i
 sl <- routes_fast_sf[2:4, ]
 class(sl)
 class(sl$geometry)
-rnet_sf <- overline(sl = sl, attrib = "length", quiet = TRUE)
+overline(sl = sl, attrib = "length")
+rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 
 # legacy implementation based on sp data

@@ -155,7 +155,8 @@ lineLabels <- function(sl, attrib) {
 #' sl <- routes_fast_sf[2:4, ]
 #' class(sl)
 #' class(sl$geometry)
-#' rnet_sf <- overline(sl = sl, attrib = "length", quiet = TRUE)
+#' overline(sl = sl, attrib = "length")
+#' rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
 #' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 #'
 #' # legacy implementation based on sp data
@@ -343,20 +344,23 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param ncores integer, how many cores to use in parallel processing, default = 1
 #' @param simplify logical, if TRUE group final segments back into lines, default = TRUE
 #' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
-#' @param quiet Should the the function omit messages? `FALSE` by default.
+#' @param quiet Should the the function omit messages? `NULL` by default,
+#' which means the output will only be shown if `sl` has more than 1000 rows.
 #' @family rnet
 #' @author Malcolm Morgan
 #' @export
 #' @return An `sf` object representing a route network
 #' @rdname overline
-overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = FALSE) {
+overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = NULL) {
   if (!"sfc_LINESTRING" %in% class(sl$geometry)) {
     stop("Only LINESTRING is supported")
   }
   if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
-
+  if(is.null(quiet)) {
+   quiet <- ifelse(nrow(sl) > 1000, TRUE, FALSE)
+  }
   x <- sf::st_zm(sl)
   x <- x[, attrib]
   x_crs <- sf::st_crs(x)
