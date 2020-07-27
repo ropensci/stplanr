@@ -415,9 +415,16 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   if (!quiet) {
     message(paste0(Sys.time(), " building geometry"))
   }
-  sf::st_geometry(x) <- sf::st_as_sfc(pbapply::pblapply(1:nrow(coords), function(y) {
-    sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
-  }), crs = x_crs)
+  sf::st_geometry(x) <- sf::st_as_sfc(
+    if (requireNamespace("pbapply", quietly = TRUE)) {
+      pbapply::pblapply(1:nrow(coords), function(y) {
+        sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
+      })
+    } else {
+      lapply(1:nrow(coords), function(y) {
+        sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
+      })
+    }, crs = x_crs)
   rm(coords)
 
   # Recombine into fewer lines
@@ -446,17 +453,33 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
           library(sf)
           # library(dplyr)
         })
-        overlined_simple <- pbapply::pblapply(x, function(y) {
-          y <- dplyr::group_by_at(y, attrib)
-          y <- dplyr::summarise(y, do_union = FALSE)
-        }, cl = cl)
+        overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
+          pbapply::pblapply(x, function(y) {
+            y <- dplyr::group_by_at(y, attrib)
+            y <- dplyr::summarise(y, do_union = FALSE)
+          }, cl = cl)
+        } else {
+          lapply(x, function(y) {
+            y <- dplyr::group_by_at(y, attrib)
+            y <- dplyr::summarise(y, do_union = FALSE)
+          })
+        }
+
+
         parallel::stopCluster(cl)
         rm(cl)
       } else {
-        overlined_simple <- pbapply::pblapply(x, function(y) {
-          y <- dplyr::group_by_at(y, attrib)
-          y <- dplyr::summarise(y, do_union = FALSE)
-        })
+        overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
+          pbapply::pblapply(x, function(y) {
+            y <- dplyr::group_by_at(y, attrib)
+            y <- dplyr::summarise(y, do_union = FALSE)
+          })
+        } else {
+          lapply(x, function(y) {
+            y <- dplyr::group_by_at(y, attrib)
+            y <- dplyr::summarise(y, do_union = FALSE)
+          })
+        }
       }
       rm(x)
       suppressWarnings(overlined_simple <-
