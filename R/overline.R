@@ -191,7 +191,6 @@ overline <- function(sl,
 }
 #' @export
 overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
-
   overline2(sl,
     attrib,
     ncores = 1,
@@ -199,7 +198,6 @@ overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, .
     regionalise = 1e5,
     ...
   )
-
 }
 #' @export
 overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
@@ -358,8 +356,8 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
-  if(is.null(quiet)) {
-   quiet <- ifelse(nrow(sl) > 1000, TRUE, FALSE)
+  if (is.null(quiet)) {
+    quiet <- ifelse(nrow(sl) > 1000, TRUE, FALSE)
   }
   x <- sf::st_zm(sl)
   x <- x[, attrib]
@@ -400,7 +398,6 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
         y
       }
     }
-
   }))
 
   # message(paste0(Sys.time(), " removing duplicates"))
@@ -424,7 +421,9 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
       lapply(1:nrow(coords), function(y) {
         sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
       })
-    }, crs = x_crs)
+    },
+    crs = x_crs
+  )
   rm(coords)
 
   # Recombine into fewer lines
@@ -517,7 +516,6 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   } else {
     return(x)
   }
-
 }
 
 
