@@ -117,7 +117,7 @@ u <- paste0(
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for
 overlapping segments. Reproducible question from
-\url{http://gis.stackexchange.com}. See \url{http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+\url{https://gis.stackexchange.com}. See \url{https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
 \seealso{
 Other rnet: 

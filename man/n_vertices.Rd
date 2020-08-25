@@ -14,7 +14,7 @@ Returns a vector of the same length as the number of lines,
 with the number of vertices per line or polygon.
 }
 \details{
-See \url{http://gis.stackexchange.com/questions/58147/} for more information.
+See \url{https://gis.stackexchange.com/questions/58147/} for more information.
 }
 \examples{
 n_vertices(routes_fast)

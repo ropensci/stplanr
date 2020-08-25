@@ -5,7 +5,7 @@
 #' Returns a vector of the same length as the number of lines,
 #' with the number of vertices per line or polygon.
 #'
-#' See <http://gis.stackexchange.com/questions/58147/> for more information.
+#' See <https://gis.stackexchange.com/questions/58147/> for more information.
 #'
 #' @param l A SpatialLines or SpatalPolygons object
 #' @family lines

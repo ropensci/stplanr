@@ -70,7 +70,7 @@ route_transportapi_public <- function(from, to, silent = FALSE,
   orig <- paste0(from, collapse = ",")
   dest <- paste0(to, collapse = ",")
 
-  api_base <- "http://fcc.transportapi.com"
+  api_base <- "https://fcc.transportapi.com"
   ft_string <- paste0("/from/lonlat:", orig, "/to/lonlat:", dest)
 
   queryattrs <- list(region = region)

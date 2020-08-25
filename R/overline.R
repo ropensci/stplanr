@@ -118,7 +118,7 @@ lineLabels <- function(sl, attrib) {
 #' @references
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for
 #'  overlapping segments. Reproducible question from
-#'  <http://gis.stackexchange.com>. See <http://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
+#'  <https://gis.stackexchange.com>. See <https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
 #'
 #'
 #' @details

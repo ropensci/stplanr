@@ -36,7 +36,7 @@ Additional disaggregations of overall counts may include trip counts at differen
 Many OD datasets omit information.
 If there is only one time period, then this resides in the metadata for the whole data set.
 There is rarely any information about the path taken between the start and end points.
-It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/rCarto/osrm), [Google Directions API](http://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](http://vision-traffic.ptvgroup.com/en-us/products/ptv-visum/functions/)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
+It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/rCarto/osrm), [Google Directions API](https://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](https://www.ptvgroup.com/en/solutions/products/ptv-visum/)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
 
 # The importance of OD data
 
@@ -328,7 +328,7 @@ knitr::include_graphics("https://user-images.githubusercontent.com/1825120/62073
 ```
 
 This is better, but is still not ideal: the code was not intuitive to write, and the result is still not publication quality.
-Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](http://geocompr.robinlovelace.net/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
+Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](https://geocompr.robinlovelace.net/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
 As shown in the transport chapter of that book, OD flows can be visualised with the following code:
 
 ```{r, eval=FALSE}
@@ -468,7 +468,7 @@ sum(lines_cars$car_km * 2.5 * 200) / 1e9
 
 ```{r, echo=FALSE, eval=FALSE}
 # out-takes and test code
-u <- "http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/commodity_flow_survey/2007/zip/origin_destination_files.zip"
+u <- "https://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/commodity_flow_survey/2007/zip/origin_destination_files.zip"
 f <- file.path(tempdir(), "origin_destination_files.zip")
 download.file(u, f)
 unzip(f)

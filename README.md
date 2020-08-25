@@ -6,11 +6,11 @@
 <!-- [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) -->
 
 [![rstudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/onboarding/issues/10)
+[![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/software-review/issues/10)
 [![R-CMD-check](https://github.com/ropensci/stplanr/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/stplanr/actions)
 
 **stplanr** is a package for sustainable transport planning with R.
@@ -31,7 +31,7 @@ Transport
 as part of the development of the Propensity to Cycle Tool (PCT), a web
 application to explore current travel patterns and cycling potential at
 zone, desire line, route and route network levels (see
-[www.pct.bike](http://www.pct.bike/) and click on a region to try it
+[www.pct.bike](https://www.pct.bike/) and click on a region to try it
 out). The basis of the methods underlying the PCT is origin-destination
 data, which are used to highlight where many short distance trips are
 being made, and estimate how many could switch to cycling. The results
@@ -41,7 +41,7 @@ sustainable transport planning infrastructure engineering and policy
 
 See the package vignette (e.g. via `vignette("introducing-stplanr")`) or
 an [academic paper on the Propensity to Cycle Tool
-(PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on
+(PCT)](https://dx.doi.org/10.5198/jtlu.2016.862) for more information on
 how it can be used. This README provides some basics.
 
 Much of the work supports research undertaken at the Leeds’ Institute
@@ -182,7 +182,7 @@ authorities developing strategic cycle network under the Cycling and
 Walking Infrastructure Strategy
 ([CWIS](https://www.gov.uk/government/publications/cycling-and-walking-investment-strategy)),
 which is part of the Infrastructure Act
-[2015](http://www.legislation.gov.uk/ukpga/2015/7/contents/enacted).
+[2015](https://www.legislation.gov.uk/ukpga/2015/7/contents/enacted).
 **stplanr** is helping dozens of local authorities across the UK to
 answer the question: where to prioritise investment in cycling? In
 essence, stplanr was designed to support sustainable transport policies.
@@ -267,4 +267,4 @@ However, there are already some good resources on the topic, including
     Conduct](https://github.com/ropensci/stplanr/blob/master/CONDUCT.md).
     By participating in this project you agree to abide by its terms.
 
-[![rofooter](http://ropensci.org/public_images/github_footer.png)](http://ropensci.org)
+[![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

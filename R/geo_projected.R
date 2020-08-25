@@ -6,7 +6,7 @@
 #' for data collected anywhere in the world.
 #'
 #' The function is based on this stackexchange answer:
-#' <http://gis.stackexchange.com/questions/121489>
+#' <https://gis.stackexchange.com/questions/121489>
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
 #' @export

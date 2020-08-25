@@ -19,9 +19,9 @@ level than the origins stored in the object \code{cents}.
 \examples{
 \dontrun{
 # This is how the dataset was constructed - see
-# http://cowz.geodata.soton.ac.uk/download/
+# https://cowz.geodata.soton.ac.uk/download/
 download.file(
-  "http://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
+  "https://cowz.geodata.soton.ac.uk/download/files/COWZ_EW_2011_BFC.zip",
   "COWZ_EW_2011_BFC.zip"
 )
 unzip("COWZ_EW_2011_BFC.zip")

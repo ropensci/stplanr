@@ -96,7 +96,7 @@ mapshape_available <- function() {
 #' raster::crop() and rgeos::gIntersection(). The output is the subset of
 #' spatial object a with an outline described by a square bounding box.
 #' The utility of such a function is illustrated in the following question:
-#' <http://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
+#' <https://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
 #' @param shp The spatial object a to be cropped
 #' @param bb the bounding box or spatial object that will be used to crop `shp`
 #' @family geo
