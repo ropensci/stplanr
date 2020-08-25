@@ -1,9 +1,9 @@
 Leaflet-providers
 =================
-An extension to [Leaflet](http://leafletjs.com/) that contains configurations for various free<sup>[1](#what-is-free)</sup> tile providers.
+An extension to [Leaflet](https://leafletjs.com/) that contains configurations for various free<sup>[1](#what-is-free)</sup> tile providers.
 
 # Usage
-Leaflet-providers [providers](#providers) are refered to with a `provider[.<variant>]`-string. Let's say you want to add the nice [Watercolor](http://maps.stamen.com/#watercolor/) style from Stamen to your map, you pass `Stamen.Watercolor` to the `L.tileLayer.provider`-constructor, which will return a [L.TileLayer](http://leafletjs.com/reference.html#tilelayer) instance for Stamens Watercolor tile layer.
+Leaflet-providers [providers](#providers) are refered to with a `provider[.<variant>]`-string. Let's say you want to add the nice [Watercolor](https://maps.stamen.com/#watercolor/) style from Stamen to your map, you pass `Stamen.Watercolor` to the `L.tileLayer.provider`-constructor, which will return a [L.TileLayer](https://leafletjs.com/reference.html#tilelayer) instance for Stamens Watercolor tile layer.
 
 ```Javascript
 // add Stamen Watercolor to map.
@@ -13,7 +13,7 @@ L.tileLayer.provider('Stamen.Watercolor').addTo(map);
 ## Protocol relativity (`https://`-urls)
 
 Leaflet-providers tries to use `https://` if the page uses `https://` and the provider supports it.
-You can force the use of `http://` by passing `force_http: true` in the options argument.
+You can force the use of `https://` by passing `force_http: true` in the options argument.
 
 ## Retina tiles
 
@@ -21,7 +21,7 @@ Some providers have retina tiles for which the URL only needs to be slightly adj
 
 # Providers
 
-Leaflet-providers provides tile layers from different providers, including *OpenStreetMap*, *Stamen*, *Esri* and *OpenWeatherMap*. The full listing of free to use layers can be [previewed](http://leaflet-extras.github.io/leaflet-providers/preview/index.html). The page will show you the name to use with `leaflet-providers.js` and the code to use it without dependencies.
+Leaflet-providers provides tile layers from different providers, including *OpenStreetMap*, *Stamen*, *Esri* and *OpenWeatherMap*. The full listing of free to use layers can be [previewed](https://leaflet-extras.github.io/leaflet-providers/preview/index.html). The page will show you the name to use with `leaflet-providers.js` and the code to use it without dependencies.
 
 ## Providers requiring registration
 
@@ -29,7 +29,7 @@ In addition to the providers you are free<b id="what-is-free">1</b> to use, we s
 
 ### HERE (formerly Nokia).
 
-In order to use HERE layers, you must [register](http://developer.here.com/). Once registered, you can create an `app_id` and `app_code` which you have to pass to `L.tileLayer.provider` in the options:
+In order to use HERE layers, you must [register](https://developer.here.com/). Once registered, you can create an `app_id` and `app_code` which you have to pass to `L.tileLayer.provider` in the options:
 
 ```Javascript
 L.tileLayer.provider('HERE.terrainDay', {
@@ -38,7 +38,7 @@ L.tileLayer.provider('HERE.terrainDay', {
 }).addTo(map);
 ```
 
-[Available HERE layers](http://leaflet-extras.github.io/leaflet-providers/preview/#filter=HERE)
+[Available HERE layers](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=HERE)
 
 ### Mapbox
 
@@ -51,7 +51,7 @@ L.tileLayer.provider('MapBox', {id: 'ID', accessToken: 'ACCESS_TOKEN'}).addTo(ma
 
 In order to use ArcGIS maps, you must [register](https://developers.arcgis.com/en/sign-up/) and abide by the [terms of service](https://developers.arcgis.com/en/terms/). No special syntax is required.
 
-[Available Esri layers](http://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri)
+[Available Esri layers](https://leaflet-extras.github.io/leaflet-providers/preview/#filter=Esri)
 
 # Attribution
 

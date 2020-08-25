@@ -17,7 +17,7 @@ for data collected anywhere in the world.
 }
 \details{
 The function is based on this stackexchange answer:
-\url{http://gis.stackexchange.com/questions/121489}
+\url{https://gis.stackexchange.com/questions/121489}
 }
 \examples{
 sp::bbox(routes_fast)

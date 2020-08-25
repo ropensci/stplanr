@@ -14,7 +14,7 @@ data(flow)
 This dataset represents commuter flows (work travel) between origin
 and destination zones (see \code{\link[=cents]{cents()}}).
 The data is from the UK and is available as open data:
-\url{http://wicid.ukdataservice.ac.uk/}.
+\url{https://wicid.ukdataservice.ac.uk/}.
 }
 \details{
 The variables are as follows:

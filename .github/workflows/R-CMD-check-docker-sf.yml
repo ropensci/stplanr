@@ -1,7 +1,7 @@
 
 on: [push, pull_request]
 
-name: R-CMD-check-docker
+name: R-CMD-check-docker-sf
 
 jobs:
   R-CMD-check-docker:

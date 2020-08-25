@@ -32,7 +32,7 @@ library(geofabrik)
 roads_iow = get_geofabrik(name = "Isle of Wight")
 f = gf_filename("Isle of Wight")
 file.copy(f, "iow.pbf")
-options(osrm.server = "http://0.0.0.0:5000/", osrm.profile = "driving")
+options(osrm.server = "https://0.0.0.0:5000/", osrm.profile = "driving")
 ```
 
 
@@ -53,7 +53,7 @@ docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-extract -p /opt/car.lua /
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-partition /data/iow.osrm
 docker run -t -v "${PWD}:/data" osrm/osrm-backend osrm-customize /data/iow.osrm
 docker run -t -i -p 5000:5000 -v "${PWD}:/data" osrm/osrm-backend osrm-routed --algorithm mld /data/iow.osrm
-curl "http://127.0.0.1:5000/route/v1/driving/13.388860,52.517037;13.385983,52.496891?steps=true"
+curl "https://127.0.0.1:5000/route/v1/driving/13.388860,52.517037;13.385983,52.496891?steps=true"
 ```
 
 Now we can do routing in R!
