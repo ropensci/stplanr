@@ -45,11 +45,7 @@ or an [academic paper on the Propensity to Cycle Tool (PCT)](http://dx.doi.org/1
 for more information on how it can be used.
 This README provides some basics.
 
-Although much of the work supports research undertaken at the Leeds' Institute for Transport Studies ([ITS](https://environment.leeds.ac.uk/transport)),  **stplanr** should be useful to researchers everywhere.
-The function `route_graphhopper()`, for example, works anywhere in the world
-using the [graphhopper](https://graphhopper.com/) routing API and
-`read_table_builder()` reads-in Australian data. We welcome contributions that make
-transport research easier worldwide.
+Much of the work supports research undertaken at the Leeds' Institute for Transport Studies ([ITS](https://environment.leeds.ac.uk/transport)) but  **stplanr** should be useful to transport researchers and practitioners needing free, open and reproducible methods for working with geographic data everywhere.
 
 ## Key functions
 

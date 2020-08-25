@@ -44,14 +44,11 @@ an [academic paper on the Propensity to Cycle Tool
 (PCT)](http://dx.doi.org/10.5198/jtlu.2016.862) for more information on
 how it can be used. This README provides some basics.
 
-Although much of the work supports research undertaken at the Leeds’
-Institute for Transport Studies
-([ITS](https://environment.leeds.ac.uk/transport)), **stplanr** should
-be useful to researchers everywhere. The function `route_graphhopper()`,
-for example, works anywhere in the world using the
-[graphhopper](https://graphhopper.com/) routing API and
-`read_table_builder()` reads-in Australian data. We welcome
-contributions that make transport research easier worldwide.
+Much of the work supports research undertaken at the Leeds’ Institute
+for Transport Studies ([ITS](https://environment.leeds.ac.uk/transport))
+but **stplanr** should be useful to transport researchers and
+practitioners needing free, open and reproducible methods for working
+with geographic data everywhere.
 
 ## Key functions
 
@@ -146,11 +143,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2020-05-02 18:31:15 constructing segments
-#> 2020-05-02 18:31:15 building geometry
-#> 2020-05-02 18:31:15 simplifying geometry
-#> 2020-05-02 18:31:15 aggregating flows
-#> 2020-05-02 18:31:15 rejoining segments into linestrings
+#> 2020-08-25 02:54:42 constructing segments
+#> 2020-08-25 02:54:42 building geometry
+#> 2020-08-25 02:54:42 simplifying geometry
+#> 2020-08-25 02:54:42 aggregating flows
+#> 2020-08-25 02:54:42 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from
