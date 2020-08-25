@@ -370,20 +370,19 @@ line2df.Spatial <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' l <- routes_fast_sf[2:4, ]
+#' l <- routes_fast_sf[2, ]
 #' lpoints <- line2points(l)
-#' lpoints_sfc <- line2points(sf::st_geometry(l))
-#' identical(lpoints, lpoints_sfc)
+#' plot(l$geometry)
+#' plot(lpoints, add = TRUE)
 #' line2points(sf::st_linestring(matrix(c(0, 0, 2, 2), ncol = 2, byrow = TRUE)))
 #' lpoints2 <- line2pointsn(l)
-#' plot(sf::st_geometry(lpoints), pch = lpoints$id, cex = lpoints$id, col = "black")
 #' plot(lpoints2$geometry, add = TRUE)
-#' # in sp data forms (may be depreciated)
-#' l <- routes_fast[2:4, ]
-#' lpoints <- line2points(l)
-#' lpoints2 <- line2pointsn(l)
-#' plot(lpoints, pch = lpoints$id, cex = lpoints$id)
-#' points(lpoints2)
+#' # in sp data forms (may be deprecated)
+#' # l <- routes_fast[2:4, ]
+#' # lpoints <- line2points(l)
+#' # lpoints2 <- line2pointsn(l)
+#' # plot(lpoints, pch = lpoints$id, cex = lpoints$id)
+#' # points(lpoints2)
 #' @export
 line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
@@ -407,14 +406,17 @@ line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
 #' @export
 line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
+  coord_matrix <- cbind(x_coords, y_coords)
   d_indices <- 1:nrow(l) * 2
   o_indices <- d_indices - 1
-  l_geometry <- sf::st_geometry(l)
-  x_coords[o_indices] <- sapply(l_geometry, `[[`, 1) # first (x) element of each line
-  x_coords[d_indices] <- sapply(l_geometry, function(x) x[length(x) / 2]) # last (x) element of each line
-  y_coords[o_indices] <- sapply(l_geometry, function(x) x[length(x) / 2 + 1]) # first (y) element of each line
-  y_coords[d_indices] <- sapply(l_geometry, tail, n = 1) # last (y) element of each line
-  p_multi <- sf::st_multipoint(cbind(x_coords, y_coords))
+  start_points <- lwgeom::st_startpoint(l)
+  start_matrix <- sf::st_coordinates(start_points)
+  end_points <- lwgeom::st_endpoint(l)
+  end_matrix <- sf::st_coordinates(end_points)
+
+  coord_matrix[o_indices, ] <- start_matrix # first (x) element of each line
+  coord_matrix[d_indices, ] <- end_matrix # first (x) element of each line
+  p_multi <- sf::st_multipoint(coord_matrix)
   p <- sf::st_cast(sf::st_sfc(p_multi), "POINT")
   sf::st_sf(data.frame(id = ids), geometry = p, crs = sf::st_crs(l))
 }
