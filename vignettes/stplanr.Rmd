@@ -174,14 +174,14 @@ if (has_internet & cs_key == 16) {
   r <- route(l = l, route_fun = cyclestreets::journey)
   r <- aggregate(r[c(3, 12)], by = list(r[[1]], r[[2]]), FUN = mean)
 } else {
-  r <- routes_fast[sel, ]
+  r <- routes_fast_sf[sel, ]
 }
 ```
 
 These routes contain the same information on origin and destination, but have additional spatial information about the route network. The routes can be plotted in the same way as the desire lines were plotted, (with buildings shown for context):
 
 ```{r, out.width="500", out.height="500"}
-plot(r["Bicycle"], lwd = lwd * 3, reset = FALSE)
+plot(r$geometry, lwd = lwd * 3, reset = FALSE)
 ```
 
 ```{r, out.width="500", out.height="500", echo=FALSE, eval=FALSE}
