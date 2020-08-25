@@ -39,7 +39,7 @@ simultaneous queries, and so will, for example, only returns values for up to
 }
 \section{Details}{
 
-Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/}
+Estimate travel times accounting for the road network - see \url{https://developers.google.com/maps/documentation/distance-matrix/overview}
 Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
 }
 

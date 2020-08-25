@@ -29,7 +29,7 @@ nearest_google <- function(lat, lng, google_api) {
 #' Return travel network distances and time using the Google Maps API
 #'
 #' @section Details:
-#' Estimate travel times accounting for the road network - see <https://developers.google.com/maps/documentation/distance-matrix/>
+#' Estimate travel times accounting for the road network - see <https://developers.google.com/maps/documentation/distance-matrix/overview>
 #' Note: Currently returns the json object returned by the Google Maps API and uses the same origins and destinations.
 #' @param from Two-column matrix or data frame of coordinates representing
 #' latitude and longitude of origins.
