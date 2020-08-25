@@ -8,17 +8,6 @@ route_local(sln, from, to, l = NULL)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork to use.}
-
-\item{from}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth.}
-
-\item{to}{Text string or coordinates (a numeric vector of
-\code{length = 2} representing latitude and longitude) representing a point
-on Earth. This represents the destination of the trip.}
-
-\item{l}{Only needed if from and to are empty, in which case this
-should be a spatial object representing desire lines}
 }
 \description{
 This function returns the shortest path between locations
@@ -40,7 +29,6 @@ Other routes:
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
 \code{\link{route_dodgr}()},
-\code{\link{route_graphhopper}()},
 \code{\link{route_transportapi_public}()},
 \code{\link{route}()}
 }
