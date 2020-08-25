@@ -1,3 +1,9 @@
+# stplanr 0.7.0
+
+- Old `mapshape()`, `line_match()` and `gclip()` functions deprecated, maintained alternatives can now be found in other packages.
+- `sp` objects updated for latest version of `sp` (#364)
+- `sf` objects updated to support more recent CRS encoding (#393)
+
 # stplanr 0.6.2
 
 ## New features

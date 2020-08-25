@@ -36,18 +36,6 @@ examples provided by \href{http://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 }
 
 \examples{
-sln <- SpatialLinesNetwork(route_network)
-class(sln)
-weightfield(sln) # field used to determine shortest path
-plot(sln)
-points(sln2points(sln)[1, ], cex = 5)
-points(sln2points(sln)[50, ], cex = 5)
-shortpath <- sum_network_routes(sln, 1, 50, sumvars = "length")
-plot(shortpath, col = "red", lwd = 4, add = TRUE)
-points(sln2points(sln)[35, ], cex = 5)
-shortpath <- sum_network_routes(sln, 1, 35, sumvars = "length")
-plot(shortpath, col = "red", lwd = 4, add = TRUE)
-library(sf)
 sln_sf <- SpatialLinesNetwork(route_network_sf)
 plot(sln_sf)
 shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
