@@ -8,6 +8,14 @@ route_local(sln, from, to, l = NULL)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork to use.}
+
+\item{from}{An object representing origins
+(if lines are provided as the first argument, from is assigned to \code{l})}
+
+\item{to}{An object representing destinations}
+
+\item{l}{Only needed if from and to are empty, in which case this
+should be a spatial object representing desire lines}
 }
 \description{
 This function returns the shortest path between locations
