@@ -3,6 +3,7 @@
 - Old `mapshape()`, `line_match()` and `gclip()` functions deprecated, maintained alternatives can now be found in other packages.
 - `sp` objects updated for latest version of `sp` (#364)
 - `sf` objects updated to support more recent CRS encoding (#393)
+- Deprecated functions including `od_aggregate()`, `onewayid()`, `gtfs2sldf()`, and `od_radiation()` have been removed
 
 # stplanr 0.6.2
 
