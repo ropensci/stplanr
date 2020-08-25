@@ -35,14 +35,6 @@ plot(shp_bb, col = "red", reset = FALSE)
 plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
 plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
 plot(routes_fast_sf$geometry, add = TRUE)
-geo_bb(routes_fast, scale_factor = c(2, 1.1), output = "bb")
-# sp implemantation
-shp <- routes_fast
-shp_bb <- geo_bb(shp, distance = 100)
-plot(shp_bb, col = "red")
-plot(geo_bb(routes_fast, scale_factor = 0.8), col = "green", add = TRUE)
-plot(geo_bb(sp::bbox(routes_fast)), add = TRUE) # works on bb also
-plot(geo_bb(routes_fast, output = "points"), add = TRUE)
 }
 \seealso{
 bb_scale

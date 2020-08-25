@@ -3,7 +3,7 @@
 #' This function returns the shortest path between locations
 #' in, or near to, segements on a `SpatialLinesNetwork`.
 #'
-#' @inheritParams route_graphhopper
+#' @inheritParams od_coords
 #' @inheritParams sum_network_routes
 #' @family routes
 #' @export
