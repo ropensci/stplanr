@@ -29,15 +29,10 @@ l <- routes_fast_sf[2, ]
 lpoints <- line2points(l)
 plot(l$geometry)
 plot(lpoints, add = TRUE)
-line2points(sf::st_linestring(matrix(c(0, 0, 2, 2), ncol = 2, byrow = TRUE)))
+# test all vertices:
+plot(l$geometry)
 lpoints2 <- line2pointsn(l)
 plot(lpoints2$geometry, add = TRUE)
-# in sp data forms (may be deprecated)
-# l <- routes_fast[2:4, ]
-# lpoints <- line2points(l)
-# lpoints2 <- line2pointsn(l)
-# plot(lpoints, pch = lpoints$id, cex = lpoints$id)
-# points(lpoints2)
 }
 \seealso{
 Other lines: 
