@@ -1,3 +1,5 @@
+# stplanr 0.7.0
+
 # stplanr 0.6.2
 
 ## New features
