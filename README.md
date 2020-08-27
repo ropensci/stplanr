@@ -6,7 +6,7 @@
 <!-- [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) -->
 
 [![rstudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/r-hub/cranlogs.app)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
@@ -143,11 +143,11 @@ on the transport system, as demonstrated in the following code chunk.
 ``` r
 routes$foot <- desire_lines$foot
 rnet <- overline2(routes, attrib = "foot")
-#> 2020-08-25 02:54:42 constructing segments
-#> 2020-08-25 02:54:42 building geometry
-#> 2020-08-25 02:54:42 simplifying geometry
-#> 2020-08-25 02:54:42 aggregating flows
-#> 2020-08-25 02:54:42 rejoining segments into linestrings
+#> 2020-08-27 09:20:22 constructing segments
+#> 2020-08-27 09:20:22 building geometry
+#> 2020-08-27 09:20:22 simplifying geometry
+#> 2020-08-27 09:20:22 aggregating flows
+#> 2020-08-27 09:20:22 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from

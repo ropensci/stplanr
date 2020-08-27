@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 # stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/stplanr.png' align="right" height=215/></a>
 
 <!-- [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) -->
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/metacran/cranlogs.app)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/r-hub/cranlogs.app)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
