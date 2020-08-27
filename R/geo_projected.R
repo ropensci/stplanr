@@ -153,13 +153,16 @@ gprojected <- geo_projected.Spatial
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
 #' @param ... Arguments passed to the buffer (see `?rgeos::gBuffer` or `?sf::st_buffer` for details)
 #' @examples
-#' buff_sp <- geo_buffer(routes_fast, width = 100)
-#' class(buff_sp)
-#' plot(buff_sp, col = "red")
 #' routes_fast_sf <- sf::st_as_sf(routes_fast)
 #' buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
 #' plot(buff_sf$geometry, add = TRUE)
 #' geo_buffer(routes_fast_sf$geometry, dist = 50)
+#' \donttest{
+#' # on legacy sp objects (not tested)
+#' buff_sp <- geo_buffer(routes_fast, width = 100)
+#' class(buff_sp)
+#' plot(buff_sp, col = "red")
+#' }
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
   UseMethod("geo_buffer")
