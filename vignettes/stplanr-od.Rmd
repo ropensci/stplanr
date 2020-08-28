@@ -366,12 +366,8 @@ The above plot contains much information, providing a visual overview of the tra
 - Although the city centre dominates, there are many small clusters of flows in the outer region, for example near Heathrow airport, which is located in the far west of the map.
 
 Plotting OD data in this way can tell us much about cities, each of which has a different travel pattern.
-The below figure, for example, shows the same plotting code applied to Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
-See Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* for details.
-
-```{r, echo=FALSE}
-knitr::include_graphics("https://geocompr.robinlovelace.net/figures/desire-1.png")
-```
+You can use the same code to visualise mobility patterns in any city.
+See Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* to see results for Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
 
 ```{r, eval=FALSE, echo=FALSE}
 saveRDS(od_all, "od_all.Rds")
