@@ -18,3 +18,4 @@ log-latest
 ^\.github/workflows/R-CMD-check\.yaml$
 ^\.github/workflows/pr-commands\.yaml$
 ^\.github$
+^codecov\.yml$

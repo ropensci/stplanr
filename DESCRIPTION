@@ -71,7 +71,8 @@ Suggests:
     data.table,
     geodist,
     mapsapi,
-    s2
+    s2,
+    covr
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make
