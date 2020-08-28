@@ -153,14 +153,21 @@ plot(l)
 
 Now the data is set-up, we can change the visual appearance of the desire lines with a single extra argument passed to the plotting function. Let's make width depend on the total number of people travelling along the desire line:
 
-```{r}
+```{r, echo=FALSE}
+l_bb <- sf::st_bbox(l)
+# l_bb[1] <- NA
+no_na_in_bb <- !any(is.na(as.numeric(l_bb)))
+```
+
+
+```{r, eval=no_na_in_bb}
 lwd <- l$All / mean(l$All)
 plot(st_geometry(l), lwd = lwd)
 ```
 
-Another useful visulisation involves setting the colour relative to the number of people cycling:
+Another useful visualisation involves setting the colour relative to the number of people cycling:
 
-```{r}
+```{r, eval=no_na_in_bb}
 plot(l["Bicycle"], lwd = lwd)
 ```
 
