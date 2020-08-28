@@ -1,3 +1,7 @@
+# stplanr 0.7.1
+
+- Tweaks to the documentation and examples for CRAN tests
+
 # stplanr 0.7.0
 
 - Issue with `line2points()` on some set-ups fixed (#418)
