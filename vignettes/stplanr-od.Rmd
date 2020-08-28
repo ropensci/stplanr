@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   eval = TRUE
 )
+has_webshot <- "webshot" %in% installed.packages()
 ```
 
 # Introduction: what is OD data?
@@ -207,9 +208,9 @@ By default, plotting `l` shows the attributes for each line:
 plot(l)
 ```
 
-Because these lines have a coordinate reference system (CRS) inherited from the zones data, they can also be plotted on an interactive map, as follows:
+Because these lines have a coordinate reference system (CRS) inherited from the zones data, they can also be plotted on an interactive map, as follows (result only shown if webshot is installed):
 
-```{r}
+```{r, eval=has_webshot}
 library(leaflet)
 leaflet() %>%
   addTiles() %>%
