@@ -1,4 +1,4 @@
-This version fixes a number of issues, primarily stale sp CRS objects thanks to Roger Bivand
+This version fixes CRAN tests that were failing on version 0.7.0.
 
 ## Test environments
 
