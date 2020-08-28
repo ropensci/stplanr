@@ -36,10 +36,13 @@ examples provided by \href{https://rpubs.com/janoskaz/10396}{Janoska(2013)}.
 }
 
 \examples{
+\donttest{
+# dont test due to issues with s2 dependency
 sln_sf <- SpatialLinesNetwork(route_network_sf)
 plot(sln_sf)
 shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
+}
 }
 \references{
 Pebesma, E. (2013). Spatial Networks, URL:https://rpubs.com/edzer/6767.

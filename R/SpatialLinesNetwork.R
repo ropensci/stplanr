@@ -80,10 +80,13 @@ validity = function(object) {
 #' @family rnet
 #' @export
 #' @examples
+#' \donttest{
+#' # dont test due to issues with s2 dependency
 #' sln_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(sln_sf)
 #' shortpath <- sum_network_routes(sln_sf, 1, 50, sumvars = "length")
 #' plot(shortpath$geometry, col = "red", lwd = 4, add = TRUE)
+#' }
 SpatialLinesNetwork <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   UseMethod("SpatialLinesNetwork")
 }
@@ -115,7 +118,8 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
 }
 #' @export
 SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
-  nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
+
+    nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
     dplyr::mutate(nrow = dplyr::n(), rownum = 1:dplyr::n()) %>%
     dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
@@ -143,7 +147,7 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   g$y <- nodes[, 2] # y-coordinate vertex
   g$n <- as.vector(table(gdata$pts0)) # nr of edges
 
-  sl$length <- sf::st_length(sl)
+  sl$length <- as.numeric(sf::st_length(sl))
   igraph::E(g)$weight <- sl$length
   # check it is a single graph
   is_connected <- igraph::is_connected(g)
