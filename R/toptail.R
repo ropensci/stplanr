@@ -16,20 +16,21 @@
 #' @family lines
 #' @export
 #' @examples
-#' l <- routes_fast[2:4, ]
-#' l_toptail <- geo_toptail(l, toptail_dist = 300)
-#' plot(l)
-#' plot(l_toptail, col = "red", add = TRUE, lwd = 3)
-#' plot(cents, col = "blue", add = TRUE, pch = 15)
-#' # Note the behaviour when the buffer size removes lines
-#' r_toptail <- geo_toptail(l, toptail_dist = 900)
-#' nrow(r_toptail)
-#' plot(r_toptail, lwd = 9, add = TRUE) # short route removed
-#' l <- sf::st_as_sf(l)
+#' l <- routes_fast_sf[2:4, ]
 #' l_top_tail <- geo_toptail(l, 300)
 #' l_top_tail
 #' plot(sf::st_geometry(l_top_tail))
-#' plot(sf::st_geometry(geo_toptail(l, 900)), lwd = 9, add = TRUE)
+#' plot(sf::st_geometry(geo_toptail(l, 600)), lwd = 9, add = TRUE)
+#' # dont test due to issues with sp classes on some set-ups
+#' # l <- routes_fast[2:4, ]
+#' # l_toptail <- geo_toptail(l, toptail_dist = 300)
+#' # plot(l)
+#' # plot(l_toptail, col = "red", add = TRUE, lwd = 3)
+#' # plot(cents, col = "blue", add = TRUE, pch = 15)
+#' # # Note the behaviour when the buffer size removes lines
+#' # r_toptail <- geo_toptail(l, toptail_dist = 900)
+#' # nrow(r_toptail)
+#' # plot(r_toptail, lwd = 9, add = TRUE) # short route removed
 geo_toptail <- function(l, toptail_dist, ...) {
   UseMethod("geo_toptail")
 }

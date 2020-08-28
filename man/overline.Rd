@@ -92,27 +92,11 @@ rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 
 # legacy implementation based on sp data
-sl <- routes_fast[2:4, ]
-rnet1 <- overline(sl = sl, attrib = "length")
-rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
-plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
-plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-
-sl <- routes_fast_sf[routes_fast_sf$length > 0, ]
-sl$bicycle <- 1
-rnet1 <- overline(sl, "bicycle")
-lwd <- rnet1$bicycle / mean(rnet1$bicycle)
-plot(rnet1, lwd = lwd)
-\donttest{
-# test on a larger dataset
-region <- "isle-of-wight"
-
-u <- paste0(
-  "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
-  region,
-  "/rf.geojson"
-)
-}
+# sl <- routes_fast[2:4, ]
+# rnet1 <- overline(sl = sl, attrib = "length")
+# rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
+# plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
+# plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 }
 \references{
 Rowlingson, B (2015). Overlaying lines and aggregating their values for

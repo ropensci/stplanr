@@ -43,7 +43,7 @@ plot(sample_routes["value"], lwd = sample_routes$value, main = "Routes")
 plot(rnet["value"], lwd = rnet$value, main = "Route network")
 ```
 
-The above figure shows how `overline2()` breaks the routes into segments with the same values and removes overlapping segments.
+The above figure shows how `overline()` breaks the routes into segments with the same values and removes overlapping segments.
 It is a form of geographic aggregation.
 
 <!-- The figure below shows in more detail how the function works with 2, 3 and then 6 lines (see the vignette's source code to reproduce the plot): -->

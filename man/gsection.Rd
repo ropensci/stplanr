@@ -19,15 +19,22 @@ Each new Lines object is the aggregate of a single number
 of aggregated lines.
 }
 \examples{
-sl <- routes_fast[2:4, ]
-rsec <- gsection(sl)
-rsec_buff <- gsection(sl, buff_dist = 1)
-plot(sl[1], lwd = 9, col = 1:nrow(sl))
-plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
-plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 sl <- routes_fast_sf[2:4, ]
 rsec <- gsection(sl)
-rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
+length(rsec) # sections
+plot(rsec, col = seq(length(rsec)))
+rsec <- gsection(sl, buff_dist = 50)
+length(rsec) # 4 features: issue
+plot(rsec, col = seq(length(rsec)))
+# \donttest{
+# dont test due to issues with sp classes on some set-ups
+# sl <- routes_fast[2:4, ]
+# rsec <- gsection(sl)
+# rsec_buff <- gsection(sl, buff_dist = 1)
+# plot(sl[1], lwd = 9, col = 1:nrow(sl))
+# plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+# plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
+# }
 }
 \seealso{
 Other rnet: 

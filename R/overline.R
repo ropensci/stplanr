@@ -43,15 +43,22 @@ islines.sf <- function(g1, g2) {
 #' @family rnet
 #' @export
 #' @examples
-#' sl <- routes_fast[2:4, ]
-#' rsec <- gsection(sl)
-#' rsec_buff <- gsection(sl, buff_dist = 1)
-#' plot(sl[1], lwd = 9, col = 1:nrow(sl))
-#' plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
-#' plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 #' sl <- routes_fast_sf[2:4, ]
 #' rsec <- gsection(sl)
-#' rsec <- gsection(sl, buff_dist = 100) # 4 features: issue
+#' length(rsec) # sections
+#' plot(rsec, col = seq(length(rsec)))
+#' rsec <- gsection(sl, buff_dist = 50)
+#' length(rsec) # 4 features: issue
+#' plot(rsec, col = seq(length(rsec)))
+#' # \donttest{
+#' # dont test due to issues with sp classes on some set-ups
+#' # sl <- routes_fast[2:4, ]
+#' # rsec <- gsection(sl)
+#' # rsec_buff <- gsection(sl, buff_dist = 1)
+#' # plot(sl[1], lwd = 9, col = 1:nrow(sl))
+#' # plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+#' # plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
+#' # }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
@@ -160,27 +167,11 @@ lineLabels <- function(sl, attrib) {
 #' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 #'
 #' # legacy implementation based on sp data
-#' sl <- routes_fast[2:4, ]
-#' rnet1 <- overline(sl = sl, attrib = "length")
-#' rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
-#' plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
-#' plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-#'
-#' sl <- routes_fast_sf[routes_fast_sf$length > 0, ]
-#' sl$bicycle <- 1
-#' rnet1 <- overline(sl, "bicycle")
-#' lwd <- rnet1$bicycle / mean(rnet1$bicycle)
-#' plot(rnet1, lwd = lwd)
-#' \donttest{
-#' # test on a larger dataset
-#' region <- "isle-of-wight"
-#'
-#' u <- paste0(
-#'   "https://github.com/npct/pct-outputs-regional-notR/raw/master/commute/msoa/",
-#'   region,
-#'   "/rf.geojson"
-#' )
-#' }
+#' # sl <- routes_fast[2:4, ]
+#' # rnet1 <- overline(sl = sl, attrib = "length")
+#' # rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
+#' # plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
+#' # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 overline <- function(sl,
                      attrib,
                      fun = sum,
