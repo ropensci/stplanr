@@ -20,15 +20,22 @@ around which a buffer should be drawn}
 This function solves the problem that buffers will not be circular when used on
 non-projected data.
 }
+\details{
+Requires recent version of PROJ (>= 6.3.0).
+Buffers on \code{sf} objects with geographic (lon/lat) coordinates can also
+be done with the \href{https://r-spatial.github.io/s2/}{\code{s2}} package.
+}
 \examples{
-routes_fast_sf <- sf::st_as_sf(routes_fast)
-buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
-plot(buff_sf$geometry, add = TRUE)
-geo_buffer(routes_fast_sf$geometry, dist = 50)
-\donttest{
-# on legacy sp objects (not tested)
-buff_sp <- geo_buffer(routes_fast, width = 100)
-class(buff_sp)
-plot(buff_sp, col = "red")
+lib_versions <- sf::sf_extSoftVersion()
+lib_versions
+  if(lib_versions[3] >= "6.3.1") {
+  routes_fast_sf <- sf::st_as_sf(routes_fast)
+  buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
+  plot(buff_sf$geometry, add = TRUE)
+  geo_buffer(routes_fast_sf$geometry, dist = 50)
+  # on legacy sp objects (not tested)
+  buff_sp <- geo_buffer(routes_fast, width = 100)
+  class(buff_sp)
+  plot(buff_sp, col = "red")
 }
 }

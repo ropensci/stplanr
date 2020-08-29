@@ -147,21 +147,28 @@ gprojected <- geo_projected.Spatial
 #'
 #' This function solves the problem that buffers will not be circular when used on
 #' non-projected data.
+#'
+#' Requires recent version of PROJ (>= 6.3.0).
+#' Buffers on `sf` objects with geographic (lon/lat) coordinates can also
+#' be done with the [`s2`](https://r-spatial.github.io/s2/) package.
+#'
 #' @param shp A spatial object with a geographic CRS (e.g. WGS84)
 #' around which a buffer should be drawn
 #' @param dist The distance (in metres) of the buffer (when buffering simple features)
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
 #' @param ... Arguments passed to the buffer (see `?rgeos::gBuffer` or `?sf::st_buffer` for details)
 #' @examples
-#' routes_fast_sf <- sf::st_as_sf(routes_fast)
-#' buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
-#' plot(buff_sf$geometry, add = TRUE)
-#' geo_buffer(routes_fast_sf$geometry, dist = 50)
-#' \donttest{
-#' # on legacy sp objects (not tested)
-#' buff_sp <- geo_buffer(routes_fast, width = 100)
-#' class(buff_sp)
-#' plot(buff_sp, col = "red")
+#' lib_versions <- sf::sf_extSoftVersion()
+#' lib_versions
+#'   if(lib_versions[3] >= "6.3.1") {
+#'   routes_fast_sf <- sf::st_as_sf(routes_fast)
+#'   buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
+#'   plot(buff_sf$geometry, add = TRUE)
+#'   geo_buffer(routes_fast_sf$geometry, dist = 50)
+#'   # on legacy sp objects (not tested)
+#'   buff_sp <- geo_buffer(routes_fast, width = 100)
+#'   class(buff_sp)
+#'   plot(buff_sp, col = "red")
 #' }
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
