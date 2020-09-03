@@ -178,41 +178,37 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the nearest polygon border.
 #'
-#' @param l A SpatialLines object
-#' @param buff A SpatialPolygons object to act as the buffer
+#' @param l An sf LINESTRING object
+#' @param buff An sf POLYGON object to act as the buffer
 #' @param ... Arguments passed to rgeos::gBuffer()
 #' @family lines
 #' @export
 #' @examples
-#' r_toptail <- toptail_buff(routes_fast, zones)
-#' sel <- row.names(routes_fast) %in% row.names(r_toptail)
-#' rf_cross_poly <- routes_fast[sel, ]
-#' plot(zones)
-#' plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
-#' # note adjacent lines removed
-#' plot(rf_cross_poly, add = TRUE, lwd = 2)
-#' plot(r_toptail, col = "red", add = TRUE)
+#' l <- routes_fast_sf
+#' buff <- zones_sf
+#' r_toptail <- toptail_buff(l, buff)
+#' nrow(l)
+#' nrow(r_toptail)
+#' plot(zones_sf$geometry)
+#' plot(l$geometry, add = TRUE)
+#' plot(r_toptail$geometry, lwd = 5, add = TRUE)
 toptail_buff <- function(l, buff, ...) {
-  # force same crs
-  if (!sp::identicalCRS(l, buff)) {
-    sp::proj4string(buff) <- sp::proj4string(l)
-  }
+  i_indexed <- out <- NULL
   for (i in 1:length(l)) {
     lpoints <- line2points(l[i, ])
     # Select zones per line
-    sel <- buff[lpoints, ]
-    l2 <- rgeos::gDifference(l[i, ], sel)
-    if (is.null(l2)) {
+    sel <- sf::st_union(buff[lpoints, ])
+    l2 <- sf::st_difference(l$geometry[i], sel)
+    # mapview::mapview(sel) +
+    #   mapview::mapview(l2[1])
+    if (length(l2) == 0) {
       next
-    } else {
-      row.names(l2) <- row.names(l[i, ])
     }
-    if (!exists("out")) {
-      out <- l2
-    } else {
-      out <- raster::bind(out, l2)
-    }
+    i_indexed <- c(i_indexed, i)
+    out <- c(out, l2)
   }
-  proj4string(out) <- proj4string(l)
-  out
+  out <- sf::st_sfc(out)
+  l_between_zones <- l[i_indexed, ]
+  l_between_zones$geometry = out
+  l_between_zones
 }

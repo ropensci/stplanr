@@ -7,9 +7,9 @@
 toptail_buff(l, buff, ...)
 }
 \arguments{
-\item{l}{A SpatialLines object}
+\item{l}{An sf LINESTRING object}
 
-\item{buff}{A SpatialPolygons object to act as the buffer}
+\item{buff}{An sf POLYGON object to act as the buffer}
 
 \item{...}{Arguments passed to rgeos::gBuffer()}
 }
@@ -18,14 +18,14 @@ Takes lines and removes the start and end point, to a distance determined
 by the nearest polygon border.
 }
 \examples{
-r_toptail <- toptail_buff(routes_fast, zones)
-sel <- row.names(routes_fast) \%in\% row.names(r_toptail)
-rf_cross_poly <- routes_fast[sel, ]
-plot(zones)
-plot(routes_fast, col = "blue", lwd = 4, add = TRUE)
-# note adjacent lines removed
-plot(rf_cross_poly, add = TRUE, lwd = 2)
-plot(r_toptail, col = "red", add = TRUE)
+l <- routes_fast_sf
+buff <- zones_sf
+r_toptail <- toptail_buff(l, buff)
+nrow(l)
+nrow(r_toptail)
+plot(zones_sf$geometry)
+plot(l$geometry, add = TRUE)
+plot(r_toptail$geometry, lwd = 5, add = TRUE)
 }
 \seealso{
 Other lines: 
