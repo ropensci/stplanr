@@ -1,3 +1,5 @@
+# stplanr 0.7.2
+
 # stplanr 0.7.1
 
 - Tweaks to the documentation and examples for CRAN tests
