@@ -157,7 +157,7 @@ gprojected <- geo_projected.Spatial
 #' @examples
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
-#'   if(lib_versions[3] >= "6.3.1") {
+#' if(lib_versions[3] >= "6.3.1") {
 #'   buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
 #'   plot(buff_sf$geometry, add = TRUE)
 #'   geo_buffer(routes_fast_sf$geometry, dist = 50)
