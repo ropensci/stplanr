@@ -79,7 +79,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
           install.packages("lwgeom")
-          remotes::install_github("r-spatial/sf")
+          install.packages("sf")
         shell: Rscript {0}
 
       - name: Session info
