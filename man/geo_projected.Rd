@@ -24,5 +24,6 @@ This function performs operations on projected data.
 }
 \examples{
 shp <- routes_fast_sf[2:4, ]
-geo_projected(shp, sf::st_buffer, dist = 100)
+# fails on some systems (with early versions of PROJ), commented out
+# geo_projected(shp, sf::st_buffer, dist = 100)
 }

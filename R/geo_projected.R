@@ -72,7 +72,8 @@ geo_select_aeq.sfc <- function(shp) {
 #' @export
 #' @examples
 #' shp <- routes_fast_sf[2:4, ]
-#' geo_projected(shp, sf::st_buffer, dist = 100)
+#' # fails on some systems (with early versions of PROJ), commented out
+#' # geo_projected(shp, sf::st_buffer, dist = 100)
 geo_projected <- function(shp, fun, crs, silent, ...) {
   UseMethod(generic = "geo_projected")
 }
