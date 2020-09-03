@@ -1,5 +1,8 @@
 # stplanr 0.7.2
 
+- Support `sf` objects for `toptail_buff()`
+- Updated examples for tests and README to reflect recent changes
+
 # stplanr 0.7.1
 
 - Tweaks to the documentation and examples for CRAN tests
