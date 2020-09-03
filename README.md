@@ -101,53 +101,80 @@ OpenStreetMap Routing Machine
 These are supported in `route_*()` functions such as
 `route_cyclestreets` and `route_osrm()`:
 
-Route functions take lat/lon inputs (results not calculated):
+Routing can be done using a range of back-ends and using lat/lon or
+desire line inputs with the `route()` function, as illustrated by the
+following commands which calculates the route between Fleet Street and
+Southwark Street over the River Thames on Blackfriars Bridge in London:
 
 ``` r
-trip <- route_osrm(from = c(-1, 53), to = c(-1.1, 53))
+library(osrm)
+#> Data: (c) OpenStreetMap contributors, ODbL 1.0 - http://www.openstreetmap.org/copyright
+#> Routing: OSRM - http://project-osrm.org/
+trip <- route(
+  from = c(-0.11, 51.514),
+  to = c(-0.10, 51.506),
+  route_fun = osrmRoute,
+  returnclass = "sf"
+  )
+#> Most common output is sf
+mapview::mapview(trip)
 ```
 
-and place names, found using the Google Map API:
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
-We can replicate this call multiple times using `line2route`, in this
-case lines 2 to 5. First we’ll create a small subset of the lines:
+You can also use and place names, found using the Google Map API:
 
 ``` r
-desire_lines <- travel_network[2:6,]
+trip2 <- route(
+  from = "Leeds",
+  to = "Bradford",
+  route_fun = osrmRoute,
+  returnclass = "sf"
+  )
+#> Most common output is sf
+mapview::mapview(trip2)
 ```
 
-Next, we’ll calculate the routes (not not evaluated):
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
+We can replicate this call multiple times with the `l` argument in
+`route()`:
 
 ``` r
-routes <- line2route(desire_lines, route_fun = route_osrm)
+desire_lines <- travel_network[2:6, ]
 ```
 
-The resulting routes will look something like this:
+Next, we’ll calculate the routes:
 
 ``` r
-lwd <- desire_lines$foot
-routes <- routes_fast_sf[2:6, ]
-plot(routes$geometry, lwd = lwd)
-plot(desire_lines$geometry, col = "green", lwd = lwd, add = TRUE)
+routes <- route(
+  l = desire_lines,
+  route_fun = osrmRoute,
+  returnclass = "sf"
+  )
+mapview::mapview(routes) +
+  mapview::mapview(desire_lines, color = "red")
 ```
 
-<img src="man/figures/README-routes-1.png" width="100%" />
+<img src="man/figures/README-plot2-1.png" width="100%" />
 
-For more examples, `example("line2route")`.
+<!-- The resulting routes will look something like this: -->
 
-`overline` is a function which takes a series of route-allocated lines,
-splits them into unique segments and aggregates the values of
-overlapping lines. This can represent where there will be most traffic
-on the transport system, as demonstrated in the following code chunk.
+For more examples, `example("route")`.
+
+`overline()` takes a series of route-allocated lines, splits them into
+unique segments and aggregates the values of overlapping lines. This can
+represent where there will be most traffic on the transport system, as
+demonstrated in the following code chunk.
 
 ``` r
 routes$foot <- desire_lines$foot
-rnet <- overline2(routes, attrib = "foot")
-#> 2020-08-27 09:20:22 constructing segments
-#> 2020-08-27 09:20:22 building geometry
-#> 2020-08-27 09:20:22 simplifying geometry
-#> 2020-08-27 09:20:22 aggregating flows
-#> 2020-08-27 09:20:22 rejoining segments into linestrings
+rnet <- overline(routes, attrib = "foot")
+#> 2020-09-03 22:24:08 constructing segments
+#> 2020-09-03 22:24:08 building geometry
+#> 2020-09-03 22:24:08 simplifying geometry
+#> 2020-09-03 22:24:08 aggregating flows
+#> 2020-09-03 22:24:08 rejoining segments into linestrings
 ```
 
 The resulting route network, with segment totals calculated from
@@ -158,7 +185,7 @@ follows:
 plot(rnet["foot"], lwd = rnet$foot)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 The above plot represents the number walking trips made (the ‘flow’)
 along particular segments of a transport network.
