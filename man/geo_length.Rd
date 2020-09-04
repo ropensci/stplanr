@@ -14,6 +14,10 @@ Takes a line (represented in sf or sp classes)
 and returns a numeric value representing distance in meters.
 }
 \examples{
-geo_length(routes_fast)
-geo_length(routes_fast_sf)
+#' lib_versions <- sf::sf_extSoftVersion()
+lib_versions
+if(lib_versions[3] >= "6.3.1") {
+  geo_length(routes_fast)
+  geo_length(routes_fast_sf)
+}
 }
