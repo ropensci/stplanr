@@ -75,7 +75,7 @@ is_linepoint <- function(l) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' # if(lib_versions[3] >= "6.3.1") {
 #'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
 #'   bearings_sf_1_9 # lines of 0 length have NaN bearing
 #'   bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
@@ -83,7 +83,7 @@ is_linepoint <- function(l) {
 #'   plot(bearings_sf_1_9, bearings_sp_1_9)
 #'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
 #'   line_bearing(flowlines[1:5, ], bidirectional = TRUE)
-#' }
+#' # }
 line_bearing <- function(l, bidirectional = FALSE) {
   UseMethod("line_bearing")
 }
@@ -128,7 +128,7 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' # if(lib_versions[3] >= "6.3.1") {
 #'   # Find all routes going North-South
 #'   lines_sf = od2line(od_data_sample, zones = zones_sf)
 #'   angle_diff(lines_sf[2, ], angle = 0)
@@ -138,7 +138,7 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #'   plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
 #'   # East-West
 #'   plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
-#' }
+#' # }
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
 }
