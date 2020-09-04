@@ -223,7 +223,7 @@ Transport planning decisions which go against the best available evidence keep g
 In this context the aim of **stplanr** is to provide an accessible toolbox for transport planning, with a focus on geographic data.
 It is hoped that it will be useful for practitioners and researchers alike, as part of the ongoing transition to open source software taking place in the tech industry.
 
-A further motivation is that the best available [evidence](http://www.nature.com/doifinder/10.1038/nclimate2923) suggests the future of civilization depends on our ability to transition away from fossil fuels.
+A further motivation is that the best available [evidence](https://www.nature.com/articles/doi:10.1038/nclimate2923) suggests the future of civilization depends on our ability to transition away from fossil fuels.
 The transport sector is the fastest growing source of emissions by sector, and represents a major roadblock in the path towards a zero-carbon economy. Transport systems are also a major cause of ill health, by enabling sedentary lifestyles and causing numerous road traffic casualties.
 Knowledge of these impacts motivated the word 'sustainable' in the package's name: by focusing on active travel and public transport modes, **stplanr** is intended to encourage interventions that reduce dependence on fossil fuels.
 
