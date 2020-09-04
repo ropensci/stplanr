@@ -1,4 +1,7 @@
-This version fixes CRAN tests that were failing on version 0.7.0.
+This version fixes CRAN tests that were failing on version 0.7.1 on Solaris and Macos.
+Examples only run on PROJ>6.3.1 to address issues found here: 
+
+https://cran.r-project.org/web/checks/check_results_stplanr.html
 
 ## Test environments
 
