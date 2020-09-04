@@ -43,22 +43,25 @@ islines.sf <- function(g1, g2) {
 #' @family rnet
 #' @export
 #' @examples
-#' sl <- routes_fast_sf[2:4, ]
-#' rsec <- gsection(sl)
-#' length(rsec) # sections
-#' plot(rsec, col = seq(length(rsec)))
-#' rsec <- gsection(sl, buff_dist = 50)
-#' length(rsec) # 4 features: issue
-#' plot(rsec, col = seq(length(rsec)))
-#' # \donttest{
-#' # dont test due to issues with sp classes on some set-ups
-#' # sl <- routes_fast[2:4, ]
-#' # rsec <- gsection(sl)
-#' # rsec_buff <- gsection(sl, buff_dist = 1)
-#' # plot(sl[1], lwd = 9, col = 1:nrow(sl))
-#' # plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
-#' # plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
-#' # }
+#' #' lib_versions <- sf::sf_extSoftVersion()
+#' lib_versions
+#' # fails on some systems (with early versions of PROJ)
+#' if(lib_versions[3] >= "6.3.1") {
+#'   sl <- routes_fast_sf[2:4, ]
+#'   rsec <- gsection(sl)
+#'   length(rsec) # sections
+#'   plot(rsec, col = seq(length(rsec)))
+#'   rsec <- gsection(sl, buff_dist = 50)
+#'   length(rsec) # 4 features: issue
+#'   plot(rsec, col = seq(length(rsec)))
+#'   # dont test due to issues with sp classes on some set-ups
+#'   # sl <- routes_fast[2:4, ]
+#'   # rsec <- gsection(sl)
+#'   # rsec_buff <- gsection(sl, buff_dist = 1)
+#'   # plot(sl[1], lwd = 9, col = 1:nrow(sl))
+#'   # plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
+#'   # plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
+#' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
