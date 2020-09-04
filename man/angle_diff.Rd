@@ -28,15 +28,20 @@ Building on the convention used in \code{\link[=bearing]{bearing()}} and in many
 North is definied as 0, East as 90 and West as -90.
 }
 \examples{
-# Find all routes going North-South
-lines_sf = od2line(od_data_sample, zones = zones_sf)
-angle_diff(lines_sf[2, ], angle = 0)
-angle_diff(lines_sf[2:3, ], angle = 0)
-a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
-plot(flowlines)
-plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
-# East-West
-plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
+lib_versions <- sf::sf_extSoftVersion()
+lib_versions
+# fails on some systems (with early versions of PROJ)
+if(lib_versions[3] >= "6.3.1") {
+  # Find all routes going North-South
+  lines_sf = od2line(od_data_sample, zones = zones_sf)
+  angle_diff(lines_sf[2, ], angle = 0)
+  angle_diff(lines_sf[2:3, ], angle = 0)
+  a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
+  plot(flowlines)
+  plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
+  # East-West
+  plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
+}
 }
 \seealso{
 Other lines: 

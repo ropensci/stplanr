@@ -72,13 +72,18 @@ is_linepoint <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
-#' bearings_sf_1_9 # lines of 0 length have NaN bearing
-#' bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
-#' bearings_sp_1_9
-#' plot(bearings_sf_1_9, bearings_sp_1_9)
-#' line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-#' line_bearing(flowlines[1:5, ], bidirectional = TRUE)
+#' lib_versions <- sf::sf_extSoftVersion()
+#' lib_versions
+#' # fails on some systems (with early versions of PROJ)
+#' if(lib_versions[3] >= "6.3.1") {
+#'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
+#'   bearings_sf_1_9 # lines of 0 length have NaN bearing
+#'   bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
+#'   bearings_sp_1_9
+#'   plot(bearings_sf_1_9, bearings_sp_1_9)
+#'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
+#'   line_bearing(flowlines[1:5, ], bidirectional = TRUE)
+#' }
 line_bearing <- function(l, bidirectional = FALSE) {
   UseMethod("line_bearing")
 }
@@ -120,15 +125,20 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #'
 #' @export
 #' @examples
-#' # Find all routes going North-South
-#' lines_sf = od2line(od_data_sample, zones = zones_sf)
-#' angle_diff(lines_sf[2, ], angle = 0)
-#' angle_diff(lines_sf[2:3, ], angle = 0)
-#' a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
-#' plot(flowlines)
-#' plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
-#' # East-West
-#' plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
+#' lib_versions <- sf::sf_extSoftVersion()
+#' lib_versions
+#' # fails on some systems (with early versions of PROJ)
+#' if(lib_versions[3] >= "6.3.1") {
+#'   # Find all routes going North-South
+#'   lines_sf = od2line(od_data_sample, zones = zones_sf)
+#'   angle_diff(lines_sf[2, ], angle = 0)
+#'   angle_diff(lines_sf[2:3, ], angle = 0)
+#'   a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
+#'   plot(flowlines)
+#'   plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
+#'   # East-West
+#'   plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
+#' }
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
 }
