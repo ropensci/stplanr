@@ -126,10 +126,11 @@ lineLabels <- function(sl, attrib) {
 #' @inheritParams gsection
 #' @inheritParams overline2
 #' @author Barry Rowlingson
-#' @references Morgan, M (2020). Travel flow aggregation: Nationally scalable
-#' methods for interactive and online visualisation of transport behaviour at
-#' the road network level
-#' <https://journals.sagepub.com/doi/full/10.1177/2399808320942779>
+#' @references 
+#' Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
+#' for interactive and online visualisation of transport behaviour at the road network level.
+#' Environment and Planning B: Urban Analytics and City Science. July 2020.
+#' [doi:10.1177/2399808320942779](https://doi.org/10.1177%2F2399808320942779)
 #'
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for overlapping
 #' segments. Reproducible question from <https://gis.stackexchange.com>. See
@@ -141,11 +142,12 @@ lineLabels <- function(sl, attrib) {
 #' all duplicated segments, and if simplify is TRUE the segments with identical
 #' attributes are recombined into linestrings.
 #'
-#' The following arguments only apply to `overline2()`:
+#' The following arguments only apply to the `sf` implementation of `overline()`:
 #'
-#' - `ncores`, the number of cores to use in parallel processing - `simplify`,
-#' should the final segments be converted back into longer lines? The default
-#' setting. - `regionalise` the threshold number of rows above which
+#' - `ncores`, the number of cores to use in parallel processing
+#' - `simplify`, should the final segments be converted back into longer lines? The default
+#' setting.
+#' - `regionalise` the threshold number of rows above which
 #' regionalisation is used (see details).
 #'
 #'
