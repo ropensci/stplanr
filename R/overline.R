@@ -108,55 +108,66 @@ lineLabels <- function(sl, attrib) {
 
 #' Convert series of overlapping lines into a route network
 #'
-#' This function takes a series of overlapping lines
-#' and converts them into a single route network.
+#' This function takes a series of overlapping lines and converts them into a
+#' single route network.
 #'
-#' The function can be used to estimate the amount of transport 'flow'
-#' at the route segment level based on input datasets from routing services,
-#' for example linestring geometries created with the `route()` function.
+#' The function can be used to estimate the amount of transport 'flow' at the
+#' route segment level based on input datasets from routing services, for
+#' example linestring geometries created with the `route()` function.
 #'
-#' @param attrib A character vector corresponding to the variables in
-#' `sl$` on which the function(s) will operate.
-#' @param fun The function(s) used to aggregate the grouped values (default: sum).
-#' If length of `fun` is smaller than `attrib` then the functions are
-#' repeated for subsequent attributes.
-#' @param na.zero Sets whether aggregated values with a value of zero are removed.
+#' @param attrib A character vector corresponding to the variables in `sl$` on
+#'   which the function(s) will operate.
+#' @param fun The function(s) used to aggregate the grouped values (default:
+#'   sum). If length of `fun` is smaller than `attrib` then the functions are
+#'   repeated for subsequent attributes.
+#' @param na.zero Sets whether aggregated values with a value of zero are
+#'   removed.
 #' @param ... Arguments passed to `overline2`
 #' @inheritParams gsection
 #' @inheritParams overline2
 #' @author Barry Rowlingson
-#' @references
-#' Rowlingson, B (2015). Overlaying lines and aggregating their values for
-#'  overlapping segments. Reproducible question from
-#'  <https://gis.stackexchange.com>. See <https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
+#' @references 
+#' Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
+#' for interactive and online visualisation of transport behaviour at the road network level.
+#' Environment and Planning B: Urban Analytics and City Science. July 2020.
+#' [doi:10.1177/2399808320942779](https://doi.org/10.1177%2F2399808320942779)
+#'
+#' Rowlingson, B (2015). Overlaying lines and aggregating their values for overlapping
+#' segments. Reproducible question from <https://gis.stackexchange.com>. See
+#' <https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments>.
 #'
 #'
-#' @details
-#' The `overline()` function breaks each line into many straight segments and then looks for duplicated segments.
-#' Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
-#' recombined into linestrings.
+#' @details The `overline()` function breaks each line into many straight
+#' segments and then looks for duplicated segments. Attributes are summed for
+#' all duplicated segments, and if simplify is TRUE the segments with identical
+#' attributes are recombined into linestrings.
 #'
-#' The following arguments only apply to `overline2()`:
+#' The following arguments only apply to the `sf` implementation of `overline()`:
 #'
 #' - `ncores`, the number of cores to use in parallel processing
-#' - `simplify`, should the final segments be converted back into longer lines? The default setting.
-#' - `regionalise` the threshold number of rows above which regionalisation is used (see details).
+#' - `simplify`, should the final segments be converted back into longer lines? The default
+#' setting.
+#' - `regionalise` the threshold number of rows above which
+#' regionalisation is used (see details).
 #'
 #'
-#' For `sf` objects
-#' Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
-#' This significantly reduces computation time for large datasets, but slightly increases the final file size.
-#' For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
+#' For `sf` objects Regionalisation breaks the dataset into a 10 x 10 grid and
+#' then performed the simplification across each grid. This significantly
+#' reduces computation time for large datasets, but slightly increases the final
+#' file size. For smaller datasets it increases computation time slightly but
+#' reduces memory usage and so may also be useful.
 #'
-#' A known limitation of this method is that overlapping segments of different lengths are not aggregated.
-#' This can occur when lines stop halfway down a road. Typically these errors are small,
-#' but some artefacts may remain within the resulting data.
+#' A known limitation of this method is that overlapping segments of different
+#' lengths are not aggregated. This can occur when lines stop halfway down a
+#' road. Typically these errors are small, but some artefacts may remain within
+#' the resulting data.
 #'
-#' For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
-#' to overline subsets of the dataset, rbind the results together, and then overline again, to produce
-#' a final result.
+#' For very large datasets nrow(x) > 1000000, memory usage can be significant.
+#' In these cases is is possible to overline subsets of the dataset, rbind the
+#' results together, and then overline again, to produce a final result.
 #'
-#' Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
+#' Multicore support is only enabled for the regionalised simplification stage
+#' as it does not help with other stages.
 #'
 #' @family rnet
 #' @export
@@ -344,23 +355,23 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @return An `sf` object representing a route network
 #' @rdname overline
 overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = NULL) {
-  if (!"sfc_LINESTRING" %in% class(sl$geometry)) {
+  if (!"sfc_LINESTRING" %in% class(sf::st_geometry(sl))) {
     stop("Only LINESTRING is supported")
   }
   if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
   }
   if (is.null(quiet)) {
-    quiet <- ifelse(nrow(sl) > 1000, TRUE, FALSE)
+    quiet <- ifelse(nrow(sl) < 1000, TRUE, FALSE)
   }
-  x <- sf::st_zm(sl)
-  x <- x[, attrib]
-  x_crs <- sf::st_crs(x)
+  sl <- sf::st_zm(sl)
+  sl <- sl[, attrib]
+  sl_crs <- sf::st_crs(sl)
   if (!quiet) {
     message(paste0(Sys.time(), " constructing segments"))
   }
-  c1 <- sf::st_coordinates(x)
-  sf::st_geometry(x) <- NULL
+  c1 <- sf::st_coordinates(sl)
+  sf::st_geometry(sl) <- NULL
   l1 <- c1[, 3] # Get which line each point is part of
   c1 <- c1[, 1:2]
   l1_start <- duplicated(l1) # find the break points between lines
@@ -373,10 +384,12 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   c3 <- cbind(c1, c2) # make new matrix of start and end coords
   rm(c1, c2)
   c3 <- c3[!is.na(c3[, 3]), ]
-  x <- x[l1[l1_start], , drop = FALSE] # repeate attributes
+  sl <- sl[l1[l1_start], , drop = FALSE] # repeate attributes
   rm(l1, l1_start)
 
-  # message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
+  # if (!quiet) {
+  #   message(paste0(Sys.time(), " transposing 'B to A' to 'A to B'"))
+  # }
   attributes(c3)$dimnames <- NULL
   c3 <- t(apply(c3, MARGIN = 1, FUN = function(y) {
     if (y[1] != y[3]) {
@@ -394,19 +407,22 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
     }
   }))
 
-  # message(paste0(Sys.time(), " removing duplicates"))
-  x <- cbind(c3, x)
+  # if (!quiet) {
+  #   message(paste0(Sys.time(), " removing duplicates"))
+  # }
+  sl <- cbind(c3, sl)
   rm(c3)
-  x <- dplyr::group_by_at(x, c("1", "2", "3", "4"))
-  x <- dplyr::summarise_all(x, .funs = sum)
-  coords <- as.matrix(x[, 1:4])
-  x <- x[, attrib]
+
+  sl <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
+  sl <- dplyr::ungroup(dplyr::summarise_all(sl, .funs = sum))
+  coords <- as.matrix(sl[, 1:4])
+  sl <- sl[, attrib]
 
   # Make Geometry
   if (!quiet) {
     message(paste0(Sys.time(), " building geometry"))
   }
-  sf::st_geometry(x) <- sf::st_as_sfc(
+  sf::st_geometry(sl) <- sf::st_as_sfc(
     if (requireNamespace("pbapply", quietly = TRUE)) {
       pbapply::pblapply(1:nrow(coords), function(y) {
         sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
@@ -416,7 +432,7 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
         sf::st_linestring(matrix(coords[y, ], ncol = 2, byrow = T))
       })
     },
-    crs = x_crs
+    crs = sl_crs
   )
   rm(coords)
 
@@ -425,15 +441,15 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
     if (!quiet) {
       message(paste0(Sys.time(), " simplifying geometry"))
     }
-    if (nrow(x) > regionalise) {
-      message(paste0("large data detected, using regionalisation, nrow = ", nrow(x)))
-      suppressWarnings(cents <- sf::st_centroid(x))
+    if (nrow(sl) > regionalise) {
+      message(paste0("large data detected, using regionalisation, nrow = ", nrow(sl)))
+      suppressWarnings(cents <- sf::st_centroid(sl))
       grid <- sf::st_make_grid(cents, what = "polygons")
-      inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1))
-      x$grid <- inter
+      suppressWarnings(inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1)))
+      sl$grid <- inter
       rm(cents, grid, inter)
       # split into a list of df by grid
-      x <- split(x, f = x$grid)
+      sl <- dplyr::group_split(sl, grid)
       message(paste0(Sys.time(), " regionalisation complete, aggregating flows"))
       if (ncores > 1) {
         cl <- parallel::makeCluster(ncores)
@@ -447,14 +463,14 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
           # library(dplyr)
         })
         overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
-          pbapply::pblapply(x, function(y) {
+          pbapply::pblapply(sl, function(y) {
             y <- dplyr::group_by_at(y, attrib)
-            y <- dplyr::summarise(y, do_union = FALSE)
+            y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           }, cl = cl)
         } else {
-          lapply(x, function(y) {
+          lapply(sl, function(y) {
             y <- dplyr::group_by_at(y, attrib)
-            y <- dplyr::summarise(y, do_union = FALSE)
+            y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           })
         }
 
@@ -463,34 +479,32 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
         rm(cl)
       } else {
         overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
-          pbapply::pblapply(x, function(y) {
+          pbapply::pblapply(sl, function(y) {
             y <- dplyr::group_by_at(y, attrib)
-            y <- dplyr::summarise(y, do_union = FALSE)
+            y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           })
         } else {
-          lapply(x, function(y) {
+          lapply(sl, function(y) {
             y <- dplyr::group_by_at(y, attrib)
-            y <- dplyr::summarise(y, do_union = FALSE)
+            y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           })
         }
       }
-      rm(x)
-      suppressWarnings(overlined_simple <-
-        dplyr::bind_rows(overlined_simple))
-      overlined_simple <- as.data.frame(overlined_simple)
+      rm(sl)
+      overlined_simple <- data.table::rbindlist(overlined_simple)
       overlined_simple <- sf::st_sf(overlined_simple)
-      sf::st_crs(overlined_simple) <- x_crs
-      overlined_simple$grid <- NULL
+      overlined_simple <- overlined_simple[seq_len(nrow(overlined_simple)),]
     } else {
       if (!quiet) {
         message(paste0(Sys.time(), " aggregating flows"))
       }
-      overlined_simple <- dplyr::group_by_at(x, attrib)
-      overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE)
-      rm(x)
+      overlined_simple <- dplyr::group_by_at(sl, attrib)
+      overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE, .groups = 'drop')
+      rm(sl)
     }
 
-    overlined_simple <- dplyr::ungroup(overlined_simple)
+    overlined_simple <- as.data.frame(overlined_simple)
+    overlined_simple <- sf::st_sf(overlined_simple)
 
     # Separate our the linestrings and the mulilinestrings
     if (!quiet) {
@@ -508,7 +522,7 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
 
     return(rbind(overlined_simple_l, overlined_simple_ml))
   } else {
-    return(x)
+    return(sl)
   }
 }
 
