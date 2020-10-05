@@ -361,9 +361,10 @@ line2df.Spatial <- function(l) {
 #'
 #' The number of points will be double the number of lines with `line2points`. A
 #' closely related function, `line2pointsn` returns all the points that were
-#' line vertices. #' The points corresponding with a given line, `i`, will be
+#' line vertices. The points corresponding with a given line, `i`, will be
 #' `(2*i):((2*i)+1)`. The last function, `line2vertices`, returns all the points
-#' that are vertices but not nodes.
+#' that are vertices but not nodes. If the input `l` object is composed by only
+#' 1 LINESTRING with 2 POINTS, then it returns an empty `sf` object.
 #'
 #' @param l An `sf` object or a `SpatialLinesDataFrame` from the older `sp` package
 #' @param ids Vector of ids (by default `1:nrow(l)`)
@@ -378,7 +379,14 @@ line2df.Spatial <- function(l) {
 #' plot(l$geometry)
 #' lpoints2 <- line2pointsn(l)
 #' plot(lpoints2$geometry, add = TRUE)
+#'
+#' # extract only internal vertices
+#' l_internal_vertices <- line2vertices(l)
+#' plot(sf::st_geometry(l), reset = FALSE)
+#' plot(l_internal_vertices, add = TRUE)
+#' # The boundary points are missing
 #' @export
+
 line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
 }
@@ -453,14 +461,34 @@ line2vertices.sf <- function(l) {
   all_vertexes <- sf::st_coordinates(l)
   indexes_of_internal_vertexes <- lapply(
     split(1:nrow(all_vertexes), all_vertexes[, "L1"]),
-    function(x) x[-c(1, length(x))] # exclude starting and ending point
+    function(x) {
+      if (length(x) > 2L) {
+        x[-c(1, length(x))] # exclude starting and ending point
+      } else {
+        # If the line x is composed by less than 2 points, then there is no
+        # point which is not in the boundary. Hence, I return integer(0), which
+        # means that there is no ID associated to an internal point.
+        # See https://github.com/ropensci/stplanr/issues/432
+        integer(0)
+      }
+    }
   )
   # extract those indexes
-  internal_vertexes <- all_vertexes[do.call("c", indexes_of_internal_vertexes), ]
+  internal_vertexes <- all_vertexes[do.call("c", indexes_of_internal_vertexes), , drop = FALSE]
+
+  # I used drop = FALSE so that internal_vertexes is always a matrix and it's not
+  # converted to a vector when do.call("c", indexes_of_internal_vertexes)
+  # returns only 1 index.
+  # e.g. matrix(1:9, 3, 3)[1, ] vs matrix(1:9, 3, 3)[1, , drop = FALSE].
+  # This is important since data.frame(internal_vertexes) (see two lines below)
+  # works correctly only if internal_vertexes is a matrix.
+  # e.g. data.frame(matrix(1:9, 3, 3)[1, ]) vs data.frame(matrix(1:9, 3, 3)[1, , drop = FALSE])
 
   # transform back to sf
-  internal_vertexes_sf <- sf::st_as_sf(data.frame(internal_vertexes),
-                                       coords = c("X", "Y"), crs = sf::st_crs(l)
+  internal_vertexes_sf <- sf::st_as_sf(
+    data.frame(internal_vertexes),
+    coords = c("X", "Y"),
+    crs = sf::st_crs(l)
   )
   internal_vertexes_sf
 }

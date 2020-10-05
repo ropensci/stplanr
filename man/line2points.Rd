@@ -20,9 +20,10 @@ line2vertices(l)
 \description{
 The number of points will be double the number of lines with \code{line2points}. A
 closely related function, \code{line2pointsn} returns all the points that were
-line vertices. #' The points corresponding with a given line, \code{i}, will be
+line vertices. The points corresponding with a given line, \code{i}, will be
 \code{(2*i):((2*i)+1)}. The last function, \code{line2vertices}, returns all the points
-that are vertices but not nodes.
+that are vertices but not nodes. If the input \code{l} object is composed by only
+1 LINESTRING with 2 POINTS, then it returns an empty \code{sf} object.
 }
 \examples{
 l <- routes_fast_sf[2, ]
@@ -33,6 +34,12 @@ plot(lpoints, add = TRUE)
 plot(l$geometry)
 lpoints2 <- line2pointsn(l)
 plot(lpoints2$geometry, add = TRUE)
+
+# extract only internal vertices
+l_internal_vertices <- line2vertices(l)
+plot(sf::st_geometry(l), reset = FALSE)
+plot(l_internal_vertices, add = TRUE)
+# The boundary points are missing
 }
 \seealso{
 Other lines: 
