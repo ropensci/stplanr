@@ -361,9 +361,10 @@ line2df.Spatial <- function(l) {
 #'
 #' The number of points will be double the number of lines with `line2points`. A
 #' closely related function, `line2pointsn` returns all the points that were
-#' line vertices. #' The points corresponding with a given line, `i`, will be
+#' line vertices. The points corresponding with a given line, `i`, will be
 #' `(2*i):((2*i)+1)`. The last function, `line2vertices`, returns all the points
-#' that are vertices but not nodes.
+#' that are vertices but not nodes. If the input `l` object is composed by only
+#' 1 LINESTRING with 2 POINTS, then it returns an empty `sf` object.
 #'
 #' @param l An `sf` object or a `SpatialLinesDataFrame` from the older `sp` package
 #' @param ids Vector of ids (by default `1:nrow(l)`)
