@@ -453,14 +453,34 @@ line2vertices.sf <- function(l) {
   all_vertexes <- sf::st_coordinates(l)
   indexes_of_internal_vertexes <- lapply(
     split(1:nrow(all_vertexes), all_vertexes[, "L1"]),
-    function(x) x[-c(1, length(x))] # exclude starting and ending point
+    function(x) {
+      if (length(x) > 2L) {
+        x[-c(1, length(x))] # exclude starting and ending point
+      } else {
+        # If the line x is composed by less than 2 points, then there is no
+        # point which is not in the boundary. Hence, I return integer(0), which
+        # means that there is no ID associated to an internal point.
+        # See https://github.com/ropensci/stplanr/issues/432
+        integer(0)
+      }
+    }
   )
   # extract those indexes
-  internal_vertexes <- all_vertexes[do.call("c", indexes_of_internal_vertexes), ]
+  internal_vertexes <- all_vertexes[do.call("c", indexes_of_internal_vertexes), , drop = FALSE]
+
+  # I used drop = FALSE so that internal_vertexes is always a matrix and it's not
+  # converted to a vector when do.call("c", indexes_of_internal_vertexes)
+  # returns only 1 index.
+  # e.g. matrix(1:9, 3, 3)[1, ] vs matrix(1:9, 3, 3)[1, , drop = FALSE].
+  # This is important since data.frame(internal_vertexes) (see two lines below)
+  # works correctly only if internal_vertexes is a matrix.
+  # e.g. data.frame(matrix(1:9, 3, 3)[1, ]) vs data.frame(matrix(1:9, 3, 3)[1, , drop = FALSE])
 
   # transform back to sf
-  internal_vertexes_sf <- sf::st_as_sf(data.frame(internal_vertexes),
-                                       coords = c("X", "Y"), crs = sf::st_crs(l)
+  internal_vertexes_sf <- sf::st_as_sf(
+    data.frame(internal_vertexes),
+    coords = c("X", "Y"),
+    crs = sf::st_crs(l)
   )
   internal_vertexes_sf
 }
