@@ -379,7 +379,14 @@ line2df.Spatial <- function(l) {
 #' plot(l$geometry)
 #' lpoints2 <- line2pointsn(l)
 #' plot(lpoints2$geometry, add = TRUE)
+#'
+#' # extract only internal vertices
+#' l_internal_vertices <- line2vertices(l)
+#' plot(sf::st_geometry(l), reset = FALSE)
+#' plot(l_internal_vertices, add = TRUE)
+#' # The boundary points are missing
 #' @export
+
 line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
 }
