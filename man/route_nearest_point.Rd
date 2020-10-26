@@ -7,9 +7,9 @@
 route_nearest_point(r, p, id_out = FALSE)
 }
 \arguments{
-\item{r}{An \code{sf} object with one feature containing a linestring geometry to be split}
+\item{r}{The input route object from which the nearest route is to be found}
 
-\item{p}{A point represented by an \code{sf} object the will split the \code{route}}
+\item{p}{The point whose nearest route will be found}
 
 \item{id_out}{Should the index of the matching feature be returned? \code{FALSE} by default}
 }

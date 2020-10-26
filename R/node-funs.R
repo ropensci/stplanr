@@ -108,7 +108,8 @@ route_split_id <- function(r, id = NULL, p = NULL) {
 #' This function was written as a drop-in replacement for `sf::st_nearest_feature()`,
 #' which only works with recent versions of GEOS.
 #'
-#' @inheritParams route_split
+#' @param r The input route object from which the nearest route is to be found
+#' @param p The point whose nearest route will be found
 #' @param id_out Should the index of the matching feature be returned? `FALSE` by default
 #' @export
 #' @examples
