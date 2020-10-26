@@ -1,5 +1,8 @@
 # stplanr 0.8.0
 
+- New function `line_breakup()` breaks-up lines (#434)
+- Minor documentation fixes, including (#431)
+
 # stplanr 0.7.2
 
 - Support `sf` objects for `toptail_buff()`
