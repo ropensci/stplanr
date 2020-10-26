@@ -21,11 +21,12 @@ overline2(
 
 \item{attrib}{character, column names in sl to be summed}
 
-\item{fun}{The function(s) used to aggregate the grouped values (default: sum).
-If length of \code{fun} is smaller than \code{attrib} then the functions are
+\item{fun}{The function(s) used to aggregate the grouped values (default:
+sum). If length of \code{fun} is smaller than \code{attrib} then the functions are
 repeated for subsequent attributes.}
 
-\item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
+\item{na.zero}{Sets whether aggregated values with a value of zero are
+removed.}
 
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
 If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
@@ -45,42 +46,48 @@ which means the output will only be shown if \code{sl} has more than 1000 rows.}
 An \code{sf} object representing a route network
 }
 \description{
-This function takes a series of overlapping lines
-and converts them into a single route network.
+This function takes a series of overlapping lines and converts them into a
+single route network.
 
 This function is intended as a replacement for overline() and is significantly faster
 especially on large datasets. However, it also uses more memory.
 }
 \details{
-The function can be used to estimate the amount of transport 'flow'
-at the route segment level based on input datasets from routing services,
-for example linestring geometries created with the \code{route()} function.
+The function can be used to estimate the amount of transport 'flow' at the
+route segment level based on input datasets from routing services, for
+example linestring geometries created with the \code{route()} function.
 
-The \code{overline()} function breaks each line into many straight segments and then looks for duplicated segments.
-Attributes are summed for all duplicated segments, and if simplify is TRUE the segments with identical attributes are
-recombined into linestrings.
+The \code{overline()} function breaks each line into many straight
+segments and then looks for duplicated segments. Attributes are summed for
+all duplicated segments, and if simplify is TRUE the segments with identical
+attributes are recombined into linestrings.
 
-The following arguments only apply to \code{overline2()}:
+The following arguments only apply to the \code{sf} implementation of \code{overline()}:
 \itemize{
 \item \code{ncores}, the number of cores to use in parallel processing
-\item \code{simplify}, should the final segments be converted back into longer lines? The default setting.
-\item \code{regionalise} the threshold number of rows above which regionalisation is used (see details).
+\item \code{simplify}, should the final segments be converted back into longer lines? The default
+setting.
+\item \code{regionalise} the threshold number of rows above which
+regionalisation is used (see details).
 }
 
-For \code{sf} objects
-Regionalisation breaks the dataset into a 10 x 10 grid and then performed the simplification across each grid.
-This significantly reduces computation time for large datasets, but slightly increases the final file size.
-For smaller datasets it increases computation time slightly but reduces memory usage and so may also be useful.
+For \code{sf} objects Regionalisation breaks the dataset into a 10 x 10 grid and
+then performed the simplification across each grid. This significantly
+reduces computation time for large datasets, but slightly increases the final
+file size. For smaller datasets it increases computation time slightly but
+reduces memory usage and so may also be useful.
 
-A known limitation of this method is that overlapping segments of different lengths are not aggregated.
-This can occur when lines stop halfway down a road. Typically these errors are small,
-but some artefacts may remain within the resulting data.
+A known limitation of this method is that overlapping segments of different
+lengths are not aggregated. This can occur when lines stop halfway down a
+road. Typically these errors are small, but some artefacts may remain within
+the resulting data.
 
-For very large datasets nrow(x) > 1000000, memory usage can be significant. In these cases is is possible
-to overline subsets of the dataset, rbind the results together, and then overline again, to produce
-a final result.
+For very large datasets nrow(x) > 1000000, memory usage can be significant.
+In these cases is is possible to overline subsets of the dataset, rbind the
+results together, and then overline again, to produce a final result.
 
-Multicore support is only enabled for the regionalised simplification stage as it does not help with other stages.
+Multicore support is only enabled for the regionalised simplification stage
+as it does not help with other stages.
 }
 \examples{
 
@@ -99,9 +106,14 @@ plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 }
 \references{
-Rowlingson, B (2015). Overlaying lines and aggregating their values for
-overlapping segments. Reproducible question from
-\url{https://gis.stackexchange.com}. See \url{https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
+Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
+for interactive and online visualisation of transport behaviour at the road network level.
+Environment and Planning B: Urban Analytics and City Science. July 2020.
+\href{https://doi.org/10.1177%2F2399808320942779}{doi:10.1177/2399808320942779}
+
+Rowlingson, B (2015). Overlaying lines and aggregating their values for overlapping
+segments. Reproducible question from \url{https://gis.stackexchange.com}. See
+\url{https://gis.stackexchange.com/questions/139681/overlaying-lines-and-aggregating-their-values-for-overlapping-segments}.
 }
 \seealso{
 Other rnet: 

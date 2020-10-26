@@ -35,6 +35,7 @@ Other lines:
 \code{\link{line2df}()},
 \code{\link{line2points}()},
 \code{\link{line_bearing}()},
+\code{\link{line_breakup}()},
 \code{\link{line_match}()},
 \code{\link{line_midpoint}()},
 \code{\link{line_sample}()},

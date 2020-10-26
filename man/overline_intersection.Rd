@@ -11,11 +11,12 @@ overline_intersection(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 
 \item{attrib}{character, column names in sl to be summed}
 
-\item{fun}{The function(s) used to aggregate the grouped values (default: sum).
-If length of \code{fun} is smaller than \code{attrib} then the functions are
+\item{fun}{The function(s) used to aggregate the grouped values (default:
+sum). If length of \code{fun} is smaller than \code{attrib} then the functions are
 repeated for subsequent attributes.}
 
-\item{na.zero}{Sets whether aggregated values with a value of zero are removed.}
+\item{na.zero}{Sets whether aggregated values with a value of zero are
+removed.}
 
 \item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
 If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
