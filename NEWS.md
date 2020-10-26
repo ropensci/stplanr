@@ -1,3 +1,5 @@
+# stplanr 0.8.0
+
 # stplanr 0.7.2
 
 - Support `sf` objects for `toptail_buff()`
