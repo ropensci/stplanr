@@ -3,7 +3,7 @@
 #' This function breaks up a LINESTRING geometries into smaller pieces.
 #'
 #' @param l An sf object with LINESTRING geometry
-#' @param by An sf object with `POLYGON` geometry or a number representing the
+#' @param z An sf object with `POLYGON` geometry or a number representing the
 #'   resolution of grid cells used to break up the linestring objects
 #' @return An sf object with LINESTRING geometry created after breaking up the
 #'   input object.

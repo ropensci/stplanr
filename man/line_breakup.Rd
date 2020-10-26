@@ -9,7 +9,7 @@ line_breakup(l, z)
 \arguments{
 \item{l}{An sf object with LINESTRING geometry}
 
-\item{by}{An sf object with \code{POLYGON} geometry or a number representing the
+\item{z}{An sf object with \code{POLYGON} geometry or a number representing the
 resolution of grid cells used to break up the linestring objects}
 }
 \value{
