@@ -1,4 +1,4 @@
-#' Break up line objects into shorter segements
+#' Break up line objects into shorter segments
 #'
 #' This function breaks up a LINESTRING geometries into smaller pieces.
 #'

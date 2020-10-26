@@ -2,7 +2,7 @@
 % Please edit documentation in R/line_breakup.R
 \name{line_breakup}
 \alias{line_breakup}
-\title{Break up line objects into shorter segements}
+\title{Break up line objects into shorter segments}
 \usage{
 line_breakup(l, z)
 }
