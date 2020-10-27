@@ -1,7 +1,4 @@
-This version fixes CRAN tests that were failing on version 0.7.1 on Solaris and Macos.
-Examples only run on PROJ>6.3.1 to address issues found here: 
-
-https://cran.r-project.org/web/checks/check_results_stplanr.html
+Minor update with a new function and a few fixes
 
 ## Test environments
 
@@ -15,4 +12,4 @@ https://cran.r-project.org/web/checks/check_results_stplanr.html
 
 ## R CMD check:
 
-R CMD check succeeded
+R CMD check succeeded, with only a note about the package's size

@@ -23,7 +23,7 @@ Description: Tools for transport planning with an emphasis on spatial transport
     from origin-destination (OD) data; route assignment, locally and via
     interfaces to routing services such as <https://cyclestreets.net/> and
     calculation of route segment attributes such as bearing.
-    The package implementats the 'travel flow aggregration' method
+    The package implements the 'travel flow aggregration' method
     described in Morgan and Lovelace (2020) <doi:10.1177/2399808320942779>.
     Further information on the package's aim and scope can be found
     in the vignettes and in a paper in the R Journal
