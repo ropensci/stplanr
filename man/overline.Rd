@@ -66,7 +66,9 @@ The following arguments only apply to the \code{sf} implementation of \code{over
 \itemize{
 \item \code{ncores}, the number of cores to use in parallel processing
 \item \code{simplify}, should the final segments be converted back into longer lines? The default
-setting.
+setting is \code{TRUE}. \code{simplify = FALSE} results in straight line segments consisting
+of only 2 vertices (the start and end point),
+resulting in a data frame with many more rows than the simplified results (see examples).
 \item \code{regionalise} the threshold number of rows above which
 regionalisation is used (see details).
 }
@@ -90,14 +92,20 @@ Multicore support is only enabled for the regionalised simplification stage
 as it does not help with other stages.
 }
 \examples{
-
+library(sf)
 sl <- routes_fast_sf[2:4, ]
 class(sl)
 class(sl$geometry)
 overline(sl = sl, attrib = "length")
 rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
+nrow(rnet_sf)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-
+rnet_sf_raw <- overline2(sl, attrib = "length", simplify = FALSE)
+nrow(rnet_sf_raw)
+summary(n_vertices(rnet_sf_raw))
+plot(rnet_sf_raw)
+rnet_sf_raw$n = 1:nrow(rnet_sf_raw)
+plot(rnet_sf_raw[10:25, ])
 # legacy implementation based on sp data
 # sl <- routes_fast[2:4, ]
 # rnet1 <- overline(sl = sl, attrib = "length")

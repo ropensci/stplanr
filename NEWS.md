@@ -1,3 +1,5 @@
+# stplanr (development version)
+
 # stplanr 0.8.0
 
 - New function `line_breakup()` breaks-up lines (#434)
