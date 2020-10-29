@@ -90,13 +90,17 @@ Multicore support is only enabled for the regionalised simplification stage
 as it does not help with other stages.
 }
 \examples{
-
+library(sf)
 sl <- routes_fast_sf[2:4, ]
 class(sl)
 class(sl$geometry)
 overline(sl = sl, attrib = "length")
 rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
+nrow(rnet_sf)
 plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
+rnet_sf_raw <- overline2(sl, attrib = "length", simplify = FALSE)
+nrow(rnet_sf_raw)
+plot(rnet_sf_raw)
 
 # legacy implementation based on sp data
 # sl <- routes_fast[2:4, ]
