@@ -146,7 +146,9 @@ lineLabels <- function(sl, attrib) {
 #'
 #' - `ncores`, the number of cores to use in parallel processing
 #' - `simplify`, should the final segments be converted back into longer lines? The default
-#' setting.
+#' setting is `TRUE`. `simplify = FALSE` results in straight line segments consisting
+#' of only 2 vertices (the start and end point),
+#' resulting in a data frame with many more rows than the simplified results (see examples).
 #' - `regionalise` the threshold number of rows above which
 #' regionalisation is used (see details).
 #'
@@ -182,8 +184,10 @@ lineLabels <- function(sl, attrib) {
 #' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
 #' rnet_sf_raw <- overline2(sl, attrib = "length", simplify = FALSE)
 #' nrow(rnet_sf_raw)
+#' summary(n_vertices(rnet_sf_raw))
 #' plot(rnet_sf_raw)
-#'
+#' rnet_sf_raw$n = 1:nrow(rnet_sf_raw)
+#' plot(rnet_sf_raw[10:25, ])
 #' # legacy implementation based on sp data
 #' # sl <- routes_fast[2:4, ]
 #' # rnet1 <- overline(sl = sl, attrib = "length")
