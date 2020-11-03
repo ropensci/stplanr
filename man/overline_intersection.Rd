@@ -11,9 +11,7 @@ overline_intersection(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
 
 \item{attrib}{character, column names in sl to be summed}
 
-\item{fun}{The function(s) used to aggregate the grouped values (default:
-sum). If length of \code{fun} is smaller than \code{attrib} then the functions are
-repeated for subsequent attributes.}
+\item{fun}{Which functions to summaries the attributes by?}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are
 removed.}

@@ -357,20 +357,24 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
 #' @param quiet Should the the function omit messages? `NULL` by default,
 #' which means the output will only be shown if `sl` has more than 1000 rows.
+#' @param fun Which functions to summaries the attributes by?
 #' @family rnet
 #' @author Malcolm Morgan
-#' @export
 #' @return An `sf` object representing a route network
+#' @export
+#' @examples
+#' sl <- routes_fast_sf[2:3, ]
+#' rnet <- overline2(sl, c("co2_saving", "length"), fun = list(sum = sum, mean = mean))
+#' plot(rnet)
 #' @rdname overline
-overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = NULL) {
+overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5,
+                      quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
+                      fun = sum) {
   if (!"sfc_LINESTRING" %in% class(sf::st_geometry(sl))) {
     stop("Only LINESTRING is supported")
   }
   if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
-  }
-  if (is.null(quiet)) {
-    quiet <- ifelse(nrow(sl) < 1000, TRUE, FALSE)
   }
   sl <- sf::st_zm(sl)
   sl <- sl[, attrib]
@@ -421,10 +425,15 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   sl <- cbind(c3, sl)
   rm(c3)
 
-  sl <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
-  sl <- dplyr::ungroup(dplyr::summarise_all(sl, .funs = sum))
-  coords <- as.matrix(sl[, 1:4])
-  sl <- sl[, attrib]
+  # browser()
+  # if(requireNamespace("data.table", quietly = TRUE)) {
+  #   sl = data.table::data.table(sl)
+  # }
+  slg <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
+  sls <- dplyr::ungroup(dplyr::summarise_all(slg, .funs = fun))
+  attrib = names(sls)[5:ncol(sls)]
+  coords <- as.matrix(sls[, 1:4])
+  sl <- sls[, -c(1:4)]
 
   # Make Geometry
   if (!quiet) {
@@ -481,7 +490,6 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
             y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           })
         }
-
 
         parallel::stopCluster(cl)
         rm(cl)

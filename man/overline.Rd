@@ -13,7 +13,8 @@ overline2(
   ncores = 1,
   simplify = TRUE,
   regionalise = 1e+05,
-  quiet = NULL
+  quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
+  fun = sum
 )
 }
 \arguments{
@@ -21,9 +22,7 @@ overline2(
 
 \item{attrib}{character, column names in sl to be summed}
 
-\item{fun}{The function(s) used to aggregate the grouped values (default:
-sum). If length of \code{fun} is smaller than \code{attrib} then the functions are
-repeated for subsequent attributes.}
+\item{fun}{Which functions to summaries the attributes by?}
 
 \item{na.zero}{Sets whether aggregated values with a value of zero are
 removed.}
@@ -112,6 +111,9 @@ plot(rnet_sf_raw[10:25, ])
 # rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 # plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
+sl <- routes_fast_sf[2:3, ]
+rnet <- overline2(sl, c("co2_saving", "length"), fun = list(sum = sum, mean = mean))
+plot(rnet)
 }
 \references{
 Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
