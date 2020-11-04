@@ -114,17 +114,15 @@ lineLabels <- function(sl, attrib) {
 #' The function can be used to estimate the amount of transport 'flow' at the
 #' route segment level based on input datasets from routing services, for
 #' example linestring geometries created with the `route()` function.
-#'
-#' @param attrib A character vector corresponding to the variables in `sl$` on
-#'   which the function(s) will operate.
-#' @param fun The function(s) used to aggregate the grouped values (default:
-#'   sum). If length of `fun` is smaller than `attrib` then the functions are
-#'   repeated for subsequent attributes.
-#' @param na.zero Sets whether aggregated values with a value of zero are
-#'   removed.
-#' @param ... Arguments passed to `overline2`
-#' @inheritParams gsection
-#' @inheritParams overline2
+#' @param sl A spatial object representing routes on a transport network
+#' @param attrib character, column names in sl to be aggregated
+#' @param ncores integer, how many cores to use in parallel processing, default = 1
+#' @param simplify logical, if TRUE group final segments back into lines, default = TRUE
+#' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
+#' @param quiet Should the the function omit messages? `NULL` by default,
+#' which means the output will only be shown if `sl` has more than 1000 rows.
+#' @param fun Named list of functions to summaries the attributes by? `sum` is the default.
+#' `list(sum = sum, average = mean)` will summarise all `attrib`utes by sum and mean.
 #' @author Barry Rowlingson
 #' @references
 #' Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
@@ -174,15 +172,15 @@ lineLabels <- function(sl, attrib) {
 #' @family rnet
 #' @export
 #' @examples
-#' library(sf)
 #' sl <- routes_fast_sf[2:4, ]
-#' class(sl)
-#' class(sl$geometry)
-#' overline(sl = sl, attrib = "length")
-#' rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
-#' nrow(rnet_sf)
-#' plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-#' rnet_sf_raw <- overline2(sl, attrib = "length", simplify = FALSE)
+#' sl$All <- flowlines$All[2:4]
+#' rnet <- overline(sl = sl, attrib = "All")
+#' nrow(sl)
+#' nrow(rnet)
+#' plot(rnet)
+#' rnet_mean <- overline(sl, c("All", "av_incline"), fun = list(mean = mean, sum = sum))
+#' plot(rnet_mean, lwd = rnet_mean$All_sum / mean(rnet_mean$All_sum))
+#' rnet_sf_raw <- overline(sl, attrib = "length", simplify = FALSE)
 #' nrow(rnet_sf_raw)
 #' summary(n_vertices(rnet_sf_raw))
 #' plot(rnet_sf_raw)
@@ -196,24 +194,31 @@ lineLabels <- function(sl, attrib) {
 #' # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 overline <- function(sl,
                      attrib,
-                     fun = sum,
-                     na.zero = FALSE,
-                     buff_dist = 0,
-                     ...) {
+                     ncores = 1,
+                     simplify = TRUE,
+                     regionalise = 1e5,
+                     quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
+                     fun = sum) {
   UseMethod("overline")
 }
 #' @export
-overline.sf <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
-  overline2(sl,
-    attrib,
-    ncores = 1,
-    simplify = TRUE,
-    regionalise = 1e5,
-    ...
-  )
+overline.sf <- function(sl, ...) {
+  overline2(sl, ...)
 }
 #' @export
-overline.Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...) {
+overline.Spatial <- function(sl, ...) {
+  overline_Spatial(sl, ...)
+}
+#' Spatial aggregation on sp data
+#'
+#' This function, largely superceded by sf implementations, still works
+#' but is not particularly fast.
+#' @param na.zero Sets whether aggregated values with a value of zero are
+#'   removed.
+#' @inheritParams gsection
+#' @inheritParams overline
+#' @export
+overline_Spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
   fun <- c(fun)
   if (length(fun) < length(attrib)) {
     fun <- rep(c(fun), length.out = length(attrib))
@@ -350,27 +355,25 @@ onewaygeo.Spatial <- function(x, attrib) {
 #' @description This function is intended as a replacement for overline() and is significantly faster
 #' especially on large datasets. However, it also uses more memory.
 #'
-#' @param sl A spatial object representing routes on a transport network
-#' @param attrib character, column names in sl to be summed
-#' @param ncores integer, how many cores to use in parallel processing, default = 1
-#' @param simplify logical, if TRUE group final segments back into lines, default = TRUE
-#' @param regionalise integer, during simplification regonalisation is used if the number of segments exceeds this value
-#' @param quiet Should the the function omit messages? `NULL` by default,
-#' which means the output will only be shown if `sl` has more than 1000 rows.
 #' @family rnet
 #' @author Malcolm Morgan
-#' @export
 #' @return An `sf` object representing a route network
+#' @export
 #' @rdname overline
-overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5, quiet = NULL) {
+overline2 <-
+  function(sl,
+           attrib,
+           ncores = 1,
+           simplify = TRUE,
+           regionalise = 1e5,
+           quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
+           fun = sum) {
+
   if (!"sfc_LINESTRING" %in% class(sf::st_geometry(sl))) {
     stop("Only LINESTRING is supported")
   }
   if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
     stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
-  }
-  if (is.null(quiet)) {
-    quiet <- ifelse(nrow(sl) < 1000, TRUE, FALSE)
   }
   sl <- sf::st_zm(sl)
   sl <- sl[, attrib]
@@ -421,10 +424,15 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
   sl <- cbind(c3, sl)
   rm(c3)
 
-  sl <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
-  sl <- dplyr::ungroup(dplyr::summarise_all(sl, .funs = sum))
-  coords <- as.matrix(sl[, 1:4])
-  sl <- sl[, attrib]
+  # browser()
+  # if(requireNamespace("data.table", quietly = TRUE)) {
+  #   sl = data.table::data.table(sl)
+  # }
+  slg <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
+  sls <- dplyr::ungroup(dplyr::summarise_all(slg, .funs = fun))
+  attrib <- names(sls)[5:ncol(sls)]
+  coords <- as.matrix(sls[, 1:4])
+  sl <- sls[, -c(1:4)]
 
   # Make Geometry
   if (!quiet) {
@@ -481,7 +489,6 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
             y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
           })
         }
-
 
         parallel::stopCluster(cl)
         rm(cl)
@@ -543,6 +550,7 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
 #'
 #' @param sl An `sf` `LINESTRING` object with overlapping elements
 #' @inheritParams overline
+#' @inheritParams overline_spatial
 #' @export
 #' @examples
 #' routes_fast_sf$value <- 1
@@ -554,7 +562,7 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
 #' sl <- routes_fast_sf[4:7, ]
 #' rnet <- overline_intersection(sl = sl, attrib = c("value", "length"))
 #' plot(rnet, lwd = rnet$value)
-#' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
+#' rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"))
 #' plot(rnet_sf, lwd = rnet_sf$value)
 #'
 #' # An even larger example (not shown, takes time to run)
@@ -562,7 +570,7 @@ overline2 <- function(sl, attrib, ncores = 1, simplify = TRUE, regionalise = 1e5
 #' # rnet_sf <- overline(routes_fast_sf, attrib = c("value", "length"), buff_dist = 10)
 #' # plot(rnet$geometry, lwd = rnet$value * 2, col = "grey")
 #' # plot(rnet_sf$geometry,  lwd = rnet_sf$value, add = TRUE)
-overline_intersection <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
+overline_intersection <- function(sl, attrib, fun = sum) {
   sl <- sl[attrib]
   sli <- sf::st_intersection(sl)
 

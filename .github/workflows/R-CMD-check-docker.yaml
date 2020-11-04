@@ -14,7 +14,7 @@ jobs:
         run: |
           install.packages('remotes')
           install.packages('rcmdcheck')
-          remotes::install_deps(dependencies = TRUE, repos = "https://cran.rstudio.com", upgrade = TRUE)
+          remotes::install_deps(dependencies = TRUE, upgrade = TRUE)
         shell: Rscript {0}
 
       - name: Check

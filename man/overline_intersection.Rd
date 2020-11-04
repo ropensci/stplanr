@@ -4,22 +4,15 @@
 \alias{overline_intersection}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline_intersection(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0)
+overline_intersection(sl, attrib, fun = sum)
 }
 \arguments{
 \item{sl}{An \code{sf} \code{LINESTRING} object with overlapping elements}
 
-\item{attrib}{character, column names in sl to be summed}
+\item{attrib}{character, column names in sl to be aggregated}
 
-\item{fun}{The function(s) used to aggregate the grouped values (default:
-sum). If length of \code{fun} is smaller than \code{attrib} then the functions are
-repeated for subsequent attributes.}
-
-\item{na.zero}{Sets whether aggregated values with a value of zero are
-removed.}
-
-\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
-If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
+\item{fun}{Named list of functions to summaries the attributes by? \code{sum} is the default.
+\code{list(sum = sum, average = mean)} will summarise all \code{attrib}utes by sum and mean.}
 }
 \description{
 This function takes overlapping \code{LINESTRING}s stored in an
@@ -36,7 +29,7 @@ plot(rnet, lwd = rnet$value)
 sl <- routes_fast_sf[4:7, ]
 rnet <- overline_intersection(sl = sl, attrib = c("value", "length"))
 plot(rnet, lwd = rnet$value)
-rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"), buff_dist = 10)
+rnet_sf <- overline(routes_fast_sf[4:7, ], attrib = c("value", "length"))
 plot(rnet_sf, lwd = rnet_sf$value)
 
 # An even larger example (not shown, takes time to run)
