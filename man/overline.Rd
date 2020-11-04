@@ -5,7 +5,15 @@
 \alias{overline2}
 \title{Convert series of overlapping lines into a route network}
 \usage{
-overline(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0, ...)
+overline(
+  sl,
+  attrib,
+  ncores = 1,
+  simplify = TRUE,
+  regionalise = 1e+05,
+  quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
+  fun = sum
+)
 
 overline2(
   sl,
@@ -20,17 +28,7 @@ overline2(
 \arguments{
 \item{sl}{A spatial object representing routes on a transport network}
 
-\item{attrib}{character, column names in sl to be summed}
-
-\item{fun}{Which functions to summaries the attributes by?}
-
-\item{na.zero}{Sets whether aggregated values with a value of zero are
-removed.}
-
-\item{buff_dist}{A number specifying the distance in meters of the buffer to be used to crop lines before running the operation.
-If the distance is zero (the default) touching but non-overlapping lines may be aggregated.}
-
-\item{...}{Arguments passed to \code{overline2}}
+\item{attrib}{character, column names in sl to be aggregated}
 
 \item{ncores}{integer, how many cores to use in parallel processing, default = 1}
 
@@ -40,6 +38,9 @@ If the distance is zero (the default) touching but non-overlapping lines may be 
 
 \item{quiet}{Should the the function omit messages? \code{NULL} by default,
 which means the output will only be shown if \code{sl} has more than 1000 rows.}
+
+\item{fun}{Named list of functions to summaries the attributes by? \code{sum} is the default.
+\code{list(sum = sum, average = mean)} will summarise all \code{attrib}utes by sum and mean.}
 }
 \value{
 An \code{sf} object representing a route network
@@ -91,15 +92,15 @@ Multicore support is only enabled for the regionalised simplification stage
 as it does not help with other stages.
 }
 \examples{
-library(sf)
 sl <- routes_fast_sf[2:4, ]
-class(sl)
-class(sl$geometry)
-overline(sl = sl, attrib = "length")
-rnet_sf <- overline(sl = sl, attrib = "length", quiet = FALSE)
-nrow(rnet_sf)
-plot(rnet_sf, lwd = rnet_sf$length / mean(rnet_sf$length))
-rnet_sf_raw <- overline2(sl, attrib = "length", simplify = FALSE)
+sl$All <- flowlines$All[2:4]
+rnet <- overline(sl = sl, attrib = "All")
+nrow(sl)
+nrow(rnet)
+plot(rnet)
+rnet_mean <- overline(sl, c("All", "av_incline"), fun = list(mean = mean, sum = sum))
+plot(rnet_mean, lwd = rnet_mean$All_sum / mean(rnet_mean$All_sum))
+rnet_sf_raw <- overline(sl, attrib = "length", simplify = FALSE)
 nrow(rnet_sf_raw)
 summary(n_vertices(rnet_sf_raw))
 plot(rnet_sf_raw)
@@ -111,9 +112,6 @@ plot(rnet_sf_raw[10:25, ])
 # rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
 # plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
 # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
-sl <- routes_fast_sf[2:3, ]
-rnet <- overline2(sl, c("co2_saving", "length"), fun = list(sum = sum, mean = mean))
-plot(rnet)
 }
 \references{
 Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
