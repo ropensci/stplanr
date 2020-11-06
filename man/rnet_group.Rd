@@ -26,7 +26,7 @@ Assign segments in a route network to groups
 \examples{
 rnet <- stplanr::osm_net_example
 rnet$group <- rnet_group(rnet)
-sf:::plot(rnet["group"])
+sf:::plot.sf(rnet["group"])
 # mapview::mapview(rnet["group"])
 rnet$group_25m = rnet_group(rnet, d = 25)
 sf:::plot.sf(rnet["group_20m"])
