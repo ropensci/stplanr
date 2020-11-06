@@ -42,18 +42,26 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
+library(osrm)
+r_osrm <- route(
+  from = c(-0.11, 51.514),
+  to = c(-0.10, 51.506),
+  route_fun = osrmRoute,
+  returnclass = "sf"
+)
 r <- overline(routes_fast_sf[2:5, ], "length")
 l <- od2line(od_data_sample[2:5, 1:3], cents_sf)
 sln <- stplanr::SpatialLinesNetwork(r)
 # calculate shortest paths
 plot(sln)
 plot(l$geometry, add = TRUE)
-sp <- stplanr::route(
+r_local <- stplanr::route(
   l = l,
   route_fun = stplanr::route_local,
   sln = sln
 )
-plot(sp["all"], add = TRUE, lwd = 5)
+library(sf) # for plotting
+plot(r_local["all"], add = TRUE, lwd = 5)
 }
 \seealso{
 Other routes: 
