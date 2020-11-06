@@ -29,7 +29,7 @@
 #'   sln = sln
 #' )
 #' library(sf) # for plotting
-#' plot(sp["all"], add = TRUE, lwd = 5)
+#' plot(r_local["all"], add = TRUE, lwd = 5)
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = cyclestreets::journey,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {

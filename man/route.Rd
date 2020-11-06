@@ -61,7 +61,7 @@ r_local <- stplanr::route(
   sln = sln
 )
 library(sf) # for plotting
-plot(sp["all"], add = TRUE, lwd = 5)
+plot(r_local["all"], add = TRUE, lwd = 5)
 }
 \seealso{
 Other routes: 
