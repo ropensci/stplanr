@@ -93,7 +93,6 @@
 #' plot(st_geometry(line2points(rnet_cycleway_intersection_clean)), pch = 16, add = TRUE)
 #'
 #' par(def_par)
-
 rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) {
   rnet_nodes <- sf::st_geometry(line2points(rnet))
   rnet_internal_vertexes <- sf::st_geometry(line2vertices(rnet))
