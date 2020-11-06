@@ -60,6 +60,7 @@ r_local <- stplanr::route(
   route_fun = stplanr::route_local,
   sln = sln
 )
+library(sf) # for plotting
 plot(sp["all"], add = TRUE, lwd = 5)
 }
 \seealso{
