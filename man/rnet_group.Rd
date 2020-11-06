@@ -26,14 +26,15 @@ Assign segments in a route network to groups
 \examples{
 rnet <- stplanr::osm_net_example
 rnet$group <- rnet_group(rnet)
-sf:::plot.sf(rnet["group"])
+library(sf) # for plotting
+plot(rnet["group"])
 # mapview::mapview(rnet["group"])
 rnet$group_25m = rnet_group(rnet, d = 25)
-sf:::plot.sf(rnet["group_20m"])
+plot(rnet["group_20m"])
 rnet$group_walktrap = rnet_group(rnet, igraph::cluster_walktrap)
-sf:::plot.sf(rnet["group_walktrap"])
+plot(rnet["group_walktrap"])
 rnet$group_louvain = rnet_group(rnet, igraph::cluster_louvain)
-sf:::plot.sf(rnet["group_louvain"])
+plot(rnet["group_louvain"])
 rnet$group_fast_greedy = rnet_group(rnet, igraph::cluster_fast_greedy)
-sf:::plot.sf(rnet["group_fast_greedy"])
+plot(rnet["group_fast_greedy"])
 }
