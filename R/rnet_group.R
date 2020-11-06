@@ -12,16 +12,16 @@
 #' @examples
 #' rnet <- stplanr::osm_net_example
 #' rnet$group <- rnet_group(rnet)
-#' plot(rnet["group"])
+#' sf:::plot(rnet["group"])
 #' # mapview::mapview(rnet["group"])
 #' rnet$group_25m = rnet_group(rnet, d = 25)
-#' plot(rnet["group_20m"])
+#' sf:::plot.sf(rnet["group_20m"])
 #' rnet$group_walktrap = rnet_group(rnet, igraph::cluster_walktrap)
-#' plot(rnet["group_walktrap"])
+#' sf:::plot.sf(rnet["group_walktrap"])
 #' rnet$group_louvain = rnet_group(rnet, igraph::cluster_louvain)
-#' plot(rnet["group_louvain"])
+#' sf:::plot.sf(rnet["group_louvain"])
 #' rnet$group_fast_greedy = rnet_group(rnet, igraph::cluster_fast_greedy)
-#' plot(rnet["group_fast_greedy"])
+#' sf:::plot.sf(rnet["group_fast_greedy"])
 #' @export
 rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, char = TRUE) {
   if(!is.null(d)) {
