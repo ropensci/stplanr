@@ -9,6 +9,7 @@
 #' (`"1"` instead of the numeric value `1`)? `TRUE` by default
 #' @inheritParams rnet_breakup_vertices
 #'
+#' @family
 #' @examples
 #' rnet <- stplanr::osm_net_example
 #' rnet$group <- rnet_group(rnet)

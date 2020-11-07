@@ -37,3 +37,4 @@ plot(rnet["group_louvain"])
 rnet$group_fast_greedy = rnet_group(rnet, igraph::cluster_fast_greedy)
 plot(rnet["group_fast_greedy"])
 }
+\concept{}
