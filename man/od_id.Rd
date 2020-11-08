@@ -52,7 +52,8 @@ x <- data.frame(
   val = 1,
   stringsAsFactors = FALSE
 )
-bench::mark(check = FALSE, iterations = 10,
+bench::mark(
+  check = FALSE, iterations = 10,
   od_id_order(x),
   od_id_character(x$id1, x$id2),
   od_id_szudzik(x$id1, x$id2),

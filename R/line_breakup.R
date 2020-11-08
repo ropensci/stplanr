@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' library(sf)
-#' z = zones_sf$geometry
+#' z <- zones_sf$geometry
 #' l <- routes_fast_sf$geometry[2]
 #' l_split <- line_breakup(l, z)
 #' l
@@ -26,4 +26,3 @@ line_breakup <- function(l, z) {
   l_split_linestring <- sf::st_collection_extract(l_split, type = "LINESTRING")
   l_split_linestring
 }
-

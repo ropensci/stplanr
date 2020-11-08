@@ -49,8 +49,8 @@ identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be co
 for users and are difficult to plot.
 }
 \examples{
-(od_min = od_data_sample[c(1, 2, 9), 1:6])
-(od_oneway = od_oneway(od_min))
+(od_min <- od_data_sample[c(1, 2, 9), 1:6])
+(od_oneway <- od_oneway(od_min))
 # (od_oneway_old = onewayid(od_min, attrib = 3:6)) # old implementation
 nrow(od_oneway) < nrow(od_min) # result has fewer rows
 sum(od_min$all) == sum(od_oneway$all) # but the same total flow

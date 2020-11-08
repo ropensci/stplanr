@@ -26,7 +26,7 @@ This function performs operations on projected data.
 lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # fails on some systems (with early versions of PROJ)
-if(lib_versions[3] >= "6.3.1") {
+if (lib_versions[3] >= "6.3.1") {
   shp <- routes_fast_sf[2:4, ]
   geo_projected(shp, sf::st_buffer, dist = 100)
 }

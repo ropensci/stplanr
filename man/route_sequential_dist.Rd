@@ -15,9 +15,9 @@ route_sequential_dist(m, lonlat = TRUE)
 Calculate the sequential distances between sequential coordinate pairs
 }
 \examples{
-x = c(0, 2, 3, 4, 5, 9)
-y = c(0, 0, 0, 0, 0, 1)
-m = cbind(x, y)
+x <- c(0, 2, 3, 4, 5, 9)
+y <- c(0, 0, 0, 0, 0, 1)
+m <- cbind(x, y)
 route_sequential_dist(m)
 }
 \seealso{

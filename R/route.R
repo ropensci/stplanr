@@ -45,8 +45,8 @@ route.numeric <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.character <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = cyclestreets::journey,
-                          n_print = 10, list_output = FALSE, cl = NULL, ...) {
+                            route_fun = cyclestreets::journey,
+                            n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
   route(l, route_fun = route_fun, ...)
@@ -59,12 +59,12 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   # generate od coordinates
   ldf <- od_coords(from, to, l)
   # calculate line data frame
-  if(is.null(l)) {
+  if (is.null(l)) {
     l <- od_coords2line(ldf)
   }
-  if(list_output) {
+  if (list_output) {
     list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
-      if(is.null(cl)) {
+      if (is.null(cl)) {
         pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
       } else {
         pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
@@ -74,7 +74,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     }
   } else {
     list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
-      if(is.null(cl)) {
+      if (is.null(cl)) {
         pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
       } else {
         pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...), cl = cl)
@@ -86,17 +86,17 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
-  if(sum(list_elements_sf) < length(list_out)) {
+  if (sum(list_elements_sf) < length(list_out)) {
     failing_routes <- which(!list_elements_sf)
     message("These routes failed: ", paste0(failing_routes, collapse = ", "))
     message("The first of which was:")
     print(list_out[[failing_routes[1]]])
   }
-  if(list_output | ! any(list_elements_sf)) {
+  if (list_output | !any(list_elements_sf)) {
     message("Returning list")
     return(list_out)
   }
-  if(requireNamespace("data.table", quietly = TRUE)) {
+  if (requireNamespace("data.table", quietly = TRUE)) {
     out_dt <- data.table::rbindlist(list_out[list_elements_sf])
     return(sf::st_sf(out_dt[, !names(out_dt) %in% "geometry"], geometry = out_dt$geometry))
   } else {
@@ -105,8 +105,8 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                     route_fun = cyclestreets::journey,
-                     n_print = 10, list_output = FALSE, cl = NULL, ...) {
+                          route_fun = cyclestreets::journey,
+                          n_print = 10, list_output = FALSE, cl = NULL, ...) {
 
   # error msg in case routing fails
   error_fun <- function(e) {
@@ -117,7 +117,7 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   # generate od coordinates
   ldf <- dplyr::as_tibble(od_coords(from, to, l))
   # calculate line data frame
-  if(is.null(l)) {
+  if (is.null(l)) {
     l <- od2line(ldf)
   }
 
@@ -137,9 +137,12 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
 
   if (nrow(ldf) > 1) {
     for (i in 2:nrow(ldf)) {
-      rc[[i]] <- tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = error_fun)
+      rc[[i]] <- tryCatch(
+        {
+          FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+        },
+        error = error_fun
+      )
       perc_temp <- i %% round(nrow(ldf) / n_print)
       # print % of distances calculated
       if (!is.na(perc_temp) & perc_temp == 0) {
@@ -158,7 +161,6 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   }
 
   r
-
 }
 
 #' Route on local data using the dodgr package
@@ -181,97 +183,104 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
 #'   plot(r$geometry, add = TRUE, col = "red", lwd = 5)
 #' }
 route_dodgr <- function(from = NULL,
-           to = NULL,
-           l = NULL,
-           net = NULL
-           # ,
-           # return_net = FALSE
-  ) {
-    if (!requireNamespace("dodgr", quietly = TRUE)) {
-      stop("dodgr must be installed for this function to work.")
-    }
-    od_coordinate_matrix <- od_coords(from, to, l)
-    to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
-    fm_coords <- od_coordinate_matrix[, 1:2, drop = FALSE]
-    # Try to get route network if net not provided
-    if (is.null(net)) {
-      pts <- rbind(fm_coords, to_coords)
-      net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
-      message("Network not provided, fetching network using dodgr_streetnet")
-    }
+                        to = NULL,
+                        l = NULL,
+                        net = NULL
+                        # ,
+                        # return_net = FALSE
+) {
+  if (!requireNamespace("dodgr", quietly = TRUE)) {
+    stop("dodgr must be installed for this function to work.")
+  }
+  od_coordinate_matrix <- od_coords(from, to, l)
+  to_coords <- od_coordinate_matrix[, 3:4, drop = FALSE]
+  fm_coords <- od_coordinate_matrix[, 1:2, drop = FALSE]
+  # Try to get route network if net not provided
+  if (is.null(net)) {
+    pts <- rbind(fm_coords, to_coords)
+    net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.2)
+    message("Network not provided, fetching network using dodgr_streetnet")
+  }
 
-    ckh <- dodgr::dodgr_cache_off()
-    suppressMessages(
-      ways_dg <- dodgr::weight_streetnet(net)
-    )
+  ckh <- dodgr::dodgr_cache_off()
+  suppressMessages(
+    ways_dg <- dodgr::weight_streetnet(net)
+  )
 
-    verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
-    # suppressMessages ({
-    from_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, fm_coords,
-      connected = TRUE
-    )])
-    to_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, to_coords,
-      connected = TRUE
-    )])
-    # })
-    dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
-    paths <- lapply(dp, function(i) {
-      lapply(i, function(j) {
-        if (is.null(j)) {
-          return(NULL)
-        }
-        res <- verts[match(j, verts$id), c("x", "y")]
-        sf::st_linestring(as.matrix(res))
-      })
+  verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
+  # suppressMessages ({
+  from_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, fm_coords,
+    connected = TRUE
+  )])
+  to_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, to_coords,
+    connected = TRUE
+  )])
+  # })
+  dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
+  paths <- lapply(dp, function(i) {
+    lapply(i, function(j) {
+      if (is.null(j)) {
+        return(NULL)
+      }
+      res <- verts[match(j, verts$id), c("x", "y")]
+      sf::st_linestring(as.matrix(res))
     })
-    nms <- as.character(unlist(lapply(paths, function(i) names(i))))
-    from_to <- do.call(rbind, strsplit(nms, "-"))
-    from_xy <- fm_coords[match(from_to[, 1], unique(from_to[, 1])), , drop = FALSE]
-    to_xy <- fm_coords[match(from_to[, 2], unique(from_to[, 2])), , drop = FALSE]
+  })
+  nms <- as.character(unlist(lapply(paths, function(i) names(i))))
+  from_to <- do.call(rbind, strsplit(nms, "-"))
+  from_xy <- fm_coords[match(from_to[, 1], unique(from_to[, 1])), , drop = FALSE]
+  to_xy <- fm_coords[match(from_to[, 2], unique(from_to[, 2])), , drop = FALSE]
 
-    # remove any NULL paths:
-    paths <- unlist(paths, recursive = FALSE)
-    index <- which(vapply(paths, is.null, logical(1)))
-    if (any(index)) {
-      message("unable to trace ", length(index), " path(s)")
-      message("Failed path index numbers are:")
-      message(list(as.integer(index)))
-    }
-    index <- which(!seq(paths) %in% index)
-    paths <- sf::st_sfc(paths[index], crs = 4326)
-    sf::st_sf(
-      from = from_to[index, 1],
-      from_x = from_xy [index, 1],
-      from_y = from_xy [index, 2],
-      to = from_to[index, 2],
-      to_x = to_xy [index, 1],
-      to_y = to_xy [index, 2],
-      geometry = paths
-    )
+  # remove any NULL paths:
+  paths <- unlist(paths, recursive = FALSE)
+  index <- which(vapply(paths, is.null, logical(1)))
+  if (any(index)) {
+    message("unable to trace ", length(index), " path(s)")
+    message("Failed path index numbers are:")
+    message(list(as.integer(index)))
+  }
+  index <- which(!seq(paths) %in% index)
+  paths <- sf::st_sfc(paths[index], crs = 4326)
+  sf::st_sf(
+    from = from_to[index, 1],
+    from_x = from_xy [index, 1],
+    from_y = from_xy [index, 2],
+    to = from_to[index, 2],
+    to_x = to_xy [index, 1],
+    to_y = to_xy [index, 2],
+    geometry = paths
+  )
 }
 
-route_i <- function(FUN, ldf, i, l, ...){
+route_i <- function(FUN, ldf, i, l, ...) {
   error_fun <- function(e) {
     e
   }
-  tryCatch({
-    single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
-    sf::st_sf(cbind(
-      sf::st_drop_geometry(l[rep(i, nrow(single_route)), ]),
-      route_number = i,
-      sf::st_drop_geometry(single_route)
-    ),
-    geometry = single_route$geometry)
-  }, error = error_fun)
+  tryCatch(
+    {
+      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
+      sf::st_sf(cbind(
+        sf::st_drop_geometry(l[rep(i, nrow(single_route)), ]),
+        route_number = i,
+        sf::st_drop_geometry(single_route)
+      ),
+      geometry = single_route$geometry
+      )
+    },
+    error = error_fun
+  )
 }
 
-route_l <- function(FUN, ldf, i, l, ...){
+route_l <- function(FUN, ldf, i, l, ...) {
   error_fun <- function(e) {
     e
   }
-  tryCatch({
-    single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
-  }, error = error_fun)
+  tryCatch(
+    {
+      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
+    },
+    error = error_fun
+  )
 }
 
 most_common_class_of_list <- function(l, class_to_find = "sf") {
@@ -281,4 +290,3 @@ most_common_class_of_list <- function(l, class_to_find = "sf") {
   is_class <- class_out == class_to_find
   is_class
 }
-

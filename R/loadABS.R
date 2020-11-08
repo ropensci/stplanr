@@ -25,10 +25,10 @@
 #' @examples
 #' data_dir <- system.file("extdata", package = "stplanr")
 #' t1 <- read_table_builder(file.path(data_dir, "SA1Population.csv"))
-#' if(requireNamespace("openxlsx")) {
+#' if (requireNamespace("openxlsx")) {
 #'   t2 <- read_table_builder(file.path(data_dir, "SA1Population.xlsx"),
 #'     filetype = "xlsx", sheet = 1, removeTotal = TRUE
-#' )
+#'   )
 #' }
 #' f <- file.path(data_dir, "SA1Population.csv")
 #' sa1pop <- read.csv(f, stringsAsFactors = TRUE, header = FALSE)
@@ -41,7 +41,7 @@ read_table_builder <- function(dataset, filetype = "csv", sheet = 1, removeTotal
     tbfile <- dataset
   } else if (is.character(dataset)) {
     if (filetype == "xlsx") {
-      if(requireNamespace("openxlsx", quietly = TRUE)) {
+      if (requireNamespace("openxlsx", quietly = TRUE)) {
         tbfile <- openxlsx::readWorkbook(dataset, sheet = sheet, colNames = FALSE)
       } else {
         stop("Please install openxlsx for this to work")

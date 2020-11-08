@@ -48,7 +48,7 @@ solve this type of problem.
 }
 \examples{
 library(sf)
-def_par = par(no.readonly = TRUE)
+def_par <- par(no.readonly = TRUE)
 par(mar = rep(0, 4))
 
 # Check the geometry of the roundabout example. The dots represent the
@@ -92,8 +92,10 @@ plot(st_geometry(rnet_overpass_clean), lwd = 2, col = rainbow(nrow(rnet_overpass
 # Check the geometry of the cycleway_intersection example. The black dots
 # represent the boundary points and we can see that the two roads are not
 # connected according to SpatialLinesNetwork() function.
-plot(rnet_cycleway_intersection$geometry, lwd = 2,
-     col = rainbow(nrow(rnet_cycleway_intersection)))
+plot(rnet_cycleway_intersection$geometry,
+  lwd = 2,
+  col = rainbow(nrow(rnet_cycleway_intersection))
+)
 plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
 # Check interactively
 # mapview::mapview(rnet_overpass)
@@ -101,7 +103,8 @@ plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
 # Clean the rnet object and plot the result.
 rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 plot(rnet_cycleway_intersection_clean$geometry,
-     lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
+  lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean))
+)
 plot(st_geometry(line2points(rnet_cycleway_intersection_clean)), pch = 16, add = TRUE)
 
 par(def_par)

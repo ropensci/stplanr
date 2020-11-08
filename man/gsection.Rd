@@ -22,7 +22,7 @@ of aggregated lines.
 lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # fails on some systems (with early versions of PROJ)
-if(lib_versions[3] >= "6.3.1") {
+if (lib_versions[3] >= "6.3.1") {
   sl <- routes_fast_sf[2:4, ]
   rsec <- gsection(sl)
   length(rsec) # sections

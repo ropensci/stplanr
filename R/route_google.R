@@ -10,9 +10,9 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' from = "university of leeds"
-#' to = "pedallers arms leeds"
-#' r = route(from, to, route_fun = cyclestreets::journey)
+#' from <- "university of leeds"
+#' to <- "pedallers arms leeds"
+#' r <- route(from, to, route_fun = cyclestreets::journey)
 #' plot(r)
 #' # r_google <- route(from, to, route_fun = mapsapi::mp_directions) # fails
 #' r_google1 <- route_google(from, to)

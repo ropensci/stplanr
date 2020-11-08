@@ -26,14 +26,14 @@ odf <- od_coords(l = flowlines_sf)
 odlines <- od_coords2line(odf)
 odlines <- od_coords2line(odf, crs = 4326)
 plot(odlines)
-x_coords = 1:3
-n = 50
-d = data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
-names(d) = c("fx", "fy", "tx", "ty")
-l = od_coords2line(d)
+x_coords <- 1:3
+n <- 50
+d <- data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
+names(d) <- c("fx", "fy", "tx", "ty")
+l <- od_coords2line(d)
 plot(l)
 nrow(l)
-l_with_duplicates = od_coords2line(d, remove_duplicates = FALSE)
+l_with_duplicates <- od_coords2line(d, remove_duplicates = FALSE)
 plot(l_with_duplicates)
 nrow(l_with_duplicates)
 }

@@ -95,7 +95,7 @@ plot(cway_catch, add = TRUE, col = "green")
 plot(testcycleway, col = "red", add = TRUE)
 sa1income <- sf::read_sf("smallsa1.shp")
 testcycleway <- sf::read_sf("testcycleway.shp")
-f = list.files(".", "testcycleway|smallsa1")
+f <- list.files(".", "testcycleway|smallsa1")
 file.remove(f)
 cway_catch <- calc_catchment(
   polygonlayer = sa1income,

@@ -74,7 +74,7 @@ geo_select_aeq.sfc <- function(shp) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   shp <- routes_fast_sf[2:4, ]
 #'   geo_projected(shp, sf::st_buffer, dist = 100)
 #' }
@@ -161,7 +161,7 @@ gprojected <- geo_projected.Spatial
 #' @examples
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
 #'   plot(buff_sf$geometry, add = TRUE)
 #'   geo_buffer(routes_fast_sf$geometry, dist = 50)
@@ -195,7 +195,7 @@ geo_buffer.Spatial <- function(shp, ...) {
 #' @examples
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   geo_length(routes_fast)
 #'   geo_length(routes_fast_sf)
 #' }

@@ -50,7 +50,8 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #'   val = 1,
 #'   stringsAsFactors = FALSE
 #' )
-#' bench::mark(check = FALSE, iterations = 10,
+#' bench::mark(
+#'   check = FALSE, iterations = 10,
 #'   od_id_order(x),
 #'   od_id_character(x$id1, x$id2),
 #'   od_id_szudzik(x$id1, x$id2),
@@ -151,8 +152,8 @@ not_duplicated <- function(x) {
 #' identical geometries (see [flowlines()]) which can be confusing
 #' for users and are difficult to plot.
 #' @examples
-#' (od_min = od_data_sample[c(1, 2, 9), 1:6])
-#' (od_oneway = od_oneway(od_min))
+#' (od_min <- od_data_sample[c(1, 2, 9), 1:6])
+#' (od_oneway <- od_oneway(od_min))
 #' # (od_oneway_old = onewayid(od_min, attrib = 3:6)) # old implementation
 #' nrow(od_oneway) < nrow(od_min) # result has fewer rows
 #' sum(od_min$all) == sum(od_oneway$all) # but the same total flow
@@ -175,11 +176,11 @@ not_duplicated <- function(x) {
 #' #   od_oneway(flowlines_sf)
 #' # )
 od_oneway <- function(x,
-           attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
-           id1 = names(x)[1],
-           id2 = names(x)[2],
-           stplanr.key = NULL) {
-    is_sf <- is(x, "sf")
+                      attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
+                      id1 = names(x)[1],
+                      id2 = names(x)[2],
+                      stplanr.key = NULL) {
+  is_sf <- is(x, "sf")
 
   if (is.null(stplanr.key)) {
     id1_temp <- x[[id1]]

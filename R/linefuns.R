@@ -75,7 +75,7 @@ is_linepoint <- function(l) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
 #'   bearings_sf_1_9 # lines of 0 length have NaN bearing
 #'   bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
@@ -101,7 +101,7 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
   p <- sf::st_geometry(line2points(l))
   i_s <- 1:length(sf::st_geometry(l)) * 2 - 1
   bearing_radians <- sapply(i_s, function(i) lwgeom::st_geod_azimuth(p[i:(i + 1)]))
-  bearing = bearing_radians * 180 / (pi)
+  bearing <- bearing_radians * 180 / (pi)
   if (bidirectional) {
     bearing <- make_bidirectional(bearing)
   }
@@ -128,9 +128,9 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   # Find all routes going North-South
-#'   lines_sf = od2line(od_data_sample, zones = zones_sf)
+#'   lines_sf <- od2line(od_data_sample, zones = zones_sf)
 #'   angle_diff(lines_sf[2, ], angle = 0)
 #'   angle_diff(lines_sf[2:3, ], angle = 0)
 #'   a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)

@@ -29,7 +29,7 @@ package.
 lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # dont test due to issues with sp classes on some set-ups
-if(lib_versions[3] >= "6.3.1") {
+if (lib_versions[3] >= "6.3.1") {
   # l <- routes_fast[2:4, ] # to run with sp classes
   l <- routes_fast_sf[2:4, ]
   l_top_tail <- geo_toptail(l, 300)

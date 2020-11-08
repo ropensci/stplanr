@@ -54,7 +54,6 @@ od2odf <- function(flow, zones) {
 #' od_coords(flowlines[1:3, ])
 #' od_coords(flowlines_sf[1:3, ])
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
-
   if (is(object = from, class2 = "sf")) {
     is_sf_line <- all(sf::st_geometry_type(from) == "LINESTRING")
   } else {
@@ -91,7 +90,6 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
   }
 
   as.matrix(coord_matrix)
-
 }
 
 #' Convert origin-destination coordinates into desire lines
@@ -111,24 +109,24 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 #' odlines <- od_coords2line(odf)
 #' odlines <- od_coords2line(odf, crs = 4326)
 #' plot(odlines)
-#' x_coords = 1:3
-#' n = 50
-#' d = data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
-#' names(d) = c("fx", "fy", "tx", "ty")
-#' l = od_coords2line(d)
+#' x_coords <- 1:3
+#' n <- 50
+#' d <- data.frame(lapply(1:4, function(x) sample(x_coords, n, replace = TRUE)))
+#' names(d) <- c("fx", "fy", "tx", "ty")
+#' l <- od_coords2line(d)
 #' plot(l)
 #' nrow(l)
-#' l_with_duplicates = od_coords2line(d, remove_duplicates = FALSE)
+#' l_with_duplicates <- od_coords2line(d, remove_duplicates = FALSE)
 #' plot(l_with_duplicates)
 #' nrow(l_with_duplicates)
 od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
   # check for illegal NAs in coordinates
   odm_check(odc)
   odc_unique <- odc[!duplicated(odc[, 1:4, drop = FALSE]), , drop = FALSE]
-  if(nrow(odc_unique) < nrow(odc) && remove_duplicates) {
+  if (nrow(odc_unique) < nrow(odc) && remove_duplicates) {
     message("Duplicate OD pairs identified, removing ", nrow(odc) - nrow(odc_unique), " rows")
     odc <- odc_unique
-    odc_unique$n = dplyr::group_size(dplyr::group_by_all(as.data.frame(odc[, 1:4])))
+    odc_unique$n <- dplyr::group_size(dplyr::group_by_all(as.data.frame(odc[, 1:4])))
   }
   odm <- as.matrix(odc)
   linestring_list <- lapply(seq(nrow(odm)), function(i) {
@@ -227,20 +225,18 @@ od2line.sf <- function(flow, zones, destinations = NULL,
     dest_matches <- match(flow[[dest_code]], zones[[zone_code]])
     od_matches_check(dest_matches, flow[[dest_code]], type = "destination")
     dest_points <- coords_o[dest_matches, ]
-
   } else {
-    if(is.na(zone_code_d)) {
+    if (is.na(zone_code_d)) {
       zone_code_d <- names(destinations)[1]
     }
     coords_d <- sf::st_coordinates(destinations)[, 1:2]
     dest_points <- coords_d[match(flow[[dest_code]], destinations[[zone_code_d]]), ]
   }
 
-  odm = cbind(origin_points, dest_points)
+  odm <- cbind(origin_points, dest_points)
 
   odsfc <- od_coords2line(odm, crs = sf::st_crs(zones), remove_duplicates = FALSE)
   sf::st_sf(flow, geometry = odsfc$geometry)
-
 }
 #' @export
 od2line.Spatial <- function(flow, zones, destinations = NULL,
@@ -556,9 +552,12 @@ line2route <-
 
     rc <- as.list(rep(NA, length(l)))
     for (i in 1:n_ldf) {
-      rc[[i]] <- tryCatch({
-        FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-      }, error = error_fun)
+      rc[[i]] <- tryCatch(
+        {
+          FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
+        },
+        error = error_fun
+      )
       perc_temp <- i %% round(n_ldf / n_print)
       # print % of distances calculated
       if (!is.na(perc_temp) & perc_temp == 0) {
@@ -569,7 +568,7 @@ line2route <-
 
     class_out <- sapply(rc, function(x) class(x)[1])
     most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
-    if(most_common_class == "sf") {
+    if (most_common_class == "sf") {
       message("Output is sf")
       rc_is_sf <- class_out == "sf"
       rc_sf <- rc[rc_is_sf]
@@ -652,7 +651,7 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 
         routes@data[idx_to_replace, ] <- routes_retry@data[idx_retry, ]
         routes@lines[[idx_to_replace]] <-
-          Lines(routes_retry@lines[[idx_retry]]@Lines, row.names(routes_retry[idx_retry,]))
+          Lines(routes_retry@lines[[idx_retry]]@Lines, row.names(routes_retry[idx_retry, ]))
       }
     }
   }
@@ -841,14 +840,14 @@ points2line.matrix <- function(p) {
 #' @examples
 #' od_aggregate_from(flow)
 od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., col = 1) {
-  if(is.character(attrib)) {
+  if (is.character(attrib)) {
     attrib_lgl <- grepl(pattern = attrib, x = names(flow))
-    if(sum(attrib_lgl) == 0){
+    if (sum(attrib_lgl) == 0) {
       stop("No columns match the attribute ", attrib)
     }
-    attrib = which(attrib_lgl)
+    attrib <- which(attrib_lgl)
   }
-  if(!is.null(attrib)) {
+  if (!is.null(attrib)) {
     flow <- flow[attrib]
   }
   flow_grouped <- dplyr::group_by_at(flow, col)
@@ -869,14 +868,14 @@ od_aggregate_from <- function(flow, attrib = NULL, FUN = sum, ..., col = 1) {
 #' @examples
 #' od_aggregate_to(flow)
 od_aggregate_to <- function(flow, attrib = NULL, FUN = sum, ..., col = 2) {
-  if(is.character(attrib)) {
+  if (is.character(attrib)) {
     attrib_lgl <- grepl(pattern = attrib, x = names(flow))
-    if(sum(attrib_lgl) == 0){
+    if (sum(attrib_lgl) == 0) {
       stop("No columns match the attribute ", attrib)
     }
-    attrib = which(attrib_lgl)
+    attrib <- which(attrib_lgl)
   }
-  if(!is.null(attrib)) {
+  if (!is.null(attrib)) {
     flow <- flow[attrib]
   }
   flow_grouped <- dplyr::group_by_at(flow, col)
@@ -942,11 +941,11 @@ odmatrix_to_od <- function(odmatrix) {
 
 # Check for NAs in matrix
 odm_check <- function(odc) {
-  if(any(is.na(odc[, 1:2]))) {
+  if (any(is.na(odc[, 1:2]))) {
     na_row <- which(is.na(odc[, 1]) | is.na(odc[, 1]))
     stop("NAs detected in the origin coordinates on row number ", na_row, call. = FALSE)
   }
-  if(any(is.na(odc[, 3:4]))) {
+  if (any(is.na(odc[, 3:4]))) {
     na_row <- which(is.na(odc[, 3]) | is.na(odc[, 4]))
     stop("NAs detected in the origin coordinates on row number ", na_row, call. = FALSE)
   }
@@ -954,14 +953,16 @@ odm_check <- function(odc) {
 
 # Check for NAs in od matching
 od_matches_check <- function(origin_matches, origin_codes, type = "origin") {
-  if(anyNA(origin_matches)) {
+  if (anyNA(origin_matches)) {
     n_failing <- sum(is.na(origin_matches))
     first_offending_row <- which(is.na(origin_matches))[1]
-    stop(call. = FALSE,
-         n_failing, " non matching IDs in the ", type, ". ",
-         "ID on row ",
-         first_offending_row,
-         " does not match any zone.\n",
-         "The first offending id was ", origin_codes[first_offending_row])
+    stop(
+      call. = FALSE,
+      n_failing, " non matching IDs in the ", type, ". ",
+      "ID on row ",
+      first_offending_row,
+      " does not match any zone.\n",
+      "The first offending id was ", origin_codes[first_offending_row]
+    )
   }
 }

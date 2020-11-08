@@ -19,7 +19,7 @@ It is useful for calculating route characteristics such as mean
 distances of segments and changes in gradient.
 }
 \examples{
-y = od_data_routes$elevations[od_data_routes$route_number == 2]
+y <- od_data_routes$elevations[od_data_routes$route_number == 2]
 y
 route_rolling_average(y)
 route_rolling_average(y, n = 1)

@@ -36,4 +36,3 @@
 #' @useDynLib stplanr
 NULL
 utils::globalVariables(c(".", "n", ".inc", "object", "x", "y", "stplanr_start", "stplanr_end", "stplanr_linkid"))
-

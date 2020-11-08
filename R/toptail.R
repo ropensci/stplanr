@@ -19,7 +19,7 @@
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # dont test due to issues with sp classes on some set-ups
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   # l <- routes_fast[2:4, ] # to run with sp classes
 #'   l <- routes_fast_sf[2:4, ]
 #'   l_top_tail <- geo_toptail(l, 300)
@@ -80,7 +80,7 @@ geo_toptail.sf <- function(l, toptail_dist, ...) {
           lwgeom::st_endpoint(li)
         )
         sel <- geo_buffer(shp = sel_points, dist = toptail_dist, nQuadSegs = 5)
-        if(any(sf::st_contains_properly(sel, li, sparse = FALSE))) {
+        if (any(sf::st_contains_properly(sel, li, sparse = FALSE))) {
           message(
             "Line ", i, " is completely removed by the clip and",
             " is omitted from the results"
@@ -205,6 +205,6 @@ toptail_buff <- function(l, buff, ...) {
   }
   out <- sf::st_sfc(out)
   l_between_zones <- l[i_indexed, ]
-  l_between_zones$geometry = out
+  l_between_zones$geometry <- out
   l_between_zones
 }

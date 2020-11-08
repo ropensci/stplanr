@@ -40,9 +40,9 @@ diff_above_mean <- r1$elevations_diff_1 + mean(y)
 par(mfrow = c(2, 1))
 plot(c(0, cumsum(r1$distances)), c(y, y[length(y)]), ylim = c(80, 130))
 lines(c(0, cumsum(r1$distances)), c(y, y[length(y)]))
-points(d, diff_above_mean )
+points(d, diff_above_mean)
 abline(h = mean(y))
-rg = r1$rolling_gradient
+rg <- r1$rolling_gradient
 rg[is.na(rg)] <- 0
 plot(c(0, d), c(0, rg), ylim = c(0, 0.2))
 points(c(0, d), c(0, r1$rolling_gradient3), col = "blue")

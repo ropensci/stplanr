@@ -66,7 +66,7 @@
 #' plot(testcycleway, col = "red", add = TRUE)
 #' sa1income <- sf::read_sf("smallsa1.shp")
 #' testcycleway <- sf::read_sf("testcycleway.shp")
-#' f = list.files(".", "testcycleway|smallsa1")
+#' f <- list.files(".", "testcycleway|smallsa1")
 #' file.remove(f)
 #' cway_catch <- calc_catchment(
 #'   polygonlayer = sa1income,
@@ -128,10 +128,12 @@ calc_catchment.Spatial <- function(
     rgeos::gIntersection(polygonlayer, targetbuffer, byid = TRUE)
   targetintersect <- sp::SpatialPolygonsDataFrame(targetintersect,
     data = data.frame(
-      calc_catchment_charid = sapply(targetintersect@polygons, function(x)
-        x@ID),
-      row.names = sapply(targetintersect@polygons, function(x)
-        x@ID)
+      calc_catchment_charid = sapply(targetintersect@polygons, function(x) {
+        x@ID
+      }),
+      row.names = sapply(targetintersect@polygons, function(x) {
+        x@ID
+      })
     )
   )
 
@@ -168,7 +170,7 @@ calc_catchment.Spatial <- function(
     targetintersectd <- rgeos::gUnaryUnion(targetintersect, id = targetintersect$calc_catchment_targetid)
     targetcols <- colnames(targetlayer@data)
     targetcols <- targetcols[which(targetcols != "calc_catchment_charid")]
-    targetintersect@data[targetcols] <- lapply(targetcols, function(x){
+    targetintersect@data[targetcols] <- lapply(targetcols, function(x) {
       as.character(targetintersect@data[[x]])
     })
     targetintersectd_data <- as.data.frame(

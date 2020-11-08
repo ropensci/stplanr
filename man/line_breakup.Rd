@@ -21,7 +21,7 @@ This function breaks up a LINESTRING geometries into smaller pieces.
 }
 \examples{
 library(sf)
-z = zones_sf$geometry
+z <- zones_sf$geometry
 l <- routes_fast_sf$geometry[2]
 l_split <- line_breakup(l, z)
 l

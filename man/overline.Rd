@@ -104,7 +104,7 @@ rnet_sf_raw <- overline(sl, attrib = "length", simplify = FALSE)
 nrow(rnet_sf_raw)
 summary(n_vertices(rnet_sf_raw))
 plot(rnet_sf_raw)
-rnet_sf_raw$n = 1:nrow(rnet_sf_raw)
+rnet_sf_raw$n <- 1:nrow(rnet_sf_raw)
 plot(rnet_sf_raw[10:25, ])
 # legacy implementation based on sp data
 # sl <- routes_fast[2:4, ]

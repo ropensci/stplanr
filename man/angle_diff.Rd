@@ -31,9 +31,9 @@ North is definied as 0, East as 90 and West as -90.
 lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # fails on some systems (with early versions of PROJ)
-if(lib_versions[3] >= "6.3.1") {
+if (lib_versions[3] >= "6.3.1") {
   # Find all routes going North-South
-  lines_sf = od2line(od_data_sample, zones = zones_sf)
+  lines_sf <- od2line(od_data_sample, zones = zones_sf)
   angle_diff(lines_sf[2, ], angle = 0)
   angle_diff(lines_sf[2:3, ], angle = 0)
   a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)

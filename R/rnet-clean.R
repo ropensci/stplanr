@@ -36,7 +36,7 @@
 #'
 #' @examples
 #' library(sf)
-#' def_par = par(no.readonly = TRUE)
+#' def_par <- par(no.readonly = TRUE)
 #' par(mar = rep(0, 4))
 #'
 #' # Check the geometry of the roundabout example. The dots represent the
@@ -80,8 +80,10 @@
 #' # Check the geometry of the cycleway_intersection example. The black dots
 #' # represent the boundary points and we can see that the two roads are not
 #' # connected according to SpatialLinesNetwork() function.
-#' plot(rnet_cycleway_intersection$geometry, lwd = 2,
-#'      col = rainbow(nrow(rnet_cycleway_intersection)))
+#' plot(rnet_cycleway_intersection$geometry,
+#'   lwd = 2,
+#'   col = rainbow(nrow(rnet_cycleway_intersection))
+#' )
 #' plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
 #' # Check interactively
 #' # mapview::mapview(rnet_overpass)
@@ -89,7 +91,8 @@
 #' # Clean the rnet object and plot the result.
 #' rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
 #' plot(rnet_cycleway_intersection_clean$geometry,
-#'      lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean)))
+#'   lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean))
+#' )
 #' plot(st_geometry(line2points(rnet_cycleway_intersection_clean)), pch = 16, add = TRUE)
 #'
 #' par(def_par)
@@ -111,7 +114,6 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
   index_intersection_points <- duplicated(rbind_nodes_internal_vertexes)
 
   if (any(index_intersection_points)) {
-
     intersection_points <- sf::st_as_sf(
       data.frame(rbind_nodes_internal_vertexes[index_intersection_points, , drop = FALSE]),
       coords = c("x_coords", "y_coords"),
@@ -136,4 +138,3 @@ rnet_breakup_vertices <- function(rnet, breakup_internal_vertex_matches = TRUE) 
 
   rnet_clean
 }
-

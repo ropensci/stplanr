@@ -15,8 +15,8 @@ route_slope_vector(x, e)
 Calculate the gradient of line segments from distance and elevation vectors
 }
 \examples{
-x = c(0, 2, 3, 4, 5, 9)
-e = c(1, 2, 2, 4, 3, 1) / 10
+x <- c(0, 2, 3, 4, 5, 9)
+e <- c(1, 2, 2, 4, 3, 1) / 10
 route_slope_vector(x, e)
 }
 \seealso{

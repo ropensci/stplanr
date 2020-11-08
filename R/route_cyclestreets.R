@@ -195,11 +195,13 @@ route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = 
 api_pat <- function(api_name, force = FALSE) {
   api_name_caps <- toupper(api_name)
   env <- Sys.getenv(api_name_caps)
-  if (!identical(env, "") && !force) return(env)
+  if (!identical(env, "") && !force) {
+    return(env)
+  }
 
   if (!interactive()) {
     stop(paste0("Set the environment variable ", api_name_caps, " e.g. with .Renviron or Sys.setenv()"),
-         call. = FALSE
+      call. = FALSE
     )
   }
 

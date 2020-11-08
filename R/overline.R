@@ -46,7 +46,7 @@ islines.sf <- function(g1, g2) {
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
 #' # fails on some systems (with early versions of PROJ)
-#' if(lib_versions[3] >= "6.3.1") {
+#' if (lib_versions[3] >= "6.3.1") {
 #'   sl <- routes_fast_sf[2:4, ]
 #'   rsec <- gsection(sl)
 #'   length(rsec) # sections
@@ -184,7 +184,7 @@ lineLabels <- function(sl, attrib) {
 #' nrow(rnet_sf_raw)
 #' summary(n_vertices(rnet_sf_raw))
 #' plot(rnet_sf_raw)
-#' rnet_sf_raw$n = 1:nrow(rnet_sf_raw)
+#' rnet_sf_raw$n <- 1:nrow(rnet_sf_raw)
 #' plot(rnet_sf_raw[10:25, ])
 #' # legacy implementation based on sp data
 #' # sl <- routes_fast[2:4, ]
@@ -219,7 +219,6 @@ overline2 <-
            regionalise = 1e5,
            quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
            fun = sum) {
-
     if (!"sfc_LINESTRING" %in% class(sf::st_geometry(sl))) {
       stop("Only LINESTRING is supported")
     }
@@ -332,12 +331,12 @@ overline2 <-
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
               y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
+              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
             }, cl = cl)
           } else {
             lapply(sl, function(y) {
               y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
+              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
             })
           }
 
@@ -347,25 +346,25 @@ overline2 <-
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
               y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
+              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
             })
           } else {
             lapply(sl, function(y) {
               y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = 'drop')
+              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
             })
           }
         }
         rm(sl)
         overlined_simple <- data.table::rbindlist(overlined_simple)
         overlined_simple <- sf::st_sf(overlined_simple)
-        overlined_simple <- overlined_simple[seq_len(nrow(overlined_simple)),]
+        overlined_simple <- overlined_simple[seq_len(nrow(overlined_simple)), ]
       } else {
         if (!quiet) {
           message(paste0(Sys.time(), " aggregating flows"))
         }
         overlined_simple <- dplyr::group_by_at(sl, attrib)
-        overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE, .groups = 'drop')
+        overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE, .groups = "drop")
         rm(sl)
       }
 
@@ -381,10 +380,10 @@ overline2 <-
       overlined_simple_l <- overlined_simple[geom_types == "LINESTRING", ]
       overlined_simple_ml <- overlined_simple[geom_types == "MULTILINESTRING", ]
       suppressWarnings(overlined_simple_ml <-
-                         sf::st_cast(
-                           sf::st_cast(overlined_simple_ml, "MULTILINESTRING"),
-                           "LINESTRING"
-                         ))
+        sf::st_cast(
+          sf::st_cast(overlined_simple_ml, "MULTILINESTRING"),
+          "LINESTRING"
+        ))
 
       return(rbind(overlined_simple_l, overlined_simple_ml))
     } else {

@@ -107,19 +107,19 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
   # line lengths:
   # If uselonglat == FALSE then checks if sl uses longlat coordinate
   # system/projection. If so, passes longlat=TRUE.
-  sl$length <- sapply(sl@lines, function(x)
+  sl$length <- sapply(sl@lines, function(x) {
     sp::LineLength(x@Lines[[1]], longlat = ifelse(
       uselonglat == TRUE, TRUE, ifelse(length(grep(
         "proj=longlat", sp::proj4string(sl)
       )) > 0, TRUE, FALSE)
-    )))
+    ))
+  })
   igraph::E(g)$weight <- sl$length
   new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
 }
 #' @export
 SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
-
-    nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
+  nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
     dplyr::group_by(.data$L1) %>%
     dplyr::mutate(nrow = dplyr::n(), rownum = 1:dplyr::n()) %>%
     dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
@@ -151,7 +151,7 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
   igraph::E(g)$weight <- sl$length
   # check it is a single graph
   is_connected <- igraph::is_connected(g)
-  if(!is_connected) {
+  if (!is_connected) {
     warning("Graph composed of multiple subgraphs, consider cleaning it with sln_clean_graph().")
   }
   # largest_group = names(which.max(graph_membership_table))
@@ -169,12 +169,12 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' @export
 sln_clean_graph <- function(sln) {
   g <- sln@g
-  graph_membership = igraph::components(g)$membership
-  graph_membership_table = table(graph_membership)
-  if(length(graph_membership_table) > 1) {
+  graph_membership <- igraph::components(g)$membership
+  graph_membership_table <- table(graph_membership)
+  if (length(graph_membership_table) > 1) {
     message("Input sln composed of ", length(graph_membership_table), " graphs. Selecting the largest.")
-    }
-  largest_group = names(which.max(graph_membership_table))
+  }
+  largest_group <- names(which.max(graph_membership_table))
   connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
   connected_edges <- igraph::E(g)[.inc(connected_vertexes)]
   temp_sl <- sln@sl[as.numeric(connected_edges), ]
@@ -736,9 +736,9 @@ sln2points <- function(sln) {
 #' sln_sf <- SpatialLinesNetwork(route_network_sf)
 #' plot(sln_sf)
 #' nodes_df <- data.frame(
-#'     start = rep(c(1, 2, 3, 4, 5), each = 4),
-#'     end = rep(c(50, 51, 52, 33), times = 5)
-#'   )
+#'   start = rep(c(1, 2, 3, 4, 5), each = 4),
+#'   end = rep(c(50, 51, 52, 33), times = 5)
+#' )
 #' weightfield(sln_sf) # field used to determine shortest path
 #' library(sf)
 #' shortpath_sf <- sum_network_links(sln_sf, nodes_df)
