@@ -18,28 +18,28 @@
 #' rnet$group <- rnet_group(rnet)
 #' plot(rnet["group"])
 #' # mapview::mapview(rnet["group"])
-#' rnet$group_25m = rnet_group(rnet, d = 25)
+#' rnet$group_25m <- rnet_group(rnet, d = 25)
 #' plot(rnet["group_25m"])
-#' rnet$group_walktrap = rnet_group(rnet, igraph::cluster_walktrap)
+#' rnet$group_walktrap <- rnet_group(rnet, igraph::cluster_walktrap)
 #' plot(rnet["group_walktrap"])
-#' rnet$group_louvain = rnet_group(rnet, igraph::cluster_louvain)
+#' rnet$group_louvain <- rnet_group(rnet, igraph::cluster_louvain)
 #' plot(rnet["group_louvain"])
-#' rnet$group_fast_greedy = rnet_group(rnet, igraph::cluster_fast_greedy)
+#' rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 #' plot(rnet["group_fast_greedy"])
 #' @export
 rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, as.undirected = TRUE) {
-  if(!is.null(d)) {
-    touching_list = sf::st_is_within_distance(rnet, dist = d)
+  if (!is.null(d)) {
+    touching_list <- sf::st_is_within_distance(rnet, dist = d)
   } else {
-    touching_list = sf::st_intersects(rnet)
+    touching_list <- sf::st_intersects(rnet)
   }
-  g = igraph::graph.adjlist(touching_list)
-  if(as.undirected) {
-    g = igraph::as.undirected(g)
+  g <- igraph::graph.adjlist(touching_list)
+  if (as.undirected) {
+    g <- igraph::as.undirected(g)
   }
-  wc = cluster_fun(g)
-  m = igraph::membership(wc)
+  wc <- cluster_fun(g)
+  m <- igraph::membership(wc)
   class(m)
-  m = as.integer(m)
+  m <- as.integer(m)
   m
 }
