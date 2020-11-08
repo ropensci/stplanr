@@ -4,7 +4,12 @@
 \alias{rnet_group}
 \title{Assign segments in a route network to groups}
 \usage{
-rnet_group(rnet, cluster_fun = igraph::clusters, d = NULL)
+rnet_group(
+  rnet,
+  cluster_fun = igraph::clusters,
+  d = NULL,
+  as.undirected = TRUE
+)
 }
 \arguments{
 \item{rnet}{An sf object with LINESTRING geometry representing a route
@@ -16,6 +21,10 @@ are available in the \code{igraph} package. Default: \code{\link[igraph:componen
 \item{d}{Optional distance variable used to classify segments that are
 close (within a certain distance specified by \code{d}) to each other but not
 necessarily touching}
+
+\item{as.undirected}{Coerce the graph created internally into an undirected
+graph with \code{\link[igraph:as.directed]{igraph::as.undirected()}}? TRUE by default, which enables use
+of a wider range of clutering functions.}
 }
 \value{
 The function returns an integer vector reporting the group of each network element
