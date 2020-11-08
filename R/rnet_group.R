@@ -38,6 +38,5 @@ rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL) {
   m = igraph::membership(wc)
   class(m)
   m = as.integer(m)
-  if(char) m = as.character(m)
   m
 }
