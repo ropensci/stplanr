@@ -1,5 +1,7 @@
 # stplanr (development version)
 
+- New function `rnet_group()` groups route network elements (#403)
+
 # stplanr 0.8.0
 
 - New function `line_breakup()` breaks-up lines (#434)
