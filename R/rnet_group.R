@@ -5,9 +5,9 @@
 #' @param d Optional distance variable used to classify segments that are
 #' close (within a certain distance specified by `d`) to each other but not
 #' necessarily touching
-#' @param char Should the function return a character representation of the groups
-#' (`"1"` instead of the numeric value `1`)? `TRUE` by default
 #' @inheritParams rnet_breakup_vertices
+#'
+#' @return The function returns an integer vector reporting the group of each network element
 #'
 #' @family rnet
 #' @examples
@@ -24,7 +24,7 @@
 #' rnet$group_fast_greedy = rnet_group(rnet, igraph::cluster_fast_greedy)
 #' plot(rnet["group_fast_greedy"])
 #' @export
-rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, char = TRUE) {
+rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL) {
   if(!is.null(d)) {
     touching_list = sf::st_is_within_distance(rnet, dist = d)
   } else {
@@ -36,6 +36,8 @@ rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, char = TR
   g = igraph::as.undirected(g)
   wc = cluster_fun(g)
   m = igraph::membership(wc)
+  class(m)
+  m = as.integer(m)
   if(char) m = as.character(m)
   m
 }

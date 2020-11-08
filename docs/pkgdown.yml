@@ -1,8 +1,15 @@
-pandoc: 2.2.1
-pkgdown: 1.1.0
+pandoc: 2.11.0.2
+pkgdown: 1.6.1
 pkgdown_sha: ~
-template:
-  package: rotemplate
 articles:
+  stplanr-od: stplanr-od.html
   stplanr-paper: stplanr-paper.html
+  stplanr-parallel: stplanr-parallel.html
+  stplanr-route-nets: stplanr-route-nets.html
+  stplanr-routing: stplanr-routing.html
+  stplanr: stplanr.html
+last_built: 2020-11-08T12:39Z
+urls:
+  reference: https://ropensci.github.io/stplanr/reference
+  article: https://ropensci.github.io/stplanr/articles
 

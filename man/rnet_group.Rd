@@ -4,7 +4,7 @@
 \alias{rnet_group}
 \title{Assign segments in a route network to groups}
 \usage{
-rnet_group(rnet, cluster_fun = igraph::clusters, d = NULL, char = TRUE)
+rnet_group(rnet, cluster_fun = igraph::clusters, d = NULL)
 }
 \arguments{
 \item{rnet}{An sf object with LINESTRING geometry representing a route
@@ -16,9 +16,9 @@ are available in the \code{igraph} package. Default: \code{\link[igraph:componen
 \item{d}{Optional distance variable used to classify segments that are
 close (within a certain distance specified by \code{d}) to each other but not
 necessarily touching}
-
-\item{char}{Should the function return a character representation of the groups
-(\code{"1"} instead of the numeric value \code{1})? \code{TRUE} by default}
+}
+\value{
+The function returns an integer vector reporting the group of each network element
 }
 \description{
 Assign segments in a route network to groups
