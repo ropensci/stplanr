@@ -245,7 +245,7 @@ stplanr depends on rgdal, which can be tricky to install.
 and other Linux distros can be found here:
 <https://github.com/r-spatial/sf#installing>
 
-## Funtions, help and contributing
+## Functions, help and contributing
 
 The current list of available functions can be seen on the package’s
 website at
