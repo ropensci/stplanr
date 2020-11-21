@@ -2,9 +2,12 @@
 % Please edit documentation in R/rnet_boundary_points.R
 \name{rnet_boundary_points}
 \alias{rnet_boundary_points}
+\alias{rnet_boundary_points_lwgeom}
 \title{Get points at the beginner and end of linestrings}
 \usage{
 rnet_boundary_points(rnet)
+
+rnet_boundary_points_lwgeom(rnet)
 }
 \arguments{
 \item{rnet}{An sf object with LINESTRING geometry representing a route
@@ -17,9 +20,10 @@ Get points at the beginner and end of linestrings
 has_sfheaders <- requireNamespace("sfheaders", quietly = TRUE)
 if(has_sfheaders) {
 rnet <- rnet_roundabout
-j <- rnet_boundary_points(rnet)
-summary(duplicated(j))
+bp1 <- rnet_boundary_points(rnet)
+bp2 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
+identical(sort(sf::st_coordinates(bp1)), sort(sf::st_coordinates(bp2)))
 plot(rnet$geometry)
-plot(j, add = TRUE)
+plot(bp1, add = TRUE)
 }
 }
