@@ -16,16 +16,13 @@ rnet_boundary_points <- function(rnet) {
   coordinates <- sfheaders::sf_to_df(rnet)
   # names(coordinates) # "sfg_id"        "linestring_id" "x"             "y"
   # head(coordinates)
-  coordinates <- as.matrix(coordinates[c("x", "y", "linestring_id")])
-  L1_index <- ncol(coordinates)
-  coordinates <- unname(coordinates)
-  first_pair <- !duplicated(coordinates[, L1_index])
-  last_pair <- !duplicated(coordinates[, L1_index], fromLast = TRUE)
+  coordinates <- coordinates[-1]
+  first_pair <- !duplicated(coordinates[, 1])
+  last_pair <- !duplicated(coordinates[, 1], fromLast = TRUE)
   idxs <- first_pair | last_pair
   pairs <- coordinates[idxs, ]
-  boundary_points <- sfheaders::sf_point(
-    pairs[, -L1_index]
-  )
+  pairs_unique <- unique(pairs[c("x", "y")])
+  boundary_points <- sfheaders::sf_point(pairs_unique)
   sf::st_crs(boundary_points) <- sf::st_crs(rnet)
   boundary_points
 }
