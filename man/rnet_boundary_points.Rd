@@ -3,15 +3,20 @@
 \name{rnet_boundary_points}
 \alias{rnet_boundary_points}
 \alias{rnet_boundary_points_lwgeom}
+\alias{rnet_duplicated_vertices}
 \title{Get points at the beginner and end of linestrings}
 \usage{
 rnet_boundary_points(rnet)
 
 rnet_boundary_points_lwgeom(rnet)
+
+rnet_duplicated_vertices(rnet, n = 2)
 }
 \arguments{
 \item{rnet}{An sf object with LINESTRING geometry representing a route
 network.}
+
+\item{n}{The minimum number of time a vertex must be duplicated to be returned}
 }
 \description{
 Get points at the beginner and end of linestrings
@@ -22,6 +27,7 @@ if(has_sfheaders) {
 rnet <- rnet_roundabout
 bp1 <- rnet_boundary_points(rnet)
 bp2 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
+bp3 <- line2points(rnet) # slower version with lwgeom
 identical(sort(sf::st_coordinates(bp1)), sort(sf::st_coordinates(bp2)))
 plot(rnet$geometry)
 plot(bp1, add = TRUE)
