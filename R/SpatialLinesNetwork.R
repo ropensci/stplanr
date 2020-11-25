@@ -564,6 +564,43 @@ sum_network_routes <- function(sln, start, end, sumvars = weightfield(sln), comb
     })
 
     if (is(sln, "sfNetwork")) {
+      # Test if routesegs returned an "impossible" path (i.e. epath == 0L) and
+      # start/end nodes are identical.
+      # See https://github.com/ropensci/stplanr/issues/444 for more details.
+      if (
+        all(vapply(routesegs, identical, logical(1), integer(0))) &&
+        all.equal(start, end)
+      ) {
+        # In that case we are going to return a degenerate LINESTRING object
+        # whose only POINT is given by the common node(s).
+        # I decided to use the following approach in case there are more than 1
+        # start/end nodes and they are all degenerate
+        deg_linestrings <- lapply(
+          start,
+          function(start_end_id) {
+            node_coordinates <- cbind(sln_sf@g$x[start_end_id], sln_sf@g$y[start_end_id])
+            st_linestring(rbind(node_coordinates, node_coordinates))
+          }
+        )
+
+        deg_linestring <- st_sfc(
+          deg_linestrings,
+          crs = st_crs(sln_sf@sl),
+          precision = st_precision(sln_sf@sl)
+        )
+
+        return(
+          st_sf(
+            data.frame(
+              ID = 1,
+              sum_length = NA,
+              pathfound = FALSE
+            ),
+            geometry = deg_linestring
+          )
+        )
+      }
+
       routecoords <- mapply(function(routesegs, start) {
         linecoords <- sf::st_coordinates(sln@sl[routesegs, ])
         linecoords <- lapply(1:max(linecoords[, "L1"]), function(x) {
