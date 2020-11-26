@@ -14,7 +14,8 @@
 #'
 #' See [bikecitizens.net](https://map.bikecitizens.net/gb-leeds#/!/1/1/53.8265,-1.576195/53.80025,-1.51577)
 #' for an interactive version of the routing engine used by BikeCitizens.
-#' @param ldf A matrix with four columns: from_lon, from_lat, to_lon and to_lat
+#' @param from A numeric vector representing the start point
+#' @param to A numeric vector representing the end point
 #' @param base_url The base URL for the routes
 #' @param cccode The city code for the routes
 #' @param routing_profile What type of routing to use?
@@ -30,7 +31,8 @@
 #' r <- route_bikecitizens(ldf)
 #' plot(r)
 route_bikecitizens <- function(
-                               ldf = NULL,
+                               from = NULL,
+                               to = NULL,
                                base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
                                cccode = "gb-leeds",
                                routing_profile = "balanced",
@@ -39,11 +41,11 @@ route_bikecitizens <- function(
                                from_lon = -1.576195,
                                to_lat = 53.80025,
                                to_lon = -1.51577) {
-  if (!is.null(ldf)) {
-    from_lon <- ldf[1, 1]
-    from_lat <- ldf[1, 2]
-    to_lon <- ldf[1, 3]
-    to_lat <- ldf[1, 4]
+  if (!is.null(from) && !is.null(to)) {
+    from_lon <- from[1]
+    from_lat <- from[2]
+    to_lon <- to[1]
+    to_lat <- to[2]
   }
   q <- list(
     cccode,

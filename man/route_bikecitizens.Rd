@@ -5,7 +5,8 @@
 \title{Get a route from the BikeCitizens web service}
 \usage{
 route_bikecitizens(
-  ldf = NULL,
+  from = NULL,
+  to = NULL,
   base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
   cccode = "gb-leeds",
   routing_profile = "balanced",
@@ -17,7 +18,9 @@ route_bikecitizens(
 )
 }
 \arguments{
-\item{ldf}{A matrix with four columns: from_lon, from_lat, to_lon and to_lat}
+\item{from}{A numeric vector representing the start point}
+
+\item{to}{A numeric vector representing the end point}
 
 \item{base_url}{The base URL for the routes}
 
