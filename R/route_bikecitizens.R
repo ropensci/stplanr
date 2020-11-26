@@ -26,27 +26,26 @@
 #' @export
 #' @examples
 #' route_bikecitizens()
-#' ldf = od_coords(stplanr::od_data_lines[2, ])
-#' r = route_bikecitizens(ldf)
+#' ldf <- od_coords(stplanr::od_data_lines[2, ])
+#' r <- route_bikecitizens(ldf)
 #' plot(r)
-route_bikecitizens = function(
-  ldf = NULL,
-  base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
-  cccode = "gb-leeds",
-  routing_profile = "balanced",
-  bike_profile = "citybike",
-  from_lat = 53.8265,
-  from_lon = -1.576195,
-  to_lat = 53.80025,
-  to_lon = -1.51577
-) {
-  if(!is.null(ldf)) {
-    from_lon = ldf[1, 1]
-    from_lat = ldf[1, 2]
-    to_lon = ldf[1, 3]
-    to_lat = ldf[1, 4]
+route_bikecitizens <- function(
+                               ldf = NULL,
+                               base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
+                               cccode = "gb-leeds",
+                               routing_profile = "balanced",
+                               bike_profile = "citybike",
+                               from_lat = 53.8265,
+                               from_lon = -1.576195,
+                               to_lat = 53.80025,
+                               to_lon = -1.51577) {
+  if (!is.null(ldf)) {
+    from_lon <- ldf[1, 1]
+    from_lat <- ldf[1, 2]
+    to_lon <- ldf[1, 3]
+    to_lat <- ldf[1, 4]
   }
-  q = list(
+  q <- list(
     cccode,
     routing_profile,
     bike_profile,
@@ -55,7 +54,7 @@ route_bikecitizens = function(
     to_lat,
     to_lon
   )
-  n = c(
+  n <- c(
     "cccode",
     "routing_profile",
     "bike_profile",
@@ -64,15 +63,15 @@ route_bikecitizens = function(
     "to_lat",
     "to_lon"
   )
-  names(q) = n
-  u = httr::modify_url(
+  names(q) <- n
+  u <- httr::modify_url(
     url = base_url,
     query = q
   )
-  r = jsonlite::read_json(u)
-  d = do.call(rbind, r$route)
-  storage.mode(d) = "numeric"
-  dsfc = sf::st_sfc(sf::st_linestring(d[, c(2, 1, 3)]), crs = 4326)
-  dsf = sf::st_sf(geometry = dsfc)
+  r <- jsonlite::read_json(u)
+  d <- do.call(rbind, r$route)
+  storage.mode(d) <- "numeric"
+  dsfc <- sf::st_sfc(sf::st_linestring(d[, c(2, 1, 3)]), crs = 4326)
+  dsf <- sf::st_sf(geometry = dsfc)
   dsf
 }
