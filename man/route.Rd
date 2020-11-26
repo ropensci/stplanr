@@ -9,6 +9,7 @@ route(
   to = NULL,
   l = NULL,
   route_fun = cyclestreets::journey,
+  wait = 0,
   n_print = 10,
   list_output = FALSE,
   cl = NULL,
@@ -27,6 +28,9 @@ should be a spatial object representing desire lines}
 \item{route_fun}{A routing function to be used for converting the straight lines to routes
 \code{\link[=od2line]{od2line()}}}
 
+\item{wait}{How long to wait between routes?
+0 seconds by default, can be useful when sending requests to rate limited APIs.}
+
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
@@ -42,6 +46,10 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
+l2 = od_data_lines[2:4, ]
+r_bc = route(l = l2, route_fun = route_bikecitizens)
+plot(r_bc)
+# route(l = l2, route_fun = route_bikecitizens, wait = 1)
 library(osrm)
 r_osrm <- route(
   from = c(-0.11, 51.514),
@@ -60,7 +68,6 @@ r_local <- stplanr::route(
   route_fun = stplanr::route_local,
   sln = sln
 )
-library(sf) # for plotting
 plot(r_local["all"], add = TRUE, lwd = 5)
 }
 \seealso{

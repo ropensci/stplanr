@@ -7,9 +7,15 @@
 #' @inheritParams od_coords
 #' @inheritParams line2route
 #' @param cl Cluster
+#' @param wait How long to wait between routes?
+#'   0 seconds by default, can be useful when sending requests to rate limited APIs.
 #' @family routes
 #' @export
 #' @examples
+#' l2 = od_data_lines[2:4, ]
+#' r_bc = route(l = l2, route_fun = route_bikecitizens)
+#' plot(r_bc)
+#' # route(l = l2, route_fun = route_bikecitizens, wait = 1)
 #' library(osrm)
 #' r_osrm <- route(
 #'   from = c(-0.11, 51.514),
@@ -28,16 +34,15 @@
 #'   route_fun = stplanr::route_local,
 #'   sln = sln
 #' )
-#' library(sf) # for plotting
 #' plot(r_local["all"], add = TRUE, lwd = 5)
 route <- function(from = NULL, to = NULL, l = NULL,
-                  route_fun = cyclestreets::journey,
+                  route_fun = cyclestreets::journey, wait = 0,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {
   UseMethod(generic = "route")
 }
 #' @export
 route.numeric <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = cyclestreets::journey,
+                          route_fun = cyclestreets::journey, wait = 0.1,
                           n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
@@ -45,7 +50,7 @@ route.numeric <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.character <- function(from = NULL, to = NULL, l = NULL,
-                            route_fun = cyclestreets::journey,
+                            route_fun = cyclestreets::journey, wait = 0.1,
                             n_print = 10, list_output = FALSE, cl = NULL, ...) {
   odm <- od_coords(from, to)
   l <- od_coords2line(odm)
@@ -53,7 +58,7 @@ route.character <- function(from = NULL, to = NULL, l = NULL,
 }
 #' @export
 route.sf <- function(from = NULL, to = NULL, l = NULL,
-                     route_fun,
+                     route_fun = cyclestreets::journey, wait = 0.1,
                      n_print = 10, list_output = FALSE, cl = NULL, ...) {
   FUN <- match.fun(route_fun)
   # generate od coordinates
@@ -75,15 +80,14 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   } else {
     list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
       if (is.null(cl)) {
-        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
+        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...))
       } else {
-        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...), cl = cl)
+        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...), cl = cl)
       }
     } else {
       lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
     }
   }
-
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
   if (sum(list_elements_sf) < length(list_out)) {
@@ -103,9 +107,49 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     do.call(rbind, list_out[list_elements_sf])
   }
 }
+
+route_i <- function(FUN, ldf, wait, i, l, ...) {
+  Sys.sleep(wait)
+  error_fun <- function(e) {
+    e
+  }
+  tryCatch(
+    {
+      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
+      sf::st_sf(cbind(
+        sf::st_drop_geometry(l[rep(i, nrow(single_route)), ]),
+        route_number = i,
+        sf::st_drop_geometry(single_route)
+      ),
+      geometry = single_route$geometry
+      )
+    },
+    error = error_fun
+  )
+}
+
+route_l <- function(FUN, ldf, i, l, ...) {
+  error_fun <- function(e) {
+    e
+  }
+  tryCatch(
+    {
+      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
+    },
+    error = error_fun
+  )
+}
+
+most_common_class_of_list <- function(l, class_to_find = "sf") {
+  class_out <- sapply(l, function(x) class(x)[1])
+  most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
+  message("Most common output is ", most_common_class)
+  is_class <- class_out == class_to_find
+  is_class
+}
 #' @export
 route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = cyclestreets::journey,
+                          route_fun = cyclestreets::journey, wait = 0,
                           n_print = 10, list_output = FALSE, cl = NULL, ...) {
 
   # error msg in case routing fails
@@ -120,7 +164,6 @@ route.Spatial <- function(from = NULL, to = NULL, l = NULL,
   if (is.null(l)) {
     l <- od2line(ldf)
   }
-
 
   # pre-allocate objects
   rc <- as.list(rep(NA, nrow(ldf)))
@@ -250,43 +293,4 @@ route_dodgr <- function(from = NULL,
     to_y = to_xy [index, 2],
     geometry = paths
   )
-}
-
-route_i <- function(FUN, ldf, i, l, ...) {
-  error_fun <- function(e) {
-    e
-  }
-  tryCatch(
-    {
-      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
-      sf::st_sf(cbind(
-        sf::st_drop_geometry(l[rep(i, nrow(single_route)), ]),
-        route_number = i,
-        sf::st_drop_geometry(single_route)
-      ),
-      geometry = single_route$geometry
-      )
-    },
-    error = error_fun
-  )
-}
-
-route_l <- function(FUN, ldf, i, l, ...) {
-  error_fun <- function(e) {
-    e
-  }
-  tryCatch(
-    {
-      single_route <- FUN(ldf[i, 1:2], ldf[i, 3:4], ...)
-    },
-    error = error_fun
-  )
-}
-
-most_common_class_of_list <- function(l, class_to_find = "sf") {
-  class_out <- sapply(l, function(x) class(x)[1])
-  most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
-  message("Most common output is ", most_common_class)
-  is_class <- class_out == class_to_find
-  is_class
 }
