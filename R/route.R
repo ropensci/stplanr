@@ -12,7 +12,7 @@
 #' @family routes
 #' @export
 #' @examples
-#' l3 = od_data_lines[2:4, ]
+#' l2 = od_data_lines[2:4, ]
 #' r_bc = route(l = l2, route_fun = route_bikecitizens)
 #' plot(r_bc)
 #' # route(l = l2, route_fun = route_bikecitizens, wait = 1)
