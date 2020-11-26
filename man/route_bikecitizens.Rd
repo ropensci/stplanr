@@ -5,6 +5,7 @@
 \title{Get a route from the BikeCitizens web service}
 \usage{
 route_bikecitizens(
+  ldf = NULL,
   base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
   cccode = "gb-leeds",
   routing_profile = "balanced",
@@ -16,6 +17,8 @@ route_bikecitizens(
 )
 }
 \arguments{
+\item{ldf}{A matrix with four columns: from_lon, from_lat, to_lon and to_lat}
+
 \item{base_url}{The base URL for the routes}
 
 \item{cccode}{The city code for the routes}
@@ -38,4 +41,7 @@ for an interactive version of the routing engine used by BikeCitizens.
 }
 \examples{
 route_bikecitizens()
+ldf = od_coords(stplanr::od_data_lines[2, ])
+r = route_bikecitizens(ldf)
+plot(r)
 }

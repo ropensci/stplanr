@@ -14,7 +14,7 @@
 #'
 #' See [bikecitizens.net](https://map.bikecitizens.net/gb-leeds#/!/1/1/53.8265,-1.576195/53.80025,-1.51577)
 #' for an interactive version of the routing engine used by BikeCitizens.
-#'
+#' @param ldf A matrix with four columns: from_lon, from_lat, to_lon and to_lat
 #' @param base_url The base URL for the routes
 #' @param cccode The city code for the routes
 #' @param routing_profile What type of routing to use?
@@ -26,7 +26,11 @@
 #' @export
 #' @examples
 #' route_bikecitizens()
+#' ldf = od_coords(stplanr::od_data_lines[2, ])
+#' r = route_bikecitizens(ldf)
+#' plot(r)
 route_bikecitizens = function(
+  ldf = NULL,
   base_url = "https://map.bikecitizens.net/api/v1/locations/route.json",
   cccode = "gb-leeds",
   routing_profile = "balanced",
@@ -36,6 +40,12 @@ route_bikecitizens = function(
   to_lat = 53.80025,
   to_lon = -1.51577
 ) {
+  if(!is.null(ldf)) {
+    from_lon = ldf[1, 1]
+    from_lat = ldf[1, 2]
+    to_lon = ldf[1, 3]
+    to_lat = ldf[1, 4]
+  }
   q = list(
     cccode,
     routing_profile,
@@ -62,6 +72,7 @@ route_bikecitizens = function(
   r = jsonlite::read_json(u)
   d = do.call(rbind, r$route)
   storage.mode(d) = "numeric"
-  dsf = sf::st_sfc(sf::st_linestring(d[, c(2, 1, 3)]), crs = 4326)
+  dsfc = sf::st_sfc(sf::st_linestring(d[, c(2, 1, 3)]), crs = 4326)
+  dsf = sf::st_sf(geometry = dsfc)
   dsf
 }
