@@ -564,12 +564,54 @@ sum_network_routes <- function(sln, start, end, sumvars = weightfield(sln), comb
     })
 
     if (is(sln, "sfNetwork")) {
-      # Test if routesegs returned an "impossible" path (i.e. epath == 0L) and
-      # start/end nodes are identical.
-      # See https://github.com/ropensci/stplanr/issues/444 for more details.
+      # Test if routesegs returned at least one "impossible" path (i.e. epath ==
+      # 0L) and SOME start/end nodes are identical but not all of them. In this
+      # case I need to differentiate the two scenarios (i.e. degenerate paths
+      # and regular paths).
+      # See https://github.com/ropensci/stplanr/issues/444 and
+      # https://github.com/ropensci/stplanr/pull/445 for more details.
+      if (
+        any(vapply(routesegs, identical, logical(1), integer(0))) &&
+        (any(start == end) && !all(start == end))
+      ) {
+        # Find ID of identical nodes
+        ID_identical <- which(start == end)
+
+        # Run the sum_network_routes() function independently for the two cases
+        degenerate_paths <- sum_network_routes(
+          sln = sln,
+          start = start[ID_identical],
+          end = end[ID_identical],
+          sumvars = sumvars,
+          combinations = FALSE
+        )
+        regular_paths <- sum_network_routes(
+          sln = sln,
+          start = start[-ID_identical],
+          end = end[-ID_identical],
+          sumvars = sumvars,
+          combinations = FALSE
+        )
+
+        # Combine the results and arrange them in the same order as before
+        all_paths <- rbind(degenerate_paths, regular_paths)
+
+        # I arrange the paths in the original order sorting the ID of the
+        # identical and (not)identical
+        all_paths <- all_paths %>%
+          dplyr::slice(order(c(which(start == end), which(start != end)))) %>%
+          dplyr::mutate(ID = 1:n())
+
+        return(all_paths)
+      }
+
+      # Test if routesegs returned all "impossible" paths (i.e. epath == 0L) and
+      # ALL start/end nodes are identical.
+      # See https://github.com/ropensci/stplanr/issues/444 and
+      # https://github.com/ropensci/stplanr/pull/445 for more details.
       if (
         all(vapply(routesegs, identical, logical(1), integer(0))) &&
-        all.equal(start, end)
+        isTRUE(all.equal(start, end))
       ) {
         # In that case we are going to return a degenerate LINESTRING object
         # whose only POINT is given by the common node(s).
@@ -578,26 +620,27 @@ sum_network_routes <- function(sln, start, end, sumvars = weightfield(sln), comb
         deg_linestrings <- lapply(
           start,
           function(start_end_id) {
-            node_coordinates <- cbind(sln_sf@g$x[start_end_id], sln_sf@g$y[start_end_id])
-            st_linestring(rbind(node_coordinates, node_coordinates))
+            node_coordinates <- cbind(sln@g$x[start_end_id], sln@g$y[start_end_id])
+            sf::st_linestring(rbind(node_coordinates, node_coordinates))
           }
         )
 
-        deg_linestring <- st_sfc(
+        deg_linestring <- sf::st_sfc(
           deg_linestrings,
-          crs = st_crs(sln_sf@sl),
-          precision = st_precision(sln_sf@sl)
+          crs = sf::st_crs(sln@sl),
+          precision = sf::st_precision(sln@sl)
         )
 
         return(
-          st_sf(
-            data.frame(
+          sf::st_sf(
+            dplyr::tibble(
               ID = 1,
               sum_length = NA,
               pathfound = FALSE
             ),
             geometry = deg_linestring
-          )
+          ) %>%
+            dplyr::mutate(ID = 1:n())
         )
       }
 
