@@ -23,9 +23,15 @@ rnet_boundary_points <- function(rnet) {
   last_pair <- !duplicated(coordinates[, 1], fromLast = TRUE)
   idxs <- first_pair | last_pair
   pairs <- coordinates[idxs, ]
-  pairs_unique <- unique(pairs[c("x", "y")])
-  boundary_points <- sfheaders::sf_point(pairs_unique)
+  boundary_points <- sfheaders::sf_point(pairs)
   sf::st_crs(boundary_points) <- sf::st_crs(rnet)
+  boundary_points
+}
+#' @rdname rnet_boundary_points
+#' @export
+rnet_boundary_unique <- function(rnet) {
+  pairs <- rnet_boundary_points(rnet)
+  pairs_unique <- unique(pairs)
   boundary_points
 }
 #' @rdname rnet_boundary_points

@@ -2,11 +2,14 @@
 % Please edit documentation in R/rnet_boundary_points.R
 \name{rnet_boundary_points}
 \alias{rnet_boundary_points}
+\alias{rnet_boundary_unique}
 \alias{rnet_boundary_points_lwgeom}
 \alias{rnet_duplicated_vertices}
 \title{Get points at the beginner and end of linestrings}
 \usage{
 rnet_boundary_points(rnet)
+
+rnet_boundary_unique(rnet)
 
 rnet_boundary_points_lwgeom(rnet)
 
