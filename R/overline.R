@@ -219,6 +219,10 @@ overline2 <-
            regionalise = 1e5,
            quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
            fun = sum) {
+    if(as.character(unique(sf::st_geometry_type(sl))) == "MULTILINESTRING") {
+      message("Converting from MULTILINESTRING to LINESTRING")
+      sl <- sf::st_cast(sl, "LINESTRING")
+    }
     if (!"sfc_LINESTRING" %in% class(sf::st_geometry(sl))) {
       stop("Only LINESTRING is supported")
     }
