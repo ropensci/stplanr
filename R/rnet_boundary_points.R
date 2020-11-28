@@ -31,8 +31,7 @@ rnet_boundary_points <- function(rnet) {
 #' @export
 rnet_boundary_unique <- function(rnet) {
   pairs <- rnet_boundary_points(rnet)
-  pairs_unique <- unique(pairs)
-  boundary_points
+  unique(pairs)
 }
 #' @rdname rnet_boundary_points
 #' @export
