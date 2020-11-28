@@ -4,7 +4,7 @@
 \alias{route_local}
 \title{Plan a route with local data}
 \usage{
-route_local(sln, from, to, l = NULL)
+route_local(sln, from, to, l = NULL, ...)
 }
 \arguments{
 \item{sln}{The SpatialLinesNetwork or sfNetwork to use.}
@@ -30,6 +30,9 @@ plot(sln)
 plot(r$geometry, add = TRUE, col = "red", lwd = 5)
 plot(cents[c(3, 4), ], add = TRUE)
 r2 <- route_local(sln = sln, cents_sf[3, ], cents_sf[4, ])
+plot(r2$geometry, add = TRUE, col = "blue", lwd = 3)
+l <- flowlines_sf[3:5, ]
+r3 <- route_local(l = l, sln = sln)
 plot(r2$geometry, add = TRUE, col = "blue", lwd = 3)
 }
 \seealso{

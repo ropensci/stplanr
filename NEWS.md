@@ -4,6 +4,7 @@
 - New function `rnet_group()` groups route network elements (#403)
 - `overline()` now converts `MULTILINESTRING` geometries to `LINESTRINGS` automatically
 - Routing on the network using `sum_network_routes()` now returns a linestring for routes that start where they end (i.e. no travel) (#444)
+- Routing using `route_local()` fixed: the `l` argument now works (#448)
 
 # stplanr 0.8.0
 
