@@ -16,6 +16,8 @@ route_local(sln, from, to, l = NULL, ...)
 
 \item{l}{Only needed if from and to are empty, in which case this
 should be a spatial object representing desire lines}
+
+\item{...}{Arguments to pass to \code{sum_network_links}}
 }
 \description{
 This function returns the shortest path between locations
