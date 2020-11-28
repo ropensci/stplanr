@@ -7,7 +7,7 @@
 route_local(sln, from, to, l = NULL)
 }
 \arguments{
-\item{sln}{The SpatialLinesNetwork to use.}
+\item{sln}{The SpatialLinesNetwork or sfNetwork to use.}
 
 \item{from}{An object representing origins
 (if lines are provided as the first argument, from is assigned to \code{l})}
