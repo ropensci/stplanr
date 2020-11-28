@@ -8,7 +8,7 @@ or sfNetwork.}
 sln2points(sln)
 }
 \arguments{
-\item{sln}{The SpatialLinesNetwork to use.}
+\item{sln}{The SpatialLinesNetwork or sfNetwork to use.}
 }
 \description{
 Generate spatial points representing nodes on a SpatialLinesNetwork
