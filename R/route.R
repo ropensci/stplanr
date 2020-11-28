@@ -12,20 +12,19 @@
 #' @family routes
 #' @export
 #' @examples
-#' l2 = od_data_lines[2:4, ]
-#' r_bc = route(l = l2, route_fun = route_bikecitizens)
+#' l = od_data_lines[2:4, ]
+#' r_bc = route(l = l, route_fun = route_bikecitizens)
 #' plot(r_bc)
-#' # route(l = l2, route_fun = route_bikecitizens, wait = 1)
+#' # route(l = l, route_fun = route_bikecitizens, wait = 1)
 #' library(osrm)
 #' r_osrm <- route(
-#'   from = c(-0.11, 51.514),
-#'   to = c(-0.10, 51.506),
+#'   l = l,
 #'   route_fun = osrmRoute,
 #'   returnclass = "sf"
 #' )
-#' r <- overline(routes_fast_sf[2:5, ], "length")
-#' l <- od2line(od_data_sample[2:5, 1:3], cents_sf)
-#' sln <- stplanr::SpatialLinesNetwork(r)
+#' nrow(r_osrm)
+#' plot(r_osrm)
+#' sln <- stplanr::SpatialLinesNetwork(route_network_sf)
 #' # calculate shortest paths
 #' plot(sln)
 #' plot(l$geometry, add = TRUE)

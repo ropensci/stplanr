@@ -33,7 +33,7 @@ route_local <- function(sln, from, to, l = NULL, ...) {
     y = as.vector(coords[, c(2, 4)]), maxdist = 2000
   )
   nodes_matrix <- matrix(nodes_near, ncol = 2)
-  # od_df <- data.frame(start = nodes_matrix[, 1], end = nodes_matrix[, 2])
+  od_df <- data.frame(start = nodes_matrix[, 1], end = nodes_matrix[, 2])
   # sum_network_routes(sln, start = nodes_matrix[, 1], end = nodes_matrix[, 2], ...)
   sum_network_links(sln, routedata = od_df, ...)
 }
