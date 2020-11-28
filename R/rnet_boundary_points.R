@@ -7,25 +7,33 @@
 #' if(has_sfheaders) {
 #' rnet <- rnet_roundabout
 #' bp1 <- rnet_boundary_points(rnet)
-#' bp2 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
-#' bp3 <- line2points(rnet) # slower version with lwgeom
+#' bp2 <- line2points(rnet) # slower version with lwgeom
+#' bp3 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
+#' bp4 <- rnet_boundary_unique(rnet)
+#' nrow(bp1)
+#' nrow(bp3)
 #' identical(sort(sf::st_coordinates(bp1)), sort(sf::st_coordinates(bp2)))
+#' identical(sort(sf::st_coordinates(bp3)), sort(sf::st_coordinates(bp4)))
 #' plot(rnet$geometry)
-#' plot(bp1, add = TRUE)
+#' plot(bp3, add = TRUE)
 #' }
 rnet_boundary_points <- function(rnet) {
-  stopifnot(requireNamespace("sfheaders", quietly = TRUE))
-  coordinates <- sfheaders::sf_to_df(rnet)
-  # names(coordinates) # "sfg_id"        "linestring_id" "x"             "y"
-  # head(coordinates)
-  coordinates <- coordinates[-1]
-  first_pair <- !duplicated(coordinates[, 1])
-  last_pair <- !duplicated(coordinates[, 1], fromLast = TRUE)
-  idxs <- first_pair | last_pair
-  pairs <- coordinates[idxs, ]
-  boundary_points <- sfheaders::sf_point(pairs)
+  pairs <- rnet_boundary_df(rnet)
+  pairs_xyz <- pairs[names(pairs) %in% c("x", "y", "z")]
+  boundary_points <- sfheaders::sf_point(pairs_xyz)
   sf::st_crs(boundary_points) <- sf::st_crs(rnet)
   boundary_points
+}
+#' @rdname rnet_boundary_points
+#' @export
+rnet_boundary_df <- function(rnet) {
+  stopifnot(requireNamespace("sfheaders", quietly = TRUE))
+  coordinates <- sfheaders::sf_to_df(rnet)
+  first_pair <- !duplicated(coordinates[["sfg_id"]])
+  last_pair <- !duplicated(coordinates[["sfg_id"]], fromLast = TRUE)
+  idxs <- first_pair | last_pair
+  pairs <- coordinates[idxs, ]
+  pairs
 }
 #' @rdname rnet_boundary_points
 #' @export

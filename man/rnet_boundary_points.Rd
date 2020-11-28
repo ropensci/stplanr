@@ -2,12 +2,15 @@
 % Please edit documentation in R/rnet_boundary_points.R
 \name{rnet_boundary_points}
 \alias{rnet_boundary_points}
+\alias{rnet_boundary_df}
 \alias{rnet_boundary_unique}
 \alias{rnet_boundary_points_lwgeom}
 \alias{rnet_duplicated_vertices}
 \title{Get points at the beginner and end of linestrings}
 \usage{
 rnet_boundary_points(rnet)
+
+rnet_boundary_df(rnet)
 
 rnet_boundary_unique(rnet)
 
@@ -29,10 +32,14 @@ has_sfheaders <- requireNamespace("sfheaders", quietly = TRUE)
 if(has_sfheaders) {
 rnet <- rnet_roundabout
 bp1 <- rnet_boundary_points(rnet)
-bp2 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
-bp3 <- line2points(rnet) # slower version with lwgeom
+bp2 <- line2points(rnet) # slower version with lwgeom
+bp3 <- rnet_boundary_points_lwgeom(rnet) # slower version with lwgeom
+bp4 <- rnet_boundary_unique(rnet)
+nrow(bp1)
+nrow(bp3)
 identical(sort(sf::st_coordinates(bp1)), sort(sf::st_coordinates(bp2)))
+identical(sort(sf::st_coordinates(bp3)), sort(sf::st_coordinates(bp4)))
 plot(rnet$geometry)
-plot(bp1, add = TRUE)
+plot(bp3, add = TRUE)
 }
 }
