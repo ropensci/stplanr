@@ -1,7 +1,6 @@
 # See https://rdatatable.gitlab.io/data.table/articles/datatable-importing.html#data-table-in-imports-but-nothing-imported-1
 .datatable.aware = TRUE
-# FIXME
-utils::globalVariables(c(".N", "linestring_id", "new_linestring_id"))
+utils::globalVariables(c("linestring_id", "new_linestring_id"))
 
 #' Break up an sf object with LINESTRING geometry.
 #'
@@ -110,7 +109,7 @@ rnet_breakup_vertices <- function(rnet, verbose = FALSE) {
   # A few safety checks
   if (!inherits(rnet, "sf")) {
     stop(
-      "At the moment this function was tested only using sf objects.",
+      "Sorry, at the moment this function was tested only using sf objects.",
       call. = FALSE
     )
   }
@@ -134,46 +133,69 @@ rnet_breakup_vertices <- function(rnet, verbose = FALSE) {
     rebuild_tbl <- TRUE
   }
 
-  # step 1 - Find points that are both boundary points and internal points.
-  # 1a - Find internal points (i.e. points that are not in the boundary)
-  internal_points <- data.table::data.table(
-    sfheaders::sf_to_df(line2vertices(rnet))
-  )
+  # Step 1 - Find points that are both boundary points and internal points (for
+  # two different LINESTRINGS, obviously). This is the "roundabout" problem.
+
+  # 1a - Extract all points and convert to data.table format
+  rnet_points_data_table <- data.table::data.table(sfheaders::sf_to_df(rnet))
+
+  # 1b - Subset only internal points (still in data.table format)
+  internal_points <- rnet_points_data_table[
+    duplicated(linestring_id) & duplicated(linestring_id, fromLast = TRUE),
+    !"sfg_id"
+  ]
+
+  # At the moment I  don't need duplicated pairs of internal points
+  internal_points <- unique(internal_points, by = c("x", "y"))
+
+  # setkey for faster join (see below)
   data.table::setkey(internal_points, x, y)
-  # I don't need duplicated pairs of coordinates
-  internal_points <- unique(internal_points)
+
   if (verbose) {
     message("Extracted the (unique) internal points")
   }
-  # 1b - Find points that lie in the boundaries
-  boundary_points <- data.table::data.table(
-    sfheaders::sf_to_df(rnet_boundary_unique(rnet))
-  )
+
+  # 1c - Extract only boundary points (still in data.table format)
+  boundary_points <- rnet_points_data_table[
+    !duplicated(linestring_id) | !duplicated(linestring_id, fromLast = TRUE),
+    !"sfg_id"
+  ]
+
+  # I don't need duplicated pairs of boundary points
+  boundary_points <- unique(boundary_points, by = c("x", "y"))
+
+  # setkey for faster join (see below)
   data.table::setkey(boundary_points, x, y)
+
   if (verbose) {
     message("Extracted the (unique) boundary points")
   }
 
-  # Consider only the points that are both internal and boundaries
-  shared_internal_points_data_table <- boundary_points[
+  # 1d - Consider only the points that are both internal and boundaries
+  shared_internal_points <- boundary_points[
     # The following [ ] is used to filter the boundary points which are also
     # internal points. The operation checks that the x and y coordinates
     # are identical
     stats::na.omit(boundary_points[internal_points, which = TRUE]),
   ]
 
-  if (nrow(shared_internal_points_data_table) > 0) {
-    # step 2 - Split at shared internal points
-    message("Splitting the input object at the shared internal points.")
-    rnet <- my_st_split(rnet, shared_internal_points_data_table)
+  # Step 2 - If necessary, split at shared internal points
+  if (nrow(shared_internal_points) > 0) {
+    message(
+      "Splitting the input object at the internal points that are also boundaries."
+    )
+    rnet <- my_st_split(rnet, shared_internal_points)
   }
 
-  # step 3 - Find duplicated internal points
-  internal_points <- data.table::data.table(
-    sfheaders::sf_to_df(line2vertices(rnet))
-  )
-  data.table::setkey(internal_points, x, y)
-  duplicated_internal_points <- internal_points[duplicated(internal_points)]
+  # Step 3 - Find internal points (again, since now I need the duplicates)
+  rnet_points_data_table <- data.table::data.table(sfheaders::sf_to_df(rnet))
+  internal_points <- rnet_points_data_table[
+    duplicated(linestring_id) & duplicated(linestring_id, fromLast = TRUE),
+    !"sfg_id"
+  ]
+
+  duplicated_internal_points <- internal_points[duplicated(internal_points, by = c("x", "y"))]
+  data.table::setkey(duplicated_internal_points, x, y)
 
   # 4 - Split at duplicated internal points
   if (nrow(duplicated_internal_points) > 0) {
@@ -192,59 +214,67 @@ rnet_breakup_vertices <- function(rnet, verbose = FALSE) {
 # Not sure if it should be exported (maybe yes). In any case: ADD DOCS
 # FIXME: ADD DOCS
 my_st_split <- function(rnet, points) {
-  # Extract coordinates from rnet and points
-  # rnet must be an sf data.frame with LINESTRING geometry (no ZM) while points must be an
-  # sfc with MULTIPOINT geometry
-  rnet_coordinates <- data.table::data.table(sfheaders::sf_to_df(rnet))
+  # rnet must be an sf object with LINESTRING geometry
+  # points must be a data.table object with x and y coordinates as keys
+
+  # Extract coordinates from rnet
+  # FIXME: Check what happens with the Z and M dimensions
+  rnet_points <- data.table::data.table(sfheaders::sf_to_df(rnet))
 
   # Check Z/M dimensions
-  if (any(c("z", "m") %in% colnames(rnet_coordinates))) {
-    warning("The Z/M dimensions will be lost.", call. = FALSE, immediate. = TRUE)
-  }
+  # if (any(c("z", "m") %in% colnames(rnet_coordinates))) {
+  #  warning("The Z/M dimensions will be lost.", call. = FALSE, immediate. = TRUE)
+  # }
 
   # I cannot split a LINESTRING at a boundary point (since there is nothing "at
-  # the other side" of the boundary point), so I need to find ID of all shared
-  # internal points
-  id_not_boundary <- rnet_coordinates[
+  # the other side" of the boundary point), so I need to find ID(s) of all
+  # internal points and intersect those ID(s) with the ID(s) of the points that
+  # will be used for breaking the linestrings.
+  id_not_boundary <- rnet_points[
     duplicated(linestring_id) & duplicated(linestring_id, fromLast = TRUE),
     which = TRUE
   ]
-  id_shared <- rnet_coordinates[points, on = c("x", "y"), which = TRUE]
-  id <- intersect(id_not_boundary, id_shared)
+  id_internal_and_boundary <- rnet_points[
+    points,
+    on = c("x", "y"),
+    which = TRUE
+  ]
+  id <- intersect(id_not_boundary, id_internal_and_boundary)
 
-  # Now I need to duplicate the coordinates of the shared internal points (since
-  # they will become boundary points for the new LINESTRING(s)). I use sort
-  # since I want to preserve the order within the points.
-  rnet_coordinates <- rnet_coordinates[sort(c(1:.N, id))]
+  # Now I need to duplicate the coordinates of the internal points that are also
+  # boundary points (since they will become boundary points for the new
+  # LINESTRING(s)). I use sort since I want to preserve the order within the
+  # points.
+  rnet_points <- rnet_points[sort(c(1:nrow(rnet_points), id))]
 
-  # I will build the new sfc LINESTRING using sfheaders::sfc_linestring so I
-  # need to build an ID for each new LINESTRING. The ID for the new
-  # LINESTRING(s) is created starting from the L1 column in rnet_coordinates and
+  # I will build the new LINESTRING using sfheaders::sfc_linestring so I need to
+  # build an ID for each new LINESTRING. The ID for the new LINESTRING(s) is
+  # created starting from the linestring_id column in rnet_points and
   # incrementing the id by 1 at each break point.
-  break_id <- double(nrow(rnet_coordinates))
+  break_id <- double(nrow(rnet_points))
   break_id[id + 1:length(id)] <- 1L # The ID is shifted by 1 at each break point
   break_id <- cumsum(break_id)
-  rnet_coordinates$new_linestring_id <- rnet_coordinates$linestring_id + break_id
+  rnet_points[["new_linestring_id"]] <- rnet_points[["linestring_id"]] + break_id
 
   # Now I can create the new LINESTRING sfc
   new_linestring <- sfheaders::sfc_linestring(
-    obj = rnet_coordinates,
+    obj = rnet_points,
     x = "x",
     y = "y",
     linestring_id = "new_linestring_id"
   )
 
   # Exclude Z and/or M dimension
+  # FIXME
   attr(new_linestring, "z_range") <- NULL
   attr(new_linestring, "m_range") <- NULL
 
   # Determine the ID(s) of the old LINESTRING(s) (i.e. I need to create an sf
   # object with the new geometry column and the old fields)
-  old_rnet_id <- rnet_coordinates[
-    ,
-    list(linestring_id = unique(linestring_id)),
+  old_rnet_id <- rnet_points[
+    j = list(linestring_id = unique(linestring_id)),
     by = new_linestring_id
-  ]$linestring_id
+  ][["linestring_id"]]
 
   # Create the new object:
   sf::st_sf(
