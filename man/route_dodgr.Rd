@@ -39,6 +39,7 @@ Other routes:
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
 \code{\link{route_local}()},
+\code{\link{route_osrm}()},
 \code{\link{route_transportapi_public}()},
 \code{\link{route}()}
 }

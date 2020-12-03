@@ -75,6 +75,7 @@ Other routes:
 \code{\link{line2route}()},
 \code{\link{route_dodgr}()},
 \code{\link{route_local}()},
+\code{\link{route_osrm}()},
 \code{\link{route_transportapi_public}()}
 }
 \concept{routes}
