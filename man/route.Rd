@@ -46,9 +46,15 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-l = od_data_lines[2:4, ]
-r_bc = route(l = l, route_fun = route_bikecitizens)
-plot(r_bc)
+library(sf)
+l = od_data_lines[2, ]
+r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
+r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
+plot(r_walk$geometry)
+\donttest{
+plot(r_bike$geometry, col = "blue", add = TRUE)
+# r_bc = route(l = l, route_fun = route_bikecitizens)
+# plot(r_bc)
 # route(l = l, route_fun = route_bikecitizens, wait = 1)
 library(osrm)
 r_osrm <- route(
@@ -68,6 +74,7 @@ r_local <- stplanr::route(
   sln = sln
 )
 plot(r_local["all"], add = TRUE, lwd = 5)
+}
 }
 \seealso{
 Other routes: 
