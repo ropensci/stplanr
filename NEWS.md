@@ -6,6 +6,7 @@
 - Routing on the network using `sum_network_routes()` now returns a linestring for routes that start where they end (i.e. no travel) (#444)
 - Routing using `route_local()` fixed: the `l` argument now works (#448)
 - New `route_osrm()` function (#449)
+- Bug fixed in `route()` function: incorrect bounding box returned when `data.table` installed (#452)
 
 # stplanr 0.8.0
 
