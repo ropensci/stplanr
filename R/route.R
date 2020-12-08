@@ -12,9 +12,15 @@
 #' @family routes
 #' @export
 #' @examples
-#' l = od_data_lines[2:4, ]
-#' r_bc = route(l = l, route_fun = route_bikecitizens)
-#' plot(r_bc)
+#' library(sf)
+#' l = od_data_lines[2, ]
+#' r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
+#' r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
+#' plot(r_walk$geometry)
+#' \donttest{
+#' plot(r_bike$geometry, col = "blue", add = TRUE)
+#' # r_bc = route(l = l, route_fun = route_bikecitizens)
+#' # plot(r_bc)
 #' # route(l = l, route_fun = route_bikecitizens, wait = 1)
 #' library(osrm)
 #' r_osrm <- route(
@@ -34,6 +40,7 @@
 #'   sln = sln
 #' )
 #' plot(r_local["all"], add = TRUE, lwd = 5)
+#' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = cyclestreets::journey, wait = 0,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {
@@ -100,10 +107,18 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     return(list_out)
   }
   if (requireNamespace("data.table", quietly = TRUE)) {
+    # browser()
+    # warning("data.table used to create the sf object, bounding box may be incorrect.")
     out_dt <- data.table::rbindlist(list_out[list_elements_sf])
-    return(sf::st_sf(out_dt[, !"geometry"], geometry = out_dt$geometry))
+    out_dtsf <- sf::st_sf(out_dt[, !"geometry"], geometry = out_dt$geometry)
+    # attributes(out_dtsf$geometry)
+    # identical(sf::st_bbox(out_dtsf), sf::st_bbox(out_sf)) # FALSE
+    attr(out_dtsf$geometry, "bbox") = sfheaders::sf_bbox(out_dtsf)
+    # identical(sf::st_bbox(out_dtsf), sf::st_bbox(out_sf)) # TRUE
+    return(out_dtsf)
   } else {
-    do.call(rbind, list_out[list_elements_sf])
+    out_sf <- do.call(rbind, list_out[list_elements_sf])
+    out_sf
   }
 }
 

@@ -161,4 +161,102 @@ boundary_points <- st_geometry(line2points(rnet_roundabout))
 points_cols <- rep(rainbow(nrow(rnet_roundabout)), each = 2)
 plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
 
-# Clean the roundabout example.
+library(stplanr)
+library(sf)
+rnet = stplanr::osm_net_example
+
+# define:
+# rnet_boundary_rnet_breakup
+# `%dtIN%`
+# rnet_boundary_rnet_breakup2
+
+
+boundary_points_by_id_r <- function (rnet) {
+  ids <- lapply (rnet$geometry, function (i) rownames (as.matrix (i)))
+  ends <- vapply (ids, function (i) i [c (1, length (i))],
+                  character (2), USE.NAMES = FALSE)
+  ends <- unique (as.vector (ends))
+
+  mids <- lapply (ids, function (i) i [-c (1, length (i))])
+  mids <- unname (do.call (c, mids))
+  mid_is_end <- mids [mids %in% ends]
+  mids <- table (mids)
+  mids_dup <- names (mids) [which (mids > 1)]
+
+  ids <- unique (c (mid_is_end, mids_dup))
+
+  xy <- do.call (rbind, lapply (rnet$geometry, function (i) as.matrix (i)))
+  xy <- xy [match (ids, rownames (xy)), ]
+  p <- sfheaders::sf_point (xy)
+  sf::st_crs(p) <- sf::st_crs(rnet)
+  return (p)
+}
+
+library(Rcpp)
+cppFunction('
+Rcpp::CharacterVector getids (Rcpp::List g) {
+    const int n = g.size ();
+
+    std::unordered_set <std::string> endset, midset, middupset;
+    Rcpp::List mids (n);
+    for (Rcpp::NumericMatrix i: g) {
+        Rcpp::List dimnames = i.attr ("dimnames");
+        Rcpp::CharacterVector rownames = dimnames (0);
+
+        endset.emplace (rownames (0));
+        endset.emplace (rownames (rownames.size () - 1));
+
+        rownames.erase (0);
+        rownames.erase (rownames.size () - 1);
+        for (auto j: rownames)
+        {
+            std::string js = Rcpp::as <std::string> (j);
+            if (midset.find (js) != midset.end ())
+                middupset.emplace (j);
+            midset.emplace (js);
+        }
+    }
+
+    std::unordered_set <std::string> mid_is_end;
+    for (auto i: midset) {
+        if (endset.find (i) != endset.end ())
+            mid_is_end.emplace (i);
+    }
+
+    std::unordered_set <std::string> res;
+    for (auto i: mid_is_end)
+        res.emplace (i);
+    for (auto i: middupset)
+        res.emplace (i);
+
+    return Rcpp::wrap (res);
+    }
+')
+
+boundary_points_by_id_cpp <- function (rnet) {
+  ids <- getids (rnet$geometry)
+  xy <- do.call (rbind, lapply (rnet$geometry, function (i) as.matrix (i)))
+  xy <- xy [match (ids, rownames (xy)), ]
+  p <- sfheaders::sf_point (xy)
+  sf::st_crs(p) <- sf::st_crs(rnet)
+  return (p)
+}
+
+pref <- rnet_boundary_rnet_breakup2 (rnet)
+pr <- boundary_points_by_id_r (rnet)
+pc <- boundary_points_by_id_cpp (rnet)
+nrow (pref); nrow (pr); nrow (pc)
+#> [1] 55
+#> [1] 55
+#> [1] 55
+
+bench::mark(check = FALSE,
+            l2p = {line2points(rnet)},
+            rbp = {rnet_boundary_points(rnet)},
+            rdv = {rnet_duplicated_vertices(rnet)},
+            rnb = {rnet_boundary_rnet_breakup(rnet)},
+            rnb2 = {rnet_boundary_rnet_breakup2(rnet)},
+            rnbv = {rnet_breakup_vertices(rnet)},
+            rrid = {boundary_points_by_id_r(rnet)},
+            rcid = {boundary_points_by_id_cpp(rnet)},
+            time_unit = "ms")
