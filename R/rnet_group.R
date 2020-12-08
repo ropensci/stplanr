@@ -1,16 +1,14 @@
 #' Assign segments in a route network to groups
 #'
-#' @param cluster_fun The clustering function to use. Various clustering functions
-#' are available in the `igraph` package. Default: [igraph::clusters()].
-#' @param d Optional distance variable used to classify segments that are
-#' close (within a certain distance specified by `d`) to each other but not
-#' necessarily touching
-#' @param as.undirected Coerce the graph created internally into an undirected
-#' graph with [igraph::as.undirected()]? TRUE by default, which enables use
-#' of a wider range of clutering functions.
-#' @inheritParams rnet_breakup_vertices
+#' @param rnet An sf, sfc, or sfNetwork object representing a route network.
+#' @param ... Arguments passed to other methods.
 #'
-#' @return The function returns an integer vector reporting the group of each network element
+#' @return If the input rnet is an sf/sfc object, it returns an integer vector
+#'   reporting the groups of each network element. If the input is an sfNetwork
+#'   object, it returns an sfNetwork object with an extra column called
+#'   rnet_group representing the groups of each network element. In the latter
+#'   case, the connectivity of the spatial object is derived from the sfNetwork
+#'   object.
 #'
 #' @family rnet
 #' @examples
@@ -26,8 +24,44 @@
 #' plot(rnet["group_louvain"])
 #' rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 #' plot(rnet["group_fast_greedy"])
+#'
+#' # show sfNetwork implementation
+#' sfn <- SpatialLinesNetwork(rnet_breakup_vertices(rnet))
+#' sfn <- rnet_group(sfn)
+#' plot(slot(sfn, "sl")["rnet_group"])
 #' @export
-rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, as.undirected = TRUE) {
+#'
+rnet_group <- function(rnet, ...) {
+  UseMethod("rnet_group")
+}
+
+#' @name rnet_group
+#' @export
+rnet_group.default = function(rnet, ...) {
+  stop(
+    "At the moment there is no support for matching objects of class ",
+    paste0(class(rnet), collapse = " "), ".",
+    call. = FALSE
+  )
+}
+
+#' @param cluster_fun The clustering function to use. Various clustering functions
+#' are available in the `igraph` package. Default: [igraph::clusters()].
+#' @param d Optional distance variable used to classify segments that are
+#' close (within a certain distance specified by `d`) to each other but not
+#' necessarily touching
+#' @param as.undirected Coerce the graph created internally into an undirected
+#' graph with [igraph::as.undirected()]? TRUE by default, which enables use
+#' of a wider range of clutering functions.
+#' @name rnet_group
+#' @export
+rnet_group.sfc <- function(
+  rnet,
+  cluster_fun = igraph::clusters,
+  d = NULL,
+  as.undirected = TRUE,
+  ...
+) {
   if (!is.null(d)) {
     touching_list <- sf::st_is_within_distance(rnet, dist = d)
   } else {
@@ -39,7 +73,55 @@ rnet_group <- function(rnet, cluster_fun = igraph::clusters, d = NULL, as.undire
   }
   wc <- cluster_fun(g)
   m <- igraph::membership(wc)
-  class(m)
   m <- as.integer(m)
   m
+}
+
+#' @name rnet_group
+#' @export
+rnet_group.sf <- function(
+  rnet,
+  cluster_fun = igraph::clusters,
+  d = NULL,
+  as.undirected = TRUE,
+  ...
+) {
+  rnet_group(
+    sf::st_geometry(rnet),
+    cluster_fun = cluster_fun,
+    d = d,
+    as.undirected = as.undirected,
+    ...
+  )
+}
+
+#' @name rnet_group
+#' @export
+rnet_group.sfNetwork <- function(
+  rnet,
+  cluster_fun = igraph::clusters,
+  ...
+) {
+  # 1. Derive the dual graph of the input rnet object
+  rnet_graph_dual <- igraph::make_line_graph(methods::slot(rnet, "g"))
+
+  # 2. Apply the cluster_fun
+  wc <- cluster_fun(rnet_graph_dual)
+
+  # 3. Derive the membership
+  m <- igraph::membership(wc)
+
+  # 4. Add the new column
+  if ("rnet_group" %in% colnames(methods::slot(rnet, "sl"))) {
+    warning(
+      "The rnet_group column will be overwritten.",
+      call. = FALSE,
+      immediate. = TRUE
+    )
+  }
+  methods::slot(rnet, "sl")[["rnet_group"]] <- as.integer(m)
+
+  # Return
+  rnet
+
 }
