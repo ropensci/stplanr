@@ -214,7 +214,7 @@ rnet_breakup_vertices <- function(rnet, verbose = FALSE) {
 
   rnet <- sf::st_sf(
     sf::st_drop_geometry(rnet)[old_rnet_id, , drop = FALSE],
-    geometry = new_linestring,
+    geometry = new_linestring_sfc,
     agr = sf::st_agr(rnet)
   )
 
