@@ -7,6 +7,7 @@
 - Routing using `route_local()` fixed: the `l` argument now works (#448)
 - New `route_osrm()` function (#449)
 - Bug fixed in `route()` function: incorrect bounding box returned when `data.table` installed (#452)
+- `rnet_breakup_vertices()` is much (10+ times) faster on large datasets (#416)
 
 # stplanr 0.8.0
 
