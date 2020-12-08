@@ -6,7 +6,7 @@ name: R-CMD-check-docker
 jobs:
   R-CMD-check-docker:
     runs-on: ubuntu-latest
-    container: geocompr/geocompr
+    container: rocker/geospatial:dev-osgeo
     steps:
       - uses: actions/checkout@v1
 
