@@ -110,7 +110,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     # browser()
     # warning("data.table used to create the sf object, bounding box may be incorrect.")
     out_dt <- data.table::rbindlist(list_out[list_elements_sf])
-    out_dtsf <- sf::st_sf(out_dt[, !names(out_dt) %in% "geometry"], geometry = out_dt$geometry)
+    out_dtsf <- sf::st_sf(out_dt[, !"geometry"], geometry = out_dt$geometry)
     # attributes(out_dtsf$geometry)
     # identical(sf::st_bbox(out_dtsf), sf::st_bbox(out_sf)) # FALSE
     attr(out_dtsf$geometry, "bbox") = sfheaders::sf_bbox(out_dtsf)

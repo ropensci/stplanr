@@ -2,49 +2,48 @@
 % Please edit documentation in R/rnet-clean.R
 \name{rnet_breakup_vertices}
 \alias{rnet_breakup_vertices}
-\title{Break up an \code{sf} object with LINESTRING geometry.}
+\title{Break up an sf object with LINESTRING geometry.}
 \usage{
-rnet_breakup_vertices(rnet, breakup_internal_vertex_matches = TRUE)
+rnet_breakup_vertices(rnet, verbose = FALSE)
 }
 \arguments{
-\item{rnet}{An sf object with LINESTRING geometry representing a route
+\item{rnet}{An sf or sfc object with LINESTRING geometry representing a route
 network.}
 
-\item{breakup_internal_vertex_matches}{Boolean. Should breaks be made at
-shared internal points? \code{TRUE} by default. Internal points are points that
-do not lie in the boundary of the LINESTRING.}
+\item{verbose}{Boolean. If TRUE, the function prints additional messages.}
 }
 \value{
-An sf object with LINESTRING geometry created after breaking up the
-input object.
+An sf or sfc object with LINESTRING geometry created after breaking
+up the input object.
 }
 \description{
-This function breaks up a single LINESTRING geometry into multiple
-LINESTRING(s) for preserving routability of an \code{sfNetwork} object created
-by \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} function with Open Street Map data. See details
-and \href{https://github.com/ropensci/stplanr/issues/282}{stplanr/issues/282}.
+This function breaks up a LINESTRING geometry into multiple LINESTRING(s). It
+is used mainly for preserving routability of an \code{sfNetwork} object that is
+created using Open Street Map data. See details,
+\href{https://github.com/ropensci/stplanr/issues/282}{stplanr/issues/282}, and
+\href{https://github.com/ropensci/stplanr/issues/416}{stplanr/issues/416}.
 }
 \details{
-A LINESTRING geometry is broken-up when one of the following conditions is
-met:
+A LINESTRING geometry is broken-up when one of the two following conditions
+are met:
 \enumerate{
-\item two or more LINESTRINGS share a POINT that lies in the union of their
-boundaries (see the rnet_roundabout example);
+\item two or more LINESTRINGS share a POINT which is a boundary point for some
+LINESTRING(s), but not all of them (see the rnet_roundabout example);
 \item two or more LINESTRINGS share a POINT which is not in the boundary of any
 LINESTRING (see the rnet_cycleway_intersection example).
 }
 
 The problem with the first example is that, according to algorithm behind
-\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}}, two LINESTRINGS are connected if and only
-if they share at least one point in their boundaries. The roads and the
-roundabout are clearly connected in the "real" world but the corresponding
-LINESTRING objects do not share any boundary point. In fact, by Open Street
+\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}}, two LINESTRINGS are connected if and only if they
+share at least one point in their boundaries. The roads and the roundabout
+are clearly connected in the "real" world but the corresponding LINESTRING
+objects do not share two distinct boundary points. In fact, by Open Street
 Map standards, a roundabout is represented as a closed and circular
-LINESTRING and this implies that the roundabout is not connected to the other
-roads according to \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} definition. By the same reasoning,
-the roads in the second example are clearly connected in the "real" world,
-but they do not share any point in their boundaries. This function is used to
-solve this type of problem.
+LINESTRING, and this implies that the roundabout is not connected to the
+other roads according to \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} definition. By the same
+reasoning, the roads in the second example are clearly connected in the
+"real" world, but they do not share any point in their boundaries. This
+function is used to solve this type of problem.
 }
 \examples{
 library(sf)
@@ -52,13 +51,13 @@ def_par <- par(no.readonly = TRUE)
 par(mar = rep(0, 4))
 
 # Check the geometry of the roundabout example. The dots represent the
-# boundary points of the LINESTRINGS. The "isolated" red point in the top-left
-# is the boundary point of the roundabout, and it is not shared with any
-# other street.
+# boundary points of the LINESTRINGS. The "isolated" red point in the
+# top-left is the boundary point of the roundabout, and it is not shared
+# with any other street.
 plot(st_geometry(rnet_roundabout), lwd = 2, col = rainbow(nrow(rnet_roundabout)))
 boundary_points <- st_geometry(line2points(rnet_roundabout))
 points_cols <- rep(rainbow(nrow(rnet_roundabout)), each = 2)
-plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
+plot(boundary_points, pch = 16, add = TRUE, col = points_cols, cex = 2)
 
 # Clean the roundabout example.
 rnet_roundabout_clean <- rnet_breakup_vertices(rnet_roundabout)
@@ -68,14 +67,14 @@ points_cols <- rep(rainbow(nrow(rnet_roundabout_clean)), each = 2)
 plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
 # The roundabout is now routable since it was divided into multiple pieces
 # (one for each colour), which, according to SpatialLinesNetwork() function,
-# are connected to the other streets.
+# are connected.
 
 # Check the geometry of the overpasses example. This example is used to test
 # that this function does not create any spurious intersection.
 plot(st_geometry(rnet_overpass), lwd = 2, col = rainbow(nrow(rnet_overpass)))
 boundary_points <- st_geometry(line2points(rnet_overpass))
 points_cols <- rep(rainbow(nrow(rnet_overpass)), each = 2)
-plot(boundary_points, pch = 16, add = TRUE, col = points_cols)
+plot(boundary_points, pch = 16, add = TRUE, col = points_cols, cex = 2)
 # At the moment the network is not routable since one of the underpasses is
 # not connected to the other streets.
 
@@ -92,9 +91,11 @@ plot(st_geometry(rnet_overpass_clean), lwd = 2, col = rainbow(nrow(rnet_overpass
 # Check the geometry of the cycleway_intersection example. The black dots
 # represent the boundary points and we can see that the two roads are not
 # connected according to SpatialLinesNetwork() function.
-plot(rnet_cycleway_intersection$geometry,
+plot(
+  rnet_cycleway_intersection$geometry,
   lwd = 2,
-  col = rainbow(nrow(rnet_cycleway_intersection))
+  col = rainbow(nrow(rnet_cycleway_intersection)),
+  cex = 2
 )
 plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
 # Check interactively
@@ -102,8 +103,11 @@ plot(st_geometry(line2points(rnet_cycleway_intersection)), pch = 16, add = TRUE)
 
 # Clean the rnet object and plot the result.
 rnet_cycleway_intersection_clean <- rnet_breakup_vertices(rnet_cycleway_intersection)
-plot(rnet_cycleway_intersection_clean$geometry,
-  lwd = 2, col = rainbow(nrow(rnet_cycleway_intersection_clean))
+plot(
+  rnet_cycleway_intersection_clean$geometry,
+  lwd = 2,
+  col = rainbow(nrow(rnet_cycleway_intersection_clean)),
+  cex = 2
 )
 plot(st_geometry(line2points(rnet_cycleway_intersection_clean)), pch = 16, add = TRUE)
 

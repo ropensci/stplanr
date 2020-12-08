@@ -51,7 +51,9 @@ Imports:
     rlang (>= 0.2.2),
     lwgeom (>= 0.1.4),
     sf (>= 0.6.3),
-    magrittr
+    magrittr,
+    sfheaders,
+    data.table
 LinkingTo: 
     RcppArmadillo (>= 0.9.100.5.0),
     Rcpp (>= 0.12.18)
@@ -70,11 +72,9 @@ Suggests:
     bench,
     openxlsx (>= 4.1.0),
     osrm,
-    data.table,
     geodist,
     mapsapi,
-    s2,
-    sfheaders
+    s2
 VignetteBuilder: knitr
 URL: https://github.com/ropensci/stplanr, https://docs.ropensci.org/stplanr/
 SystemRequirements: GNU make

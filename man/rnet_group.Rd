@@ -12,7 +12,7 @@ rnet_group(
 )
 }
 \arguments{
-\item{rnet}{An sf object with LINESTRING geometry representing a route
+\item{rnet}{An sf or sfc object with LINESTRING geometry representing a route
 network.}
 
 \item{cluster_fun}{The clustering function to use. Various clustering functions
