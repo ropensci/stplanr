@@ -7,14 +7,14 @@
 rnet_breakup_vertices(rnet, verbose = FALSE)
 }
 \arguments{
-\item{rnet}{An sf object with LINESTRING geometry representing a route
+\item{rnet}{An sf or sfc object with LINESTRING geometry representing a route
 network.}
 
 \item{verbose}{Boolean. If TRUE, the function prints additional messages.}
 }
 \value{
-An sf object with LINESTRING geometry created after breaking up the
-input object.
+An sf or sfc object with LINESTRING geometry created after breaking
+up the input object.
 }
 \description{
 This function breaks up a LINESTRING geometry into multiple LINESTRING(s). It

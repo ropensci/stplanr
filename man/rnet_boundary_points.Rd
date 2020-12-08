@@ -19,7 +19,7 @@ rnet_boundary_points_lwgeom(rnet)
 rnet_duplicated_vertices(rnet, n = 2)
 }
 \arguments{
-\item{rnet}{An sf object with LINESTRING geometry representing a route
+\item{rnet}{An sf or sfc object with LINESTRING geometry representing a route
 network.}
 
 \item{n}{The minimum number of time a vertex must be duplicated to be returned}
