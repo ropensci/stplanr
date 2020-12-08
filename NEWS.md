@@ -9,6 +9,7 @@
 - Bug fixed in `route()` function: incorrect bounding box returned when `data.table` installed (#452)
 - `rnet_breakup_vertices()` is much (10+ times) faster on large datasets (#416)
   - Thanks to an [epic pull request](https://github.com/ropensci/stplanr/pull/451) by @agila5 and great input from @luukvdmeer 
+  
 
 # stplanr 0.8.0
 
