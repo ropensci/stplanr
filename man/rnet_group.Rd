@@ -2,18 +2,38 @@
 % Please edit documentation in R/rnet_group.R
 \name{rnet_group}
 \alias{rnet_group}
+\alias{rnet_group.default}
+\alias{rnet_group.sfc}
+\alias{rnet_group.sf}
+\alias{rnet_group.sfNetwork}
 \title{Assign segments in a route network to groups}
 \usage{
-rnet_group(
+rnet_group(rnet, ...)
+
+\method{rnet_group}{default}(rnet, ...)
+
+\method{rnet_group}{sfc}(
   rnet,
   cluster_fun = igraph::clusters,
   d = NULL,
-  as.undirected = TRUE
+  as.undirected = TRUE,
+  ...
 )
+
+\method{rnet_group}{sf}(
+  rnet,
+  cluster_fun = igraph::clusters,
+  d = NULL,
+  as.undirected = TRUE,
+  ...
+)
+
+\method{rnet_group}{sfNetwork}(rnet, cluster_fun = igraph::clusters, ...)
 }
 \arguments{
-\item{rnet}{An sf or sfc object with LINESTRING geometry representing a route
-network.}
+\item{rnet}{An sf, sfc, or sfNetwork object representing a route network.}
+
+\item{...}{Arguments passed to other methods.}
 
 \item{cluster_fun}{The clustering function to use. Various clustering functions
 are available in the \code{igraph} package. Default: \code{\link[igraph:components]{igraph::clusters()}}.}
@@ -27,7 +47,12 @@ graph with \code{\link[igraph:as.directed]{igraph::as.undirected()}}? TRUE by de
 of a wider range of clutering functions.}
 }
 \value{
-The function returns an integer vector reporting the group of each network element
+If the input rnet is an sf/sfc object, it returns an integer vector
+reporting the groups of each network element. If the input is an sfNetwork
+object, it returns an sfNetwork object with an extra column called
+rnet_group representing the groups of each network element. In the latter
+case, the connectivity of the spatial object is derived from the sfNetwork
+object.
 }
 \description{
 Assign segments in a route network to groups
@@ -45,6 +70,11 @@ rnet$group_louvain <- rnet_group(rnet, igraph::cluster_louvain)
 plot(rnet["group_louvain"])
 rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 plot(rnet["group_fast_greedy"])
+
+# show sfNetwork implementation
+sfn <- SpatialLinesNetwork(rnet_breakup_vertices(rnet))
+sfn <- rnet_group(sfn)
+plot(slot(sfn, "sl")["rnet_group"])
 }
 \seealso{
 Other rnet: 
