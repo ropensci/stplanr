@@ -1,7 +1,7 @@
 #' Assign segments in a route network to groups
 #'
-#' This function assigns linestring features, with together are assumed to
-#' form a route network, into groups.
+#' This function assigns linestring features, many of which in an
+#' `sf` object can form route networks, into groups.
 #' By default, the function `igraph::clusters()` is used to determine
 #' group membership, but any `igraph::cluster*()` function can be used.
 #' See examples and the web page

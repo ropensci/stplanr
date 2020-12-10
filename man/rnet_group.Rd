@@ -55,8 +55,8 @@ case, the connectivity of the spatial object is derived from the sfNetwork
 object.
 }
 \description{
-This function assigns linestring features, with together are assumed to
-form a route network, into groups.
+This function assigns linestring features, many of which in an
+\code{sf} object can form route networks, into groups.
 By default, the function \code{igraph::clusters()} is used to determine
 group membership, but any \verb{igraph::cluster*()} function can be used.
 See examples and the web page
