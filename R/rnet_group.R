@@ -1,5 +1,17 @@
 #' Assign segments in a route network to groups
 #'
+#' This function assigns linestring features, many of which in an
+#' `sf` object can form route networks, into groups.
+#' By default, the function `igraph::clusters()` is used to determine
+#' group membership, but any `igraph::cluster*()` function can be used.
+#' See examples and the web page
+#' [igraph.org/r/doc/communities.html](https://igraph.org/r/doc/communities.html)
+#' for more information. From that web page, the following clustering
+#' functions are available:
+#'
+#' `cluster_edge_betweenness, cluster_fast_greedy, cluster_label_prop,`
+#' `cluster_leading_eigen, cluster_louvain, cluster_optimal, cluster_spinglass, cluster_walktrap`
+#'
 #' @param rnet An sf, sfc, or sfNetwork object representing a route network.
 #' @param ... Arguments passed to other methods.
 #'
@@ -12,7 +24,7 @@
 #'
 #' @family rnet
 #' @examples
-#' rnet <- stplanr::osm_net_example
+#' rnet <- rnet_breakup_vertices(stplanr::osm_net_example)
 #' rnet$group <- rnet_group(rnet)
 #' plot(rnet["group"])
 #' # mapview::mapview(rnet["group"])
@@ -26,9 +38,9 @@
 #' plot(rnet["group_fast_greedy"])
 #'
 #' # show sfNetwork implementation
-#' sfn <- SpatialLinesNetwork(rnet_breakup_vertices(rnet))
+#' sfn <- SpatialLinesNetwork(rnet)
 #' sfn <- rnet_group(sfn)
-#' plot(slot(sfn, "sl")["rnet_group"])
+#' plot(sfn@sl["rnet_group"])
 #' @export
 #'
 rnet_group <- function(rnet, ...) {
