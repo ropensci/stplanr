@@ -6,10 +6,7 @@
 - Routing on the network using `sum_network_routes()` now returns a linestring for routes that start where they end (i.e. no travel) (#444)
 - Routing using `route_local()` fixed: the `l` argument now works (#448)
 - New `route_osrm()` function (#449)
-- Bug fixed in `route()` function: incorrect bounding box returned when `data.table` installed (#452)
-- `rnet_breakup_vertices()` is much (10+ times) faster on large datasets (#416)
-  - Thanks to an [epic pull request](https://github.com/ropensci/stplanr/pull/451) by @agila5 and great input from @luukvdmeer 
-  
+- `rnet_group()` is now a generic function that works with `sfNetwork` objects (#455)
 
 # stplanr 0.8.0
 
