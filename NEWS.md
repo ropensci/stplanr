@@ -6,7 +6,10 @@
 - Routing on the network using `sum_network_routes()` now returns a linestring for routes that start where they end (i.e. no travel) (#444)
 - Routing using `route_local()` fixed: the `l` argument now works (#448)
 - New `route_osrm()` function (#449)
+- `rnet_breakup_vertices()` is now way faster, thanks to Andrea Gilardi and others (#416)
 - `rnet_group()` is now a generic function that works with `sfNetwork` objects (#455)
+- `route_osrm()` provides easy access to multi-modal routing (#449)
+- Bug in `route()` function's calculation of bbox attributes fixed (#452)
 
 # stplanr 0.8.0
 
