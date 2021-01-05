@@ -26,10 +26,12 @@
 #' @param to_lon Longitude of destination
 #' @export
 #' @examples
+#' \donttest{
 #' route_bikecitizens()
 #' ldf <- od_coords(stplanr::od_data_lines[2, ])
 #' r <- route_bikecitizens(ldf)
 #' plot(r)
+#' }
 route_bikecitizens <- function(
                                from = NULL,
                                to = NULL,
