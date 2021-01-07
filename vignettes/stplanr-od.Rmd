@@ -465,11 +465,6 @@ sum(lines_cars$car_km * 2.5 * 200) / 1e9
 
 ```{r, echo=FALSE, eval=FALSE}
 # out-takes and test code
-u <- "https://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/commodity_flow_survey/2007/zip/origin_destination_files.zip"
-f <- file.path(tempdir(), "origin_destination_files.zip")
-download.file(u, f)
-unzip(f)
-
 # demonstrate bug/feature in sf
 library(sf)
 m <- matrix(c(
