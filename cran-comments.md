@@ -1,6 +1,6 @@
 Minor update with a new function and a few fixes
 
-Resubmitted after typo in DESCRIPTION fixed.
+Resubmitted after urls updated.
 
 ## Test environments
 

@@ -128,7 +128,7 @@ lineLabels <- function(sl, attrib) {
 #' Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
 #' for interactive and online visualisation of transport behaviour at the road network level.
 #' Environment and Planning B: Urban Analytics and City Science. July 2020.
-#' [doi:10.1177/2399808320942779](https://doi.org/10.1177/2399808320942779)
+#' \doi{10.1177/2399808320942779}.
 #'
 #' Rowlingson, B (2015). Overlaying lines and aggregating their values for overlapping
 #' segments. Reproducible question from <https://gis.stackexchange.com>. See

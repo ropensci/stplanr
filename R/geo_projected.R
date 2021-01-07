@@ -163,12 +163,12 @@ gprojected <- geo_projected.Spatial
 #' lib_versions
 #' if (lib_versions[3] >= "6.3.1") {
 #'   buff_sf <- geo_buffer(routes_fast_sf, dist = 50)
-#'   plot(buff_sf$geometry, add = TRUE)
+#'   plot(buff_sf$geometry)
 #'   geo_buffer(routes_fast_sf$geometry, dist = 50)
 #'   # on legacy sp objects (not tested)
-#'   buff_sp <- geo_buffer(routes_fast, width = 100)
-#'   class(buff_sp)
-#'   plot(buff_sp, col = "red")
+#'   # buff_sp <- geo_buffer(routes_fast, width = 100)
+#'   # class(buff_sp)
+#'   # plot(buff_sp, col = "red")
 #' }
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {

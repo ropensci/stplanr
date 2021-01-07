@@ -43,10 +43,10 @@ It is typically the job of the analyst to use a routing service (such as [OSRM](
 
 Despite the rather dull name, OD datasets are a vital part of the modern world: they underpin analysis and models that influence current *and future* transport systems.
 Historically, these models, and the OD datasets that drove them, were used to plan for car-dominated cities [@boyce_forecasting_2015].
-Now that there is growing evidence of the negative impacts car domination, however, there is a strong argument for transport models being repurposed.
+Now that there is growing evidence of the negative impacts car domination, however, there is a strong argument for transport models being re-purposed.
 Origin-destination data can be part of the solution.
 
-From a health perspective transport planning, supported by OD data and analysed primarily using proprietary software and opaque methods, has failed: roads are now the largest cause of death of young people worldwide, killing more than [1 million](https://www.who.int/violence_injury_prevention/road_safety_status/2018/en/) people each year [@world_health_organization_global_2018].
+From a health perspective transport planning, supported by OD data and analysed primarily using proprietary software and opaque methods, has failed: roads are now the largest cause of death of young people worldwide, killing more than [1 million](https://www.who.int/publications/i/item/9789241565684) people each year [@world_health_organization_global_2018].
 Even ignoring problems such as air pollution, obesity and climate change, it is clear that current transport systems are unsustainable.
 There are other reasons why transport data analysis and software are important [@lovelace_stplanr_2018].
 
