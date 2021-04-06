@@ -53,7 +53,8 @@ Imports:
     sf (>= 0.6.3),
     magrittr,
     sfheaders,
-    data.table
+    data.table,
+    pbapply
 LinkingTo: 
     RcppArmadillo (>= 0.9.100.5.0),
     Rcpp (>= 0.12.18)
@@ -64,7 +65,6 @@ Suggests:
     dodgr (>= 0.0.3),
     stats19,
     cyclestreets,
-    pbapply,
     leaflet,
     rgdal,
     pct,

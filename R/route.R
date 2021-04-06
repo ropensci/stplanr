@@ -17,8 +17,8 @@
 #' r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
 #' r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
 #' plot(r_walk$geometry)
-#' \donttest{
 #' plot(r_bike$geometry, col = "blue", add = TRUE)
+#' \donttest{
 #' # r_bc = route(l = l, route_fun = route_bikecitizens)
 #' # plot(r_bc)
 #' # route(l = l, route_fun = route_bikecitizens, wait = 1)
@@ -74,26 +74,18 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     l <- od_coords2line(ldf)
   }
   if (list_output) {
-    list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
       if (is.null(cl)) {
-        pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
+        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
       } else {
-        pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
+        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...), cl = cl)
       }
     } else {
-      lapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
-    }
-  } else {
-    list_out <- if (requireNamespace("pbapply", quietly = TRUE)) {
       if (is.null(cl)) {
-        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...))
+        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...))
       } else {
-        pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...), cl = cl)
+        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...), cl = cl)
       }
-    } else {
-      lapply(1:nrow(l), function(i) route_i(FUN, ldf, i, l, ...))
     }
-  }
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
   if (sum(list_elements_sf) < length(list_out)) {
@@ -122,6 +114,7 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   }
 }
 
+# output sf objects
 route_i <- function(FUN, ldf, wait, i, l, ...) {
   Sys.sleep(wait)
   error_fun <- function(e) {
@@ -142,6 +135,7 @@ route_i <- function(FUN, ldf, wait, i, l, ...) {
   )
 }
 
+# output whatever the routing function returns
 route_l <- function(FUN, ldf, i, l, ...) {
   error_fun <- function(e) {
     e
