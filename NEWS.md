@@ -1,5 +1,7 @@
 # stplanr 0.8.2
 
+- Bug fixed related to the `route()` function: it silently failed when `pbapply` not installed. The package was promoted from Suggests to Imports (#460)
+
 # stplanr 0.8.1
 
 - Thanks to the `styler` package, code in `stplanr` now adheres to a consistent style (using arrow `<-` assignment despite the maintainer's default of equals `=` assignment - many `=` had been introduced accidentally!)
