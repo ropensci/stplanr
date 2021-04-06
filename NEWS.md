@@ -1,3 +1,5 @@
+# stplanr 0.8.2
+
 # stplanr 0.8.1
 
 - Thanks to the `styler` package, code in `stplanr` now adheres to a consistent style (using arrow `<-` assignment despite the maintainer's default of equals `=` assignment - many `=` had been introduced accidentally!)
