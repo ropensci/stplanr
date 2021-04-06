@@ -74,18 +74,18 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
     l <- od_coords2line(ldf)
   }
   if (list_output) {
-      if (is.null(cl)) {
-        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
-      } else {
-        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...), cl = cl)
-      }
+    if (is.null(cl)) {
+      list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
     } else {
-      if (is.null(cl)) {
-        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...))
-      } else {
-        list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...), cl = cl)
-      }
+      list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...), cl = cl)
     }
+  } else {
+    if (is.null(cl)) {
+      list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...))
+    } else {
+      list_out <- pbapply::pblapply(1:nrow(l), function(i) route_i(FUN, ldf, wait, i, l, ...), cl = cl)
+    }
+  }
 
   list_elements_sf <- most_common_class_of_list(list_out, "sf")
   if (sum(list_elements_sf) < length(list_out)) {
@@ -261,10 +261,10 @@ route_dodgr <- function(from = NULL,
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
   # suppressMessages ({
   from_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, fm_coords,
-    connected = TRUE
+                                                       connected = TRUE
   )])
   to_id <- unique(verts$id[dodgr::match_pts_to_graph(verts, to_coords,
-    connected = TRUE
+                                                     connected = TRUE
   )])
   # })
   dp <- dodgr::dodgr_paths(ways_dg, from = from_id, to = to_id)
