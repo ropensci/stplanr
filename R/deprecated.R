@@ -5,204 +5,273 @@
 #' @name stplanr-deprecated
 NULL
 
-#' Simplify geometry of spatial objects with the mapshaper library
+# Functions for aggregating two-way OD pairs into 'oneway' lines
+#' Aggregate ods so they become non-directional
 #'
-#' @section Details:
-#'
-#' Note: more advance R/mapshaper tools are provided by the rmapshaper
-#' package: <https://github.com/ateucher/rmapshaper>.
-#'
-#' Calls the JavaScript command-line GIS application mapshaper
-#' (<https://github.com/mbloch/mapshaper>) from the system
-#' to simplify geographic features, and then tidies up.
-#' mapshaper must be installed and available to [system()].
-#' `mapshape` writes new a file to disk.
-#' Thanks to Richard and Adrian Ellison for demonstrating this in R.
-#'
-#' @param shp A spatial object to be simplified.
-#' @param percent A number between 1 and 100 stating how aggressively to simplify
-#'  the object (1 is a very aggressive simplification)
-#' @param ms_options Text string of options passed to mapshaper such as
-#' @param dsn The name of the temporary file to write to (deleted after use)
-#' @param silent Logical determining whether the function call is printed to screen
-#' `no-topology` (a flag) and `snap-interval=1` (a key value pair).
-#' See the mapshaper documentation for details:
-#' <https://github.com/mbloch/mapshaper/wiki/Command-Reference>.
-#'
-#' The percent argument refers to the percentage of removable points to retain.
-#' So `percent = 1` is a very aggressive simplication, saving a huge amount of
-#' hard-disk space.
-#' @family geo
-#' @export
-#' @examples
-#' \dontrun{
-#' shp <- routes_fast[2, ]
-#' plot(shp)
-#' rfs10 <- mapshape(shp)
-#' rfs5 <- mapshape(shp, percent = 5)
-#' rfs1 <- mapshape(shp, percent = 1)
-#' plot(rfs10, add = TRUE, col = "red")
-#' plot(rfs5, add = TRUE, col = "blue")
-#' plot(rfs1, add = TRUE, col = "grey")
-#' # snap the lines to the nearest interval
-#' rfs_int <- mapshape(shp, ms_options = "snap-interval=0.001")
-#' plot(shp)
-#' plot(rfs_int, add = TRUE)
-#' mapshape(routes_fast_sf[2, ])
-#' }
-mapshape <- function(shp, percent = 10, ms_options = "", dsn = "mapshape", silent = FALSE) {
-  .Deprecated(new = "simplify", package = "rmapshaper")
-  shp_filename <- paste0(dsn, ".shp")
-  new_filename <- paste0(dsn, "-ms.shp")
-  if (!mapshape_available()) stop("mapshaper not available on this system")
-  is_sp <- is(shp, "Spatial")
-  if (is_sp) {
-    shp <- sf::st_as_sf(shp)
-  }
-  sf::write_sf(shp, shp_filename, delete_layer = TRUE)
-  cmd <- paste0("mapshaper ", ms_options, " ", shp_filename, " -simplify ", percent, "% -o ", new_filename)
-  if (!silent) print(paste0("Running the following command from the system: ", cmd))
-  system(cmd, ignore.stderr = TRUE)
-  new_shp <- sf::st_read(paste0(dsn, "-ms.shp"))
-  sf::st_crs(new_shp) <- sf::st_crs(shp)
-  to_remove <- list.files(pattern = dsn)
-  file.remove(to_remove)
-  if (is_sp) {
-    new_shp <- as(new_shp, "Spatial")
-  }
-  new_shp
-}
-
-#' Does the computer have mapshaper available?
-#'
-#' This helper function for [mapshape()]
-#' determines whether or not the JavaScript library
-#' mapshaper is available.
-#'
-#' @family geo
-#' @export
-#' @examples
-#' \dontrun{
-#' mapshape_available()
-#' }
-mapshape_available <- function() {
-  .Deprecated(new = "simplify", package = "rmapshaper")
-  suppressWarnings(system("mapshaper --version")) != 127
-}
-#' Crops spatial object x to the bounding box of spatial object (or matrix) b
-#'
-#' This function is a cross between the spatial subsetting funtions such as
-#' sp::over(), rgeos::gIntersects() etc, and the cropping functions of
-#' raster::crop() and rgeos::gIntersection(). The output is the subset of
-#' spatial object a with an outline described by a square bounding box.
-#' The utility of such a function is illustrated in the following question:
-#' <https://gis.stackexchange.com/questions/46954/clip-spatial-object-to-bounding-box-in-r/>.
-#' @param shp The spatial object a to be cropped
-#' @param bb the bounding box or spatial object that will be used to crop `shp`
-#' @family geo
-#'
-#' @export
-#' @examples
-#' \dontrun{
-#' cb <- sf::st_buffer(cents_sf[8, ], dist = 0.012)
-#' plot(cents_sf$geometry)
-#' plot(cb, add = TRUE)
-#' clipped <- gclip(cents_sf, cb)
-#' plot(clipped, add = TRUE)
-#' clipped$avslope # gclip also returns the data attribute
-#' points(clipped)
-#' points(cents[cb, ], col = "red") # note difference
-#' gclip(cents_sf, cb)
-#' }
-gclip <- function(shp, bb) {
-  .Deprecated(new = "st_buffer", package = "sf")
-  UseMethod("gclip")
-}
-#' @export
-gclip.Spatial <- function(shp, bb) {
-  if (class(bb) == "matrix") {
-    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
-  }
-  else {
-    b_poly <- as(raster::extent(bb), "SpatialPolygons")
-  }
-  clipped <- rgeos::gIntersection(shp, b_poly, byid = TRUE, id = row.names(shp))
-  if (grepl("DataFrame", class(shp))) {
-    if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
-      geodata <- data.frame(gclip_id = row.names(clipped@lineobj))
-    }
-    else {
-      geodata <- data.frame(gclip_id = row.names(clipped))
-    }
-    joindata <- cbind(gclip_id = row.names(shp), shp@data)
-    geodata <- dplyr::left_join(geodata, joindata)
-    row.names(geodata) <- geodata$gclip_id
-    # if the data are SpatialPolygonsDataFrame (based on https://stat.ethz.ch/pipermail/r-sig-geo/2008-January/003052.html)
-    if (grepl("SpatialPolygons", class(shp))) {
-      # then rebuild SpatialPolygonsDataFrame selecting relevant rows by row.names (row ID values)
-      clipped <- sp::SpatialPolygonsDataFrame(clipped, as(shp[row.names(clipped), ], "data.frame"))
-    } else if (grepl("SpatialLines", class(shp)) & grepl("SpatialCollections", class(clipped))) {
-      clipped <- sp::SpatialLinesDataFrame(clipped@lineobj, geodata)
-    } else if (grepl("SpatialLines", class(shp))) {
-      clipped <- sp::SpatialLinesDataFrame(clipped, geodata)
-    } else { # assumes the data is a SpatialPointsDataFrame
-      clipped <- sp::SpatialPointsDataFrame(clipped, geodata)
-    }
-  }
-  clipped@data$gclip_id <- NULL
-  clipped
-}
-#' @export
-gclip.sf <- function(shp, bb) {
-  shp <- as(shp, "Spatial")
-  shp <- gclip.Spatial(shp, as(bb, "Spatial"))
-  sf::st_as_sf(shp)
-}
-
-#' Match two sets of lines based on similarity
-#'
-#' This function is a wrapper around gDistance that matches lines based on the Hausdorff distance
-#'
-#' @param l1 A spatial object
-#' @param l2 A spatial object
-#' @param threshold The threshold for a match - distances greater than this will not count as matches
-#' @param return_sp Should the function return a spatial result (FALSE by default)
+#' For example, sum total travel in both directions.
+#' @param x A data frame or SpatialLinesDataFrame, representing an OD matrix
+#' @param attrib A vector of column numbers or names
+#' for deciding which attribute(s) of class numeric to
+#' aggregate
+#' @param id1 Optional (it is assumed to be the first column)
+#' text string referring to the name of the variable containing
+#' the unique id of the origin
+#' @param id2 Optional (it is assumed to be the second column)
+#' text string referring to the name of the variable containing
+#' the unique id of the destination
+#' @param stplanr.key A key of unique OD pairs regardless of the order,
+#' autogenerated by [od_id_order()]
+#' @return `onewayid` outputs a data.frame with rows containing
+#' results for the user-selected attribute values that have been aggregated.
 #' @family lines
 #' @export
-#' @examples
-#' \dontrun{
-#' x1 <- 2:4
-#' x2 <- 3:5
-#' match(x1, x2) # how the base function works
-#' l1 <- flowlines[2:4, ]
-#' l2 <- routes_fast[3:5, ]
-#' (lmatches <- line_match(l1, l2)) # how the stplanr version works
-#' l2matched <- l2[lmatches[!is.na(lmatches)], ]
-#' plot(l1)
-#' plot(l2, add = TRUE)
-#' plot(l2matched, add = TRUE, col = "red") # showing matched routes
-#' l2matched2 <- line_match(l1, l2, return_sp = TRUE)
-#' identical(l2matched, l2matched2)
-#' # decreasing the match likelihood via the threshold
-#' line_match(l1, l2, threshold = 0.003)
-#' }
-line_match <- function(l1, l2, threshold = 0.01, return_sp = FALSE) {
-  .Deprecated(new = "st_distance", package = "sf")
-  dist_mat <- rgeos::gDistance(l1, l2, byid = TRUE, hausdorff = TRUE)
-  closest <- apply(dist_mat, 2, which.min)
-  closest_values <- apply(dist_mat, 2, min)
-  closest[closest_values > threshold] <- NA
-  sel_na <- is.na(closest)
-  if (return_sp) {
-    l2matched <- l2[closest[!sel_na], ]
-    match_num <- names(closest)[which(!sel_na)]
-    if (is(l2, "SpatialLinesDataFrame")) {
-      l2matched$match <- match_num
-    } else {
-      l2matched <- sp::SpatialLinesDataFrame(l2matched, data = data.frame(match_num), match.ID = FALSE)
-    }
-    return(l2matched)
-  } else {
-    return(unname(closest))
-  }
+onewayid <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
+                     stplanr.key = od_id_order(x, id1, id2)) {
+  .Deprecated(new = "od_oneway", package = "od",
+              msg = "See updated od_oneway function in stplanr, and the od package")
+  UseMethod("onewayid")
 }
+
+#' @name onewayid
+#' @details
+#' Flow data often contains movement in two directions: from point A to point B
+#' and then from B to A. This can be problematic for transport planning, because
+#' the magnitude of flow along a route can be masked by flows the other direction.
+#' If only the largest flow in either direction is captured in an analysis, for
+#' example, the true extent of travel will by heavily under-estimated for
+#' OD pairs which have similar amounts of travel in both directions.
+#' Flows in both direction are often represented by overlapping lines with
+#' identical geometries (see [flowlines()]) which can be confusing
+#' for users and are difficult to plot.
+#' @examples
+#' \donttest{
+#' # this function is deprecated so examples are not expected to run
+#' # keeping the example code in there for now for posterity
+#' flow_oneway <- onewayid(flow, attrib = 3)
+#' nrow(flow_oneway) < nrow(flow) # result has fewer rows
+#' sum(flow$All) == sum(flow_oneway$All) # but the same total flow
+#' # using names instead of index for attribute
+#' onewayid(flow, attrib = "All")
+#' # using many attributes to aggregate
+#' attrib <- which(vapply(flow, is.numeric, TRUE))
+#' flow_oneway <- onewayid(flow, attrib = attrib)
+#' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
+#' # Demonstrate the results from onewayid and onewaygeo are identical
+#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
+#' plot(flow_oneway$All, flow_oneway_geo$All)
+#' flow_oneway_sf <- onewayid(flowlines_sf, 3)
+#' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
+#' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
+#' }
+#' @export
+onewayid.data.frame <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
+                                stplanr.key = od_id_order(x, id1, id2)) {
+  if (is.numeric(attrib)) {
+    attrib_names <- names(x)[attrib]
+  } else {
+    attrib_names <- attrib
+    attrib <- which(names(x) %in% attrib)
+  }
+
+  # separate geometry for sf objects
+  is_sf <- is(x, "sf")
+  if (is_sf) {
+    x_sf <- sf::st_sf(stplanr.key[3], geometry = sf::st_geometry(x))
+    x <- sf::st_drop_geometry(x)
+  }
+
+  x <- dplyr::bind_cols(x, stplanr.key)
+
+  x_oneway_numeric <- dplyr::group_by(x, stplanr.key) %>%
+    dplyr::summarise_at(attrib, sum)
+
+  x_oneway_binary <- dplyr::mutate(x, is_two_way = duplicated(stplanr.key)) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(is_two_way = dplyr::last(.data$is_two_way)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway_character <- x %>%
+    dplyr::transmute(
+      id1 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 1],
+      id2 = stringr::str_split(.data$stplanr.key, " ", simplify = TRUE)[, 2],
+      stplanr.key = .data$stplanr.key
+    ) %>%
+    dplyr::group_by(stplanr.key) %>%
+    dplyr::summarise(id1 = dplyr::first(id1), id2 = dplyr::first(id2)) %>%
+    dplyr::select(-stplanr.key)
+
+  x_oneway <- dplyr::bind_cols(
+    x_oneway_character,
+    x_oneway_numeric,
+    x_oneway_binary
+  )
+
+  if (is_sf) {
+    x_sf <- x_sf[!duplicated(x_sf$stplanr.key), ]
+    x_oneway <- sf::st_as_sf(dplyr::inner_join(x_oneway, x_sf))
+    # class(x_oneway) # sf
+  }
+
+  x_oneway$stplanr.key <- NULL
+  names(x_oneway)[1:2] <- c(id1, id2)
+
+  return(x_oneway)
+}
+
+#' @name onewayid
+#' @examples
+#' # with spatial data
+#' data(flowlines)
+#' fo <- onewayid(flowlines, attrib = "All")
+#' head(fo@data)
+#' plot(fo)
+#' sum(fo$All) == sum(flowlines$All)
+#' # test results for one line
+#' n <- 3
+#' plot(fo[n, ], lwd = 20, add = TRUE)
+#' f_over_n <- rgeos::gEquals(fo[n, ], flowlines["All"], byid = TRUE)
+#' sum(flowlines$All[f_over_n]) == sum(fo$All[n]) # check aggregation worked
+#' plot(flowlines[which(f_over_n)[1], ], add = TRUE, col = "white", lwd = 10)
+#' plot(flowlines[which(f_over_n)[2], ], add = TRUE, lwd = 5)
+#' @export
+onewayid.SpatialLines <- function(x, attrib, id1 = names(x)[1], id2 = names(x)[2],
+                                  stplanr.key = od_id_order(x, id1, id2)) {
+  x_geom <- sp::SpatialLines(x@lines, proj4string = sp::CRS(proj4string(x)))
+  x <- x@data
+
+  x_oneway <- onewayid(x, id1, id2, attrib = attrib)
+  x_oneway$stplanr.key <- od_id_order(x_oneway[c(id1, id2)])$stplanr.key
+
+  if (length(x_geom) != nrow(x_oneway)) {
+    id_old <- paste(x[[id1]], x[[id2]])
+    sel <- id_old %in% x_oneway$stplanr.key
+    x_geom <- x_geom[sel, ]
+  }
+
+  x_oneway <- sp::SpatialLinesDataFrame(sl = x_geom, data = x_oneway, match.ID = FALSE)
+
+  return(x_oneway)
+}
+
+#' Import GTFS shapes and route data to SpatialLinesDataFrame.
+#'
+#' Takes a string with the file path of the zip file with the GTFS feed,
+#' imports the shapes (geometry), route and agency data and returns a
+#' SpatialLinesDataFrame for the GTFS feed.
+#'
+#' @param gtfszip String with the file path of the GTFS feed zip file
+#' @export
+#' @examples
+#' f <- system.file("extdata", "beartransit-ca-us.zip", package = "stplanr")
+#' # update file to latest version
+#' # see https://code.google.com/p/googletransitdatafeed/wiki/PublicFeeds
+#' u <- "http://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip"
+#' # download.file(u, f)
+#' gtfs <- gtfs2sldf(gtfszip = f)
+#' plot(gtfs, col = gtfs$route_long_name)
+#' plot(gtfs[gtfs$route_long_name == "Central Campus", ])
+#' \dontrun{
+#' # An example of a larger gtfs feed
+#' download.file(
+#'   "http://www.yrt.ca/google/google_transit.zip",
+#'   paste0(tempdir(), "/gtfsfeed.zip")
+#' )
+#' yrtgtfs <- gtfs2sldf(paste0(tempdir(), "/gtfsfeed.zip"))
+#' sp::plot(yrtgtfs, col = paste0("#", yrtgtfs$route_color))
+#' }
+gtfs2sldf <- function(gtfszip = "") {
+  .Deprecated(new = "read_gtfs", package = "gtfs2gps", msg = "Many packages read gtfs files")
+  if (gtfszip == "") {
+    stop("Zip file required")
+  }
+  if (file.exists(gtfszip) == FALSE) {
+    stop("Specified zip file does not exist")
+  }
+
+  gtfsfiles <- unzip(gtfszip, exdir = tempdir())
+
+  gtfstrips <-
+    read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/trips.txt"))
+  if (all(charToRaw(substr(colnames(gtfstrips)[1], 1, 3)) == c(as.raw(239), as.raw(46), as.raw(46)))) {
+    gtfstrips <-
+      read.csv(
+        stringsAsFactors = TRUE,
+        paste0(tempdir(), "/trips.txt"),
+        fileEncoding = "UTF-8-BOM"
+      )
+    gtfsroutes <-
+      read.csv(
+        stringsAsFactors = TRUE,
+        paste0(tempdir(), "/routes.txt"),
+        fileEncoding = "UTF-8-BOM"
+      )
+    gtfsagency <-
+      read.csv(
+        stringsAsFactors = TRUE,
+        paste0(tempdir(), "/agency.txt"),
+        fileEncoding = "UTF-8-BOM"
+      )
+    gtfsshape <-
+      read.csv(
+        stringsAsFactors = TRUE,
+        paste0(tempdir(), "/shapes.txt"),
+        fileEncoding = "UTF-8-BOM"
+      )
+  }
+  else {
+    gtfsroutes <-
+      read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/routes.txt"))
+    gtfsagency <-
+      read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/agency.txt"))
+    gtfsshape <-
+      read.csv(stringsAsFactors = TRUE, paste0(tempdir(), "/shapes.txt"))
+  }
+
+  if (nrow(gtfsshape) == 0) {
+    stop("GTFS shapes.txt file is empty.")
+  }
+
+  unlink(gtfsfiles)
+
+  gtfslines <- sp::SpatialLinesDataFrame((
+    gtfsshape %>%
+      dplyr::group_by_( ~ shape_id) %>%
+      dplyr::arrange_( ~ shape_pt_sequence) %>%
+      dplyr::do_(gtfsline = "sp::Lines(sp::Line(as.matrix(.[,c('shape_pt_lon','shape_pt_lat')])),unique(.$shape_id))") %>%
+      dplyr::ungroup() %>%
+      dplyr::do_(
+        gtfsline = "sp::SpatialLines(.[[2]],
+                                    proj4string = sp::CRS('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'))"
+      )
+  )[[1]][[1]],
+  data = gtfstrips %>%
+    dplyr::inner_join(gtfsroutes) %>%
+    dplyr::distinct_(
+      ~ route_id,
+      ~ shape_id,
+      ~ route_short_name,
+      ~ route_long_name,
+      ~ route_desc,
+      ~ route_type,
+      ~ route_color,
+      ~ route_text_color,
+      ~ agency_id
+    ) %>%
+    dplyr::select_(
+      ~ route_id,
+      ~ shape_id,
+      ~ route_short_name,
+      ~ route_long_name,
+      ~ route_desc,
+      ~ route_type,
+      ~ route_color,
+      ~ route_text_color,
+      ~ agency_id
+    ) %>%
+    dplyr::inner_join(gtfsagency) %>%
+    dplyr::do_("`rownames<-`(.,.$shape_id)")
+  )
+  rm(gtfstrips, gtfsshape, gtfsagency, gtfsroutes)
+  return(gtfslines)
+}
+

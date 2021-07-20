@@ -4,7 +4,7 @@
 #' `geojson_write` from the geojsonio package
 #' provides the same functionality <https://github.com/ropensci/geojsonio>.
 #'
-#' @inheritParams gclip
+#' @param shp Spatial data object
 #' @param filename File name of the output geojson
 writeGeoJSON <- function(shp, filename) {
   name <- nm <- deparse(substitute(shp))
@@ -16,7 +16,7 @@ writeGeoJSON <- function(shp, filename) {
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
 #'
-#' @inheritParams gclip
+#' @param bb Bounding box object
 #' @param scale_factor Numeric vector determining how much the bounding box will grow or shrink.
 #' Two numbers refer to extending the bounding box in x and y dimensions, respectively.
 #' If the value is 1, the output size will be the same as the input.

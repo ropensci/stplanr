@@ -23,11 +23,8 @@ rf_osgb <- reproject(routes_fast[1:3, ], 27700)
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{gclip}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
-\code{\link{mapshape_available}()},
-\code{\link{mapshape}()},
 \code{\link{quadrant}()}
 }
 \concept{geo}

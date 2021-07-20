@@ -4,7 +4,7 @@
 \alias{mats2line}
 \title{Convert 2 matrices to lines}
 \usage{
-mats2line(mat1, mat2)
+mats2line(mat1, mat2, crs = NA)
 }
 \arguments{
 \item{mat1}{Matrix representing origins}
@@ -33,7 +33,6 @@ Other lines:
 \code{\link{line2points}()},
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
-\code{\link{line_match}()},
 \code{\link{line_midpoint}()},
 \code{\link{line_sample}()},
 \code{\link{line_segment}()},
@@ -41,6 +40,7 @@ Other lines:
 \code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
+\code{\link{onewayid}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()},
 \code{\link{toptailgs}()},

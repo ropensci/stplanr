@@ -10,16 +10,21 @@
 #' m2 <- matrix(c(9, 9, 9, 1), ncol = 2)
 #' l <- mats2line(m1, m2)
 #' class(l)
+#' l
 #' lsf <- sf::st_sf(l, crs = 4326)
 #' class(lsf)
 #' plot(lsf)
 #' # mapview::mapview(lsf)
-mats2line <- function(mat1, mat2) {
+mats2line <- function(mat1, mat2, crs = NA) {
   l <- lapply(1:nrow(mat1), function(i) {
     mat_combined <- rbind(mat1[i, ], mat2[i, ])
     sf::st_linestring(mat_combined)
   })
-  sf::st_sfc(l)
+  if(is.na(crs)) {
+    sf::st_sfc(l)
+  } else {
+    sf::st_sfc(l, crs = crs)
+  }
 }
 #' Add geometry columns representing a route via intermediary points
 #'

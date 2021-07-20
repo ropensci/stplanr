@@ -7,7 +7,7 @@
 writeGeoJSON(shp, filename)
 }
 \arguments{
-\item{shp}{The spatial object a to be cropped}
+\item{shp}{Spatial data object}
 
 \item{filename}{File name of the output geojson}
 }
