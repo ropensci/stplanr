@@ -19,6 +19,7 @@ m1 <- matrix(c(1, 2, 1, 2), ncol = 2)
 m2 <- matrix(c(9, 9, 9, 1), ncol = 2)
 l <- mats2line(m1, m2)
 class(l)
+l
 lsf <- sf::st_sf(l, crs = 4326)
 class(lsf)
 plot(lsf)

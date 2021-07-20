@@ -1,5 +1,7 @@
 # stplanr 0.8.3
 
+- Outputs of `line_via()` now have correct CRS
+
 # stplanr 0.8.2
 
 - Bug fixed related to the `route()` function: it silently failed when `pbapply` not installed. The package was promoted from Suggests to Imports (#460)
