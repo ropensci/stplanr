@@ -1,6 +1,8 @@
 # stplanr 0.8.3
 
 - Outputs of `line_via()` now have correct CRS
+- `calc_catchment()` have been deprecated because the generate warnings
+- Minor fixes and improvements in the package's documentation
 
 # stplanr 0.8.2
 
