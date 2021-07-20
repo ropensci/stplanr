@@ -1,17 +1,11 @@
-Minor update with a new function and a few fixes
-
-Resubmitted after urls updated.
-
 ## Test environments
 
-* Linux
-  - Local (Ubuntu 18.04) 
-  - GH Actions: https://github.com/ropensci/stplanr/actions
+* local Ubuntu 20.04 R installation, R 4.1.0
+* ubuntu 20.04, Windows Devel and Mac, R 4.1.0
+* win-builder (devel)
 
-* Windows
-  - Winbuild
-  - Windows: https://github.com/ropensci/stplanr/actions 
+## R CMD check results
 
-## R CMD check:
+0 errors | 0 warnings | 1 note
 
-R CMD check succeeded, with only a note about the package's size
+* This is a new release.
