@@ -2,6 +2,7 @@
 #'
 #' @param mat1 Matrix representing origins
 #' @param mat2 Matrix representing destinations
+#' @param crs Number representing the coordinate system of the data, e.g. 4326
 #' @family lines
 #'
 #' @export

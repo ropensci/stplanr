@@ -10,6 +10,8 @@ mats2line(mat1, mat2, crs = NA)
 \item{mat1}{Matrix representing origins}
 
 \item{mat2}{Matrix representing destinations}
+
+\item{crs}{Number representing the coordinate system of the data, e.g. 4326}
 }
 \description{
 Convert 2 matrices to lines
