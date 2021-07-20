@@ -184,14 +184,16 @@ NULL
 
 #' Spatial polygons of home locations for flow analysis.
 #'
-#'  These correspond to the [cents()] data.
+#' Note: we recommend using the `zones_sf` data.
+#'
+#' These correspond to the `cents_sf` data.
 #'
 #' \itemize{
 #'   \item geo_code. the official code of the zone
 #' }
 #'
 #' @examples
-#' zones
+#' library(sf)
 #' zones_sf
 #' plot(zones_sf)
 #' @docType data

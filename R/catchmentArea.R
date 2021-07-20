@@ -93,6 +93,7 @@ calc_catchment <- function(
                            retainAreaProportion = FALSE,
                            dissolve = FALSE,
                            quadsegs = NULL) {
+  .Deprecated(msg = "Try using functionality in the sfnetworks package")
   UseMethod(generic = "calc_catchment")
 }
 #' @export

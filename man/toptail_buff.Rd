@@ -44,7 +44,6 @@ Other lines:
 \code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
-\code{\link{onewayid}()},
 \code{\link{points2line}()},
 \code{\link{toptailgs}()},
 \code{\link{update_line_geometry}()}

@@ -64,7 +64,6 @@ Other lines:
 \code{\link{mats2line}()},
 \code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
-\code{\link{onewayid}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()},
 \code{\link{toptailgs}()},
