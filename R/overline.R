@@ -314,7 +314,19 @@ overline2 <-
       if (nrow(sl) > regionalise) {
         message(paste0("large data detected, using regionalisation, nrow = ", nrow(sl)))
         suppressWarnings(cents <- sf::st_centroid(sl))
-        grid <- sf::st_make_grid(cents, what = "polygons")
+        # Fix for https://github.com/r-spatial/sf/issues/1777
+        if(sf::st_is_longlat(cents)){
+          bbox <- sf::st_bbox(cents)
+          bbox[1] <- bbox[1] - abs(bbox[1] * 0.001)
+          bbox[2] <- bbox[2] - abs(bbox[2] * 0.001)
+          bbox[3] <- bbox[3] + abs(bbox[3] * 0.001)
+          bbox[4] <- bbox[4] + abs(bbox[4] * 0.001)
+          bbox <- sf::st_as_sfc(bbox)
+          grid <- st_make_grid(bbox, what = "polygons")
+        } else {
+          grid <- sf::st_make_grid(cents, what = "polygons")
+        }
+
         suppressWarnings(inter <- unlist(lapply(sf::st_intersects(cents, grid), `[[`, 1)))
         sl$grid <- inter
         rm(cents, grid, inter)
