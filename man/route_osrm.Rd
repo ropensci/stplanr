@@ -33,16 +33,20 @@ slower R interface to OSRM routing services compared with the excellent
 \code{\link[osrm:osrmRoute]{osrm::osrmRoute()}} function (which can be used via the \code{\link[=route]{route()}}) function.
 }
 \examples{
+\donttest{
 l1 = od_data_lines[49, ]
 l1m = od_coords(l1)
 from = l1m[, 1:2]
 to = l1m[, 3:4]
+if(curl::has_internet()) {
 r_foot = route_osrm(from, to)
 r_bike = route_osrm(from, to, osrm.profile = "bike")
 r_car = route_osrm(from, to, osrm.profile = "car")
 plot(r_foot$geometry, lwd = 9, col = "grey")
 plot(r_bike, col = "blue", add = TRUE)
 plot(r_car, col = "red", add = TRUE)
+}
+}
 }
 \seealso{
 Other routes: 

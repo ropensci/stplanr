@@ -44,9 +44,11 @@ for an interactive version of the routing engine used by BikeCitizens.
 }
 \examples{
 \donttest{
+if(curl::has_internet()) {
 route_bikecitizens()
 ldf <- od_coords(stplanr::od_data_lines[2, ])
 r <- route_bikecitizens(ldf)
 plot(r)
+}
 }
 }
