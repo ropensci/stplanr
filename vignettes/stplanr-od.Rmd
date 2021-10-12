@@ -87,7 +87,7 @@ od
 
 <!-- # Representations of OD data -->
 
-Like all data, the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://census.ukdataservice.ac.uk/media/50966/2011_england_household.pdf) questions:
+Like all data, the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://ukdataservice.ac.uk/learning-hub/census/) questions:
 
 - In your main job, what is the address of your workplace?
 - How do you usually travel to work (for the longest part, by distance, of your usual journey to work)?
