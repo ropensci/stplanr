@@ -1,3 +1,5 @@
+# stplanr 0.8.4
+
 # stplanr 0.8.3
 
 - Outputs of `line_via()` now have correct CRS
