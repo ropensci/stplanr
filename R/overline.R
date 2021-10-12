@@ -322,7 +322,7 @@ overline2 <-
           bbox[3] <- bbox[3] + abs(bbox[3] * 0.001)
           bbox[4] <- bbox[4] + abs(bbox[4] * 0.001)
           bbox <- sf::st_as_sfc(bbox)
-          grid <- st_make_grid(bbox, what = "polygons")
+          grid <- sf::st_make_grid(bbox, what = "polygons")
         } else {
           grid <- sf::st_make_grid(cents, what = "polygons")
         }
