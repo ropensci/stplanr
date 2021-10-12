@@ -14,8 +14,7 @@ bibliography:
 
 ```{r, include=FALSE}
 library(stplanr)
-build <- curl::has_internet()
-knitr::opts_chunk$set(eval = build)
+knitr::opts_chunk$set(eval = curl::has_internet())
 ```
 
 # Introduction
@@ -160,14 +159,14 @@ no_na_in_bb <- !any(is.na(as.numeric(l_bb)))
 ```
 
 
-```{r, eval=no_na_in_bb}
+```{r}
 lwd <- l$All / mean(l$All)
 plot(st_geometry(l), lwd = lwd)
 ```
 
 Another useful visualisation involves setting the colour relative to the number of people cycling:
 
-```{r, eval=no_na_in_bb}
+```{r}
 plot(l["Bicycle"], lwd = lwd)
 ```
 
