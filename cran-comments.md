@@ -6,7 +6,7 @@ Fails gracefully when offline: checks pass when offline (tested locally).
 
 * local R installation, R 4.1.1
 * various OSs (GitHub Actions), R 4.1.1
-* win-builder (devel): https://win-builder.r-project.org/epR2DuxCijl5
+* win-builder (devel): https://win-builder.r-project.org/OGHEyTkYy5O7/
 
 ## R CMD check results
 
