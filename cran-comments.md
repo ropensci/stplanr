@@ -1,6 +1,6 @@
-Update to work without needing the bench package.
+Does not Suggest stats19
 
-Also fails gracefully when offline: checks pass when offline (tested locally).
+Fails gracefully when offline: checks pass when offline (tested locally).
 
 ## Test environments
 
