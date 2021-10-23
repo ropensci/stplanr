@@ -1,3 +1,5 @@
+# stplanr 0.8.5
+
 # stplanr 0.8.4
 
 - No longer Suggests bench package
