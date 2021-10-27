@@ -15,22 +15,4 @@ This dataset represents the type of data downloaded and cleaned
 using stplanr functions. It represents a very small sample (with most variables stripped)
 of open data from the UK's Stats19 dataset.
 }
-\examples{
-\dontrun{
-# Generate data
-ac <- read_stats19_ac()
-ca <- read_stats19_ca()
-ve <- read_stats19_ve()
-library(dplyr)
-ca_ac <- inner_join(ca, ac)
-ca_cycle <- ca_ac \%>\%
-  filter(Casualty_Severity == "Fatal" & !is.na(Latitude)) \%>\%
-  select(Age = Age_of_Casualty, Mode = Casualty_Type, Longitude, Latitude)
-ca_sp <- sp::SpatialPointsDataFrame(coords = ca_cycle[3:4], data = ca_cycle[1:2])
-data("route_network")
-proj4string(ca_sp) <- proj4string(route_network)
-bb <- bb2poly(route_network)
-ca_local <- ca_sp[bb, ]
-}
-}
 \keyword{datasets}

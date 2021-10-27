@@ -15,10 +15,19 @@ bibliography:
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = TRUE
+  eval = FALSE
 )
 has_webshot <- "webshot" %in% installed.packages()
 ```
+
+Note: an updated version of this vignette, called 'od', is available in the `od` package.
+View it as follows:
+
+```{r, eval=FALSE}
+install.packages("od")
+vignette("od")
+```
+
 
 # Introduction: what is OD data?
 
@@ -78,7 +87,7 @@ od
 
 <!-- # Representations of OD data -->
 
-Like all data, the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://census.ukdataservice.ac.uk/media/50966/2011_england_household.pdf) questions:
+Like all data, the object `od`, created in the preceding code chunk, comes from a specific context: the 2011 [UK Census](https://ukdataservice.ac.uk/learning-hub/census/) questions:
 
 - In your main job, what is the address of your workplace?
 - How do you usually travel to work (for the longest part, by distance, of your usual journey to work)?
@@ -210,7 +219,7 @@ plot(l)
 
 Because these lines have a coordinate reference system (CRS) inherited from the zones data, they can also be plotted on an interactive map, as follows (result only shown if webshot is installed):
 
-```{r, eval=has_webshot}
+```{r}
 library(leaflet)
 leaflet() %>%
   addTiles() %>%

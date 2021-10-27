@@ -14,11 +14,12 @@
 #' @examples
 #' library(sf)
 #' l = od_data_lines[2, ]
+#' \donttest{
+#' if(curl::has_internet()) {
 #' r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
 #' r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
 #' plot(r_walk$geometry)
 #' plot(r_bike$geometry, col = "blue", add = TRUE)
-#' \donttest{
 #' # r_bc = route(l = l, route_fun = route_bikecitizens)
 #' # plot(r_bc)
 #' # route(l = l, route_fun = route_bikecitizens, wait = 1)
@@ -40,6 +41,7 @@
 #'   sln = sln
 #' )
 #' plot(r_local["all"], add = TRUE, lwd = 5)
+#' }
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = cyclestreets::journey, wait = 0,

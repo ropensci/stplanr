@@ -1,3 +1,12 @@
+# stplanr 0.8.5
+
+- No longer Suggests stats19 package
+
+# stplanr 0.8.4
+
+- No longer Suggests bench package
+- Tests pass when internet unavailable (#469)
+
 # stplanr 0.8.3
 
 - Outputs of `line_via()` now have correct CRS

@@ -12,7 +12,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = curl::has_internet()
 )
 ```
 
@@ -77,7 +78,9 @@ igraph::is_connected(g)
 sf:::plot.sfc_LINESTRING(rnet_disconnected$geometry)
 ```
 
-![](https://i.imgur.com/827f761.png)
+```{r, echo=FALSE}
+knitr::include_graphics("https://i.imgur.com/827f761.png")
+```
 
 The elements of the network are clearly divided into groups.
 We can identify these groups as follows:
@@ -85,9 +88,6 @@ We can identify these groups as follows:
 ```{r, eval=FALSE}
 rnet_disconnected$group = rnet_igroup(rnet_disconnected)
 ```
-
-
-
 
 # SpatialLineNetworks
 
