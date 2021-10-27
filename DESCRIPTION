@@ -28,6 +28,9 @@ Description: Tools for transport planning with an emphasis on spatial transport
     Further information on the package's aim and scope can be found
     in the vignettes and in a paper in the R Journal
     (Lovelace and Ellison 2018) <doi:10.32614/RJ-2018-053>.
+    This package Suggests the 'pct' package which at the time of writing
+    is unavailable on CRAN. You can install it from the repository
+    'itsleeds/pct' on GitHub.
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
