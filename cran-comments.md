@@ -1,3 +1,5 @@
+New sentence in Description field explains how to install the pct package while it is unavailable from CRAN.
+
 ## Test environments
 
 * local Ubuntu 20.04 R installation, R 4.1.0
