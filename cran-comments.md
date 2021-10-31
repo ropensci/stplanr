@@ -6,7 +6,7 @@ stplanr.Rmd vignette updated to pass on Solaris checks following feedback from C
 
 * local R installation, R 4.1.1
 * various OSs (GitHub Actions), R 4.1.1
-* win-builder (devel): https://win-builder.r-project.org/OGHEyTkYy5O7/
+* win-builder (devel): https://win-builder.r-project.org/1ki6Zs83Gact
 
 ## R CMD check results
 
