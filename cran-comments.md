@@ -1,5 +1,7 @@
 New sentence in Description field explains how to install the pct package while it is unavailable from CRAN.
 
+stplanr.Rmd vignette updated to pass on Solaris checks following feedback from CRAN submission
+
 ## Test environments
 
 * local R installation, R 4.1.1
