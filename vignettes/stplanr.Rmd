@@ -159,7 +159,7 @@ no_na_in_bb <- !any(is.na(as.numeric(l_bb)))
 ```
 
 
-```{r}
+```{r, eval=no_na_in_bb}
 lwd <- l$All / mean(l$All)
 plot(st_geometry(l), lwd = lwd)
 ```
