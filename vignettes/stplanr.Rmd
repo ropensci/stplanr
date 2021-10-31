@@ -158,10 +158,10 @@ Now the data is set-up, we can change the visual appearance of the desire lines 
 l_bb <- sf::st_bbox(l)
 # l_bb[1] <- NA
 no_na_in_bb <- !any(is.na(as.numeric(l_bb)))
+knitr::opts_chunk$set(eval = no_na_in_bb)
 ```
 
-
-```{r, eval=no_na_in_bb}
+```{r}
 lwd <- l$All / mean(l$All)
 plot(st_geometry(l), lwd = lwd)
 ```
