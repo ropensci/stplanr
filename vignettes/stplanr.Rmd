@@ -116,7 +116,9 @@ class(cents_sf)
 plot(cents_sf)
 ```
 
-**stplanr** creates desire lines using the `od2line()` function, which links geographical and non-geographical datasets together. In this case, it will join the non-geographical `flow` data with the geographical `cents_sf` data plotted above. Let's take a single OD pair, E02002361 to E02002371, the fourth row represented in the table above, to see how this works:
+**stplanr** creates desire lines using the `od2line()` function, which links geographical and non-geographical datasets together. 
+Note: this functionality has been superseded by functions in the `od` package.
+In this case, it will join the non-geographical `flow` data with the geographical `cents_sf` data plotted above. Let's take a single OD pair, E02002361 to E02002371, the fourth row represented in the table above, to see how this works:
 
 ```{r}
 flow_single_line <- od_data_sample[2:3, ] # select only the first line
@@ -156,8 +158,8 @@ Now the data is set-up, we can change the visual appearance of the desire lines 
 l_bb <- sf::st_bbox(l)
 # l_bb[1] <- NA
 no_na_in_bb <- !any(is.na(as.numeric(l_bb)))
+knitr::opts_chunk$set(eval = no_na_in_bb)
 ```
-
 
 ```{r}
 lwd <- l$All / mean(l$All)
