@@ -75,6 +75,13 @@ route.sf <- function(from = NULL, to = NULL, l = NULL,
   if (is.null(l)) {
     l <- od_coords2line(ldf)
   }
+  # Check the CRS before trying to do routing:
+  # https://github.com/ropensci/stplanr/issues/474
+  if(!sf::st_is_longlat(l)) {
+    warning("CRS of line object is not geographic (in degrees lon/lat)")
+    message("It has the following CRS: ", sf::st_crs(l))
+    message("See ?st_transform() to transform its CRS, e.g. to EPSG 4326")
+  }
   if (list_output) {
     if (is.null(cl)) {
       list_out <- pbapply::pblapply(1:nrow(l), function(i) route_l(FUN, ldf, i, l, ...))
