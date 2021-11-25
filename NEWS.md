@@ -1,8 +1,7 @@
-# stplanr 0.8.6
-
 # stplanr 0.8.6 (November 2021)
 
 - `route()` checks the CRS and gives an appropriate warning if it is projected
+- The package now Suggests igraph rather than depending on it making it easier to install
 
 # stplanr 0.8.5
 

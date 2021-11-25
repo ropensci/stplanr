@@ -67,26 +67,28 @@ rnet_group.default = function(rnet, ...) {
 #' of a wider range of clutering functions.
 #' @name rnet_group
 #' @export
-rnet_group.sfc <- function(
-  rnet,
-  cluster_fun = igraph::clusters,
-  d = NULL,
-  as.undirected = TRUE,
-  ...
-) {
-  if (!is.null(d)) {
-    touching_list <- sf::st_is_within_distance(rnet, dist = d)
+rnet_group.sfc <- function(rnet,
+                           cluster_fun = igraph::clusters,
+                           d = NULL,
+                           as.undirected = TRUE,
+                           ...) {
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    if (!is.null(d)) {
+      touching_list <- sf::st_is_within_distance(rnet, dist = d)
+    } else {
+      touching_list <- sf::st_intersects(rnet)
+    }
+    g <- igraph::graph.adjlist(touching_list)
+    if (as.undirected) {
+      g <- igraph::as.undirected(g)
+    }
+    wc <- cluster_fun(g)
+    m <- igraph::membership(wc)
+    m <- as.integer(m)
+    return(m)
   } else {
-    touching_list <- sf::st_intersects(rnet)
+    message("You must install igraph for this function to work")
   }
-  g <- igraph::graph.adjlist(touching_list)
-  if (as.undirected) {
-    g <- igraph::as.undirected(g)
-  }
-  wc <- cluster_fun(g)
-  m <- igraph::membership(wc)
-  m <- as.integer(m)
-  m
 }
 
 #' @name rnet_group
@@ -114,26 +116,32 @@ rnet_group.sfNetwork <- function(
   cluster_fun = igraph::clusters,
   ...
 ) {
-  # 1. Derive the dual graph of the input rnet object
-  rnet_graph_dual <- igraph::make_line_graph(methods::slot(rnet, "g"))
 
-  # 2. Apply the cluster_fun
-  wc <- cluster_fun(rnet_graph_dual)
+  if (requireNamespace("igraph", quietly = TRUE)) {
 
-  # 3. Derive the membership
-  m <- igraph::membership(wc)
+    # 1. Derive the dual graph of the input rnet object
+    rnet_graph_dual <- igraph::make_line_graph(methods::slot(rnet, "g"))
 
-  # 4. Add the new column
-  if ("rnet_group" %in% colnames(methods::slot(rnet, "sl"))) {
-    warning(
-      "The rnet_group column will be overwritten.",
-      call. = FALSE,
-      immediate. = TRUE
-    )
+    # 2. Apply the cluster_fun
+    wc <- cluster_fun(rnet_graph_dual)
+
+    # 3. Derive the membership
+    m <- igraph::membership(wc)
+
+    # 4. Add the new column
+    if ("rnet_group" %in% colnames(methods::slot(rnet, "sl"))) {
+      warning(
+        "The rnet_group column will be overwritten.",
+        call. = FALSE,
+        immediate. = TRUE
+      )
+    }
+    methods::slot(rnet, "sl")[["rnet_group"]] <- as.integer(m)
+
+    # Return
+    return(rnet)
+  } else {
+    message("You must install igraph for this function to work")
   }
-  methods::slot(rnet, "sl")[["rnet_group"]] <- as.integer(m)
-
-  # Return
-  rnet
 
 }

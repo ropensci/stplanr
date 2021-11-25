@@ -604,6 +604,10 @@ calc_network_catchment <- function(sln,
                                    ),
                                    retainAreaProportion = FALSE,
                                    dissolve = FALSE) {
+  if (!requireNamespace("igraph", quietly = TRUE)) {
+    warning("igraph needs to be installed for this function to work")
+    return(NULL)
+  }
   longlat <- ifelse(sp::is.projected(sln@sl) == TRUE, FALSE, TRUE)
   maximpedance <-
     ifelse(longlat == TRUE, maximpedance / 1000, maximpedance)

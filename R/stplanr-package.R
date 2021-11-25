@@ -27,7 +27,6 @@
 #' @importFrom raster extent crop
 #' @importFrom geosphere distHaversine
 #' @importFrom Rcpp evalCpp
-#' @importFrom igraph graph E
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
 #' @importFrom maptools SpatialLinesMidPoints
