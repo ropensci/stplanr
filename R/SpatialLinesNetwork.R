@@ -19,8 +19,12 @@ setClass("SpatialLinesNetwork", representation(
   g = "igraph", nb = "list", weightfield = "character"
 ),
 validity = function(object) {
-  stopifnot(length(object@sl) == length(igraph::E(object@g)))
-  stopifnot(length(object@nb) == length(igraph::V(object@g)))
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    stopifnot(length(object@sl) == length(igraph::E(object@g)))
+    stopifnot(length(object@nb) == length(igraph::V(object@g)))
+  } else {
+    message("You must install igraph for this function to work")
+  }
 }
 )
 
@@ -41,8 +45,12 @@ setClass("sfNetwork", representation(
   g = "igraph", nb = "list", weightfield = "character"
 ),
 validity = function(object) {
-  stopifnot(nrow(object@sl) == length(igraph::E(object@g)))
-  stopifnot(length(object@nb) == length(igraph::V(object@g)))
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    stopifnot(nrow(object@sl) == length(igraph::E(object@g)))
+    stopifnot(length(object@nb) == length(igraph::V(object@g)))
+  } else {
+    message("You must install igraph for this function to work")
+  }
 }
 )
 
@@ -96,67 +104,71 @@ SpatialLinesNetwork.Spatial <- function(sl, uselonglat = FALSE, tolerance = 0.00
   if (!all(sapply(sl@lines, length) == 1)) {
     stop("SpatialLines is not simple: each Lines element should have only a single Line")
   }
-  # Generate graph data
-  gdata <- coord_matches(sl, tolerance)
-  s <- gdata$s
-  g <- igraph::graph(gdata$pts0, directed = FALSE) # edges
-  nodes <- s[gdata$upts + 1, ]
-  g$x <- nodes[, 1] # x-coordinate vertex
-  g$y <- nodes[, 2] # y-coordinate vertex
-  g$n <- as.vector(table(gdata$pts0)) # nr of edges
-  # line lengths:
-  # If uselonglat == FALSE then checks if sl uses longlat coordinate
-  # system/projection. If so, passes longlat=TRUE.
-  sl$length <- sapply(sl@lines, function(x) {
-    sp::LineLength(x@Lines[[1]], longlat = ifelse(
-      uselonglat == TRUE, TRUE, ifelse(length(grep(
-        "proj=longlat", sp::proj4string(sl)
-      )) > 0, TRUE, FALSE)
-    ))
-  })
-  igraph::E(g)$weight <- sl$length
-  new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    # Generate graph data
+    gdata <- coord_matches(sl, tolerance)
+    s <- gdata$s
+    g <- igraph::graph(gdata$pts0, directed = FALSE) # edges
+    nodes <- s[gdata$upts + 1, ]
+    g$x <- nodes[, 1] # x-coordinate vertex
+    g$y <- nodes[, 2] # y-coordinate vertex
+    g$n <- as.vector(table(gdata$pts0)) # nr of edges
+    # line lengths:
+    # If uselonglat == FALSE then checks if sl uses longlat coordinate
+    # system/projection. If so, passes longlat=TRUE.
+    sl$length <- sapply(sl@lines, function(x) {
+      sp::LineLength(x@Lines[[1]], longlat = ifelse(
+        uselonglat == TRUE, TRUE, ifelse(length(grep(
+          "proj=longlat", sp::proj4string(sl)
+        )) > 0, TRUE, FALSE)
+      ))
+    })
+    igraph::E(g)$weight <- sl$length
+    new("SpatialLinesNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
+  }
 }
 #' @export
 SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
-  nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
-    dplyr::group_by(.data$L1) %>%
-    dplyr::mutate(nrow = dplyr::n(), rownum = 1:dplyr::n()) %>%
-    dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(allrownum = 1:dplyr::n())
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    nodecoords <- as.data.frame(sf::st_coordinates(sl)) %>%
+      dplyr::group_by(.data$L1) %>%
+      dplyr::mutate(nrow = dplyr::n(), rownum = 1:dplyr::n()) %>%
+      dplyr::filter(.data$rownum == 1 | .data$rownum == (!!dplyr::quo(nrow))) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(allrownum = 1:dplyr::n())
 
-  gdata <- coord_matches_sf(
-    as.matrix(
-      nodecoords %>%
-        dplyr::select(.data$X, .data$Y, .data$allrownum)
-    ),
-    as.matrix(
-      nodecoords %>%
-        dplyr::arrange(.data$X, .data$Y) %>%
-        dplyr::select(.data$X, .data$Y, .data$allrownum)
-    ),
-    nrow(sl),
-    tolerance
-  )
+    gdata <- coord_matches_sf(
+      as.matrix(
+        nodecoords %>%
+          dplyr::select(.data$X, .data$Y, .data$allrownum)
+      ),
+      as.matrix(
+        nodecoords %>%
+          dplyr::arrange(.data$X, .data$Y) %>%
+          dplyr::select(.data$X, .data$Y, .data$allrownum)
+      ),
+      nrow(sl),
+      tolerance
+    )
 
-  s <- gdata$s
-  g <- igraph::graph(gdata$pts0, directed = FALSE)
-  nodes <- s[gdata$upts + 1, ]
-  g$x <- nodes[, 1] # x-coordinate vertex
-  g$y <- nodes[, 2] # y-coordinate vertex
-  g$n <- as.vector(table(gdata$pts0)) # nr of edges
+    s <- gdata$s
+    g <- igraph::graph(gdata$pts0, directed = FALSE)
+    nodes <- s[gdata$upts + 1, ]
+    g$x <- nodes[, 1] # x-coordinate vertex
+    g$y <- nodes[, 2] # y-coordinate vertex
+    g$n <- as.vector(table(gdata$pts0)) # nr of edges
 
-  sl$length <- as.numeric(sf::st_length(sl))
-  igraph::E(g)$weight <- sl$length
-  # check it is a single graph
-  is_connected <- igraph::is_connected(g)
-  if (!is_connected) {
-    warning("Graph composed of multiple subgraphs, consider cleaning it with sln_clean_graph().")
+    sl$length <- as.numeric(sf::st_length(sl))
+    igraph::E(g)$weight <- sl$length
+    # check it is a single graph
+    is_connected <- igraph::is_connected(g)
+    if (!is_connected) {
+      warning("Graph composed of multiple subgraphs, consider cleaning it with sln_clean_graph().")
+    }
+    # largest_group = names(which.max(graph_membership_table))
+    # connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
+    new("sfNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
   }
-  # largest_group = names(which.max(graph_membership_table))
-  # connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
-  new("sfNetwork", sl = sl, g = g, nb = gdata$nb, weightfield = "length")
 }
 
 #' Clean spatial network - return an sln with a single connected graph
@@ -168,17 +180,19 @@ SpatialLinesNetwork.sf <- function(sl, uselonglat = FALSE, tolerance = 0.000) {
 #' @return An sfNetwork object
 #' @export
 sln_clean_graph <- function(sln) {
-  g <- sln@g
-  graph_membership <- igraph::components(g)$membership
-  graph_membership_table <- table(graph_membership)
-  if (length(graph_membership_table) > 1) {
-    message("Input sln composed of ", length(graph_membership_table), " graphs. Selecting the largest.")
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    g <- sln@g
+    graph_membership <- igraph::components(g)$membership
+    graph_membership_table <- table(graph_membership)
+    if (length(graph_membership_table) > 1) {
+      message("Input sln composed of ", length(graph_membership_table), " graphs. Selecting the largest.")
+    }
+    largest_group <- names(which.max(graph_membership_table))
+    connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
+    connected_edges <- igraph::E(g)[.inc(connected_vertexes)]
+    temp_sl <- sln@sl[as.numeric(connected_edges), ]
+    SpatialLinesNetwork(temp_sl)
   }
-  largest_group <- names(which.max(graph_membership_table))
-  connected_vertexes <- igraph::V(g)[which(graph_membership == largest_group)]
-  connected_edges <- igraph::E(g)[.inc(connected_vertexes)]
-  temp_sl <- sln@sl[as.numeric(connected_edges), ]
-  SpatialLinesNetwork(temp_sl)
 }
 
 #' Plot a SpatialLinesNetwork
@@ -201,7 +215,9 @@ setMethod("plot",
       sp::plot(x@sl, ...)
     }
     else if (component == "graph") {
-      igraph::plot.igraph(x@g, ...)
+      if (requireNamespace("igraph", quietly = TRUE)) {
+        igraph::plot.igraph(x@g, ...)
+      }
     }
     else {
       stop("Value of component not valid")
@@ -228,7 +244,9 @@ setMethod("plot",
       sp::plot(x@sl$geometry, ...)
     }
     else if (component == "graph") {
-      igraph::plot.igraph(x@g, ...)
+      if (requireNamespace("igraph", quietly = TRUE)) {
+        igraph::plot.igraph(x@g, ...)
+      }
     }
     else {
       stop("Value of component not valid")
@@ -307,7 +325,9 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", value = "AN
     stop("x not SpatialLinesNetwork")
   }
   x@weightfield <- value
-  igraph::E(x@g)$weight <- x@sl@data[, value]
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    igraph::E(x@g)$weight <- x@sl@data[, value]
+  }
   x
 })
 
@@ -318,7 +338,9 @@ setReplaceMethod("weightfield", signature(x = "sfNetwork", value = "ANY"), defin
     stop("x not sfNetwork")
   }
   x@weightfield <- value
-  igraph::E(x@g)$weight <- as.numeric(x@sl[[value]])
+  if (requireNamespace("igraph", quietly = TRUE)) {
+    igraph::E(x@g)$weight <- as.numeric(x@sl[[value]])
+  }
   x
 })
 
@@ -338,7 +360,9 @@ setReplaceMethod("weightfield", signature(x = "SpatialLinesNetwork", varname = "
     }
     x@sl@data[, varname] <- value
     x@weightfield <- varname
-    igraph::E(x@g)$weight <- x@sl@data[, varname]
+    if (requireNamespace("igraph", quietly = TRUE)) {
+      igraph::E(x@g)$weight <- x@sl@data[, varname]
+    }
     x
   }
 )
@@ -359,7 +383,9 @@ setReplaceMethod("weightfield", signature(x = "sfNetwork", varname = "character"
     }
     x@sl[, varname] <- value
     x@weightfield <- varname
-    igraph::E(x@g)$weight <- x@sl[, varname]
+    if (requireNamespace("igraph", quietly = TRUE)) {
+      igraph::E(x@g)$weight <- x@sl[, varname]
+    }
     x
   }
 )
@@ -565,6 +591,10 @@ sum_network_routes <- function(sln, start, end, sumvars = weightfield(sln), comb
     stop("start and end must be numeric (integer) values")
   }
 
+  if (!requireNamespace("igraph", quietly = TRUE)) {
+    warning("igraph needs to be installed for this function to work")
+    return(NULL)
+  }
 
   if (combinations == FALSE) {
     routesegs <- lapply(1:length(start), function(i) {
@@ -850,6 +880,10 @@ sum_network_links <- function(sln, routedata) {
   }
   if (ncol(routedata) < 3) {
     routedata$count <- 1
+  }
+  if (!requireNamespace("igraph", quietly = TRUE)) {
+    warning("igraph needs to be installed for this function to work")
+    return(NULL)
   }
 
   if (nrow(routedata[which(is.na(routedata[, 1]) == TRUE | is.na(routedata[, 2]) == TRUE), ]) > 0) {
