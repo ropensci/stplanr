@@ -67,26 +67,28 @@ rnet_group.default = function(rnet, ...) {
 #' of a wider range of clutering functions.
 #' @name rnet_group
 #' @export
-rnet_group.sfc <- function(
-  rnet,
-  cluster_fun = igraph::clusters,
-  d = NULL,
-  as.undirected = TRUE,
-  ...
-) {
-  if (!is.null(d)) {
-    touching_list <- sf::st_is_within_distance(rnet, dist = d)
+rnet_group.sfc <- function(rnet,
+                           cluster_fun = igraph::clusters,
+                           d = NULL,
+                           as.undirected = TRUE,
+                           ...) {
+  if (requireNamespace("igrapht", quietly = TRUE)) {
+    if (!is.null(d)) {
+      touching_list <- sf::st_is_within_distance(rnet, dist = d)
+    } else {
+      touching_list <- sf::st_intersects(rnet)
+    }
+    g <- igraph::graph.adjlist(touching_list)
+    if (as.undirected) {
+      g <- igraph::as.undirected(g)
+    }
+    wc <- cluster_fun(g)
+    m <- igraph::membership(wc)
+    m <- as.integer(m)
+    m
   } else {
-    touching_list <- sf::st_intersects(rnet)
+    message("You must install igraph for this function to work")
   }
-  g <- igraph::graph.adjlist(touching_list)
-  if (as.undirected) {
-    g <- igraph::as.undirected(g)
-  }
-  wc <- cluster_fun(g)
-  m <- igraph::membership(wc)
-  m <- as.integer(m)
-  m
 }
 
 #' @name rnet_group
