@@ -1,3 +1,5 @@
+# stplanr 0.8.7
+
 # stplanr 0.8.6 (November 2021)
 
 - `route()` checks the CRS and gives an appropriate warning if it is projected
