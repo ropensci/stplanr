@@ -41,6 +41,7 @@
 #'   sln = sln
 #' )
 #' plot(r_local["all"], add = TRUE, lwd = 5)
+#'
 #' }
 #' }
 route <- function(from = NULL, to = NULL, l = NULL,
