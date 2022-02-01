@@ -69,8 +69,23 @@ route.character <- function(from = NULL, to = NULL, l = NULL,
 route.sf <- function(from = NULL, to = NULL, l = NULL,
                      route_fun = cyclestreets::journey, wait = 0.1,
                      n_print = 10, list_output = FALSE, cl = NULL, ...) {
-  browser()
   FUN <- match.fun(route_fun)
+  if (requireNamespace("opentripplanner", quietly = TRUE)) {
+    if (identical(FUN, opentripplanner::otp_plan) && !is.null(l)) {
+      message("Routing in batch mode with OTP")
+      l_origins_sf = lwgeom::st_startpoint(l)
+      l_destinations_sf = lwgeom::st_endpoint(l)
+      l_origins_matrix = sf::st_coordinates(l_origins_sf)
+      l_destinations_matrix = sf::st_coordinates(l_destinations_sf)
+      routes_out = opentripplanner::otp_plan(
+        fromPlace = l_origins_matrix,
+        toPlace = l_destinations_matrix,
+        ...
+        )
+      return(routes_out)
+    }
+  }
+
   # generate od coordinates
   ldf <- od_coords(from, to, l)
   # calculate line data frame

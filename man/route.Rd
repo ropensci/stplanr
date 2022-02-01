@@ -75,6 +75,7 @@ r_local <- stplanr::route(
   sln = sln
 )
 plot(r_local["all"], add = TRUE, lwd = 5)
+
 }
 }
 }
