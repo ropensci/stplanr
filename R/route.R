@@ -69,6 +69,7 @@ route.character <- function(from = NULL, to = NULL, l = NULL,
 route.sf <- function(from = NULL, to = NULL, l = NULL,
                      route_fun = cyclestreets::journey, wait = 0.1,
                      n_print = 10, list_output = FALSE, cl = NULL, ...) {
+  browser()
   FUN <- match.fun(route_fun)
   # generate od coordinates
   ldf <- od_coords(from, to, l)
