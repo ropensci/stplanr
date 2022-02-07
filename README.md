@@ -3,6 +3,7 @@
 
 # stplanr <a href='https://docs.ropensci.org/stplanr/'><img src='man/figures/logo.png' align="right" height=215/></a>
 
+
 <!-- [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) -->
 
 [![rstudio mirror
