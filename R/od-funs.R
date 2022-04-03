@@ -668,11 +668,7 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' @family od
 #' @export
 #' @examples
-#' data(cents)
-#' df <- points2odf(cents)
-#' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
-#' df2 <- points2odf(cents_centroids)
-#' df3 <- points2odf(cents_sf)
+#' points2odf(cents_sf)
 points2odf <- function(p) {
   UseMethod("points2odf")
 }

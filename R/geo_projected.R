@@ -47,11 +47,11 @@ geo_select_aeq.sfc <- function(shp) {
 #' This function performs operations on projected data.
 #'
 #' @param shp A spatial object with a geographic (WGS84) coordinate system
-#' @param fun A function to perform on the projected object (e.g. the the rgeos or sf packages)
+#' @param fun A function to perform on the projected object (e.g. from the sf package)
 #' @param crs An optional coordinate reference system (if not provided it is set
 #' automatically by [geo_select_aeq()])
 #' @param silent A binary value for printing the CRS details (default: TRUE)
-#' @param ... Arguments to pass to `fun`, e.g. `byid = TRUE` if the function is `rgeos::gLength()`
+#' @param ... Arguments to pass to `fun`
 #' @aliases gprojected
 #' @export
 #' @examples
@@ -111,7 +111,7 @@ geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE
 #' around which a buffer should be drawn
 #' @param dist The distance (in metres) of the buffer (when buffering simple features)
 #' @param width The distance (in metres) of the buffer (when buffering sp objects)
-#' @param ... Arguments passed to the buffer (see `?rgeos::gBuffer` or `?sf::st_buffer` for details)
+#' @param ... Arguments passed to the buffer (see `?sf::st_buffer` for details)
 #' @examples
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions

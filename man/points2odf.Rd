@@ -15,11 +15,7 @@ representing the potential flows, or 'spatial interaction', between every combin
 of points.
 }
 \examples{
-data(cents)
-df <- points2odf(cents)
-cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
-df2 <- points2odf(cents_centroids)
-df3 <- points2odf(cents_sf)
+points2odf(cents_sf)
 }
 \seealso{
 Other od: 

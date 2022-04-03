@@ -22,10 +22,6 @@
 islines <- function(g1, g2) {
   UseMethod("islines")
 }
-islines.Spatial <- function(g1, g2) {
-  ## return TRUE if geometries intersect as lines, not points
-  inherits(rgeos::gIntersection(g1, g2), "SpatialLines")
-}
 islines.sf <- function(g1, g2) {
   sf::st_geometry_type(sf::st_intersection(sf::st_geometry(g1), sf::st_geometry(g2))) == "MULTILINESTRING"
 }
@@ -66,16 +62,6 @@ gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
 }
 #' @export
-gsection.Spatial <- function(sl, buff_dist = 0) {
-  if (buff_dist > 0) {
-    sl <- geo_toptail(sl, toptail_dist = buff_dist)
-  }
-  overlapping <- rgeos::gOverlaps(sl, byid = T)
-  u <- rgeos::gUnion(sl, sl)
-  u_merged <- rgeos::gLineMerge(u)
-  sp::disaggregate(u_merged)
-}
-#' @export
 gsection.sf <- function(sl, buff_dist = 0) {
   if (buff_dist > 0) {
     sl <- geo_toptail(sl, toptail_dist = buff_dist)
@@ -86,24 +72,6 @@ gsection.sf <- function(sl, buff_dist = 0) {
   u_disag <- sf::st_cast(u_merged, "LINESTRING")
 
   u_disag
-}
-#' Label SpatialLinesDataFrame objects
-#'
-#' This function adds labels to lines plotted using base graphics. Largely
-#' for illustrative purposes, not designed for publication-quality
-#' graphics.
-#'
-#' @param sl A SpatialLinesDataFrame with overlapping elements
-#' @param attrib A text string corresponding to a named variable in `sl`
-#'
-#' @author Barry Rowlingson
-#' @family rnet
-#'
-#' @export
-lineLabels <- function(sl, attrib) {
-  text(sp::coordinates(
-    rgeos::gCentroid(sl, byid = TRUE)
-  ), labels = sl[[attrib]])
 }
 
 #' Convert series of overlapping lines into a route network
@@ -186,12 +154,6 @@ lineLabels <- function(sl, attrib) {
 #' plot(rnet_sf_raw)
 #' rnet_sf_raw$n <- 1:nrow(rnet_sf_raw)
 #' plot(rnet_sf_raw[10:25, ])
-#' # legacy implementation based on sp data
-#' # sl <- routes_fast[2:4, ]
-#' # rnet1 <- overline(sl = sl, attrib = "length")
-#' # rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
-#' # plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
-#' # plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 overline <- function(sl,
                      attrib,
                      ncores = 1,
@@ -408,73 +370,7 @@ overline2 <-
   }
 #' @export
 overline.sf <- overline2
-#' @export
-overline.Spatial <- function(sl, ...) {
-  overline_spatial(sl, ...)
-}
 
-#' Spatial aggregation of routes represented with sp classes
-#'
-#' This function, largely superseded by sf implementations, still works
-#' but is not particularly fast.
-#'
-#' @param na.zero Sets whether aggregated values with a value of zero are
-#'   removed.
-#' @inheritParams gsection
-#' @inheritParams overline
-#' @family rnet
-#' @export
-overline_spatial <- function(sl, attrib, fun = sum, na.zero = FALSE, buff_dist = 0) {
-  fun <- c(fun)
-  if (length(fun) < length(attrib)) {
-    fun <- rep(c(fun), length.out = length(attrib))
-  }
-
-  sl_sp <- as(sl, "SpatialLines")
-
-  ## get the line sections that make the network
-  slu <- gsection(sl, buff_dist = buff_dist)
-  ## overlay network with routes
-  overs <- sp::over(slu, sl_sp, returnList = TRUE)
-  ## overlay is true if end points overlay, so filter them out:
-  overs <- lapply(1:length(overs), function(islu) {
-    Filter(function(isl) {
-      islines(sl_sp[isl, ], slu[islu, ])
-    }, overs[[islu]])
-  })
-  ## now aggregate the required attribibute using fun():
-  # aggs = sapply(overs, function(os){fun(sl[[attrib]][os])})
-  aggs <- setNames(
-    as.data.frame(
-      lapply(
-        1:length(attrib),
-        function(y, overs, attribs, aggfuns) {
-          sapply(overs, function(os, attrib, fun2) {
-            fun2(sl[[attrib]][os])
-          },
-          attrib = attribs[y],
-          fun2 = aggfuns[[y]]
-          )
-        },
-        overs,
-        attrib,
-        fun
-      )
-    ),
-    attrib
-  )
-
-  ## make a sl with the named attribibute:
-  sl <- sp::SpatialLinesDataFrame(slu, aggs)
-  # names(sl) = attrib
-
-  ## remove lines with attribute values of zero
-  if (na.zero) {
-    sl <- sl[sl[[attrib]] > 0, ]
-  }
-
-  sl
-}
 
 #' Aggregate flows so they become non-directional (by geometry - the slow way)
 #'
@@ -525,33 +421,6 @@ onewaygeo.sf <- function(x, attrib) {
   x$matching_rows <- apply(geq, 1, function(x) paste0(formatC(which(x), width = 4, format = "d", flag = 0), collapse = "-"))
 
   singlelines <- stats::aggregate(x[attrib], list(x$matching_rows), FUN = sum)
-
-  return(singlelines)
-}
-#' @export
-onewaygeo.Spatial <- function(x, attrib) {
-  geq <- rgeos::gEquals(x, x, byid = TRUE) | rgeos::gEqualsExact(x, x, byid = TRUE)
-  sel1 <- !duplicated(geq) # repeated rows
-  singlelines <- x[sel1, ]
-  non_numeric_cols <- which(!sapply(x@data, is.numeric))
-  keeper_cols <- sort(unique(c(non_numeric_cols, attrib)))
-
-  singlelines@data[, attrib] <- (matrix(
-    unlist(
-      lapply(
-        apply(geq, 1, function(x) {
-          which(x == TRUE)
-        }),
-        function(y, x) {
-          colSums(x[y, attrib]@data)
-        }, x
-      )
-    ),
-    nrow = nrow(x),
-    byrow = TRUE
-  ))[sel1, ]
-
-  singlelines@data <- singlelines@data[keeper_cols]
 
   return(singlelines)
 }

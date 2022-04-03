@@ -14,7 +14,7 @@ around which a buffer should be drawn}
 
 \item{width}{The distance (in metres) of the buffer (when buffering sp objects)}
 
-\item{...}{Arguments passed to the buffer (see \code{?rgeos::gBuffer} or \code{?sf::st_buffer} for details)}
+\item{...}{Arguments passed to the buffer (see \code{?sf::st_buffer} for details)}
 }
 \description{
 This function solves the problem that buffers will not be circular when used on
