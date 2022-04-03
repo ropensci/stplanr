@@ -1,3 +1,5 @@
+# stplanr 1.0.0
+
 # stplanr 0.8.7 (February 2022)
 
 - `route()` now runs batch routing when input is a linestring and `opentripplanner` is installed (#459)
