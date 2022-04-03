@@ -91,6 +91,13 @@ rnet_disconnected$group = rnet_igroup(rnet_disconnected)
 
 # SpatialLineNetworks
 
+Note: functionality in this section is not supported and the code below is not evaluated but kept for educational/historical purposes.
+See the [{sfnetwork}](https://luukvdmeer.github.io/sfnetworks/) for a better maintained approach.
+
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
 An important feature of route networks is that they are simultaneously spatial and graph entities.
 This duality is captured in `sfNetwork` objects, which can be created by the function `SpatialLinesNetwork()`:
 

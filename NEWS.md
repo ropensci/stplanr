@@ -1,5 +1,11 @@
 # stplanr 1.0.0
 
+- Remove dependency on `sp`, `rgeos` and `rgdal` (#332)
+- That involved removal of the following functions:
+  - [catchmentArea.R](https://github.com/ropensci/stplanr/blob/v0.8.5/R/catchmentArea.R)
+  
+  - Browse the code base as of stplanr 0.8.5 here: https://github.com/ropensci/stplanr/blob/v0.8.5
+
 # stplanr 0.8.7 (February 2022)
 
 - `route()` now runs batch routing when input is a linestring and `opentripplanner` is installed (#459)

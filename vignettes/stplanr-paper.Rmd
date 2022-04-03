@@ -34,6 +34,13 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 5, eval = FALSE)
 This paper has now been peer reviewed and published by the R Journal.
 Please see the published version at [journal.r-project.org](https://journal.r-project.org/archive/2018/RJ-2018-053/index.html) and cite it as @lovelace_stplanr_2018.
 
+The code presented in this paper requires stplanr 0.8.5 or earlier, which can be installed as follows:
+
+```r
+remotes::install_github("ropensci/stplanr", ref = "v0.8.5")
+```
+
+
 # Introduction
 
 Transport planning can broadly be defined as the process of designing
@@ -467,7 +474,8 @@ Calculating the catchment area is straightforward and in addition to specifying 
 Since proportioning the areas assumes projected data, unprojected data are automatically projected to either a common projection (if one is already projected) or a specified projection.
 It should be emphasised that the choice of projection is important and has an effect on the results meaning setting a local projection is recommended to achieve the most accurate results.
 
-```{r calccatchment, results='hide'}
+```{r calccatchment, results='hide', eval=FALSE}
+remotes::install_github("ropensci/stplanr")
 catch800m <- calc_catchment(
   polygonlayer = sa1income,
   targetlayer = testcycleway,

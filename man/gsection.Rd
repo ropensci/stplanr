@@ -42,10 +42,6 @@ if (lib_versions[3] >= "6.3.1") {
 \seealso{
 Other rnet: 
 \code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
 \code{\link{find_network_nodes}()},
 \code{\link{islines}()},
 \code{\link{lineLabels}()},

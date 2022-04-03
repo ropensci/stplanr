@@ -90,10 +90,6 @@ plot(sfn@sl["rnet_group"])
 \seealso{
 Other rnet: 
 \code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
 \code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
