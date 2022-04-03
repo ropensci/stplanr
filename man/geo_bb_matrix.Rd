@@ -7,13 +7,12 @@
 geo_bb_matrix(shp)
 }
 \arguments{
-\item{shp}{Spatial object (from sf or sp packages)}
+\item{shp}{Spatial object}
 }
 \description{
 Converts a range of spatial data formats into a matrix representing the bounding box
 }
 \examples{
-geo_bb_matrix(routes_fast)
 geo_bb_matrix(routes_fast_sf)
 geo_bb_matrix(cents[1, ])
 geo_bb_matrix(c(-2, 54))

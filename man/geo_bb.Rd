@@ -13,7 +13,7 @@ geo_bb(
 )
 }
 \arguments{
-\item{shp}{Spatial object (from sf or sp packages)}
+\item{shp}{Spatial object}
 
 \item{scale_factor}{Numeric vector determining how much the bounding box will grow or shrink.
 Two numbers refer to extending the bounding box in x and y dimensions, respectively.
