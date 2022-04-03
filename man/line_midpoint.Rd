@@ -10,8 +10,7 @@ line_midpoint(l, tolerance = 0.01)
 \item{l}{A spatial lines object}
 }
 \description{
-This is a wrapper around \code{\link[=SpatialLinesMidPoints]{SpatialLinesMidPoints()}} that allows it to find the midpoint
-of lines that are not projected, which have a lat/long CRS.
+Find the mid-point of lines
 }
 \examples{
 data(routes_fast_sf)

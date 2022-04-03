@@ -65,17 +65,6 @@ r_osrm <- route(
 )
 nrow(r_osrm)
 plot(r_osrm)
-sln <- stplanr::SpatialLinesNetwork(route_network_sf)
-# calculate shortest paths
-plot(sln)
-plot(l$geometry, add = TRUE)
-r_local <- stplanr::route(
-  l = l,
-  route_fun = stplanr::route_local,
-  sln = sln
-)
-plot(r_local["all"], add = TRUE, lwd = 5)
-
 }
 }
 }
@@ -84,7 +73,6 @@ Other routes:
 \code{\link{line2routeRetry}()},
 \code{\link{line2route}()},
 \code{\link{route_dodgr}()},
-\code{\link{route_local}()},
 \code{\link{route_osrm}()},
 \code{\link{route_transportapi_public}()}
 }

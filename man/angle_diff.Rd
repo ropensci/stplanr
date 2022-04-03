@@ -36,11 +36,6 @@ if (lib_versions[3] >= "6.3.1") {
   lines_sf <- od2line(od_data_sample, zones = zones_sf)
   angle_diff(lines_sf[2, ], angle = 0)
   angle_diff(lines_sf[2:3, ], angle = 0)
-  a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
-  plot(flowlines)
-  plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
-  # East-West
-  plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
 }
 }
 \seealso{

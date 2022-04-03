@@ -5,7 +5,6 @@
 \alias{rnet_group.default}
 \alias{rnet_group.sfc}
 \alias{rnet_group.sf}
-\alias{rnet_group.sfNetwork}
 \title{Assign segments in a route network to groups}
 \usage{
 rnet_group(rnet, ...)
@@ -27,8 +26,6 @@ rnet_group(rnet, ...)
   as.undirected = TRUE,
   ...
 )
-
-\method{rnet_group}{sfNetwork}(rnet, cluster_fun = igraph::clusters, ...)
 }
 \arguments{
 \item{rnet}{An sf, sfc, or sfNetwork object representing a route network.}
@@ -81,11 +78,6 @@ rnet$group_louvain <- rnet_group(rnet, igraph::cluster_louvain)
 plot(rnet["group_louvain"])
 rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 plot(rnet["group_fast_greedy"])
-
-# show sfNetwork implementation
-sfn <- SpatialLinesNetwork(rnet)
-sfn <- rnet_group(sfn)
-plot(sfn@sl["rnet_group"])
 }
 \seealso{
 Other rnet: 

@@ -121,33 +121,9 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #'   lines_sf <- od2line(od_data_sample, zones = zones_sf)
 #'   angle_diff(lines_sf[2, ], angle = 0)
 #'   angle_diff(lines_sf[2:3, ], angle = 0)
-#'   a <- angle_diff(flowlines, angle = 0, bidirectional = TRUE, absolute = TRUE)
-#'   plot(flowlines)
-#'   plot(flowlines[a < 15, ], add = TRUE, lwd = 3, col = "red")
-#'   # East-West
-#'   plot(flowlines[a > 75, ], add = TRUE, lwd = 3, col = "green")
 #' }
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
   UseMethod("angle_diff")
-}
-#' @export
-angle_diff.Spatial <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
-  if (is(object = l, "Spatial")) {
-    line_angles <- line_bearing(l)
-  } else {
-    line_angles <- l
-  }
-  angle_diff <- angle - line_angles
-  angle_diff[angle_diff <= -180] <- angle_diff[angle_diff <= -180] + 180
-  angle_diff[angle_diff >= 180] <- angle_diff[angle_diff >= 180] - 180
-  if (bidirectional) {
-    angle_diff[angle_diff <= -90] <- 180 + angle_diff[angle_diff <= -90]
-    angle_diff[angle_diff >= 90] <- 180 - angle_diff[angle_diff >= 90]
-  }
-  if (absolute) {
-    angle_diff <- abs(angle_diff)
-  }
-  angle_diff
 }
 #' @export
 angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
@@ -156,8 +132,6 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 }
 #' Find the mid-point of lines
 #'
-#' This is a wrapper around [SpatialLinesMidPoints()] that allows it to find the midpoint
-#' of lines that are not projected, which have a lat/long CRS.
 #' @inheritParams line2df
 #' @family lines
 #' @export

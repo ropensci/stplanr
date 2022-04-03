@@ -26,6 +26,5 @@
 #' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
 #' @importFrom dplyr first last n
-#' @useDynLib stplanr
 NULL
 utils::globalVariables(c(".", "n", ".inc", "object", "x", "y", "stplanr_start", "stplanr_end", "stplanr_linkid"))
