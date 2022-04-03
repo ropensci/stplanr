@@ -54,7 +54,6 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
   bb <- geo_bb_matrix(shp)
   bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
   bb_sp <- bb2poly(bb = bb, distance = distance)
-  bb <- sf::st_as_sf(bb_sp)
   sf::st_crs(bb) <- sf::st_crs(shp)
   if (output == "polygon") {
     return(bb)
@@ -63,7 +62,7 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
     # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
     # bb_point <- sf::st_as_sf(bb_point)
     # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
+    # return(bb_point)
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -84,7 +83,7 @@ geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon
     # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
     # bb_point <- sf::st_as_sf(bb_point)
     # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
+    # return(bb_point)
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -107,7 +106,7 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
     # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
     # bb_point <- sf::st_as_sf(bb_point)
     # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
+    # return(bb_point)
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -117,12 +116,13 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
 bb2poly <- function(bb, distance = 0) {
   if (is(bb, "matrix")) {
     bb = as.numeric(bb)
+    class(bb) = "bbox"
     b_poly <- sf::st_as_sfc(bb)
   } else {
     b_poly = sf::st_as_sfc(bb)
   }
   if (distance > 0) {
-    b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
+    b_poly_buff <- geo_buffer(shp = b_poly, dist = distance)
     b_poly <- bb2poly(b_poly_buff)
   }
   b_poly
