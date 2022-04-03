@@ -18,15 +18,6 @@ geo_select_aeq <- function(shp) {
   UseMethod("geo_select_aeq")
 }
 #' @export
-geo_select_aeq.Spatial <- function(shp) {
-  cent <- rgeos::gCentroid(shp)
-  aeqd <- sprintf(
-    "+proj=aeqd +lat_0=%s +lon_0=%s +x_0=0 +y_0=0",
-    cent@coords[[2]], cent@coords[[1]]
-  )
-  sp::CRS(aeqd)
-}
-#' @export
 geo_select_aeq.sf <- function(shp) {
   cent <- sf::st_geometry(shp)
   coords <- sf::st_coordinates(shp)
@@ -50,7 +41,6 @@ geo_select_aeq.sfc <- function(shp) {
   )
   sf::st_crs(aeqd)
 }
-
 
 #' Perform GIS functions on a temporary, projected version of a spatial object
 #'
@@ -108,36 +98,6 @@ geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE
   }
   res
 }
-#' @export
-geo_projected.Spatial <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
-  # assume it's not projected  (i.e. lat/lon) if there is no CRS
-  if (!is.na(sp::is.projected(shp))) {
-    if (sp::is.projected(shp)) {
-      res <- fun(shp, ...)
-    } else {
-      shp_projected <- reproject(shp, crs = crs)
-      if (!silent) {
-        message(paste0("Running function on a temporary projection: ", crs))
-      }
-      res <- fun(shp_projected, ...)
-      if (is(res, "Spatial")) {
-        res <- sp::spTransform(res, sp::CRS("+init=epsg:4326"))
-      }
-    }
-  } else {
-    shp_projected <- reproject(shp, crs = crs)
-    if (!silent) {
-      message(paste0("Running function on a temporary projection: ", crs$proj4string))
-    }
-    res <- fun(shp_projected, ...)
-    if (is(res, "Spatial")) {
-      res <- sp::spTransform(res, sp::CRS("+init=epsg:4326"))
-    }
-  }
-  res
-}
-#' @export
-gprojected <- geo_projected.Spatial
 #' Perform a buffer operation on a temporary projected CRS
 #'
 #' This function solves the problem that buffers will not be circular when used on
@@ -177,10 +137,6 @@ geo_buffer.sfc <- function(shp, ...) {
   geo_projected(shp, sf::st_buffer, ...)
 }
 
-#' @export
-geo_buffer.Spatial <- function(shp, ...) {
-  geo_projected.Spatial(shp = shp, fun = rgeos::gBuffer, ...)
-}
 #' Calculate line length of line with geographic or projected CRS
 #'
 #' Takes a line (represented in sf or sp classes)
@@ -206,10 +162,4 @@ geo_length.sf <- function(shp) {
     l <- sf::st_length(shp)
   }
   as.numeric(l)
-}
-
-#' @export
-geo_length.Spatial <- function(shp) {
-  shp <- sf::st_as_sf(shp)
-  geo_length(shp)
 }
