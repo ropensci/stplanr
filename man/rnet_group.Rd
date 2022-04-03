@@ -89,16 +89,9 @@ plot(sfn@sl["rnet_group"])
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
 \code{\link{overline}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
-\code{\link{rnet_breakup_vertices}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_breakup_vertices}()}
 }
 \concept{rnet}
