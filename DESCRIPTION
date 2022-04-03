@@ -68,7 +68,6 @@ Suggests:
     dodgr (>= 0.0.3),
     cyclestreets,
     leaflet,
-    rgdal,
     pct,
     tmap,
     openxlsx (>= 4.1.0),

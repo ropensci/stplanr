@@ -211,8 +211,6 @@ devtools::install_github("ropensci/stplanr")
 library(stplanr)
 ```
 
-stplanr depends on rgdal, which can be tricky to install.
-
 ### Installing stplanr on Linux and Mac
 
 **stplanr** depends on **sf**. Installation instructions for Mac, Ubuntu and other Linux distros can be found here: https://github.com/r-spatial/sf#installing
