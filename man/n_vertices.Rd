@@ -2,23 +2,20 @@
 % Please edit documentation in R/linefuns.R
 \name{n_vertices}
 \alias{n_vertices}
-\title{Retrieve the number of vertices from a SpatialLines or SpatialPolygons object}
+\title{Retrieve the number of vertices in sf objects}
 \usage{
 n_vertices(l)
 }
 \arguments{
-\item{l}{A SpatialLines or SpatalPolygons object}
+\item{l}{An sf object with LINESTRING geometry}
 }
 \description{
-Returns a vector of the same length as the number of lines,
-with the number of vertices per line or polygon.
-}
-\details{
-See \url{https://gis.stackexchange.com/questions/58147/} for more information.
+Returns a vector of the same length as the number of sf objects.
 }
 \examples{
-n_vertices(routes_fast)
-n_vertices(routes_fast_sf)
+l = routes_fast_sf
+n_vertices(l)
+n_vertices(zones_sf)
 }
 \seealso{
 Other lines: 

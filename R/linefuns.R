@@ -1,34 +1,22 @@
 # Line functions
 
-#' Retrieve the number of vertices from a SpatialLines or SpatialPolygons object
+#' Retrieve the number of vertices in sf objects
 #'
-#' Returns a vector of the same length as the number of lines,
-#' with the number of vertices per line or polygon.
+#' Returns a vector of the same length as the number of sf objects.
 #'
-#' See <https://gis.stackexchange.com/questions/58147/> for more information.
-#'
-#' @param l A SpatialLines or SpatalPolygons object
+#' @param l An sf object with LINESTRING geometry
 #' @family lines
 #' @export
 #' @examples
-#' n_vertices(routes_fast)
-#' n_vertices(routes_fast_sf)
+#' l = routes_fast_sf
+#' n_vertices(l)
+#' n_vertices(zones_sf)
 n_vertices <- function(l) {
   UseMethod("n_vertices")
 }
 #' @export
-n_vertices.Spatial <- function(l) {
-  sapply(l@lines, function(x) nrow(x@Lines[[1]]@coords))
-}
-#' @export
 n_vertices.sf <- function(l) {
-  geoms <- sf::st_coordinates(l)
-  L1 <- rlang::quo(L1)
-  geoms %>%
-    dplyr::as_tibble() %>%
-    dplyr::group_by(!!L1) %>%
-    dplyr::summarise(n_vertices = dplyr::n()) %>%
-    dplyr::pull(n_vertices)
+  sapply(sf::st_geometry(l), function(x) nrow(sf::st_coordinates(x)))
 }
 
 #' Identify lines that are points
@@ -188,13 +176,6 @@ line_midpoint.sf <- function(l) {
   l <- sf::as_Spatial(l)
   res_sp <- line_midpoint.Spatial(l)
   sf::st_as_sf(l)
-}
-#' Calculate length of lines in geographic CRS
-#' @inheritParams line2df
-#' @param byid Logical determining whether the length is returned per object (default is true)
-#' @export
-line_length <- function(l, byid = TRUE) {
-  gprojected(l, rgeos::gLength, byid = byid)
 }
 
 #' Divide SpatialLines dataset into regular segments
