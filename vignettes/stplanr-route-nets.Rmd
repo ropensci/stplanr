@@ -109,7 +109,7 @@ Imagine we want to create a point half way along the the most westerly route seg
 
 ```{r netpoint}
 new_point_coordinates <- c(-1.540, 53.826)
-p <- sf::st_sf(geometry = sf::st_sfc(sf::st_point(new_point_coordinates)), crs = crs)
+p <- sf::st_sf(geometry = sf::st_sfc(sf::st_point(new_point_coordinates)), crs = 4326)
 ```
 
 # Other approaches
