@@ -162,66 +162,37 @@ angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 #' @family lines
 #' @export
 #' @examples
-#' data(routes_fast)
+#' data(routes_fast_sf)
 #' line_midpoint(routes_fast[2:5, ])
-line_midpoint <- function(l) {
-  UseMethod("line_midpoint")
-}
-#' @export
-line_midpoint.Spatial <- function(l) {
-  gprojected(l, maptools::SpatialLinesMidPoints)
-}
-#' @export
-line_midpoint.sf <- function(l) {
-  l <- sf::as_Spatial(l)
-  res_sp <- line_midpoint.Spatial(l)
-  sf::st_as_sf(l)
+line_midpoint <- function(l, tolerance = 0.01) {
+  lwgeom::st_linesubstring(x = l, from = 0.5, tolerance = tolerance)
 }
 
-#' Divide SpatialLines dataset into regular segments
+#' Divide sf LINESTRING objects into regular segments
 #' @inheritParams line2df
 #' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
 #' @family lines
 #' @export
 #' @examples
-#' data(routes_fast)
-#' l <- routes_fast[2, ]
-#' library(sp)
+#' l <- routes_fast_sf[2, ]
 #' l_seg2 <- line_segment(l = l, n_segments = 2)
-#' plot(l_seg2, col = l_seg2$group, lwd = 50)
+#' plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 line_segment <- function(l, n_segments, segment_length = NA) {
   if (!is.na(segment_length)) {
     l_length <- line_length(l)
     n_segments <- round(l_length / segment_length)
   }
-  if (n_segments == 2) {
-    pseg <- line_midpoint(l)
-  } else {
-    pseg <- sp::spsample(x = l, n = n_segments - 1, type = "regular")
-  }
-  l_geom <- raster::geom(l)
-  l_coords <- l_geom[, c("x", "y")]
-  knn_res <- nabor::knn(data = l_coords, query = sp::coordinates(pseg), k = 1)
-  sel_nearest <- c(knn_res$nn.idx)
-  for (i in 1:(length(sel_nearest) + 1)) {
-    ids <- c(1, sel_nearest, nrow(l))
-    if (i == 1) {
-      l_seg <- points2line(l_coords[ids[i]:ids[(i + 1)], ])
-      sp::spChFIDs(l) <- i
-    } else if (i == length(sel_nearest) + 1) {
-      l_temp <- points2line(l_coords[ids[i]:nrow(l_coords), ])
-      sp::spChFIDs(l_temp) <- i
-      l_seg <- raster::bind(l_seg, l_temp)
-    } else {
-      l_temp <- points2line(l_coords[ids[i]:ids[(i + 1)], ])
-      sp::spChFIDs(l_temp) <- i
-      l_seg <- raster::bind(l_seg, l_temp)
-    }
-  }
-  l_seg <- sp::SpatialLinesDataFrame(l_seg, data.frame(group = 1:i))
-  raster::crs(l_seg) <- raster::crs(l)
-  l_seg
+  # browser() # tests
+  # first_linestring = lwgeom::st_linesubstring(x = l, from = 0, to = 0.2)
+  from_to_sequence = seq(from = 0, to = 1, length.out = n_segments + 1)
+  line_segment_list = lapply(seq(n_segments), function(i)
+    lwgeom::st_linesubstring(
+      x = l,
+      from = from_to_sequence[i],
+      to = from_to_sequence[i + 1])
+    )
+  do.call(rbind, line_segment_list)
 }
 make_bidirectional <- function(bearing) {
   is_na_bearings <- is.na(bearing)

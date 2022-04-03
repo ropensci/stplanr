@@ -4,7 +4,7 @@
 \alias{line_midpoint}
 \title{Find the mid-point of lines}
 \usage{
-line_midpoint(l)
+line_midpoint(l, tolerance = 0.01)
 }
 \arguments{
 \item{l}{A spatial lines object}
@@ -14,7 +14,7 @@ This is a wrapper around \code{\link[=SpatialLinesMidPoints]{SpatialLinesMidPoin
 of lines that are not projected, which have a lat/long CRS.
 }
 \examples{
-data(routes_fast)
+data(routes_fast_sf)
 line_midpoint(routes_fast[2:5, ])
 }
 \seealso{
