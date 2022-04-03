@@ -1,7 +1,5 @@
 #' Split a spatial object into quadrants
 #'
-#' Split a spatial object (initially tested on SpatialPolygons) into quadrants.
-#'
 #' Returns a character vector of NE, SE, SW, NW corresponding to north-east, south-east
 #' quadrants respectively. If number_out is TRUE, returns numbers from 1:4, respectively.
 #'
