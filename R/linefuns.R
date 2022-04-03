@@ -180,7 +180,7 @@ line_midpoint <- function(l, tolerance = 0.01) {
 #' plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 line_segment <- function(l, n_segments, segment_length = NA) {
   if (!is.na(segment_length)) {
-    l_length <- line_length(l)
+    l_length <- sf::st_length(l)
     n_segments <- round(l_length / segment_length)
   }
   # browser() # tests
