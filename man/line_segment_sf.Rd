@@ -18,7 +18,7 @@ Divide sf LINESTRING objects into regular segments
 }
 \examples{
 l <- routes_fast_sf[2, ]
-l_seg2 <- line_segment(l = l, n_segments = 2)
+l_seg2 <- line_segment_sf(l = l, n_segments = 2)
 plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 }
 \seealso{
