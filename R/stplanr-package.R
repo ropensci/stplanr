@@ -22,7 +22,6 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
-#' @importFrom maptools SpatialLinesMidPoints
 #' @importFrom rlang .data
 #' @importFrom dplyr first last n
 NULL
