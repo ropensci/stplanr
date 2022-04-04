@@ -509,31 +509,6 @@ points2flow <- function(p) {
   od2line(flow = odf, zones = p)
 }
 
-#' Quickly calculate Euclidean distances of od pairs
-#'
-#' It is common to want to know the Euclidean distance between origins and destinations
-#' in OD data. You can calculate this by first converting OD data to SpatialLines data,
-#' e.g. with [od2line()]. However this can be slow and overkill if you just
-#' want to know the distance. This function is a few orders of magnitude faster.
-#'
-#' Note: this function assumes that the zones or centroids in `cents` have a geographic
-#' (lat/lon) CRS.
-#'
-#' @inheritParams od2line
-#' @family od
-#' @export
-#' @examples
-#' data(flow)
-#' data(cents)
-#' od_dist(flow, cents)
-od_dist <- function(flow, zones) {
-  omatch <- match(flow[[1]], zones@data[[1]])
-  dmatch <- match(flow[[2]], zones@data[[1]])
-  cents_o <- zones@coords[omatch, ]
-  cents_d <- zones@coords[dmatch, ]
-  geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
-}
-
 #' Convert a series of points, or a matrix of coordinates, into a line
 #'
 #' This function makes that makes the creation of `sf`

@@ -16,7 +16,6 @@
 #' @importFrom methods as slot
 #' @importFrom stats setNames
 #' @importFrom utils read.csv
-#' @importFrom geosphere distHaversine
 #' @importFrom Rcpp evalCpp
 #' @importFrom methods is new
 #' @importFrom utils download.file tail unzip
