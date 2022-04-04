@@ -56,9 +56,6 @@ Imports:
     sfheaders,
     data.table,
     pbapply
-LinkingTo: 
-    RcppArmadillo (>= 0.9.100.5.0),
-    Rcpp (>= 0.12.18)
 Suggests:
     testthat (>= 2.0.0),
     knitr (>= 1.20),

@@ -126,12 +126,13 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
   return(l)
 }
 
-#' Clip the beginning and ends SpatialLines to the edge of SpatialPolygon borders
+#' Clip the beginning and ends of `sf` LINESTRING objects
 #'
 #' Takes lines and removes the start and end point, to a distance determined
-#' by the nearest polygon border.
+#' by the nearest `buff` polygon border.
 #'
 #' @inheritParams geo_toptail
+#' @param buff An `sf` object with POLYGON geometry to buffer the linestring.
 #' @family lines
 #' @export
 #' @examples
