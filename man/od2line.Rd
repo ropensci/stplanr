@@ -79,7 +79,6 @@ plot(flowlines_dests)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},

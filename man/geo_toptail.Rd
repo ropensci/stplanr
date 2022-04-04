@@ -21,8 +21,9 @@ Takes lines and removes the start and end point, to a distance determined
 by the user.
 }
 \details{
-Note: \code{\link[=toptailgs]{toptailgs()}} is around 10 times faster, but only works
-on data with geographic CRS's due to its reliance on the geosphere
+Note: see the function
+\href{https://github.com/ropensci/stplanr/blob/master/R/toptail.R#L121}{\code{toptailgs()}}
+in {stplanr} v0.8.5 for an implementation that uses the geosphere
 package.
 }
 \examples{
@@ -46,15 +47,12 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

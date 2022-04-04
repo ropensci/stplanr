@@ -30,15 +30,12 @@ Other lines:
 \code{\link{line2points}()},
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
-\code{\link{line_sample}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

@@ -50,8 +50,6 @@ plot(r_car, col = "red", add = TRUE)
 }
 \seealso{
 Other routes: 
-\code{\link{line2routeRetry}()},
-\code{\link{line2route}()},
 \code{\link{route_dodgr}()},
 \code{\link{route}()}
 }

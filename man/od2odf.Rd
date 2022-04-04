@@ -37,7 +37,6 @@ od2odf(flow[1:2, ], zones)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},

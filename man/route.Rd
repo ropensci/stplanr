@@ -22,11 +22,9 @@ route(
 
 \item{to}{An object representing destinations}
 
-\item{l}{Only needed if from and to are empty, in which case this
-should be a spatial object representing desire lines}
+\item{l}{A spatial (linestring) object}
 
-\item{route_fun}{A routing function to be used for converting the straight lines to routes
-\code{\link[=od2line]{od2line()}}}
+\item{route_fun}{A routing function to be used for converting the lines to routes}
 
 \item{wait}{How long to wait between routes?
 0 seconds by default, can be useful when sending requests to rate limited APIs.}
@@ -34,11 +32,18 @@ should be a spatial object representing desire lines}
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
+\item{list_output}{If FALSE (default) assumes spatial (linestring) object output.
+Set to TRUE to save output as a list.}
 
 \item{cl}{Cluster}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
+\item{...}{Arguments passed to the routing function}
+
+\item{l_id}{Character string naming the id field from the input lines data,
+typically the origin and destination ids pasted together. If absent, the row name of the
+straight lines will be used.}
+
+\item{time_delay}{Number or seconds to wait between each query}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them
@@ -70,8 +75,10 @@ plot(r_osrm)
 }
 \seealso{
 Other routes: 
-\code{\link{line2routeRetry}()},
-\code{\link{line2route}()},
+\code{\link{route_dodgr}()},
+\code{\link{route_osrm}()}
+
+Other routes: 
 \code{\link{route_dodgr}()},
 \code{\link{route_osrm}()}
 }

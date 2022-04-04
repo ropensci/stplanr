@@ -5,7 +5,18 @@
 #' The definition of optimal depends on the routing function used
 #'
 #' @inheritParams od_coords
-#' @inheritParams line2route
+#' @param l A spatial (linestring) object
+#' @param route_fun A routing function to be used for converting the lines to routes
+#' @param n_print A number specifying how frequently progress updates
+#' should be shown
+#' @param list_output If FALSE (default) assumes spatial (linestring) object output.
+#' Set to TRUE to save output as a list.
+#' @param l_id Character string naming the id field from the input lines data,
+#' typically the origin and destination ids pasted together. If absent, the row name of the
+#' straight lines will be used.
+#' @param time_delay Number or seconds to wait between each query
+#' @param ... Arguments passed to the routing function
+#' @family routes
 #' @param cl Cluster
 #' @param wait How long to wait between routes?
 #'   0 seconds by default, can be useful when sending requests to rate limited APIs.

@@ -20,7 +20,6 @@ plot(flow_sf)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},

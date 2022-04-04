@@ -46,33 +46,6 @@ NULL
 #' The key variables are the origin and destination ids, which link to
 #' the `cents` georeferenced spatial objects.
 #' @family example data
-#' @examples
-#' \dontrun{
-#' # This is how the dataset was constructed - see
-#' # https://github.com/npct/pct - if download to ~/repos
-#' flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
-#' data(cents)
-#' o <- flow$Area.of.residence %in% cents$geo_code[-1]
-#' d <- flow$Area.of.workplace %in% cents$geo_code[-1]
-#' flow <- flow[o & d, ] # subset flows with o and d in study area
-#' library(devtools)
-#' flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
-#' use_data(flow, overwrite = TRUE)
-#'
-#' # Convert flows to spatial lines dataset
-#' flowlines <- od2line(flow = flow, zones = cents)
-#' # use_data(flowlines, overwrite = TRUE)
-#'
-#' # Convert flows to routes
-#' routes_fast <- line2route(l = flowlines, plan = "fastest")
-#' routes_slow <- line2route(l = flowlines, plan = "quietest")
-#'
-#' use_data(routes_fast)
-#' use_data(routes_slow)
-#' routes_fast_sf <- sf::st_as_sf(routes_fast)
-#' routes_slow_sf <- sf::st_as_sf(routes_slow)
-#' }
-#'
 #' @docType data
 #' @keywords datasets
 #' @name flow

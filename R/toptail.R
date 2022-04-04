@@ -3,8 +3,9 @@
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the user.
 #'
-#' Note: [toptailgs()] is around 10 times faster, but only works
-#' on data with geographic CRS's due to its reliance on the geosphere
+#' Note: see the function
+#' [`toptailgs()`](https://github.com/ropensci/stplanr/blob/master/R/toptail.R#L121)
+#' in {stplanr} v0.8.5 for an implementation that uses the geosphere
 #' package.
 #'
 #' @param l An `sf` object representing lines
@@ -52,71 +53,6 @@ geo_toptail <- function(l, toptail_dist, ...) {
   # out <- data.table::rbindlist(line_list)
   # sf::st_sf(out)
   out
-}
-#' Clip the first and last n metres of SpatialLines
-#'
-#' Takes lines and removes the start and end point, to a distance determined
-#' by the user. Uses the geosphere::distHaversine function and requires
-#' coordinates in WGS84 (lng/lat).
-#'
-#' @param l A SpatialLines object
-#' @param toptail_dist The distance (in metres) to top the line by.
-#' Can be either a single value or a vector of the same length as the
-#' SpatialLines object. If tail_dist is missing, is used as the tail distance.
-#' @param tail_dist The distance (in metres) to tail the line by. Can be
-#' either a single value or a vector of the same length as the SpatialLines
-#' object.
-#' @family lines
-#' @export
-toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
-  if (length(toptail_dist) > 1) {
-    if (length(toptail_dist) != length(l)) {
-      stop("toptail_dist is vector but not of equal length to SpatialLines object")
-    }
-  }
-  if (!missing(tail_dist)) {
-    if (length(tail_dist) > 1) {
-      if (length(tail_dist) != length(l)) {
-        stop("tail_dist is vector but not of equal length to SpatialLines object")
-      }
-    }
-  }
-  else {
-    tail_dist <- toptail_dist
-  }
-
-  toptail_disto <- toptail_dist
-  tail_disto <- tail_dist
-
-  i <- 1
-  while (i <= length(l)) {
-    toptail_dist <- ifelse(length(toptail_disto) == 1, toptail_disto, toptail_disto[i])
-    linecoords <- coordinates(l@lines[[i]])[[1]]
-    topdists <- geosphere::distHaversine(linecoords[1, ], linecoords)
-    linecoords <- rbind(
-      tail(linecoords[which(topdists < toptail_dist), , drop = FALSE], n = 1) + (
-        linecoords[which(topdists >= toptail_dist), , drop = FALSE][1, ] -
-          tail(linecoords[which(topdists < toptail_dist), , drop = FALSE], n = 1)
-      ) * (
-        (toptail_dist - tail(topdists[which(topdists < toptail_dist)], n = 1)) / (topdists[which(topdists >= toptail_dist)][1] - tail(topdists[which(topdists < toptail_dist)], n = 1))
-      ),
-      linecoords[which(topdists >= toptail_dist), , drop = FALSE]
-    )
-    bottomdists <- geosphere::distHaversine(linecoords[nrow(linecoords), ], linecoords)
-    tail_dist <- ifelse(length(tail_disto) == 1, tail_disto, tail_disto[i])
-
-    linecoords <- rbind(
-      linecoords[which(bottomdists >= tail_dist), , drop = FALSE],
-      tail(linecoords[which(bottomdists >= tail_dist), , drop = FALSE], n = 1) + (
-        linecoords[which(bottomdists < tail_dist), , drop = FALSE][1, ] -
-          tail(linecoords[which(bottomdists >= tail_dist), , drop = FALSE], n = 1)
-      ) *
-        ((tail(bottomdists[which(bottomdists >= tail_dist)], n = 1) - tail_dist) / (tail(bottomdists[which(bottomdists >= tail_dist)], n = 1) - bottomdists[which(bottomdists < tail_dist)][1]))
-    )
-    l@lines[[i]]@Lines[[1]]@coords <- unname(linecoords)
-    i <- i + 1
-  }
-  return(l)
 }
 
 #' Clip the beginning and ends of `sf` LINESTRING objects

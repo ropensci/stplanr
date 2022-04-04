@@ -12,7 +12,6 @@
 #'
 #'
 #' @import curl
-#' @importFrom sp bbox plot spTransform Lines SpatialLines spChFIDs proj4string proj4string<- CRS coordinates
 #' @importFrom graphics text
 #' @importFrom methods as slot
 #' @importFrom stats setNames
