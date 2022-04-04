@@ -14,7 +14,7 @@ Converts a range of spatial data formats into a matrix representing the bounding
 }
 \examples{
 geo_bb_matrix(routes_fast_sf)
-geo_bb_matrix(cents[1, ])
+geo_bb_matrix(cents_sf[1, ])
 geo_bb_matrix(c(-2, 54))
 geo_bb_matrix(sf::st_coordinates(cents_sf))
 }
@@ -22,7 +22,6 @@ geo_bb_matrix(sf::st_coordinates(cents_sf))
 Other geo: 
 \code{\link{bbox_scale}()},
 \code{\link{geo_bb}()},
-\code{\link{quadrant}()},
-\code{\link{reproject}()}
+\code{\link{quadrant}()}
 }
 \concept{geo}

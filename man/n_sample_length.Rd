@@ -30,9 +30,6 @@ sum(res)
 # more examples:
 n_sample_length(5, 1:5, c(0.1, 0.9, 0, 0, 0))
 n_sample_length(5, 1:5, c(0.5, 0.3, 0.1, 0, 0))
-l <- flowlines[2:6, ]
-l_lengths <- line_length(l)
-n <- n_sample_length(10, l_lengths, weights = l$All)
 }
 \seealso{
 Other lines: 
@@ -52,7 +49,6 @@ Other lines:
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptailgs}()}
 }
 \concept{lines}

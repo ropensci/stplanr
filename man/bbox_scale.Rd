@@ -30,7 +30,6 @@ points(bb[1, ], bb[2, ], col = "red")
 Other geo: 
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
-\code{\link{quadrant}()},
-\code{\link{reproject}()}
+\code{\link{quadrant}()}
 }
 \concept{geo}

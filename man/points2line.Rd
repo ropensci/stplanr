@@ -44,7 +44,6 @@ Other lines:
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptailgs}()}
 }
 \concept{lines}

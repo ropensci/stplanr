@@ -10,11 +10,6 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' rnet <- overline(routes_fast[c(2, 3, 22), ], attrib = "length")
-#' plot(rnet)
-#' lines(routes_fast[22, ], col = "red") # line without overlaps
-#' islines(routes_fast[2, ], routes_fast[3, ])
-#' islines(routes_fast[2, ], routes_fast[22, ])
 #' # sf implementation
 #' islines(routes_fast_sf[2, ], routes_fast_sf[3, ])
 #' islines(routes_fast_sf[2, ], routes_fast_sf[22, ])
@@ -50,13 +45,6 @@ islines.sf <- function(g1, g2) {
 #'   rsec <- gsection(sl, buff_dist = 50)
 #'   length(rsec) # 4 features: issue
 #'   plot(rsec, col = seq(length(rsec)))
-#'   # dont test due to issues with sp classes on some set-ups
-#'   # sl <- routes_fast[2:4, ]
-#'   # rsec <- gsection(sl)
-#'   # rsec_buff <- gsection(sl, buff_dist = 1)
-#'   # plot(sl[1], lwd = 9, col = 1:nrow(sl))
-#'   # plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
-#'   # plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 #' }
 gsection <- function(sl, buff_dist = 0) {
   UseMethod("gsection")
@@ -397,20 +385,6 @@ overline.sf <- overline2
 #' with a distance (i.e. not intra-zone flows) are included
 #' @family lines
 #' @export
-#' @examples
-#' plot(flowlines[1:30, ], lwd = flowlines$On.foot[1:30])
-#' singlines <- onewaygeo(flowlines[1:30, ], attrib = which(names(flowlines) == "On.foot"))
-#' plot(singlines, lwd = singlines$On.foot / 2, col = "red", add = TRUE)
-#' \dontrun{
-#' plot(flowlines, lwd = flowlines$All / 10)
-#' singlelines <- onewaygeo(flowlines, attrib = 3:14)
-#' plot(singlelines, lwd = singlelines$All / 20, col = "red", add = TRUE)
-#' sum(singlelines$All) == sum(flowlines$All)
-#' nrow(singlelines)
-#' singlelines_sf <- onewaygeo(flowlines_sf, attrib = 3:14)
-#' sum(singlelines_sf$All) == sum(flowlines_sf$All)
-#' summary(singlelines$All == singlelines_sf$All)
-#' }
 onewaygeo <- function(x, attrib) {
   UseMethod("onewaygeo")
 }

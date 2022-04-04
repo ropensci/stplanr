@@ -65,9 +65,6 @@ is_linepoint <- function(l) {
 #' if (lib_versions[3] >= "6.3.1") {
 #'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
 #'   bearings_sf_1_9 # lines of 0 length have NaN bearing
-#'   bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
-#'   bearings_sp_1_9
-#'   plot(bearings_sf_1_9, bearings_sp_1_9)
 #'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
 #' }
 line_bearing <- function(l, bidirectional = FALSE) {
@@ -128,13 +125,22 @@ angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 #' Find the mid-point of lines
 #'
 #' @inheritParams line2df
+#' @param tolerance The tolerance used to break lines at verteces.
+#'   See [lwgeom::st_linesubstring()].
 #' @family lines
 #' @export
 #' @examples
-#' data(routes_fast_sf)
-#' line_midpoint(routes_fast[2:5, ])
-line_midpoint <- function(l, tolerance = 0.01) {
-  lwgeom::st_linesubstring(x = l, from = 0.5, tolerance = tolerance)
+#' l = routes_fast_sf[2:5, ]
+#' plot(l$geometry, col = 2:5)
+#' midpoints = line_midpoint(l)
+#' plot(midpoints, add = TRUE)
+line_midpoint <- function(l, tolerance = NULL) {
+  if(is.null(tolerance)) {
+    sub = lwgeom::st_linesubstring(x = l, from = 0, to = 0.5)
+  } else {
+    sub = lwgeom::st_linesubstring(x = l, from = 0, to = 0.5, tolerance = tolerance)
+  }
+  lwgeom::st_endpoint(sub)
 }
 
 #' Divide sf LINESTRING objects into regular segments
@@ -159,7 +165,8 @@ line_segment <- function(l, n_segments, segment_length = NA) {
     lwgeom::st_linesubstring(
       x = l,
       from = from_to_sequence[i],
-      to = from_to_sequence[i + 1])
+      to = from_to_sequence[i + 1]
+      )
     )
   do.call(rbind, line_segment_list)
 }

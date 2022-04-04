@@ -320,10 +320,6 @@ od2line2 <- function(flow, zones) {
 #' @family lines
 #' @export
 #' @examples
-#' data(flowlines)
-#' line2df(flowlines[5, ]) # beginning and end of a single straight line
-#' line2df(flowlines) # on multiple lines
-#' line2df(routes_fast[5:6, ]) # beginning and end of routes
 #' line2df(routes_fast_sf[5:6, ]) # beginning and end of routes
 line2df <- function(l) {
   UseMethod("line2df")
@@ -706,45 +702,11 @@ points2odf.Spatial <- function(p) {
 #'
 #' @export
 #' @examples
-#' data(cents)
-#' plot(cents)
-#' flow <- points2flow(cents)
-#' plot(flow, add = TRUE)
-#' flow_sf <- points2flow(cents_sf)
+#' flow_sf <- points2flow(cents_sf[1:4, ])
 #' plot(flow_sf)
 points2flow <- function(p) {
   odf <- points2odf(p)
   od2line(flow = odf, zones = p)
-}
-
-#' Update line geometry
-#'
-#' Take two SpatialLines objects and update the geometry of the former with that of the latter,
-#' retaining the data of the former.
-#'
-#' @param l A SpatialLines object, whose geometry is to be modified
-#' @param nl A SpatialLines object of the same length as `l` to provide the new geometry
-#' @family lines
-#'
-#' @export
-#' @examples
-#' data(flowlines)
-#' l <- flowlines[2:5, ]
-#' nl <- routes_fast
-#' nrow(l)
-#' nrow(nl)
-#' l <- l[!is_linepoint(l), ]
-#' names(l)
-#' names(routes_fast)
-#' l_newgeom <- update_line_geometry(l, nl)
-#' plot(l, lwd = l$All / mean(l$All))
-#' plot(l_newgeom, lwd = l$All / mean(l$All))
-#' names(l_newgeom)
-update_line_geometry <- function(l, nl) {
-  for (i in 1:nrow(l)) {
-    l@lines[[i]] <- Lines(nl@lines[[i]]@Lines, row.names(l[i, ]))
-  }
-  l
 }
 
 #' Quickly calculate Euclidean distances of od pairs

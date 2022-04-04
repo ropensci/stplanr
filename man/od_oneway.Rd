@@ -59,19 +59,8 @@ attrib <- which(vapply(flow, is.numeric, TRUE))
 flow_oneway <- od_oneway(flow, attrib = attrib)
 colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 # Demonstrate the results from oneway and onewaygeo are identical
-flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 flow_oneway_sf <- od_oneway(flowlines_sf)
-par(mfrow = c(1, 2))
-plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-par(mfrow = c(1, 1))
-od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
-cor(od_max_min$all, od_oneway$all)
-# benchmark performance
-# bench::mark(check = FALSE, iterations = 3,
-#   onewayid(flowlines_sf, attrib),
-#   od_oneway(flowlines_sf)
-# )
 }
 \seealso{
 Other od: 

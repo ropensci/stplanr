@@ -22,14 +22,6 @@ Takes lines and removes the start and end point, to a distance determined
 by the user. Uses the geosphere::distHaversine function and requires
 coordinates in WGS84 (lng/lat).
 }
-\examples{
-data("routes_fast")
-rf <- routes_fast[2:3, ]
-r_toptail <- toptailgs(rf, toptail_dist = 300)
-plot(rf, lwd = 3)
-plot(r_toptail, col = "red", add = TRUE)
-plot(cents, add = TRUE)
-}
 \seealso{
 Other lines: 
 \code{\link{angle_diff}()},
@@ -48,7 +40,6 @@ Other lines:
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

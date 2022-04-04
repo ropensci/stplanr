@@ -4,17 +4,22 @@
 \alias{line_midpoint}
 \title{Find the mid-point of lines}
 \usage{
-line_midpoint(l, tolerance = 0.01)
+line_midpoint(l, tolerance = NULL)
 }
 \arguments{
 \item{l}{A spatial lines object}
+
+\item{tolerance}{The tolerance used to break lines at verteces.
+See \code{\link[lwgeom:st_linesubstring]{lwgeom::st_linesubstring()}}.}
 }
 \description{
 Find the mid-point of lines
 }
 \examples{
-data(routes_fast_sf)
-line_midpoint(routes_fast[2:5, ])
+l = routes_fast_sf[2:5, ]
+plot(l$geometry, col = 2:5)
+midpoints = line_midpoint(l)
+plot(midpoints, add = TRUE)
 }
 \seealso{
 Other lines: 
@@ -34,7 +39,6 @@ Other lines:
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptailgs}()}
 }
 \concept{lines}

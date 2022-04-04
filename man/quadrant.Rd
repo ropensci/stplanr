@@ -28,7 +28,6 @@ plot(x$geometry, col = factor(quads))
 Other geo: 
 \code{\link{bbox_scale}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{geo_bb}()},
-\code{\link{reproject}()}
+\code{\link{geo_bb}()}
 }
 \concept{geo}

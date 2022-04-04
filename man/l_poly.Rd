@@ -14,13 +14,6 @@ data(l_poly)
 This dataset represents road width for testing.
 }
 \examples{
-\dontrun{
-l <- routes_fast[13, ]
-l_poly <- geo_projected(l, rgeos::gBuffer, 8)
-plot(l_poly)
-plot(routes_fast, add = TRUE)
-# allocate road width to relevant line
-devtools::use_data(l_poly)
-}
+l_poly
 }
 \keyword{datasets}

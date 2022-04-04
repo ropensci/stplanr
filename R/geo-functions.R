@@ -37,12 +37,10 @@ bbox_scale <- function(bb, scale_factor) {
 #' @family geo
 #' @export
 #' @examples
-#' # Simple features implementation:
 #' shp <- routes_fast_sf
 #' shp_bb <- geo_bb(shp, distance = 100)
 #' plot(shp_bb, col = "red", reset = FALSE)
 #' plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
-#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
 #' plot(routes_fast_sf$geometry, add = TRUE)
 geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
@@ -53,7 +51,7 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
   output <- match.arg(output)
   bb <- geo_bb_matrix(shp)
   bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb_sp <- bb2poly(bb = bb, distance = distance)
+  bb <- bb2poly(bb = bb, distance = distance)
   sf::st_crs(bb) <- sf::st_crs(shp)
   if (output == "polygon") {
     return(bb)
@@ -123,7 +121,8 @@ bb2poly <- function(bb, distance = 0) {
   }
   if (distance > 0) {
     b_poly_buff <- geo_buffer(shp = b_poly, dist = distance)
-    b_poly <- bb2poly(b_poly_buff)
+    b_poly_bbox = sf::st_bbox(b_poly_buff)
+    b_poly <- bb2poly(b_poly_bbox)
   }
   b_poly
 }
@@ -137,7 +136,7 @@ bb2poly <- function(bb, distance = 0) {
 #' @export
 #' @examples
 #' geo_bb_matrix(routes_fast_sf)
-#' geo_bb_matrix(cents[1, ])
+#' geo_bb_matrix(cents_sf[1, ])
 #' geo_bb_matrix(c(-2, 54))
 #' geo_bb_matrix(sf::st_coordinates(cents_sf))
 geo_bb_matrix <- function(shp) {

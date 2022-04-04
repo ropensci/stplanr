@@ -68,13 +68,6 @@ geo_toptail <- function(l, toptail_dist, ...) {
 #' object.
 #' @family lines
 #' @export
-#' @examples
-#' data("routes_fast")
-#' rf <- routes_fast[2:3, ]
-#' r_toptail <- toptailgs(rf, toptail_dist = 300)
-#' plot(rf, lwd = 3)
-#' plot(r_toptail, col = "red", add = TRUE)
-#' plot(cents, add = TRUE)
 toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
   if (length(toptail_dist) > 1) {
     if (length(toptail_dist) != length(l)) {

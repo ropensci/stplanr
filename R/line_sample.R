@@ -19,9 +19,6 @@
 #' # more examples:
 #' n_sample_length(5, 1:5, c(0.1, 0.9, 0, 0, 0))
 #' n_sample_length(5, 1:5, c(0.5, 0.3, 0.1, 0, 0))
-#' l <- flowlines[2:6, ]
-#' l_lengths <- line_length(l)
-#' n <- n_sample_length(10, l_lengths, weights = l$All)
 n_sample_length <- function(n, l_lengths, weights) {
   # generate length-adjusted weights equal to 1
   l_lengths_rel <- l_lengths * weights / (sum(l_lengths * weights))
@@ -46,15 +43,6 @@ n_sample_length <- function(n, l_lengths, weights) {
 #' @param weights The relative probabilities of lines being samples
 #' @family lines
 #' @export
-#' @examples
-#' l <- flowlines[2:5, ]
-#' n <- 100
-#' l_lengths <- line_length(l)
-#' weights <- l$All
-#' p <- line_sample(l, 50, weights)
-#' plot(p)
-#' p <- line_sample(l, 50, weights = 1:length(l))
-#' plot(p)
 line_sample <- function(l, n, weights) {
   not_projected <- !sp::is.projected(l)
   if (not_projected) {

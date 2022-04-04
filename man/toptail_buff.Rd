@@ -2,18 +2,20 @@
 % Please edit documentation in R/toptail.R
 \name{toptail_buff}
 \alias{toptail_buff}
-\title{Clip the beginning and ends SpatialLines to the edge of SpatialPolygon borders}
+\title{Clip the beginning and ends of \code{sf} LINESTRING objects}
 \usage{
 toptail_buff(l, buff, ...)
 }
 \arguments{
 \item{l}{An \code{sf} object representing lines}
 
+\item{buff}{An \code{sf} object with POLYGON geometry to buffer the linestring.}
+
 \item{...}{Arguments passed to \code{sf::st_buffer()}}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
-by the nearest polygon border.
+by the nearest \code{buff} polygon border.
 }
 \examples{
 l <- routes_fast_sf
@@ -43,7 +45,6 @@ Other lines:
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptailgs}()}
 }
 \concept{lines}

@@ -27,9 +27,6 @@ lib_versions
 if (lib_versions[3] >= "6.3.1") {
   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
   bearings_sf_1_9 # lines of 0 length have NaN bearing
-  bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
-  bearings_sp_1_9
-  plot(bearings_sf_1_9, bearings_sp_1_9)
   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
 }
 }
@@ -51,7 +48,6 @@ Other lines:
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptailgs}()}
 }
 \concept{lines}
