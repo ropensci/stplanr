@@ -27,6 +27,7 @@ nearest_cyclestreets <- function(shp = NULL, lat, lng, pat = api_pat("cyclestree
 }
 #' @export
 nearest_cyclestreets.NULL <- function(shp = NULL, lat, lng, pat = api_pat("cyclestreet")) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   url <- paste0("https://api.cyclestreets.net/v2/nearestpoint?lonlat=", lng, ",", lat, "&key=", pat)
   obj <- jsonlite::fromJSON(url)
   coords <- obj$features$geometry$coordinates[[1]]
@@ -37,6 +38,7 @@ nearest_cyclestreets.NULL <- function(shp = NULL, lat, lng, pat = api_pat("cycle
 }
 #' @export
 nearest_cyclestreets.Spatial <- function(shp, lat = shp@coords[1, 2], lng = shp@coords[1, 1], pat = api_pat("cyclestreet")) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   nearest_cyclestreets.NULL(lat = lat, lng = lng, pat = pat)
 }
 #' @export

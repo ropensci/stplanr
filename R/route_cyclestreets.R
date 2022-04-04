@@ -74,6 +74,7 @@ route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = 
                                base_url = "https://www.cyclestreets.net", reporterrors = TRUE,
                                save_raw = "FALSE") {
 
+  if(!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   # Convert sp object to lat/lon vector
   if (class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame") {
     from <- coordinates(from)

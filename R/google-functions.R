@@ -17,6 +17,7 @@
 #' nearest_google(lat = 50.333, lng = 3.222, google_api = "api_key_here")
 #' }
 nearest_google <- function(lat, lng, google_api) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   base_url <- "https://roads.googleapis.com/v1/snapToRoads"
   url <- paste0(base_url, "?path=", lat, ",", lng, "&key=", google_api)
   obj <- jsonlite::fromJSON(url)

@@ -71,6 +71,7 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
 
   else {
     # Convert sp object to lat/lon vector
+    if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
     if (is(object = from, "Spatial")) from <- sp::coordinates(from)
     if (is(object = to, "Spatial")) to <- sp::coordinates(to)
 
@@ -245,6 +246,8 @@ od2line.Spatial <- function(flow, zones, destinations = NULL,
                             dest_code = names(flow)[2],
                             zone_code_d = NA, silent = TRUE) {
   l <- vector("list", nrow(flow))
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
+
 
   if (is.null(destinations)) {
     if (!silent) {
@@ -300,6 +303,7 @@ od2line.Spatial <- function(flow, zones, destinations = NULL,
 #' @rdname od2line
 #' @export
 od2line2 <- function(flow, zones) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   odf <- od2odf(flow, zones)
   l <- vector("list", nrow(odf))
   for (i in 1:nrow(odf)) {
@@ -384,6 +388,7 @@ line2points <- function(l, ids = rep(1:nrow(l))) {
 }
 #' @export
 line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   for (i in 1:length(l)) {
     lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
     pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
@@ -433,6 +438,8 @@ line2pointsn <- function(l) {
 }
 #' @export
 line2pointsn.Spatial <- function(l) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
+  if (!requireNamespace("raster", quietly = TRUE)) stop("raster package required")
   spdf <- raster::geom(l)
   p <- sp::SpatialPoints(coords = spdf[, c("x", "y")])
   raster::crs(p) <- raster::crs(l)
@@ -763,6 +770,8 @@ points2line.sf <- function(p) {
 }
 #' @export
 points2line.Spatial <- function(p) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
+  if (!requireNamespace("raster", quietly = TRUE)) stop("raster package required")
   if (is(p, "SpatialPoints")) {
     p_proj <- sp::proj4string(p)
     p <- sp::coordinates(p)

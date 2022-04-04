@@ -44,6 +44,7 @@ n_sample_length <- function(n, l_lengths, weights) {
 #' @family lines
 #' @export
 line_sample <- function(l, n, weights) {
+  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
   not_projected <- !sp::is.projected(l)
   if (not_projected) {
     crs_orig <- sp::proj4string(l)
