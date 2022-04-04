@@ -1,4 +1,7 @@
-# stplanr 0.9.0
+# stplanr 0.9.0 (April 2022)
+
+- Message added on loading the package announcing planned changes (#332)
+- New function `line_segment_sf()` (#482)
 
 # stplanr 0.8.7 (February 2022)
 
