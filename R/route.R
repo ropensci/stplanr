@@ -11,10 +11,6 @@
 #' should be shown
 #' @param list_output If FALSE (default) assumes spatial (linestring) object output.
 #' Set to TRUE to save output as a list.
-#' @param l_id Character string naming the id field from the input lines data,
-#' typically the origin and destination ids pasted together. If absent, the row name of the
-#' straight lines will be used.
-#' @param time_delay Number or seconds to wait between each query
 #' @param ... Arguments passed to the routing function
 #' @family routes
 #' @param cl Cluster

@@ -38,12 +38,6 @@ Set to TRUE to save output as a list.}
 \item{cl}{Cluster}
 
 \item{...}{Arguments passed to the routing function}
-
-\item{l_id}{Character string naming the id field from the input lines data,
-typically the origin and destination ids pasted together. If absent, the row name of the
-straight lines will be used.}
-
-\item{time_delay}{Number or seconds to wait between each query}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them
