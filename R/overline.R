@@ -433,7 +433,6 @@ onewaygeo.sf <- function(x, attrib) {
 #'
 #' @param sl An `sf` `LINESTRING` object with overlapping elements
 #' @inheritParams overline
-#' @inheritParams overline_spatial
 #' @export
 #' @examples
 #' routes_fast_sf$value <- 1

@@ -8,13 +8,13 @@
 geo_toptail(l, toptail_dist, ...)
 }
 \arguments{
-\item{l}{A SpatialLines object}
+\item{l}{An \code{sf} object representing lines}
 
 \item{toptail_dist}{The distance (in metres) to top and tail the line by.
 Can either be a single value or a vector of the same length as the
 SpatialLines object.}
 
-\item{...}{Arguments passed to rgeos::gBuffer()}
+\item{...}{Arguments passed to \code{sf::st_buffer()}}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
@@ -30,7 +30,6 @@ lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # dont test due to issues with sp classes on some set-ups
 if (lib_versions[3] >= "6.3.1") {
-  # l <- routes_fast[2:4, ] # to run with sp classes
   l <- routes_fast_sf[2:4, ]
   l_top_tail <- geo_toptail(l, 300)
   l_top_tail

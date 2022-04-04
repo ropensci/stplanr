@@ -7,11 +7,9 @@
 toptail_buff(l, buff, ...)
 }
 \arguments{
-\item{l}{An sf LINESTRING object}
+\item{l}{An \code{sf} object representing lines}
 
-\item{buff}{An sf POLYGON object to act as the buffer}
-
-\item{...}{Arguments passed to rgeos::gBuffer()}
+\item{...}{Arguments passed to \code{sf::st_buffer()}}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined

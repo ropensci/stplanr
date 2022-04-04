@@ -7,11 +7,11 @@
 #' on data with geographic CRS's due to its reliance on the geosphere
 #' package.
 #'
-#' @param l A SpatialLines object
+#' @param l An `sf` object representing lines
 #' @param toptail_dist The distance (in metres) to top and tail the line by.
 #' Can either be a single value or a vector of the same length as the
 #' SpatialLines object.
-#' @param ... Arguments passed to rgeos::gBuffer()
+#' @param ... Arguments passed to `sf::st_buffer()`
 #' @aliases toptail
 #' @family lines
 #' @export
@@ -20,7 +20,6 @@
 #' lib_versions
 #' # dont test due to issues with sp classes on some set-ups
 #' if (lib_versions[3] >= "6.3.1") {
-#'   # l <- routes_fast[2:4, ] # to run with sp classes
 #'   l <- routes_fast_sf[2:4, ]
 #'   l_top_tail <- geo_toptail(l, 300)
 #'   l_top_tail
@@ -28,48 +27,6 @@
 #'   plot(sf::st_geometry(geo_toptail(l, 600)), lwd = 9, add = TRUE)
 #' }
 geo_toptail <- function(l, toptail_dist, ...) {
-  UseMethod("geo_toptail")
-}
-#' @export
-geo_toptail.Spatial <- toptail <- function(l, toptail_dist, ...) {
-  if (length(toptail_dist) > 1 & length(toptail_dist) != length(l)) {
-    stop("toptail_dist is vector but not of equal length to spatial object")
-  }
-
-  lpoints <- line2points(l)
-
-  if (length(toptail_dist) == 1) {
-    toptail_dist <- rep(toptail_dist, length(l))
-  }
-
-  for (i in 1:length(l)) {
-    sel_points <- lpoints[lpoints$id == i, ]
-
-    # Create buffer for geographic or projected crs
-    if (!sp::is.projected(l)) {
-      sel <- geo_buffer(lpoints, width = toptail_dist[i], ..., silent = TRUE)
-    } else {
-      sel <- rgeos::gBuffer(lpoints, dist = toptail_dist[i], ...)
-    }
-
-    if (rgeos::gContainsProperly(sel, l[i, ])) {
-      message(paste0(
-        "Line ", i, " is completely removed by the clip and",
-        " is omitted from the results"
-      ))
-      next
-    }
-    l2 <- rgeos::gDifference(l[i, ], sel)
-    if (!exists("out")) {
-      out <- l2
-    } else {
-      out <- raster::bind(out, l2)
-    }
-  }
-  out
-}
-#' @export
-geo_toptail.sf <- function(l, toptail_dist, ...) {
   suppressMessages(suppressWarnings({
     line_list <- lapply(
       seq(nrow(l)),
@@ -79,7 +36,7 @@ geo_toptail.sf <- function(l, toptail_dist, ...) {
           lwgeom::st_startpoint(li),
           lwgeom::st_endpoint(li)
         )
-        sel <- geo_buffer(shp = sel_points, dist = toptail_dist, nQuadSegs = 5)
+        sel <- geo_buffer(shp = sel_points, dist = toptail_dist, nQuadSegs = 5, ...)
         if (any(sf::st_contains_properly(sel, li, sparse = FALSE))) {
           message(
             "Line ", i, " is completely removed by the clip and",
@@ -174,9 +131,7 @@ toptailgs <- function(l, toptail_dist, tail_dist = NULL) {
 #' Takes lines and removes the start and end point, to a distance determined
 #' by the nearest polygon border.
 #'
-#' @param l An sf LINESTRING object
-#' @param buff An sf POLYGON object to act as the buffer
-#' @param ... Arguments passed to rgeos::gBuffer()
+#' @inheritParams geo_toptail
 #' @family lines
 #' @export
 #' @examples
