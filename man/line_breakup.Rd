@@ -42,6 +42,7 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_midpoint}()},
 \code{\link{line_sample}()},
+\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},

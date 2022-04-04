@@ -47,6 +47,7 @@ Other lines:
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
 \code{\link{line_sample}()},
+\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{mats2line}()},
 \code{\link{n_sample_length}()},
