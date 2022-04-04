@@ -19,12 +19,11 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 (has no distance). This can be useful for removing data that will not be plotted.
 }
 \examples{
-data(flowlines)
-islp <- is_linepoint(flowlines)
-nrow(flowlines)
+islp <- is_linepoint(flowlines_sf)
+nrow(flowlines_sf)
 sum(islp)
 # Remove invisible 'linepoints'
-nrow(flowlines[!islp, ])
+nrow(flowlines_sf[!islp, ])
 }
 \seealso{
 Other lines: 

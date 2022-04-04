@@ -33,12 +33,11 @@ n_vertices.sf <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' data(flowlines)
-#' islp <- is_linepoint(flowlines)
-#' nrow(flowlines)
+#' islp <- is_linepoint(flowlines_sf)
+#' nrow(flowlines_sf)
 #' sum(islp)
 #' # Remove invisible 'linepoints'
-#' nrow(flowlines[!islp, ])
+#' nrow(flowlines_sf[!islp, ])
 is_linepoint <- function(l) {
   nverts <- n_vertices(l)
   sel <- nverts <= 2
@@ -70,22 +69,8 @@ is_linepoint <- function(l) {
 #'   bearings_sp_1_9
 #'   plot(bearings_sf_1_9, bearings_sp_1_9)
 #'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-#'   line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 #' }
 line_bearing <- function(l, bidirectional = FALSE) {
-  UseMethod("line_bearing")
-}
-#' @export
-line_bearing.Spatial <- function(l, bidirectional = FALSE) {
-  ldf <- line2df(l)
-  bearing <- geosphere::bearing(as.matrix(ldf[, c("fx", "fy")]), as.matrix(ldf[, c("tx", "ty")]))
-  if (bidirectional) {
-    bearing <- make_bidirectional(bearing)
-  }
-  bearing
-}
-#' @export
-line_bearing.sf <- function(l, bidirectional = FALSE) {
   p <- sf::st_geometry(line2points(l))
   i_s <- 1:length(sf::st_geometry(l)) * 2 - 1
   bearing_radians <- sapply(i_s, function(i) lwgeom::st_geod_azimuth(p[i:(i + 1)]))
@@ -123,12 +108,22 @@ line_bearing.sf <- function(l, bidirectional = FALSE) {
 #'   angle_diff(lines_sf[2:3, ], angle = 0)
 #' }
 angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
-  UseMethod("angle_diff")
-}
-#' @export
-angle_diff.sf <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
-  l_sp <- sf::as_Spatial(sf::st_geometry(l))
-  angle_diff.Spatial(l_sp, angle, bidirectional = FALSE, absolute = TRUE)
+  if (is(object = l, "sf")) {
+    line_angles <- line_bearing(l)
+  } else {
+    line_angles <- l
+  }
+  angle_diff <- angle - line_angles
+  angle_diff[angle_diff <= -180] <- angle_diff[angle_diff <= -180] + 180
+  angle_diff[angle_diff >= 180] <- angle_diff[angle_diff >= 180] - 180
+  if (bidirectional) {
+    angle_diff[angle_diff <= -90] <- 180 + angle_diff[angle_diff <= -90]
+    angle_diff[angle_diff >= 90] <- 180 - angle_diff[angle_diff >= 90]
+  }
+  if (absolute) {
+    angle_diff <- abs(angle_diff)
+  }
+  angle_diff
 }
 #' Find the mid-point of lines
 #'

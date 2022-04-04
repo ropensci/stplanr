@@ -31,7 +31,6 @@ if (lib_versions[3] >= "6.3.1") {
   bearings_sp_1_9
   plot(bearings_sf_1_9, bearings_sp_1_9)
   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-  line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 }
 }
 \seealso{
