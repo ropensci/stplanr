@@ -10,19 +10,10 @@ points2line(p)
 \item{p}{A spatial (points) obect or matrix representing the coordinates of points.}
 }
 \description{
-This is a simple wrapper around \code{\link[=spLines]{spLines()}} that makes the creation of
-\code{SpatialLines} objects easy and intuitive
+This function makes that makes the creation of \code{sf}
+objects with LINESTRING geometries easy.
 }
 \examples{
-p <- matrix(1:4, ncol = 2)
-library(sp)
-l <- points2line(p)
-plot(l)
-l <- points2line(cents)
-plot(l)
-p <- line2points(routes_fast)
-l <- points2line(p)
-plot(l)
 l_sf <- points2line(cents_sf)
 plot(l_sf)
 }

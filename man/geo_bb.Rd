@@ -33,6 +33,7 @@ shp_bb <- geo_bb(shp, distance = 100)
 plot(shp_bb, col = "red", reset = FALSE)
 plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
 plot(routes_fast_sf$geometry, add = TRUE)
+geo_bb(shp, output = "point")
 }
 \seealso{
 bb_scale

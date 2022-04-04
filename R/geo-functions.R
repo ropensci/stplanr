@@ -42,6 +42,7 @@ bbox_scale <- function(bb, scale_factor) {
 #' plot(shp_bb, col = "red", reset = FALSE)
 #' plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
 #' plot(routes_fast_sf$geometry, add = TRUE)
+#' geo_bb(shp, output = "point")
 geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
@@ -56,11 +57,7 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    warning("Points currently unsupported")
-    # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    # bb_point <- sf::st_as_sf(bb_point)
-    # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    # return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -77,11 +74,7 @@ geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    warning("Points currently unsupported")
-    # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    # bb_point <- sf::st_as_sf(bb_point)
-    # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    # return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -100,11 +93,7 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    warning("Points currently unsupported")
-    # bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    # bb_point <- sf::st_as_sf(bb_point)
-    # sf::st_crs(bb_point) <- sf::st_crs(shp)
-    # return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }

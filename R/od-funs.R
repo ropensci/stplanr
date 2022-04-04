@@ -51,7 +51,6 @@ od2odf <- function(flow, zones) {
 #' od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' # od_coords("Hereford", "Leeds") # geocode locations
-#' od_coords(flowlines[1:3, ])
 #' od_coords(flowlines_sf[1:3, ])
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
   if (is(object = from, class2 = "sf")) {
@@ -341,17 +340,6 @@ line2df.sf <- function(l) {
       tx = dplyr::last(!!X), ty = dplyr::last(!!Y)
     )
 }
-#' @export
-line2df.Spatial <- function(l) {
-  ldf_geom <- raster::geom(l)
-  dplyr::group_by(dplyr::as_tibble(ldf_geom), object) %>%
-    dplyr::summarise(
-      fx = dplyr::first(x),
-      fy = dplyr::first(y),
-      tx = dplyr::last(x),
-      ty = dplyr::last(y)
-    )
-}
 
 #' Convert a spatial (linestring) object to points
 #'
@@ -387,23 +375,6 @@ line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
 }
 #' @export
-line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-  for (i in 1:length(l)) {
-    lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
-    pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
-    lpoints <- sp::SpatialPoints(pmat)
-    if (i == 1) {
-      out <- lpoints
-    } else {
-      out <- raster::bind(out, lpoints)
-    }
-  }
-  sp::proj4string(out) <- sp::proj4string(l)
-  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
-  out
-}
-#' @export
 line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
   coord_matrix <- cbind(x_coords, y_coords)
@@ -435,15 +406,6 @@ line2points.sfg <- function(l, ids = rep(1:nrow(l), each = 2)) {
 #' @export
 line2pointsn <- function(l) {
   UseMethod("line2pointsn")
-}
-#' @export
-line2pointsn.Spatial <- function(l) {
-  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-  if (!requireNamespace("raster", quietly = TRUE)) stop("raster package required")
-  spdf <- raster::geom(l)
-  p <- sp::SpatialPoints(coords = spdf[, c("x", "y")])
-  raster::crs(p) <- raster::crs(l)
-  p
 }
 #' @export
 line2pointsn.sf <- function(l) {
@@ -574,22 +536,13 @@ od_dist <- function(flow, zones) {
 
 #' Convert a series of points, or a matrix of coordinates, into a line
 #'
-#' This is a simple wrapper around [spLines()] that makes the creation of
-#' `SpatialLines` objects easy and intuitive
+#' This function makes that makes the creation of `sf`
+#' objects with LINESTRING geometries easy.
 #'
 #' @param p A spatial (points) obect or matrix representing the coordinates of points.
 #' @family lines
 #' @export
 #' @examples
-#' p <- matrix(1:4, ncol = 2)
-#' library(sp)
-#' l <- points2line(p)
-#' plot(l)
-#' l <- points2line(cents)
-#' plot(l)
-#' p <- line2points(routes_fast)
-#' l <- points2line(p)
-#' plot(l)
 #' l_sf <- points2line(cents_sf)
 #' plot(l_sf)
 points2line <- function(p) {
@@ -598,25 +551,6 @@ points2line <- function(p) {
 #' @export
 points2line.sf <- function(p) {
   points2flow(p = p)
-}
-#' @export
-points2line.Spatial <- function(p) {
-  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-  if (!requireNamespace("raster", quietly = TRUE)) stop("raster package required")
-  if (is(p, "SpatialPoints")) {
-    p_proj <- sp::proj4string(p)
-    p <- sp::coordinates(p)
-  } else {
-    p_proj <- NA
-  }
-  l <- points2line(p)
-  raster::crs(l) <- p_proj
-  l
-}
-#' @export
-points2line.matrix <- function(p) {
-  l <- raster::spLines(p)
-  l
 }
 #' Summary statistics of trips originating from zones in OD data
 #'
