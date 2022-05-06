@@ -1,19 +1,11 @@
-# this is the test code that led to the development of this function:
-# u = paste0("https://map.bikecitizens.net/api/v1/locations/route.json?",
-#   "cccode=gb-leeds&routing_profile=balanced&bike_profile=citybike&",
-#   "from_lat=53.8265&from_lon=-1.576195&to_lat=53.80025&to_lon=-1.51577")
-# r = jsonlite::read_json(u)
-# d = do.call(rbind, r$route)
-# class(d) # matrix
-# storage.mode(d) = "numeric"
-# dsf = sf::st_sfc(sf::st_linestring(d[, c(2, 1, 3)]), crs = 4326)
-# dsf
-# mapview::mapview(dsf)
-
 #' Get a route from the BikeCitizens web service
 #'
 #' See [bikecitizens.net](https://map.bikecitizens.net/gb-leeds#/!/1/1/53.8265,-1.576195/53.80025,-1.51577)
 #' for an interactive version of the routing engine used by BikeCitizens.
+#'
+#' See the bikecitizens.R file in the data-raw directory of the package's
+#' development repository for details on usage and examples.
+#'
 #' @param from A numeric vector representing the start point
 #' @param to A numeric vector representing the end point
 #' @param base_url The base URL for the routes
@@ -24,16 +16,6 @@
 #' @param from_lon Longitude of origin
 #' @param to_lat Latitude of destination
 #' @param to_lon Longitude of destination
-#' @export
-#' @examples
-#' \donttest{
-#' if(curl::has_internet()) {
-#' route_bikecitizens()
-#' ldf <- od_coords(stplanr::od_data_lines[2, ])
-#' r <- route_bikecitizens(ldf)
-#' plot(r)
-#' }
-#' }
 route_bikecitizens <- function(
                                from = NULL,
                                to = NULL,
