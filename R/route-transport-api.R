@@ -52,10 +52,10 @@ route_transportapi_public <- function(from, to, silent = FALSE,
                                       region = "southeast", modes = NA, not_modes = NA) {
 
   # Convert sp object to lat/lon vector
-  if (class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame") {
+  if (is(from, "SpatialPoints") | is(from, "SpatialPointsDataFrame")) {
     from <- coordinates(from)
   }
-  if (class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame") {
+  if (is(to, "SpatialPoints") | is(to, "SpatialPointsDataFrame")) {
     to <- coordinates(to)
   }
 

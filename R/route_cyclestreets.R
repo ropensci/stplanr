@@ -75,12 +75,13 @@ route_cyclestreets <- function(from, to, plan = "fastest", silent = TRUE, pat = 
                                save_raw = "FALSE") {
 
   # Convert sp object to lat/lon vector
-  if (class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame") {
+  if (is(from, "SpatialPoints") | is(from, "SpatialPointsDataFrame")) {
     from <- coordinates(from)
   }
-  if (class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame") {
+  if (is(to, "SpatialPoints") | is(to, "SpatialPointsDataFrame")) {
     to <- coordinates(to)
   }
+
 
   # Convert character strings to lon/lat if needs be
   if (is.character(from)) {

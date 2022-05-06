@@ -91,10 +91,10 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
   mode <- match.arg(mode)
   base_url <- "https://maps.googleapis.com/maps/api/distancematrix/json?units="
   # Convert sp object to lat/lon vector
-  if (class(from) == "SpatialPoints" | class(from) == "SpatialPointsDataFrame") {
+  if (is(from, "SpatialPoints") | is(from, "SpatialPointsDataFrame")) {
     from <- coordinates(from)
   }
-  if (class(to) == "SpatialPoints" | class(to) == "SpatialPointsDataFrame") {
+  if (is(to, "SpatialPoints") | is(to, "SpatialPointsDataFrame")) {
     to <- coordinates(to)
   }
   if (google_api == "") {
@@ -120,7 +120,7 @@ dist_google <- function(from, to, google_api = Sys.getenv("GOOGLEDIST"),
     base_url, g_units, "&origins=", from,
     "&destinations=", to, "&mode=", mode
   )
-  if (class(arrival_time)[1] == "POSIXlt") {
+  if (is(arrival_time[1], "POSIXlt")) {
     arrival_time <- as.numeric(arrival_time)
     url_travel <- paste0(url_travel, "&arrival_time=", arrival_time)
   }
