@@ -28,7 +28,7 @@
 #' # plot(r_foot$geometry, lwd = 9, col = "grey")
 #' # plot(r_bike, col = "blue", add = TRUE)
 #' # plot(r_car, col = "red", add = TRUE)
-#' }
+#' # }
 #' }
 route_osrm <- function(from, to, osrm.server = "https://routing.openstreetmap.de/",
                        osrm.profile = "foot"){

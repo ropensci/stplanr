@@ -46,7 +46,7 @@ slower R interface to OSRM routing services compared with the excellent
 # plot(r_foot$geometry, lwd = 9, col = "grey")
 # plot(r_bike, col = "blue", add = TRUE)
 # plot(r_car, col = "red", add = TRUE)
-}
+# }
 }
 }
 \seealso{
