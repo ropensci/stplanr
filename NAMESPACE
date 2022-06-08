@@ -93,11 +93,6 @@ export(rnet_get_nodes)
 export(rnet_group)
 export(route)
 export(route_average_gradient)
-<<<<<<< HEAD
-export(route_bikecitizens)
-=======
-export(route_cyclestreets)
->>>>>>> master
 export(route_dodgr)
 export(route_google)
 export(route_nearest_point)
