@@ -2,7 +2,6 @@
 % Please edit documentation in R/od-funs.R
 \name{od2line}
 \alias{od2line}
-\alias{od2line2}
 \title{Convert origin-destination data to spatial lines}
 \usage{
 od2line(
@@ -15,8 +14,6 @@ od2line(
   zone_code_d = NA,
   silent = FALSE
 )
-
-od2line2(flow, zones)
 }
 \arguments{
 \item{flow}{A data frame representing origin-destination data.
@@ -68,14 +65,6 @@ od_data <- stplanr::flow[1:20, ]
 l <- od2line(flow = od_data, zones = cents_sf)
 plot(sf::st_geometry(cents_sf))
 plot(l, lwd = l$All / mean(l$All), add = TRUE)
-l <- od2line(flow = od_data, zones = cents)
-# When destinations are different
-head(destinations[1:5])
-od_data2 <- flow_dests[1:12, 1:3]
-od_data2
-flowlines_dests <- od2line(od_data2, cents_sf, destinations = destinations_sf)
-flowlines_dests
-plot(flowlines_dests)
 }
 \seealso{
 Other od: 

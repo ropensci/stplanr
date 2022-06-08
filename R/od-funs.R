@@ -34,7 +34,6 @@ od2odf <- function(flow, zones) {
 #' @export
 #' @examples
 #' od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
-#' od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' # od_coords("Hereford", "Leeds") # geocode locations
 #' od_coords(flowlines_sf[1:3, ])
@@ -44,37 +43,34 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
   } else {
     is_sf_line <- FALSE
   }
-
   if (is_sf_line | any(grepl(pattern = "Line", x = class(from)))) {
     l <- from
   }
-
   if (!is.null(l)) {
     coord_matrix <- line2df(l) %>%
       dplyr::select("fx", "fy", "tx", "ty")
-  }
-
-  else {
-    # Convert sp object to lat/lon vector
-    if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-    if (is(object = from, "Spatial")) from <- sp::coordinates(from)
-    if (is(object = to, "Spatial")) to <- sp::coordinates(to)
-
+  } else {
     # sf objects
-    if (is(object = from, "sf") | is(object = from, "sfc")) from <- sf::st_coordinates(from)
-    if (is(object = to, "sf") | is(object = to, "sfc")) to <- sf::st_coordinates(to)
-
+    if (is(object = from, "sf") | is(object = from, "sfc")) {
+      from <- sf::st_coordinates(from)
+    }
+    if (is(object = to, "sf") | is(object = to, "sfc")) {
+      to <- sf::st_coordinates(to)
+    }
     # Convert character strings to lon/lat if needs be
-    if (is.character(from)) from <- matrix(geo_code(from), ncol = 2)
-    if (is.character(to)) to <- matrix(geo_code(to), ncol = 2)
+    if (is.character(from)) {
+      from <- matrix(geo_code(from), ncol = 2)
+    }
+    if (is.character(to)) {
+      to <- matrix(geo_code(to), ncol = 2)
+    }
     if (is.vector(from) & is.vector(to)) {
       coord_matrix <- matrix(c(from, to), ncol = 4)
-    } else {
-      coord_matrix <- cbind(from, to)
-    }
+      } else {
+        coord_matrix <- cbind(from, to)
+      }
     colnames(coord_matrix) <- c("fx", "fy", "tx", "ty")
   }
-
   as.matrix(coord_matrix)
 }
 
@@ -164,14 +160,6 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #' l <- od2line(flow = od_data, zones = cents_sf)
 #' plot(sf::st_geometry(cents_sf))
 #' plot(l, lwd = l$All / mean(l$All), add = TRUE)
-#' l <- od2line(flow = od_data, zones = cents)
-#' # When destinations are different
-#' head(destinations[1:5])
-#' od_data2 <- flow_dests[1:12, 1:3]
-#' od_data2
-#' flowlines_dests <- od2line(od_data2, cents_sf, destinations = destinations_sf)
-#' flowlines_dests
-#' plot(flowlines_dests)
 #' @name od2line
 NULL
 
@@ -223,81 +211,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
 
   odsfc <- od_coords2line(odm, crs = sf::st_crs(zones), remove_duplicates = FALSE)
   sf::st_sf(flow, geometry = odsfc$geometry)
-}
-#' @export
-od2line.Spatial <- function(flow, zones, destinations = NULL,
-                            zone_code = names(zones)[1],
-                            origin_code = names(flow)[1],
-                            dest_code = names(flow)[2],
-                            zone_code_d = NA, silent = TRUE) {
-  l <- vector("list", nrow(flow))
-  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-
-
-  if (is.null(destinations)) {
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(zones[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  } else {
-    if (is.na(zone_code_d)) {
-      zone_code_d <- names(destinations)[1]
-    }
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones and", zone_code_d, "in the destinations,\nto",
-        origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(destinations[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  }
-  l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
-  sp::proj4string(l) <- sp::proj4string(zones)
-  l
-}
-
-#' @rdname od2line
-#' @export
-od2line2 <- function(flow, zones) {
-  if (!requireNamespace("sp", quietly = TRUE)) stop("sp package required")
-  odf <- od2odf(flow, zones)
-  l <- vector("list", nrow(odf))
-  for (i in 1:nrow(odf)) {
-    l[[i]] <-
-      sp::Lines(list(sp::Line(rbind(
-        c(odf$fx[i], odf$fy[i]), c(odf$tx[i], odf$ty[i])
-      ))), as.character(i))
-  }
-  l <- sp::SpatialLines(l)
 }
 
 #' Convert geographic line objects to a data.frame with from and to coords
