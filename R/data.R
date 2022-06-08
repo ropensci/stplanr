@@ -10,25 +10,19 @@
 #' }
 #'
 #' Cents was generated from the data repository pct-data: https://github.com/npct/pct-data. This data was accessed from within the pct repo: https://github.com/npct/pct, using the following code:
-#' @aliases cents_sf
 #' @examples
-#' \dontrun{
-#' cents
-#' plot(cents)
-#' }
-#'
+#' cents_sf
 #' @docType data
 #' @keywords datasets
-#' @name cents
-#' @usage data(cents)
-#' @format A spatial dataset with 8 rows and 5 variables
+#' @name cents_sf
+#' @format A spatial dataset with 8 rows and 5 columns
 NULL
 
-#' data frame of commuter flows
+#' Data frame of commuter flows
 #'
 #'
 #' This dataset represents commuter flows (work travel) between origin
-#' and destination zones (see [cents()]).
+#' and destination zones.
 #' The data is from the UK and is available as open data:
 #' <https://wicid.ukdataservice.ac.uk/>.
 #'
@@ -44,15 +38,15 @@ NULL
 #' Although these variable names are unique to UK data, the data
 #' structure is generalisable and typical of flow data from any source.
 #' The key variables are the origin and destination ids, which link to
-#' the `cents` georeferenced spatial objects.
+#' the georeferenced spatial objects.
 #' @family example data
 #' @docType data
 #' @keywords datasets
 #' @name flow
-#' @usage data(flow)
 #' @format A data frame with 49 rows and 15 columns
 NULL
-#' data frame of invented
+
+#' Data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
 #' @family example data
@@ -71,75 +65,36 @@ NULL
 #' @usage data(flow_dests)
 #' @format A data frame with 49 rows and 15 columns
 NULL
-#' Example destinations data
-#'
-#' This dataset represents trip destinations on a different geographic
-#' level than the origins stored in the object `cents`.
-#'
-#' See https://github.com/ropensci/stplanr/blob/v0.8.5/R/data.R for
-#' details on how the datasets were created.
-#'
-#' @family example data
-#' @examples
-#' destinations_sf
-#' @docType data
-#' @keywords datasets
-#' @name destination_zones
-#' @aliases destinations destinations_sf
-#' @usage data(destination_zones)
-#' @format A spatial dataset with 87 features
-NULL
-#' spatial lines dataset of commuter flows
-#'
-#'
-#' Flow data after conversion to a spatial format
-#' with [od2line()] (see [flow()]).
-#'
-#' @family example data
-#' @docType data
-#' @keywords datasets
-#' @name flowlines
-#' @aliases flowlines_sf
-#' @format A spatial lines dataset with 49 rows and 15 columns
-NULL
 
-#' spatial lines dataset of commuter flows on the travel network
+#' Spatial lines dataset of commuter flows on the travel network
 #'
 #'
 #' Simulated travel route allocated to the transport network
-#' representing the 'fastest' between [cents()]
-#' objects
-#' with [od2line()] (see [flow()]).
+#' representing the 'fastest' between `cents_sf`
+#' objects.
 #'
 #' @family example data
 #' @docType data
 #' @keywords datasets
-#' @name routes_fast
-#' @usage data(routes_fast)
+#' @name routes_fast_sf
+#' @usage routes_fast_sf
 #' @format A spatial lines dataset with 49 rows and 15 columns
-#' @aliases routes_fast_sf
 NULL
 
-#' spatial lines dataset of commuter flows on the travel network
+#' Spatial lines dataset of commuter flows on the travel network
 #'
 #'
 #' Simulated travel route allocated to the transport network
-#' representing the 'quietest' between [cents()]
-#' objects
-#' with [od2line()] (see [flow()]).
+#' representing the 'quietest' between `cents_sf`.
 #'
 #' @family example data
 #' @docType data
 #' @keywords datasets
-#' @name routes_slow
-#' @usage data(routes_slow)
+#' @name routes_slow_sf
 #' @format A spatial lines dataset 49 rows and 15 columns
-#' @aliases routes_slow_sf
 NULL
 
 #' Spatial polygons of home locations for flow analysis.
-#'
-#' Note: we recommend using the `zones_sf` data.
 #'
 #' These correspond to the `cents_sf` data.
 #'
@@ -153,55 +108,32 @@ NULL
 #' plot(zones_sf)
 #' @docType data
 #' @keywords datasets
-#' @name zones
-#' @aliases zones_sf
+#' @name zones_sf
+NULL
+
+#' Spatial lines dataset of commuter flows
+#'
+#'
+#' Flow data after conversion to a spatial format..
+#'
+#' @family example data
+#' @docType data
+#' @keywords datasets
+#' @name flowlines_sf
+#' @format A spatial lines dataset with 49 rows and 15 columns
 NULL
 
 #' spatial lines dataset representing a route network
 #'
 #'
 #' The flow of commuters using different segments of the road network represented in the
-#' [flowlines()] and [routes_fast()] datasets
+#' [flowlines_sf()] and [routes_fast_sf()] datasets
 #'
 #' @family example data
 #' @docType data
 #' @keywords datasets
-#' @name route_network
-#' @aliases route_network_sf
-#' @usage data(route_network)
+#' @name route_network_sf
 #' @format A spatial lines dataset 80 rows and 1 column
-#' @examples
-#' \dontrun{
-#' # Generate route network
-#' route_network <- overline(routes_fast, "All", fun = sum)
-#' route_network_sf <- sf::st_as_sf(route_network)
-#' }
-NULL
-
-#' SpatialPointsDataFrame representing road traffic deaths
-#'
-#' This dataset represents the type of data downloaded and cleaned
-#' using stplanr functions. It represents a very small sample (with most variables stripped)
-#' of open data from the UK's Stats19 dataset.
-#'
-#' @docType data
-#' @keywords datasets
-#' @name ca_local
-#' @usage data(ca_local)
-#' @format A SpatialPointsDataFrame with 11 rows and 2 columns
-NULL
-
-#' Line polygon
-#'
-#' This dataset represents road width for testing.
-#' @docType data
-#' @keywords datasets
-#' @name l_poly
-#' @usage data(l_poly)
-#' @format A SpatialPolygon
-#'
-#' @examples
-#' l_poly
 NULL
 
 #' Example of OpenStreetMap road network
@@ -287,4 +219,17 @@ NULL
 #' @format A sf object
 #' @examples
 #' rnet_cycleway_intersection
+NULL
+
+#' Example destinations data
+#'
+#' This dataset represents trip destinations on a different geographic
+#' level than the origins stored in the object `cents_sf`.
+#' @family example data
+#' @examples
+#' destinations_sf
+#' @docType data
+#' @keywords datasets
+#' @name destinations_sf
+#' @format A spatial dataset with 87 features
 NULL

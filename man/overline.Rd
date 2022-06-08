@@ -93,7 +93,7 @@ as it does not help with other stages.
 }
 \examples{
 sl <- routes_fast_sf[2:4, ]
-sl$All <- flowlines$All[2:4]
+sl$All <- flowlines_sf$All[2:4]
 rnet <- overline(sl = sl, attrib = "All")
 nrow(sl)
 nrow(rnet)

@@ -45,7 +45,7 @@ If only the largest flow in either direction is captured in an analysis, for
 example, the true extent of travel will by heavily under-estimated for
 OD pairs which have similar amounts of travel in both directions.
 Flows in both direction are often represented by overlapping lines with
-identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be confusing
+identical geometries which can be confusing
 for users and are difficult to plot.
 }
 \examples{

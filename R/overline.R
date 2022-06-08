@@ -129,7 +129,7 @@ gsection.sf <- function(sl, buff_dist = 0) {
 #' @export
 #' @examples
 #' sl <- routes_fast_sf[2:4, ]
-#' sl$All <- flowlines$All[2:4]
+#' sl$All <- flowlines_sf$All[2:4]
 #' rnet <- overline(sl = sl, attrib = "All")
 #' nrow(sl)
 #' nrow(rnet)
@@ -368,9 +368,6 @@ overline.sf <- overline2
 #' If only the largest flow in either direction is captured in an analysis, for
 #' example, the true extent of travel will by heavily under-estimated for
 #' OD pairs which have similar amounts of travel in both directions.
-#' Flows in both direction are often represented by overlapping lines with
-#' identical geometries (see [flowlines()]) which can be confusing
-#' for users and are difficult to plot.
 #'
 #' This function aggregates directional flows into non-directional flows,
 #' potentially halving the number of lines objects and reducing the number

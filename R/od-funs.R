@@ -136,7 +136,7 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #'
 #' @param flow A data frame representing origin-destination data.
 #'  The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in [cents()],
+#' to the first column of the data in the zones. Thus in [cents_sf()],
 #' the first column is geo_code. This corresponds to the first two columns
 #' of [flow()].
 #' @param zones A spatial object representing origins (and destinations

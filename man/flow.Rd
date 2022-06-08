@@ -3,16 +3,13 @@
 \docType{data}
 \name{flow}
 \alias{flow}
-\title{data frame of commuter flows}
+\title{Data frame of commuter flows}
 \format{
 A data frame with 49 rows and 15 columns
 }
-\usage{
-data(flow)
-}
 \description{
 This dataset represents commuter flows (work travel) between origin
-and destination zones (see \code{\link[=cents]{cents()}}).
+and destination zones.
 The data is from the UK and is available as open data:
 \url{https://wicid.ukdataservice.ac.uk/}.
 }
@@ -29,16 +26,16 @@ The variables are as follows:
 Although these variable names are unique to UK data, the data
 structure is generalisable and typical of flow data from any source.
 The key variables are the origin and destination ids, which link to
-the \code{cents} georeferenced spatial objects.
+the georeferenced spatial objects.
 }
 \seealso{
 Other example data: 
-\code{\link{destination_zones}},
+\code{\link{destinations_sf}},
 \code{\link{flow_dests}},
-\code{\link{flowlines}},
-\code{\link{route_network}},
-\code{\link{routes_fast}},
-\code{\link{routes_slow}}
+\code{\link{flowlines_sf}},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
 }
 \concept{example data}
 \keyword{datasets}

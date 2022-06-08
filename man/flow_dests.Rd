@@ -3,7 +3,7 @@
 \docType{data}
 \name{flow_dests}
 \alias{flow_dests}
-\title{data frame of invented
+\title{Data frame of invented
 commuter flows with destinations in a different layer than the origins}
 \format{
 A data frame with 49 rows and 15 columns
@@ -12,7 +12,7 @@ A data frame with 49 rows and 15 columns
 data(flow_dests)
 }
 \description{
-data frame of invented
+Data frame of invented
 commuter flows with destinations in a different layer than the origins
 }
 \examples{
@@ -27,12 +27,12 @@ devtools::use_data(flow_dests)
 }
 \seealso{
 Other example data: 
-\code{\link{destination_zones}},
-\code{\link{flowlines}},
+\code{\link{destinations_sf}},
+\code{\link{flowlines_sf}},
 \code{\link{flow}},
-\code{\link{route_network}},
-\code{\link{routes_fast}},
-\code{\link{routes_slow}}
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
 }
 \concept{example data}
 \keyword{datasets}

@@ -133,7 +133,7 @@ not_duplicated <- function(x) {
 #' example, the true extent of travel will by heavily under-estimated for
 #' OD pairs which have similar amounts of travel in both directions.
 #' Flows in both direction are often represented by overlapping lines with
-#' identical geometries (see [flowlines()]) which can be confusing
+#' identical geometries which can be confusing
 #' for users and are difficult to plot.
 #' @examples
 #' (od_min <- od_data_sample[c(1, 2, 9), 1:6])
