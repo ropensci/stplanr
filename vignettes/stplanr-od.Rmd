@@ -440,7 +440,7 @@ The following suggestions are based on my own reading  --- if you have any other
 - @martin_origin-destination_2018 describe methods for classifying OD pairs based on demographic data.
 - The [kepler.gl](https://kepler.gl/demo/ukcommute) website provides a nifty web application for visualising OD data.
 - Documentation for the open source microscopic transport modelling software [SUMO](https://sumo.dlr.de/userdoc/Demand/Importing_O/D_Matrices.html) describes ways of reading-in OD file formats not covered in this vignette.
-- An excellent introduction to modelling and visualising OD data in the [introductory vignette](https://github.com/rCarto/flows/blob/master/vignettes/flows.Rmd) of the `flows` R package.
+- An excellent introduction to modelling and visualising OD data in the [introductory vignette](https://github.com/riatelab/flows/blob/master/vignettes/flows.Rmd) of the `flows` R package.
 
 # Summary
 

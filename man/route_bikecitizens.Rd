@@ -42,13 +42,7 @@ route_bikecitizens(
 See \href{https://map.bikecitizens.net/gb-leeds#/!/1/1/53.8265,-1.576195/53.80025,-1.51577}{bikecitizens.net}
 for an interactive version of the routing engine used by BikeCitizens.
 }
-\examples{
-\donttest{
-if(curl::has_internet()) {
-route_bikecitizens()
-ldf <- od_coords(stplanr::od_data_lines[2, ])
-r <- route_bikecitizens(ldf)
-plot(r)
-}
-}
+\details{
+See the bikecitizens.R file in the data-raw directory of the package's
+development repository for details on usage and examples.
 }

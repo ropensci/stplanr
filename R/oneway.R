@@ -49,10 +49,10 @@ od_id_szudzik <- function(x, y, ordermatters = FALSE) {
     stop("x and y are not of equal length")
   }
 
-  if (class(x) == "factor") {
+  if (is(x, "factor")) {
     x <- as.character(x)
   }
-  if (class(y) == "factor") {
+  if (is(y, "factor")) {
     y <- as.character(y)
   }
   lvls <- unique(c(x, y))
@@ -88,8 +88,8 @@ od_id_character <- function(x, y) {
 
 convert_to_numeric <- function(x, y) {
   if (length(x) != length(y)) stop("x and y are not of equal length")
-  if (class(x) == "factor") x <- as.character(x)
-  if (class(y) == "factor") y <- as.character(y)
+  if (is(x, "factor")) x <- as.character(x)
+  if (is(y, "factor")) y <- as.character(y)
   lvls <- unique(c(x, y))
   x <- as.integer(factor(x, levels = lvls))
   y <- as.integer(factor(y, levels = lvls))
