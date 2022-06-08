@@ -62,7 +62,6 @@ Suggests:
     leaflet,
     pct,
     tmap,
-    openxlsx (>= 4.1.0),
     osrm,
     geodist,
     mapsapi,
