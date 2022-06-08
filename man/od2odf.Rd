@@ -24,16 +24,14 @@ Origin-destination (OD) data is often provided
 in the form of 1 line per OD pair, with zone codes of the trip origin in the first
 column and the zone codes of the destination in the second column
 (see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{\code{vignette("stplanr-od")}}) for details.
-\code{od2odf()} creates an 'origin-destination data frame', based on a data frame containing
-origin and destination cones (\code{flow}) that match the first column in a
-a spatial (polygon or point) object (\code{zones}).
+\code{od2odf()} creates an 'origin-destination data frame', with columns containing
+origin and destination codes (\code{flow}) that match the first column in a
+a spatial (polygon or point \code{sf}) object (\code{zones}).
 
 The function returns a data frame with coordinates for the origin and destination.
 }
 \examples{
-data(flow)
-data(zones)
-od2odf(flow[1:2, ], zones)
+od2odf(flow[1:2, ], zones_sf)
 }
 \seealso{
 Other od: 

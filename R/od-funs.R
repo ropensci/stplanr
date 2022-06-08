@@ -5,33 +5,19 @@
 #' in the form of 1 line per OD pair, with zone codes of the trip origin in the first
 #' column and the zone codes of the destination in the second column
 #' (see the [`vignette("stplanr-od")`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html)) for details.
-#' `od2odf()` creates an 'origin-destination data frame', based on a data frame containing
-#' origin and destination cones (`flow`) that match the first column in a
-#' a spatial (polygon or point) object (`zones`).
+#' `od2odf()` creates an 'origin-destination data frame', with columns containing
+#' origin and destination codes (`flow`) that match the first column in a
+#' a spatial (polygon or point `sf`) object (`zones`).
 #'
 #' The function returns a data frame with coordinates for the origin and destination.
 #' @inheritParams od2line
 #' @family od
 #' @export
 #' @examples
-#' data(flow)
-#' data(zones)
-#' od2odf(flow[1:2, ], zones)
+#' od2odf(flow[1:2, ], zones_sf)
 od2odf <- function(flow, zones) {
-  coords <- data.frame(
-    code = as.character(zones[[1]]),
-    fx = sp::coordinates(zones)[, 1], fy = sp::coordinates(zones)[, 2]
-  )
-  flowcode <- data.frame(
-    stringsAsFactors = FALSE,
-    code_o = as.character(flow[[1]]),
-    code_d = as.character(flow[[2]])
-  )
-  odf <- dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
-  names(coords) <- c("code", "fx", "fy")
-  odf <- dplyr::left_join(odf, coords, by = c("code_d" = "code"))
-
-  data.frame(odf) # return data.frame as more compatible with spatial data
+  od_codes = flow[1:2]
+  cbind(o = flow[[1]], d = flow[[2]], od::od_coordinates(flow, zones))
 }
 
 #' Create matrices representing origin-destination coordinates
