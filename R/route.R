@@ -19,20 +19,7 @@
 #' @family routes
 #' @export
 #' @examples
-#' library(sf)
-#' l = od_data_lines[2, ]
-#' \donttest{
-#' if(curl::has_internet()) {
-#' library(osrm)
-#' r_osrm <- route(
-#'   l = l,
-#'   route_fun = osrmRoute,
-#'   returnclass = "sf"
-#' )
-#' nrow(r_osrm)
-#' plot(r_osrm)
-#' }
-#' }
+#' # Todo: add examples
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = cyclestreets::journey, wait = 0,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {

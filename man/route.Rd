@@ -45,20 +45,7 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-library(sf)
-l = od_data_lines[2, ]
-\donttest{
-if(curl::has_internet()) {
-library(osrm)
-r_osrm <- route(
-  l = l,
-  route_fun = osrmRoute,
-  returnclass = "sf"
-)
-nrow(r_osrm)
-plot(r_osrm)
-}
-}
+# Todo: add examples
 }
 \seealso{
 Other routes: 
