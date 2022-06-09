@@ -133,7 +133,7 @@ not_duplicated <- function(x) {
 #' example, the true extent of travel will by heavily under-estimated for
 #' OD pairs which have similar amounts of travel in both directions.
 #' Flows in both direction are often represented by overlapping lines with
-#' identical geometries (see [flowlines()]) which can be confusing
+#' identical geometries which can be confusing
 #' for users and are difficult to plot.
 #' @examples
 #' (od_min <- od_data_sample[c(1, 2, 9), 1:6])
@@ -146,19 +146,8 @@ not_duplicated <- function(x) {
 #' flow_oneway <- od_oneway(flow, attrib = attrib)
 #' colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 #' # Demonstrate the results from oneway and onewaygeo are identical
-#' flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 #' flow_oneway_sf <- od_oneway(flowlines_sf)
-#' par(mfrow = c(1, 2))
-#' plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 #' plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-#' par(mfrow = c(1, 1))
-#' od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
-#' cor(od_max_min$all, od_oneway$all)
-#' # benchmark performance
-#' # bench::mark(check = FALSE, iterations = 3,
-#' #   onewayid(flowlines_sf, attrib),
-#' #   od_oneway(flowlines_sf)
-#' # )
 od_oneway <- function(x,
                       attrib = names(x[-c(1:2)])[vapply(x[-c(1:2)], is.numeric, TRUE)],
                       id1 = names(x)[1],

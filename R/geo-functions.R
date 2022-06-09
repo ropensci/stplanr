@@ -1,17 +1,3 @@
-#' Write to geojson easily
-#'
-#' Provides a user-friendly wrapper for `sf::st_write()`. Note,
-#' `geojson_write` from the geojsonio package
-#' provides the same functionality <https://github.com/ropensci/geojsonio>.
-#'
-#' @param shp Spatial data object
-#' @param filename File name of the output geojson
-writeGeoJSON <- function(shp, filename) {
-  name <- nm <- deparse(substitute(shp))
-  newname <- paste0(filename, ".geojson")
-  sf::st_write(sf::st_as_sf(shp), newname)
-}
-
 #' Scale a bounding box
 #'
 #' Takes a bounding box as an input and outputs a bounding box of a different size, centred at the same point.
@@ -43,7 +29,7 @@ bbox_scale <- function(bb, scale_factor) {
 #' represented as a bounding box, corner points or rectangular polygon.
 #'
 #' @inheritParams bbox_scale
-#' @param shp Spatial object (from sf or sp packages)
+#' @param shp Spatial object
 #' @param distance Distance in metres to extend the bounding box by
 #' @param output Type of object returned (polygon by default)
 #' @aliases bb2poly
@@ -51,13 +37,12 @@ bbox_scale <- function(bb, scale_factor) {
 #' @family geo
 #' @export
 #' @examples
-#' # Simple features implementation:
 #' shp <- routes_fast_sf
 #' shp_bb <- geo_bb(shp, distance = 100)
 #' plot(shp_bb, col = "red", reset = FALSE)
 #' plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
-#' plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
 #' plot(routes_fast_sf$geometry, add = TRUE)
+#' geo_bb(shp, output = "point")
 geo_bb <- function(shp, scale_factor = 1, distance = 0, output = c("polygon", "points", "bb")) {
   UseMethod("geo_bb")
 }
@@ -67,16 +52,12 @@ geo_bb.sf <- function(shp, scale_factor = 1, distance = 0, output = c("polygon",
   output <- match.arg(output)
   bb <- geo_bb_matrix(shp)
   bb <- bbox_scale(bb = bb, scale_factor = scale_factor)
-  bb_sp <- bb2poly(bb = bb, distance = distance)
-  bb <- sf::st_as_sf(bb_sp)
+  bb <- bb2poly(bb = bb, distance = distance)
   sf::st_crs(bb) <- sf::st_crs(shp)
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -93,10 +74,7 @@ geo_bb.bbox <- function(shp, scale_factor = 1, distance = 0, output = c("polygon
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb_sp)[1:4, c(5, 6)])
-    bb_point <- sf::st_as_sf(bb_point)
-    sf::st_crs(bb_point) <- sf::st_crs(shp)
-    return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -115,8 +93,7 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
   if (output == "polygon") {
     return(bb)
   } else if (output == "points") {
-    bb_point <- sp::SpatialPoints(raster::geom(bb)[1:4, c(5, 6)])
-    return(bb_point)
+    return(sf::st_cast(x = bb, to = "POINT")[1:4])
   } else if (output == "bb") {
     return(geo_bb_matrix(bb))
   }
@@ -125,14 +102,16 @@ geo_bb.matrix <- function(shp, scale_factor = 1, distance = 0, output = c("polyg
 #' @export
 bb2poly <- function(bb, distance = 0) {
   if (is(bb, "matrix")) {
-    b_poly <- as(raster::extent(as.vector(t(bb))), "SpatialPolygons")
+    bb = as.numeric(bb)
+    class(bb) = "bbox"
+    b_poly <- sf::st_as_sfc(bb)
   } else {
-    b_poly <- as(raster::extent(bb), "SpatialPolygons")
-    proj4string(b_poly) <- proj4string(bb)
+    b_poly = sf::st_as_sfc(bb)
   }
   if (distance > 0) {
-    b_poly_buff <- geo_buffer(shp = b_poly, width = distance)
-    b_poly <- bb2poly(b_poly_buff)
+    b_poly_buff <- geo_buffer(shp = b_poly, dist = distance)
+    b_poly_bbox = sf::st_bbox(b_poly_buff)
+    b_poly <- bb2poly(b_poly_bbox)
   }
   b_poly
 }
@@ -145,17 +124,12 @@ bb2poly <- function(bb, distance = 0) {
 #' @family geo
 #' @export
 #' @examples
-#' geo_bb_matrix(routes_fast)
 #' geo_bb_matrix(routes_fast_sf)
-#' geo_bb_matrix(cents[1, ])
+#' geo_bb_matrix(cents_sf[1, ])
 #' geo_bb_matrix(c(-2, 54))
 #' geo_bb_matrix(sf::st_coordinates(cents_sf))
 geo_bb_matrix <- function(shp) {
   UseMethod("geo_bb_matrix")
-}
-#' @export
-geo_bb_matrix.Spatial <- function(shp) {
-  sp::bbox(shp)
 }
 #' @export
 geo_bb_matrix.sf <- function(shp) {

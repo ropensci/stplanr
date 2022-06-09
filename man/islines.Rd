@@ -18,11 +18,6 @@ not.
 }
 \examples{
 \dontrun{
-rnet <- overline(routes_fast[c(2, 3, 22), ], attrib = "length")
-plot(rnet)
-lines(routes_fast[22, ], col = "red") # line without overlaps
-islines(routes_fast[2, ], routes_fast[3, ])
-islines(routes_fast[2, ], routes_fast[22, ])
 # sf implementation
 islines(routes_fast_sf[2, ], routes_fast_sf[3, ])
 islines(routes_fast_sf[2, ], routes_fast_sf[22, ])
@@ -30,22 +25,9 @@ islines(routes_fast_sf[2, ], routes_fast_sf[22, ])
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
 \code{\link{overline}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},
-\code{\link{rnet_group}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_group}()}
 }
 \concept{rnet}

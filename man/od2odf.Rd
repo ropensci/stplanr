@@ -9,7 +9,7 @@ od2odf(flow, zones)
 \arguments{
 \item{flow}{A data frame representing origin-destination data.
 The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
+to the first column of the data in the zones. Thus in \code{\link[=cents_sf]{cents_sf()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
@@ -24,26 +24,22 @@ Origin-destination (OD) data is often provided
 in the form of 1 line per OD pair, with zone codes of the trip origin in the first
 column and the zone codes of the destination in the second column
 (see the \href{https://docs.ropensci.org/stplanr/articles/stplanr-od.html}{\code{vignette("stplanr-od")}}) for details.
-\code{od2odf()} creates an 'origin-destination data frame', based on a data frame containing
-origin and destination cones (\code{flow}) that match the first column in a
-a spatial (polygon or point) object (\code{zones}).
+\code{od2odf()} creates an 'origin-destination data frame', with columns containing
+origin and destination codes (\code{flow}) that match the first column in a
+a spatial (polygon or point \code{sf}) object (\code{zones}).
 
 The function returns a data frame with coordinates for the origin and destination.
 }
 \examples{
-data(flow)
-data(zones)
-od2odf(flow[1:2, ], zones)
+od2odf(flow[1:2, ], zones_sf)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
 \code{\link{od_coords}()},
-\code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},

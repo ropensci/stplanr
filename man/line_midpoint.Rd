@@ -4,18 +4,22 @@
 \alias{line_midpoint}
 \title{Find the mid-point of lines}
 \usage{
-line_midpoint(l)
+line_midpoint(l, tolerance = NULL)
 }
 \arguments{
 \item{l}{A spatial lines object}
+
+\item{tolerance}{The tolerance used to break lines at verteces.
+See \code{\link[lwgeom:st_linesubstring]{lwgeom::st_linesubstring()}}.}
 }
 \description{
-This is a wrapper around \code{\link[=SpatialLinesMidPoints]{SpatialLinesMidPoints()}} that allows it to find the midpoint
-of lines that are not projected, which have a lat/long CRS.
+Find the mid-point of lines
 }
 \examples{
-data(routes_fast)
-line_midpoint(routes_fast[2:5, ])
+l = routes_fast_sf[2:5, ]
+plot(l$geometry, col = 2:5)
+midpoints = line_midpoint(l)
+plot(midpoints, add = TRUE)
 }
 \seealso{
 Other lines: 
@@ -26,17 +30,12 @@ Other lines:
 \code{\link{line2points}()},
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

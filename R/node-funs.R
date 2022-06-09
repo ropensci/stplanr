@@ -1,24 +1,3 @@
-#' Add node to spatial lines object
-#'
-#' @inheritParams route_split
-#' @param sln A spatial lines (`sfNetwork`) object created by `SpatialLinesNetwork`
-#' @export
-#' @examples
-#' sample_routes <- routes_fast_sf[2:6, NULL]
-#' sample_routes$value <- rep(1:3, length.out = 5)
-#' rnet <- overline2(sample_routes, attrib = "value")
-#' sln <- SpatialLinesNetwork(rnet)
-#' p <- sf::st_sfc(sf::st_point(c(-1.540, 53.826)), crs = sf::st_crs(rnet))
-#' sln_nodes <- sln2points(sln)
-#' sln_new <- sln_add_node(sln, p)
-#' route <- route_local(sln_new, p, sln_nodes[9, ])
-#' plot(sln)
-#' plot(sln_nodes, pch = as.character(1:nrow(sln_nodes)), add = TRUE)
-#' plot(route$geometry, lwd = 9, add = TRUE)
-sln_add_node <- function(sln, p) {
-  rnet_new <- rnet_add_node(sln@sl, p)
-  SpatialLinesNetwork(rnet_new)
-}
 #' Extract nodes from route network
 #'
 #' @inheritParams route_split

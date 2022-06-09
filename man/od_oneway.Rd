@@ -45,7 +45,7 @@ If only the largest flow in either direction is captured in an analysis, for
 example, the true extent of travel will by heavily under-estimated for
 OD pairs which have similar amounts of travel in both directions.
 Flows in both direction are often represented by overlapping lines with
-identical geometries (see \code{\link[=flowlines]{flowlines()}}) which can be confusing
+identical geometries which can be confusing
 for users and are difficult to plot.
 }
 \examples{
@@ -59,30 +59,17 @@ attrib <- which(vapply(flow, is.numeric, TRUE))
 flow_oneway <- od_oneway(flow, attrib = attrib)
 colSums(flow_oneway[attrib]) == colSums(flow[attrib]) # test if the colSums are equal
 # Demonstrate the results from oneway and onewaygeo are identical
-flow_oneway_geo <- onewaygeo(flowlines, attrib = attrib)
 flow_oneway_sf <- od_oneway(flowlines_sf)
-par(mfrow = c(1, 2))
-plot(flow_oneway_geo, lwd = flow_oneway_geo$All / mean(flow_oneway_geo$All))
 plot(flow_oneway_sf$geometry, lwd = flow_oneway_sf$All / mean(flow_oneway_sf$All))
-par(mfrow = c(1, 1))
-od_max_min <- od_oneway(od_min, stplanr.key = od_id_character(od_min[[1]], od_min[[2]]))
-cor(od_max_min$all, od_oneway$all)
-# benchmark performance
-# bench::mark(check = FALSE, iterations = 3,
-#   onewayid(flowlines_sf, attrib),
-#   od_oneway(flowlines_sf)
-# )
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
 \code{\link{od_coords}()},
-\code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_to_odmatrix}()},
 \code{\link{odmatrix_to_od}()},

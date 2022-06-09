@@ -2,7 +2,7 @@
 % Please edit documentation in R/linefuns.R
 \name{line_segment}
 \alias{line_segment}
-\title{Divide SpatialLines dataset into regular segments}
+\title{Divide sf LINESTRING objects into regular segments}
 \usage{
 line_segment(l, n_segments, segment_length = NA)
 }
@@ -14,14 +14,12 @@ line_segment(l, n_segments, segment_length = NA)
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
 }
 \description{
-Divide SpatialLines dataset into regular segments
+Divide sf LINESTRING objects into regular segments
 }
 \examples{
-data(routes_fast)
-l <- routes_fast[2, ]
-library(sp)
+l <- routes_fast_sf[2, ]
 l_seg2 <- line_segment(l = l, n_segments = 2)
-plot(l_seg2, col = l_seg2$group, lwd = 50)
+plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 }
 \seealso{
 Other lines: 
@@ -33,16 +31,11 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

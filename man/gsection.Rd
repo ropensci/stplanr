@@ -30,33 +30,13 @@ if (lib_versions[3] >= "6.3.1") {
   rsec <- gsection(sl, buff_dist = 50)
   length(rsec) # 4 features: issue
   plot(rsec, col = seq(length(rsec)))
-  # dont test due to issues with sp classes on some set-ups
-  # sl <- routes_fast[2:4, ]
-  # rsec <- gsection(sl)
-  # rsec_buff <- gsection(sl, buff_dist = 1)
-  # plot(sl[1], lwd = 9, col = 1:nrow(sl))
-  # plot(rsec, col = 5 + (1:length(rsec)), add = TRUE, lwd = 3)
-  # plot(rsec_buff, col = 5 + (1:length(rsec_buff)), add = TRUE, lwd = 3)
 }
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
 \code{\link{overline}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},
-\code{\link{rnet_group}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_group}()}
 }
 \concept{rnet}

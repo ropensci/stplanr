@@ -9,7 +9,7 @@ od_aggregate_from(flow, attrib = NULL, FUN = sum, ..., col = 1)
 \arguments{
 \item{flow}{A data frame representing origin-destination data.
 The first two columns of this data frame should correspond
-to the first column of the data in the zones. Thus in \code{\link[=cents]{cents()}},
+to the first column of the data in the zones. Thus in \code{\link[=cents_sf]{cents_sf()}},
 the first column is geo_code. This corresponds to the first two columns
 of \code{\link[=flow]{flow()}}.}
 
@@ -36,13 +36,11 @@ od_aggregate_from(flow)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
 \code{\link{od_coords}()},
-\code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},

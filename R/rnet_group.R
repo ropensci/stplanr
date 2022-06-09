@@ -36,13 +36,7 @@
 #' plot(rnet["group_louvain"])
 #' rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 #' plot(rnet["group_fast_greedy"])
-#'
-#' # show sfNetwork implementation
-#' sfn <- SpatialLinesNetwork(rnet)
-#' sfn <- rnet_group(sfn)
-#' plot(sfn@sl["rnet_group"])
 #' @export
-#'
 rnet_group <- function(rnet, ...) {
   UseMethod("rnet_group")
 }
@@ -107,41 +101,4 @@ rnet_group.sf <- function(
     as.undirected = as.undirected,
     ...
   )
-}
-
-#' @name rnet_group
-#' @export
-rnet_group.sfNetwork <- function(
-  rnet,
-  cluster_fun = igraph::clusters,
-  ...
-) {
-
-  if (requireNamespace("igraph", quietly = TRUE)) {
-
-    # 1. Derive the dual graph of the input rnet object
-    rnet_graph_dual <- igraph::make_line_graph(methods::slot(rnet, "g"))
-
-    # 2. Apply the cluster_fun
-    wc <- cluster_fun(rnet_graph_dual)
-
-    # 3. Derive the membership
-    m <- igraph::membership(wc)
-
-    # 4. Add the new column
-    if ("rnet_group" %in% colnames(methods::slot(rnet, "sl"))) {
-      warning(
-        "The rnet_group column will be overwritten.",
-        call. = FALSE,
-        immediate. = TRUE
-      )
-    }
-    methods::slot(rnet, "sl")[["rnet_group"]] <- as.integer(m)
-
-    # Return
-    return(rnet)
-  } else {
-    message("You must install igraph for this function to work")
-  }
-
 }

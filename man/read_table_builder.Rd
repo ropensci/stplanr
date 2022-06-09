@@ -34,18 +34,10 @@ census and other datasets in a format that is difficult to use in R
 because it contains rows with additional information.
 This function imports the original (unzipped) TableBuilder files in .csv
 or .xlsx format before creating an R dataframe with the data.
+
+Note: we recommend using the
+\href{https://github.com/mattcowgill/readabs}{readabs}
+package for this purpose.
 }
 
-\examples{
-data_dir <- system.file("extdata", package = "stplanr")
-t1 <- read_table_builder(file.path(data_dir, "SA1Population.csv"))
-if (requireNamespace("openxlsx")) {
-  t2 <- read_table_builder(file.path(data_dir, "SA1Population.xlsx"),
-    filetype = "xlsx", sheet = 1, removeTotal = TRUE
-  )
-}
-f <- file.path(data_dir, "SA1Population.csv")
-sa1pop <- read.csv(f, stringsAsFactors = TRUE, header = FALSE)
-t3 <- read_table_builder(sa1pop)
-}
 \concept{data}

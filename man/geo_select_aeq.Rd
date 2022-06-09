@@ -20,12 +20,6 @@ The function is based on this stackexchange answer:
 \url{https://gis.stackexchange.com/questions/121489}
 }
 \examples{
-sp::bbox(routes_fast)
-new_crs <- geo_select_aeq(routes_fast)
-rf_projected <- sp::spTransform(routes_fast, new_crs)
-sp::bbox(rf_projected)
-line_length <- rgeos::gLength(rf_projected, byid = TRUE)
-plot(line_length, rf_projected$length)
 shp <- zones_sf
 geo_select_aeq(shp)
 }

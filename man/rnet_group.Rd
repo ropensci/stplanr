@@ -5,7 +5,6 @@
 \alias{rnet_group.default}
 \alias{rnet_group.sfc}
 \alias{rnet_group.sf}
-\alias{rnet_group.sfNetwork}
 \title{Assign segments in a route network to groups}
 \usage{
 rnet_group(rnet, ...)
@@ -27,8 +26,6 @@ rnet_group(rnet, ...)
   as.undirected = TRUE,
   ...
 )
-
-\method{rnet_group}{sfNetwork}(rnet, cluster_fun = igraph::clusters, ...)
 }
 \arguments{
 \item{rnet}{An sf, sfc, or sfNetwork object representing a route network.}
@@ -81,30 +78,12 @@ rnet$group_louvain <- rnet_group(rnet, igraph::cluster_louvain)
 plot(rnet["group_louvain"])
 rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 plot(rnet["group_fast_greedy"])
-
-# show sfNetwork implementation
-sfn <- SpatialLinesNetwork(rnet)
-sfn <- rnet_group(sfn)
-plot(sfn@sl["rnet_group"])
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
 \code{\link{overline}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
-\code{\link{rnet_breakup_vertices}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_breakup_vertices}()}
 }
 \concept{rnet}

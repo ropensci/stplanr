@@ -39,13 +39,11 @@ nrow(l_with_duplicates)
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords}()},
-\code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},

@@ -8,21 +8,22 @@
 geo_toptail(l, toptail_dist, ...)
 }
 \arguments{
-\item{l}{A SpatialLines object}
+\item{l}{An \code{sf} object representing lines}
 
 \item{toptail_dist}{The distance (in metres) to top and tail the line by.
 Can either be a single value or a vector of the same length as the
 SpatialLines object.}
 
-\item{...}{Arguments passed to rgeos::gBuffer()}
+\item{...}{Arguments passed to \code{sf::st_buffer()}}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
 by the user.
 }
 \details{
-Note: \code{\link[=toptailgs]{toptailgs()}} is around 10 times faster, but only works
-on data with geographic CRS's due to its reliance on the geosphere
+Note: see the function
+\href{https://github.com/ropensci/stplanr/blob/master/R/toptail.R#L121}{\code{toptailgs()}}
+in {stplanr} v0.8.5 for an implementation that uses the geosphere
 package.
 }
 \examples{
@@ -30,7 +31,6 @@ lib_versions <- sf::sf_extSoftVersion()
 lib_versions
 # dont test due to issues with sp classes on some set-ups
 if (lib_versions[3] >= "6.3.1") {
-  # l <- routes_fast[2:4, ] # to run with sp classes
   l <- routes_fast_sf[2:4, ]
   l_top_tail <- geo_toptail(l, 300)
   l_top_tail
@@ -47,17 +47,12 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

@@ -21,21 +21,17 @@ and returns a matrix of coordinates representing origin (fx, fy) and destination
 }
 \examples{
 od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
-od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
 od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 # od_coords("Hereford", "Leeds") # geocode locations
-od_coords(flowlines[1:3, ])
 od_coords(flowlines_sf[1:3, ])
 }
 \seealso{
 Other od: 
-\code{\link{dist_google}()},
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
-\code{\link{od_dist}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},

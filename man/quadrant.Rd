@@ -4,36 +4,30 @@
 \alias{quadrant}
 \title{Split a spatial object into quadrants}
 \usage{
-quadrant(sp_obj, number_out = FALSE)
+quadrant(x, cent = NULL, number_out = FALSE)
 }
 \arguments{
-\item{sp_obj}{Spatial object}
+\item{x}{Object of class sf}
 
-\item{number_out}{Should the output be numbers from 1:4 (FALSE by default)}
+\item{cent}{The centrepoint of the region of interest.
+Quadrants will be defined based on this point.
+By default this will be the geographic centroid of the zones.}
+
+\item{number_out}{Should the result be returned as a number?}
 }
 \description{
-Split a spatial object (initially tested on SpatialPolygons) into quadrants.
-}
-\details{
 Returns a character vector of NE, SE, SW, NW corresponding to north-east, south-east
 quadrants respectively. If number_out is TRUE, returns numbers from 1:4, respectively.
 }
 \examples{
-data(zones)
-sp_obj <- zones
-(quads <- quadrant(sp_obj))
-plot(sp_obj, col = factor(quads))
-points(rgeos::gCentroid(sp_obj), col = "white")
-# edge cases (e.g. when using rasters) lead to NAs
-sp_obj <- raster::rasterToPolygons(raster::raster(ncol = 3, nrow = 3))
-(quads <- quadrant(sp_obj))
-plot(sp_obj, col = factor(quads))
+x = zones_sf
+(quads <- quadrant(x))
+plot(x$geometry, col = factor(quads))
 }
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{geo_bb}()},
-\code{\link{reproject}()}
+\code{\link{geo_bb}()}
 }
 \concept{geo}

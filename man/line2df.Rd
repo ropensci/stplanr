@@ -14,10 +14,6 @@ This function returns a data frame with fx and fy and tx and ty variables
 representing the beginning and end points of spatial line features respectively.
 }
 \examples{
-data(flowlines)
-line2df(flowlines[5, ]) # beginning and end of a single straight line
-line2df(flowlines) # on multiple lines
-line2df(routes_fast[5:6, ]) # beginning and end of routes
 line2df(routes_fast_sf[5:6, ]) # beginning and end of routes
 }
 \seealso{
@@ -29,17 +25,12 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

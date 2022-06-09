@@ -22,11 +22,9 @@ route(
 
 \item{to}{An object representing destinations}
 
-\item{l}{Only needed if from and to are empty, in which case this
-should be a spatial object representing desire lines}
+\item{l}{A spatial (linestring) object}
 
-\item{route_fun}{A routing function to be used for converting the straight lines to routes
-\code{\link[=od2line]{od2line()}}}
+\item{route_fun}{A routing function to be used for converting the lines to routes}
 
 \item{wait}{How long to wait between routes?
 0 seconds by default, can be useful when sending requests to rate limited APIs.}
@@ -34,11 +32,12 @@ should be a spatial object representing desire lines}
 \item{n_print}{A number specifying how frequently progress updates
 should be shown}
 
-\item{list_output}{If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.}
+\item{list_output}{If FALSE (default) assumes spatial (linestring) object output.
+Set to TRUE to save output as a list.}
 
 \item{cl}{Cluster}
 
-\item{...}{Arguments passed to the routing function, e.g. \code{\link[=route_cyclestreets]{route_cyclestreets()}}}
+\item{...}{Arguments passed to the routing function}
 }
 \description{
 Takes origins and destinations, finds the optimal routes between them
@@ -46,46 +45,15 @@ and returns the result as a spatial (sf or sp) object.
 The definition of optimal depends on the routing function used
 }
 \examples{
-library(sf)
-l = od_data_lines[2, ]
-\donttest{
-if(curl::has_internet()) {
-r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
-r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
-plot(r_walk$geometry)
-plot(r_bike$geometry, col = "blue", add = TRUE)
-# r_bc = route(l = l, route_fun = route_bikecitizens)
-# plot(r_bc)
-# route(l = l, route_fun = route_bikecitizens, wait = 1)
-library(osrm)
-r_osrm <- route(
-  l = l,
-  route_fun = osrmRoute,
-  returnclass = "sf"
-)
-nrow(r_osrm)
-plot(r_osrm)
-sln <- stplanr::SpatialLinesNetwork(route_network_sf)
-# calculate shortest paths
-plot(sln)
-plot(l$geometry, add = TRUE)
-r_local <- stplanr::route(
-  l = l,
-  route_fun = stplanr::route_local,
-  sln = sln
-)
-plot(r_local["all"], add = TRUE, lwd = 5)
-
-}
-}
+# Todo: add examples
 }
 \seealso{
 Other routes: 
-\code{\link{line2routeRetry}()},
-\code{\link{line2route}()},
 \code{\link{route_dodgr}()},
-\code{\link{route_local}()},
-\code{\link{route_osrm}()},
-\code{\link{route_transportapi_public}()}
+\code{\link{route_osrm}()}
+
+Other routes: 
+\code{\link{route_dodgr}()},
+\code{\link{route_osrm}()}
 }
 \concept{routes}

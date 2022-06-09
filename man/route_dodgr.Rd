@@ -12,8 +12,7 @@ route_dodgr(from = NULL, to = NULL, l = NULL, net = NULL)
 
 \item{to}{An object representing destinations}
 
-\item{l}{Only needed if from and to are empty, in which case this
-should be a spatial object representing desire lines}
+\item{l}{A spatial (linestring) object}
 
 \item{net}{sf object representing the route network}
 }
@@ -36,11 +35,7 @@ if (requireNamespace("dodgr")) {
 }
 \seealso{
 Other routes: 
-\code{\link{line2routeRetry}()},
-\code{\link{line2route}()},
-\code{\link{route_local}()},
 \code{\link{route_osrm}()},
-\code{\link{route_transportapi_public}()},
 \code{\link{route}()}
 }
 \concept{routes}

@@ -2,20 +2,20 @@
 % Please edit documentation in R/toptail.R
 \name{toptail_buff}
 \alias{toptail_buff}
-\title{Clip the beginning and ends SpatialLines to the edge of SpatialPolygon borders}
+\title{Clip the beginning and ends of \code{sf} LINESTRING objects}
 \usage{
 toptail_buff(l, buff, ...)
 }
 \arguments{
-\item{l}{An sf LINESTRING object}
+\item{l}{An \code{sf} object representing lines}
 
-\item{buff}{An sf POLYGON object to act as the buffer}
+\item{buff}{An \code{sf} object with POLYGON geometry to buffer the linestring.}
 
-\item{...}{Arguments passed to rgeos::gBuffer()}
+\item{...}{Arguments passed to \code{sf::st_buffer()}}
 }
 \description{
 Takes lines and removes the start and end point, to a distance determined
-by the nearest polygon border.
+by the nearest \code{buff} polygon border.
 }
 \examples{
 l <- routes_fast_sf
@@ -37,16 +37,11 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
-\code{\link{points2line}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{points2line}()}
 }
 \concept{lines}

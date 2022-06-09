@@ -34,27 +34,24 @@ slower R interface to OSRM routing services compared with the excellent
 }
 \examples{
 \donttest{
-l1 = od_data_lines[49, ]
-l1m = od_coords(l1)
-from = l1m[, 1:2]
-to = l1m[, 3:4]
-if(curl::has_internet()) {
-r_foot = route_osrm(from, to)
-r_bike = route_osrm(from, to, osrm.profile = "bike")
-r_car = route_osrm(from, to, osrm.profile = "car")
-plot(r_foot$geometry, lwd = 9, col = "grey")
-plot(r_bike, col = "blue", add = TRUE)
-plot(r_car, col = "red", add = TRUE)
-}
+# Examples no longer working due to API being down
+# l1 = od_data_lines[49, ]
+# l1m = od_coords(l1)
+# from = l1m[, 1:2]
+# to = l1m[, 3:4]
+# if(curl::has_internet()) {
+# r_foot = route_osrm(from, to)
+# r_bike = route_osrm(from, to, osrm.profile = "bike")
+# r_car = route_osrm(from, to, osrm.profile = "car")
+# plot(r_foot$geometry, lwd = 9, col = "grey")
+# plot(r_bike, col = "blue", add = TRUE)
+# plot(r_car, col = "red", add = TRUE)
+# }
 }
 }
 \seealso{
 Other routes: 
-\code{\link{line2routeRetry}()},
-\code{\link{line2route}()},
 \code{\link{route_dodgr}()},
-\code{\link{route_local}()},
-\code{\link{route_transportapi_public}()},
 \code{\link{route}()}
 }
 \concept{routes}

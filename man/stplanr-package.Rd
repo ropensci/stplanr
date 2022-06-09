@@ -10,15 +10,6 @@ The stplanr package provides functions to access
 and analyse data for transportation research, including origin-destination analysis,
 route allocation and modelling travel patterns.
 }
-\section{Interesting functions}{
-
-\itemize{
-\item \code{\link[=overline]{overline()}} - Aggregate overlaying route lines and data intelligently
-\item \code{\link[=calc_catchment]{calc_catchment()}} - Create a 'catchment area' to show the areas serving a destination
-\item \code{\link[=route_cyclestreets]{route_cyclestreets()}} - Finds the fastest routes for cyclists between two places.
-}
-}
-
 \seealso{
 \url{https://github.com/ropensci/stplanr}
 }

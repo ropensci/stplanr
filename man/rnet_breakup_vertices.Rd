@@ -18,7 +18,7 @@ up the input object.
 }
 \description{
 This function breaks up a LINESTRING geometry into multiple LINESTRING(s). It
-is used mainly for preserving routability of an \code{sfNetwork} object that is
+is used mainly for preserving routability of an object that is
 created using Open Street Map data. See details,
 \href{https://github.com/ropensci/stplanr/issues/282}{stplanr/issues/282}, and
 \href{https://github.com/ropensci/stplanr/issues/416}{stplanr/issues/416}.
@@ -34,13 +34,13 @@ LINESTRING (see the rnet_cycleway_intersection example).
 }
 
 The problem with the first example is that, according to algorithm behind
-\code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}}, two LINESTRINGS are connected if and only if they
+\code{SpatialLinesNetwork()}, two LINESTRINGS are connected if and only if they
 share at least one point in their boundaries. The roads and the roundabout
 are clearly connected in the "real" world but the corresponding LINESTRING
 objects do not share two distinct boundary points. In fact, by Open Street
 Map standards, a roundabout is represented as a closed and circular
 LINESTRING, and this implies that the roundabout is not connected to the
-other roads according to \code{\link[=SpatialLinesNetwork]{SpatialLinesNetwork()}} definition. By the same
+other roads according to \code{SpatialLinesNetwork()} definition. By the same
 reasoning, the roads in the second example are clearly connected in the
 "real" world, but they do not share any point in their boundaries. This
 function is used to solve this type of problem.
@@ -115,22 +115,9 @@ par(def_par)
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
 \code{\link{overline}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
-\code{\link{rnet_group}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_group}()}
 }
 \concept{rnet}

@@ -5,7 +5,7 @@ utils::globalVariables(c("linestring_id", "new_linestring_id"))
 #' Break up an sf object with LINESTRING geometry.
 #'
 #' This function breaks up a LINESTRING geometry into multiple LINESTRING(s). It
-#' is used mainly for preserving routability of an `sfNetwork` object that is
+#' is used mainly for preserving routability of an object that is
 #' created using Open Street Map data. See details,
 #' [stplanr/issues/282](https://github.com/ropensci/stplanr/issues/282), and
 #' [stplanr/issues/416](https://github.com/ropensci/stplanr/issues/416).
@@ -18,13 +18,13 @@ utils::globalVariables(c("linestring_id", "new_linestring_id"))
 #' LINESTRING (see the rnet_cycleway_intersection example).
 #'
 #' The problem with the first example is that, according to algorithm behind
-#' [SpatialLinesNetwork()], two LINESTRINGS are connected if and only if they
+#' `SpatialLinesNetwork()`, two LINESTRINGS are connected if and only if they
 #' share at least one point in their boundaries. The roads and the roundabout
 #' are clearly connected in the "real" world but the corresponding LINESTRING
 #' objects do not share two distinct boundary points. In fact, by Open Street
 #' Map standards, a roundabout is represented as a closed and circular
 #' LINESTRING, and this implies that the roundabout is not connected to the
-#' other roads according to [SpatialLinesNetwork()] definition. By the same
+#' other roads according to `SpatialLinesNetwork()` definition. By the same
 #' reasoning, the roads in the second example are clearly connected in the
 #' "real" world, but they do not share any point in their boundaries. This
 #' function is used to solve this type of problem.

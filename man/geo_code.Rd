@@ -22,8 +22,7 @@ geo_code(
 \item{return_all}{Should the request return all information returned by Google Maps?
 The default is \code{FALSE}: to return only two numbers: the longitude and latitude, in that order}
 
-\item{pat}{The API key used. By default this is set to NULL and
-this is usually aquired automatically through a helper, api_pat().}
+\item{pat}{Personal access token}
 }
 \description{
 Generate a lat/long pair from data using Google's geolocation API.
@@ -36,9 +35,5 @@ geo_code("hereford", return_all = TRUE)
 # needs api key in .Renviron
 geo_code("hereford", service = "google", pat = Sys.getenv("GOOGLE"), return_all = TRUE)
 }
-}
-\seealso{
-Other nodes: 
-\code{\link{nearest_google}()}
 }
 \concept{nodes}

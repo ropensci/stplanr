@@ -5,45 +5,21 @@
 #' The definition of optimal depends on the routing function used
 #'
 #' @inheritParams od_coords
-#' @inheritParams line2route
+#' @param l A spatial (linestring) object
+#' @param route_fun A routing function to be used for converting the lines to routes
+#' @param n_print A number specifying how frequently progress updates
+#' should be shown
+#' @param list_output If FALSE (default) assumes spatial (linestring) object output.
+#' Set to TRUE to save output as a list.
+#' @param ... Arguments passed to the routing function
+#' @family routes
 #' @param cl Cluster
 #' @param wait How long to wait between routes?
 #'   0 seconds by default, can be useful when sending requests to rate limited APIs.
 #' @family routes
 #' @export
 #' @examples
-#' library(sf)
-#' l = od_data_lines[2, ]
-#' \donttest{
-#' if(curl::has_internet()) {
-#' r_walk = route(l = l, route_fun = route_osrm, osrm.profile = "foot")
-#' r_bike = route(l = l, route_fun = route_osrm, osrm.profile = "bike")
-#' plot(r_walk$geometry)
-#' plot(r_bike$geometry, col = "blue", add = TRUE)
-#' # r_bc = route(l = l, route_fun = route_bikecitizens)
-#' # plot(r_bc)
-#' # route(l = l, route_fun = route_bikecitizens, wait = 1)
-#' library(osrm)
-#' r_osrm <- route(
-#'   l = l,
-#'   route_fun = osrmRoute,
-#'   returnclass = "sf"
-#' )
-#' nrow(r_osrm)
-#' plot(r_osrm)
-#' sln <- stplanr::SpatialLinesNetwork(route_network_sf)
-#' # calculate shortest paths
-#' plot(sln)
-#' plot(l$geometry, add = TRUE)
-#' r_local <- stplanr::route(
-#'   l = l,
-#'   route_fun = stplanr::route_local,
-#'   sln = sln
-#' )
-#' plot(r_local["all"], add = TRUE, lwd = 5)
-#'
-#' }
-#' }
+#' # Todo: add examples
 route <- function(from = NULL, to = NULL, l = NULL,
                   route_fun = cyclestreets::journey, wait = 0,
                   n_print = 10, list_output = FALSE, cl = NULL, ...) {
@@ -181,65 +157,6 @@ most_common_class_of_list <- function(l, class_to_find = "sf") {
   is_class <- class_out == class_to_find
   is_class
 }
-#' @export
-route.Spatial <- function(from = NULL, to = NULL, l = NULL,
-                          route_fun = cyclestreets::journey, wait = 0,
-                          n_print = 10, list_output = FALSE, cl = NULL, ...) {
-
-  # error msg in case routing fails
-  error_fun <- function(e) {
-    warning(paste("Fail for line number", i))
-    e
-  }
-  FUN <- match.fun(route_fun)
-  # generate od coordinates
-  ldf <- dplyr::as_tibble(od_coords(from, to, l))
-  # calculate line data frame
-  if (is.null(l)) {
-    l <- od2line(ldf)
-  }
-
-  # pre-allocate objects
-  rc <- as.list(rep(NA, nrow(ldf)))
-  rg <- sf::st_sfc(lapply(1:nrow(ldf), function(x) {
-    sf::st_linestring(matrix(as.numeric(NA), ncol = 2))
-  }))
-
-  rc[[1]] <- FUN(from = c(ldf$fx[1], ldf$fy[1]), to = c(ldf$tx[1], ldf$ty[1]), ...)
-  rdf <- dplyr::as_tibble(matrix(ncol = ncol(rc[[1]]@data), nrow = nrow(ldf)))
-  names(rdf) <- names(rc[[1]])
-
-  rdf[1, ] <- rc[[1]]@data[1, ]
-  rg[1] <- sf::st_as_sfc(rc[[1]])
-
-  if (nrow(ldf) > 1) {
-    for (i in 2:nrow(ldf)) {
-      rc[[i]] <- tryCatch(
-        {
-          FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        },
-        error = error_fun
-      )
-      perc_temp <- i %% round(nrow(ldf) / n_print)
-      # print % of distances calculated
-      if (!is.na(perc_temp) & perc_temp == 0) {
-        message(paste0(round(100 * i / nrow(ldf)), " % out of ", nrow(ldf), " distances calculated"))
-      }
-
-      rdf[i, ] <- rc[[i]]@data[1, ]
-      rg[i] <- sf::st_as_sf(rc[[i]])$geometry
-    }
-  }
-
-  r <- sf::st_sf(geometry = rg, rdf)
-
-  if (list_output) {
-    r <- rc
-  }
-
-  r
-}
-
 #' Route on local data using the dodgr package
 #'
 #' @inheritParams route

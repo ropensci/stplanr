@@ -13,7 +13,7 @@ line_bearing(l, bidirectional = FALSE)
 Default is FALSE. If TRUE, the same line in the oposite direction would have the same bearing}
 }
 \description{
-This is a simple wrapper around the geosphere function \code{\link[=bearing]{bearing()}} to return the
+This function returns the
 bearing (in degrees relative to north) of lines.
 }
 \details{
@@ -27,11 +27,7 @@ lib_versions
 if (lib_versions[3] >= "6.3.1") {
   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
   bearings_sf_1_9 # lines of 0 length have NaN bearing
-  bearings_sp_1_9 <- line_bearing(flowlines[1:5, ])
-  bearings_sp_1_9
-  plot(bearings_sf_1_9, bearings_sp_1_9)
   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-  line_bearing(flowlines[1:5, ], bidirectional = TRUE)
 }
 }
 \seealso{
@@ -43,17 +39,12 @@ Other lines:
 \code{\link{line2points}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
-\code{\link{line_sample}()},
-\code{\link{line_segment_sf}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
-\code{\link{n_sample_length}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
-\code{\link{toptail_buff}()},
-\code{\link{toptailgs}()},
-\code{\link{update_line_geometry}()}
+\code{\link{toptail_buff}()}
 }
 \concept{lines}

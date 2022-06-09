@@ -5,33 +5,19 @@
 #' in the form of 1 line per OD pair, with zone codes of the trip origin in the first
 #' column and the zone codes of the destination in the second column
 #' (see the [`vignette("stplanr-od")`](https://docs.ropensci.org/stplanr/articles/stplanr-od.html)) for details.
-#' `od2odf()` creates an 'origin-destination data frame', based on a data frame containing
-#' origin and destination cones (`flow`) that match the first column in a
-#' a spatial (polygon or point) object (`zones`).
+#' `od2odf()` creates an 'origin-destination data frame', with columns containing
+#' origin and destination codes (`flow`) that match the first column in a
+#' a spatial (polygon or point `sf`) object (`zones`).
 #'
 #' The function returns a data frame with coordinates for the origin and destination.
 #' @inheritParams od2line
 #' @family od
 #' @export
 #' @examples
-#' data(flow)
-#' data(zones)
-#' od2odf(flow[1:2, ], zones)
+#' od2odf(flow[1:2, ], zones_sf)
 od2odf <- function(flow, zones) {
-  coords <- data.frame(
-    code = as.character(zones[[1]]),
-    fx = coordinates(zones)[, 1], fy = coordinates(zones)[, 2]
-  )
-  flowcode <- data.frame(
-    stringsAsFactors = FALSE,
-    code_o = as.character(flow[[1]]),
-    code_d = as.character(flow[[2]])
-  )
-  odf <- dplyr::left_join(flowcode, coords, by = c("code_o" = "code"))
-  names(coords) <- c("code", "fx", "fy")
-  odf <- dplyr::left_join(odf, coords, by = c("code_d" = "code"))
-
-  data.frame(odf) # return data.frame as more compatible with spatial data
+  od_codes = flow[1:2]
+  cbind(o = flow[[1]], d = flow[[2]], od::od_coordinates(flow, zones))
 }
 
 #' Create matrices representing origin-destination coordinates
@@ -48,10 +34,8 @@ od2odf <- function(flow, zones) {
 #' @export
 #' @examples
 #' od_coords(from = c(0, 52), to = c(1, 53)) # lon/lat coordinates
-#' od_coords(from = cents[1, ], to = cents[2, ]) # Spatial points
 #' od_coords(cents_sf[1:3, ], cents_sf[2:4, ]) # sf points
 #' # od_coords("Hereford", "Leeds") # geocode locations
-#' od_coords(flowlines[1:3, ])
 #' od_coords(flowlines_sf[1:3, ])
 od_coords <- function(from = NULL, to = NULL, l = NULL) {
   if (is(object = from, class2 = "sf")) {
@@ -59,36 +43,34 @@ od_coords <- function(from = NULL, to = NULL, l = NULL) {
   } else {
     is_sf_line <- FALSE
   }
-
   if (is_sf_line | any(grepl(pattern = "Line", x = class(from)))) {
     l <- from
   }
-
   if (!is.null(l)) {
     coord_matrix <- line2df(l) %>%
       dplyr::select("fx", "fy", "tx", "ty")
-  }
-
-  else {
-    # Convert sp object to lat/lon vector
-    if (is(object = from, "Spatial")) from <- sp::coordinates(from)
-    if (is(object = to, "Spatial")) to <- sp::coordinates(to)
-
+  } else {
     # sf objects
-    if (is(object = from, "sf") | is(object = from, "sfc")) from <- sf::st_coordinates(from)
-    if (is(object = to, "sf") | is(object = to, "sfc")) to <- sf::st_coordinates(to)
-
+    if (is(object = from, "sf") | is(object = from, "sfc")) {
+      from <- sf::st_coordinates(from)
+    }
+    if (is(object = to, "sf") | is(object = to, "sfc")) {
+      to <- sf::st_coordinates(to)
+    }
     # Convert character strings to lon/lat if needs be
-    if (is.character(from)) from <- matrix(geo_code(from), ncol = 2)
-    if (is.character(to)) to <- matrix(geo_code(to), ncol = 2)
+    if (is.character(from)) {
+      from <- matrix(geo_code(from), ncol = 2)
+    }
+    if (is.character(to)) {
+      to <- matrix(geo_code(to), ncol = 2)
+    }
     if (is.vector(from) & is.vector(to)) {
       coord_matrix <- matrix(c(from, to), ncol = 4)
-    } else {
-      coord_matrix <- cbind(from, to)
-    }
+      } else {
+        coord_matrix <- cbind(from, to)
+      }
     colnames(coord_matrix) <- c("fx", "fy", "tx", "ty")
   }
-
   as.matrix(coord_matrix)
 }
 
@@ -154,7 +136,7 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #'
 #' @param flow A data frame representing origin-destination data.
 #'  The first two columns of this data frame should correspond
-#' to the first column of the data in the zones. Thus in [cents()],
+#' to the first column of the data in the zones. Thus in [cents_sf()],
 #' the first column is geo_code. This corresponds to the first two columns
 #' of [flow()].
 #' @param zones A spatial object representing origins (and destinations
@@ -178,14 +160,6 @@ od_coords2line <- function(odc, crs = 4326, remove_duplicates = TRUE) {
 #' l <- od2line(flow = od_data, zones = cents_sf)
 #' plot(sf::st_geometry(cents_sf))
 #' plot(l, lwd = l$All / mean(l$All), add = TRUE)
-#' l <- od2line(flow = od_data, zones = cents)
-#' # When destinations are different
-#' head(destinations[1:5])
-#' od_data2 <- flow_dests[1:12, 1:3]
-#' od_data2
-#' flowlines_dests <- od2line(od_data2, cents_sf, destinations = destinations_sf)
-#' flowlines_dests
-#' plot(flowlines_dests)
 #' @name od2line
 NULL
 
@@ -238,78 +212,6 @@ od2line.sf <- function(flow, zones, destinations = NULL,
   odsfc <- od_coords2line(odm, crs = sf::st_crs(zones), remove_duplicates = FALSE)
   sf::st_sf(flow, geometry = odsfc$geometry)
 }
-#' @export
-od2line.Spatial <- function(flow, zones, destinations = NULL,
-                            zone_code = names(zones)[1],
-                            origin_code = names(flow)[1],
-                            dest_code = names(flow)[2],
-                            zone_code_d = NA, silent = TRUE) {
-  l <- vector("list", nrow(flow))
-
-  if (is.null(destinations)) {
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones to", origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- zones@data[[zone_code]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(zones[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  } else {
-    if (is.na(zone_code_d)) {
-      zone_code_d <- names(destinations)[1]
-    }
-    if (!silent) {
-      message(paste(
-        "Matching", zone_code, "in the zones and", zone_code_d, "in the destinations,\nto",
-        origin_code, "and", dest_code,
-        "for origins and destinations respectively"
-      ))
-    }
-    for (i in 1:nrow(flow)) {
-      from <- zones@data[[zone_code]] %in% flow[[origin_code]][i]
-      if (sum(from) == 0) {
-        warning(paste0("No match for line ", i))
-      }
-      to <- destinations@data[[zone_code_d]] %in% flow[[dest_code]][i]
-      if (sum(to) == 0 & sum(from) == 1) {
-        warning(paste0("No match for line ", i))
-      }
-      x <- sp::coordinates(zones[from, ])
-      y <- sp::coordinates(destinations[to, ])
-      l[[i]] <- sp::Lines(list(sp::Line(rbind(x, y))), as.character(i))
-    }
-  }
-  l <- sp::SpatialLines(l)
-  l <- sp::SpatialLinesDataFrame(l, data = flow, match.ID = FALSE)
-  sp::proj4string(l) <- sp::proj4string(zones)
-  l
-}
-
-#' @rdname od2line
-#' @export
-od2line2 <- function(flow, zones) {
-  odf <- od2odf(flow, zones)
-  l <- vector("list", nrow(odf))
-  for (i in 1:nrow(odf)) {
-    l[[i]] <-
-      sp::Lines(list(sp::Line(rbind(
-        c(odf$fx[i], odf$fy[i]), c(odf$tx[i], odf$ty[i])
-      ))), as.character(i))
-  }
-  l <- sp::SpatialLines(l)
-}
 
 #' Convert geographic line objects to a data.frame with from and to coords
 #'
@@ -320,10 +222,6 @@ od2line2 <- function(flow, zones) {
 #' @family lines
 #' @export
 #' @examples
-#' data(flowlines)
-#' line2df(flowlines[5, ]) # beginning and end of a single straight line
-#' line2df(flowlines) # on multiple lines
-#' line2df(routes_fast[5:6, ]) # beginning and end of routes
 #' line2df(routes_fast_sf[5:6, ]) # beginning and end of routes
 line2df <- function(l) {
   UseMethod("line2df")
@@ -339,17 +237,6 @@ line2df.sf <- function(l) {
     dplyr::summarise(
       fx = dplyr::first(!!X), fy = dplyr::first(!!Y),
       tx = dplyr::last(!!X), ty = dplyr::last(!!Y)
-    )
-}
-#' @export
-line2df.Spatial <- function(l) {
-  ldf_geom <- raster::geom(l)
-  dplyr::group_by(dplyr::as_tibble(ldf_geom), object) %>%
-    dplyr::summarise(
-      fx = dplyr::first(x),
-      fy = dplyr::first(y),
-      tx = dplyr::last(x),
-      ty = dplyr::last(y)
     )
 }
 
@@ -387,22 +274,6 @@ line2points <- function(l, ids = rep(1:nrow(l))) {
   UseMethod("line2points")
 }
 #' @export
-line2points.Spatial <- function(l, ids = rep(1:nrow(l), each = 2)) {
-  for (i in 1:length(l)) {
-    lcoords <- sp::coordinates(l[i, ])[[1]][[1]]
-    pmat <- matrix(lcoords[c(1, nrow(lcoords)), ], nrow = 2)
-    lpoints <- sp::SpatialPoints(pmat)
-    if (i == 1) {
-      out <- lpoints
-    } else {
-      out <- raster::bind(out, lpoints)
-    }
-  }
-  sp::proj4string(out) <- sp::proj4string(l)
-  out <- sp::SpatialPointsDataFrame(coords = out, data = data.frame(id = ids))
-  out
-}
-#' @export
 line2points.sf <- function(l, ids = rep(1:nrow(l), each = 2)) {
   y_coords <- x_coords <- double(length = length(ids)) # initiate coords
   coord_matrix <- cbind(x_coords, y_coords)
@@ -434,13 +305,6 @@ line2points.sfg <- function(l, ids = rep(1:nrow(l), each = 2)) {
 #' @export
 line2pointsn <- function(l) {
   UseMethod("line2pointsn")
-}
-#' @export
-line2pointsn.Spatial <- function(l) {
-  spdf <- raster::geom(l)
-  p <- sp::SpatialPoints(coords = spdf[, c("x", "y")])
-  raster::crs(p) <- raster::crs(l)
-  p
 }
 #' @export
 line2pointsn.sf <- function(l) {
@@ -489,175 +353,6 @@ line2vertices.sf <- function(l) {
   internal_vertexes_sf
 }
 
-#' Convert straight OD data (desire lines) into routes
-#'
-#' @section Details:
-#'
-#' See [route_cyclestreets()] and other route functions for details.
-#'
-#' A parallel implementation of this was available until version 0.1.8.
-#'
-#' @param l A spatial (linestring) object
-#' @param route_fun A routing function to be used for converting the straight lines to routes
-#' [od2line()]
-#' @param n_print A number specifying how frequently progress updates
-#' should be shown
-#' @param list_output If FALSE (default) assumes spatial (linestring) object output. Set to TRUE to save output as a list.
-#' @param l_id Character string naming the id field from the input lines data,
-#' typically the origin and destination ids pasted together. If absent, the row name of the
-#' straight lines will be used.
-#' @param time_delay Number or seconds to wait between each query
-#' @param ... Arguments passed to the routing function, e.g. [route_cyclestreets()]
-#' @family routes
-#' @export
-#' @examples
-#' \dontrun{
-#' # does not run as requires API key
-#' l <- flowlines[2:5, ]
-#' r <- line2route(l)
-#' rq <- line2route(l = l, plan = "quietest", silent = TRUE)
-#' rsc <- line2route(l = l, route_fun = cyclestreets::journey)
-#' plot(r)
-#' plot(r, col = "red", add = TRUE)
-#' plot(rq, col = "green", add = TRUE)
-#' plot(rsc)
-#' plot(l, add = T)
-#' # Plot for a single line to compare 'fastest' and 'quietest' route
-#' n <- 2
-#' plot(l[n, ])
-#' lines(r[n, ], col = "red")
-#' lines(rq[n, ], col = "green")
-#' }
-line2route <-
-  function(l,
-           route_fun = stplanr::route_cyclestreets,
-           n_print = 10,
-           list_output = FALSE,
-           l_id = NA,
-           time_delay = 0,
-           ...) {
-    return_sf <- is(l, "sf")
-    if (return_sf) {
-      requireNamespace("sf")
-      l <- sf::as_Spatial(l)
-    }
-    FUN <- match.fun(route_fun)
-    ldf <- line2df(l)
-    n_ldf <- nrow(ldf)
-
-    error_fun <- function(e) {
-      warning(paste("Fail for line number", i))
-      e
-    }
-
-    rc <- as.list(rep(NA, length(l)))
-    for (i in 1:n_ldf) {
-      rc[[i]] <- tryCatch(
-        {
-          FUN(from = c(ldf$fx[i], ldf$fy[i]), to = c(ldf$tx[i], ldf$ty[i]), ...)
-        },
-        error = error_fun
-      )
-      perc_temp <- i %% round(n_ldf / n_print)
-      # print % of distances calculated
-      if (!is.na(perc_temp) & perc_temp == 0) {
-        message(paste0(round(100 * i / n_ldf), " % out of ", n_ldf, " distances calculated"))
-      }
-      Sys.sleep(time = time_delay)
-    }
-
-    class_out <- sapply(rc, function(x) class(x)[1])
-    most_common_class <- names(sort(table(class_out), decreasing = TRUE)[1])
-    if (most_common_class == "sf") {
-      message("Output is sf")
-      rc_is_sf <- class_out == "sf"
-      rc_sf <- rc[rc_is_sf]
-      r_sf <- do.call(rbind, rc_sf)
-      return(r_sf)
-    }
-
-    if (list_output) {
-      r <- rc
-    } else {
-      # Set the names based on the first non failing line (then exit loop)
-      for (i in 1:n_ldf) {
-        if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
-          rdata <- data.frame(matrix(nrow = nrow(l), ncol = ncol(rc[[i]]) + 1))
-          names(rdata) <- c(names(rc[[i]]), "error")
-          r <- l
-          r@data <- rdata
-          break
-        }
-        Sys.sleep(time = time_delay)
-      }
-
-      # Copy rc into r including the data or copy the error into r
-      for (i in 1:n_ldf) {
-        if (grepl("Spatial.*DataFrame", class(rc[[i]]))[1]) {
-          r@lines[[i]] <- Lines(rc[[i]]@lines[[1]]@Lines, row.names(l[i, ]))
-          r@data[i, ] <- c(rc[[i]]@data, error = NA)
-        } else {
-          r@data[i, "error"] <- rc[[i]][1]
-        }
-        Sys.sleep(time = time_delay)
-      }
-
-      # Set the id in r
-      l_ids <- c(l_id, "id")
-      l_id <- l_ids[!is.na(l_ids)][1]
-      r$id <- if (l_id %in% names(l)) {
-        l@data[[l_id]]
-      } else {
-        row.names(l)
-      }
-    }
-    if (return_sf) {
-      r <- sf::st_as_sf(r)
-    }
-    r
-  }
-
-#' Convert straight spatial (linestring) object from flow data into routes retrying
-#' on connection (or other) intermittent failures
-#'
-#' @section Details:
-#'
-#' See [line2route()] for the version that is not retried on errors.
-#' @param lines A spatial (linestring) object
-#' @param pattern A regex that the error messages must not match to be retried, default
-#'  "^Error: " i.e. do not retry errors starting with "Error: "
-#' @param n_retry Number of times to retry
-#' @inheritParams line2route
-#' @family routes
-#' @export
-#' @examples
-#' \dontrun{
-#' data(flowlines)
-#' rf_list <- line2routeRetry(flowlines[1:2, ], pattern = "nonexistanceerror", silent = F)
-#' }
-line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
-  routes <- line2route(lines, reporterrors = T, ...)
-
-  # When the time is NA then the routing failed,
-  # if there is no error message or the message matches the pattern select line to be retried
-  failed_to_route <- lines[is.na(routes$time) & (is.na(routes$error) | !grepl(pattern, routes$error)), ]
-  if (nrow(failed_to_route) > 0 && n_retry > 0) {
-    ids <- routes$ids
-    routes_retry <- line2routeRetry(failed_to_route, pattern = pattern, n_retry = n_retry - 1, ...)
-    for (idx_retry in 1:nrow(routes_retry)) {
-      # Merge in retried routes if they are Spatial DataFrames
-      if (grepl("Spatial.*DataFrame", class(routes_retry[[idx_retry]]))) {
-        idx_to_replace <- which(routes$id == routes_retry$id[idx_retry])
-
-        routes@data[idx_to_replace, ] <- routes_retry@data[idx_retry, ]
-        routes@lines[[idx_to_replace]] <-
-          Lines(routes_retry@lines[[idx_retry]]@Lines, row.names(routes_retry[idx_retry, ]))
-      }
-    }
-  }
-  routes
-}
-
 #' Convert a series of points into a dataframe of origins and destinations
 #'
 #' Takes a series of geographical points and converts them into a data.frame
@@ -668,11 +363,7 @@ line2routeRetry <- function(lines, pattern = "^Error: ", n_retry = 3, ...) {
 #' @family od
 #' @export
 #' @examples
-#' data(cents)
-#' df <- points2odf(cents)
-#' cents_centroids <- rgeos::gCentroid(cents, byid = TRUE)
-#' df2 <- points2odf(cents_centroids)
-#' df3 <- points2odf(cents_sf)
+#' points2odf(cents_sf)
 points2odf <- function(p) {
   UseMethod("points2odf")
 }
@@ -710,90 +401,22 @@ points2odf.Spatial <- function(p) {
 #'
 #' @export
 #' @examples
-#' data(cents)
-#' plot(cents)
-#' flow <- points2flow(cents)
-#' plot(flow, add = TRUE)
-#' flow_sf <- points2flow(cents_sf)
+#' flow_sf <- points2flow(cents_sf[1:4, ])
 #' plot(flow_sf)
 points2flow <- function(p) {
   odf <- points2odf(p)
   od2line(flow = odf, zones = p)
 }
 
-#' Update line geometry
-#'
-#' Take two SpatialLines objects and update the geometry of the former with that of the latter,
-#' retaining the data of the former.
-#'
-#' @param l A SpatialLines object, whose geometry is to be modified
-#' @param nl A SpatialLines object of the same length as `l` to provide the new geometry
-#' @family lines
-#'
-#' @export
-#' @examples
-#' data(flowlines)
-#' l <- flowlines[2:5, ]
-#' nl <- routes_fast
-#' nrow(l)
-#' nrow(nl)
-#' l <- l[!is_linepoint(l), ]
-#' names(l)
-#' names(routes_fast)
-#' l_newgeom <- update_line_geometry(l, nl)
-#' plot(l, lwd = l$All / mean(l$All))
-#' plot(l_newgeom, lwd = l$All / mean(l$All))
-#' names(l_newgeom)
-update_line_geometry <- function(l, nl) {
-  for (i in 1:nrow(l)) {
-    l@lines[[i]] <- Lines(nl@lines[[i]]@Lines, row.names(l[i, ]))
-  }
-  l
-}
-
-#' Quickly calculate Euclidean distances of od pairs
-#'
-#' It is common to want to know the Euclidean distance between origins and destinations
-#' in OD data. You can calculate this by first converting OD data to SpatialLines data,
-#' e.g. with [od2line()]. However this can be slow and overkill if you just
-#' want to know the distance. This function is a few orders of magnitude faster.
-#'
-#' Note: this function assumes that the zones or centroids in `cents` have a geographic
-#' (lat/lon) CRS.
-#'
-#' @inheritParams od2line
-#' @family od
-#' @export
-#' @examples
-#' data(flow)
-#' data(cents)
-#' od_dist(flow, cents)
-od_dist <- function(flow, zones) {
-  omatch <- match(flow[[1]], zones@data[[1]])
-  dmatch <- match(flow[[2]], zones@data[[1]])
-  cents_o <- zones@coords[omatch, ]
-  cents_d <- zones@coords[dmatch, ]
-  geosphere::distHaversine(p1 = cents_o, p2 = cents_d)
-}
-
 #' Convert a series of points, or a matrix of coordinates, into a line
 #'
-#' This is a simple wrapper around [spLines()] that makes the creation of
-#' `SpatialLines` objects easy and intuitive
+#' This function makes that makes the creation of `sf`
+#' objects with LINESTRING geometries easy.
 #'
 #' @param p A spatial (points) obect or matrix representing the coordinates of points.
 #' @family lines
 #' @export
 #' @examples
-#' p <- matrix(1:4, ncol = 2)
-#' library(sp)
-#' l <- points2line(p)
-#' plot(l)
-#' l <- points2line(cents)
-#' plot(l)
-#' p <- line2points(routes_fast)
-#' l <- points2line(p)
-#' plot(l)
 #' l_sf <- points2line(cents_sf)
 #' plot(l_sf)
 points2line <- function(p) {
@@ -802,23 +425,6 @@ points2line <- function(p) {
 #' @export
 points2line.sf <- function(p) {
   points2flow(p = p)
-}
-#' @export
-points2line.Spatial <- function(p) {
-  if (is(p, "SpatialPoints")) {
-    p_proj <- sp::proj4string(p)
-    p <- sp::coordinates(p)
-  } else {
-    p_proj <- NA
-  }
-  l <- points2line(p)
-  raster::crs(l) <- p_proj
-  l
-}
-#' @export
-points2line.matrix <- function(p) {
-  l <- raster::spLines(p)
-  l
 }
 #' Summary statistics of trips originating from zones in OD data
 #'

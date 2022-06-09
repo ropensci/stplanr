@@ -13,7 +13,7 @@ geo_bb(
 )
 }
 \arguments{
-\item{shp}{Spatial object (from sf or sp packages)}
+\item{shp}{Spatial object}
 
 \item{scale_factor}{Numeric vector determining how much the bounding box will grow or shrink.
 Two numbers refer to extending the bounding box in x and y dimensions, respectively.
@@ -28,13 +28,12 @@ Takes a geographic object or bounding box as an input and outputs a bounding box
 represented as a bounding box, corner points or rectangular polygon.
 }
 \examples{
-# Simple features implementation:
 shp <- routes_fast_sf
 shp_bb <- geo_bb(shp, distance = 100)
 plot(shp_bb, col = "red", reset = FALSE)
 plot(geo_bb(routes_fast_sf, scale_factor = 0.8), col = "green", add = TRUE)
-plot(geo_bb(routes_fast_sf, output = "points"), add = TRUE)
 plot(routes_fast_sf$geometry, add = TRUE)
+geo_bb(shp, output = "point")
 }
 \seealso{
 bb_scale
@@ -42,7 +41,6 @@ bb_scale
 Other geo: 
 \code{\link{bbox_scale}()},
 \code{\link{geo_bb_matrix}()},
-\code{\link{quadrant}()},
-\code{\link{reproject}()}
+\code{\link{quadrant}()}
 }
 \concept{geo}

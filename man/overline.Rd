@@ -93,7 +93,7 @@ as it does not help with other stages.
 }
 \examples{
 sl <- routes_fast_sf[2:4, ]
-sl$All <- flowlines$All[2:4]
+sl$All <- flowlines_sf$All[2:4]
 rnet <- overline(sl = sl, attrib = "All")
 nrow(sl)
 nrow(rnet)
@@ -106,12 +106,6 @@ summary(n_vertices(rnet_sf_raw))
 plot(rnet_sf_raw)
 rnet_sf_raw$n <- 1:nrow(rnet_sf_raw)
 plot(rnet_sf_raw[10:25, ])
-# legacy implementation based on sp data
-# sl <- routes_fast[2:4, ]
-# rnet1 <- overline(sl = sl, attrib = "length")
-# rnet2 <- overline(sl = sl, attrib = "length", buff_dist = 1)
-# plot(rnet1, lwd = rnet1$length / mean(rnet1$length))
-# plot(rnet2, lwd = rnet2$length / mean(rnet2$length))
 }
 \references{
 Morgan M and Lovelace R (2020). Travel flow aggregation: Nationally scalable methods
@@ -125,42 +119,16 @@ segments. Reproducible question from \url{https://gis.stackexchange.com}. See
 }
 \seealso{
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},
-\code{\link{rnet_group}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_group}()}
 
 Other rnet: 
-\code{\link{SpatialLinesNetwork}},
-\code{\link{calc_catchment_sum}()},
-\code{\link{calc_catchment}()},
-\code{\link{calc_moving_catchment}()},
-\code{\link{calc_network_catchment}()},
-\code{\link{find_network_nodes}()},
 \code{\link{gsection}()},
 \code{\link{islines}()},
-\code{\link{lineLabels}()},
-\code{\link{overline_spatial}()},
-\code{\link{plot,SpatialLinesNetwork,ANY-method}},
-\code{\link{plot,sfNetwork,ANY-method}},
 \code{\link{rnet_breakup_vertices}()},
-\code{\link{rnet_group}()},
-\code{\link{sln2points}()},
-\code{\link{sum_network_links}()},
-\code{\link{sum_network_routes}()}
+\code{\link{rnet_group}()}
 }
 \author{
 Barry Rowlingson

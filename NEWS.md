@@ -1,3 +1,12 @@
+# stplanr 1.0.0
+
+- Remove dependency on `sp`, `rgeos` and `rgdal` (#332)
+- That involved removal of the following functions:
+  - [catchmentArea.R](https://github.com/ropensci/stplanr/blob/v0.8.5/R/catchmentArea.R)
+  - Some of the functionality from [linefuns.R](https://github.com/ropensci/stplanr/blob/v0.8.5/R/linefuns.R)
+  
+  - Browse the code base as of stplanr 0.8.5 here: https://github.com/ropensci/stplanr/blob/v0.8.5
+
 # stplanr 0.9.0 (May 2022)
 
 - Message added on loading the package announcing planned changes: support for `sp` objects and associated packages will be dropped (#332)

@@ -3,16 +3,13 @@
 \docType{data}
 \name{flow}
 \alias{flow}
-\title{data frame of commuter flows}
+\title{Data frame of commuter flows}
 \format{
 A data frame with 49 rows and 15 columns
 }
-\usage{
-data(flow)
-}
 \description{
 This dataset represents commuter flows (work travel) between origin
-and destination zones (see \code{\link[=cents]{cents()}}).
+and destination zones.
 The data is from the UK and is available as open data:
 \url{https://wicid.ukdataservice.ac.uk/}.
 }
@@ -29,44 +26,16 @@ The variables are as follows:
 Although these variable names are unique to UK data, the data
 structure is generalisable and typical of flow data from any source.
 The key variables are the origin and destination ids, which link to
-the \code{cents} georeferenced spatial objects.
-}
-\examples{
-\dontrun{
-# This is how the dataset was constructed - see
-# https://github.com/npct/pct - if download to ~/repos
-flow <- readRDS("~/repos/pct/pct-data/national/flow.Rds")
-data(cents)
-o <- flow$Area.of.residence \%in\% cents$geo_code[-1]
-d <- flow$Area.of.workplace \%in\% cents$geo_code[-1]
-flow <- flow[o & d, ] # subset flows with o and d in study area
-library(devtools)
-flow$id <- paste(flow$Area.of.residence, flow$Area.of.workplace)
-use_data(flow, overwrite = TRUE)
-
-# Convert flows to spatial lines dataset
-flowlines <- od2line(flow = flow, zones = cents)
-# use_data(flowlines, overwrite = TRUE)
-
-# Convert flows to routes
-routes_fast <- line2route(l = flowlines, plan = "fastest")
-routes_slow <- line2route(l = flowlines, plan = "quietest")
-
-use_data(routes_fast)
-use_data(routes_slow)
-routes_fast_sf <- sf::st_as_sf(routes_fast)
-routes_slow_sf <- sf::st_as_sf(routes_slow)
-}
-
+the georeferenced spatial objects.
 }
 \seealso{
 Other example data: 
-\code{\link{destination_zones}},
+\code{\link{destinations_sf}},
 \code{\link{flow_dests}},
-\code{\link{flowlines}},
-\code{\link{route_network}},
-\code{\link{routes_fast}},
-\code{\link{routes_slow}}
+\code{\link{flowlines_sf}},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
 }
 \concept{example data}
 \keyword{datasets}
