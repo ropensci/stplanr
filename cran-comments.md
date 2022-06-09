@@ -1,20 +1,17 @@
-Update in preparation for big changes in v1.0.0 that will remove support for soon-to-be retired rgeos/rgdal/maptools packages.
+This is a major update removing support for objects with classes based on the sp package.
 
-The message on load will give people a chance to provide feedback.
+sp has be superseded by sf. This change prepares for the retirement of sp and associated packages.
 
-Also contains fixes based on emails from CRAN and best practice checks.
+The package retains an onload message preparing people for this major change. I could remove it but suspect the benefits of keeping the onload message for this release, to be removed on the next release, outweigh the cons.
 
-Results on WinBuilder: https://win-builder.r-project.org/lsiV27w76DU3/00check.log
+Happy for any comments on this.
 
 ## R CMD check results
 checking R code for possible problems ... NOTE
   File ‘stplanr/R/zzz.R’:
     .onLoad calls:
-      packageStartupMessage(paste0("Loading stplanr v0.9.0.\n", "Note: the next planned version, v1.0.0, will not support sp objects.\n",     "See the issue #332 and https://github.com/ropensci/stplanr/pull/481.",     "Any feedback on GitHub: welcome. Thanks (Robin Lovelace, April 2022)!"))
-  
-  See section ‘Good practice’ in '?.onAttach'.
 
-0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+0 errors ✔ | 0 warnings ✔ | 1 notes ✖
 
 R CMD check succeeded
 
