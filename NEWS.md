@@ -4,8 +4,8 @@
 - That involved removal of the following functions:
   - [catchmentArea.R](https://github.com/ropensci/stplanr/blob/v0.8.5/R/catchmentArea.R)
   - Some of the functionality from [linefuns.R](https://github.com/ropensci/stplanr/blob/v0.8.5/R/linefuns.R)
-  
   - Browse the code base as of stplanr 0.8.5 here: https://github.com/ropensci/stplanr/blob/v0.8.5
+- Removal of 'ABS' reading functionality in favour of https://github.com/mattcowgill/readabs
 
 # stplanr 0.9.0 (May 2022)
 
