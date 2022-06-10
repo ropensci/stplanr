@@ -89,7 +89,7 @@ there has been little prior work to develop R functionality designed
 specifically for transport planning, with the notable exceptions of
 [TravelR](https://r-forge.r-project.org/projects/travelr/) (a package on
 R-Forge last updated in 2012) and
-[gtfsr](https://github.com/ropensci/gtfsr) (a package for handling
+[tidytransit](https://github.com/r-transit/tidytransit) (a package for handling
 General Transit Feed Specification (GTFS) data).
 
 The purpose of **stplanr** is to provide a toolbox rather than a
