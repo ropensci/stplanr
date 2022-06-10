@@ -1,3 +1,7 @@
+Update: I have updated faulty URLs and removed the .onLoad message to prevent NOTEs.
+
+Please double check if there are more notes: the DOI related note is a false positive.
+
 This is a major update removing support for objects with classes based on the sp package.
 
 sp has be superseded by sf. This change prepares for the retirement of sp and associated packages.
