@@ -99,7 +99,7 @@ on sustainability [@banister_sustainable_2008] and ‘Big Data’
 [@zheng_big_2016] in the wider field of transport planning. A major
 motivation was the lack of R packages, and open source software in
 general, for transport applications. This may be surprising given the
-uqiquity of transport problems;^[
+ubiquity of transport problems;^[
 Many people can think of things that could be improved on their local transport networks, especially for walking, cycling and wheel-chairs.
 But most lack the evidence to communicate the issues, and potential solutions, to others.
 ]
