@@ -1,3 +1,5 @@
+# stplanr (development version)
+
 # stplanr 1.0.0
 
 - Remove dependency on `sp`, `rgeos` and `rgdal` (#332)
