@@ -18,19 +18,16 @@ Authors@R: c(
     )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
 Description: Tools for transport planning with an emphasis on spatial transport
-    data and non-motorized modes. Enables common transport planning tasks including:
-    downloading and cleaning transport datasets; creating geographic "desire lines"
-    from origin-destination (OD) data; route assignment, locally and via
-    interfaces to routing services such as <https://cyclestreets.net/> and
-    calculation of route segment attributes such as bearing.
+    data and non-motorized modes. Create geographic "desire lines"
+    from origin-destination (OD) data (building on the 'od' package);
+    calculate routes on the transport network locally and via
+    interfaces to routing services such as <https://cyclestreets.net/>;
+    calculate route segment attributes such as bearing.
     The package implements the 'travel flow aggregration' method
     described in Morgan and Lovelace (2020) <doi:10.1177/2399808320942779>.
     Further information on the package's aim and scope can be found
     in the vignettes and in a paper in the R Journal
     (Lovelace and Ellison 2018) <doi:10.32614/RJ-2018-053>.
-    This package Suggests the 'pct' package which at the time of writing
-    is unavailable on CRAN. You can install it from the repository
-    'itsleeds/pct' on GitHub.
 License: MIT + file LICENSE
 BugReports: https://github.com/ropensci/stplanr/issues
 LazyData: yes
