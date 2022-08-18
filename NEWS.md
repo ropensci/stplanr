@@ -1,4 +1,4 @@
-# stplanr (development version)
+# stplanr 1.0.1
 
 # stplanr 1.0.0
 
