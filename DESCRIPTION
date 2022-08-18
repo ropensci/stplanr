@@ -53,7 +53,6 @@ Imports:
     sfheaders
 Suggests:
     cyclestreets,
-    dodgr (>= 0.0.3),
     geodist,
     igraph (>= 1.2.2),
     knitr (>= 1.20),
@@ -70,5 +69,5 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 SystemRequirements: GNU make

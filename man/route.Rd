@@ -49,11 +49,9 @@ The definition of optimal depends on the routing function used
 }
 \seealso{
 Other routes: 
-\code{\link{route_dodgr}()},
 \code{\link{route_osrm}()}
 
 Other routes: 
-\code{\link{route_dodgr}()},
 \code{\link{route_osrm}()}
 }
 \concept{routes}
