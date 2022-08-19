@@ -4,7 +4,7 @@
 #' by the user.
 #'
 #' Note: see the function
-#' [`toptailgs()`](https://github.com/ropensci/stplanr/blob/master/R/toptail.R#L121)
+#' [`toptailgs()`](https://github.com/ropensci/stplanr/blob/v1.0.0/R/toptail.R)
 #' in {stplanr} v0.8.5 for an implementation that uses the geosphere
 #' package.
 #'
