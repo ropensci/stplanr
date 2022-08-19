@@ -22,7 +22,7 @@ by the user.
 }
 \details{
 Note: see the function
-\href{https://github.com/ropensci/stplanr/blob/master/R/toptail.R#L121}{\code{toptailgs()}}
+\href{https://github.com/ropensci/stplanr/blob/v1.0.0/R/toptail.R}{\code{toptailgs()}}
 in {stplanr} v0.8.5 for an implementation that uses the geosphere
 package.
 }
