@@ -177,7 +177,7 @@ overline2 <-
       stop("Only LINESTRING is supported")
     }
     if (is(sl, "data.table")) {
-      sl_df <- as.data.frame(sf::st_sf(sf::st_drop_geometry(sl))),
+      sl_df <- as.data.frame(sf::st_sf(sf::st_drop_geometry(sl)))
       sl_geometry <- ls$geometry
       sl <- sf::st_df(sl_df, geometry = sl_geometry)
   )
