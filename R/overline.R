@@ -146,7 +146,7 @@ overline <- function(sl,
                      attrib,
                      ncores = 1,
                      simplify = TRUE,
-                     regionalise = 1e5,
+                     regionalise = 1e9,
                      quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
                      fun = sum) {
   UseMethod("overline")
