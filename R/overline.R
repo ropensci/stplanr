@@ -177,9 +177,8 @@ overline2 <-
       stop("Only LINESTRING is supported")
     }
     if (is(sl, "data.table")) {
-      sl_df <- as.data.frame(sf::st_sf(sf::st_drop_geometry(sl)))
-      sl_geometry <- ls$geometry
-      sl <- sf::st_df(sl_df, geometry = sl_geometry)
+      sl_df <- as.data.frame(sf::st_drop_geometry(sl))
+      sl <- sf::st_sf(sl_df, geometry = sl$geometry)
     }
     if (any(c("1", "2", "3", "4", "grid") %in% attrib)) {
       stop("1, 2, 3, 4, grid are not a permitted column names, please rename that column")
