@@ -13,6 +13,7 @@
 #' @examples
 #' cents_sf
 #' @docType data
+#' @family data
 #' @keywords datasets
 #' @name cents_sf
 #' @format A spatial dataset with 8 rows and 5 columns
@@ -39,8 +40,9 @@ NULL
 #' structure is generalisable and typical of flow data from any source.
 #' The key variables are the origin and destination ids, which link to
 #' the georeferenced spatial objects.
-#' @family example data
+#' @family data
 #' @docType data
+#' @family data
 #' @keywords datasets
 #' @name flow
 #' @format A data frame with 49 rows and 15 columns
@@ -49,7 +51,6 @@ NULL
 #' Data frame of invented
 #' commuter flows with destinations in a different layer than the origins
 #'
-#' @family example data
 #' @examples
 #' \dontrun{
 #' # This is how the dataset was constructed
@@ -58,8 +59,8 @@ NULL
 #' flow_dests <- dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
 #' devtools::use_data(flow_dests)
 #' }
-#'
 #' @docType data
+#' @family data
 #' @keywords datasets
 #' @name flow_dests
 #' @usage data(flow_dests)
@@ -73,7 +74,7 @@ NULL
 #' representing the 'fastest' between `cents_sf`
 #' objects.
 #'
-#' @family example data
+#' @family data
 #' @docType data
 #' @keywords datasets
 #' @name routes_fast_sf
@@ -87,7 +88,7 @@ NULL
 #' Simulated travel route allocated to the transport network
 #' representing the 'quietest' between `cents_sf`.
 #'
-#' @family example data
+#' @family data
 #' @docType data
 #' @keywords datasets
 #' @name routes_slow_sf
@@ -109,6 +110,7 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name zones_sf
+#' @family data
 NULL
 
 #' Spatial lines dataset of commuter flows
@@ -116,7 +118,7 @@ NULL
 #'
 #' Flow data after conversion to a spatial format..
 #'
-#' @family example data
+#' @family data
 #' @docType data
 #' @keywords datasets
 #' @name flowlines_sf
@@ -129,7 +131,7 @@ NULL
 #' The flow of commuters using different segments of the road network represented in the
 #' [flowlines_sf()] and [routes_fast_sf()] datasets
 #'
-#' @family example data
+#' @family data
 #' @docType data
 #' @keywords datasets
 #' @name route_network_sf
@@ -141,6 +143,7 @@ NULL
 #' @keywords datasets
 #' @name osm_net_example
 #' @format An sf object
+#' @family data
 #' @examples
 #' osm_net_example
 NULL
@@ -153,6 +156,7 @@ NULL
 #' @keywords datasets
 #' @name od_data_sample
 #' @format A data frame (tibble) object
+#' @family data
 #' @examples
 #' od_data_sample
 NULL
@@ -165,6 +169,7 @@ NULL
 #' @keywords datasets
 #' @name od_data_lines
 #' @format A data frame (tibble) object
+#' @family data
 #' @examples
 #' od_data_lines
 NULL
@@ -180,6 +185,7 @@ NULL
 #' @keywords datasets
 #' @name od_data_routes
 #' @format A data frame (tibble) object
+#' @family data
 #' @examples
 #' od_data_routes
 NULL
@@ -225,7 +231,7 @@ NULL
 #'
 #' This dataset represents trip destinations on a different geographic
 #' level than the origins stored in the object `cents_sf`.
-#' @family example data
+#' @family data
 #' @examples
 #' destinations_sf
 #' @docType data

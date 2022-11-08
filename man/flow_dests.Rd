@@ -23,16 +23,22 @@ flow_dests$Area.of.workplace <- sample(x = destinations$WZ11CD, size = nrow(flow
 flow_dests <- dplyr::rename(flow_dests, WZ11CD = Area.of.workplace)
 devtools::use_data(flow_dests)
 }
-
 }
 \seealso{
-Other example data: 
+Other data: 
+\code{\link{cents_sf}},
 \code{\link{destinations_sf}},
 \code{\link{flowlines_sf}},
 \code{\link{flow}},
+\code{\link{od_data_lines}},
+\code{\link{od_data_routes}},
+\code{\link{od_data_sample}},
+\code{\link{osm_net_example}},
+\code{\link{read_table_builder}()},
 \code{\link{route_network_sf}},
 \code{\link{routes_fast_sf}},
-\code{\link{routes_slow_sf}}
+\code{\link{routes_slow_sf}},
+\code{\link{zones_sf}}
 }
-\concept{example data}
+\concept{data}
 \keyword{datasets}

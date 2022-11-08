@@ -13,4 +13,21 @@ See \code{data-raw/generate-data.Rmd} for details on how this was created.
 \examples{
 od_data_sample
 }
+\seealso{
+Other data: 
+\code{\link{cents_sf}},
+\code{\link{destinations_sf}},
+\code{\link{flow_dests}},
+\code{\link{flowlines_sf}},
+\code{\link{flow}},
+\code{\link{od_data_lines}},
+\code{\link{od_data_routes}},
+\code{\link{osm_net_example}},
+\code{\link{read_table_builder}()},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}},
+\code{\link{zones_sf}}
+}
+\concept{data}
 \keyword{datasets}

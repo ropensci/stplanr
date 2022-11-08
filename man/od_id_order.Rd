@@ -26,3 +26,19 @@ This function is slow on large datasets, see szudzik_pairing for faster alternat
 x <- data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
 od_id_order(x) # 4th line switches id1 and id2 so stplanr.key is in order
 }
+\seealso{
+Other od: 
+\code{\link{od2line}()},
+\code{\link{od2odf}()},
+\code{\link{od_aggregate_from}()},
+\code{\link{od_aggregate_to}()},
+\code{\link{od_coords2line}()},
+\code{\link{od_coords}()},
+\code{\link{od_id}},
+\code{\link{od_oneway}()},
+\code{\link{od_to_odmatrix}()},
+\code{\link{odmatrix_to_od}()},
+\code{\link{points2flow}()},
+\code{\link{points2odf}()}
+}
+\concept{od}

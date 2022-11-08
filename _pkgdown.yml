@@ -15,6 +15,7 @@ reference:
 - title: Work with and analyse routes
   contents:
   - has_concept("route_funs")
+  - starts_with("route")
 - title: Routing
   contents:
   - has_concept("routes")
@@ -23,10 +24,13 @@ reference:
   - has_concept("nodes")
 - title: Route network functions
   contents:
+  - starts_with("rnet")
+  - starts_with("over")
   - has_concept("rnet")
 - title: Geographic functions
   contents:
   - has_concept("geo")
+  - starts_with("stplanr")
 - title: Get transport data
   contents:
   - has_concept("data")

@@ -45,8 +45,6 @@ od_id_szudzik(d[[1]], d[[2]])
 od_id_max_min(d[[1]], d[[2]])
 }
 \seealso{
-od_oneway
-
 Other od: 
 \code{\link{od2line}()},
 \code{\link{od2odf}()},
@@ -54,6 +52,7 @@ Other od:
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
 \code{\link{od_coords}()},
+\code{\link{od_id_order}()},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},
 \code{\link{odmatrix_to_od}()},
