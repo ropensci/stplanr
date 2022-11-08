@@ -1,5 +1,7 @@
 # stplanr 1.0.2
 
+-   Update docs, fix missing functions issue (#499)
+
 # stplanr 1.0.1
 
 -   Fix for breaking change in `dodgr` (#494)
