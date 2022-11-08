@@ -13,6 +13,7 @@
 #' @examples
 #' cents_sf
 #' @docType data
+#' @family example data
 #' @keywords datasets
 #' @name cents_sf
 #' @format A spatial dataset with 8 rows and 5 columns
@@ -41,6 +42,7 @@ NULL
 #' the georeferenced spatial objects.
 #' @family example data
 #' @docType data
+#' @family example data
 #' @keywords datasets
 #' @name flow
 #' @format A data frame with 49 rows and 15 columns
@@ -60,6 +62,7 @@ NULL
 #' }
 #'
 #' @docType data
+#' @family example data
 #' @keywords datasets
 #' @name flow_dests
 #' @usage data(flow_dests)

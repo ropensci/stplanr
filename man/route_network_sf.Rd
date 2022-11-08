@@ -13,6 +13,7 @@ The flow of commuters using different segments of the road network represented i
 }
 \seealso{
 Other example data: 
+\code{\link{cents_sf}},
 \code{\link{destinations_sf}},
 \code{\link{flow_dests}},
 \code{\link{flowlines_sf}},

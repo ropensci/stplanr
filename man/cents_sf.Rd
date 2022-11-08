@@ -23,4 +23,15 @@ Cents was generated from the data repository pct-data: https://github.com/npct/p
 \examples{
 cents_sf
 }
+\seealso{
+Other example data: 
+\code{\link{destinations_sf}},
+\code{\link{flow_dests}},
+\code{\link{flowlines_sf}},
+\code{\link{flow}},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
+}
+\concept{example data}
 \keyword{datasets}

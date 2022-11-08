@@ -12,6 +12,7 @@ Flow data after conversion to a spatial format..
 }
 \seealso{
 Other example data: 
+\code{\link{cents_sf}},
 \code{\link{destinations_sf}},
 \code{\link{flow_dests}},
 \code{\link{flow}},

@@ -16,6 +16,7 @@ destinations_sf
 }
 \seealso{
 Other example data: 
+\code{\link{cents_sf}},
 \code{\link{flow_dests}},
 \code{\link{flowlines_sf}},
 \code{\link{flow}},

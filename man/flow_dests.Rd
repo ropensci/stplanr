@@ -27,6 +27,16 @@ devtools::use_data(flow_dests)
 }
 \seealso{
 Other example data: 
+\code{\link{cents_sf}},
+\code{\link{destinations_sf}},
+\code{\link{flowlines_sf}},
+\code{\link{flow}},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
+
+Other example data: 
+\code{\link{cents_sf}},
 \code{\link{destinations_sf}},
 \code{\link{flowlines_sf}},
 \code{\link{flow}},

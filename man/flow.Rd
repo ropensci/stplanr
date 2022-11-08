@@ -30,6 +30,16 @@ the georeferenced spatial objects.
 }
 \seealso{
 Other example data: 
+\code{\link{cents_sf}},
+\code{\link{destinations_sf}},
+\code{\link{flow_dests}},
+\code{\link{flowlines_sf}},
+\code{\link{route_network_sf}},
+\code{\link{routes_fast_sf}},
+\code{\link{routes_slow_sf}}
+
+Other example data: 
+\code{\link{cents_sf}},
 \code{\link{destinations_sf}},
 \code{\link{flow_dests}},
 \code{\link{flowlines_sf}},
