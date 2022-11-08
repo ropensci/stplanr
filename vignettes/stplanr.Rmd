@@ -31,7 +31,7 @@ A more detailed overview of the package's aims and capabilities is contained in 
 
 # Installing stplanr
 
-If you're new to programming and transport data, we recommend using **stplanr** interactively in an Integrated Development Environment (IDE), [RStudio](https://www.rstudio.com/products/rstudio/download/).
+If you're new to programming and transport data, we recommend using **stplanr** interactively in an Integrated Development Environment (IDE), [RStudio](https://posit.co/download/rstudio-desktop/).
 Broader guidance on R set-up can be found in [Efficient R Programming](https://csgillespie.github.io/efficientR/set-up.html) [@gillespie_efficient_2016], RStudio's [Education pages](https://education.rstudio.com/learn/beginner/) and on [CRAN](https://cran.r-project.org/).
 
 Once you have an R set-up you are happy with, the latest version can be installed as follows:
