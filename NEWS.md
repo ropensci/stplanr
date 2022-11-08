@@ -1,3 +1,5 @@
+# stplanr 1.0.2
+
 # stplanr 1.0.1
 
 -   Fix for breaking change in `dodgr` (#494)
