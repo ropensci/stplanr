@@ -6,6 +6,7 @@
 #' @examples
 #' x <- data.frame(id1 = c(1, 1, 2, 2, 3), id2 = c(1, 2, 3, 1, 4))
 #' od_id_order(x) # 4th line switches id1 and id2 so stplanr.key is in order
+#' @family od
 #' @export
 od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
   data.frame(
@@ -33,7 +34,6 @@ od_id_order <- function(x, id1 = names(x)[1], id2 = names(x)[2]) {
 #' @param y a vector of numeric, character, or factor values
 #' @param ordermatters logical, does the order of values matter to pairing, default = FALSE
 #' @family od
-#' @seealso od_oneway
 #' @name od_id
 #' @examples
 #' (d <- od_data_sample[2:9, 1:2])

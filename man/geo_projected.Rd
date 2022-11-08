@@ -31,3 +31,14 @@ if (lib_versions[3] >= "6.3.1") {
   geo_projected(shp, sf::st_buffer, dist = 100)
 }
 }
+\seealso{
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{geo_bb}()},
+\code{\link{geo_buffer}()},
+\code{\link{geo_length}()},
+\code{\link{geo_select_aeq}()},
+\code{\link{quadrant}()}
+}
+\concept{geo}

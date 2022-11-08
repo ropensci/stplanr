@@ -32,6 +32,7 @@ Other od:
 \code{\link{od_aggregate_from}()},
 \code{\link{od_aggregate_to}()},
 \code{\link{od_coords2line}()},
+\code{\link{od_id_order}()},
 \code{\link{od_id}},
 \code{\link{od_oneway}()},
 \code{\link{od_to_odmatrix}()},

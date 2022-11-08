@@ -23,3 +23,14 @@ The function is based on this stackexchange answer:
 shp <- zones_sf
 geo_select_aeq(shp)
 }
+\seealso{
+Other geo: 
+\code{\link{bbox_scale}()},
+\code{\link{geo_bb_matrix}()},
+\code{\link{geo_bb}()},
+\code{\link{geo_buffer}()},
+\code{\link{geo_length}()},
+\code{\link{geo_projected}()},
+\code{\link{quadrant}()}
+}
+\concept{geo}

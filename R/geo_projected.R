@@ -13,6 +13,7 @@
 #' @examples
 #' shp <- zones_sf
 #' geo_select_aeq(shp)
+#' @family geo
 #' @export
 geo_select_aeq <- function(shp) {
   UseMethod("geo_select_aeq")
@@ -54,6 +55,7 @@ geo_select_aeq.sfc <- function(shp) {
 #' @param ... Arguments to pass to `fun`
 #' @aliases gprojected
 #' @export
+#' @family geo
 #' @examples
 #' lib_versions <- sf::sf_extSoftVersion()
 #' lib_versions
@@ -120,6 +122,7 @@ geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE
 #'   plot(buff_sf$geometry)
 #'   geo_buffer(routes_fast_sf$geometry, dist = 50)
 #' }
+#' @family geo
 #' @export
 geo_buffer <- function(shp, dist = NULL, width = NULL, ...) {
   UseMethod("geo_buffer")
@@ -144,6 +147,7 @@ geo_buffer.sfc <- function(shp, ...) {
 #' if (lib_versions[3] >= "6.3.1") {
 #'   geo_length(routes_fast_sf)
 #' }
+#' @family geo
 #' @export
 geo_length <- function(shp) {
   UseMethod("geo_length")
