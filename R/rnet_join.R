@@ -132,9 +132,9 @@ rnet_split_lines = function(rnet_x, geo_y, dist = 1) {
   rnet_split_lines
 }
 
-#' Convert multilinestring object into linestrings, without losing and vertices
+#' Convert multilinestring object into linestrings, without losing vertices
 #'
-#' @param x LInestring object
+#' @param x Linestring object
 #' @export
 line_cast = function(x) {
   sf::st_cast(sf::st_cast(x, "MULTILINESTRING"), "LINESTRING")
