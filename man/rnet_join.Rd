@@ -5,7 +5,31 @@
 \title{Spatial join function that is designed to add columns to a 'target' route network
 from a 'source' route network that contains the base geometry, e.g. from OSM}
 \usage{
-rnet_join(x, y)
+rnet_join(
+  rnet_x,
+  rnet_y,
+  dist = 1,
+  length_y = TRUE,
+  key_column = 1,
+  split_y = TRUE
+)
+}
+\arguments{
+\item{rnet_x}{Target route network, the output will have the same geometries
+as features in this object.}
+
+\item{rnet_y}{Source route network. Columns from this route network object will
+be copied across to the new network.}
+
+\item{dist}{The buffer width around rnet_y in meters. 1 m by default.}
+
+\item{length_y}{Add a new column called \code{length_y}? Useful when joining based on
+length of segments (e.g. weighted mean). \code{TRUE} by default.}
+
+\item{key_column}{The index of the key (unique identifier) column in \code{rnet_x}.}
+
+\item{split_y}{Should the second route network be split at the start and
+end points of LINESTRING features in the first? \code{TRUE} by default.}
 }
 \description{
 Spatial join function that is designed to add columns to a 'target' route network
