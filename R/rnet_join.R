@@ -1,6 +1,18 @@
 #' Spatial join function that is designed to add columns to a 'target' route network
 #'   from a 'source' route network that contains the base geometry, e.g. from OSM
 #'
+#' The output of this function is an sf object containing polygons representing
+#' buffers around the route network in `rnet_x`.
+#' The examples below demonstrate how to join attributes from
+#' a route network object created with the function [overline()] onto
+#' OSM geometries.
+#'
+#' Note: The main purpose of this function is to join an ID from `rnet_x`
+#' onto `rnet_y`. Subsequent steps, e.g. with [dplyr::inner_join()]
+#' are needed to join the attributes back onto `rnet_x`.
+#' There are rarely 1-to-1 relationships between spatial network geometries
+#' so we take care when using this function.
+#'
 #' @param rnet_x Target route network, the output will have the same geometries
 #'   as features in this object.
 #' @param rnet_y Source route network. Columns from this route network object will
@@ -13,16 +25,36 @@
 #'   end points of LINESTRING features in the first? `TRUE` by default.
 #' @examples
 #' library(sf)
+#' library(dplyr)
+#' # Uncomment for interactive examples:
+#' # library(mapview)
+#' plot(route_network_small["flow"])
 #' plot(osm_net_example$geometry, lwd = 5, col = "grey")
-#' route_network_sf$flow = 1:nrow(route_network_small)
 #' plot(route_network_small["flow"], add = TRUE)
-#' joined_network = rnet_join(osm_net_example, route_network_sf)
+#' rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
+#' mapview(rnetj, zcol = "flow") +
+#'   mapview(route_network_small, zcol = "flow")
+#' plot(rnetj["flow"])
+#' plot(route_network_small["flow"], add = TRUE)
+#' rnetj_summary = rnetj %>%
+#'   sf::st_drop_geometry() %>%
+#'   group_by(osm_id) %>%
+#'     summarise(
+#'       flow = weighted.mean(flow, length_y, na.rm = TRUE),
+#'       )
+#' osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
+#' plot(osm_joined_rnet[c("flow", "highway")])
+#' mapview(joined_network) +
+#'   mapview(route_network_small)
 #' @export
-rnet_join = function(rnet_x, rnet_y, dist = 1, length_y = TRUE, key_column = 1,
-                     split_y = TRUE) {
+rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
+                     subset_x = TRUE, dist_subset = 5, split_y = TRUE, ...) {
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2)
+  if (subset_x) {
+    rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
+  }
   if (split_y) {
-    rnet_y = rnet_split_lines(rnet_y, rnet_x)
+    rnet_y = rnet_split_lines(rnet_y, rnet_x, dist = dist_subset)
   }
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
@@ -37,9 +69,10 @@ rnet_join = function(rnet_x, rnet_y, dist = 1, length_y = TRUE, key_column = 1,
 #' @param rnet_y The subsetting route network
 #' @param dist The buffer width around y in meters. 1 m by default.
 #' @param crop Crop `rnet_x`? `TRUE` is the default
-#' @param min_length Segments shorter than this *and* which were longer
-#'   before the cropping process will be removed. 3 m by default.
-rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_length = 3) {
+#' @param min_x Segments shorter than this multiple of dist
+#'   *and* which were longer
+#'   before the cropping process will be removed. 3 by default.
+rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3) {
   rnet_x$length_x_original = as.numeric(sf::st_length(rnet_x))
   rnet_y_union = sf::st_union(rnet_y)
   rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
@@ -47,6 +80,7 @@ rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_length = 3) {
     rnet_x = sf::st_intersection(rnet_x, rnet_y_buffer)
     rnet_x = line_cast(rnet_x)
     rnet_x$length_x_cropped = as.numeric(sf::st_length(rnet_x))
+    min_length = dist * min_x
     sel_short = rnet_x$length_x_cropped < min_length &
       rnet_x$length_x_original > min_length
     rnet_x = rnet_x[!sel_short, ]

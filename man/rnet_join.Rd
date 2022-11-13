@@ -8,10 +8,13 @@ from a 'source' route network that contains the base geometry, e.g. from OSM}
 rnet_join(
   rnet_x,
   rnet_y,
-  dist = 1,
+  dist = 5,
   length_y = TRUE,
   key_column = 1,
-  split_y = TRUE
+  subset_x = TRUE,
+  dist_subset = 5,
+  split_y = TRUE,
+  ...
 )
 }
 \arguments{
@@ -32,13 +35,40 @@ length of segments (e.g. weighted mean). \code{TRUE} by default.}
 end points of LINESTRING features in the first? \code{TRUE} by default.}
 }
 \description{
-Spatial join function that is designed to add columns to a 'target' route network
-from a 'source' route network that contains the base geometry, e.g. from OSM
+The output of this function is an sf object containing polygons representing
+buffers around the route network in \code{rnet_x}.
+The examples below demonstrate how to join attributes from
+a route network object created with the function \code{\link[=overline]{overline()}} onto
+OSM geometries.
+}
+\details{
+Note: The main purpose of this function is to join an ID from \code{rnet_x}
+onto \code{rnet_y}. Subsequent steps, e.g. with \code{\link[dplyr:mutate-joins]{dplyr::inner_join()}}
+are needed to join the attributes back onto \code{rnet_x}.
+There are rarely 1-to-1 relationships between spatial network geometries
+so we take care when using this function.
 }
 \examples{
 library(sf)
+library(dplyr)
+# Uncomment for interactive examples:
+# library(mapview)
+plot(route_network_small["flow"])
 plot(osm_net_example$geometry, lwd = 5, col = "grey")
-route_network_sf$flow = 1:nrow(route_network_small)
 plot(route_network_small["flow"], add = TRUE)
-joined_network = rnet_join(osm_net_example, route_network_sf)
+rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
+mapview(rnetj, zcol = "flow") +
+  mapview(route_network_small, zcol = "flow")
+plot(rnetj["flow"])
+plot(route_network_small["flow"], add = TRUE)
+rnetj_summary = rnetj \%>\%
+  sf::st_drop_geometry() \%>\%
+  group_by(osm_id) \%>\%
+    summarise(
+      flow = weighted.mean(flow, length_y, na.rm = TRUE),
+      )
+osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
+plot(osm_joined_rnet[c("flow", "highway")])
+mapview(joined_network) +
+  mapview(route_network_small)
 }

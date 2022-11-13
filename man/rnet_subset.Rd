@@ -4,7 +4,7 @@
 \alias{rnet_subset}
 \title{Subset one route network based on overlaps with another}
 \usage{
-rnet_subset(rnet_x, rnet_y, dist = 1, crop = TRUE, min_length = 3)
+rnet_subset(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3)
 }
 \arguments{
 \item{rnet_x}{The route network to be subset}
@@ -15,8 +15,9 @@ rnet_subset(rnet_x, rnet_y, dist = 1, crop = TRUE, min_length = 3)
 
 \item{crop}{Crop \code{rnet_x}? \code{TRUE} is the default}
 
-\item{min_length}{Segments shorter than this \emph{and} which were longer
-before the cropping process will be removed. 3 m by default.}
+\item{min_x}{Segments shorter than this multiple of dist
+\emph{and} which were longer
+before the cropping process will be removed. 3 by default.}
 }
 \description{
 Subset one route network based on overlaps with another
