@@ -3,7 +3,7 @@
 \docType{data}
 \name{route_network_sf}
 \alias{route_network_sf}
-\title{spatial lines dataset representing a route network}
+\title{Spatial lines dataset representing a route network}
 \format{
 A spatial lines dataset 80 rows and 1 column
 }
@@ -23,6 +23,7 @@ Other data:
 \code{\link{od_data_sample}},
 \code{\link{osm_net_example}},
 \code{\link{read_table_builder}()},
+\code{\link{route_network_small}},
 \code{\link{routes_fast_sf}},
 \code{\link{routes_slow_sf}},
 \code{\link{zones_sf}}

@@ -125,7 +125,7 @@ NULL
 #' @format A spatial lines dataset with 49 rows and 15 columns
 NULL
 
-#' spatial lines dataset representing a route network
+#' Spatial lines dataset representing a route network
 #'
 #'
 #' The flow of commuters using different segments of the road network represented in the
@@ -136,6 +136,19 @@ NULL
 #' @keywords datasets
 #' @name route_network_sf
 #' @format A spatial lines dataset 80 rows and 1 column
+NULL
+
+#' Spatial lines dataset representing a small route network
+#'
+#'
+#' The flow between randomly selected vertices on the `osm_net_example`.
+#' See `data-raw/route_network_small.R` for details.
+#'
+#' @family data
+#' @docType data
+#' @keywords datasets
+#' @name route_network_small
+#' @format A spatial lines dataset with one column: flow
 NULL
 
 #' Example of OpenStreetMap road network
