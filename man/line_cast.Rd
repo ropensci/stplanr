@@ -2,13 +2,13 @@
 % Please edit documentation in R/rnet_join.R
 \name{line_cast}
 \alias{line_cast}
-\title{Convert multilinestring object into linestrings, without losing and vertices}
+\title{Convert multilinestring object into linestrings}
 \usage{
 line_cast(x)
 }
 \arguments{
-\item{x}{LInestring object}
+\item{x}{Linestring object}
 }
 \description{
-Convert multilinestring object into linestrings, without losing and vertices
+Without losing vertices
 }

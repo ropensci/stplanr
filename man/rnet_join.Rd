@@ -2,8 +2,7 @@
 % Please edit documentation in R/rnet_join.R
 \name{rnet_join}
 \alias{rnet_join}
-\title{Spatial join function that is designed to add columns to a 'target' route network
-from a 'source' route network that contains the base geometry, e.g. from OSM}
+\title{Join route networks}
 \usage{
 rnet_join(
   rnet_x,
@@ -44,13 +43,17 @@ end points of LINESTRING features in the first? \code{TRUE} by default.}
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }
 \description{
-The output of this function is an sf object containing polygons representing
+This is a spatial join function that is enables adding columns to a
+'target' route network from a 'source' route
+network that contains the base geometry, e.g. from OSM
+}
+\details{
+The output is an sf object containing polygons representing
 buffers around the route network in \code{rnet_x}.
 The examples below demonstrate how to join attributes from
 a route network object created with the function \code{\link[=overline]{overline()}} onto
 OSM geometries.
-}
-\details{
+
 Note: The main purpose of this function is to join an ID from \code{rnet_x}
 onto \code{rnet_y}. Subsequent steps, e.g. with \code{\link[dplyr:mutate-joins]{dplyr::inner_join()}}
 are needed to join the attributes back onto \code{rnet_x}.

@@ -1,7 +1,10 @@
-#' Spatial join function that is designed to add columns to a 'target' route network
-#'   from a 'source' route network that contains the base geometry, e.g. from OSM
+#' Join route networks
 #'
-#' The output of this function is an sf object containing polygons representing
+#' This is a spatial join function that is enables adding columns to a
+#' 'target' route network from a 'source' route
+#' network that contains the base geometry, e.g. from OSM
+#'
+#' The output is an sf object containing polygons representing
 #' buffers around the route network in `rnet_x`.
 #' The examples below demonstrate how to join attributes from
 #' a route network object created with the function [overline()] onto
@@ -132,7 +135,9 @@ rnet_split_lines = function(rnet_x, geo_y, dist = 1) {
   rnet_split_lines
 }
 
-#' Convert multilinestring object into linestrings, without losing vertices
+#' Convert multilinestring object into linestrings
+#'
+#' Without losing vertices
 #'
 #' @param x Linestring object
 #' @export
