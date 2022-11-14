@@ -4,266 +4,559 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="stplanr">
 <title>stplanr: A Package for Transport Planning • stplanr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- ropensci --><link href="../ropensci.css" rel="stylesheet">
-<meta property="og:title" content="stplanr: A Package for Transport Planning">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="stplanr: A Package for Transport Planning">
 <meta property="og:description" content="stplanr">
-<meta name="twitter:card" content="summary">
-<!-- Matomo --><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
+<meta property="og:image" content="https://ropensci.github.io/stplanr/logo.png">
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]--><!-- Matomo --><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script><script src="https://ropensci.org/scripts/matomo.js"></script><noscript><p><img src="https://ropensci.matomo.cloud/matomo.php?idsite=1&amp;rec=1" style="border:0;" alt=""></p></noscript>
 <!-- End Matomo Code -->
 </head>
-<body data-spy="scroll" data-target="#toc">
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+    
 
-      <div class="navbar-brand-container">
-        <a href="https://ropensci.org"><img src="https://ropensci.org/img/icon_short_white.svg" id="hexlogo" alt="rOpenSci"></a>
-        <a class="navbar-brand" href="../index.html"><i>stplanr <small>v0.8.0.9000</small></i></a>
-      </div>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <a href="https://ropensci.org" class="external-link"><img src="https://ropensci.org/img/icon_short_white.svg" id="hexlogo" alt="rOpenSci"></a>
+    <a class="navbar-brand me-2" href="../index.html">stplanr</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto"></ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="nav-link" href="../articles/stplanr.html">Get started</a>
 </li>
-<li>
-  <a href="../articles/stplanr.html">Get started</a>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/stplanr-od.html">Origin-destination data with stplanr</a>
+    <a class="dropdown-item" href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
+    <a class="dropdown-item" href="../articles/stplanr-parallel.html">Parallel routing and performance with stplanr</a>
+    <a class="dropdown-item" href="../articles/stplanr-route-nets.html">Route networks with stplanr</a>
+    <a class="dropdown-item" href="../articles/stplanr-routing.html">Transport routing with stplanr</a>
+  </div>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/stplanr-od.html">Origin-destination data with stplanr</a>
-    </li>
-    <li>
-      <a href="../articles/stplanr-paper.html">stplanr: A Package for Transport Planning</a>
-    </li>
-    <li>
-      <a href="../articles/stplanr-parallel.html">Parallel routing and performance with stplanr</a>
-    </li>
-    <li>
-      <a href="../articles/stplanr-route-nets.html">Route networks with stplanr</a>
-    </li>
-    <li>
-      <a href="../articles/stplanr-routing.html">Transport routing with stplanr</a>
-    </li>
-  </ul>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
-</li>
-        <li>
-  <a href="https://github.com/ropensci/stplanr/">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/ropensci/stplanr/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><script src="stplanr-paper_files/header-attrs-2.5/header-attrs.js"></script><link href="stplanr-paper_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="stplanr-paper_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>stplanr: A Package for Transport Planning</h1>
-                        <h4 class="author">Robin Lovelace</h4>
+
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>stplanr: A Package for Transport Planning</h1>
+                        <h4 data-toc-skip class="author">Robin
+Lovelace</h4>
             <address class="author_afil">
-      University of Leeds<br><a class="author_email" href="mailto:#"></a><a href="mailto:r.lovelace@leeds.ac.uk" class="email">r.lovelace@leeds.ac.uk</a>
+      University of
+Leeds<br><a class="author_email" href="mailto:#"></a><a href="mailto:r.lovelace@leeds.ac.uk" class="email">r.lovelace@leeds.ac.uk</a>
       </address>
-                              <h4 class="author">Richard Ellison</h4>
+                              <h4 data-toc-skip class="author">Richard
+Ellison</h4>
             <address class="author_afil">
-      University of Sydney<br><a class="author_email" href="mailto:#"></a><a href="mailto:richard.ellison@sydney.edu.au" class="email">richard.ellison@sydney.edu.au</a>
+      University of
+Sydney<br><a class="author_email" href="mailto:#"></a><a href="mailto:richard.ellison@sydney.edu.au" class="email">richard.ellison@sydney.edu.au</a>
       </address>
                   
       
-      <small class="dont-index">Source: <a href="https://github.com/ropensci/stplanr/blob/master/../../vignettes/stplanr-paper.Rmd"><code>../../vignettes/stplanr-paper.Rmd</code></a></small>
-      <div class="hidden name"><code>stplanr-paper.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/stplanr/blob/HEAD/vignettes/stplanr-paper.Rmd" class="external-link"><code>vignettes/stplanr-paper.Rmd</code></a></small>
+      <div class="d-none name"><code>stplanr-paper.Rmd</code></div>
     </div>
 
     
         <div class="abstract">
       <p class="abstract">Abstract</p>
-      <p>Tools for transport planning should be flexible, scalable and transparent. The <strong>stplanr</strong> package demonstrates and provides a home for such tools, with an emphasis on spatial transport data and non-motorized modes. <strong>stplanr</strong> facilitates common transport planning tasks including: downloading and cleaning transport datasets; creating geographic ‘desire lines from origin-destination (OD) data; route assignment, via the <code>SpatialLinesNetwork</code> class and interfaces to routing services such as CycleStreets.net; calculation of route segment attributes such as bearing and aggregate flow; and `travel watershed’ analysis. This paper demonstrates this functionality using reproducible examples on real transport datasets. More broadly, the experience shows open source software can form the basis of a reproducible transport planning workflow. <strong>stplanr</strong>, alongside other packages and open source projects, could provide a more transparent and democratically accountable alternative to the current approach which is heavily reliant on proprietary and technically and financially inaccessible software.</p>
+      <p>Tools for transport planning should be flexible, scalable and
+      transparent. The <strong>stplanr</strong> package demonstrates and
+      provides a home for such tools, with an emphasis on spatial
+      transport data and non-motorized modes. <strong>stplanr</strong>
+      facilitates common transport planning tasks including: downloading
+      and cleaning transport datasets; creating geographic ‘desire lines
+      from origin-destination (OD) data; route assignment, via the
+      <code>SpatialLinesNetwork</code> class and interfaces to routing
+      services such as CycleStreets.net; calculation of route segment
+      attributes such as bearing and aggregate flow; and `travel
+      watershed’ analysis. This paper demonstrates this functionality
+      using reproducible examples on real transport datasets. More
+      broadly, the experience shows open source software can form the
+      basis of a reproducible transport planning workflow.
+      <strong>stplanr</strong>, alongside other packages and open source
+      projects, could provide a more transparent and democratically
+      accountable alternative to the current approach which is heavily
+      reliant on proprietary and technically and financially
+      inaccessible software.</p>
     </div>
     
-<div id="note" class="section level2">
-<h2 class="hasAnchor">
-<a href="#note" class="anchor"></a>Note</h2>
-<p>This paper has now been peer reviewed and published by the R Journal. Please see the published version at <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html">journal.r-project.org</a> and cite it as <span class="citation">Lovelace and Ellison (2018)</span>.</p>
+<div class="section level3">
+<h3 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a>
+</h3>
+<p>This paper has now been peer reviewed and published by the R Journal.
+Please see the published version at <a href="https://journal.r-project.org/archive/2018/RJ-2018-053/index.html" class="external-link">journal.r-project.org</a>
+and cite it as <span class="citation">Lovelace and Ellison
+(2018)</span>.</p>
+<p>The code presented in this paper requires stplanr 0.8.5 or earlier,
+which can be installed as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ropensci/stplanr"</span>, ref <span class="op">=</span> <span class="st">"v0.8.5"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>Transport planning can broadly be defined as the process of designing and evaluating transport interventions <span class="citation">(de Dios Ortuzar and Willumsen 2011)</span> usually with the ultimate aim of improving transport systems from economic, social and environmental perspectives. This inevitably involves a degree of subjective judgment and intuition. With the proliferation of new transport datasets — and the increasing availability of hardware and software to make sense of them — there is great potential for the discipline to become more evidence-based and scientific <span class="citation">(Balmer, Rieser, and Nagel 2009)</span>. Transport planners have always undertaken a wide range computational activities <span class="citation">(Boyce and Williams 2015)</span>, but with the digital revolution the demands have grown beyond the capabilities of a single, monolithic product. The diversity of tasks , and need for democratic accountability in public decision making, suggests that future-proof transport planning software should be:</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>Transport planning can broadly be defined as the process of designing
+and evaluating transport interventions <span class="citation">(de Dios
+Ortuzar and Willumsen 2011)</span> usually with the ultimate aim of
+improving transport systems from economic, social and environmental
+perspectives. This inevitably involves a degree of subjective judgment
+and intuition. With the proliferation of new transport datasets — and
+the increasing availability of hardware and software to make sense of
+them — there is great potential for the discipline to become more
+evidence-based and scientific <span class="citation">(Balmer, Rieser,
+and Nagel 2009)</span>. Transport planners have always undertaken a wide
+range computational activities <span class="citation">(Boyce and
+Williams 2015)</span>, but with the digital revolution the demands have
+grown beyond the capabilities of a single, monolithic product. The
+diversity of tasks , and need for democratic accountability in public
+decision making, suggests that future-proof transport planning software
+should be:</p>
 <ul>
 <li><p>flexible, able to handle a wide range of data formats</p></li>
-<li><p>scalable, able to work at multiple geographic levels from single streets to large cities and regions</p></li>
-<li><p>robust and reliable, tested on a range of datasets and able to work ’out of the box’ in a range of real-world projects</p></li>
-<li><p>open source and reproducible, ensuring transparency and encouraging citizen science</p></li>
+<li><p>scalable, able to work at multiple geographic levels from single
+streets to large cities and regions</p></li>
+<li><p>robust and reliable, tested on a range of datasets and able to
+work ’out of the box’ in a range of real-world projects</p></li>
+<li><p>open source and reproducible, ensuring transparency and
+encouraging citizen science</p></li>
 </ul>
-<p>This paper sets out to demonstrate that open source software with a command-line interface (CLI) can provide a foundation for transport planning software that meets each of these criteria. R provides a strong basis for progress in this direction because it already contains functionality used in common transport planning workflows. , and greatly improved R’s spatial abilities <span class="citation">(Bivand, Pebesma, and G’omez-Rubio 2013)</span>, work that is being consolidated and extended in the recent package.</p>
-<p>Building on these foundations a number of spatial packages have been developed for applied domains including: disease mapping and modelling, with packages such as and <span class="citation">(Kim and Wakefield 2016; Brown and Zhou 2016)</span>; spatial ecology, with the <strong>adehabitat</strong> family of packages <span class="citation">(Calenge 2006)</span>; and visualisation, with packages such as <strong>SpatialEpi</strong>, <strong>diseasemapping</strong> and <span class="citation">Brown (2016)</span>. However, there has been little prior work to develop R functionality designed specifically for transport planning, with the notable exceptions of <a href="https://r-forge.r-project.org/projects/travelr/">TravelR</a> (a package on R-Forge last updated in 2012) and <a href="https://github.com/ropensci/gtfsr">gtfsr</a> (a package for handling General Transit Feed Specification (GTFS) data).</p>
-<p>The purpose of <strong>stplanr</strong> is to provide a toolbox rather than a specific solution for transport planning, with an emphasis on spatial data and active modes. This emphasis is timely given the recent emphasis on sustainability <span class="citation">(Banister 2008)</span> and ‘Big Data’ <span class="citation">(Zheng et al. 2016)</span> in the wider field of transport planning. A major motivation was the lack of R packages, and open source software in general, for transport applications. This may be surprising given the uqiquity of transport problems;<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> R’s proficiency at handling spatial, temporal and travel survey data that describe transport systems; and the growing popularity of R in applied domains <span class="citation">(Jalal et al. 2017; Moore and Hutchinson 2017)</span>. Another motivation is the growth in open access datasets: the main purpose of early versions of the package was to process open origin-destination data <span class="citation">(Lovelace et al. 2017)</span>.</p>
-<p>R is already used in transport applications, as illustrated by recent research that applies packages from other domains to transport problems. For instance, <span class="citation">Efthymiou and Antoniou (2012)</span> use R to analyse the data collected from an online survey focused on car-sharing, bicycle-sharing and electric vehicles. <span class="citation">Efthymiou and Antoniou (2012)</span> also used R to collect and analyse transport-related data from Twitter using packages including , and . These packages were used to download, parse and plot the Twitter data using a method that can be repeated and the results reproduced or updated. More general statistical analyses have also been conducted on transport-related datasets using packages including and <span class="citation">(Diana 2012; Cerin et al. 2013)</span>. Despite the rising use of R for transport research, there has yet been to be a package for transport planning.</p>
-<p>The design of the R language, with its emphasis on flexibility, data processing and statistical modelling, suggests it can provide a powerful environment for transport planning research. There are many quantitative methods in transport planning, many of which fit into the classic ‘four stage’ transport model which involves the following steps <span class="citation">(de Dios Ortuzar and Willumsen 2011)</span>: (1) trip <em>generation</em> to estimate trip freqency from origins; (2) <em>distribution</em> of trips to destinations; (3) <em>modal split</em> of trips between walking, cycling, buses etc.; (4) <em>assignment</em> of trips to the transport route network. To this we would like to add two more stages for the big data age: (0) data processing and exploration; and (5) validation. This sequence is not the only way of transport modelling and some have argued that its dominance has reduced innovation. However it is certainly a common approach and provides a useful schema for classifying the kinds of task that <strong>stplanr</strong> can tackle:</p>
+<p>This paper sets out to demonstrate that open source software with a
+command-line interface (CLI) can provide a foundation for transport
+planning software that meets each of these criteria. R provides a strong
+basis for progress in this direction because it already contains
+functionality used in common transport planning workflows. , and greatly
+improved R’s spatial abilities <span class="citation">(Bivand, Pebesma,
+and G’omez-Rubio 2013)</span>, work that is being consolidated and
+extended in the recent package.</p>
+<p>Building on these foundations a number of spatial packages have been
+developed for applied domains including: disease mapping and modelling,
+with packages such as and <span class="citation">(Kim and Wakefield
+2016; Brown and Zhou 2016)</span>; spatial ecology, with the
+<strong>adehabitat</strong> family of packages <span class="citation">(Calenge 2006)</span>; and visualisation, with packages
+such as <strong>SpatialEpi</strong>, <strong>diseasemapping</strong> and
+<span class="citation">Brown (2016)</span>. However, there has been
+little prior work to develop R functionality designed specifically for
+transport planning, with the notable exceptions of <a href="https://r-forge.r-project.org/projects/travelr/" class="external-link">TravelR</a> (a
+package on R-Forge last updated in 2012) and <a href="https://github.com/r-transit/tidytransit" class="external-link">tidytransit</a> (a
+package for handling General Transit Feed Specification (GTFS)
+data).</p>
+<p>The purpose of <strong>stplanr</strong> is to provide a toolbox
+rather than a specific solution for transport planning, with an emphasis
+on spatial data and active modes. This emphasis is timely given the
+recent emphasis on sustainability <span class="citation">(Banister
+2008)</span> and ‘Big Data’ <span class="citation">(Zheng et al.
+2016)</span> in the wider field of transport planning. A major
+motivation was the lack of R packages, and open source software in
+general, for transport applications. This may be surprising given the
+ubiquity of transport problems;<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt; Many people can think of things that could be improved
+on their local transport networks, especially for walking, cycling and
+wheel-chairs. But most lack the evidence to communicate the issues, and
+potential solutions, to others.&lt;/p&gt;"><sup>1</sup></a> R’s proficiency at handling spatial,
+temporal and travel survey data that describe transport systems; and the
+growing popularity of R in applied domains <span class="citation">(Jalal
+et al. 2017; Moore and Hutchinson 2017)</span>. Another motivation is
+the growth in open access datasets: the main purpose of early versions
+of the package was to process open origin-destination data <span class="citation">(Lovelace et al. 2017)</span>.</p>
+<p>R is already used in transport applications, as illustrated by recent
+research that applies packages from other domains to transport problems.
+For instance, <span class="citation">Efthymiou and Antoniou
+(2012)</span> use R to analyse the data collected from an online survey
+focused on car-sharing, bicycle-sharing and electric vehicles. <span class="citation">Efthymiou and Antoniou (2012)</span> also used R to
+collect and analyse transport-related data from Twitter using packages
+including , and . These packages were used to download, parse and plot
+the Twitter data using a method that can be repeated and the results
+reproduced or updated. More general statistical analyses have also been
+conducted on transport-related datasets using packages including and
+<span class="citation">(Diana 2012; Cerin et al. 2013)</span>. Despite
+the rising use of R for transport research, there has yet been to be a
+package for transport planning.</p>
+<p>The design of the R language, with its emphasis on flexibility, data
+processing and statistical modelling, suggests it can provide a powerful
+environment for transport planning research. There are many quantitative
+methods in transport planning, many of which fit into the classic ‘four
+stage’ transport model which involves the following steps <span class="citation">(de Dios Ortuzar and Willumsen 2011)</span>: (1) trip
+<em>generation</em> to estimate trip freqency from origins; (2)
+<em>distribution</em> of trips to destinations; (3) <em>modal split</em>
+of trips between walking, cycling, buses etc.; (4) <em>assignment</em>
+of trips to the transport route network. To this we would like to add
+two more stages for the big data age: (0) data processing and
+exploration; and (5) validation. This sequence is not the only way of
+transport modelling and some have argued that its dominance has reduced
+innovation. However it is certainly a common approach and provides a
+useful schema for classifying the kinds of task that
+<strong>stplanr</strong> can tackle:</p>
 <ul>
-<li><p>Accessing and processing of data on transport infrastructure and behaviour (stage 0)</p></li>
+<li><p>Accessing and processing of data on transport infrastructure and
+behaviour (stage 0)</p></li>
 <li><p>Analysis and visualisation of the transport network (0)</p></li>
-<li><p>Analysis of origin-destination (OD) data and the visualisation of resulting ‘desire lines’</p></li>
-<li><p>The allocation of desire lines to roads and other guideways via routing services</p></li>
-<li><p>The aggregation of routes to estimate total levels of flow on segments throughout the transport network</p></li>
-<li><p>Development of models to estimate transport behaviour currently and under various scenarios of change</p></li>
-<li><p>The calculation of ‘catchment areas’ affected by transport infrastructure</p></li>
+<li><p>Analysis of origin-destination (OD) data and the visualisation of
+resulting ‘desire lines’</p></li>
+<li><p>The allocation of desire lines to roads and other guideways via
+routing services</p></li>
+<li><p>The aggregation of routes to estimate total levels of flow on
+segments throughout the transport network</p></li>
+<li><p>Development of models to estimate transport behaviour currently
+and under various scenarios of change</p></li>
+<li><p>The calculation of ‘catchment areas’ affected by transport
+infrastructure</p></li>
 </ul>
-<p>The automation of such tasks can assist researchers and practitioners to create evidence for decision making. If the data processing and analysis stages are fast and painless, more time can be dedicated to visualisation and decision making. This should allow researchers to focus on problems, rather than on clunky graphical user interfaces (GUIs), and ad-hoc scripts that could be generalised. Furthermore, if the process can be made reproducible and accessible (e.g. via online visualisation packages such as <strong>shiny</strong>), this could help transport planning move away from reliance on ‘black boxes’ <span class="citation">(Waddell 2002)</span> and empower citizens to challenge decisions made by transport planning authorities based on the evidence <span class="citation">(Hollander 2016)</span>. There are many advantages of using a scriptable, interactive and open source language such as R for transport planning. Such an approach enables: reproducible research; the automation and sharing of code between researchers; reduced barriers to innovation as anyone can create new features for the benefit of all planners; easier interaction with non domain experts (who will lack dedicated software); and integration with other software systems, as illustrated by the use of to generate JavaScript for sharing interactive maps for transport planning, as used in the publicly accessible Propensity to Cycle Tool <span class="citation">(Lovelace et al. 2017)</span>. Furthermore, R has a strong user community which can support newcomers (<em>stplanr</em> was peer reviewed thanks to the community surrounding ROpenSci). The advantages of using R specifically to develop the functionality described in this paper are that it has excellent geo-statistical capabilities <span class="citation">(Pebesma et al. 2015)</span>, visualisation packages (e.g. <strong>tmap</strong>, <strong>ggplot2</strong>), support for logit models (which are useful for modelling modal shift), and support for the many formats that transport datasets are stored in (e.g. via the <strong>haven</strong> and <strong>rio</strong> packages).</p>
+<p>The automation of such tasks can assist researchers and practitioners
+to create evidence for decision making. If the data processing and
+analysis stages are fast and painless, more time can be dedicated to
+visualisation and decision making. This should allow researchers to
+focus on problems, rather than on clunky graphical user interfaces
+(GUIs), and ad-hoc scripts that could be generalised. Furthermore, if
+the process can be made reproducible and accessible (e.g. via online
+visualisation packages such as <strong>shiny</strong>), this could help
+transport planning move away from reliance on ‘black boxes’ <span class="citation">(Waddell 2002)</span> and empower citizens to challenge
+decisions made by transport planning authorities based on the evidence
+<span class="citation">(Hollander 2016)</span>. There are many
+advantages of using a scriptable, interactive and open source language
+such as R for transport planning. Such an approach enables: reproducible
+research; the automation and sharing of code between researchers;
+reduced barriers to innovation as anyone can create new features for the
+benefit of all planners; easier interaction with non domain experts (who
+will lack dedicated software); and integration with other software
+systems, as illustrated by the use of to generate JavaScript for sharing
+interactive maps for transport planning, as used in the publicly
+accessible Propensity to Cycle Tool <span class="citation">(Lovelace et
+al. 2017)</span>. Furthermore, R has a strong user community which can
+support newcomers (<em>stplanr</em> was peer reviewed thanks to the
+community surrounding ROpenSci). The advantages of using R specifically
+to develop the functionality described in this paper are that it has
+excellent geo-statistical capabilities <span class="citation">(Pebesma
+et al. 2015)</span>, visualisation packages (e.g. <strong>tmap</strong>,
+<strong>ggplot2</strong>), support for logit models (which are useful
+for modelling modal shift), and support for the many formats that
+transport datasets are stored in (e.g. via the <strong>haven</strong>
+and <strong>rio</strong> packages).</p>
 </div>
-<div id="package-structure-and-functionality" class="section level1">
-<h1 class="hasAnchor">
-<a href="#package-structure-and-functionality" class="anchor"></a>Package structure and functionality</h1>
-<p>The package can be installed and loaded in the usual way (see the package’s <a href="https://github.com/ropensci/stplanr">README</a> for dependencies and access to development versions):</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"stplanr"</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="package-structure-and-functionality">Package structure and functionality<a class="anchor" aria-label="anchor" href="#package-structure-and-functionality"></a>
+</h2>
+<p>The package can be installed and loaded in the usual way (see the
+package’s <a href="https://github.com/ropensci/stplanr" class="external-link">README</a> for
+dependencies and access to development versions):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/stplanr">stplanr</a></span><span class="op">)</span></code></pre></div>
-<p>As illustrated by the message emitted when <strong>stplanr</strong> is loaded, it depends on . This means that the spatial data classes commonly used in the package will work with generic R functions such as <code>summary</code>, <code>aggregate</code> and, as illustrated in the figures below, <code>plot</code> .</p>
-<div id="core-functions-and-classes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#core-functions-and-classes" class="anchor"></a>Core functions and classes</h2>
-<p>The package’s core functions are structured around 3 common types of spatial transport data:</p>
-<ul>
-<li>Origin-destination (OD) data, which report the number of people travelling between origin-destination pairs. This type of data is not explicitly spatial (OD datasets are usually represented as data frames) but represents movement over space between points in geographical space. An example is provided in the <code>flow</code> dataset.</li>
-<li>Line data, one dimensional linear features on the surface of the Earth. These are typically stored as a <code>SpatialLinesDataFrame</code>.</li>
-<li>Route data are special types of lines which have been allocated to the transport network. Routes typically result from the allocation of a straight ‘desire line’ allocated to the route network with a <code>route_</code> function. Route network represent many overlapping routes. All are typically stored as <code>SpatialLinesDataFrame</code>.</li>
-</ul>
-<p>For ease of use, functions focussed on each data type have been developed with names prefixed with <code>od_</code>, <code>line_</code> and <code>route_</code> respectively. A selection of these is presented in Table 1. Additional ‘core functions’ could be developed, such as those prefixed with <code>rn_</code> (for working with route network data) and <code>g_</code> functions for geographic operations such as buffer creation on lat/lon projected data (this function is currently named <code>buff_geo</code>). We plan to elicit feedback on such changes before implementing them.</p>
-<p>With a tip of the hat to the concept of type stability (e.g. as implemented in ), we also plan to make the core functions of <strong>stplanr</strong> more type-stable in future releases. Core functions, which begin with the prefixes listed above, could follow ’s lead and return only objects with the same class as that of the input. However there are limitations to this approach: it will break existing functionality and mean that output objects have a larger size than necessary (<code>line_bearing</code>, for example, does not need to duplicate the spatial data contained in its input). Instead, we plan to continue to name functions around the type of <em>input</em> data they take, but are open minded about function input-output data class conventions, especially in the context of the new class system implemented in .</p>
-<p>A class system has not been developed for each data type (this option is discussed in the final section). The most common data types used in <strong>stplanr</strong> are assumed to be data frames and spatial datasets.</p>
-<p>Transport datasets are very diverse. There are therefore many other functions which have more ad-hock names. Rather attempt a systematic description of each of <strong>stplanr</strong>’s functions (which can be gleaned from the online manual) it is more illuminating to see how they work together, as part of a transport planning workflow. As with most workflows, this begins with data access and ends with visualisation.</p>
-</div>
-<div id="accessing-and-processing-transport-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accessing-and-processing-transport-data" class="anchor"></a>Accessing and processing transport data</h2>
-<p>Gaining access to data is often the first stage in transport research. This is often a long and protracted process which is thankfully becoming easier thanks to the ‘open data’ movement and packages such as <strong>tigris</strong> for making data access from within R easier .</p>
-<p><strong>stplanr</strong> provides a variety of different functions that facilitate importing common data formats used for transport analysis into R. Although transport analysis generally requires some transport-specific datasets, it also typically relies heavily on common sources of data including census data. This being the case, <strong>stplanr</strong> also includes functions that may be useful to those not involved in transport research. This includes the <code>read_table_builder</code> function for importing data from the Australian Bureau of Statistics (ABS) and the UK’s Stats19 road traffic casualty dataset. A brief example of the latter is demonstrated below, which begins with downloading the data (warning this downloads ~100 MB of data):</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"stplanr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">dl_stats19</span><span class="op">(</span><span class="op">)</span> <span class="co"># download and extract stats19 road traffic casualty data</span></code></pre></div>
-<pre><code>#&gt; [1] "Data saved at: /tmp/RtmpppF3E2/Accidents0514.csv"
-#&gt; [2] "Data saved at: /tmp/RtmpppF3E2/Casualties0514.csv"
-#&gt; [3] "Data saved at: /tmp/RtmpppF3E2/Vehicles0514.csv"  </code></pre>
-<p>Once the data has been saved in the default directory, determined by <code><a href="https://rdrr.io/r/base/tempfile.html">tempdir()</a></code>, it can be read-in and cleaned with the <code>read_stats19_</code> functions (note these call <code>format_stats19_</code> functions internally to clean the datasets and add correct labels to the variables):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ac</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ac</span><span class="op">(</span><span class="op">)</span>
-<span class="va">ca</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ca</span><span class="op">(</span><span class="op">)</span>
-<span class="va">ve</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ve</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>The resulting datasets (representing accident, casualty and vehicle level data, respectively) can be merged and made geographic, as illustrated below:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/stplanr" class="external-link">stplanr</a></span><span class="op">)</span></span></code></pre></div>
+<p>As illustrated by the message emitted when <strong>stplanr</strong>
+is loaded, it depends on . This means that the spatial data classes
+commonly used in the package will work with generic R functions such as
+<code>summary</code>, <code>aggregate</code> and, as illustrated in the
+figures below, <code>plot</code> .</p>
+<div class="section level3">
+<h3 id="core-functions-and-classes">Core functions and classes<a class="anchor" aria-label="anchor" href="#core-functions-and-classes"></a>
+</h3>
+<p>The package’s core functions are structured around 3 common types of
+spatial transport data:</p>
+<ul>
+<li>Origin-destination (OD) data, which report the number of people
+travelling between origin-destination pairs. This type of data is not
+explicitly spatial (OD datasets are usually represented as data frames)
+but represents movement over space between points in geographical space.
+An example is provided in the <code>flow</code> dataset.</li>
+<li>Line data, one dimensional linear features on the surface of the
+Earth. These are typically stored as a
+<code>SpatialLinesDataFrame</code>.</li>
+<li>Route data are special types of lines which have been allocated to
+the transport network. Routes typically result from the allocation of a
+straight ‘desire line’ allocated to the route network with a
+<code>route_</code> function. Route network represent many overlapping
+routes. All are typically stored as
+<code>SpatialLinesDataFrame</code>.</li>
+</ul>
+<p>For ease of use, functions focussed on each data type have been
+developed with names prefixed with <code>od_</code>, <code>line_</code>
+and <code>route_</code> respectively. A selection of these is presented
+in Table 1. Additional ‘core functions’ could be developed, such as
+those prefixed with <code>rn_</code> (for working with route network
+data) and <code>g_</code> functions for geographic operations such as
+buffer creation on lat/lon projected data (this function is currently
+named <code>buff_geo</code>). We plan to elicit feedback on such changes
+before implementing them.</p>
+<p>With a tip of the hat to the concept of type stability (e.g. as
+implemented in ), we also plan to make the core functions of
+<strong>stplanr</strong> more type-stable in future releases. Core
+functions, which begin with the prefixes listed above, could follow ’s
+lead and return only objects with the same class as that of the input.
+However there are limitations to this approach: it will break existing
+functionality and mean that output objects have a larger size than
+necessary (<code>line_bearing</code>, for example, does not need to
+duplicate the spatial data contained in its input). Instead, we plan to
+continue to name functions around the type of <em>input</em> data they
+take, but are open minded about function input-output data class
+conventions, especially in the context of the new class system
+implemented in .</p>
+<p>A class system has not been developed for each data type (this option
+is discussed in the final section). The most common data types used in
+<strong>stplanr</strong> are assumed to be data frames and spatial
+datasets.</p>
+<p>Transport datasets are very diverse. There are therefore many other
+functions which have more ad-hock names. Rather attempt a systematic
+description of each of <strong>stplanr</strong>’s functions (which can
+be gleaned from the online manual) it is more illuminating to see how
+they work together, as part of a transport planning workflow. As with
+most workflows, this begins with data access and ends with
+visualisation.</p>
+</div>
+<div class="section level3">
+<h3 id="accessing-and-processing-transport-data">Accessing and processing transport data<a class="anchor" aria-label="anchor" href="#accessing-and-processing-transport-data"></a>
+</h3>
+<p>Gaining access to data is often the first stage in transport
+research. This is often a long and protracted process which is
+thankfully becoming easier thanks to the ‘open data’ movement and
+packages such as <strong>tigris</strong> for making data access from
+within R easier .</p>
+<p><strong>stplanr</strong> provides a variety of different functions
+that facilitate importing common data formats used for transport
+analysis into R. Although transport analysis generally requires some
+transport-specific datasets, it also typically relies heavily on common
+sources of data including census data. This being the case,
+<strong>stplanr</strong> also includes functions that may be useful to
+those not involved in transport research. This includes the
+<code>read_table_builder</code> function for importing data from the
+Australian Bureau of Statistics (ABS) and the UK’s Stats19 road traffic
+casualty dataset. A brief example of the latter is demonstrated below,
+which begins with downloading the data (warning this downloads ~100 MB
+of data):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">dl_stats19</span><span class="op">(</span><span class="op">)</span> <span class="co"># download and extract stats19 road traffic casualty data</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] "Data saved at: /tmp/RtmpppF3E2/Accidents0514.csv"</span></span>
+<span><span class="co">#&gt; [2] "Data saved at: /tmp/RtmpppF3E2/Casualties0514.csv"</span></span>
+<span><span class="co">#&gt; [3] "Data saved at: /tmp/RtmpppF3E2/Vehicles0514.csv"  </span></span></code></pre>
+<p>Once the data has been saved in the default directory, determined by
+<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>, it can be read-in and cleaned with the
+<code>read_stats19_</code> functions (note these call
+<code>format_stats19_</code> functions internally to clean the datasets
+and add correct labels to the variables):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="va">ca_ac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ca</span>, <span class="va">ac</span><span class="op">)</span>
-<span class="va">ca_cycle</span> <span class="op">&lt;-</span> <span class="va">ca_ac</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Casualty_Severity</span> <span class="op">==</span> <span class="st">"Fatal"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Latitude</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>Age <span class="op">=</span> <span class="va">Age_of_Casualty</span>, Mode <span class="op">=</span> <span class="va">Casualty_Type</span>, <span class="va">Longitude</span>, <span class="va">Latitude</span><span class="op">)</span>
-<span class="va">ca_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPoints.html">SpatialPointsDataFrame</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="va">ca_cycle</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, data <span class="op">=</span> <span class="va">ca_cycle</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>Now that this casualty data has been cleaned, subsetted (to only include serious cycle crashes) and converted into a spatial class system, we can analyse them using geographical datasets of the type commonly used by <strong>stplanr</strong>. The following code, for example, geographically subsets the dataset to include only crashes that occured within the bounding box of a <a href="https://github.com/ropensci/stplanr/blob/master/data/route_network.rda?raw=true">route network dataset</a> provided by <strong>stplanr</strong> (from version 0.1.7 and beyond) using the function <code>bb2poly</code>, which converts a spatial dataset into a box, represented as a rectangular <code>SpatialPolygonsDataFrame</code>:</p>
+<code class="sourceCode R"><span><span class="va">ac</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ac</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">ca</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ca</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">ve</span> <span class="op">&lt;-</span> <span class="fu">read_stats19_ve</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting datasets (representing accident, casualty and vehicle
+level data, respectively) can be merged and made geographic, as
+illustrated below:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"route_network"</span><span class="op">)</span> <span class="co"># devtools::install_github("ropensci/splanr")version 0.1.7</span>
-<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">ca_sp</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span>
-<span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geo_bb.html">bb2poly</a></span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">bb</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/is.projected.html">proj4string</a></span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span>
-<span class="va">ca_local</span> <span class="op">&lt;-</span> <span class="va">ca_sp</span><span class="op">[</span><span class="va">bb</span>, <span class="op">]</span></code></pre></div>
-<p>The above code chunk shows the importance of understanding geographical data when working with transport data. It is only by converting the casualty data into a spatial data class, and adding a coordinate reference system (CRS), that transport planners and researchers can link this important dataset back to the route network. We can now perform GIS operations on the results. The next code chunk, for example, finds all the fatalities that took place within 100 m of the route network, using the function <code>buff_geo</code>:</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="va">ca_ac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span><span class="va">ca</span>, <span class="va">ac</span><span class="op">)</span></span>
+<span><span class="va">ca_cycle</span> <span class="op">&lt;-</span> <span class="va">ca_ac</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Casualty_Severity</span> <span class="op">==</span> <span class="st">"Fatal"</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">Latitude</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span>Age <span class="op">=</span> <span class="va">Age_of_Casualty</span>, Mode <span class="op">=</span> <span class="va">Casualty_Type</span>, <span class="va">Longitude</span>, <span class="va">Latitude</span><span class="op">)</span></span>
+<span><span class="va">ca_sp</span> <span class="op">&lt;-</span> <span class="fu">SpatialPointsDataFrame</span><span class="op">(</span>coords <span class="op">=</span> <span class="va">ca_cycle</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, data <span class="op">=</span> <span class="va">ca_cycle</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>Now that this casualty data has been cleaned, subsetted (to only
+include serious cycle crashes) and converted into a spatial class
+system, we can analyse them using geographical datasets of the type
+commonly used by <strong>stplanr</strong>. The following code, for
+example, geographically subsets the dataset to include only crashes that
+occured within the bounding box of a route network dataset provided by
+<strong>stplanr</strong> (from version 0.1.7 and beyond) using the
+function <code>bb2poly</code>, which converts a spatial dataset into a
+box, represented as a rectangular
+<code>SpatialPolygonsDataFrame</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rnet_buff_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geo_buffer.html">geo_buffer</a></span><span class="op">(</span><span class="va">route_network</span>, width <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
-<span class="va">ca_buff</span> <span class="op">&lt;-</span> <span class="va">ca_local</span><span class="op">[</span><span class="va">rnet_buff_100</span>, <span class="op">]</span></code></pre></div>
-<p>These can be visualised using base R graphics, extended by , as illustrated in Figure . This provides a good start for analysis but for publication-quality plots and interactive plots, designed for public engagement, we recommend using dedicated visualisation packages that work with spatial data such as .</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"route_network"</span><span class="op">)</span> <span class="co"># devtools::install_github("ropensci/splanr")version 0.1.7</span></span>
+<span><span class="fu">proj4string</span><span class="op">(</span><span class="va">ca_sp</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">proj4string</span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span></span>
+<span><span class="va">bb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geo_bb.html">bb2poly</a></span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span></span>
+<span><span class="fu">proj4string</span><span class="op">(</span><span class="va">bb</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">proj4string</span><span class="op">(</span><span class="va">route_network</span><span class="op">)</span></span>
+<span><span class="va">ca_local</span> <span class="op">&lt;-</span> <span class="va">ca_sp</span><span class="op">[</span><span class="va">bb</span>, <span class="op">]</span></span></code></pre></div>
+<p>The above code chunk shows the importance of understanding
+geographical data when working with transport data. It is only by
+converting the casualty data into a spatial data class, and adding a
+coordinate reference system (CRS), that transport planners and
+researchers can link this important dataset back to the route network.
+We can now perform GIS operations on the results. The next code chunk,
+for example, finds all the fatalities that took place within 100 m of
+the route network, using the function <code>buff_geo</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">bb</span>, lty <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rnet_buff_100</span>, col <span class="op">=</span> <span class="st">"grey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">ca_local</span>, pch <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">ca_buff</span>, cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="creating-geographic-desire-lines" class="section level2">
-<h2 class="hasAnchor">
-<a href="#creating-geographic-desire-lines" class="anchor"></a>Creating geographic desire lines</h2>
-<p>Perhaps the most common type of aggregate-level transport information is origin-destination (‘OD’) data. This can be presented either as a matrix or (more commonly) a long table of OD pairs. An example of this type of raw data is provided below (see <code><a href="../reference/flow.html">?flow</a></code> to see how this dataset was created).</p>
+<code class="sourceCode R"><span><span class="va">rnet_buff_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geo_buffer.html">geo_buffer</a></span><span class="op">(</span><span class="va">route_network</span>, width <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">ca_buff</span> <span class="op">&lt;-</span> <span class="va">ca_local</span><span class="op">[</span><span class="va">rnet_buff_100</span>, <span class="op">]</span></span></code></pre></div>
+<p>These can be visualised using base R graphics, extended by , as
+illustrated in Figure <span class="math inline">\(\ref{fig:fats}\)</span>. This provides a good
+start for analysis but for publication-quality plots and interactive
+plots, designed for public engagement, we recommend using dedicated
+visualisation packages that work with spatial data such as .</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"flow"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">flow</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>Although the flow data displayed above describes movement over geographical space, it contains no explicitly geographical information. Instead, the coordinates of the origins and destinations are linked to a separate geographical dataset which also must be loaded to analyse the flows. This is a common problem solved by the function <code>od2line</code>. The geographical data is a set of points representing centroids of the origin and destinations, saved as a <code>SpatialPointsDataFrame</code>. Geographical data in R is best represented as such <code>Spatial*</code> objects, which use the <code>S4</code> object engine. This explains the close integration of <strong>stplanr</strong> with R’s spatial packages, especially <strong>sp</strong>, which defines the <code>S4</code> spatial object system.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"cents"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">cents</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>We use <code>od2line</code> to combine <code>flow</code> and <code>cents</code>, to join the former to the latter. We will visualise the <code>l</code> object created below in the next section.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od2line.html">od2line</a></span><span class="op">(</span>flow <span class="op">=</span> <span class="va">flow</span>, zones <span class="op">=</span> <span class="va">cents</span><span class="op">)</span></code></pre></div>
-<p>The data is now in a form that is much easier to analyse. We can plot the data with the command <code><a href="https://r-spatial.github.io/sf/reference/plot.html">plot(l)</a></code>, which was not possible before. Because the <code>SpatialLinesDataFrame</code> object also contains data per line, it also helps with visualisation of the flows, as illustrated in Figure .</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bb</span>, lty <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rnet_buff_100</span>, col <span class="op">=</span> <span class="st">"grey"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">ca_local</span>, pch <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">ca_buff</span>, cex <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="allocating-flows-to-the-transport-network" class="section level2">
-<h2 class="hasAnchor">
-<a href="#allocating-flows-to-the-transport-network" class="anchor"></a>Allocating flows to the transport network</h2>
-<p>A common problem faced by transport researchers is network allocation: converting the ‘as the crow flies’ lines illustrated in the figure above into routes. These are the complex, winding paths that people and animals make to avoid obstacles such as buildings and to make the journey faster and more efficient (e.g. by following the route network).</p>
-<p>This is difficult (and was until recently near impossible using free software) because of the size and complexity of transport networks, the complexity of realistic routing algorithms and need for context-specificity in the routing engine. Inexperienced cyclists, for example, would take a very different route than a heavy goods vehicle. <strong>stplanr</strong> tackles this issue by using 3rd party APIs to provide route-allocation.</p>
-<p>Route allocation is undertaken by  functions such as  and . These allocate a single OD pair, represented as a text string to be ‘geo-coded,’ a pair of of coordinates, or two <code>SpatialPoints</code> objects, representing origins and destinations. This is illustrated below with <code>route_cyclestreet</code>, which uses the <a href="https://www.cyclestreets.net/api/">CycleStreets.net API</a>, a routing service “by cyclists for cyclists” that offers a range route strategies (primarily ‘fastest,’ ‘quietest’ and ‘balanced’) that are based on a detailed analysis of cyclist wayfinding:<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<div class="section level3">
+<h3 id="creating-geographic-desire-lines">Creating geographic desire lines<a class="anchor" aria-label="anchor" href="#creating-geographic-desire-lines"></a>
+</h3>
+<p>Perhaps the most common type of aggregate-level transport information
+is origin-destination (‘OD’) data. This can be presented either as a
+matrix or (more commonly) a long table of OD pairs. An example of this
+type of raw data is provided below (see <code><a href="../reference/flow.html">?flow</a></code> to see how
+this dataset was created).</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"flow"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flow</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>Although the flow data displayed above describes movement over
+geographical space, it contains no explicitly geographical information.
+Instead, the coordinates of the origins and destinations are linked to a
+separate geographical dataset which also must be loaded to analyse the
+flows. This is a common problem solved by the function
+<code>od2line</code>. The geographical data is a set of points
+representing centroids of the origin and destinations, saved as a
+<code>SpatialPointsDataFrame</code>. Geographical data in R is best
+represented as such <code>Spatial*</code> objects, which use the
+<code>S4</code> object engine. This explains the close integration of
+<strong>stplanr</strong> with R’s spatial packages, especially
+<strong>sp</strong>, which defines the <code>S4</code> spatial object
+system.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"cents"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">cents</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>We use <code>od2line</code> to combine <code>flow</code> and
+<code>cents</code>, to join the former to the latter. We will visualise
+the <code>l</code> object created below in the next section.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">route_bl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route_cyclestreets.html">route_cyclestreets</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"Bradford"</span>, to <span class="op">=</span> <span class="st">"Leeds"</span><span class="op">)</span>
-<span class="va">route_c1_c2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route_cyclestreets.html">route_cyclestreets</a></span><span class="op">(</span><span class="va">cents</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">cents</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>The raw output from routing APIs is usually provided as a JSON or GeoJSON text string. By default, <code>route_cyclestreet</code> saves a number of key variables (including length, time, hilliness and busyness variables generated by CycleStreets.net) from the attribute data provided by the API. If the user wants to save the raw output, the <code>save_raw</code> argument can be used:</p>
+<code class="sourceCode R"><span><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/od2line.html">od2line</a></span><span class="op">(</span>flow <span class="op">=</span> <span class="va">flow</span>, zones <span class="op">=</span> <span class="va">cents</span><span class="op">)</span></span></code></pre></div>
+<p>The data is now in a form that is much easier to analyse. We can plot
+the data with the command <code>plot(l)</code>, which was not possible
+before. Because the <code>SpatialLinesDataFrame</code> object also
+contains data per line, it also helps with visualisation of the flows,
+as illustrated in Figure <span class="math inline">\(\ref{fig:lines_routes}\)</span>.</p>
+</div>
+<div class="section level3">
+<h3 id="allocating-flows-to-the-transport-network">Allocating flows to the transport network<a class="anchor" aria-label="anchor" href="#allocating-flows-to-the-transport-network"></a>
+</h3>
+<p>A common problem faced by transport researchers is network
+allocation: converting the ‘as the crow flies’ lines illustrated in the
+figure above into routes. These are the complex, winding paths that
+people and animals make to avoid obstacles such as buildings and to make
+the journey faster and more efficient (e.g. by following the route
+network).</p>
+<p>This is difficult (and was until recently near impossible using free
+software) because of the size and complexity of transport networks, the
+complexity of realistic routing algorithms and need for
+context-specificity in the routing engine. Inexperienced cyclists, for
+example, would take a very different route than a heavy goods vehicle.
+<strong>stplanr</strong> tackles this issue by using 3rd party APIs to
+provide route-allocation.</p>
+<p>Route allocation is undertaken by functions such as and . These
+allocate a single OD pair, represented as a text string to be
+‘geo-coded’, a pair of of coordinates, or two <code>SpatialPoints</code>
+objects, representing origins and destinations. This is illustrated
+below with <code>route_cyclestreet</code>, which uses the <a href="https://www.cyclestreets.net/api/" class="external-link">CycleStreets.net API</a>, a
+routing service “by cyclists for cyclists” that offers a range route
+strategies (primarily ‘fastest’, ‘quietest’ and ‘balanced’) that are
+based on a detailed analysis of cyclist wayfinding:<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;An API key is needed for this function to work. This can
+be requested (or purchased for large scale routing) from &lt;a href="https://www.cyclestreets.net/api/apply/" class="external-link"&gt;cyclestreets.net/api/apply&lt;/a&gt;.
+See &lt;code&gt;?route_cyclestreet&lt;/code&gt; for details. Thanks to Martin
+Lucas-Smith and Simon Nuttall for making this possible.&lt;/p&gt;'><sup>2</sup></a></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">route_bl_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/route_cyclestreets.html">route_cyclestreets</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"Bradford"</span>, to <span class="op">=</span> <span class="st">"Leeds"</span>, save_raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>Additional arguments taken by the <code>route_</code> functions depend on the routing function in question. By changing the <code>plan</code> argument of <code>route_cyclestreet</code> to <code>fastest</code>, <code>quietest</code> or <code>balanced</code>, for example, routes favouring speed, quietness or a balance between speed and quietness will be saved, respectively.</p>
-<p>To automate the creation of route-allocated lines over many desire lines, the <code>line2route</code> function loops over each line, wrapping any <code>route_</code> function as an input. The output is a <code>SpatialLinesDataFrame</code> with the same number of dimensions as the input dataset (see the right panel in Figure ).</p>
-<pre><code>routes_fast &lt;- line2route(l = l, route_fun = route_cyclestreet)</code></pre>
-<p>The result of this ‘batch routing’ exercise is illustrated in Figure . The red lines in the left hand panel are very different from the hypothetical straight ‘desire lines’ often used in transport research, highlighting the importance of this route-allocation functionality.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">route_network</span>, lwd <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l</span>, lwd <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">10</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">routes_fast</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>
-<span class="va">routes_fast</span><span class="op">$</span><span class="va">All</span> <span class="op">&lt;-</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span>
-<span class="va">rnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/overline.html">overline</a></span><span class="op">(</span><span class="va">routes_fast</span>, <span class="st">"All"</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span>
-<span class="va">rnet</span><span class="op">$</span><span class="va">flow</span> <span class="op">&lt;-</span> <span class="va">rnet</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rnet</span><span class="op">$</span><span class="va">All</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">rnet</span>, lwd <span class="op">=</span> <span class="va">rnet</span><span class="op">$</span><span class="va">flow</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rnet</span><span class="op">$</span><span class="va">flow</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>To estimate the amount of capacity needed at each segment on the transport network, the <code>overline</code> function demonstrated above, is used to divide line geometries into unique segments and aggregate the overlapping values. The results, illustrated in the right-hand panel of Figure , can be used to estimate where there is most need to improve the transport network, for example informing the decision of where to build new bicycle paths.</p>
-<p>Limitations with the <code>route_cyclestreet</code> routing API include its specificity, to one mode (cycling) and a single region (the UK and part of Europe). To overcome these limitations, additional routing APIs were added with the functions <code>route_graphhopper</code>, <code>route_transportapi_public</code> and <code>viaroute</code>. These interface to Graphhopper, TransportAPI and the Open Source Routing Machine (OSRM) routing services, respectively. The great advantage of OSRM is that it allows you to run your own routing services on a local server, greatly increasing the rate of route generation.</p>
-<p>A short example of finding the route by car and bike between New York and Oaxaca demonstrates how <code>route_graphhopper</code> can collect geographical and other data on routes by various modes, anywhere in the world. The output, shown in Table , shows that the function also saves time, distance and (for bike trips) vertical distance climbed for the trips.</p>
+<code class="sourceCode R"><span><span class="va">route_bl</span> <span class="op">&lt;-</span> <span class="fu">route_cyclestreets</span><span class="op">(</span>from <span class="op">=</span> <span class="st">"Bradford"</span>, to <span class="op">=</span> <span class="st">"Leeds"</span><span class="op">)</span></span>
+<span><span class="va">route_c1_c2</span> <span class="op">&lt;-</span> <span class="fu">route_cyclestreets</span><span class="op">(</span><span class="va">cents</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">cents</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<p>The raw output from routing APIs is usually provided as a JSON or
+GeoJSON text string. By default, <code>route_cyclestreet</code> saves a
+number of key variables (including length, time, hilliness and busyness
+variables generated by CycleStreets.net) from the attribute data
+provided by the API. If the user wants to save the raw output, the
+<code>save_raw</code> argument can be used:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">route_bl_raw</span> <span class="op">&lt;-</span> <span class="fu">route_cyclestreets</span><span class="op">(</span>from <span class="op">=</span> <span class="st">"Bradford"</span>, to <span class="op">=</span> <span class="st">"Leeds"</span>, save_raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Additional arguments taken by the <code>route_</code> functions
+depend on the routing function in question. By changing the
+<code>plan</code> argument of <code>route_cyclestreet</code> to
+<code>fastest</code>, <code>quietest</code> or <code>balanced</code>,
+for example, routes favouring speed, quietness or a balance between
+speed and quietness will be saved, respectively.</p>
+<p>To automate the creation of route-allocated lines over many desire
+lines, the <code>line2route</code> function loops over each line,
+wrapping any <code>route_</code> function as an input. The output is a
+<code>SpatialLinesDataFrame</code> with the same number of dimensions as
+the input dataset (see the right panel in Figure <span class="math inline">\(\ref{fig:lines_routes}\)</span>).</p>
+<pre><code><span><span class="va">routes_fast</span> <span class="op">&lt;-</span> <span class="fu">line2route</span><span class="op">(</span>l <span class="op">=</span> <span class="va">l</span>, route_fun <span class="op">=</span> <span class="va">route_cyclestreet</span><span class="op">)</span></span></code></pre>
+<p>The result of this ‘batch routing’ exercise is illustrated in Figure
+<span class="math inline">\(\ref{fig:lines_routes}\)</span>. The red
+lines in the left hand panel are very different from the hypothetical
+straight ‘desire lines’ often used in transport research, highlighting
+the importance of this route-allocation functionality.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ny2oaxaca1</span> <span class="op">&lt;-</span> <span class="fu">route_graphhopper</span><span class="op">(</span><span class="st">"New York"</span>, <span class="st">"Oaxaca"</span>, vehicle <span class="op">=</span> <span class="st">"bike"</span><span class="op">)</span>
-<span class="va">ny2oaxaca2</span> <span class="op">&lt;-</span> <span class="fu">route_graphhopper</span><span class="op">(</span><span class="st">"New York"</span>, <span class="st">"Oaxaca"</span>, vehicle <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">ny2oaxaca1</span><span class="op">@</span><span class="va">data</span>, <span class="va">ny2oaxaca2</span><span class="op">@</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">route_network</span>, lwd <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l</span>, lwd <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">10</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">routes_fast</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span><span class="va">routes_fast</span><span class="op">$</span><span class="va">All</span> <span class="op">&lt;-</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span></span>
+<span><span class="va">rnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/overline.html">overline</a></span><span class="op">(</span><span class="va">routes_fast</span>, <span class="st">"All"</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
+<span><span class="va">rnet</span><span class="op">$</span><span class="va">flow</span> <span class="op">&lt;-</span> <span class="va">rnet</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rnet</span><span class="op">$</span><span class="va">All</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rnet</span>, lwd <span class="op">=</span> <span class="va">rnet</span><span class="op">$</span><span class="va">flow</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rnet</span><span class="op">$</span><span class="va">flow</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>To estimate the amount of capacity needed at each segment on the
+transport network, the <code>overline</code> function demonstrated
+above, is used to divide line geometries into unique segments and
+aggregate the overlapping values. The results, illustrated in the
+right-hand panel of Figure <span class="math inline">\(\ref{fig:lines_routes}\)</span>, can be used to
+estimate where there is most need to improve the transport network, for
+example informing the decision of where to build new bicycle paths.</p>
+<p>Limitations with the <code>route_cyclestreet</code> routing API
+include its specificity, to one mode (cycling) and a single region (the
+UK and part of Europe). To overcome these limitations, additional
+routing APIs were added with the functions
+<code>route_graphhopper</code>, <code>route_transportapi_public</code>
+and <code>viaroute</code>. These interface to Graphhopper, TransportAPI
+and the Open Source Routing Machine (OSRM) routing services,
+respectively. The great advantage of OSRM is that it allows you to run
+your own routing services on a local server, greatly increasing the rate
+of route generation.</p>
+<p>A short example of finding the route by car and bike between New York
+and Oaxaca demonstrates how <code>route_graphhopper</code> can collect
+geographical and other data on routes by various modes, anywhere in the
+world. The output, shown in Table <span class="math inline">\(\ref{tab:xtnyoa}\)</span>, shows that the function
+also saves time, distance and (for bike trips) vertical distance climbed
+for the trips.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ny2oaxaca1</span> <span class="op">&lt;-</span> <span class="fu">route_graphhopper</span><span class="op">(</span><span class="st">"New York"</span>, <span class="st">"Oaxaca"</span>, vehicle <span class="op">=</span> <span class="st">"bike"</span><span class="op">)</span></span>
+<span><span class="va">ny2oaxaca2</span> <span class="op">&lt;-</span> <span class="fu">route_graphhopper</span><span class="op">(</span><span class="st">"New York"</span>, <span class="st">"Oaxaca"</span>, vehicle <span class="op">=</span> <span class="st">"car"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ny2oaxaca1</span><span class="op">@</span><span class="va">data</span>, <span class="va">ny2oaxaca2</span><span class="op">@</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">time</th>
@@ -285,292 +578,528 @@
 </table>
 <!-- ## Calculating geographic attributes of transport routes -->
 </div>
-<div id="modelling-travel-catchment-areas" class="section level2">
-<h2 class="hasAnchor">
-<a href="#modelling-travel-catchment-areas" class="anchor"></a>Modelling travel catchment areas</h2>
-<p>Accessibility to transport services is a particularly important topic when considering public transport or active travel because of the frequent steep reduction in use as distances to access services (or infrastructure) increase. As a result, the planning for transport services and infrastructure frequently focuses on several measures of accessibility including distance, but also travel times and frequencies and weighted by population. The functions in <strong>stplanr</strong> are intended to provide a method of estimating these accessibility measures as well as calculating the population that can access specific services (i.e., estimating the catchment area).</p>
-<p>Catchment areas in particular are a widely used measure of accessibility that attempts to both quantify the likely target group for a particular service, and visualise the geographic area that is covered by the service. For instance, passengers are often said to be willing to walk up to 400 metres to a bus stop, or 800 metres to a railway station . Although these distances may appear relatively arbitrary and have been found to underestimate the true catchment area of bus stops and railway stations  they nonetheless represent a good, albeit somewhat conservative, starting point from which catchment areas can be determined.</p>
-<p>In many cases, catchment areas are calculated on the basis of straight-line (or “as the crow flies”) distances. This is a simplistic, but relatively appealing approach because it requires little additional data and is straight-forward to understand. <strong>stplanr</strong> provides functionality that calculates catchment areas using straight-line distances with the <code>calc_catchment</code> function. This function takes a <code>SpatialPolygonsDataFrame</code> that contains the population (or other) data, typically from a census, and a <code>Spatial*</code> layer that contains the geometry of the transport facility. These two layers are overlayed to calculate statistics for the desired catchments including proportioning polygons to account for the proportion located within the catchment area.</p>
-<p>To illustrate how catchment areas can be calculated, <strong>stplanr</strong> contains some sample datasets stored in ESRI Shapefile format (a commonly used format for distributing GIS layers) that can together be used to calculate sample catchment areas. One of these datasets (<code>smallsa1</code>) contains population data for Statistical Area 1 (SA1) zones in Sydney, Australia. The second contains hypothetical cycleways aligned to streets in Sydney. The code below unzips the datasets and reads in the shapefiles.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"smallsa1.zip"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"testcycleway.zip"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sa1income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"smallsa1.shp"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span>
-<span class="va">testcycleway</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"testcycleway.shp"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span>
-<span class="co"># Remove unzipped files</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"^(smallsa1|testcycleway).*"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Calculating the catchment area is straightforward and in addition to specifying the required datasets, only a vector containing column names to calculate statistics and a distance is required. Since proportioning the areas assumes projected data, unprojected data are automatically projected to either a common projection (if one is already projected) or a specified projection. It should be emphasised that the choice of projection is important and has an effect on the results meaning setting a local projection is recommended to achieve the most accurate results.</p>
+<div class="section level3">
+<h3 id="modelling-travel-catchment-areas">Modelling travel catchment areas<a class="anchor" aria-label="anchor" href="#modelling-travel-catchment-areas"></a>
+</h3>
+<p>Accessibility to transport services is a particularly important topic
+when considering public transport or active travel because of the
+frequent steep reduction in use as distances to access services (or
+infrastructure) increase. As a result, the planning for transport
+services and infrastructure frequently focuses on several measures of
+accessibility including distance, but also travel times and frequencies
+and weighted by population. The functions in <strong>stplanr</strong>
+are intended to provide a method of estimating these accessibility
+measures as well as calculating the population that can access specific
+services (i.e., estimating the catchment area).</p>
+<p>Catchment areas in particular are a widely used measure of
+accessibility that attempts to both quantify the likely target group for
+a particular service, and visualise the geographic area that is covered
+by the service. For instance, passengers are often said to be willing to
+walk up to 400 metres to a bus stop, or 800 metres to a railway station
+. Although these distances may appear relatively arbitrary and have been
+found to underestimate the true catchment area of bus stops and railway
+stations they nonetheless represent a good, albeit somewhat
+conservative, starting point from which catchment areas can be
+determined.</p>
+<p>In many cases, catchment areas are calculated on the basis of
+straight-line (or “as the crow flies”) distances. This is a simplistic,
+but relatively appealing approach because it requires little additional
+data and is straight-forward to understand. <strong>stplanr</strong>
+provides functionality that calculates catchment areas using
+straight-line distances with the <code>calc_catchment</code> function.
+This function takes a <code>SpatialPolygonsDataFrame</code> that
+contains the population (or other) data, typically from a census, and a
+<code>Spatial*</code> layer that contains the geometry of the transport
+facility. These two layers are overlayed to calculate statistics for the
+desired catchments including proportioning polygons to account for the
+proportion located within the catchment area.</p>
+<p>To illustrate how catchment areas can be calculated,
+<strong>stplanr</strong> contains some sample datasets stored in ESRI
+Shapefile format (a commonly used format for distributing GIS layers)
+that can together be used to calculate sample catchment areas. One of
+these datasets (<code>smallsa1</code>) contains population data for
+Statistical Area 1 (SA1) zones in Sydney, Australia. The second contains
+hypothetical cycleways aligned to streets in Sydney. The code below
+unzips the datasets and reads in the shapefiles.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">catch800m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_catchment.html">calc_catchment</a></span><span class="op">(</span>
-  polygonlayer <span class="op">=</span> <span class="va">sa1income</span>,
-  targetlayer <span class="op">=</span> <span class="va">testcycleway</span>,
-  calccols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Total"</span><span class="op">)</span>,
-  distance <span class="op">=</span> <span class="fl">800</span>,
-  projection <span class="op">=</span> <span class="st">"austalbers"</span>,
-  dissolve <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
-<p>By looking at the data.frame associated with the SpatialPolygonsDataFrame that is returned from the <code>calc_catchment</code> function, the total population within the catchment area can be seen to be nearly 40,000 people. The catchment area can also be plotted as with any other <code>Spatial*</code> object using the <code>plot</code> function using the code below with the result shown in Figure .</p>
+<code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"stplanr"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"smallsa1.zip"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"testcycleway.zip"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sa1income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="st">"smallsa1.shp"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>
+<span><span class="va">testcycleway</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="st">"testcycleway.shp"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>
+<span><span class="co"># Remove unzipped files</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"^(smallsa1|testcycleway).*"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Calculating the catchment area is straightforward and in addition to
+specifying the required datasets, only a vector containing column names
+to calculate statistics and a distance is required. Since proportioning
+the areas assumes projected data, unprojected data are automatically
+projected to either a common projection (if one is already projected) or
+a specified projection. It should be emphasised that the choice of
+projection is important and has an effect on the results meaning setting
+a local projection is recommended to achieve the most accurate
+results.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sa1income</span>, col <span class="op">=</span> <span class="st">"light grey"</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">catch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">testcycleway</span>, col <span class="op">=</span> <span class="st">"green"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>This simplistic catchment area is useful when the straight-line distance is a reasonable approximation of the route taken to walk (or cycle) to a transport facility. However, this is often not the case. The catchment area in Figure  initially appears reasonable but the red-shaded catchment area includes an area that requires travelling around a bay to access from the (green-coloured) cycleway. To allow for more realistic catchment areas for most situations, <strong>stplanr</strong> provides the <code>calc_network_catchment</code> function that uses the same principle as <code>calc_catchment</code> but also takes into account the transport network.</p>
-<p>To use <code>calc_network_catchment</code>, a transport network needs to be prepared that can be used in conjunction with the previous datasets. Preparation of the dataset involves using the <code>SpatialLinesNetwork</code> function to create a network from a <code>SpatialLinesDataFrame</code>. This function combines a <code>SpatialLinesDataFrame</code> with a graph network (using the  package) to provide basic routing functionality. The network is used to calculate the shortest actual paths within the specific catchment distance. This process involves the following code:</p>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ropensci/stplanr"</span><span class="op">)</span></span>
+<span><span class="va">catch800m</span> <span class="op">&lt;-</span> <span class="fu">calc_catchment</span><span class="op">(</span></span>
+<span>  polygonlayer <span class="op">=</span> <span class="va">sa1income</span>,</span>
+<span>  targetlayer <span class="op">=</span> <span class="va">testcycleway</span>,</span>
+<span>  calccols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Total"</span><span class="op">)</span>,</span>
+<span>  distance <span class="op">=</span> <span class="fl">800</span>,</span>
+<span>  projection <span class="op">=</span> <span class="st">"austalbers"</span>,</span>
+<span>  dissolve <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>By looking at the data.frame associated with the
+SpatialPolygonsDataFrame that is returned from the
+<code>calc_catchment</code> function, the total population within the
+catchment area can be seen to be nearly 40,000 people. The catchment
+area can also be plotted as with any other <code>Spatial*</code> object
+using the <code>plot</code> function using the code below with the
+result shown in Figure <span class="math inline">\(\ref{fig:catchmentplot}\)</span>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"sydroads.zip"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sydroads</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"."</span>, <span class="st">"roads"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"^(roads).*"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sydnetwork</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SpatialLinesNetwork.html">SpatialLinesNetwork</a></span><span class="op">(</span><span class="va">sydroads</span><span class="op">)</span></code></pre></div>
-<p>The network catchment is then calculated using a similar method as with <code>calc_catchment</code> but with a few minor changes. Specifically these are including the <code>SpatialLinesNetwork</code>, and using the <code>maximpedance</code> parameter to define the distance, with distance being the additional distance from the network. In contrast to the distance parameter that is based on the straight-line distance in both the <code>calc_catchment</code> and <code>calc_network_catchment</code> functions, the <code>maximpedance</code> parameter is the maximum value in the units of the network’s weight attribute. In practice this is generally distance in metres but can also be travel times, risk or other measures.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sa1income</span>, col <span class="op">=</span> <span class="st">"light grey"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">catch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">testcycleway</span>, col <span class="op">=</span> <span class="st">"green"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>This simplistic catchment area is useful when the straight-line
+distance is a reasonable approximation of the route taken to walk (or
+cycle) to a transport facility. However, this is often not the case. The
+catchment area in Figure <span class="math inline">\(\ref{fig:catchmentplot}\)</span> initially appears
+reasonable but the red-shaded catchment area includes an area that
+requires travelling around a bay to access from the (green-coloured)
+cycleway. To allow for more realistic catchment areas for most
+situations, <strong>stplanr</strong> provides the
+<code>calc_network_catchment</code> function that uses the same
+principle as <code>calc_catchment</code> but also takes into account the
+transport network.</p>
+<p>To use <code>calc_network_catchment</code>, a transport network needs
+to be prepared that can be used in conjunction with the previous
+datasets. Preparation of the dataset involves using the
+<code>SpatialLinesNetwork</code> function to create a network from a
+<code>SpatialLinesDataFrame</code>. This function combines a
+<code>SpatialLinesDataFrame</code> with a graph network (using the
+package) to provide basic routing functionality. The network is used to
+calculate the shortest actual paths within the specific catchment
+distance. This process involves the following code:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">netcatch800m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_network_catchment.html">calc_network_catchment</a></span><span class="op">(</span>
-  sln <span class="op">=</span> <span class="va">sydnetwork</span>,
-  polygonlayer <span class="op">=</span> <span class="va">sa1income</span>,
-  targetlayer <span class="op">=</span> <span class="va">testcycleway</span>,
-  calccols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Total"</span><span class="op">)</span>,
-  maximpedance <span class="op">=</span> <span class="fl">800</span>,
-  distance <span class="op">=</span> <span class="fl">100</span>,
-  projection <span class="op">=</span> <span class="st">"austalbers"</span>
-<span class="op">)</span></code></pre></div>
-<p>Once calculated, the network catchment area can be used just as the straight-line network catchment. This includes extracting the catchment population of 128,000 and plotting the original catchment area together with the original area with the results shown in Figure :</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"sydroads.zip"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sydroads</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/methods/as.html" class="external-link">as</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">read_sf</a></span><span class="op">(</span><span class="st">"."</span>, <span class="st">"roads"</span><span class="op">)</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"^(roads).*"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">sydnetwork</span> <span class="op">&lt;-</span> <span class="fu">SpatialLinesNetwork</span><span class="op">(</span><span class="va">sydroads</span><span class="op">)</span></span></code></pre></div>
+<p>The network catchment is then calculated using a similar method as
+with <code>calc_catchment</code> but with a few minor changes.
+Specifically these are including the <code>SpatialLinesNetwork</code>,
+and using the <code>maximpedance</code> parameter to define the
+distance, with distance being the additional distance from the network.
+In contrast to the distance parameter that is based on the straight-line
+distance in both the <code>calc_catchment</code> and
+<code>calc_network_catchment</code> functions, the
+<code>maximpedance</code> parameter is the maximum value in the units of
+the network’s weight attribute. In practice this is generally distance
+in metres but can also be travel times, risk or other measures.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">sa1income</span>, col <span class="op">=</span> <span class="st">"light grey"</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">catch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">netcatch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">testcycleway</span>, col <span class="op">=</span> <span class="st">"green"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">netcatch800m</span> <span class="op">&lt;-</span> <span class="fu">calc_network_catchment</span><span class="op">(</span></span>
+<span>  sln <span class="op">=</span> <span class="va">sydnetwork</span>,</span>
+<span>  polygonlayer <span class="op">=</span> <span class="va">sa1income</span>,</span>
+<span>  targetlayer <span class="op">=</span> <span class="va">testcycleway</span>,</span>
+<span>  calccols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Total"</span><span class="op">)</span>,</span>
+<span>  maximpedance <span class="op">=</span> <span class="fl">800</span>,</span>
+<span>  distance <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  projection <span class="op">=</span> <span class="st">"austalbers"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Once calculated, the network catchment area can be used just as the
+straight-line network catchment. This includes extracting the catchment
+population of 128,000 and plotting the original catchment area together
+with the original area with the results shown in Figure <span class="math inline">\(\ref{fig:netcatchplot}\)</span>:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sa1income</span>, col <span class="op">=</span> <span class="st">"light grey"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">catch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">netcatch800m</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">testcycleway</span>, col <span class="op">=</span> <span class="st">"green"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="modelling-and-visualisation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#modelling-and-visualisation" class="anchor"></a>Modelling and visualisation</h1>
-<div id="modelling-mode-choice" class="section level2">
-<h2 class="hasAnchor">
-<a href="#modelling-mode-choice" class="anchor"></a>Modelling mode choice</h2>
-<p>Route-allocated lines allow estimation of <em>route distance</em> and <em>cirquity</em> (route distance divided by Euclidean distance). These variables can help model the rate of flow between origins and destination, as illustrated in the left-hand panel of Figure . The code below demonstrates how objects generated by <strong>stplanr</strong> can be used to undertake such analysis, with the <code>line_length</code> function used to find the distance, in meters, of lat/lon data.</p>
-<pre><code>l$d_euclidean &lt;- line_length(l)
-l$d_rf &lt;- routes_fast@data$length
-plot(l$d_euclidean, l$d_rf,
-  xlab = "Euclidean distance", ylab = "Route distance")
-abline(a = 0, b = 1)
-abline(a = 0, b = 1.2, col = "green")
-abline(a = 0, b = 1.5, col = "red")</code></pre>
-<p>The left hand panel of Figure  shows the expected strong correlation between Euclidean (<span class="math inline">\(d_E\)</span>) and fastest route (<span class="math inline">\(d_{Rf}\)</span>) distance. However, some OD pairs have a proportionally higher route distance than others, as illustrated by distance from the black line in the above plot: this represents : the ratio of network distance to Euclidean distance :</p>
+<div class="section level2">
+<h2 id="modelling-and-visualisation">Modelling and visualisation<a class="anchor" aria-label="anchor" href="#modelling-and-visualisation"></a>
+</h2>
+<div class="section level3">
+<h3 id="modelling-mode-choice">Modelling mode choice<a class="anchor" aria-label="anchor" href="#modelling-mode-choice"></a>
+</h3>
+<p>Route-allocated lines allow estimation of <em>route distance</em> and
+<em>cirquity</em> (route distance divided by Euclidean distance). These
+variables can help model the rate of flow between origins and
+destination, as illustrated in the left-hand panel of Figure <span class="math inline">\(\ref{fig:euclidfastest}\)</span>. The code below
+demonstrates how objects generated by <strong>stplanr</strong> can be
+used to undertake such analysis, with the <code>line_length</code>
+function used to find the distance, in meters, of lat/lon data.</p>
+<pre><code><span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span> <span class="op">&lt;-</span> <span class="fu">line_length</span><span class="op">(</span><span class="va">l</span><span class="op">)</span></span>
+<span><span class="va">l</span><span class="op">$</span><span class="va">d_rf</span> <span class="op">&lt;-</span> <span class="va">routes_fast</span><span class="op">@</span><span class="va">data</span><span class="op">$</span><span class="va">length</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">l</span><span class="op">$</span><span class="va">d_rf</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Euclidean distance"</span>, ylab <span class="op">=</span> <span class="st">"Route distance"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1.2</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">0</span>, b <span class="op">=</span> <span class="fl">1.5</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre>
+<p>The left hand panel of Figure <span class="math inline">\(\ref{fig:euclidfastest}\)</span> shows the
+expected strong correlation between Euclidean (<span class="math inline">\(d_E\)</span>) and fastest route (<span class="math inline">\(d_{Rf}\)</span>) distance. However, some OD pairs
+have a proportionally higher route distance than others, as illustrated
+by distance from the black line in the above plot: this represents : the
+ratio of network distance to Euclidean distance :</p>
 <p><span class="math display">\[
- Q = \frac{d_{Rf}}{d_E}
+Q = \frac{d_{Rf}}{d_E}
 \]</span></p>
-<p>An extension to the concept of cirquity is the ‘quietness diversion factor’ (<span class="math inline">\(QDF\)</span>) of a desire line , the ratio of the route distance of a quiet route option (<span class="math inline">\(d_{Rq}\)</span>) to that of the fastest:</p>
+<p>An extension to the concept of cirquity is the ‘quietness diversion
+factor’ (<span class="math inline">\(QDF\)</span>) of a desire line ,
+the ratio of the route distance of a quiet route option (<span class="math inline">\(d_{Rq}\)</span>) to that of the fastest:</p>
 <p><span class="math display">\[
- QDF = \frac{d_{Rq}}{d_{Rf}}
+QDF = \frac{d_{Rq}}{d_{Rf}}
 \]</span></p>
-<p>Thanks to the ‘quietest’ route option provided by <code>route_cyclestreet</code>, we can estimate average values for both metrics as follows:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">routes_slow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/line2route.html">line2route</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">route_cyclestreet</span>, plan <span class="op">=</span> <span class="st">"quietest"</span><span class="op">)</span></code></pre></div>
+<p>Thanks to the ‘quietest’ route option provided by
+<code>route_cyclestreet</code>, we can estimate average values for both
+metrics as follows:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l</span><span class="op">$</span><span class="va">d_rq</span> <span class="op">&lt;-</span> <span class="va">routes_slow</span><span class="op">$</span><span class="va">length</span> <span class="co"># quietest route distance</span>
-<span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_rf</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">QDF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_rq</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">d_rf</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">Q</span>
-<span class="va">QDF</span></code></pre></div>
-<p>The results show that cycle paths are not particularly direct in the study region by international standards . This is hardly surprisingly given the small size of the sample and the short distances covered: <span class="math inline">\(Q\)</span> tends to decrease at a decaying rate with distance. What is surprising is that <span class="math inline">\(QDF\)</span> is close to unity, which could imply that the quiet routes are constructed along direct, and therefore sensible routes. We should caution against such assumptions, however: It is a small sample of desire lines and, when time is explored, we find that the ‘quietness diversion factor with respect to time’ (<span class="math inline">\(QDF_t\)</span>) is slightly larger:</p>
+<code class="sourceCode R"><span><span class="va">routes_slow</span> <span class="op">&lt;-</span> <span class="fu">line2route</span><span class="op">(</span><span class="va">l</span>, <span class="va">route_cyclestreet</span>, plan <span class="op">=</span> <span class="st">"quietest"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">QDFt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">routes_slow</span><span class="op">$</span><span class="va">time</span> <span class="op">/</span> <span class="va">routes_fast</span><span class="op">$</span><span class="va">time</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-</div>
-<div id="models-of-travel-behaviour" class="section level2">
-<h2 class="hasAnchor">
-<a href="#models-of-travel-behaviour" class="anchor"></a>Models of travel behaviour</h2>
-<p>There are many ways of estimating flows between origins and destinations, including spatial interaction models, the four-stage transport model and gravity models (‘distance decay’). <strong>stplanr</strong> aims eventually to facilitate creation of many types of flow model.</p>
-<p>At present there are no functions for modelling distance decay, but this is something we would like to add in future versions of <strong>stplanr</strong>. Distance decay is an especially important concept for sustainable transport planning due to physical limitations on the ability of people to walk and cycle large distances .</p>
-<p>We can explore the relationship between distance and the proportion of trips made by walking, using the same object <code>l</code> generated by <strong>stplanr</strong>.</p>
+<code class="sourceCode R"><span><span class="va">l</span><span class="op">$</span><span class="va">d_rq</span> <span class="op">&lt;-</span> <span class="va">routes_slow</span><span class="op">$</span><span class="va">length</span> <span class="co"># quietest route distance</span></span>
+<span><span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_rf</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">QDF</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_rq</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">d_rf</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">Q</span></span>
+<span><span class="va">QDF</span></span></code></pre></div>
+<p>The results show that cycle paths are not particularly direct in the
+study region by international standards . This is hardly surprisingly
+given the small size of the sample and the short distances covered:
+<span class="math inline">\(Q\)</span> tends to decrease at a decaying
+rate with distance. What is surprising is that <span class="math inline">\(QDF\)</span> is close to unity, which could imply
+that the quiet routes are constructed along direct, and therefore
+sensible routes. We should caution against such assumptions, however: It
+is a small sample of desire lines and, when time is explored, we find
+that the ‘quietness diversion factor with respect to time’ (<span class="math inline">\(QDF_t\)</span>) is slightly larger:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l</span><span class="op">$</span><span class="va">pwalk</span> <span class="op">&lt;-</span> <span class="va">l</span><span class="op">$</span><span class="va">On.foot</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">l</span><span class="op">$</span><span class="va">pwalk</span>,
-  cex <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">50</span>,
-  xlab <span class="op">=</span> <span class="st">"Euclidean distance (m)"</span>, ylab <span class="op">=</span> <span class="st">"Proportion of trips by foot"</span>
-<span class="op">)</span></code></pre></div>
-<p>Based on the right-hand panel in Figure , there is a clear negative relationship between distance of trips and the proportion of those trips made by walking. This is unsurprising: beyond a certain distance (around 1.5km according the the data presented in the figure above) walking is usually seen as too slow and other modes are considered. According to the academic literature, this ‘distance decay’ is non-linear and there have been a number of functions proposed to fit to distance decay curves . From the range of options we test below just two forms. We will compare the ability of linear and log-square-root functions to fit the data contained in <code>l</code> for walking.</p>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">QDFt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">routes_slow</span><span class="op">$</span><span class="va">time</span> <span class="op">/</span> <span class="va">routes_fast</span><span class="op">$</span><span class="va">time</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="models-of-travel-behaviour">Models of travel behaviour<a class="anchor" aria-label="anchor" href="#models-of-travel-behaviour"></a>
+</h3>
+<p>There are many ways of estimating flows between origins and
+destinations, including spatial interaction models, the four-stage
+transport model and gravity models (‘distance decay’).
+<strong>stplanr</strong> aims eventually to facilitate creation of many
+types of flow model.</p>
+<p>At present there are no functions for modelling distance decay, but
+this is something we would like to add in future versions of
+<strong>stplanr</strong>. Distance decay is an especially important
+concept for sustainable transport planning due to physical limitations
+on the ability of people to walk and cycle large distances .</p>
+<p>We can explore the relationship between distance and the proportion
+of trips made by walking, using the same object <code>l</code> generated
+by <strong>stplanr</strong>.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_euclidean</span>, data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span><span class="op">)</span>
-<span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_rf</span>, data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span><span class="op">)</span>
-<span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_rf</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">d_rf</span><span class="op">^</span><span class="fl">0.5</span><span class="op">)</span>,
-  data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">quasipoisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p>The results of these regression models can be seen using <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>. Surprisingly, Euclidean distance was a better predictor of walking than route distance, but no strong conclusions can be drawn from this finding, with such a small sample of desire lines (n = 42). The results are purely illustrative, of the kind of the possibilities created by using <strong>stplanr</strong> in conjuction with R’s modelling capabilities (see Figure ).</p>
+<code class="sourceCode R"><span><span class="va">l</span><span class="op">$</span><span class="va">pwalk</span> <span class="op">&lt;-</span> <span class="va">l</span><span class="op">$</span><span class="va">On.foot</span> <span class="op">/</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">l</span><span class="op">$</span><span class="va">pwalk</span>,</span>
+<span>  cex <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">50</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Euclidean distance (m)"</span>, ylab <span class="op">=</span> <span class="st">"Proportion of trips by foot"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Based on the right-hand panel in Figure <span class="math inline">\(\ref{fig:euclidfastest}\)</span>, there is a clear
+negative relationship between distance of trips and the proportion of
+those trips made by walking. This is unsurprising: beyond a certain
+distance (around 1.5km according the the data presented in the figure
+above) walking is usually seen as too slow and other modes are
+considered. According to the academic literature, this ‘distance decay’
+is non-linear and there have been a number of functions proposed to fit
+to distance decay curves . From the range of options we test below just
+two forms. We will compare the ability of linear and log-square-root
+functions to fit the data contained in <code>l</code> for walking.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">l</span><span class="op">$</span><span class="va">pwalk</span>,
-  cex <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">50</span>,
-  xlab <span class="op">=</span> <span class="st">"Euclidean distance (m)"</span>, ylab <span class="op">=</span> <span class="st">"Proportion of trips by foot"</span>
-<span class="op">)</span>
-<span class="va">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>d_euclidean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5000</span>, d_rf <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5000</span><span class="op">)</span>
-<span class="va">lm1p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">l2</span><span class="op">)</span>
-<span class="va">lm2p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm2</span>, <span class="va">l2</span><span class="op">)</span>
-<span class="va">lm3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm3</span>, <span class="va">l2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">lm1p</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">lm2p</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">lm3p</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_euclidean</span>, data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span><span class="op">)</span></span>
+<span><span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_rf</span>, data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span><span class="op">)</span></span>
+<span><span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">pwalk</span> <span class="op">~</span> <span class="va">d_rf</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">d_rf</span><span class="op">^</span><span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">l</span><span class="op">@</span><span class="va">data</span>, weights <span class="op">=</span> <span class="va">All</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">quasipoisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The results of these regression models can be seen using
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>. Surprisingly, Euclidean distance was a better
+predictor of walking than route distance, but no strong conclusions can
+be drawn from this finding, with such a small sample of desire lines (n
+= 42). The results are purely illustrative, of the kind of the
+possibilities created by using <strong>stplanr</strong> in conjuction
+with R’s modelling capabilities (see Figure ).</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">l</span><span class="op">$</span><span class="va">pwalk</span>,</span>
+<span>  cex <span class="op">=</span> <span class="va">l</span><span class="op">$</span><span class="va">All</span> <span class="op">/</span> <span class="fl">50</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Euclidean distance (m)"</span>, ylab <span class="op">=</span> <span class="st">"Proportion of trips by foot"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">l2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>d_euclidean <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5000</span>, d_rf <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5000</span><span class="op">)</span></span>
+<span><span class="va">lm1p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">l2</span><span class="op">)</span></span>
+<span><span class="va">lm2p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lm2</span>, <span class="va">l2</span><span class="op">)</span></span>
+<span><span class="va">lm3p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lm3</span>, <span class="va">l2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="va">lm1p</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lm2p</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"green"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">l2</span><span class="op">$</span><span class="va">d_euclidean</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">lm3p</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="visualisation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#visualisation" class="anchor"></a>Visualisation</h2>
-<p>Visualisation is an important aspect of any transport study, as it enables researchers to communicate their findings to other researchers, policy-makers and, ultimately, the public. It may therefore come as a surprise that <strong>stplanr</strong> contains no functions for visualisation. Instead, users are encouraged to make use of existing spatial visualisation tools in R, such as <strong>tmap</strong>, <strong>leaflet</strong> and <strong>ggmap</strong> .</p>
-<p>Furthermore, with the development of online application frameworks such as <strong>shiny</strong>, it is now easier than ever to make the results of transport analysis and modelling projects available to the public. An example is the online interface of the Propensity to Cycle Tool (PCT). The results of the project, generated using <strong>stplanr</strong>, are presented at zone, desire line and Route Network levels . There is great potential to expand on the principle of publicly accessible transport planning tools via ‘web apps,’ perhaps through new R packages dedicated to visualising transport data.</p>
+<div class="section level3">
+<h3 id="visualisation">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a>
+</h3>
+<p>Visualisation is an important aspect of any transport study, as it
+enables researchers to communicate their findings to other researchers,
+policy-makers and, ultimately, the public. It may therefore come as a
+surprise that <strong>stplanr</strong> contains no functions for
+visualisation. Instead, users are encouraged to make use of existing
+spatial visualisation tools in R, such as <strong>tmap</strong>,
+<strong>leaflet</strong> and <strong>ggmap</strong> .</p>
+<p>Furthermore, with the development of online application frameworks
+such as <strong>shiny</strong>, it is now easier than ever to make the
+results of transport analysis and modelling projects available to the
+public. An example is the online interface of the Propensity to Cycle
+Tool (PCT). The results of the project, generated using
+<strong>stplanr</strong>, are presented at zone, desire line and Route
+Network levels . There is great potential to expand on the principle of
+publicly accessible transport planning tools via ‘web apps’, perhaps
+through new R packages dedicated to visualising transport data.</p>
 </div>
 </div>
-<div id="future-directions-of-travel" class="section level1">
-<h1 class="hasAnchor">
-<a href="#future-directions-of-travel" class="anchor"></a>Future directions of travel</h1>
-<p>This paper has demonstrated the great potential for R to be used for transport planning. R’s flexibility, powerful GIS capabilities  and free accessibility makes it well-suited to the needs of transport planners and researchers, especially those wanting to avoid the high costs of market-leading products. Rather than ‘reinvent the wheel’ (e.g. with a new class system), <strong>stplanr</strong> builds on existing packages and  classes to work with common transport data formats.</p>
-<p>It is useful to see <strong>stplanr</strong>, and R for transport planning in general, as an addition tool in the transport planner’s cabinet. It can be understood as one part of a wider movement that is making transport planning a more open and democratic process. Other developments in this movement include the increasing availability of open data  and the rise of open source products for transport modelling, such as <a href="https://www.dlr.de/ts/en/desktopdefault.aspx/tabid-9883/16931_read-41000/">SUMO</a>, <a href="https://www.matsim.org/">MATSim</a> and <a href="https://its.mit.edu/software/mitsimlab">MITSIMLAB</a> . <strong>stplanr</strong>, with its focus on GIS operations rather than microscopic vehicle-level behaviour, can complement such software and help make better use of new open data sources.</p>
-<p>Because transport planning is an inherently spatial activity, <strong>stplanr</strong> occupies an important niche in the transport planning software landscape, with its focus on spatial transport data. There is great potential for development of <strong>stplanr</strong> in many directions. Desirable developments include the additional of functions for modelling modal split, for examample with functions to create commonly distance decay curves which are commonly found in active travel research  and improving the computational efficiency of existing functions to make the methods more scalable for large databases. Our priority for <strong>stplanr</strong> however, is to keep the focus on geographic functions for transport planning. There are many opportunities in this direction, including:</p>
+<div class="section level2">
+<h2 id="future-directions-of-travel">Future directions of travel<a class="anchor" aria-label="anchor" href="#future-directions-of-travel"></a>
+</h2>
+<p>This paper has demonstrated the great potential for R to be used for
+transport planning. R’s flexibility, powerful GIS capabilities and free
+accessibility makes it well-suited to the needs of transport planners
+and researchers, especially those wanting to avoid the high costs of
+market-leading products. Rather than ‘reinvent the wheel’ (e.g. with a
+new class system), <strong>stplanr</strong> builds on existing packages
+and classes to work with common transport data formats.</p>
+<p>It is useful to see <strong>stplanr</strong>, and R for transport
+planning in general, as an addition tool in the transport planner’s
+cabinet. It can be understood as one part of a wider movement that is
+making transport planning a more open and democratic process. Other
+developments in this movement include the increasing availability of
+open data and the rise of open source products for transport modelling,
+such as <a href="https://www.dlr.de/ts/en/desktopdefault.aspx/tabid-9883/16931_read-41000/" class="external-link">SUMO</a>,
+<a href="https://www.matsim.org/" class="external-link">MATSim</a> and MITSIMLAB .
+<strong>stplanr</strong>, with its focus on GIS operations rather than
+microscopic vehicle-level behaviour, can complement such software and
+help make better use of new open data sources.</p>
+<p>Because transport planning is an inherently spatial activity,
+<strong>stplanr</strong> occupies an important niche in the transport
+planning software landscape, with its focus on spatial transport data.
+There is great potential for development of <strong>stplanr</strong> in
+many directions. Desirable developments include the additional of
+functions for modelling modal split, for examample with functions to
+create commonly distance decay curves which are commonly found in active
+travel research and improving the computational efficiency of existing
+functions to make the methods more scalable for large databases. Our
+priority for <strong>stplanr</strong> however, is to keep the focus on
+geographic functions for transport planning. There are many
+opportunities in this direction, including:</p>
 <ul>
-<li>Functions to assess the environment surrounding routes, e.g. via integration with the in-development <strong>osmdata</strong> package.</li>
-<li>Functions to match different GIS routes, perhaps building on the Hausdorf distance algorithm implemented in the  function <code>gDistance</code>.</li>
-<li>Additional functions for route-allocation of travel, e.g. via an interface to the OpenTripPlanner API.</li>
-<li>Functions for aggregating very large GPS trace datasets (e.g. into raster cells) for anonymisation and analysis/visualisation purposes.</li>
-<li>The creation of a class system for spatial transport datasets, such as to represent spatial route and a route networks (perhaps with classes named  and ). This is not a short-term priority and it would be beneficial to coincide such developments to a migration to  for spatial classes.</li>
+<li>Functions to assess the environment surrounding routes, e.g. via
+integration with the in-development <strong>osmdata</strong>
+package.</li>
+<li>Functions to match different GIS routes, perhaps building on the
+Hausdorf distance algorithm implemented in the function
+<code>gDistance</code>.</li>
+<li>Additional functions for route-allocation of travel, e.g. via an
+interface to the OpenTripPlanner API.</li>
+<li>Functions for aggregating very large GPS trace datasets (e.g. into
+raster cells) for anonymisation and analysis/visualisation
+purposes.</li>
+<li>The creation of a class system for spatial transport datasets, such
+as to represent spatial route and a route networks (perhaps with classes
+named and ). This is not a short-term priority and it would be
+beneficial to coincide such developments to a migration to for spatial
+classes.</li>
 </ul>
-<p>Such spatial data processing capabilities would increase the range of transport planning tasks that <strong>stplanr</strong> can facilitate. For all this planned development activity to be useful, it is vital that new functionality is intuitive. R has a famously steep learning curve. Implementing simple concepts such as consistent naming systems  and ensuring ‘type stability’ can greatly improve the usability of the package. For this reason, much future work in <strong>stplanr</strong> will go into improving documentation and user-friendliness.</p>
-<p>Like much open source software <strong>stplanr</strong> is an open-ended project, a work-in-progress. We have set out clear motivations for developing transport planning capabilities in R and believe that the current version of <strong>stplanr</strong> (0.1.6) provides a major step in that direction compared with what was available a couple of years ago. But there is much more to do. We therefore welcome input on where the package’s priorities should lie, how it should evolve in the future and how to ensure it is well-developed and sustained.</p>
+<p>Such spatial data processing capabilities would increase the range of
+transport planning tasks that <strong>stplanr</strong> can facilitate.
+For all this planned development activity to be useful, it is vital that
+new functionality is intuitive. R has a famously steep learning curve.
+Implementing simple concepts such as consistent naming systems and
+ensuring ‘type stability’ can greatly improve the usability of the
+package. For this reason, much future work in <strong>stplanr</strong>
+will go into improving documentation and user-friendliness.</p>
+<p>Like much open source software <strong>stplanr</strong> is an
+open-ended project, a work-in-progress. We have set out clear
+motivations for developing transport planning capabilities in R and
+believe that the current version of <strong>stplanr</strong> (0.1.6)
+provides a major step in that direction compared with what was available
+a couple of years ago. But there is much more to do. We therefore
+welcome input on where the package’s priorities should lie, how it
+should evolve in the future and how to ensure it is well-developed and
+sustained.</p>
 <!-- This creates the opportunity for extending existing modelling and data analysis data to better handle typical travel survey formats, e.g. by creating a system to represent travel surveys worldwide by merging trip, individual and household level data. Such non-spatial extensions of R for transport planning could build on the fast grouping and processing functions provided by \CRANpkg{dplyr}. This is an interesting potential direction of travel for **stplanr** or future packages for transport research. -->
 <!-- If you would like to contribute or request new features, see -->
 <!-- https://github.com/Robinlovelace/stplanr -->
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-balmer_matsim-t:_2009" class="csl-entry">
-Balmer, Michael, Marcel Rieser, and Kai Nagel. 2009. <span>“<span>MATSim</span>-<span>T</span>: <span>Architecture</span> and Simulation Times.”</span> <em>Multi-Agent Systems for Traffic and Transportation Engineering</em>, 57–78. <a href="https://svn.vsp.tu-berlin.de/repos/public-svn/publications/vspwp/2008/08-03/3aug08.pdf">https://svn.vsp.tu-berlin.de/repos/public-svn/publications/vspwp/2008/08-03/3aug08.pdf</a>.
+Balmer, Michael, Marcel Rieser, and Kai Nagel. 2009.
+<span>“<span>MATSim</span>-<span>T</span>: <span>Architecture</span> and
+Simulation Times.”</span> <em>Multi-Agent Systems for Traffic and
+Transportation Engineering</em>, 57–78. <a href="https://svn.vsp.tu-berlin.de/repos/public-svn/publications/vspwp/2008/08-03/3aug08.pdf" class="external-link">https://svn.vsp.tu-berlin.de/repos/public-svn/publications/vspwp/2008/08-03/3aug08.pdf</a>.
 </div>
 <div id="ref-banister_sustainable_2008" class="csl-entry">
-Banister, David. 2008. <span>“The Sustainable Mobility Paradigm.”</span> <em>Transport Policy</em> 15 (2): 73–80. <a href="https://doi.org/10.1016/j.tranpol.2007.10.005">https://doi.org/10.1016/j.tranpol.2007.10.005</a>.
+Banister, David. 2008. <span>“The Sustainable Mobility Paradigm.”</span>
+<em>Transport Policy</em> 15 (2): 73–80. <a href="https://doi.org/10.1016/j.tranpol.2007.10.005" class="external-link">https://doi.org/10.1016/j.tranpol.2007.10.005</a>.
 </div>
 <div id="ref-bivand_applied_2013" class="csl-entry">
-Bivand, Roger S, Edzer J Pebesma, and Virgilio G’omez-Rubio. 2013. <em>Applied Spatial Data Analysis with <span>R</span></em>. Vol. 747248717. Springer.
+Bivand, Roger S, Edzer J Pebesma, and Virgilio G’omez-Rubio. 2013.
+<em>Applied Spatial Data Analysis with <span>R</span></em>. Vol.
+747248717. Springer.
 </div>
 <div id="ref-boyce_forecasting_2015" class="csl-entry">
-Boyce, David E., and Huw C. W. L. Williams. 2015. <em>Forecasting <span>Urban</span> <span>Travel</span>: <span>Past</span>, <span>Present</span> and <span>Future</span></em>. Edward Elgar Publishing.
+Boyce, David E., and Huw C. W. L. Williams. 2015. <em>Forecasting
+<span>Urban</span> <span>Travel</span>: <span>Past</span>,
+<span>Present</span> and <span>Future</span></em>. Edward Elgar
+Publishing.
 </div>
 <div id="ref-RJ-2016-005" class="csl-entry">
-Brown, Patrick E. 2016. <span>“Maps, <span>Coordinate Reference Systems</span> and <span>Visualising Geographic Data</span> with Mapmisc.”</span> <em>The R Journal</em> 8 (1): 64–91.
+Brown, Patrick E. 2016. <span>“Maps, <span>Coordinate Reference
+Systems</span> and <span>Visualising Geographic Data</span> with
+Mapmisc.”</span> <em>The R Journal</em> 8 (1): 64–91.
 </div>
 <div id="ref-brown_diseasemapping:_2016" class="csl-entry">
-Brown, Patrick E., and L. Zhou. 2016. <span>“Diseasemapping: <span>Modelling</span> <span>Spatial</span> <span>Variation</span> in <span>Disease</span> <span>Risk</span> for <span>Areal</span> <span>Data</span>.”</span> <a href="https://CRAN.R-project.org/package=diseasemapping">https://CRAN.R-project.org/package=diseasemapping</a>.
+Brown, Patrick E., and L. Zhou. 2016. <span>“Diseasemapping:
+<span>Modelling</span> <span>Spatial</span> <span>Variation</span> in
+<span>Disease</span> <span>Risk</span> for <span>Areal</span>
+<span>Data</span>.”</span> <a href="https://CRAN.R-project.org/package=diseasemapping" class="external-link">https://CRAN.R-project.org/package=diseasemapping</a>.
 </div>
 <div id="ref-calenge_package_2006" class="csl-entry">
-Calenge, C. 2006. <span>“The Package Adehabitat for the <span>R</span> Software: Tool for the Analysis of Space and Habitat Use by Animals.”</span> <em>Ecological Modelling</em> 197: 1035.
+Calenge, C. 2006. <span>“The Package Adehabitat for the <span>R</span>
+Software: Tool for the Analysis of Space and Habitat Use by
+Animals.”</span> <em>Ecological Modelling</em> 197: 1035.
 </div>
 <div id="ref-cerin_walking_2013" class="csl-entry">
-Cerin, Ester, Cindy H P Sit, Anthony Barnett, Man Chin Cheung, and Wai Man Chan. 2013. <span>“Walking for Recreation and Perceptions of the Neighborhood Environment in Older <span>Chinese</span> Urban Dwellers.”</span> <em>Journal of Urban Health</em> 90 (1): 56–66. <a href="https://doi.org/10.1007/s11524-012-9704-8">https://doi.org/10.1007/s11524-012-9704-8</a>.
+Cerin, Ester, Cindy H P Sit, Anthony Barnett, Man Chin Cheung, and Wai
+Man Chan. 2013. <span>“Walking for Recreation and Perceptions of the
+Neighborhood Environment in Older <span>Chinese</span> Urban
+Dwellers.”</span> <em>Journal of Urban Health</em> 90 (1): 56–66. <a href="https://doi.org/10.1007/s11524-012-9704-8" class="external-link">https://doi.org/10.1007/s11524-012-9704-8</a>.
 </div>
 <div id="ref-willumsen_modelling_2011" class="csl-entry">
-de Dios Ortuzar, Juan, and Luis G. Willumsen. 2011. <em>Modelling <span>Transport</span></em>. <span>John Wiley &amp; Sons</span>.
+de Dios Ortuzar, Juan, and Luis G. Willumsen. 2011. <em>Modelling
+<span>Transport</span></em>. <span>John Wiley &amp; Sons</span>.
 </div>
 <div id="ref-diana_studying_2012" class="csl-entry">
-Diana, Marco. 2012. <span>“Studying <span>Patterns</span> of <span>Use</span> of <span>Transport</span> <span>Modes</span> <span>Through</span> <span>Data</span> <span>Mining</span>.”</span> <em>Transportation Research Record: Journal of the Transportation Research Board</em> 2308 (December): 1–9. <a href="https://doi.org/10.3141/2308-01">https://doi.org/10.3141/2308-01</a>.
+Diana, Marco. 2012. <span>“Studying <span>Patterns</span> of
+<span>Use</span> of <span>Transport</span> <span>Modes</span>
+<span>Through</span> <span>Data</span> <span>Mining</span>.”</span>
+<em>Transportation Research Record: Journal of the Transportation
+Research Board</em> 2308 (December): 1–9. <a href="https://doi.org/10.3141/2308-01" class="external-link">https://doi.org/10.3141/2308-01</a>.
 </div>
 <div id="ref-efthymiou_use_2012" class="csl-entry">
-Efthymiou, Dimitrios, and Constantinos Antoniou. 2012. <span>“Use of <span>Social</span> <span>Media</span> for <span>Transport</span> <span>Data</span> <span>Collection</span>.”</span> <em>Procedia - Social and Behavioral Sciences</em> 48 (August 2016): 775–85. <a href="https://doi.org/10.1016/j.sbspro.2012.06.1055">https://doi.org/10.1016/j.sbspro.2012.06.1055</a>.
+Efthymiou, Dimitrios, and Constantinos Antoniou. 2012. <span>“Use of
+<span>Social</span> <span>Media</span> for <span>Transport</span>
+<span>Data</span> <span>Collection</span>.”</span> <em>Procedia - Social
+and Behavioral Sciences</em> 48 (August 2016): 775–85. <a href="https://doi.org/10.1016/j.sbspro.2012.06.1055" class="external-link">https://doi.org/10.1016/j.sbspro.2012.06.1055</a>.
 </div>
 <div id="ref-hollander_transport_2016" class="csl-entry">
-Hollander, Yaron. 2016. <em>Transport <span>Modelling</span> for a <span>Complete Beginner</span></em>. <span>CTthink!</span>
+Hollander, Yaron. 2016. <em>Transport <span>Modelling</span> for a
+<span>Complete Beginner</span></em>. <span>CTthink!</span>
 </div>
 <div id="ref-jalal_overview_2017" class="csl-entry">
-Jalal, Hawre, Petros Pechlivanoglou, Eline Krijkamp, Fernando Alarid-Escudero, Eva Enns, and M. G. Myriam Hunink. 2017. <span>“An <span>Overview</span> of <span>R</span> in <span>Health Decision Sciences</span>.”</span> <em>Medical Decision Making</em>, January, 0272989X16686559. <a href="https://doi.org/10.1177/0272989X16686559">https://doi.org/10.1177/0272989X16686559</a>.
+Jalal, Hawre, Petros Pechlivanoglou, Eline Krijkamp, Fernando
+Alarid-Escudero, Eva Enns, and M. G. Myriam Hunink. 2017. <span>“An
+<span>Overview</span> of <span>R</span> in <span>Health Decision
+Sciences</span>.”</span> <em>Medical Decision Making</em>, January,
+0272989X16686559.
 </div>
 <div id="ref-kim_spatialepi:_2016" class="csl-entry">
-Kim, Albert Y., and Jon Wakefield. 2016. <span>“<span>SpatialEpi</span>: <span>Methods</span> and <span>Data</span> for <span>Spatial</span> <span>Epidemiology</span>.”</span> <a href="https://CRAN.R-project.org/package=SpatialEpi">https://CRAN.R-project.org/package=SpatialEpi</a>.
+Kim, Albert Y., and Jon Wakefield. 2016. <span>“<span>SpatialEpi</span>:
+<span>Methods</span> and <span>Data</span> for <span>Spatial</span>
+<span>Epidemiology</span>.”</span> <a href="https://CRAN.R-project.org/package=SpatialEpi" class="external-link">https://CRAN.R-project.org/package=SpatialEpi</a>.
 </div>
 <div id="ref-lovelace_stplanr_2018" class="csl-entry">
-Lovelace, Robin, and Richard Ellison. 2018. <span>“Stplanr: <span>A Package</span> for <span>Transport Planning</span>.”</span> <em>The R Journal</em> 10 (2): 7–23. <a href="https://doi.org/10.32614/RJ-2018-053">https://doi.org/10.32614/RJ-2018-053</a>.
+Lovelace, Robin, and Richard Ellison. 2018. <span>“Stplanr: <span>A
+Package</span> for <span>Transport Planning</span>.”</span> <em>The R
+Journal</em> 10 (2): 7–23. <a href="https://doi.org/10.32614/RJ-2018-053" class="external-link">https://doi.org/10.32614/RJ-2018-053</a>.
 </div>
 <div id="ref-lovelace_propensity_2017" class="csl-entry">
-Lovelace, Robin, Anna Goodman, Rachel Aldred, Nikolai Berkoff, Ali Abbas, and James Woodcock. 2017. <span>“The <span>Propensity</span> to <span>Cycle</span> <span>Tool</span>: <span>An</span> Open Source Online System for Sustainable Transport Planning.”</span> <em>Journal of Transport and Land Use</em> 10 (1). <a href="https://doi.org/10.5198/jtlu.2016.862">https://doi.org/10.5198/jtlu.2016.862</a>.
+Lovelace, Robin, Anna Goodman, Rachel Aldred, Nikolai Berkoff, Ali
+Abbas, and James Woodcock. 2017. <span>“The <span>Propensity</span> to
+<span>Cycle</span> <span>Tool</span>: <span>An</span> Open Source Online
+System for Sustainable Transport Planning.”</span> <em>Journal of
+Transport and Land Use</em> 10 (1). <a href="https://doi.org/10.5198/jtlu.2016.862" class="external-link">https://doi.org/10.5198/jtlu.2016.862</a>.
 </div>
 <div id="ref-moore_why_2017" class="csl-entry">
-Moore, R. D. (Dan), and David Hutchinson. 2017. <span>“Why <span>Watershed Analysts Should Use R</span> for <span>Data Processing</span> and <span>Analysis</span>.”</span> <em>Confluence: Journal of Watershed Science and Management</em> 1 (1). <a href="http://confluence-jwsm.ca/index.php/jwsm/article/view/2">http://confluence-jwsm.ca/index.php/jwsm/article/view/2</a>.
+Moore, R. D. (Dan), and David Hutchinson. 2017. <span>“Why
+<span>Watershed Analysts Should Use R</span> for <span>Data
+Processing</span> and <span>Analysis</span>.”</span> <em>Confluence:
+Journal of Watershed Science and Management</em> 1 (1). <a href="http://confluence-jwsm.ca/index.php/jwsm/article/view/2" class="external-link">http://confluence-jwsm.ca/index.php/jwsm/article/view/2</a>.
 </div>
 <div id="ref-pebesma_software_2015" class="csl-entry">
-Pebesma, Edzer, Roger Bivand, Paulo Justiniano Ribeiro, and others. 2015. <span>“Software for <span>Spatial</span> <span>Statistics</span>.”</span> <em>Journal of Statistical Software</em> 63 (1): 1–8. <a href="http://brage.bibsys.no/xmlui/bitstream/id/320781/Pebesma_Bivand_Ribeiro.pdf">http://brage.bibsys.no/xmlui/bitstream/id/320781/Pebesma_Bivand_Ribeiro.pdf</a>.
+Pebesma, Edzer, Roger Bivand, Paulo Justiniano Ribeiro, et al. 2015.
+<span>“Software for <span>Spatial</span>
+<span>Statistics</span>.”</span> <em>Journal of Statistical
+Software</em> 63 (1): 1–8. <a href="http://brage.bibsys.no/xmlui/bitstream/id/320781/Pebesma_Bivand_Ribeiro.pdf" class="external-link">http://brage.bibsys.no/xmlui/bitstream/id/320781/Pebesma_Bivand_Ribeiro.pdf</a>.
 </div>
 <div id="ref-waddell_urbansim:_2002" class="csl-entry">
-Waddell, Paul. 2002. <span>“<span>UrbanSim</span>: <span>Modeling</span> Urban Development for Land Use, Transportation, and Environmental Planning.”</span> <em>Journal of the American Planning Association</em> 68 (3): 297–314.
+Waddell, Paul. 2002. <span>“<span>UrbanSim</span>: <span>Modeling</span>
+Urban Development for Land Use, Transportation, and Environmental
+Planning.”</span> <em>Journal of the American Planning Association</em>
+68 (3): 297–314.
 </div>
 <div id="ref-zheng_big_2016" class="csl-entry">
-Zheng, Xinhu, Wei Chen, Pu Wang, Dayong Shen, Songhang Chen, Xiao Wang, Qingpeng Zhang, and Liuqing Yang. 2016. <span>“Big Data for Social Transportation.”</span> <em>IEEE Transactions on Intelligent Transportation Systems</em> 17 (3): 620–30. <a href="https://ieeexplore.ieee.org/abstract/document/7359138/">https://ieeexplore.ieee.org/abstract/document/7359138/</a>.
+Zheng, Xinhu, Wei Chen, Pu Wang, Dayong Shen, Songhang Chen, Xiao Wang,
+Qingpeng Zhang, and Liuqing Yang. 2016. <span>“Big Data for Social
+Transportation.”</span> <em>IEEE Transactions on Intelligent
+Transportation Systems</em> 17 (3): 620–30. <a href="https://ieeexplore.ieee.org/abstract/document/7359138/" class="external-link">https://ieeexplore.ieee.org/abstract/document/7359138/</a>.
 </div>
 </div>
-</div>
-<div class="footnotes">
-<hr>
-<ol>
-<li id="fn1"><p> Many people can think of things that could be improved on their local transport networks, especially for walking, cycling and wheel-chairs. But most lack the evidence to communicate the issues, and potential solutions, to others.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>An API key is needed for this function to work. This can be requested (or purchased for large scale routing) from <a href="https://www.cyclestreets.net/api/apply/">cyclestreets.net/api/apply</a>. See <code>?route_cyclestreet</code> for details. Thanks to Martin Lucas-Smith and Simon Nuttall for making this possible.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-</ol>
-</div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
 </div>
 
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><!-- begin footer --><div class="footer">
+    <footer><!-- begin footer --><div class="footer">
     <div class="container">
-        <div class="row start bottom-8">
-            <div class="col-xs-2"> <img id="footerlogo" src="https://ropensci.org/img/icon_short_white.svg">
+        <div class="row start top-4 bottom-8">
+            <div class="col-2"> <img id="footerlogo" src="https://ropensci.org/img/icon_short_white.svg">
 </div>
-            <div class="col-xs-10">
+            <div class="col-10">
                 <div class="row">
                     <div class="col-md-4 col-xs-6">
-                        <a href="http://github.com/ropensci" target="_blank"><div class="icon fab fa-github"></div></a>
-                        <a href="http://github.com/ropenscilabs" target="_blank"><div class="icon fa fa-flask"></div></a>
-                        <a href="http://twitter.com/ropensci" target="_blank"><div class="icon fab fa-twitter"></div></a>
-                        <a href="http://vimeo.com/ropensci" target="_blank"><div class="icon fab fa-vimeo"></div></a>
+                        <a href="https://github.com/ropensci" target="_blank" class="external-link"><div class="icon fab fa-github"></div></a>
+                        <a href="https://github.com/ropenscilabs" target="_blank" class="external-link"><div class="icon fa fa-flask"></div></a>
+                        <a href="https://twitter.com/ropensci" target="_blank" class="external-link"><div class="icon fab fa-twitter"></div></a>
+                        <a href="https://vimeo.com/ropensci" target="_blank" class="external-link"><div class="icon fab fa-vimeo"></div></a>
                     </div>
                 </div>
                 <div class="row top-4">
                     <div class="col-md-2 col-sm-4">
                         <ul>
 <h5 class="bottom-2">About</h5>
-                            <li><a href="https://ropensci.org/about">About rOpenSci</a></li>
-                            <li><a href="https://ropensci.org/software-review">Software Review Process</a></li>
-                            <li><a href="https://ropensci.org/about#team">Our Team</a></li>
-                            <li><a href="https://ropensci.org/careers">Jobs</a></li>
-                            <li><a href="https://ropensci.org/donate">Donate</a></li>
-                            <li><a href="https://ropensci.org/contact">Contact Us</a></li>
+                            <li><a href="https://ropensci.org/about" class="external-link">About rOpenSci</a></li>
+                            <li><a href="https://ropensci.org/software-review" class="external-link">Software Review</a></li>
+                            <li><a href="https://ropensci.org/about#team" class="external-link">Our Team</a></li>
+                            <li><a href="https://ropensci.org/careers" class="external-link">Jobs</a></li>
+                            <li><a href="https://ropensci.org/donate" class="external-link">Donate</a></li>
+                            <li><a href="https://ropensci.org/contact" class="external-link">Contact Us</a></li>
                         </ul>
 </div>
                     <div class="col-md-3 col-sm-4">
                         <ul>
 <h5 class="bottom-2">Community</h5>
-                            <li><a href="https://ropensci.org/community/">Our Community</a></li>
-                            <li><a href="https://ropensci.org/commcalls/">Community calls</a></li>
-                            <li><a href="https://ropensci.org/events/">Events</a></li>
-                            <li><a href="https://discuss.ropensci.org/">Join the Discussion</a></li>
-                            <li><a href="https://ropensci.org/code-of-conduct">Code of conduct</a></li>
+                            <li><a href="https://ropensci.org/community/" class="external-link">Our Community</a></li>
+                            <li><a href="https://ropensci.org/commcalls/" class="external-link">Community calls</a></li>
+                            <li><a href="https://ropensci.org/events/" class="external-link">Events</a></li>
+                            <li><a href="https://discuss.ropensci.org/" class="external-link">Join the Discussion</a></li>
+                            <li><a href="https://ropensci.org/code-of-conduct" class="external-link">Code of conduct</a></li>
                         </ul>
 </div>
                     <div class="col-md-2 col-sm-4">
                         <ul>
 <h5 class="bottom-2">Resources</h5>
-                            <li><a href="https://ropensci.org/packages/">Packages</a></li>
-                            <li><a href="https://ropensci.org/usecases/">Use Cases</a></li>
-                            <li><a href="https://ropensci.org/talks-papers/">Talks &amp; Publications</a></li>
-                            <li><a href="https://docs.ropensci.org/">Documentation</a></li>
-                            <li><a href="https://ropensci.org/how-to-cite-ropensci/">Cite rOpenSci</a></li>
+                            <li><a href="https://ropensci.org/packages/" class="external-link">Packages</a></li>
+                            <li><a href="https://ropensci.org/usecases/" class="external-link">Use Cases</a></li>
+                            <li><a href="https://ropensci.org/talks-papers/" class="external-link">Talks &amp; Publications</a></li>
+                            <li><a href="https://docs.ropensci.org/" class="external-link">Documentation</a></li>
+                            <li><a href="https://ropensci.org/news/" class="external-link">Newsletter</a></li>
+                            <li><a href="https://ropensci.org/how-to-cite-ropensci/" class="external-link">Cite rOpenSci</a></li>
                         </ul>
 </div>
                     <div class="col-md-4 col-xs-12">
                         <h5 class="bottom-2"></h5>
 
-                        <p>rOpenSci is a fiscally sponsored project of <a href="http://numfocus.org" target="_blank">NumFOCUS</a></p>
-                        <a href="http://numfocus.org" target="_blank"></a>
+                        <p>rOpenSci is a fiscally sponsored project of <a href="http://numfocus.org" class="external-link">NumFOCUS</a>.</p>
 
                     </div>
                 </div>
@@ -580,11 +1109,13 @@ Zheng, Xinhu, Wei Chen, Pu Wang, Dayong Shen, Songhang Chen, Xiao Wang, Qingpeng
 </div>
 <!-- / end footer -->
 
-      </footer>
+
+    </footer>
 </div>
 
   
 
+  
 
   </body>
 </html>

@@ -52,6 +52,7 @@ Other data:
 \code{\link{od_data_sample}},
 \code{\link{osm_net_example}},
 \code{\link{route_network_sf}},
+\code{\link{route_network_small}},
 \code{\link{routes_fast_sf}},
 \code{\link{routes_slow_sf}},
 \code{\link{zones_sf}}
