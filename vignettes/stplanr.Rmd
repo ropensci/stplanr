@@ -174,22 +174,16 @@ plot(l["Bicycle"], lwd = lwd)
 
 Finally, we can convert these desire lines into routes as follows (other routing functions can be used, but may require API keys to work - see the [`cyclestreets`](https://cran.r-project.org/package=cyclestreets) package documentation for example):
 
-```{r, message=FALSE, warning=FALSE}
+```{r, eval=FALSE}
 # if the next line returns FALSE the code will not run
-(has_internet <- curl::has_internet())
-(cs_key <- nchar(Sys.getenv("CYCLESTREETS")))
-if (has_internet & cs_key == 16) {
-  r <- route(l = l, route_fun = cyclestreets::journey)
-  r <- aggregate(r[c(3, 12)], by = list(r[[1]], r[[2]]), FUN = mean)
-} else {
-  r <- routes_fast_sf[sel, ]
-}
+r <- route(l = l, route_fun = cyclestreets::journey)
 ```
 
 These routes contain the same information on origin and destination, but have additional spatial information about the route network.
-The routes can be plotted in the same way as the desire lines were plotted:
+The routes can be plotted in the same way as the desire lines were plotted (we will use the pre-made data for this):
 
 ```{r, out.width="500", out.height="500", eval=FALSE}
+r <- stplanr::routes_fast_sf
 plot(r$geometry, lwd = lwd * 3, reset = FALSE)
 ```
 
