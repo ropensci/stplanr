@@ -153,9 +153,14 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @examples
 #' l <- routes_fast_sf[2, ]
 #' l_seg2 <- line_segment(l = l, n_segments = 2)
+#' l_seg3 <- line_segment(l = l, n_segments = 3)
+#' l_seg_100 <- line_segment(l = l, segment_length = 100)
 #' plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
+#' plot(sf::st_geometry(l_seg3), col = 1:3, lwd = 5)
+#' plot(sf::st_geometry(l_seg3), col = 1:3)
 line_segment <- function(l, n_segments, segment_length = NA) {
   if (!is.na(segment_length)) {
+    browser()
     l_length <- sf::st_length(l)
     n_segments <- round(l_length / segment_length)
   }
