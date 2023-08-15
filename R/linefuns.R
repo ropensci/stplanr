@@ -181,7 +181,7 @@ line_segment <- function(
   }
   if (is.na(n_segments)) {
     l_length <- as.numeric(sf::st_length(l))
-    n_segments <- round(l_length / segment_length)
+    n_segments <- max(round(l_length / segment_length), 1)
   }
   if(n_segments == 1) {
     return(l)
