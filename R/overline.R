@@ -232,12 +232,8 @@ overline2 <-
     sl <- cbind(c3, sl)
     rm(c3)
 
-    # browser()
-    # if(requireNamespace("data.table", quietly = TRUE)) {
-    #   sl = data.table::data.table(sl)
-    # }
-    slg <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
-    sls <- dplyr::ungroup(dplyr::summarise_all(slg, .funs = fun))
+    sls <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
+    sls <- dplyr::ungroup(dplyr::summarise_all(sls, .funs = fun))
     attrib <- names(sls)[5:ncol(sls)]
     coords <- as.matrix(sls[, 1:4])
     sl <- sls[, -c(1:4)]
@@ -300,13 +296,11 @@ overline2 <-
           })
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             }, cl = cl)
           } else {
             lapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           }
 
@@ -315,13 +309,11 @@ overline2 <-
         } else {
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           } else {
             lapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           }
         }
@@ -333,8 +325,8 @@ overline2 <-
         if (!quiet) {
           message(paste0(Sys.time(), " aggregating flows"))
         }
-        overlined_simple <- dplyr::group_by_at(sl, attrib)
-        overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE, .groups = "drop")
+
+        overlined_simple <- ol_grp(sl, attrib)
         rm(sl)
       }
 
@@ -363,6 +355,11 @@ overline2 <-
 #' @export
 overline.sf <- overline2
 
+ol_grp <- function(sl, attrib){
+  sl <- data.table::data.table(sl)
+  sl <- sl[, .(geometry = st_combine(geometry)), by = attrib]
+  sf::st_as_sf(sl)
+}
 
 #' Aggregate flows so they become non-directional (by geometry - the slow way)
 #'
