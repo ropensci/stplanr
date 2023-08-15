@@ -4,7 +4,7 @@
 \alias{rnet_subset}
 \title{Subset one route network based on overlaps with another}
 \usage{
-rnet_subset(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3)
+rnet_subset(rnet_x, rnet_y, dist = 10, crop = TRUE, min_x = 3)
 }
 \arguments{
 \item{rnet_x}{The route network to be subset}

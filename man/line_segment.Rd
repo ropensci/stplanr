@@ -2,9 +2,9 @@
 % Please edit documentation in R/linefuns.R
 \name{line_segment}
 \alias{line_segment}
-\title{Divide sf LINESTRING objects into regular segments}
+\title{Divide an sf object with LINESTRING geometry into regular segments}
 \usage{
-line_segment(l, n_segments, segment_length = NA)
+line_segment(l, n_segments = NA, segment_length = NA)
 }
 \arguments{
 \item{l}{A spatial lines object}
@@ -14,12 +14,22 @@ line_segment(l, n_segments, segment_length = NA)
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
 }
 \description{
-Divide sf LINESTRING objects into regular segments
+This function keeps the attributes
 }
 \examples{
 l <- routes_fast_sf[2, ]
 l_seg2 <- line_segment(l = l, n_segments = 2)
+l_seg3 <- line_segment(l = l, n_segments = 3)
+l_seg_100 <- line_segment(l = l, segment_length = 100)
+l_seg_2000 <- line_segment(l = l, segment_length = 2000)
 plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
+plot(sf::st_geometry(l_seg3), col = 1:3, lwd = 5)
+plot(sf::st_geometry(l_seg_100), col = seq(nrow(l_seg_100)), lwd = 5)
+plot(sf::st_geometry(l_seg_2000), col = seq(nrow(l_seg_100)), lwd = 5)
+# Multiple lines
+l <- routes_fast_sf[2:4, ]
+l_seg_multi = line_segment(l, segment_length = 1000)
+plot(sf::st_geometry(l_seg_multi), col = seq(nrow(l_seg_100)), lwd = 5)
 }
 \seealso{
 Other lines: 
