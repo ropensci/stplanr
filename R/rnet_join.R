@@ -134,6 +134,7 @@ line_cast = function(x) {
 #' Merge route networks, keeping attributes with aggregating functions
 #'
 #' @inheritParams rnet_join
+#' @param sum_flows Should flows be summed? `TRUE` by default.
 #' @param funs A named list of functions to apply to named columns, e.g.:
 #'   `list(flow = sum, length = mean)`. The default is to sum all numeric
 #'   columns.
@@ -173,11 +174,11 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     if (identical(fn, sum) && sum_flows) {
       res = rnetj_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(across(matches(nm), function(x) sum(x * length_y)))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)))
     } else {
       res = rnetj_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(across(matches(nm), fn))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn))
     }
     names(res)[2] = nm
     if(i > 1) {
@@ -185,7 +186,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     }
     res
   })
-  res_df = bind_cols(res_list)
+  res_df = dplyr::bind_cols(res_list)
   res_sf = dplyr::left_join(rnet_x, res_df)
   if (sum_flows) {
     res_sf$length_x = as.numeric(sf::st_length(res_sf))

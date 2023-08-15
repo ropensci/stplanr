@@ -29,6 +29,7 @@ plot(sf::st_geometry(l_seg_2000), col = seq(nrow(l_seg_100)), lwd = 5)
 # Multiple lines
 l <- routes_fast_sf[2:4, ]
 l_seg_multi = line_segment(l, segment_length = 1000)
+plot(sf::st_geometry(l_seg_multi), col = seq(nrow(l_seg_100)), lwd = 5)
 }
 \seealso{
 Other lines: 

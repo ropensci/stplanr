@@ -1,6 +1,6 @@
 # See https://rdatatable.gitlab.io/data.table/articles/datatable-importing.html#data-table-in-imports-but-nothing-imported-1
 .datatable.aware = TRUE
-utils::globalVariables(c("linestring_id", "new_linestring_id"))
+utils::globalVariables(c("linestring_id", "new_linestring_id", "length_y"))
 
 #' Break up an sf object with LINESTRING geometry.
 #'
