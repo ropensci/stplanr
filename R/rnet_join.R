@@ -32,7 +32,7 @@
 #'   `TRUE`.
 #' @param dist_subset The buffer distance in m to apply when breaking up the
 #'   source object `rnet_y`. Default: 5.
-#' @param split_y Should the source route network be split?
+#' @param segment_length Should the source route network be split?
 #'   `0` by default, meaning no splitting. Values above 0 split the source
 #'   into linestrings with a max distance. Around 5 (m) may be a sensible
 #'   default for many use cases, the smaller the value the slower the process.
@@ -45,7 +45,7 @@
 #' plot(osm_net_example$geometry, lwd = 5, col = "grey")
 #' plot(route_network_small["flow"], add = TRUE)
 #' rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
-#' rnetj2 = rnet_join(osm_net_example, route_network_small, dist = 9, split_y = 10)
+#' rnetj2 = rnet_join(osm_net_example, route_network_small, dist = 9, segment_length = 10)
 #' # library(mapview)
 #' # mapview(rnetj, zcol = "flow") +
 #' #  mapview(route_network_small, zcol = "flow")
@@ -69,13 +69,13 @@
 #' #   mapview(route_network_small)
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                     subset_x = TRUE, dist_subset = 5, split_y = 0, ...) {
+                     subset_x = TRUE, dist_subset = 5, segment_length = 0, ...) {
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2)
-  if (split_y > 0) {
-    rnet_y = rnet_split_lines(rnet_y, rnet_x, split_y = split_y)
+  if (segment_length > 0) {
+    rnet_y = line_segment(rnet_y, segment_length = segment_length)
   }
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
@@ -111,32 +111,6 @@ rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3) {
     rnet_x[rnet_y_buffer, , op = sf::st_within]
   }
   rnet_x
-}
-#' Split lines in a route network based points
-#'
-#' If the object passed to the second argument has LINSTRING geometries
-#'   the start and end points of linestrings are used.
-#'
-#' @param rnet_x The route network to be broken into smaller pieces
-#' @param geo_y The geographic object used to break up the route network
-#' @param dist The width of the buffer used when breaking up the route network.
-#'   For imprecise data it may be worth increasing this above 1 m, the default.
-#' @export
-rnet_split_lines = function(rnet_y, split_y = 10) {
-  # Require qgisprocess, stop if not installed:
-  # browser()
-  if (!requireNamespace("qgisprocess", quietly = TRUE)) {
-    stop("Please install qgisprocess to use this function")
-  }
-  rnet_y_projected = sf::st_transform(rnet_y, crs = stplanr::geo_select_aeq(rnet_y))
-  q_out = qgisprocess::qgis_run_algorithm(
-    algorithm = "grass7:v.split",
-    input = rnet_y_projected[1],
-    length = split_y
-  )
-  rnet_y_split = sf::st_as_sf(q_out)
-  rnet_y_split = sf::st_transform(rnet_y_split, sf::st_crs(rnet_y))
-  rnet_y_split
 }
 
 #' Convert multilinestring object into linestrings
