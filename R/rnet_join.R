@@ -80,7 +80,8 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
-  rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
+  rnet_y_centroids = sf::st_centroid(rnet_y)
+  rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
   rnetj
 }
 
@@ -135,7 +136,6 @@ rnet_split_lines = function(rnet_y, split_y = 10) {
   )
   rnet_y_split = sf::st_as_sf(q_out)
   rnet_y_split = sf::st_transform(rnet_y_split, sf::st_crs(rnet_y))
-  rnet_y_split$length_split = as.numeric(sf::st_length(rnet_y_split))
   rnet_y_split
 }
 
