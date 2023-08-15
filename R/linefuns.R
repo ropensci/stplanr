@@ -166,6 +166,7 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' # Multiple lines
 #' l <- routes_fast_sf[2:4, ]
 #' l_seg_multi = line_segment(l, segment_length = 1000)
+#' plot(sf::st_geometry(l_seg_multi), col = seq(nrow(l_seg_100)), lwd = 5)
 line_segment <- function(
     l,
     n_segments = NA,
@@ -188,13 +189,13 @@ line_segment <- function(
   }
   from_to_sequence = seq(from = 0, to = 1, length.out = n_segments + 1)
   suppressWarnings({
-    line_segment_list = lapply(seq(n_segments), function(i)
+    line_segment_list = lapply(seq(n_segments), function(i) {
       lwgeom::st_linesubstring(
         x = l,
         from = from_to_sequence[i],
         to = from_to_sequence[i + 1]
       )
-    )
+  })
   })
   # first_linestring = lwgeom::st_linesubstring(x = l, from = 0, to = 0.2)
   res <- bind_sf(line_segment_list)

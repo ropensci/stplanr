@@ -103,7 +103,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #'   *and* which were longer
 #'   before the cropping process will be removed. 3 by default.
 #' @export
-rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3) {
+rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_x = 3) {
   rnet_x$length_x_original = as.numeric(sf::st_length(rnet_x))
   rnet_y_union = sf::st_union(rnet_y)
   rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
@@ -129,4 +129,72 @@ rnet_subset = function(rnet_x, rnet_y, dist = 1, crop = TRUE, min_x = 3) {
 #' @export
 line_cast = function(x) {
   sf::st_cast(sf::st_cast(x, "MULTILINESTRING"), "LINESTRING")
+}
+
+#' Merge route networks, keeping attributes with aggregating functions
+#'
+#' @inheritParams rnet_join
+#' @param funs A named list of functions to apply to named columns, e.g.:
+#'   `list(flow = sum, length = mean)`. The default is to sum all numeric
+#'   columns.
+#' @param ... Additional arguments passed to `rnet_join`.
+#' @export
+#' @examples
+#' # The target object
+#' rnet_x = rnet_subset(osm_net_example[1], route_network_small)
+#' # The source object:
+#' rnet_y = route_network_small["flow"]
+#' rnet_y$quietness = rnorm(nrow(rnet_y))
+#' funs = list(flow = sum, quietness = mean)
+#' rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
+#'                          dist = 9, segment_length = 20, funs = funs)
+#' plot(rnet_y["flow"])
+#' plot(rnet_merged["flow"])
+#' @return An sf object with the same geometry as `rnet_x`
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
+  if (is.null(funs)) {
+    funs = list()
+    for (col in names(rnet_y)) {
+      if (is.numeric(rnet_y[[col]])) {
+        funs[[col]] = sum
+      }
+    }
+  }
+  sum_cols = sapply(funs, function(f) identical(f, sum))
+  sum_cols = names(funs)[which(sum_cols)]
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
+  names(rnetj)
+  rnetj_df = sf::st_drop_geometry(rnetj)
+  # Apply functions to columns with lapply:
+  res_list = lapply(seq(length(funs)), function(i) {
+    nm = names(funs[i])
+    fn = funs[[i]]
+
+    if (identical(fn, sum) && sum_flows) {
+      res = rnetj_df %>%
+        dplyr::group_by_at(1) %>%
+        dplyr::summarise(across(matches(nm), function(x) sum(x * length_y)))
+    } else {
+      res = rnetj_df %>%
+        dplyr::group_by_at(1) %>%
+        dplyr::summarise(across(matches(nm), fn))
+    }
+    names(res)[2] = nm
+    if(i > 1) {
+      res = res[-1]
+    }
+    res
+  })
+  res_df = bind_cols(res_list)
+  res_sf = dplyr::left_join(rnet_x, res_df)
+  if (sum_flows) {
+    res_sf$length_x = as.numeric(sf::st_length(res_sf))
+    for(i in sum_cols) {
+      # i = sum_cols[1]
+      res_sf[[i]] = res_sf[[i]] / res_sf$length_x
+      over_estimate = sum(res_sf[[i]], na.rm = TRUE) / sum(rnet_y[[i]], na.rm = TRUE)
+      res_sf[[i]] = res_sf[[i]] / over_estimate
+    }
+  }
+  res_sf
 }
