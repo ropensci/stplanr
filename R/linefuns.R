@@ -144,7 +144,10 @@ line_midpoint <- function(l, tolerance = NULL) {
   lwgeom::st_endpoint(sub)
 }
 
-#' Divide sf LINESTRING objects into regular segments
+#' Divide an sf object with LINESTRING geometry into regular segments
+#'
+#' This function keeps the attributes
+#'
 #' @inheritParams line2df
 #' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
@@ -155,25 +158,50 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' l_seg2 <- line_segment(l = l, n_segments = 2)
 #' l_seg3 <- line_segment(l = l, n_segments = 3)
 #' l_seg_100 <- line_segment(l = l, segment_length = 100)
+#' l_seg_2000 <- line_segment(l = l, segment_length = 2000)
 #' plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 #' plot(sf::st_geometry(l_seg3), col = 1:3, lwd = 5)
-#' plot(sf::st_geometry(l_seg_100), col = seq(nrow(l_seg_100)))
-line_segment <- function(l, n_segments, segment_length = NA) {
-  if (!is.na(segment_length)) {
+#' plot(sf::st_geometry(l_seg_100), col = seq(nrow(l_seg_100)), lwd = 5)
+#' plot(sf::st_geometry(l_seg_2000), col = seq(nrow(l_seg_100)), lwd = 5)
+#' # Multiple lines
+#' l <- routes_fast_sf[2:4, ]
+#' l_seg_multi = line_segment(l, segment_length = 1000)
+line_segment <- function(
+    l,
+    n_segments = NA,
+    segment_length = NA
+    ) {
+  n_row_l = nrow(l)
+  if(n_row_l > 1) {
+    res_list = pbapply::pblapply(seq(n_row_l), function(i) {
+      line_segment(l[i, ], n_segments, segment_length)
+      })
+    res = bind_sf(res_list)
+    return(res)
+  }
+  if (is.na(n_segments)) {
     l_length <- as.numeric(sf::st_length(l))
     n_segments <- round(l_length / segment_length)
   }
-  # first_linestring = lwgeom::st_linesubstring(x = l, from = 0, to = 0.2)
+  if(n_segments == 1) {
+    return(l)
+  }
   from_to_sequence = seq(from = 0, to = 1, length.out = n_segments + 1)
-  line_segment_list = lapply(seq(n_segments), function(i)
-    lwgeom::st_linesubstring(
-      x = l,
-      from = from_to_sequence[i],
-      to = from_to_sequence[i + 1]
+  suppressWarnings({
+    line_segment_list = lapply(seq(n_segments), function(i)
+      lwgeom::st_linesubstring(
+        x = l,
+        from = from_to_sequence[i],
+        to = from_to_sequence[i + 1]
       )
     )
-  do.call(rbind, line_segment_list)
+  })
+  # first_linestring = lwgeom::st_linesubstring(x = l, from = 0, to = 0.2)
+  res <- bind_sf(line_segment_list)
+  res
 }
+
+
 make_bidirectional <- function(bearing) {
   is_na_bearings <- is.na(bearing)
   non_na_bearings <- bearing[!is_na_bearings]
@@ -181,4 +209,18 @@ make_bidirectional <- function(bearing) {
   non_na_bearings[non_na_bearings < -90] <- non_na_bearings[non_na_bearings < -90] + 180
   bearing[!is_na_bearings] <- non_na_bearings
   bearing
+}
+
+#' Rapid row-binding of sf objects
+#'
+#' @param x List of sf objects to combine
+#' @return An sf data frame
+bind_sf = function(x) {
+  if (length(x) == 0) stop("Empty list")
+  geom_name = attr(x[[1]], "sf_column")
+  x = data.table::rbindlist(x, use.names = FALSE)
+  # x = collapse::unlist2d(x, idcols = FALSE, recursive = FALSE)
+  x[[geom_name]] = sf::st_sfc(x[[geom_name]], recompute_bbox = TRUE)
+  x = sf::st_as_sf(x)
+  x
 }

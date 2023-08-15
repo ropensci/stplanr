@@ -73,20 +73,27 @@ plot(route_network_small["flow"])
 plot(osm_net_example$geometry, lwd = 5, col = "grey")
 plot(route_network_small["flow"], add = TRUE)
 rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
-rnetj2 = rnet_join(osm_net_example, route_network_small, dist = 9, segment_length = 10)
+rnetj2 = rnet_join(osm_net_example, route_network_small, dist = 9, segment_length = 5)
 # library(mapview)
-# mapview(rnetj, zcol = "flow") +
-#  mapview(route_network_small, zcol = "flow")
-plot(rnetj["flow"])
+ mapview(rnetj, zcol = "flow") +
+   mapview(rnetj2, zcol = "flow") +
+   mapview(route_network_small, zcol = "flow")
+plot(sf::st_geometry(rnetj))
+plot(rnetj["flow"], add = TRUE)
+plot(rnetj2["flow"], add = TRUE)
 plot(route_network_small["flow"], add = TRUE)
-rnetj_summary = rnetj \%>\%
+summary(rnetj2$length_y)
+rnetj_summary = rnetj2 \%>\%
+  filter(!is.na(length_y)) \%>\%
   sf::st_drop_geometry() \%>\%
   group_by(osm_id) \%>\%
     summarise(
       flow = weighted.mean(flow, length_y, na.rm = TRUE),
       )
 osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
-plot(route_network_small["flow"])
+plot(sf::st_geometry(route_network_small))
+plot(route_network_small["flow"], lwd = 9, add = TRUE)
+plot(sf::st_geometry(osm_joined_rnet), add = TRUE)
 plot(osm_joined_rnet[c("flow")])
 # Improve fit between geometries and performance by subsetting rnet_x
 osm_subset = rnet_subset(osm_net_example, route_network_small, dist = 5)
