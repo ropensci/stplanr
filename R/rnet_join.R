@@ -32,8 +32,10 @@
 #'   `TRUE`.
 #' @param dist_subset The buffer distance in m to apply when breaking up the
 #'   source object `rnet_y`. Default: 5.
-#' @param split_y Should the second route network be split at the start and
-#'   end points of LINESTRING features in the first? `TRUE` by default.
+#' @param split_y Should the source route network be split?
+#'   `0` by default, meaning no splitting. Values above 0 split the source
+#'   into linestrings with a max distance. Around 5 (m) may be a sensible
+#'   default for many use cases, the smaller the value the slower the process.
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -66,7 +68,7 @@
 #' #   mapview(route_network_small)
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                     subset_x = TRUE, dist_subset = 5, split_y = TRUE, ...) {
+                     subset_x = TRUE, dist_subset = 5, split_y_dist = 0, ...) {
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
