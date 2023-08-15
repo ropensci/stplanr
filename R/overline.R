@@ -357,7 +357,7 @@ overline.sf <- overline2
 
 ol_grp <- function(sl, attrib){
   sl <- data.table::data.table(sl)
-  sl <- sl[, .(geometry = st_combine(geometry)), by = attrib]
+  sl <- sl[, .(geometry = sf::st_combine(geometry)), by = attrib]
   sf::st_as_sf(sl)
 }
 
