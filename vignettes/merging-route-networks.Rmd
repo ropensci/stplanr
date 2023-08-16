@@ -12,9 +12,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   # # Uncomment to speed-up build
   # eval = FALSE,
-  comment = "#>"
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
 )
 # devtools::load_all()
+sf::sf_use_s2(FALSE)
 ```
 
 ```{r setup}
@@ -32,30 +36,58 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 
 # Target network preprocessing
 
-We can pre-process the input in a number of ways, e.g.:
+We pre-processed the input simple geometry to make it even simpler as shown below.
 
 ```{r, out.width="100%", fig.width=8, fig.height=6}
 tmap_mode("view")
-nrow(rnet_x)
-summary(sf::st_length(rnet_x))
+# nrow(rnet_x)
+# summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20)
-nrow(rnet_x)
-plot(sf::st_geometry(rnet_x))
-# rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_x = 5, rm_short = TRUE)
+# nrow(rnet_x)
+# plot(sf::st_geometry(rnet_x))
+rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_x = 5, rm_short = TRUE)
 # summary(sf::st_length(rnet_x))
 # nrow(rnet_x)
 # plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, rm_disconnected = TRUE)
-nrow(rnet_x)
+# nrow(rnet_x)
 plot(sf::st_geometry(rnet_x))
 ```
 
+The initial merged result was as follows.
 
 
 ```{r}
 funs = list(value = sum, Quietness = mean)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
+brks = c(0, 100, 500, 1000, 5000)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 20, funs = funs)
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)  +
+  tm_scale_bar()
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+```
 
+We can more reduce the minimum segment length to ensure fewer NA values in the outputs:
+
+```{r}
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs)
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+```
+
+Reducing the max length of the complex route network led to the following result.
+
+```{r}
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 5, funs = funs, dist_subset = 30)
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE, sync = TRUE)
+```
+
+```{r, echo=FALSE, eval=FALSE}
+sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
+sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
 

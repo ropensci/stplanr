@@ -79,7 +79,6 @@
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = 5, segment_length = 0,
                      endCapStyle = "FLAT", ...) {
-  # browser()
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
@@ -117,7 +116,7 @@ rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, r
     rnet_x = rnet_x[rnet_y_buffer, , op = sf::st_within]
   }
   if(min_length > 0) {
-    rnet_x = rnet_x[as.numeric(sf::st_length(rnet_x)) > min_length]
+    rnet_x = rnet_x[as.numeric(sf::st_length(rnet_x)) > min_length, ]
   }
   if(rm_disconnected) {
     rnet_x = rnet_connected(rnet_x)
@@ -165,7 +164,7 @@ line_cast = function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, dist_subset = 20, ...) {
   if (is.null(funs)) {
     funs = list()
     for (col in names(rnet_y)) {
@@ -176,7 +175,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, dist_subset = dist_subset, ...)
   names(rnetj)
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
@@ -205,9 +204,12 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   if (sum_flows) {
     res_sf$length_x = as.numeric(sf::st_length(res_sf))
     for(i in sum_cols) {
+      # TODO: deduplicate
+      length_y = as.numeric(sf::st_length(rnet_y))
       # i = sum_cols[1]
       res_sf[[i]] = res_sf[[i]] / res_sf$length_x
-      over_estimate = sum(res_sf[[i]], na.rm = TRUE) / sum(rnet_y[[i]], na.rm = TRUE)
+      over_estimate = sum(res_sf[[i]] * res_sf$length_x, na.rm = TRUE) /
+        sum(rnet_y[[i]] * length_y, na.rm = TRUE)
       res_sf[[i]] = res_sf[[i]] / over_estimate
     }
   }
