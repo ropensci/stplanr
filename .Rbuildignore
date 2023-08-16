@@ -19,3 +19,4 @@ log-latest
 ^\.github/workflows/pr-commands\.yaml$
 ^\.github$
 ^CRAN-SUBMISSION$
+.geojson

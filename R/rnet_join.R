@@ -99,24 +99,26 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #' @param rnet_y The subsetting route network
 #' @param dist The buffer width around y in meters. 1 m by default.
 #' @param crop Crop `rnet_x`? `TRUE` is the default
-#' @param min_x Segments shorter than this multiple of dist
+#' @param min_length Segments shorter than this multiple of dist
 #'   *and* which were longer
 #'   before the cropping process will be removed. 3 by default.
+#' @param rm_disconnected Remove ways that are
 #' @export
-rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_x = 3) {
+rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, rm_disconnected = TRUE) {
   rnet_x$length_x_original = as.numeric(sf::st_length(rnet_x))
   rnet_y_union = sf::st_union(rnet_y)
   rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
   if(crop) {
     rnet_x = sf::st_intersection(rnet_x, rnet_y_buffer)
     rnet_x = line_cast(rnet_x)
-    rnet_x$length_x_cropped = as.numeric(sf::st_length(rnet_x))
-    min_length = dist * min_x
-    sel_short = rnet_x$length_x_cropped < min_length &
-      rnet_x$length_x_original > min_length
-    rnet_x = rnet_x[!sel_short, ]
   } else {
-    rnet_x[rnet_y_buffer, , op = sf::st_within]
+    rnet_x = rnet_x[rnet_y_buffer, , op = sf::st_within]
+  }
+  if(min_length > 0) {
+    rnet_x = rnet_x[as.numeric(sf::st_length(rnet_x)) > min_length]
+  }
+  if(rm_disconnected) {
+    rnet_x = rnet_connected(rnet_x)
   }
   rnet_x
 }
@@ -156,11 +158,10 @@ line_cast = function(x) {
 #' system("gh release list")
 #' system("gh release upload v1.0.2 rnet_*")
 #' # List the files released in v1.0.2:
-#' system("gh release download v1.0.2")
-#' rnet_x = sf::read_sf("rnet_x_ed.geojson")
-#' rnet_y = sf::read_sf("rnet_y_ed.geojson")
-#'
-#' rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
+#' # system("gh release download v1.0.2")
+#' # rnet_x = sf::read_sf("rnet_x_ed.geojson")
+#' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
+#' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
   if (is.null(funs)) {

@@ -102,3 +102,27 @@ rnet_group.sf <- function(
     ...
   )
 }
+
+#' Keep only segments connected to the largest group in a network
+#'
+#' This function takes an sf object representing a road network and
+#' returns only the parts of the network that are in the largest group.
+#'
+#' @param rnet An sf object representing a road network
+#' @return An sf object representing the largest group in the network
+#' @export
+#' @examples
+#' rnet <- rnet_breakup_vertices(stplanr::osm_net_example)
+#' rnet_largest_group <- rnet_connected(rnet)
+#' plot(rnet$geometry)
+#' plot(rnet_largest_group$geometry)
+rnet_connected <- function(rnet) {
+  # Only proceed if igraph installed:
+  if (!requireNamespace("igraph", quietly = TRUE)) {
+    message("You must install igraph for this function to work")
+  } else {
+      mem <- rnet_group(rnet)
+      rnet <- rnet[mem == which.max(table(mem)), ]
+  }
+  rnet
+}

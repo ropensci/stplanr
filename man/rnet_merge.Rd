@@ -40,4 +40,13 @@ rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
                          dist = 9, segment_length = 20, funs = funs)
 plot(rnet_y["flow"])
 plot(rnet_merged["flow"])
+
+# Larger example
+system("gh release list")
+system("gh release upload v1.0.2 rnet_*")
+# List the files released in v1.0.2:
+# system("gh release download v1.0.2")
+# rnet_x = sf::read_sf("rnet_x_ed.geojson")
+# rnet_y = sf::read_sf("rnet_y_ed.geojson")
+# rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 }

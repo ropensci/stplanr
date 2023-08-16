@@ -1,0 +1,62 @@
+---
+title: "Merging route networks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Merging route networks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  # # Uncomment to speed-up build
+  # eval = FALSE,
+  comment = "#>"
+)
+# devtools::load_all()
+```
+
+```{r setup}
+library(stplanr)
+library(dplyr)
+library(tmap)
+rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
+rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
+# dups = duplicated(rnet_x$geometry)
+# summary(dups)
+# rnet_x = rnet_x |>
+#   filter(!dups)
+# sf::write_sf(rnet_x, "~/github/ropensci/stplanr/rnet_x_ed.geojson", delete_dsn = TRUE)
+```
+
+# Target network preprocessing
+
+We can pre-process the input in a number of ways, e.g.:
+
+```{r, out.width="100%", fig.width=8, fig.height=6}
+tmap_mode("view")
+nrow(rnet_x)
+summary(sf::st_length(rnet_x))
+plot(sf::st_geometry(rnet_x))
+rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20)
+nrow(rnet_x)
+plot(sf::st_geometry(rnet_x))
+# rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_x = 5, rm_short = TRUE)
+# summary(sf::st_length(rnet_x))
+# nrow(rnet_x)
+# plot(sf::st_geometry(rnet_x))
+rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, rm_disconnected = TRUE)
+nrow(rnet_x)
+plot(sf::st_geometry(rnet_x))
+```
+
+
+
+```{r}
+funs = list(value = sum, Quietness = mean)
+
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
+
+```
+

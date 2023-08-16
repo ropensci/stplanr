@@ -7,8 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## This vignette is work in progress - watch this space!
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -26,7 +24,6 @@ library(sf)
 
 Route networks represent the network of highways, cycleways, footways and other ways along which transport happens.
 You can get route network data from OpenStreetMap (e.g. via the `osmdata` R package) and other providers or transport network data.
-
 
 # Creating route networks from overlapping routes
 
