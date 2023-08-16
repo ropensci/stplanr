@@ -267,6 +267,9 @@ overline2 <-
       }
       if (nrow(sl) > regionalise) {
         message(paste0("large data detected, using regionalisation, nrow = ", nrow(sl)))
+        # Fix for https://github.com/ropensci/stplanr/issues/510
+        sl <- sl[st_is_valid(sl),]
+
         suppressWarnings(cents <- sf::st_centroid(sl))
         # Fix for https://github.com/r-spatial/sf/issues/1777
         if(sf::st_is_longlat(cents)){
