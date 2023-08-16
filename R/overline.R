@@ -166,7 +166,7 @@ overline2 <-
            attrib,
            ncores = 1,
            simplify = TRUE,
-           regionalise = 1e9,
+           regionalise = 1e7,
            quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
            fun = sum) {
     if(as.character(unique(sf::st_geometry_type(sl))) == "MULTILINESTRING") {
