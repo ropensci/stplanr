@@ -287,7 +287,7 @@ overline2 <-
           cl <- parallel::makeCluster(ncores)
           parallel::clusterExport(
             cl = cl,
-            varlist = c("attrib"),
+            varlist = c("attrib","ol_grp"),
             envir = environment()
           )
           parallel::clusterEvalQ(cl, {
