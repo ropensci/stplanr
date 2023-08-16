@@ -13,6 +13,7 @@ rnet_join(
   subset_x = TRUE,
   dist_subset = 5,
   segment_length = 0,
+  endCapStyle = "FLAT",
   ...
 )
 }
@@ -41,6 +42,8 @@ source object \code{rnet_y}. Default: 5.}
 \code{0} by default, meaning no splitting. Values above 0 split the source
 into linestrings with a max distance. Around 5 (m) may be a sensible
 default for many use cases, the smaller the value the slower the process.}
+
+\item{endCapStyle}{Type of buffer. See \code{?sf::st_buffer} for details}
 
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }

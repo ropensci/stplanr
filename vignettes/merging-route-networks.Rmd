@@ -55,7 +55,6 @@ plot(sf::st_geometry(rnet_x))
 
 ```{r}
 funs = list(value = sum, Quietness = mean)
-
 rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 
 ```

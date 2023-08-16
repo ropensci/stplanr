@@ -36,6 +36,7 @@
 #'   `0` by default, meaning no splitting. Values above 0 split the source
 #'   into linestrings with a max distance. Around 5 (m) may be a sensible
 #'   default for many use cases, the smaller the value the slower the process.
+#' @param endCapStyle Type of buffer. See `?sf::st_buffer` for details
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -76,12 +77,13 @@
 #' #   mapview(route_network_small)
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                     subset_x = TRUE, dist_subset = 5, segment_length = 0, ...) {
+                     subset_x = TRUE, dist_subset = 5, segment_length = 0,
+                     endCapStyle = "FLAT", ...) {
   # browser()
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
-  rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2)
+  rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
   }
