@@ -26,6 +26,7 @@ geo_select_aeq(shp)
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
+\code{\link{bind_sf}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
 \code{\link{geo_buffer}()},

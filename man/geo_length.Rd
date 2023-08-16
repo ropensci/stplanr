@@ -23,6 +23,7 @@ if (lib_versions[3] >= "6.3.1") {
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
+\code{\link{bind_sf}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
 \code{\link{geo_buffer}()},

@@ -28,6 +28,7 @@ points(bb[1, ], bb[2, ], col = "red")
 }
 \seealso{
 Other geo: 
+\code{\link{bind_sf}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
 \code{\link{geo_buffer}()},

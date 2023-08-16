@@ -40,6 +40,7 @@ bb_scale
 
 Other geo: 
 \code{\link{bbox_scale}()},
+\code{\link{bind_sf}()},
 \code{\link{geo_bb_matrix}()},
 \code{\link{geo_buffer}()},
 \code{\link{geo_length}()},

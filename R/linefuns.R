@@ -216,6 +216,7 @@ make_bidirectional <- function(bearing) {
 #'
 #' @param x List of sf objects to combine
 #' @return An sf data frame
+#' @family geo
 bind_sf = function(x) {
   if (length(x) == 0) stop("Empty list")
   geom_name = attr(x[[1]], "sf_column")
