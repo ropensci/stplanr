@@ -151,6 +151,16 @@ line_cast = function(x) {
 #'                          dist = 9, segment_length = 20, funs = funs)
 #' plot(rnet_y["flow"])
 #' plot(rnet_merged["flow"])
+#'
+#' # Larger example
+#' system("gh release list")
+#' system("gh release upload v1.0.2 rnet_*")
+#' # List the files released in v1.0.2:
+#' system("gh release download v1.0.2")
+#' rnet_x = sf::read_sf("rnet_x_ed.geojson")
+#' rnet_y = sf::read_sf("rnet_y_ed.geojson")
+#'
+#' rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
   if (is.null(funs)) {
@@ -168,6 +178,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
   res_list = lapply(seq(length(funs)), function(i) {
+    # i = 1
     nm = names(funs[i])
     fn = funs[[i]]
 

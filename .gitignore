@@ -8,3 +8,4 @@ src/*.o
 src/*.so
 src/*.dll
 *.html
+*.geojson
