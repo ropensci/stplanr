@@ -1,0 +1,101 @@
+---
+output: github_document
+---
+
+```{r}
+devtools::load_all()
+library(tidyverse)
+```
+
+
+```{r}
+if(!file.exists("routes.geojson")) {
+  routes = pct::get_pct_routes_fast("isle-of-wight")
+  routes = routes %>% 
+    slice(1:1000)
+  sf::write_sf(routes, "routes.geojson", delete_dsn = TRUE)
+}
+
+routes = geojsonsf::geojson_sf("routes.geojson")
+nrow(routes)
+
+```
+
+```{r}
+res1 = overline_old(routes, attrib = "foot")
+```
+
+```{r}
+res2 = overline3(routes, attrib = "foot")
+```
+
+```{r}
+summary(res2)
+summary(res2)
+```
+
+
+# Small test
+
+```{r}
+res = bench::mark(time_unit = "s", check = FALSE,
+  original = {o1 <<- overline_old(routes, attrib = "foot")},
+  new = {o2 <<- overline3(routes, attrib = "foot")}
+)
+```
+
+
+The results are as follows:
+
+```{r}
+res |>
+  dplyr::select(expression, median, mem_alloc) |>
+  mutate(routes_per_second = nrow(routes) / median) |>
+  knitr::kable()
+```
+
+# Large test
+
+```{r}
+routes = readRDS("/tmp/uptake_commute_fastest.Rds")
+r = routes |> 
+  slice(seq(10000))
+names(r)
+system.time({
+rnet = overline_old(r,
+                            attrib = c("bicycle","bicycle_go_dutch","bicycle_ebike","quietness","gradient_smooth"),
+                            fun = list(sum = sum, max = first),
+                            ncores = 1,
+                            regionalise = 1e9)
+})
+
+system.time({
+rnet = overline3(r,
+                            attrib = c("bicycle","bicycle_go_dutch","bicycle_ebike","quietness","gradient_smooth"),
+                            fun = list(sum = sum, max = first),
+                            ncores = 1,
+                            regionalise = 1e9)
+})
+bench::mark(check = FALSE, iterations = 1,
+            old = {res1 <<- overline_old(r,
+                            attrib = c("bicycle","bicycle_go_dutch","bicycle_ebike","quietness","gradient_smooth"),
+                            fun = list(sum = sum, max = first),
+                            ncores = 1,
+                            regionalise = 1e9)
+            },
+new = {res2 <<- overline3(r,
+                            attrib = c("bicycle","bicycle_go_dutch","bicycle_ebike","quietness","gradient_smooth"),
+                            fun = list(sum = sum, max = first),
+                            ncores = 1,
+                            regionalise = 1e9)
+}
+            )
+```
+
+```{r}
+summary(res1)
+summary(res2)
+
+```
+
+
