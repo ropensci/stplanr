@@ -20,7 +20,7 @@ overline2(
   attrib,
   ncores = 1,
   simplify = TRUE,
-  regionalise = 1e+09,
+  regionalise = 1e+07,
   quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
   fun = sum
 )

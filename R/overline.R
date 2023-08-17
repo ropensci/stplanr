@@ -166,7 +166,7 @@ overline2 <-
            attrib,
            ncores = 1,
            simplify = TRUE,
-           regionalise = 1e9,
+           regionalise = 1e7,
            quiet = ifelse(nrow(sl) < 1000, TRUE, FALSE),
            fun = sum) {
     if(as.character(unique(sf::st_geometry_type(sl))) == "MULTILINESTRING") {
@@ -232,12 +232,8 @@ overline2 <-
     sl <- cbind(c3, sl)
     rm(c3)
 
-    # browser()
-    # if(requireNamespace("data.table", quietly = TRUE)) {
-    #   sl = data.table::data.table(sl)
-    # }
-    slg <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
-    sls <- dplyr::ungroup(dplyr::summarise_all(slg, .funs = fun))
+    sls <- dplyr::group_by_at(sl, c("1", "2", "3", "4"))
+    sls <- dplyr::ungroup(dplyr::summarise_all(sls, .funs = fun))
     attrib <- names(sls)[5:ncol(sls)]
     coords <- as.matrix(sls[, 1:4])
     sl <- sls[, -c(1:4)]
@@ -267,6 +263,10 @@ overline2 <-
       }
       if (nrow(sl) > regionalise) {
         message(paste0("large data detected, using regionalisation, nrow = ", nrow(sl)))
+
+        # Fix for https://github.com/ropensci/stplanr/issues/510
+        sl <- sl[st_is_valid(sl),]
+
         suppressWarnings(cents <- sf::st_centroid(sl))
         # Fix for https://github.com/r-spatial/sf/issues/1777
         if(sf::st_is_longlat(cents)){
@@ -291,7 +291,7 @@ overline2 <-
           cl <- parallel::makeCluster(ncores)
           parallel::clusterExport(
             cl = cl,
-            varlist = c("attrib"),
+            varlist = c("attrib","ol_grp"),
             envir = environment()
           )
           parallel::clusterEvalQ(cl, {
@@ -300,13 +300,11 @@ overline2 <-
           })
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             }, cl = cl)
           } else {
             lapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           }
 
@@ -315,13 +313,11 @@ overline2 <-
         } else {
           overlined_simple <- if (requireNamespace("pbapply", quietly = TRUE)) {
             pbapply::pblapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           } else {
             lapply(sl, function(y) {
-              y <- dplyr::group_by_at(y, attrib)
-              y <- dplyr::summarise(y, do_union = FALSE, .groups = "drop")
+              ol_grp(y, attrib)
             })
           }
         }
@@ -333,8 +329,8 @@ overline2 <-
         if (!quiet) {
           message(paste0(Sys.time(), " aggregating flows"))
         }
-        overlined_simple <- dplyr::group_by_at(sl, attrib)
-        overlined_simple <- dplyr::summarise(overlined_simple, do_union = FALSE, .groups = "drop")
+
+        overlined_simple <- ol_grp(sl, attrib)
         rm(sl)
       }
 
@@ -363,6 +359,11 @@ overline2 <-
 #' @export
 overline.sf <- overline2
 
+ol_grp <- function(sl, attrib){
+  sl <- data.table::data.table(sl)
+  sl <- sl[, .(geometry = sf::st_combine(geometry)), by = attrib]
+  sf::st_as_sf(sl)
+}
 
 #' Aggregate flows so they become non-directional (by geometry - the slow way)
 #'
