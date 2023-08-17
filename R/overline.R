@@ -161,7 +161,7 @@ overline <- function(sl,
 #' @return An `sf` object representing a route network
 #' @export
 #' @rdname overline
-overline2 <-
+overline3 <-
   function(sl,
            attrib,
            ncores = 1,
@@ -357,7 +357,7 @@ overline2 <-
     }
   }
 #' @export
-overline.sf <- overline2
+overline.sf <- overline3
 
 ol_grp <- function(sl, attrib){
   sl <- data.table::data.table(sl)
