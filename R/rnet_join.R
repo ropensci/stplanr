@@ -123,8 +123,15 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #'   before the cropping process will be removed. 3 by default.
 #' @param rm_disconnected Remove ways that are
 #' @export
+#' @examples
+#' rnet_x = osm_net_example[1]
+#' rnet_y = route_network_small["flow"]
+#' plot(rnet_x$geometry, lwd = 5)
+#' plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 3)
+#' rnet_x_subset = rnet_subset(rnet_x, rnet_y)
+#' plot(rnet_x_subset, add = TRUE, col = "blue")
 rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 20, rm_disconnected = TRUE) {
-  browser()
+  # browser()
   rnet_x_original = data.frame(
     id = rnet_x[[1]],
     length_original = as.numeric(sf::st_length(rnet_x))
@@ -144,11 +151,17 @@ rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 20, 
     sel_short_remove = rnet_x_joined$length_new < min_length
     sel_changed_remove = rnet_x_joined$length_new < rnet_x_joined$length_original
     sel_remove = sel_short_remove & sel_changed_remove
-    ids_to_keep = rnet_x_joined[[1]][!sel_remove]
-    # Testing:
-    rnet_x_joined[sel_short, ]
-    rnet_x_original_full = rnet_x
-    rnet_x = rnet_x[rnet_x[[1]] %in% ids_to_keep, ]
+
+    # browser()
+    # # Testing:
+    # # ids_to_keep = rnet_x_joined[[1]][!sel_remove]
+    # rnet_x_joined[sel_remove, ]
+    # plot(rnet_x_joined$geometry[sel_remove])
+    # plot(rnet_x_joined$geometry[!sel_remove])
+    # rnet_x_original_full = rnet_x
+    # rnet_x = rnet_x[rnet_x[[1]] %in% ids_to_keep, ]
+
+    rnet_x = rnet_x_joined[!sel_remove, ]
   }
   if(rm_disconnected) {
     rnet_x = rnet_connected(rnet_x)
@@ -176,16 +189,18 @@ line_cast = function(x) {
 #' @param ... Additional arguments passed to `rnet_join`.
 #' @export
 #' @examples
-#' # The target object
-#' rnet_x = osm_net_example[1]
 #' # The source object:
 #' rnet_y = route_network_small["flow"]
+#' # The target object
+#' rnet_x = rnet_subset(osm_net_example[1], rnet_y)
+#' plot(rnet_x$geometry, lwd = 5)
+#' plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 2)
 #' rnet_y$quietness = rnorm(nrow(rnet_y))
 #' funs = list(flow = sum, quietness = mean)
 #' rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
 #'                          dist = 9, segment_length = 20, funs = funs)
-#' plot(rnet_y["flow"])
-#' plot(rnet_merged["flow"])
+#' plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
+#' plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 #'
 #' # Larger example
 #' system("gh release list")
