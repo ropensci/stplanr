@@ -37,7 +37,7 @@
 #'   into linestrings with a max distance. Around 5 (m) may be a sensible
 #'   default for many use cases, the smaller the value the slower the process.
 #' @param endCapStyle Type of buffer. See `?sf::st_buffer` for details
-#' @param within Should the join be based on `sf::st_within` or `sf::st_intersects`?
+#' @param contains Should the join be based on `sf::st_contains` or `sf::st_intersects`?
 #'   `TRUE` by default. If `FALSE` the centroid of each segment of `rnet_y` is
 #'   used for the join. Note: this can result in incorrectly assigning values
 #'   on sideroads, as documented in [#520](https://github.com/ropensci/stplanr/issues/520).
@@ -82,7 +82,7 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", within = TRUE, ...) {
+                     endCapStyle = "FLAT", contains = TRUE, ...) {
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
@@ -97,8 +97,8 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
   browser()
-  if (within) {
-    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_within)
+  if (contains) {
+    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
