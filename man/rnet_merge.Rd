@@ -4,15 +4,7 @@
 \alias{rnet_merge}
 \title{Merge route networks, keeping attributes with aggregating functions}
 \usage{
-rnet_merge(
-  rnet_x,
-  rnet_y,
-  dist = 5,
-  funs = NULL,
-  sum_flows = TRUE,
-  dist_subset = 20,
-  ...
-)
+rnet_merge(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...)
 }
 \arguments{
 \item{rnet_x}{Target route network, the output will have the same geometries
@@ -29,9 +21,6 @@ columns.}
 
 \item{sum_flows}{Should flows be summed? \code{TRUE} by default.}
 
-\item{dist_subset}{The buffer distance in m to apply when breaking up the
-source object \code{rnet_y}. Default: 5.}
-
 \item{...}{Additional arguments passed to \code{rnet_join}.}
 }
 \value{
@@ -42,7 +31,7 @@ Merge route networks, keeping attributes with aggregating functions
 }
 \examples{
 # The target object
-rnet_x = rnet_subset(osm_net_example[1], route_network_small)
+rnet_x = osm_net_example[1]
 # The source object:
 rnet_y = route_network_small["flow"]
 rnet_y$quietness = rnorm(nrow(rnet_y))

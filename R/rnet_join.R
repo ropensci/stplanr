@@ -83,11 +83,11 @@
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
                      endCapStyle = "FLAT", contains = TRUE, ...) {
-  if (subset_x) {
-    rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
-  }
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
+  }
+  if (subset_x) {
+    rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
@@ -96,9 +96,14 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
-  browser()
+  # browser()
   if (contains) {
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
+    # # For debugging:
+    # library(tmap)
+    # tmap_mode("view")
+    # tm_shape(rnet_y) + tm_lines(lwd = 3) + qtm(rnetj) + qtm(rnet_x) +
+    #   qtm(osm_net_example)
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
@@ -118,8 +123,13 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #'   before the cropping process will be removed. 3 by default.
 #' @param rm_disconnected Remove ways that are
 #' @export
-rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, rm_disconnected = TRUE) {
-  rnet_x$length_x_original = as.numeric(sf::st_length(rnet_x))
+rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 20, rm_disconnected = TRUE) {
+  browser()
+  rnet_x_original = data.frame(
+    id = rnet_x[[1]],
+    length_original = as.numeric(sf::st_length(rnet_x))
+    )
+  names(rnet_x_original)[1] = names(rnet_x)[1]
   rnet_y_union = sf::st_union(rnet_y)
   rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
   if(crop) {
@@ -129,7 +139,16 @@ rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, r
     rnet_x = rnet_x[rnet_y_buffer, , op = sf::st_within]
   }
   if(min_length > 0) {
-    rnet_x = rnet_x[as.numeric(sf::st_length(rnet_x)) > min_length, ]
+    rnet_x$length_new = as.numeric(sf::st_length(rnet_x))
+    rnet_x_joined = dplyr::left_join(rnet_x, rnet_x_original)
+    sel_short_remove = rnet_x_joined$length_new < min_length
+    sel_changed_remove = rnet_x_joined$length_new < rnet_x_joined$length_original
+    sel_remove = sel_short_remove & sel_changed_remove
+    ids_to_keep = rnet_x_joined[[1]][!sel_remove]
+    # Testing:
+    rnet_x_joined[sel_short, ]
+    rnet_x_original_full = rnet_x
+    rnet_x = rnet_x[rnet_x[[1]] %in% ids_to_keep, ]
   }
   if(rm_disconnected) {
     rnet_x = rnet_connected(rnet_x)
@@ -158,7 +177,7 @@ line_cast = function(x) {
 #' @export
 #' @examples
 #' # The target object
-#' rnet_x = rnet_subset(osm_net_example[1], route_network_small)
+#' rnet_x = osm_net_example[1]
 #' # The source object:
 #' rnet_y = route_network_small["flow"]
 #' rnet_y$quietness = rnorm(nrow(rnet_y))
@@ -177,7 +196,7 @@ line_cast = function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, dist_subset = 20, ...) {
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
   if (is.null(funs)) {
     funs = list()
     for (col in names(rnet_y)) {
@@ -188,7 +207,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, dist_subset = dist_subset, ...)
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
   names(rnetj)
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
