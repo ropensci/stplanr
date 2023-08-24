@@ -37,6 +37,10 @@
 #'   into linestrings with a max distance. Around 5 (m) may be a sensible
 #'   default for many use cases, the smaller the value the slower the process.
 #' @param endCapStyle Type of buffer. See `?sf::st_buffer` for details
+#' @param within Should the join be based on `sf::st_within` or `sf::st_intersects`?
+#'   `TRUE` by default. If `FALSE` the centroid of each segment of `rnet_y` is
+#'   used for the join. Note: this can result in incorrectly assigning values
+#'   on sideroads, as documented in [#520](https://github.com/ropensci/stplanr/issues/520).
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -63,24 +67,27 @@
 #'     summarise(
 #'       flow = weighted.mean(flow, length_y, na.rm = TRUE),
 #'       )
-#' osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
+#' osm_joined_rnet = dplyr::left_join(osm_net_example, rnetj_summary)
 #' plot(sf::st_geometry(route_network_small))
 #' plot(route_network_small["flow"], lwd = 3, add = TRUE)
 #' plot(sf::st_geometry(osm_joined_rnet), add = TRUE)
 #' plot(osm_joined_rnet[c("flow")], lwd = 9, add = TRUE)
 #' # Improve fit between geometries and performance by subsetting rnet_x
 #' osm_subset = rnet_subset(osm_net_example, route_network_small, dist = 5)
-#' osm_joined_rnet = left_join(osm_subset, rnetj_summary)
+#' osm_joined_rnet = dplyr::left_join(osm_subset, rnetj_summary)
 #' plot(route_network_small["flow"])
 #' plot(osm_joined_rnet[c("flow")])
 #' # mapview(joined_network) +
 #' #   mapview(route_network_small)
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                     subset_x = TRUE, dist_subset = 5, segment_length = 0,
-                     endCapStyle = "FLAT", ...) {
+                     subset_x = TRUE, dist_subset = NULL, segment_length = 0,
+                     endCapStyle = "FLAT", within = TRUE, ...) {
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
+  }
+  if (is.null(dist_subset)) {
+    dist_subset = dist + 1
   }
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
@@ -89,8 +96,14 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
-  rnet_y_centroids = sf::st_centroid(rnet_y)
-  rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
+  browser()
+  if (within) {
+    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_within)
+  } else {
+    rnet_y_centroids = sf::st_centroid(rnet_y)
+    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
+  }
+
   rnetj
 }
 
