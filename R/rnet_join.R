@@ -37,6 +37,10 @@
 #'   into linestrings with a max distance. Around 5 (m) may be a sensible
 #'   default for many use cases, the smaller the value the slower the process.
 #' @param endCapStyle Type of buffer. See `?sf::st_buffer` for details
+#' @param contains Should the join be based on `sf::st_contains` or `sf::st_intersects`?
+#'   `TRUE` by default. If `FALSE` the centroid of each segment of `rnet_y` is
+#'   used for the join. Note: this can result in incorrectly assigning values
+#'   on sideroads, as documented in [#520](https://github.com/ropensci/stplanr/issues/520).
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -63,22 +67,25 @@
 #'     summarise(
 #'       flow = weighted.mean(flow, length_y, na.rm = TRUE),
 #'       )
-#' osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
+#' osm_joined_rnet = dplyr::left_join(osm_net_example, rnetj_summary)
 #' plot(sf::st_geometry(route_network_small))
 #' plot(route_network_small["flow"], lwd = 3, add = TRUE)
 #' plot(sf::st_geometry(osm_joined_rnet), add = TRUE)
 #' plot(osm_joined_rnet[c("flow")], lwd = 9, add = TRUE)
 #' # Improve fit between geometries and performance by subsetting rnet_x
 #' osm_subset = rnet_subset(osm_net_example, route_network_small, dist = 5)
-#' osm_joined_rnet = left_join(osm_subset, rnetj_summary)
+#' osm_joined_rnet = dplyr::left_join(osm_subset, rnetj_summary)
 #' plot(route_network_small["flow"])
 #' plot(osm_joined_rnet[c("flow")])
 #' # mapview(joined_network) +
 #' #   mapview(route_network_small)
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                     subset_x = TRUE, dist_subset = 5, segment_length = 0,
-                     endCapStyle = "FLAT", ...) {
+                     subset_x = TRUE, dist_subset = NULL, segment_length = 0,
+                     endCapStyle = "FLAT", contains = TRUE, ...) {
+  if (is.null(dist_subset)) {
+    dist_subset = dist + 1
+  }
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
@@ -89,8 +96,19 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
-  rnet_y_centroids = sf::st_centroid(rnet_y)
-  rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
+  # browser()
+  if (contains) {
+    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
+    # # For debugging:
+    # library(tmap)
+    # tmap_mode("view")
+    # tm_shape(rnet_y) + tm_lines(lwd = 3) + qtm(rnetj) + qtm(rnet_x) +
+    #   qtm(osm_net_example)
+  } else {
+    rnet_y_centroids = sf::st_centroid(rnet_y)
+    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
+  }
+
   rnetj
 }
 
@@ -105,8 +123,20 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #'   before the cropping process will be removed. 3 by default.
 #' @param rm_disconnected Remove ways that are
 #' @export
-rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, rm_disconnected = TRUE) {
-  rnet_x$length_x_original = as.numeric(sf::st_length(rnet_x))
+#' @examples
+#' rnet_x = osm_net_example[1]
+#' rnet_y = route_network_small["flow"]
+#' plot(rnet_x$geometry, lwd = 5)
+#' plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 3)
+#' rnet_x_subset = rnet_subset(rnet_x, rnet_y)
+#' plot(rnet_x_subset, add = TRUE, col = "blue")
+rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 20, rm_disconnected = TRUE) {
+  # browser()
+  rnet_x_original = data.frame(
+    id = rnet_x[[1]],
+    length_original = as.numeric(sf::st_length(rnet_x))
+    )
+  names(rnet_x_original)[1] = names(rnet_x)[1]
   rnet_y_union = sf::st_union(rnet_y)
   rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
   if(crop) {
@@ -116,7 +146,22 @@ rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 0, r
     rnet_x = rnet_x[rnet_y_buffer, , op = sf::st_within]
   }
   if(min_length > 0) {
-    rnet_x = rnet_x[as.numeric(sf::st_length(rnet_x)) > min_length, ]
+    rnet_x$length_new = as.numeric(sf::st_length(rnet_x))
+    rnet_x_joined = dplyr::left_join(rnet_x, rnet_x_original)
+    sel_short_remove = rnet_x_joined$length_new < min_length
+    sel_changed_remove = rnet_x_joined$length_new < rnet_x_joined$length_original
+    sel_remove = sel_short_remove & sel_changed_remove
+
+    # browser()
+    # # Testing:
+    # # ids_to_keep = rnet_x_joined[[1]][!sel_remove]
+    # rnet_x_joined[sel_remove, ]
+    # plot(rnet_x_joined$geometry[sel_remove])
+    # plot(rnet_x_joined$geometry[!sel_remove])
+    # rnet_x_original_full = rnet_x
+    # rnet_x = rnet_x[rnet_x[[1]] %in% ids_to_keep, ]
+
+    rnet_x = rnet_x_joined[!sel_remove, ]
   }
   if(rm_disconnected) {
     rnet_x = rnet_connected(rnet_x)
@@ -144,16 +189,18 @@ line_cast = function(x) {
 #' @param ... Additional arguments passed to `rnet_join`.
 #' @export
 #' @examples
-#' # The target object
-#' rnet_x = rnet_subset(osm_net_example[1], route_network_small)
 #' # The source object:
 #' rnet_y = route_network_small["flow"]
+#' # The target object
+#' rnet_x = rnet_subset(osm_net_example[1], rnet_y)
+#' plot(rnet_x$geometry, lwd = 5)
+#' plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 2)
 #' rnet_y$quietness = rnorm(nrow(rnet_y))
 #' funs = list(flow = sum, quietness = mean)
 #' rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
 #'                          dist = 9, segment_length = 20, funs = funs)
-#' plot(rnet_y["flow"])
-#' plot(rnet_merged["flow"])
+#' plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
+#' plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 #'
 #' # Larger example
 #' system("gh release list")
@@ -164,7 +211,7 @@ line_cast = function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, dist_subset = 20, ...) {
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
   if (is.null(funs)) {
     funs = list()
     for (col in names(rnet_y)) {
@@ -175,7 +222,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, dist_subset = dist_subset, ...)
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
   names(rnetj)
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:

@@ -11,9 +11,10 @@ rnet_join(
   length_y = TRUE,
   key_column = 1,
   subset_x = TRUE,
-  dist_subset = 5,
+  dist_subset = NULL,
   segment_length = 0,
   endCapStyle = "FLAT",
+  contains = TRUE,
   ...
 )
 }
@@ -44,6 +45,11 @@ into linestrings with a max distance. Around 5 (m) may be a sensible
 default for many use cases, the smaller the value the slower the process.}
 
 \item{endCapStyle}{Type of buffer. See \code{?sf::st_buffer} for details}
+
+\item{contains}{Should the join be based on \code{sf::st_contains} or \code{sf::st_intersects}?
+\code{TRUE} by default. If \code{FALSE} the centroid of each segment of \code{rnet_y} is
+used for the join. Note: this can result in incorrectly assigning values
+on sideroads, as documented in \href{https://github.com/ropensci/stplanr/issues/520}{#520}.}
 
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }
@@ -93,14 +99,14 @@ rnetj_summary = rnetj2 \%>\%
     summarise(
       flow = weighted.mean(flow, length_y, na.rm = TRUE),
       )
-osm_joined_rnet = left_join(osm_net_example, rnetj_summary)
+osm_joined_rnet = dplyr::left_join(osm_net_example, rnetj_summary)
 plot(sf::st_geometry(route_network_small))
 plot(route_network_small["flow"], lwd = 3, add = TRUE)
 plot(sf::st_geometry(osm_joined_rnet), add = TRUE)
 plot(osm_joined_rnet[c("flow")], lwd = 9, add = TRUE)
 # Improve fit between geometries and performance by subsetting rnet_x
 osm_subset = rnet_subset(osm_net_example, route_network_small, dist = 5)
-osm_joined_rnet = left_join(osm_subset, rnetj_summary)
+osm_joined_rnet = dplyr::left_join(osm_subset, rnetj_summary)
 plot(route_network_small["flow"])
 plot(osm_joined_rnet[c("flow")])
 # mapview(joined_network) +
