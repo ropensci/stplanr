@@ -224,7 +224,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
   rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
-  names(rnetj)
+  print(names(rnetj))
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
   res_list = lapply(seq(length(funs)), function(i) {
@@ -250,11 +250,13 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   res_df = dplyr::bind_cols(res_list)
   res_sf = dplyr::left_join(rnet_x, res_df)
   if (sum_flows) {
+    print('-------------start----------')
     res_sf$length_x = as.numeric(sf::st_length(res_sf))
       # Calculate the angle between 'corr_line_geometry' and 'geometry' for each row
     res_sf$angle = sapply(1:nrow(res_sf), function(i) {
       calculate_angle(get_vector(res_sf$corr_line_geometry[i,]), get_vector(res_sf$geometry[i,]))
     })
+    print(names(res_sf))
     for(i in sum_cols) {
       # TODO: deduplicate
       length_y = as.numeric(sf::st_length(rnet_y))
