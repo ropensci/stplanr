@@ -106,6 +106,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     #   qtm(osm_net_example)
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
+    rnet_y_centroids$corr_line_geometry = rnet_y$geometry
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
   }
 
@@ -250,15 +251,43 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   res_sf = dplyr::left_join(rnet_x, res_df)
   if (sum_flows) {
     res_sf$length_x = as.numeric(sf::st_length(res_sf))
+      # Calculate the angle between 'corr_line_geometry' and 'geometry' for each row
+    res_sf$angle = sapply(1:nrow(res_sf), function(i) {
+      calculate_angle(get_vector(res_sf$corr_line_geometry[i,]), get_vector(res_sf$geometry[i,]))
+    })
     for(i in sum_cols) {
       # TODO: deduplicate
       length_y = as.numeric(sf::st_length(rnet_y))
+      mask <- (res_sf$angle < 15) | (res_sf$angle > 160)
       # i = sum_cols[1]
-      res_sf[[i]] = res_sf[[i]] / res_sf$length_x
-      over_estimate = sum(res_sf[[i]] * res_sf$length_x, na.rm = TRUE) /
-        sum(rnet_y[[i]] * length_y, na.rm = TRUE)
-      res_sf[[i]] = res_sf[[i]] / over_estimate
+      res_sf[mask, i] <- res_sf[mask, i] / res_sf[mask, "length_x"]
+      over_estimate <- sum(res_sf[mask, i] * res_sf[mask, "length_x"], na.rm = TRUE) /
+        sum(rnet_y[mask, i] * length_y, na.rm = TRUE)
+      
+      res_sf[mask, i] <- res_sf[mask, i] / over_estimate
     }
   }
   res_sf
+}
+
+get_vector <- function(line) {
+  if (class(line) == "LINESTRING") {
+    coords <- st_coordinates(line)
+    start <- coords[1, 1:2]
+    end <- coords[2, 1:2]
+  } else {  # For MultiLineStrings, just use the first line
+    first_line <- st_cast(line, "LINESTRING")[[1]]
+    coords <- st_coordinates(first_line)
+    start <- coords[1, 1:2]
+    end <- coords[2, 1:2]
+  }
+  return(c(end[1] - start[1], end[2] - start[2]))
+}
+
+calculate_angle <- function(vector1, vector2) {
+  dot_product <- sum(vector1 * vector2)
+  magnitude_product <- sqrt(sum(vector1^2)) * sqrt(sum(vector2^2))
+  cos_angle <- dot_product / magnitude_product
+  angle <- acos(cos_angle) * (180 / pi)
+  return(angle)
 }
