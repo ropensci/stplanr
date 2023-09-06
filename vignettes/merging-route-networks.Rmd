@@ -73,7 +73,11 @@ tmap_arrange(m1, m2, sync = TRUE)
 We can more reduce the minimum segment length to ensure fewer NA values in the outputs:
 
 ```{r}
+tmap_mode("view")
+funs = list(value = sum, Quietness = mean)
+brks = c(0, 100, 500, 1000, 5000)
 rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
+rnet_merged$identifier <- NULL
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE)
