@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-# devtools::load_all()
+devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
@@ -43,15 +43,17 @@ tmap_mode("view")
 # nrow(rnet_x)
 # summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
+dim(rnet_x)
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20)
-# nrow(rnet_x)
+dim(rnet_x)# nrow(rnet_x)
 # plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_length = 5)
+dim(rnet_x)
 # summary(sf::st_length(rnet_x))
 # nrow(rnet_x)
 # plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, rm_disconnected = TRUE)
-# nrow(rnet_x)
+dim(rnet_x)# nrow(rnet_x)
 plot(sf::st_geometry(rnet_x))
 ```
 
@@ -71,7 +73,7 @@ tmap_arrange(m1, m2, sync = TRUE)
 We can more reduce the minimum segment length to ensure fewer NA values in the outputs:
 
 ```{r}
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE)

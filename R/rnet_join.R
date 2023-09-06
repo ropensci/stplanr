@@ -82,12 +82,13 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", contains = TRUE, ...) {
+                     endCapStyle = "FLAT", contains = FALSE, ...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
+    print('rnet_subset done')
   }
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
@@ -109,7 +110,6 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_y_centroids$corr_line_geometry = rnet_y$geometry
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
   }
-
   rnetj
 }
 
@@ -223,68 +223,95 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
-  print(names(rnetj))
+  # First, calculate the angle and store it in the `rnetj`
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist)
+  rnetj$angle = sapply(1:nrow(rnetj), function(i) {
+    calculate_angle(get_vector(rnetj$corr_line_geometry[[i]]), get_vector(rnetj$geometry[[i]]))
+  })
   rnetj_df = sf::st_drop_geometry(rnetj)
+  
   # Apply functions to columns with lapply:
   res_list = lapply(seq(length(funs)), function(i) {
     # i = 1
     nm = names(funs[i])
     fn = funs[[i]]
-
+    
+    # Keep the first non-NA value of 'corr_line_geometry' and 'angle' within each group
+    intermediate_df = rnetj_df %>%
+      dplyr::group_by_at(1) %>%
+      dplyr::mutate(corr_line_geometry = first(corr_line_geometry),
+                    angle = first(angle)) %>%
+      dplyr::ungroup()
+    
     if (identical(fn, sum) && sum_flows) {
-      res = rnetj_df %>%
+      res = intermediate_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)), .groups = 'drop')
     } else {
-      res = rnetj_df %>%
+      res = intermediate_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn), .groups = 'drop')
     }
-    names(res)[2] = nm
+    
+    # Add back the 'corr_line_geometry' and 'angle' columns
+    res = dplyr::left_join(res, unique(intermediate_df %>% dplyr::select(identifier, corr_line_geometry, angle)), by = "identifier")
+    
+    # Rename the summarised column
+    names(res)[which(names(res) == nm)[1]] = nm
+    
     if(i > 1) {
-      res = res[-1]
+      # Drop the 'identifier' column to avoid duplication
+      res = res %>% dplyr::select(-matches("^identifier"))
     }
+    
     res
   })
+  
   res_df = dplyr::bind_cols(res_list)
+  res_df <- res_df %>%
+    dplyr::select(identifier, value, Quietness, corr_line_geometry = corr_line_geometry...3, angle = angle...4)
+  names(res_df)
+  mask <- (res_df$angle < 60) | (res_df$angle > 110)
+ # mask[is.na(mask)] <- FALSE
+  filtered_res_df <- res_df[mask, ]
+  
   res_sf = dplyr::left_join(rnet_x, res_df)
+  
   if (sum_flows) {
-    print('-------------start----------')
     res_sf$length_x = as.numeric(sf::st_length(res_sf))
-      # Calculate the angle between 'corr_line_geometry' and 'geometry' for each row
-    res_sf$angle = sapply(1:nrow(res_sf), function(i) {
-      calculate_angle(get_vector(res_sf$corr_line_geometry[i,]), get_vector(res_sf$geometry[i,]))
-    })
-    print(names(res_sf))
     for(i in sum_cols) {
       # TODO: deduplicate
       length_y = as.numeric(sf::st_length(rnet_y))
-      mask <- (res_sf$angle < 15) | (res_sf$angle > 160)
       # i = sum_cols[1]
-      res_sf[mask, i] <- res_sf[mask, i] / res_sf[mask, "length_x"]
-      over_estimate <- sum(res_sf[mask, i] * res_sf[mask, "length_x"], na.rm = TRUE) /
-        sum(rnet_y[mask, i] * length_y, na.rm = TRUE)
-      
-      res_sf[mask, i] <- res_sf[mask, i] / over_estimate
+      res_sf[[i]] = res_sf[[i]] / res_sf$length_x
+      over_estimate = sum(res_sf[[i]] * res_sf$length_x, na.rm = TRUE) /
+        sum(rnet_y[[i]] * length_y, na.rm = TRUE)
+      res_sf[[i]] = res_sf[[i]] / over_estimate
     }
   }
   res_sf
 }
 
 get_vector <- function(line) {
-  if (class(line) == "LINESTRING") {
-    coords <- st_coordinates(line)
-    start <- coords[1, 1:2]
-    end <- coords[2, 1:2]
-  } else {  # For MultiLineStrings, just use the first line
-    first_line <- st_cast(line, "LINESTRING")[[1]]
-    coords <- st_coordinates(first_line)
-    start <- coords[1, 1:2]
-    end <- coords[2, 1:2]
+  if (sf::st_is_empty(line)) {
+   # warning("Encountered an empty LINESTRING. Returning NULL.")
+    return(NULL)
   }
+  
+  coords <- sf::st_coordinates(line)
+  
+  # Check if coords is empty or has insufficient dimensions
+  if (is.null(coords) || nrow(coords) < 2 || ncol(coords) < 2) {
+    stop("Insufficient coordinate data")
+  }
+  
+  start <- coords[1, 1:2]
+  end <- coords[2, 1:2]
+  
   return(c(end[1] - start[1], end[2] - start[2]))
 }
+
+
 
 calculate_angle <- function(vector1, vector2) {
   dot_product <- sum(vector1 * vector2)
