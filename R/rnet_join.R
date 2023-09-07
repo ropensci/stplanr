@@ -82,7 +82,7 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", contains = TRUE, ...) {
+                     endCapStyle = "FLAT", contains = FALSE, ...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
@@ -105,10 +105,12 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     # tm_shape(rnet_y) + tm_lines(lwd = 3) + qtm(rnetj) + qtm(rnet_x) +
     #   qtm(osm_net_example)
   } else {
+    # If not using 'contains', find the centroids of 'rnet_y'
     rnet_y_centroids = sf::st_centroid(rnet_y)
+    # Store the corresponding line geometries 
+    rnet_y_centroids$corr_line_geometry = rnet_y$geometry
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
   }
-
   rnetj
 }
 
@@ -211,7 +213,11 @@ line_cast = function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
+# A function to merge two route networks based on certain conditions
+# A function to merge two route networks based on certain conditions
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
+  
+  # If no aggregation functions are provided, default to summing numeric columns
   if (is.null(funs)) {
     funs = list()
     for (col in names(rnet_y)) {
@@ -220,45 +226,111 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
       }
     }
   }
+  
+  # Identify which columns should be summed
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
-  names(rnetj)
+  
+  # Join the route networks based on the given distance
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist)
+  
+  # Calculate the angle between the corresponding lines in the merged network
+  rnetj$angle = sapply(1:nrow(rnetj), function(i) {
+    calculate_angle(get_vector(rnetj$corr_line_geometry[[i]]), get_vector(rnetj$geometry[[i]]))
+  })
+  
+  # Drop geometry data to work with a standard data frame
   rnetj_df = sf::st_drop_geometry(rnetj)
-  # Apply functions to columns with lapply:
+  
+  # Loop through the provided aggregation functions and apply them to the merged network
   res_list = lapply(seq(length(funs)), function(i) {
-    # i = 1
     nm = names(funs[i])
     fn = funs[[i]]
+    
+    # Group by the first column and ensure each group has consistent geometry and angle data
+    intermediate_df = rnetj_df %>%
+      dplyr::group_by_at(1) %>%
+      dplyr::mutate(corr_line_geometry = first(corr_line_geometry),
+                    angle = first(angle)) %>%
+      dplyr::ungroup()
 
+    # If the function is sum and sum_flows is TRUE, weight the sum by the length of the line
     if (identical(fn, sum) && sum_flows) {
-      res = rnetj_df %>%
+      res = intermediate_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)), .groups = 'drop')
     } else {
-      res = rnetj_df %>%
+      res = intermediate_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn))
+        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn), .groups = 'drop')
     }
-    names(res)[2] = nm
+
+    # Add back the 'corr_line_geometry' and 'angle' columns
+    res = dplyr::left_join(res, unique(intermediate_df %>% dplyr::select(identifier, corr_line_geometry, angle)), by = "identifier")
+
+    # Rename the summarised column
+    names(res)[which(names(res) == nm)[1]] = nm
+
+    # If this isn't the first loop iteration, drop the 'identifier' column to avoid duplication
     if(i > 1) {
-      res = res[-1]
+      res = res %>% dplyr::select(-matches("^identifier"))
     }
+
     res
   })
+
+  # Combine all the results into one data frame
   res_df = dplyr::bind_cols(res_list)
-  res_sf = dplyr::left_join(rnet_x, res_df)
+  res_df <- res_df %>%
+    dplyr::select(identifier, value, Quietness, corr_line_geometry = corr_line_geometry...3, angle = angle...4)
+  
+  # Filter out lines that don't have an angle close to 90 degrees
+  mask <- (res_df$angle < 89) | (res_df$angle > 91)
+  filtered_res_df <- res_df[mask, ]
+  
+  # Join the filtered results back to the original route network
+  res_sf = dplyr::left_join(rnet_x, filtered_res_df)
+
+  # If sum_flows is TRUE, adjust the flow values based on the length of the lines
   if (sum_flows) {
     res_sf$length_x = as.numeric(sf::st_length(res_sf))
     for(i in sum_cols) {
-      # TODO: deduplicate
       length_y = as.numeric(sf::st_length(rnet_y))
-      # i = sum_cols[1]
       res_sf[[i]] = res_sf[[i]] / res_sf$length_x
       over_estimate = sum(res_sf[[i]] * res_sf$length_x, na.rm = TRUE) /
         sum(rnet_y[[i]] * length_y, na.rm = TRUE)
       res_sf[[i]] = res_sf[[i]] / over_estimate
     }
   }
+  
   res_sf
+}
+
+# A function to extract a vector from a LINESTRING geometry
+get_vector <- function(line) {
+  if (sf::st_is_empty(line)) {
+    # warning("Encountered an empty LINESTRING. Returning NULL.")
+    return(NULL)
+  }
+
+  coords <- sf::st_coordinates(line)
+
+  # Check if coords is empty or has insufficient dimensions
+  if (is.null(coords) || nrow(coords) < 2 || ncol(coords) < 2) {
+    stop("Insufficient coordinate data")
+  }
+
+  start <- coords[1, 1:2]
+  end <- coords[2, 1:2]
+
+  return(c(end[1] - start[1], end[2] - start[2]))
+}
+
+# A function to calculate the angle between two vectors
+calculate_angle <- function(vector1, vector2) {
+  dot_product <- sum(vector1 * vector2)
+  magnitude_product <- sqrt(sum(vector1^2)) * sqrt(sum(vector2^2))
+  cos_angle <- dot_product / magnitude_product
+  angle <- acos(cos_angle) * (180 / pi)
+  return(angle)
 }

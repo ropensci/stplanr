@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-# devtools::load_all()
+devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
@@ -32,6 +32,17 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 # rnet_x = rnet_x |>
 #   filter(!dups)
 # sf::write_sf(rnet_x, "~/github/ropensci/stplanr/rnet_x_ed.geojson", delete_dsn = TRUE)
+```
+```{r}
+tmap_mode("view")
+funs = list(value = sum, Quietness = mean)
+brks = c(0, 100, 500, 1000, 5000)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
+rnet_merged$identifier <- NULL
+rnet_merged$value[is.na(rnet_merged$value)] <- 0
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
 ```
 
 # Target network preprocessing
@@ -71,7 +82,7 @@ tmap_arrange(m1, m2, sync = TRUE)
 We can more reduce the minimum segment length to ensure fewer NA values in the outputs:
 
 ```{r}
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE)
