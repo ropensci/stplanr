@@ -9,7 +9,7 @@ rnet_subset(
   rnet_y,
   dist = 10,
   crop = TRUE,
-  min_length = 0,
+  min_length = 20,
   rm_disconnected = TRUE
 )
 }
@@ -30,4 +30,12 @@ before the cropping process will be removed. 3 by default.}
 }
 \description{
 Subset one route network based on overlaps with another
+}
+\examples{
+rnet_x = osm_net_example[1]
+rnet_y = route_network_small["flow"]
+plot(rnet_x$geometry, lwd = 5)
+plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 3)
+rnet_x_subset = rnet_subset(rnet_x, rnet_y)
+plot(rnet_x_subset, add = TRUE, col = "blue")
 }

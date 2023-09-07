@@ -46,8 +46,8 @@
 #' library(sf)
 #' library(dplyr)
 #' # Uncomment for interactive examples:
-#' plot(route_network_small["flow"])
-#' plot(osm_net_example$geometry, lwd = 5, col = "grey")
+#' plot(st_geometry(route_network_small))
+#' plot(osm_net_example$geometry, lwd = 5, col = "grey", add = TRUE)
 #' plot(route_network_small["flow"], add = TRUE)
 #' rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
 #' rnetj2 = rnet_join(osm_net_example, route_network_small, dist = 9, segment_length = 10)
@@ -71,12 +71,12 @@
 #' plot(sf::st_geometry(route_network_small))
 #' plot(route_network_small["flow"], lwd = 3, add = TRUE)
 #' plot(sf::st_geometry(osm_joined_rnet), add = TRUE)
-#' plot(osm_joined_rnet[c("flow")], lwd = 9, add = TRUE)
+#' # plot(osm_joined_rnet[c("flow")], lwd = 9, add = TRUE)
 #' # Improve fit between geometries and performance by subsetting rnet_x
 #' osm_subset = rnet_subset(osm_net_example, route_network_small, dist = 5)
 #' osm_joined_rnet = dplyr::left_join(osm_subset, rnetj_summary)
 #' plot(route_network_small["flow"])
-#' plot(osm_joined_rnet[c("flow")])
+#' # plot(osm_joined_rnet[c("flow")])
 #' # mapview(joined_network) +
 #' #   mapview(route_network_small)
 #' @export
@@ -202,9 +202,9 @@ line_cast = function(x) {
 #' plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
 #' plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 #'
-#' # Larger example
-#' system("gh release list")
-#' system("gh release upload v1.0.2 rnet_*")
+#' # # Larger example
+#' # system("gh release list")
+#' # system("gh release upload v1.0.2 rnet_*")
 #' # List the files released in v1.0.2:
 #' # system("gh release download v1.0.2")
 #' # rnet_x = sf::read_sf("rnet_x_ed.geojson")
