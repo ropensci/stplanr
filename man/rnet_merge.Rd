@@ -30,20 +30,22 @@ An sf object with the same geometry as \code{rnet_x}
 Merge route networks, keeping attributes with aggregating functions
 }
 \examples{
-# The target object
-rnet_x = osm_net_example[1]
 # The source object:
 rnet_y = route_network_small["flow"]
+# The target object
+rnet_x = rnet_subset(osm_net_example[1], rnet_y)
+plot(rnet_x$geometry, lwd = 5)
+plot(rnet_y$geometry, add = TRUE, col = "red", lwd = 2)
 rnet_y$quietness = rnorm(nrow(rnet_y))
 funs = list(flow = sum, quietness = mean)
 rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
                          dist = 9, segment_length = 20, funs = funs)
-plot(rnet_y["flow"])
-plot(rnet_merged["flow"])
+plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
+plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 
-# Larger example
-system("gh release list")
-system("gh release upload v1.0.2 rnet_*")
+# # Larger example
+# system("gh release list")
+# system("gh release upload v1.0.2 rnet_*")
 # List the files released in v1.0.2:
 # system("gh release download v1.0.2")
 # rnet_x = sf::read_sf("rnet_x_ed.geojson")
