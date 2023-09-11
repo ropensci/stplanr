@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-# devtools::load_all()
+devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
@@ -32,6 +32,50 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 # rnet_x = rnet_x |>
 #   filter(!dups)
 # sf::write_sf(rnet_x, "~/github/ropensci/stplanr/rnet_x_ed.geojson", delete_dsn = TRUE)
+```
+
+```{r}
+# Checking reults with adding funtions to calcualte the angle
+tmap_mode("view")
+funs = list(value = sum, Quietness = mean)
+brks = c(0, 100, 500, 1000, 5000,10000)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
+#rnet_merged$identifier <- NULL
+# rnet_merged$value[is.na(rnet_merged$value)] <- 0
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+rnet_merged
+
+
+# Function to define bands
+define_band <- function(value) {
+  if (value >= 0 && value <= 100) return("0-100")
+  if (value > 100 && value <= 500) return("100-500")
+  if (value > 500 && value <= 1000) return("500-1000")
+  if (value > 1000 && value <= 5000) return("1000-5000")
+  return("Other")
+}
+rnet_y$band <- sapply(rnet_y$value, define_band)
+rnet_merged$band <- sapply(rnet_merged$value, define_band)
+joined_data <- st_join(rnet_y, rnet_merged, join = st_intersects)
+# Filter rows with matching bands
+matching_bands <- subset(joined_data, band.x == band.y)
+
+# Check for mismatches within each band
+matching_bands$mismatch <- ifelse(matching_bands$value.x != matching_bands$value.y, 1, 0)
+
+# Count mismatches
+mismatch_count <- sum(matching_bands$mismatch)
+
+# Display mismatch count
+cat("Number of mismatches within bands:", mismatch_count, "\n")
+
+# If you wish to see rows with mismatches
+mismatch_rows <- subset(matching_bands, mismatch == 1)
+print(mismatch_rows)
+
+
 ```
 
 # Target network preprocessing

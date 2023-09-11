@@ -82,7 +82,7 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", contains = TRUE, ...) {
+                     endCapStyle = "SQUARE", contains = FALSE, ...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
@@ -90,6 +90,9 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
+  # Store the original geometry of 'rnet_x' in the buffer object
+  rnet_x_buffer$corr_line_geometry_buffer = rnet_x$geometry
+
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
   }
@@ -98,7 +101,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   }
   # browser()
   if (contains) {
-    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
+    rnetj = sf::st_join(rnet_x_buffer, rnet_y, join = sf::st_contains)
     # # For debugging:
     # library(tmap)
     # tmap_mode("view")
@@ -106,9 +109,18 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     #   qtm(osm_net_example)
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
-    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
+    # Store the original geometry of 'rnet_y' in the centroid object
+    rnet_y_centroids$corr_line_geometry_point = rnet_y$geometry
+    rnetj = sf::st_join(rnet_x_buffer, rnet_y_centroids)
+    # Calculate angles between the buffer geometry and the point geometry for each row
+    rnetj$angle = sapply(1:nrow(rnetj), function(i) {
+    calculate_angle(get_vector(rnetj$corr_line_geometry_buffer[[i]]), get_vector(rnetj$corr_line_geometry_point[[i]]))
+    })  
+    # Filter rows based on the angle values
+    mask <- (rnetj$angle < 50) | (rnetj$angle > 130)
+    filtered_rnetj <- rnetj[mask, ]
+    rnetj = filtered_rnetj
   }
-
   rnetj
 }
 
@@ -262,3 +274,27 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   res_sf
 }
+
+
+get_vector <- function(line) {
+  if (sf::st_is_empty(line)) {
+    # warning("Encountered an empty LINESTRING. Returning NULL.")
+    return(NULL)
+  }
+  coords <- sf::st_coordinates(line)
+  # Check if coords is empty or has insufficient dimensions
+  if (is.null(coords) || nrow(coords) < 2 || ncol(coords) < 2) {
+    stop("Insufficient coordinate data")
+  }
+  start <- coords[1, 1:2]
+  end <- coords[2, 1:2]
+  return(c(end[1] - start[1], end[2] - start[2]))
+}
+calculate_angle <- function(vector1, vector2) {
+  dot_product <- sum(vector1 * vector2)
+  magnitude_product <- sqrt(sum(vector1^2)) * sqrt(sum(vector2^2))
+  cos_angle <- dot_product / magnitude_product
+  angle <- acos(cos_angle) * (180 / pi)
+  return(angle)
+}
+ 		
