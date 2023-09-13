@@ -82,7 +82,8 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "SQUARE", contains = FALSE, ...) {
+                     endCapStyle = "SQUARE", contains = FALSE, 
+                     mask_function = function(angle) (angle < 40) | (angle > 140),...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
@@ -139,7 +140,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     # })
 
     # Filter rows based on the angle values
-    mask <- (rnetj$angle < 50) | (rnetj$angle > 130)
+    mask = mask_function(rnetj$angle)
     filtered_rnetj <- rnetj[mask, ]
     rnetj = filtered_rnetj
   }
