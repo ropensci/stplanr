@@ -116,6 +116,28 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnetj$angle = sapply(1:nrow(rnetj), function(i) {
     calculate_angle(get_vector(rnetj$corr_line_geometry_buffer[[i]]), get_vector(rnetj$corr_line_geometry_point[[i]]))
     })  
+    # Using angle_diff fun to replace calculate_angle/get_vector
+    # rnetj$angle_2 = sapply(1:nrow(rnetj), function(i) {
+    #   # Check if either of the geometries is empty
+    #   if (st_is_empty(rnetj$corr_line_geometry_buffer[i]) || 
+    #       st_is_empty(rnetj$corr_line_geometry_point[i])) {
+    #     return(NA)
+    #   }
+      
+    #   # Extract the two lines into a temporary 'sf' object
+    #   temp_sf <- rbind(
+    #     data.frame(geometry = rnetj$corr_line_geometry_buffer[i]), 
+    #     data.frame(geometry = rnetj$corr_line_geometry_point[i])
+    #   )
+    #   temp_sf <- st_as_sf(temp_sf)
+      
+    #   # Get the angles difference using the temporary 'sf' object
+    #   angles = angle_diff(temp_sf, angle = 0)
+      
+    #   # Return the absolute difference between the two angles
+    #   abs(angles[1] - angles[2])
+    # })
+
     # Filter rows based on the angle values
     mask <- (rnetj$angle < 50) | (rnetj$angle > 130)
     filtered_rnetj <- rnetj[mask, ]
