@@ -106,7 +106,6 @@ sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
 
 ```{r}
-
 dist = 10
 length_y = TRUE
 key_column = 1,
@@ -179,3 +178,4 @@ m2 <- mapview(filtered_rnetj,color = 'blue', fill.color = 'blue')
 
 m1 + m2
 
+```
