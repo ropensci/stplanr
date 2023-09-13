@@ -17,11 +17,12 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-devtools::load_all()
+# devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
 ```{r setup}
+rnet_join
 library(stplanr)
 library(dplyr)
 library(tmap)
@@ -104,4 +105,78 @@ tmap_arrange(m1, m2, sync = TRUE)
 sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
+
+```{r}
+
+dist = 10
+length_y = TRUE
+key_column = 1,
+subset_x = TRUE
+dist_subset = NULL
+segment_length = 0
+endCapStyle = "SQUARE"
+contains = FALSE
+mask_function = function(angle) (angle < 40) | (angle > 140)
+
+if (is.null(dist_subset)) {
+  dist_subset = dist + 1
+}
+dist_subset
+
+if (subset_x) {
+  dim(rnet_x)
+  rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset)
+  dim(rnet_x)
+}
+
+rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
+# Store the original geometry of 'rnet_x' in the buffer object
+rnet_x_buffer$corr_line_geometry_buffer = rnet_x$geometry
+
+
+m1 <- mapview(rnet_x_buffer["geometry"])
+buffer_line <- as(rnet_x_buffer["corr_line_geometry_buffer"], "Spatial")
+buffer_line_sf <- st_as_sf(buffer_line)
+m2 <- mapview(buffer_line_sf["corr_line_geometry_buffer"],color  = 'red', lwd = 2)
+m1 + m2 
+
+
+if (segment_length > 0) {
+  dim(rnet_y)
+  rnet_y = line_segment(rnet_y, segment_length = segment_length)
+  dim(rnet_y)
+}
+
+if (length_y) {
+  rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
+}
+names(rnet_y)
+
+rnet_y_centroids = sf::st_centroid(rnet_y)
+# Store the original geometry of 'rnet_y' in the centroid object
+rnet_y_centroids$corr_line_geometry_point = rnet_y$geometry
+
+m1 <- mapview(rnet_y_centroids["geometry"])
+centroids_line <- as(rnet_y_centroids["corr_line_geometry_point"], "Spatial")
+centroids_line_sf <- st_as_sf(buffer_line)
+m2 <- mapview(centroids_line_sf["corr_line_geometry_point"],color  = 'red')
+m3 <- mapview(rnet_x_buffer["geometry"])
+m1 + m2 + m3
+
+rnetj = sf::st_join(rnet_x_buffer, rnet_y_centroids)
+# Calculate angles between the buffer geometry and the point geometry for each row
+rnetj$angle = sapply(1:nrow(rnetj), function(i) {
+calculate_angle(get_vector(rnetj$corr_line_geometry_buffer[[i]]), get_vector(rnetj$corr_line_geometry_point[[i]]))
+})  
+mask_function
+mask = mask_function(rnetj$angle)
+filtered_rnetj <- rnetj[mask, ]
+dim(rnetj)
+dim(filtered_rnetj)
+rnetj = filtered_rnetj
+
+m1 <- mapview(rnetj,color = 'red', fill.color = 'red')
+m2 <- mapview(filtered_rnetj,color = 'blue', fill.color = 'blue')
+
+m1 + m2
 
