@@ -69,7 +69,7 @@ tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
 
 Let's check the results:
 
-```{r, echo=FALSE}
+```{r}
 summary(rnet_merged$value)
 summary(rnet_y$value)
 sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
@@ -85,17 +85,43 @@ m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, bre
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
 ```
 
-Reducing the max length of the complex route network led to the following result.
+As shown in the results, some sideroad values have unrealistically high values:
+
+![](https://user-images.githubusercontent.com/1825120/267946945-d89dfb99-fb60-4db5-ab39-168773ef01ad.png)
+
+Let's see the results again:
 
 ```{r}
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 5, funs = funs, dist_subset = 30)
-m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
-m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
-tmap_arrange(m1, m2, sync = TRUE)
-```
-
-```{r, echo=FALSE, eval=FALSE}
+summary(rnet_merged$value)
+summary(rnet_y$value)
 sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
+
+The good news: the number of NAs is down to only 21 compared with the previous 100+.
+Bad news: sideroads have been assigned values from the main roads.
+
+We can fix this with the `max_angle_diff` argument:
+
+```{r}
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 40)
+m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+```
+
+As shown in the results, the sideroad values are fixed:
+
+![](https://user-images.githubusercontent.com/1825120/267955054-3bd393a7-1fdd-44a4-8717-7933199c6f37.png)
+
+Let's see the results again:
+
+```{r}
+summary(rnet_merged$value)
+summary(rnet_y$value)
+sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
+sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
+```
+
+
 

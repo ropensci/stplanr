@@ -91,15 +91,16 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
-
   if(!is.null(max_angle_diff)) {
     rnet_x$angle_x = line_bearing(rnet_x, bidirectional = TRUE)
-    rnet_y$angle_y = line_bearing(rnet_y, bidirectional = TRUE)
+    contains = FALSE
   }
-
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
+  }
+  if(!is.null(max_angle_diff)) {
+    rnet_y$angle_y = line_bearing(rnet_y, bidirectional = TRUE)
   }
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
@@ -114,7 +115,6 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
     rnetj = sf::st_join(rnet_x_buffer[c(names(rnet_x)[1], "angle_x")], rnet_y_centroids)
-
   }
   if (!is.null(max_angle_diff)) {
     rnetj$angle_diff = rnetj$angle_y - rnetj$angle_x
