@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-devtools::load_all()
+# devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
