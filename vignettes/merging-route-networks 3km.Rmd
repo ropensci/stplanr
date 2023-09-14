@@ -1,0 +1,120 @@
+---
+title: "Merging route networks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Merging route networks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  # # Uncomment to speed-up build
+  # eval = FALSE,
+  comment = "#>",
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+devtools::load_all()
+sf::sf_use_s2(FALSE)
+```
+
+
+```{r setup}
+library(stplanr)
+library(dplyr)
+library(tmap)
+library(sf)
+
+rnet_x = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/OS_3km.geojson")
+rnet_y = sf::read_sf("https://github.com/nptscot/npt/releases/download/rnet_3km_buffer/rnet_3km_buffer.geojson")
+st_crs(rnet_x) <- st_crs(rnet_y)
+crs_y <- st_crs(rnet_y)
+rnet_x <- st_transform(rnet_x, crs_y)
+
+# Check CRS for rnet_x
+crs_x <- st_crs(rnet_x)
+print(crs_x)
+
+# Check CRS for rnet_y
+crs_y <- st_crs(rnet_y)
+print(crs_y)
+
+```
+
+# Target network preprocessing
+
+We pre-processed the input simple geometry to make it even simpler as shown below.
+```{r}
+dim(rnet_x)
+rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20)
+dim(rnet_x)
+rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_length = 5)
+dim(rnet_y)
+```
+
+```{r}
+# Extract column names from the rnet_x data frame
+name_list <- names(rnet_y)
+name_list
+# Initialize an empty list
+funs <- list()
+
+# Loop through each name and assign it a function based on specific conditions
+for (name in name_list) {
+  if (name == "geometry") {
+    next  # Skip the current iteration
+  } else if (name %in% c("Gradient", "Quietness")) {
+    funs[[name]] <- mean
+  } else {
+    funs[[name]] <- sum
+  }
+}
+
+tmap_mode("view")
+brks = c(0, 100, 500, 1000, 5000,10000)
+# funs = list(all_fastest_bicycle_go_dutch = sum, Quietness = mean)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 10, funs = funs)
+
+
+dim(rnet_y)
+summary(rnet_y$all_fastest_bicycle)
+dim(rnet_merged)
+summary(rnet_merged$all_fastest_bicycle)
+
+st_write(rnet_merged, "G:/rnet_merged.geojson", driver = "GeoJSON")
+#rnet_merged$identifier <- NULL
+# rnet_merged$value[is.na(rnet_merged$value)] <- 0
+m1 = tm_shape(rnet_y) + tm_lines(col ="all_fastest_bicycle_go_dutch", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines(col ="all_fastest_bicycle_go_dutch", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+```
+
+We can more reduce the minimum segment length to ensure fewer NA values in the outputs:
+****
+```{r}
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs)
+m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+```
+
+Reducing the max length of the complex route network led to the following result.
+
+```{r}
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 5, funs = funs, dist_subset = 30)
+# Drop the 'identifier' column
+# rnet_merged <- rnet_merged[ , 'value', drop = FALSE]
+m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE)
+
+```
+
+```{r, echo=FALSE, eval=FALSE}
+sum(rnet_merged$all_fastest_bicycle_go_dutch * sf::st_length(rnet_merged), na.rm = TRUE)
+sum(rnet_y$all_fastest_bicycle_go_dutch * sf::st_length(rnet_y), na.rm = TRUE)
+```
+

@@ -13,8 +13,9 @@ rnet_join(
   subset_x = TRUE,
   dist_subset = NULL,
   segment_length = 0,
-  endCapStyle = "FLAT",
-  contains = TRUE,
+  endCapStyle = "SQUARE",
+  contains = FALSE,
+  mask_function = function(angle) (angle < 40) | (angle > 140),
   ...
 )
 }
