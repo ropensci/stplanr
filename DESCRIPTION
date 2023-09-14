@@ -14,6 +14,8 @@ Authors@R: c(
     person("Scott ", "Chamberlain", role = "rev",
            comment = "Scott reviewed the package for rOpenSci, see https://github.com/ropensci/onboarding/issues/10"),
     person("Mark", "Padgham", , "mark.padgham@email.com", role = "ctb"),
+    person("Zhao", "Wang", role = "ctb",
+           comment = c(ORCID = "0000-0002-4054-0533")),
     person("Andrea", "Gilardi", role = "ctb",
            comment = c(ORCID = "0000-0002-9424-7439"))
   )

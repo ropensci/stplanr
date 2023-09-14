@@ -175,7 +175,14 @@ line_segment <- function(
   n_row_l = nrow(l)
   if(n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
-      line_segment(l[i, ], n_segments, segment_length)
+      l_segmented = line_segment(l[i, ], n_segments, segment_length)
+
+      # Work-around for https://github.com/ropensci/stplanr/issues/531
+      if (i == 1) {
+        res_names <<- names(sf::st_drop_geometry(l_segmented))
+      }
+      l_segmented = l_segmented[res_names]
+      l_segmented
       })
     res = bind_sf(res_list)
     return(res)
@@ -220,6 +227,7 @@ make_bidirectional <- function(bearing) {
 bind_sf = function(x) {
   if (length(x) == 0) stop("Empty list")
   geom_name = attr(x[[1]], "sf_column")
+  # browser()
   x = data.table::rbindlist(x, use.names = FALSE)
   # x = collapse::unlist2d(x, idcols = FALSE, recursive = FALSE)
   x[[geom_name]] = sf::st_sfc(x[[geom_name]], recompute_bbox = TRUE)

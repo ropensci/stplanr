@@ -15,6 +15,7 @@ rnet_join(
   segment_length = 0,
   endCapStyle = "FLAT",
   contains = TRUE,
+  max_angle_diff = NULL,
   ...
 )
 }
@@ -50,6 +51,9 @@ default for many use cases, the smaller the value the slower the process.}
 \code{TRUE} by default. If \code{FALSE} the centroid of each segment of \code{rnet_y} is
 used for the join. Note: this can result in incorrectly assigning values
 on sideroads, as documented in \href{https://github.com/ropensci/stplanr/issues/520}{#520}.}
+
+\item{max_angle_diff}{The maximum angle difference between x and y nets for a value
+to be returned}
 
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }
