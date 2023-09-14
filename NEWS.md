@@ -1,3 +1,5 @@
+# stplanr 1.1.0
+
 # stplanr 1.0.2
 
 -   Update docs, fix missing functions issue (#499)
