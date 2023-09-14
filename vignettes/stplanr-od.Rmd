@@ -46,7 +46,7 @@ Additional disaggregations of overall counts may include trip counts at differen
 Many OD datasets omit information.
 If there is only one time period, then this resides in the metadata for the whole data set.
 There is rarely any information about the path taken between the start and end points.
-It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/riatelab/osrm), [Google Directions API](https://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](https://www.myptv.com/en/mobility-software/ptv-visum)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
+It is typically the job of the analyst to use a routing service (such as [OSRM](https://github.com/riatelab/osrm), [Google Directions API](https://symbolixau.github.io/googleway/articles/googleway-vignette.html#google-directions-api), [CycleStreets.net](https://github.com/Robinlovelace/cyclestreets/) or [OpenRouteService](https://github.com/GIScience/openrouteservice-r/)) or an assignment model (such as those contained in proprietary software such as [SATURN](https://saturnsoftware2.co.uk/) and [Visum](https://www.ptvgroup.com/en/products/ptv-visum)) to identify likely routes with reference to shortest path algorithms or generalised cost minimisation algorithms (which account for monetary plus time and quality 'costs').
 
 # The importance of OD data
 
@@ -338,7 +338,7 @@ knitr::include_graphics("https://user-images.githubusercontent.com/1825120/62073
 ```
 
 This is better, but is still not ideal: the code was not intuitive to write, and the result is still not publication quality.
-Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](https://geocompr.robinlovelace.net/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
+Instead, it makes sense to make a dedicated mapping package such **tmap**, as outlined in the [visualisation chapter](https://r.geocompx.org/adv-map.html) of the open source book *Geocomputation with R* [@lovelace_geocomputation_2019].
 As shown in the transport chapter of that book, OD flows can be visualised with the following code:
 
 ```{r, eval=FALSE}
@@ -377,7 +377,7 @@ The above plot contains much information, providing a visual overview of the tra
 
 Plotting OD data in this way can tell us much about cities, each of which has a different travel pattern.
 You can use the same code to visualise mobility patterns in any city.
-See Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* to see results for Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
+See Section [12.4](https://r.geocompx.org/transport.html) of *Geocomputation with R* to see results for Bristol, a more polycentric city with a lower average percentage of travel by walking and cycling.
 
 ```{r, eval=FALSE, echo=FALSE}
 saveRDS(od_all, "od_all.Rds")
@@ -436,7 +436,7 @@ knitr::include_graphics("https://user-images.githubusercontent.com/1825120/61069
 Despite the importance of origin-destination datasets for transport research, there are surprisingly few guides dedicated to working with them using open source software.
 The following suggestions are based on my own reading  --- if you have any other suggestions of good resources for working with OD data, let me know!
 
-- Section [12.4](https://geocompr.robinlovelace.net/transport.html#desire-lines) of *Geocomputation with R* [@lovelace_geocomputation_2019] puts OD data in the wider context of geographic transport data.
+- Section [12.4](https://r.geocompx.org/transport.html) of *Geocomputation with R* [@lovelace_geocomputation_2019] puts OD data in the wider context of geographic transport data.
 - @martin_origin-destination_2018 describe methods for classifying OD pairs based on demographic data.
 - The [kepler.gl](https://kepler.gl/demo/ukcommute) website provides a nifty web application for visualising OD data.
 - Documentation for the open source microscopic transport modelling software [SUMO](https://sumo.dlr.de/userdoc/Demand/Importing_O/D_Matrices.html) describes ways of reading-in OD file formats not covered in this vignette.

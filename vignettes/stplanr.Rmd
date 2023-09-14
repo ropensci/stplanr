@@ -231,9 +231,9 @@ Representing this spatial data in a formal class system has many advantages, inc
 **sf** supports most common geographic data formats used in transport planning (including Shapefiles and GeoJSON files representing points, lines, zones). 
 See *stplanr: A package for transport planning* [@lovelace_stplanr_2018] for details.
 
-To get the best out of **stplanr** it helps to have a strong understanding of spatial data in R in general. Chapter 2 of the open source book [*Geocomputation with R*](https://geocompr.robinlovelace.net/) provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress.
+To get the best out of **stplanr** it helps to have a strong understanding of spatial data in R in general. Chapter 2 of the open source book [*Geocomputation with R*](https://r.geocompx.org/) provides an introductory tutorial on the basics of spatial data with R and contains references to more advanced tutorials which may come in handy as your spatial data analysis skills progress.
 Further information on geographic data for transport applications can be found in the same book.
-See https://geocompr.robinlovelace.net/transport.html.
+See https://r.geocompx.org/transport.html.
 
 # Contributing
 

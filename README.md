@@ -277,7 +277,7 @@ However, there are already some good resources on the topic, including
 
   - The Transport chapter of *Geocomputation with R*, which provides a
     broad introduction from a geographic data perspective:
-    <https://geocompr.robinlovelace.net/transport.html>
+    <https://r.geocompx.org/transport.html>
   - The **stplanr** paper, which describes the context in which the
     package was developed:
     <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
