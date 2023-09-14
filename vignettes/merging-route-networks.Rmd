@@ -104,7 +104,7 @@ Bad news: sideroads have been assigned values from the main roads.
 We can fix this with the `max_angle_diff` argument:
 
 ```{r}
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 40)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
