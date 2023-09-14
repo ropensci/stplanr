@@ -1,4 +1,8 @@
-# stplanr 1.1.0
+# stplanr 1.1.0 (2023-09)
+
+- New function `rnet_merge()` and related changes, new contributor Zhao Wang
+- `line_segment()` is now vectorised (#518)
+- Assorted fixes, see https://github.com/ropensci/stplanr/issues?q=is%3Aissue+is%3Aclosed for details
 
 # stplanr 1.0.2
 
