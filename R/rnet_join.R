@@ -41,6 +41,8 @@
 #'   `TRUE` by default. If `FALSE` the centroid of each segment of `rnet_y` is
 #'   used for the join. Note: this can result in incorrectly assigning values
 #'   on sideroads, as documented in [#520](https://github.com/ropensci/stplanr/issues/520).
+#' @param max_angle_diff The maximum angle difference between x and y nets for a value
+#'   to be returned
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -82,13 +84,19 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", contains = TRUE, ...) {
+                     endCapStyle = "FLAT", contains = TRUE, max_angle_diff = NULL, ...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
   if (subset_x) {
     rnet_x = rnet_subset(rnet_x, rnet_y, dist = dist_subset, ...)
   }
+
+  if(!is.null(max_angle_diff)) {
+    rnet_x$angle_x = line_bearing(rnet_x, bidirectional = TRUE)
+    rnet_y$angle_y = line_bearing(rnet_y, bidirectional = TRUE)
+  }
+
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
@@ -96,7 +104,6 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
   if (length_y) {
     rnet_y$length_y = as.numeric(sf::st_length(rnet_y))
   }
-  # browser()
   if (contains) {
     rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y, join = sf::st_contains)
     # # For debugging:
@@ -106,9 +113,13 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     #   qtm(osm_net_example)
   } else {
     rnet_y_centroids = sf::st_centroid(rnet_y)
-    rnetj = sf::st_join(rnet_x_buffer[key_column], rnet_y_centroids)
-  }
+    rnetj = sf::st_join(rnet_x_buffer[c(names(rnet_x)[1], "angle_x")], rnet_y_centroids)
 
+  }
+  if (!is.null(max_angle_diff)) {
+    rnetj$angle_diff = rnetj$angle_y - rnetj$angle_x
+    rnetj = rnetj[abs(rnetj$angle_diff) < max_angle_diff, ]
+  }
   rnetj
 }
 
@@ -247,6 +258,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     res
   })
   res_df = dplyr::bind_cols(res_list)
+
   res_sf = dplyr::left_join(rnet_x, res_df)
   if (sum_flows) {
     res_sf$length_x = as.numeric(sf::st_length(res_sf))

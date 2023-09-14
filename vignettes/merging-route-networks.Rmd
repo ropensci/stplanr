@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   # # Uncomment to speed-up build
-  # eval = FALSE,
+  eval = FALSE,
   comment = "#>",
   echo = FALSE,
   message = FALSE,
@@ -39,7 +39,7 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 We pre-processed the input simple geometry to make it even simpler as shown below.
 
 ```{r, out.width="100%", fig.width=8, fig.height=6}
-tmap_mode("view")
+# tmap_mode("view")
 # nrow(rnet_x)
 # summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
@@ -61,7 +61,7 @@ The initial merged result was as follows.
 ```{r}
 funs = list(value = sum, Quietness = mean)
 brks = c(0, 100, 500, 1000, 5000)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 20, funs = funs)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 20, funs = funs)
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)  +
   tm_scale_bar()
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
