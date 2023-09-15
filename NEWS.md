@@ -1,3 +1,5 @@
+# stplanr 1.1.1
+
 # stplanr 1.1.0 (2023-09)
 
 - New function `rnet_merge()` and related changes, new contributor Zhao Wang

@@ -1,7 +1,7 @@
 Type: Package
 Package: stplanr
 Title: Sustainable Transport Planning
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(
     person("Robin", "Lovelace", , "rob00x@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5679-6536")),
