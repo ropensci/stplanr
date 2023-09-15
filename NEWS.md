@@ -1,3 +1,5 @@
+# stplanr 1.1.2
+
 # stplanr 1.1.1  (2023-09)
 
 - Fixed URLs and other things for CRAN
