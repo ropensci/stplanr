@@ -1,8 +1,8 @@
 Fixed URLs
 
-## R CMD check results
+Checked with the win-builder service.
 
-checking R code for possible problems ... NOTE File 'stplanr/R/zzz.R': .onLoad calls:
+## R CMD check results
 
 0 errors ✔ \| 0 warnings ✔ \| 1 notes ✖
 
