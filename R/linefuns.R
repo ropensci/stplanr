@@ -176,7 +176,7 @@ line_segment <- function(
   if(n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
       l_segmented = line_segment(l[i, ], n_segments, segment_length)
-
+      res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {
         res_names <<- names(sf::st_drop_geometry(l_segmented))
