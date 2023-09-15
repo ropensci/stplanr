@@ -1,4 +1,6 @@
-# stplanr 1.1.2
+# stplanr 1.1.2  (2023-09)
+
+- Export S3 methods
 
 # stplanr 1.1.1  (2023-09)
 

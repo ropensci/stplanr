@@ -1,6 +1,4 @@
-Fixed URLs
-
-Checked with the win-builder service.
+Methods for exported generics registered
 
 ## R CMD check results
 
