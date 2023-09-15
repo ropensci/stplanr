@@ -84,6 +84,7 @@ geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE,
   }
   res
 }
+#' @export
 geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
   # assume it's not projected  (i.e. lat/lon) if there is no CRS
   if (is.na(sf::st_crs(shp))) {

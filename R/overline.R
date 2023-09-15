@@ -17,6 +17,7 @@
 islines <- function(g1, g2) {
   UseMethod("islines")
 }
+#' @export
 islines.sf <- function(g1, g2) {
   sf::st_geometry_type(sf::st_intersection(sf::st_geometry(g1), sf::st_geometry(g2))) == "MULTILINESTRING"
 }
