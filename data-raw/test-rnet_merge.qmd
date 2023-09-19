@@ -1,0 +1,89 @@
+---
+title: Test out network merging functionality
+format: gfm
+---
+
+
+
+```{r}
+#| eval: false
+# Get zip in working directory
+list.files("~/Downloads/", pattern = "zip")
+f = list.files("~/Downloads/", pattern = "OneDrive_1_19-09-2023.zip", full.names = TRUE)
+f
+# Unzip
+unzip(f, exdir = "./data-raw/csna_data")
+```
+
+Read-in data:
+
+```{r}
+library(tidyverse)
+list.files("./data-raw/csna_data/", pattern = "shp")
+csna_data = sf::read_sf("csna_data/Thurrock Roads_polyline.shp")
+csna_data = sf::st_transform(csna_data, "EPSG:4326")
+
+# Get OSM data for area
+csna_convex_hull = sf::st_convex_hull(sf::st_union(csna_data))
+csna_centroid = sf::st_centroid(csna_convex_hull)
+plot(csna_convex_hull)
+osm_data = osmextract::oe_get_network(csna_centroid, "driving", extra_tags = c("highway", "name", "maxspeed"), boundary = csna_convex_hull, boundary_type = "clipsrc")
+plot(osm_data$geometry)
+```
+
+```{r}
+# Length of networks
+sum(sf::st_length(csna_data)) |>
+  units::set_units("km")
+sum(sf::st_length(osm_data)) |>
+  units::set_units("km")
+```
+
+We'll take a subset in a 500 m buffer in the centre of the study area.
+
+```{r}
+buffer = sf::st_buffer(csna_centroid, 500)
+osm_subset = sf::st_intersection(osm_data, buffer)
+csna_subset = sf::st_intersection(csna_data, buffer)
+```
+
+Let's plot the two networks:
+
+```{r}
+plot(csna_subset$geometry, col = "red")
+plot(osm_subset$geometry, col = "blue", add = TRUE)
+```
+
+```{r}
+summary(csna_subset$CSNA_Level)
+funs = list(CSNA_level = max)
+osm_joined = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs)
+waldo::compare(osm_joined$geometry, csna_subset$geometry)
+summary(osm_joined$geometry %in% osm_subset$geometry)
+osm_joined
+```
+
+Let's plot the result:osm_subset
+
+
+
+```{r}
+osm_joined |>
+  select(CSNA_level) |>
+  plot()
+```
+
+Plot with tmap
+
+```{r}
+library(tmap)
+brks = 1:5
+m1 = tm_shape(osm_joined) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+```{r}
+```

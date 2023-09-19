@@ -9,3 +9,4 @@ src/*.so
 src/*.dll
 *.html
 *.geojson
+data-raw/csna_data/
