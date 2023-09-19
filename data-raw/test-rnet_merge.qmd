@@ -85,5 +85,44 @@ m2 = tm_shape(csna_subset) +
 tmap_arrange(m2, m1)
 ```
 
+We can try to improve the fit by changing the arguments that feed into the `rnet_merge` function.
+
 ```{r}
+osm_joined2 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 15)
+m1 = tm_shape(osm_joined2) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+We'll set a max segment length.
+
+```{r}
+args(stplanr::rnet_join)
+
+osm_joined3 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 15, segment_length = 10)
+m1 = tm_shape(osm_joined3) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+Finally we'll set a max angle difference.
+
+```{r}
+
+osm_joined4 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 7, segment_length = 10, max_angle_diff = 30)
+m1 = tm_shape(osm_joined4) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+Save the output as follows.
+
+```{r}
+sf::st_write(osm_joined4, "osm_joined4.geojson")
 ```

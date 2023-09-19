@@ -280,3 +280,127 @@ tmap_arrange(m2, m1)
     Warning: Values have found that are higher than the highest break
 
 ![](test-rnet_merge_files/figure-commonmark/unnamed-chunk-8-1.png)
+
+We can try to improve the fit by changing the arguments that feed into
+the `rnet_merge` function.
+
+``` r
+osm_joined2 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 15)
+```
+
+    Warning: attribute variables are assumed to be spatially constant throughout
+    all geometries
+
+    Warning in st_cast.sf(sf::st_cast(x, "MULTILINESTRING"), "LINESTRING"):
+    repeating attributes for all sub-geometries for which they may not be constant
+
+    Joining with `by = join_by(osm_id)`
+    Joining with `by = join_by(osm_id)`
+
+``` r
+m1 = tm_shape(osm_joined2) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+![](test-rnet_merge_files/figure-commonmark/unnamed-chunk-9-1.png)
+
+We’ll set a max segment length.
+
+``` r
+args(stplanr::rnet_join)
+```
+
+    function (rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1, 
+        subset_x = TRUE, dist_subset = NULL, segment_length = 0, 
+        endCapStyle = "FLAT", contains = TRUE, max_angle_diff = NULL, 
+        ...) 
+    NULL
+
+``` r
+osm_joined3 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 15, segment_length = 10)
+```
+
+    Warning: attribute variables are assumed to be spatially constant throughout
+    all geometries
+
+    Warning in st_cast.sf(sf::st_cast(x, "MULTILINESTRING"), "LINESTRING"):
+    repeating attributes for all sub-geometries for which they may not be constant
+
+    Joining with `by = join_by(osm_id)`
+    Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE
+    Joining with `by = join_by(osm_id)`
+
+``` r
+m1 = tm_shape(osm_joined3) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+![](test-rnet_merge_files/figure-commonmark/unnamed-chunk-10-1.png)
+
+Finally we’ll set a max angle difference.
+
+``` r
+osm_joined4 = stplanr::rnet_merge(osm_subset, csna_subset, funs = funs, dist = 7, segment_length = 10, max_angle_diff = 30)
+```
+
+    Warning: attribute variables are assumed to be spatially constant throughout
+    all geometries
+
+    Warning in st_cast.sf(sf::st_cast(x, "MULTILINESTRING"), "LINESTRING"):
+    repeating attributes for all sub-geometries for which they may not be constant
+
+    Joining with `by = join_by(osm_id)`
+
+    Warning: st_centroid assumes attributes are constant over geometries
+
+    Joining with `by = join_by(osm_id)`
+
+``` r
+m1 = tm_shape(osm_joined4) +
+  tm_lines(col = "CSNA_level", palette = "viridis", breaks = brks)
+m2 = tm_shape(csna_subset) +
+  tm_lines(col = "CSNA_Level", palette = "viridis", breaks = brks)
+tmap_arrange(m2, m1)
+```
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+    Warning: Values have found that are higher than the highest break
+
+![](test-rnet_merge_files/figure-commonmark/unnamed-chunk-11-1.png)
+
+Save the output as follows.
+
+``` r
+sf::st_write(osm_joined4, "osm_joined4.geojson")
+```
+
+    Writing layer `osm_joined4' to data source 
+      `osm_joined4.geojson' using driver `GeoJSON'
+    Writing 107 features with 14 fields and geometry type Line String.
