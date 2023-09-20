@@ -39,7 +39,7 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 We pre-processed the input simple geometry to make it even simpler as shown below.
 
 ```{r, out.width="50%", fig.width=8, fig.height=6, fig.show='hold'}
-# tmap_mode("view")
+tmap_mode("view")
 # nrow(rnet_x)
 # summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
@@ -123,5 +123,70 @@ sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
 
+Now let's testing on 3km dataset
+
+```{r setup}
+rnet_x = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/os_3km.geojson")
+rnet_y = sf::read_sf("https://github.com/nptscot/npt/releases/download/rnet_3km_buffer/rnet_3km_buffer.geojson")
+```
+
+```{r}
+# Extract column names from the rnet_x data frame
+name_list <- names(rnet_y)
+name_list
+# Initialize an empty list
+funs <- list()
+
+# Loop through each name and assign it a function based on specific conditions
+for (name in name_list) {
+  if (name == "geometry") {
+    next  # Skip the current iteration
+  } else if (name %in% c("Gradient", "Quietness")) {
+    funs[[name]] <- mean
+  } else {
+    funs[[name]] <- sum
+  }
+}
+```
+
+```{r}
+funs = list(
+    all_fastest_bicycle = sum, 
+    # all_fastest_bicycle_ebike = sum, 
+    # all_fastest_bicycle_go_dutch = sum, 
+    all_quietest_bicycle = sum, 
+    # all_quietest_bicycle_ebike = sum, 
+    # all_quietest_bicycle_go_dutch = sum, 
+    commute_fastest_bicycle = sum, 
+    # commute_fastest_bicycle_ebike = sum, 
+    # commute_fastest_bicycle_go_dutch = sum, 
+    commute_quietest_bicycle = sum, 
+    # commute_quietest_bicycle_ebike = sum, 
+    # commute_quietest_bicycle_go_dutch = sum, 
+    primary_fastest_bicycle = sum, 
+    # primary_fastest_bicycle_ebike = sum, 
+    # primary_fastest_bicycle_go_dutch = sum, 
+    primary_quietest_bicycle = sum, 
+    # primary_quietest_bicycle_ebike = sum, 
+    # primary_quietest_bicycle_go_dutch = sum, 
+    secondary_fastest_bicycle = sum, 
+    # secondary_fastest_bicycle_ebike = sum, 
+    # secondary_fastest_bicycle_go_dutch = sum, 
+    secondary_quietest_bicycle = sum, 
+    # secondary_quietest_bicycle_ebike = sum, 
+    # secondary_quietest_bicycle_go_dutch = sum, 
+    Gradient = mean, 
+    Quietness = mean
+)
+```
 
 
+all_fastest_bicycleall_fastest_bicycle_ebikeall_fastest_bicycle_go_dutchall_quietest_bicycleall_quietest_bicycle_ebikeall_quietest_bicycle_go_dutchcommute_fastest_bicyclecommute_fastest_bicycle_ebikecommute_fastest_bicycle_go_dutchcommute_quietest_bicyclecommute_quietest_bicycle_ebikecommute_quietest_bicycle_go_dutchprimary_fastest_bicycleprimary_fastest_bicycle_ebikeprimary_fastest_bicycle_go_dutchprimary_quietest_bicycleprimary_quietest_bicycle_ebikeprimary_quietest_bicycle_go_dutchsecondary_fastest_bicyclesecondary_fastest_bicycle_ebikesecondary_fastest_bicycle_go_dutchsecondary_quietest_bicyclesecondary_quietest_bicycle_ebikesecondary_quietest_bicycle_go_dutchGradientQuietnessgeometry
+```{r,ev}
+brks = c(0, 100, 500, 1000, 5000,10000)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
+st_write(rnet_merged, "data/3km_exmaple.geojson", driver = "GeoJSON")
+m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+```
