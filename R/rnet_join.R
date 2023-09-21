@@ -245,11 +245,11 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     if (identical(fn, sum) && sum_flows) {
       res = rnetj_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), function(x) sum(x * length_y)))
+        dplyr::summarise(dplyr::across(dplyr::all_of(nm), function(x) sum(x * length_y)))
     } else {
       res = rnetj_df %>%
         dplyr::group_by_at(1) %>%
-        dplyr::summarise(dplyr::across(dplyr::matches(nm), fn))
+        dplyr::summarise(dplyr::across(dplyr::all_of(nm), fn))
     }
     names(res)[2] = nm
     if(i > 1) {
