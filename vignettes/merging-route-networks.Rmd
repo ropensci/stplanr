@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-# devtools::load_all()
+devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
@@ -39,7 +39,7 @@ rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0
 We pre-processed the input simple geometry to make it even simpler as shown below.
 
 ```{r, out.width="50%", fig.width=8, fig.height=6, fig.show='hold'}
-tmap_mode("view")
+# tmap_mode("view")
 # nrow(rnet_x)
 # summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
@@ -104,7 +104,7 @@ Bad news: sideroads have been assigned values from the main roads.
 We can fix this with the `max_angle_diff` argument:
 
 ```{r}
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 40)
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
@@ -147,6 +147,7 @@ for (name in name_list) {
     funs[[name]] <- sum
   }
 }
+names(rnet_x)
 ```
 
 ```{r}
@@ -185,8 +186,79 @@ all_fastest_bicycleall_fastest_bicycle_ebikeall_fastest_bicycle_go_dutchall_quie
 ```{r,ev}
 brks = c(0, 100, 500, 1000, 5000,10000)
 rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
-st_write(rnet_merged, "data/3km_exmaple.geojson", driver = "GeoJSON")
+# st_write(rnet_merged, "data/3km_exmaple.geojson", driver = "GeoJSON")
+rnet_merged <- st_make_valid(rnet_merged)
 m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+
+library(tmaptools)
+
+arranged_map = tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+tmap_save(arranged_map, filename = "3km_exmaple.html")
+
+names(rnet_merged)
+
+summary(rnet_merged$secondary_quietest_bicycle)
+summary(rnet_y$secondary_quietest_bicycle)
+```
+
+```{r}
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
+
+
+
+sum_cols = sapply(funs, function(f) identical(f, sum))
+sum_cols = names(funs)[which(sum_cols)]
+sum_cols
+rnetj = rnet_join(rnet_x, rnet_y, dist = 20)
+names(rnetj)
+rnetj_df = sf::st_drop_geometry(rnetj)
+
+# Apply functions to columns with lapply:
+sum_flows = TRUE
+names(rnet_y)
+i = 1
+nm = names(funs[i])
+fn = funs[[i]]
+nm
+if (identical(fn, sum) && sum_flows) {
+  print("fn match sum")
+  print(nm)
+  res = rnetj_df %>%
+    dplyr::group_by_at(1) %>%
+    dplyr::summarise(dplyr::across(dplyr::all_of(nm), function(x) sum(x * length_y)))
+} else {
+  print("fn don't match sum")
+  print(nm)
+  res = rnetj_df %>%
+    dplyr::group_by_at(1) %>%
+    dplyr::summarise(dplyr::across(dplyr::all_of(nm), fn))
+}
+names(res)
+rnetj_df %>%
+    dplyr::group_by_at(1) %>%
+    dplyr::summarise(dplyr::across(dplyr::matches(nm), fn))
+names(rnetj_df)
+  names(res)[2] = nm
+  if(i > 1) {
+    res = res[-1]
+  }
+  res
+})
+res_df = dplyr::bind_cols(res_list)
+
+res_sf = dplyr::left_join(rnet_x, res_df)
+if (sum_flows) {
+  res_sf$length_x = as.numeric(sf::st_length(res_sf))
+  for(i in sum_cols) {
+    # TODO: deduplicate
+    length_y = as.numeric(sf::st_length(rnet_y))
+    # i = sum_cols[1]
+    res_sf[[i]] = res_sf[[i]] / res_sf$length_x
+    over_estimate = sum(res_sf[[i]] * res_sf$length_x, na.rm = TRUE) /
+      sum(rnet_y[[i]] * length_y, na.rm = TRUE)
+    res_sf[[i]] = res_sf[[i]] / over_estimate
+  }
+}
 ```
