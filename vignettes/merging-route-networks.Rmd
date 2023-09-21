@@ -123,5 +123,47 @@ sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
 
+Now let's testing on 3km dataset
 
+```{r setup}
+rnet_x = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/os_3km.geojson")
+rnet_y = sf::read_sf("https://github.com/nptscot/npt/releases/download/rnet_3km_buffer/rnet_3km_buffer.geojson")
+```
 
+```{r}
+# Extract column names from the rnet_x data frame
+name_list <- names(rnet_y)
+name_list
+# Initialize an empty list
+funs <- list()
+
+# Loop through each name and assign it a function based on specific conditions
+for (name in name_list) {
+  if (name == "geometry") {
+    next  # Skip the current iteration
+  } else if (name %in% c("Gradient", "Quietness")) {
+    funs[[name]] <- mean
+  } else {
+    funs[[name]] <- sum
+  }
+}
+names(rnet_x)
+```
+
+```{r}
+brks = c(0, 100, 500, 1000, 5000,10000)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
+# st_write(rnet_merged, "data/3km_exmaple.geojson", driver = "GeoJSON")
+rnet_merged <- st_make_valid(rnet_merged)
+m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+
+library(tmaptools)
+
+arranged_map = tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+tmap_save(arranged_map, filename = "3km_exmaple.html")
+
+summary(rnet_merged$all_fastest_bicycle_go_dutch)
+summary(rnet_y$all_fastest_bicycle_go_dutch)
+```
