@@ -162,7 +162,7 @@ m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd
 m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
 ```
-
+Read 3km_exmaple_merged from github
 ```{r}
 exmaple_3km = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/3km_exmaple_merged.geojson")
 names(rnet_y)
@@ -213,6 +213,7 @@ dim(rnet_merged)
 st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
 ```
 
+Read large_exmaple_merged from github
 ```{r}
 large_exmaple_merged = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/large_exmaple_merged.geojson")
 
@@ -220,4 +221,6 @@ summary(rnet_y$all_fastest_bicycle)
 summary(large_exmaple_merged$all_fastest_bicycle)
 sum(large_exmaple_merged$all_fastest_bicycle * sf::st_length(large_exmaple_merged), na.rm = TRUE)
 sum(rnet_y$all_fastest_bicycle * sf::st_length(rnet_y), na.rm = TRUE)
+
+plot(large_exmaple_merged)
 ```
