@@ -27,6 +27,7 @@ library(dplyr)
 library(tmap)
 library(ggplot2)
 library(tmaptools)
+library(sf)
 rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
 rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
 # dups = duplicated(rnet_x$geometry)
@@ -179,6 +180,56 @@ Now let's testing on large dataset
 rnet_x = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/OS_large_route_network_example_edingurgh.geojson")
 rnet_y = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/large_route_network_example_edingurgh.geojson")
 
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Specify multiple indices of lines
+indices_of_interest <- c(92174, 106104,357744)  # 129938
+
+# Locate points of interest by indices
+points_of_interest <- rnet_y[indices_of_interest, ]
+
+# Create buffers around points of interest (adjust buffer distance as needed)
+buffer_distance <- 10000  # example buffer distance
+buffers <- st_buffer(points_of_interest, dist = buffer_distance)
+plot(buffers$geometry)
+# Merge overlapping buffers (if necessary)
+merged_buffers <- st_union(buffers)
+
+# Select features within the merged buffers
+features_in_buffers <- st_intersection(rnet_y, merged_buffers)
+
+# Sample from features within buffers (adjust sampling fraction as needed)
+sample_in_buffers <- features_in_buffers 
+
+# # Select features outside the buffers
+# features_outside_buffers <- st_difference(rnet_y, merged_buffers)
+
+# # Sample from features outside the buffers (adjust sampling fraction as needed)
+# sample_outside_buffers <- features_outside_buffers %>% sample_frac(0.0001)
+
+# # Combine the two samples
+# sampled_rnet_y <- rbind(sample_in_buffers, sample_outside_buffers)
+# plot(sampled_rnet_y$geometry)
+
+sampled_rnet_y = sample_in_buffers
+
+
+osm_buffer <- st_buffer(sampled_rnet_y, dist = 30)
+# plot(osm_buffer$geometry)
+# Select OS road data that intersects
+rnet_x_clip = rnet_x[osm_buffer, ] 
+
+# show osm_buffer + rnet_x_clip
+ggplot() +
+  # Add the osm_buffer with blue fill and no border
+  geom_sf(data = osm_buffer, fill = "blue", color = NA) +
+  # Add the filtered rnet_x_clip with red color and thin border
+  geom_sf(data = rnet_x_clip, color = "red", size = 1) +
+  # Set the plot theme to minimal
+  theme_minimal()
+
 ```
 
 Read columns from rnet_y to assign functions to them
@@ -202,18 +253,15 @@ for (name in name_list) {
 ```
 
 ```{r, eval = FALSE}
-# Take 0.1% sample:
-# ...
-# Buffer of the 0.1% sample
-# ...
-# Select OS road data that intersects
-# rnet_x = rnet_x[osm_buffer, ] # or similar
-
 brks = c(0, 100, 500, 1000, 5000,10000)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20, crs = "EPSG:27700")
-st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
+
+rnet_x_clip <- st_cast(rnet_x_clip, "LINESTRING")
+sampled_rnet_y <- st_cast(sampled_rnet_y, "LINESTRING")
+
+rnet_merged = rnet_merge(rnet_x_clip, sampled_rnet_y, dist = 30, segment_length = 10, funs = funs, max_angle_diff = 20, crs = "EPSG:27700")
+# st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
 rnet_merged <- st_make_valid(rnet_merged)
-m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
+m1 = tm_shape(sampled_rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
 dim(rnet_merged)
