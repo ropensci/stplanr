@@ -210,7 +210,7 @@ for (name in name_list) {
 # rnet_x = rnet_x[osm_buffer, ] # or similar
 
 brks = c(0, 100, 500, 1000, 5000,10000)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
+rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20, crs = "EPSG:27700")
 st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
 rnet_merged <- st_make_valid(rnet_merged)
 m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
