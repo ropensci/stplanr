@@ -202,6 +202,13 @@ for (name in name_list) {
 ```
 
 ```{r, eval = FALSE}
+# Take 0.1% sample:
+# ...
+# Buffer of the 0.1% sample
+# ...
+# Select OS road data that intersects
+# rnet_x = rnet_x[osm_buffer, ] # or similar
+
 brks = c(0, 100, 500, 1000, 5000,10000)
 rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
 st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
