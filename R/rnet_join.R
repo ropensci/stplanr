@@ -43,6 +43,7 @@
 #'   on sideroads, as documented in [#520](https://github.com/ropensci/stplanr/issues/520).
 #' @param max_angle_diff The maximum angle difference between x and y nets for a value
 #'   to be returned
+#' @param crs The CRS to use for the buffer operation. See `?geo_projected` for details.
 #' @param ... Additional arguments passed to `rnet_subset`.
 #' @examples
 #' library(sf)
@@ -84,7 +85,8 @@
 #' @export
 rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
-                     endCapStyle = "FLAT", contains = TRUE, max_angle_diff = NULL, ...) {
+                     endCapStyle = "FLAT", contains = TRUE, max_angle_diff = NULL,
+                     crs = geo_select_aeq(rnet_x), ...) {
   if (is.null(dist_subset)) {
     dist_subset = dist + 1
   }
@@ -95,7 +97,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_x$angle_x = line_bearing(rnet_x, bidirectional = TRUE)
     contains = FALSE
   }
-  rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle)
+  rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle, crs = crs)
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
   }
@@ -213,6 +215,12 @@ line_cast = function(x) {
 #' plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
 #' plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 #'
+#' # # With a different CRS
+#' # rnet_merged2 = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
+#' #                          dist = 9, segment_length = 20, funs = funs,
+#' #                          crs = "EPSG:27700")
+#' # waldo::compare(rnet_merged, rnet_merged2)
+#' # plot(rnet_merged$flow, rnet_merged2$flow)
 #' # # Larger example
 #' # system("gh release list")
 #' # system("gh release upload v1.0.2 rnet_*")
@@ -222,7 +230,7 @@ line_cast = function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...) {
+rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
   if (is.null(funs)) {
     print('funs is NULL')
     funs = list()
@@ -234,7 +242,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   }
   sum_cols = sapply(funs, function(f) identical(f, sum))
   sum_cols = names(funs)[which(sum_cols)]
-  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, ...)
+  rnetj = rnet_join(rnet_x, rnet_y, dist = dist, crs = crs, ...)
   names(rnetj)
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:

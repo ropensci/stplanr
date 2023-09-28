@@ -4,7 +4,15 @@
 \alias{rnet_merge}
 \title{Merge route networks, keeping attributes with aggregating functions}
 \usage{
-rnet_merge(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, ...)
+rnet_merge(
+  rnet_x,
+  rnet_y,
+  dist = 5,
+  funs = NULL,
+  sum_flows = TRUE,
+  crs = geo_select_aeq(rnet_x),
+  ...
+)
 }
 \arguments{
 \item{rnet_x}{Target route network, the output will have the same geometries
@@ -20,6 +28,8 @@ be copied across to the new network.}
 columns.}
 
 \item{sum_flows}{Should flows be summed? \code{TRUE} by default.}
+
+\item{crs}{The CRS to use for the buffer operation. See \code{?geo_projected} for details.}
 
 \item{...}{Additional arguments passed to \code{rnet_join}.}
 }
@@ -43,6 +53,12 @@ rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
 plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
 plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 
+# With a different CRS
+rnet_merged2 = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
+                         dist = 9, segment_length = 20, funs = funs,
+                         crs = "EPSG:27700")
+waldo::compare(rnet_merged, rnet_merged2)
+plot(rnet_merged$flow, rnet_merged2$flow)
 # # Larger example
 # system("gh release list")
 # system("gh release upload v1.0.2 rnet_*")

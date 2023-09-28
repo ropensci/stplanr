@@ -16,6 +16,7 @@ rnet_join(
   endCapStyle = "FLAT",
   contains = TRUE,
   max_angle_diff = NULL,
+  crs = geo_select_aeq(rnet_x),
   ...
 )
 }
@@ -54,6 +55,8 @@ on sideroads, as documented in \href{https://github.com/ropensci/stplanr/issues/
 
 \item{max_angle_diff}{The maximum angle difference between x and y nets for a value
 to be returned}
+
+\item{crs}{The CRS to use for the buffer operation. See \code{?geo_projected} for details.}
 
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }
