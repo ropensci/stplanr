@@ -1,0 +1,14 @@
+---
+output: github_document
+---
+
+```{r}
+library(stplanr)
+shp = routes_fast_sf[2, ]
+crs = "EPSG:27700"
+shp_buffer1 = geo_buffer(shp, dist = 20, endCapStyle = "FLAT")
+plot(shp_buffer1$geometry)
+shp_buffer2 = geo_buffer(shp, dist = 20, crs = crs, endCapStyle = "FLAT")
+plot(shp_buffer2$geometry)
+waldo::compare(shp_buffer1, shp_buffer2)
+```
