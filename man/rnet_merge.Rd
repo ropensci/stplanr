@@ -53,12 +53,12 @@ rnet_merged = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
 plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
 plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 
-# With a different CRS
-rnet_merged2 = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
-                         dist = 9, segment_length = 20, funs = funs,
-                         crs = "EPSG:27700")
-waldo::compare(rnet_merged, rnet_merged2)
-plot(rnet_merged$flow, rnet_merged2$flow)
+# # With a different CRS
+# rnet_merged2 = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
+#                          dist = 9, segment_length = 20, funs = funs,
+#                          crs = "EPSG:27700")
+# waldo::compare(rnet_merged, rnet_merged2)
+# plot(rnet_merged$flow, rnet_merged2$flow)
 # # Larger example
 # system("gh release list")
 # system("gh release upload v1.0.2 rnet_*")
