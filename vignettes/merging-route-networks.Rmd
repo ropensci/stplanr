@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE
 )
-# devtools::load_all()
+devtools::load_all()
 sf::sf_use_s2(FALSE)
 ```
 
@@ -217,6 +217,7 @@ sampled_rnet_y = sample_in_buffers
 
 
 osm_buffer <- st_buffer(sampled_rnet_y, dist = 30)
+rnet_x_buffer = st_buffer(filtered_rnet_x, 20, 'endcap=flat join=round')
 # plot(osm_buffer$geometry)
 # Select OS road data that intersects
 rnet_x_clip = rnet_x[osm_buffer, ] 
@@ -264,6 +265,11 @@ rnet_merged <- st_make_valid(rnet_merged)
 m1 = tm_shape(sampled_rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+
+maps <- tmap_arrange(m1, m2, nrow = 1)
+
+tmap_save(maps, filename = "G:/selected_test_maps.html")
+
 dim(rnet_merged)
 st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
 ```

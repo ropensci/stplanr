@@ -97,7 +97,8 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_x$angle_x = line_bearing(rnet_x, bidirectional = TRUE)
     contains = FALSE
   }
-  rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle, crs = crs)
+  # rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle, crs = crs)
+  rnet_x_buffer = st_buffer(filtered_rnet_x, dist = dist, 'endcap=flat join=round')
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
   }
