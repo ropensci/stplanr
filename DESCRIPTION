@@ -19,7 +19,7 @@ Authors@R: c(
     person("Andrea", "Gilardi", role = "ctb",
            comment = c(ORCID = "0000-0002-9424-7439")),
     person("Josiah", "Parry", role = "ctb",
-           comment = c(ORCID = "0000-0001-9910-865X")),
+           comment = c(ORCID = "0000-0001-9910-865X"))
   )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
 Description: Tools for transport planning with an emphasis on spatial
