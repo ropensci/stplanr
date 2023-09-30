@@ -4,7 +4,12 @@
 \alias{line_segment}
 \title{Divide an sf object with LINESTRING geometry into regular segments}
 \usage{
-line_segment(l, n_segments = NA, segment_length = NA)
+line_segment(
+  l,
+  n_segments = NA,
+  segment_length = NA,
+  use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
+)
 }
 \arguments{
 \item{l}{A spatial lines object}
@@ -12,6 +17,9 @@ line_segment(l, n_segments = NA, segment_length = NA)
 \item{n_segments}{The number of segments to divide the line into}
 
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
+
+\item{use_rsgeo}{Should the \code{rsgeo} package be used?
+If \code{rsgeo} is available, this faster implementation is used by default.}
 }
 \description{
 This function keeps the attributes

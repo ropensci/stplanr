@@ -151,6 +151,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @inheritParams line2df
 #' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
+#' @param use_rsgeo Should the `rsgeo` package be used?
+#'  If `rsgeo` is available, this faster implementation is used by default.
 #' @family lines
 #' @export
 #' @examples
@@ -167,13 +169,72 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' l <- routes_fast_sf[2:4, ]
 #' l_seg_multi = line_segment(l, segment_length = 1000)
 #' plot(sf::st_geometry(l_seg_multi), col = seq(nrow(l_seg_100)), lwd = 5)
-line_segment <- function(
+line_segment <- function(l, n_segments = NA, segment_length = NA,
+                         use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")) {
+  UseMethod("line_segment")
+}
+
+#' @export
+line_segment.sf <- function(
     l,
     n_segments = NA,
-    segment_length = NA
+    segment_length = NA,
+    use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
     ) {
+
+  if (is.na(n_segments) && is.na(segment_length)) {
+    rlang::abort(
+      "`n_segment` or `segment_length` must be set.",
+      call = rlang::caller_env()
+    )
+  }
+
+  # if rsgeo is available use it
+  if (use_rsgeo) {
+    # if CRS is NA then we can continue or if IsGeographic is NA
+    crs <- sf::st_crs(l)
+    is_geographic <- crs$IsGeographic
+
+    # if its NA set FALSE, if not keep
+    is_geographic <- ifelse(is.na(is_geographic), FALSE, is_geographic)
+
+    if (is.na(crs) || !is_geographic) {
+      # extract geometry and convert to rsgeo
+      geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
+
+      # if n_segments is missing it needs to be calculated
+      if (is.na(n_segments)) {
+        l_length <- rsgeo::length_euclidean(geo)
+        n_segments <- max(round(l_length / segment_length), 1)
+      }
+
+      # segmentize the line strings
+      res <- rsgeo::line_segmentize(geo, n_segments)
+
+      # make them into sfc_LINESTRING
+      res <- sf::st_cast(sf::st_as_sfc(res), "LINESTRING")
+
+      # give them them CRS
+      res <- sf::st_set_crs(res, crs)
+
+      # calculate the number of original geometries
+      n <- length(geo)
+      # create index ids to grab rows from
+      ids <- rep.int(1:n, rep(n_segments, n))
+
+      # index the original sf object
+      res_tbl <- sf::st_drop_geometry(l)[ids,]
+
+      # assign the geometry column
+      res_tbl[[attr(l, "sf_column")]] <- res
+
+      # convert to sf and return
+      return(sf::st_as_sf(res_tbl))
+    }
+  }
+
   n_row_l = nrow(l)
-  if(n_row_l > 1) {
+  if (n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
       l_segmented = line_segment(l[i, ], n_segments, segment_length)
       res_names <- names(sf::st_drop_geometry(l_segmented))
@@ -186,12 +247,10 @@ line_segment <- function(
       })
     res = bind_sf(res_list)
     return(res)
-  }
-  if (is.na(n_segments)) {
+  } else if (is.na(n_segments)) {
     l_length <- as.numeric(sf::st_length(l))
     n_segments <- max(round(l_length / segment_length), 1)
-  }
-  if(n_segments == 1) {
+  } else if (n_segments == 1) {
     return(l)
   }
   from_to_sequence = seq(from = 0, to = 1, length.out = n_segments + 1)
@@ -207,6 +266,19 @@ line_segment <- function(
   # first_linestring = lwgeom::st_linesubstring(x = l, from = 0, to = 0.2)
   res <- bind_sf(line_segment_list)
   res
+}
+
+
+#' @export
+line_segment.sfc_LINESTRING <- function(
+    l,
+    n_segments = NA,
+    segment_length = NA,
+    use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
+) {
+  l <- sf::st_as_sf(l)
+  res <- line_segment(l, n_segments, segment)
+  sf::st_geometry(res)
 }
 
 
