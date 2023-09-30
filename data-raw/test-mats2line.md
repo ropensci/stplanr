@@ -105,7 +105,7 @@ mats2line
     ##     res <- sfheaders::sfc_linestring(m, x = "x", y = "y", linestring_id = "id")
     ##     sf::st_set_crs(res, crs)
     ## }
-    ## <bytecode: 0x55dcd0f245d0>
+    ## <bytecode: 0x5557d3a96270>
     ## <environment: namespace:stplanr>
 
 We can check the 2 results are similar as follows:
@@ -131,8 +131,8 @@ bench::mark(
     ## # A tibble: 2 × 6
     ##   expression                 min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>            <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 mats2line_old(m1, m2)   43.7µs   47.1µs    20153.  105.54KB     40.0
-    ## 2 mats2line(m1, m2)       45.9µs     50µs    18689.    3.01KB     34.9
+    ## 1 mats2line_old(m1, m2)    111µs    116µs     8424.  105.54KB     17.1
+    ## 2 mats2line(m1, m2)        118µs    125µs     7716.    3.01KB     15.2
 
 From that you may think there’s no benefit to speeding things up. But,
 when you look at the benchmark results for larger matrices, you can see
@@ -154,8 +154,42 @@ bench::mark(
     ## # A tibble: 2 × 6
     ##   expression                 min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>            <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 mats2line_old(m1, m2) 103.56ms  112.4ms      7.71  518.21KB     44.3
-    ## 2 mats2line(m1, m2)       6.08ms    7.1ms    114.      4.01MB     31.5
+    ## 1 mats2line_old(m1, m2)    224ms  224.4ms      4.43  518.21KB     23.6
+    ## 2 mats2line(m1, m2)       14.8ms   18.3ms     35.5     4.01MB     15.8
+
+The results show that the new implementation is more than 10x faster.
+But that’s not the end of the story. There is another implementation, in
+the package `{od}`, which works as follows:
+
+``` r
+odc <- cbind(m1[1:3, ], m2[1:3, ])
+desire_lines <- od::odc_to_sfc(odc)
+waldo::compare(desire_lines, mats2line(m1[1:3, ], m2[1:3, ]))
+```
+
+    ## ✔ No differences
+
+``` r
+bench::mark(
+  mats2line_old(m1, m2),
+  mats2line(m1, m2),
+  od::odc_to_sfc(cbind(m1, m2))
+)
+```
+
+    ## Warning: Some expressions had a GC in every iteration; so filtering is
+    ## disabled.
+
+    ## # A tibble: 3 × 6
+    ##   expression                         min   median `itr/sec` mem_alloc `gc/sec`
+    ##   <bch:expr>                    <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
+    ## 1 mats2line_old(m1, m2)          217.3ms  218.5ms      4.55  518.21KB    15.2 
+    ## 2 mats2line(m1, m2)               14.4ms   16.5ms     48.9     4.01MB    15.7 
+    ## 3 od::odc_to_sfc(cbind(m1, m2))   16.2ms   18.2ms     47.6     5.01MB     7.93
+
+Given the advantages of modularity, and that the purpose of the `{od}`
+package is to work with origin-destination data, it makes sense to use
+the `{od}` implementation
 
 <!-- 
 &#10;

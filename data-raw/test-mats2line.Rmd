@@ -85,7 +85,23 @@ bench::mark(
 )
 ```
 
+The results show that the new implementation is more than 10x faster.
+But that's not the end of the story.
+There is another implementation, in the package `{od}`, which works as follows:
 
+```{r}
+odc <- cbind(m1[1:3, ], m2[1:3, ])
+desire_lines <- od::odc_to_sfc(odc)
+waldo::compare(desire_lines, mats2line(m1[1:3, ], m2[1:3, ]))
+
+bench::mark(
+  mats2line_old(m1, m2),
+  mats2line(m1, m2),
+  od::odc_to_sfc(cbind(m1, m2))
+)
+```
+
+Given the advantages of modularity, and that the purpose of the `{od}` package is to work with origin-destination data, it makes sense to use the `{od}` implementation
 
 <!-- 
 
