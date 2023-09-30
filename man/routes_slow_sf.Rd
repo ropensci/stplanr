@@ -5,7 +5,7 @@
 \alias{routes_slow_sf}
 \title{Spatial lines dataset of commuter flows on the travel network}
 \format{
-A spatial lines dataset 49 rows and 15 columns
+A spatial lines dataset 42 rows and 15 columns
 }
 \description{
 Simulated travel route allocated to the transport network
