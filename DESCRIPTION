@@ -1,7 +1,7 @@
 Type: Package
 Package: stplanr
 Title: Sustainable Transport Planning
-Version: 1.1.2
+Version: 1.1.2.9000
 Authors@R: c(
     person("Robin", "Lovelace", , "rob00x@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5679-6536")),
@@ -65,6 +65,7 @@ Suggests:
     osrm,
     pct,
     rmarkdown (>= 1.10),
+    rsgeo (>= 0.1.6),
     testthat (>= 2.0.0),
     tmap
 VignetteBuilder: 
