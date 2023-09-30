@@ -17,15 +17,33 @@
 #' plot(lsf)
 #' # mapview::mapview(lsf)
 mats2line <- function(mat1, mat2, crs = NA) {
-  l <- lapply(1:nrow(mat1), function(i) {
-    mat_combined <- rbind(mat1[i, ], mat2[i, ])
-    sf::st_linestring(mat_combined)
-  })
-  if(is.na(crs)) {
-    sf::st_sfc(l)
-  } else {
-    sf::st_sfc(l, crs = crs)
+
+  # check dimensions of matrices
+  if (nrow(mat1) != nrow(mat2)) {
+    rlang::abort("`mat1` and `mat2` must have the same number of rows.")
+  } else if (ncol(mat1) != 2 || ncol(mat2) != 2) {
+    rlang::abort("`mat1` and `mat2` must have exactly 2 columns")
   }
+
+  # interleave matrices so that mat1 point is above mat2 points
+  m <- vctrs::vec_interleave(mat1, mat2)
+  # add a unique id column to the matrix
+  m <- cbind(m, rep.int(1:nrow(mat1), rep(2, nrow(mat1))))
+
+  # give the matrices column names
+  colnames(m) <- c("x", "y", "id")
+
+  # use sfheaders to create the linestrings from the matrix
+  res <- sfheaders::sfc_linestring(
+    m,
+    x = "x",
+    y = "y",
+    linestring_id = "id"
+  )
+
+  # set the crs
+  sf::st_set_crs(res, crs)
+
 }
 #' Add geometry columns representing a route via intermediary points
 #'

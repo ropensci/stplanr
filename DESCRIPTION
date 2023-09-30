@@ -52,7 +52,8 @@ Imports:
     Rcpp (>= 0.12.1),
     rlang (>= 0.2.2),
     sf (>= 0.6.3),
-    sfheaders
+    sfheaders,
+    vctrs (>= 0.4.0)
 Suggests:
     cyclestreets,
     dodgr (>= 0.2.15),
