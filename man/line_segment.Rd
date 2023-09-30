@@ -17,6 +17,9 @@ line_segment(
 \item{n_segments}{The number of segments to divide the line into}
 
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
+
+\item{use_rsgeo}{Should the \code{rsgeo} package be used?
+If \code{rsgeo} is available, this faster implementation is used by default.}
 }
 \description{
 This function keeps the attributes
