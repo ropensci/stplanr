@@ -4,7 +4,12 @@
 \alias{line_segment}
 \title{Divide an sf object with LINESTRING geometry into regular segments}
 \usage{
-line_segment(l, n_segments = NA, segment_length = NA)
+line_segment(
+  l,
+  n_segments = NA,
+  segment_length = NA,
+  use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
+)
 }
 \arguments{
 \item{l}{A spatial lines object}

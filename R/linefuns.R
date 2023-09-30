@@ -151,6 +151,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @inheritParams line2df
 #' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
+#' @param use_rsgeo Should the `rsgeo` package be used?
+#'  If `rsgeo` is available, this faster implementation is used by default.
 #' @family lines
 #' @export
 #' @examples
@@ -167,7 +169,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' l <- routes_fast_sf[2:4, ]
 #' l_seg_multi = line_segment(l, segment_length = 1000)
 #' plot(sf::st_geometry(l_seg_multi), col = seq(nrow(l_seg_100)), lwd = 5)
-line_segment <- function(l, n_segments = NA, segment_length = NA) {
+line_segment <- function(l, n_segments = NA, segment_length = NA,
+                         use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")) {
   UseMethod("line_segment")
 }
 
@@ -175,7 +178,8 @@ line_segment <- function(l, n_segments = NA, segment_length = NA) {
 line_segment.sf <- function(
     l,
     n_segments = NA,
-    segment_length = NA
+    segment_length = NA,
+    use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
     ) {
 
   if (is.na(n_segments) && is.na(segment_length)) {
@@ -186,7 +190,7 @@ line_segment.sf <- function(
   }
 
   # if rsgeo is available use it
-  if (rlang::is_installed("rsgeo", version = "0.1.6")) {
+  if (use_rsgeo) {
     # if CRS is NA then we can continue or if IsGeographic is NA
     crs <- sf::st_crs(l)
     is_geographic <- crs$IsGeographic
@@ -269,7 +273,8 @@ line_segment.sf <- function(
 line_segment.sfc_LINESTRING <- function(
     l,
     n_segments = NA,
-    segment_length = NA
+    segment_length = NA,
+    use_rsgeo = rlang::is_installed("rsgeo", version = "0.1.6")
 ) {
   l <- sf::st_as_sf(l)
   res <- line_segment(l, n_segments, segment)
