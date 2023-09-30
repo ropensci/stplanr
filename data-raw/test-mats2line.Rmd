@@ -101,7 +101,41 @@ bench::mark(
 )
 ```
 
-Given the advantages of modularity, and that the purpose of the `{od}` package is to work with origin-destination data, it makes sense to use the `{od}` implementation
+Given the advantages of modularity, and that the purpose of the `{od}` package is to work with origin-destination data, it makes sense to use the `{od}` implementation.
+
+The `{od}` implementation uses the following:
+
+```{r}
+od_coordinates_ids = function(odc) {
+  res = data.frame(id = rep(1:nrow(odc), each = 2), x = NA, y = NA)
+  ids_odd = seq(1, nrow(res), by = 2)
+  ids_even = ids_odd + 1
+  res[ids_odd, c("x", "y")] = odc[, 1:2]
+  res[ids_even, c("x", "y")] = odc[, 3:4]
+  res
+}
+od_coordinates_ids(odc)
+```
+
+Let's see if we can speed that up:
+
+```{r}
+od_coordinates_ids2 = function(odc) {
+  res = vctrs::vec_interleave(odc[, 1:2], odc[, 3:4])
+  res = data.frame(id = rep(1:nrow(odc), each = 2), x = res[, 1], y = res[, 2])
+  res
+}
+waldo::compare(
+  od_coordinates_ids(odc),
+  od_coordinates_ids2(odc)
+)
+odc = cbind(m1, m2)
+bench::mark(
+  od = od_coordinates_ids(odc),
+  vctrs = od_coordinates_ids2(odc)
+)
+```
+
 
 <!-- 
 

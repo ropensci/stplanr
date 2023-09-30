@@ -105,7 +105,7 @@ mats2line
     ##     res <- sfheaders::sfc_linestring(m, x = "x", y = "y", linestring_id = "id")
     ##     sf::st_set_crs(res, crs)
     ## }
-    ## <bytecode: 0x5557d3a96270>
+    ## <bytecode: 0x55df6fb50b10>
     ## <environment: namespace:stplanr>
 
 We can check the 2 results are similar as follows:
@@ -131,8 +131,8 @@ bench::mark(
     ## # A tibble: 2 × 6
     ##   expression                 min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>            <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 mats2line_old(m1, m2)    111µs    116µs     8424.  105.54KB     17.1
-    ## 2 mats2line(m1, m2)        118µs    125µs     7716.    3.01KB     15.2
+    ## 1 mats2line_old(m1, m2)    110µs    114µs     8574.  105.54KB     16.9
+    ## 2 mats2line(m1, m2)        118µs    123µs     7910.    3.01KB     15.0
 
 From that you may think there’s no benefit to speeding things up. But,
 when you look at the benchmark results for larger matrices, you can see
@@ -154,8 +154,8 @@ bench::mark(
     ## # A tibble: 2 × 6
     ##   expression                 min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>            <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 mats2line_old(m1, m2)    224ms  224.4ms      4.43  518.21KB     23.6
-    ## 2 mats2line(m1, m2)       14.8ms   18.3ms     35.5     4.01MB     15.8
+    ## 1 mats2line_old(m1, m2)  217.4ms  217.6ms      4.50  518.21KB     25.5
+    ## 2 mats2line(m1, m2)       14.1ms   17.6ms     41.5     4.01MB     15.8
 
 The results show that the new implementation is more than 10x faster.
 But that’s not the end of the story. There is another implementation, in
@@ -183,13 +183,65 @@ bench::mark(
     ## # A tibble: 3 × 6
     ##   expression                         min   median `itr/sec` mem_alloc `gc/sec`
     ##   <bch:expr>                    <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-    ## 1 mats2line_old(m1, m2)          217.3ms  218.5ms      4.55  518.21KB    15.2 
-    ## 2 mats2line(m1, m2)               14.4ms   16.5ms     48.9     4.01MB    15.7 
-    ## 3 od::odc_to_sfc(cbind(m1, m2))   16.2ms   18.2ms     47.6     5.01MB     7.93
+    ## 1 mats2line_old(m1, m2)          215.7ms    228ms      4.44  518.21KB     17.7
+    ## 2 mats2line(m1, m2)               14.2ms   18.9ms     50.9     4.01MB     17.6
+    ## 3 od::odc_to_sfc(cbind(m1, m2))   15.7ms     19ms     49.3     5.01MB     11.8
 
 Given the advantages of modularity, and that the purpose of the `{od}`
 package is to work with origin-destination data, it makes sense to use
-the `{od}` implementation
+the `{od}` implementation.
+
+The `{od}` implementation uses the following:
+
+``` r
+od_coordinates_ids = function(odc) {
+  res = data.frame(id = rep(1:nrow(odc), each = 2), x = NA, y = NA)
+  ids_odd = seq(1, nrow(res), by = 2)
+  ids_even = ids_odd + 1
+  res[ids_odd, c("x", "y")] = odc[, 1:2]
+  res[ids_even, c("x", "y")] = odc[, 3:4]
+  res
+}
+od_coordinates_ids(odc)
+```
+
+    ##   id           x          y
+    ## 1  1  0.54634963 -1.9157423
+    ## 2  1  0.38803029  0.9626673
+    ## 3  2 -0.75469220  0.4153730
+    ## 4  2  0.02065935  0.3727175
+    ## 5  3 -1.03140234 -0.1922811
+    ## 6  3  0.16871653  0.7634995
+
+Let’s see if we can speed that up:
+
+``` r
+od_coordinates_ids2 = function(odc) {
+  res = vctrs::vec_interleave(odc[, 1:2], odc[, 3:4])
+  res = data.frame(id = rep(1:nrow(odc), each = 2), x = res[, 1], y = res[, 2])
+  res
+}
+waldo::compare(
+  od_coordinates_ids(odc),
+  od_coordinates_ids2(odc)
+)
+```
+
+    ## ✔ No differences
+
+``` r
+odc = cbind(m1, m2)
+bench::mark(
+  od = od_coordinates_ids(odc),
+  vctrs = od_coordinates_ids2(odc)
+)
+```
+
+    ## # A tibble: 2 × 6
+    ##   expression      min   median `itr/sec` mem_alloc `gc/sec`
+    ##   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
+    ## 1 od           2.75ms   2.84ms      343.    3.94MB     33.9
+    ## 2 vctrs      876.61µs 902.94µs     1092.    1.74MB     50.8
 
 <!-- 
 &#10;
