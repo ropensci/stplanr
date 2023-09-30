@@ -79,7 +79,7 @@ NULL
 #' @keywords datasets
 #' @name routes_fast_sf
 #' @usage routes_fast_sf
-#' @format A spatial lines dataset with 49 rows and 15 columns
+#' @format A spatial lines dataset with 42 rows and 15 columns
 NULL
 
 #' Spatial lines dataset of commuter flows on the travel network
@@ -92,7 +92,7 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name routes_slow_sf
-#' @format A spatial lines dataset 49 rows and 15 columns
+#' @format A spatial lines dataset 42 rows and 15 columns
 NULL
 
 #' Spatial polygons of home locations for flow analysis.
@@ -122,7 +122,7 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @name flowlines_sf
-#' @format A spatial lines dataset with 49 rows and 15 columns
+#' @format A spatial lines dataset with 42 rows and 15 columns
 NULL
 
 #' Spatial lines dataset representing a route network
