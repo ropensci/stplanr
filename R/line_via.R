@@ -25,21 +25,7 @@ mats2line <- function(mat1, mat2, crs = NA) {
     rlang::abort("`mat1` and `mat2` must have exactly 2 columns")
   }
 
-  # interleave matrices so that mat1 point is above mat2 points
-  m <- vctrs::vec_interleave(mat1, mat2)
-  # add a unique id column to the matrix
-  m <- cbind(m, rep.int(1:nrow(mat1), rep(2, nrow(mat1))))
-
-  # give the matrices column names
-  colnames(m) <- c("x", "y", "id")
-
-  # use sfheaders to create the linestrings from the matrix
-  res <- sfheaders::sfc_linestring(
-    m,
-    x = "x",
-    y = "y",
-    linestring_id = "id"
-  )
+  res <- od::odc_to_sfc(cbind(mat1, mat2))
 
   # set the crs
   sf::st_set_crs(res, crs)
