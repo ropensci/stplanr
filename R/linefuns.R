@@ -166,7 +166,8 @@ line_segment <- function(
   l, 
   n_segments = NA,
   segment_length = NA,
-  use_rsgeo = NULL
+  use_rsgeo = NULL,
+  debug_mode = FALSE
 ) {
   UseMethod("line_segment")
 }
@@ -175,7 +176,8 @@ line_segment.sf <- function(
   l, 
   n_segments = NA,
   segment_length = NA,
-  use_rsgeo = NULL
+  use_rsgeo = NULL,
+  debug_mode = FALSE
 ) {
   if (is.na(n_segments) && is.na(segment_length)) {
     rlang::abort(
@@ -186,6 +188,9 @@ line_segment.sf <- function(
   n_row_l = nrow(l)
   if (n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
+      if (debug_mode) {
+        message(paste0("Processing row ", i, " of ", n_row_l))
+      } 
       l_segmented = line_segment1(l[i, ], n_segments, segment_length, use_rsgeo)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
@@ -209,10 +214,11 @@ line_segment.sfc_LINESTRING <- function(
   l, 
   n_segments = NA,
   segment_length = NA,
-  use_rsgeo = NULL
+  use_rsgeo = NULL,
+  debug_mode = FALSE
 ) {
   l <- sf::st_as_sf(l)
-  res <- line_segment(l, n_segments, segment)
+  res <- line_segment(l, n_segments, segment_length, use_rsgeo, debug_mode)
   sf::st_geometry(res)
 }
 
