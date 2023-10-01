@@ -223,6 +223,7 @@ line_segment.sf <- function(
       ids <- rep.int(1:n, rep(n_segments, n))
 
       # index the original sf object
+      browser()
       res_tbl <- sf::st_drop_geometry(l)[ids,]
 
       # assign the geometry column
