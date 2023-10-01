@@ -164,7 +164,6 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' # waldo::compare(l_seg_multi, l_seg_multi_rsgeo)
 line_segment <- function(
   l, 
-  n_segments = NA,
   segment_length = NA,
   use_rsgeo = NULL,
   debug_mode = FALSE
@@ -174,24 +173,27 @@ line_segment <- function(
 #' @export
 line_segment.sf <- function(
   l, 
-  n_segments = NA,
   segment_length = NA,
   use_rsgeo = NULL,
   debug_mode = FALSE
 ) {
-  if (is.na(n_segments) && is.na(segment_length)) {
+  if (is.na(segment_length)) {
     rlang::abort(
-      "`n_segment` or `segment_length` must be set.",
+      "`segment_length` must be set.",
       call = rlang::caller_env()
     )
   }
   n_row_l = nrow(l)
+  # browser()
   if (n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
-      } 
-      l_segmented = line_segment1(l[i, ], n_segments, segment_length, use_rsgeo)
+      }
+      # if( i == 108) {
+      #   browser()
+      # }
+      l_segmented = line_segment1(l[i, ], n_segments = NA, segment_length = segment_length, use_rsgeo)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {
@@ -203,7 +205,7 @@ line_segment.sf <- function(
     res = bind_sf(res_list)
   } else {
     # If there's only one row:
-    res = line_segment1(l, n_segments, segment_length, use_rsgeo)
+    res = line_segment1(l, n_segments = NA, segment_length = segment_length, use_rsgeo)
   }
   res
 }
@@ -212,13 +214,12 @@ line_segment.sf <- function(
 #' @export
 line_segment.sfc_LINESTRING <- function(
   l, 
-  n_segments = NA,
   segment_length = NA,
   use_rsgeo = NULL,
   debug_mode = FALSE
 ) {
   l <- sf::st_as_sf(l)
-  res <- line_segment(l, n_segments, segment_length, use_rsgeo, debug_mode)
+  res = line_segment(l, segment_length = segment_length, use_rsgeo, debug_mode)
   sf::st_geometry(res)
 }
 
@@ -265,7 +266,8 @@ line_segment1.sf <- function(
   if (is.na(n_segments)) {
     l_length <- as.numeric(sf::st_length(l))
     n_segments <- max(round(l_length / segment_length), 1)
-  } else if (n_segments == 1) {
+  }
+  if (n_segments == 1) {
     return(l)
   }
 
@@ -283,16 +285,15 @@ line_segment1.sf <- function(
 }
 #' @export
 line_segment1.sfc_LINESTRING <- function(
-  l, 
+  l,
   n_segments = NA,
   segment_length = NA,
-  use_rsgeo = use_rsgeo(l)
+  use_rsgeo = NULL
 ) {
   l <- sf::st_as_sf(l)
-  res <- line_segment1(l, n_segments, segment)
+  res <- line_segment1(l, n_segments, segment_length = segment_length, use_rsgeo)
   sf::st_geometry(res)
 }
-
 
 make_bidirectional <- function(bearing) {
   is_na_bearings <- is.na(bearing)
