@@ -70,6 +70,8 @@ Suggests:
     rsgeo (>= 0.1.6),
     testthat (>= 2.0.0),
     tmap
+Remotes:
+    JosiahParry/rsgeo
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
