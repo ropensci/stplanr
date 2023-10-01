@@ -97,6 +97,7 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
     rnet_x$angle_x = line_bearing(rnet_x, bidirectional = TRUE)
     contains = FALSE
   }
+  browser()
   rnet_x_buffer = geo_buffer(rnet_x, dist = dist, nQuadSegs = 2, endCapStyle = endCapStyle, crs = crs)
   if (segment_length > 0) {
     rnet_y = line_segment(rnet_y, segment_length = segment_length)
@@ -144,14 +145,13 @@ rnet_join = function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
 #' rnet_x_subset = rnet_subset(rnet_x, rnet_y)
 #' plot(rnet_x_subset, add = TRUE, col = "blue")
 rnet_subset = function(rnet_x, rnet_y, dist = 10, crop = TRUE, min_length = 20, rm_disconnected = TRUE) {
-  # browser()
   rnet_x_original = data.frame(
     id = rnet_x[[1]],
     length_original = as.numeric(sf::st_length(rnet_x))
     )
   names(rnet_x_original)[1] = names(rnet_x)[1]
   rnet_y_union = sf::st_union(rnet_y)
-  rnet_y_buffer = stplanr::geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
+  rnet_y_buffer = geo_buffer(rnet_y_union, dist = dist, nQuadSegs = 2)
   if(crop) {
     rnet_x = sf::st_intersection(rnet_x, rnet_y_buffer)
     rnet_x = line_cast(rnet_x)

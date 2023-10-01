@@ -74,6 +74,14 @@ geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE,
     sf::st_crs(shp) <- sf::st_crs(4326)
   }
   crs_orig <- sf::st_crs(shp)
+  # If the original CRS is already projected, run the fun() on the original:
+  if (!is.na(sf::st_crs(shp)) && !sf::st_is_longlat(shp)) {
+    if (!silent) {
+      message("Running function on original projection")
+    }
+    res <- fun(shp, ...)
+    return(res)
+  }
   shp_projected <- sf::st_transform(shp, crs)
   if (!silent) {
     message(paste0("Running function on a temporary projection: ", crs$proj4string))
@@ -86,20 +94,9 @@ geo_projected.sf <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE,
 }
 #' @export
 geo_projected.sfc <- function(shp, fun, crs = geo_select_aeq(shp), silent = TRUE, ...) {
-  # assume it's not projected  (i.e. lat/lon) if there is no CRS
-  if (is.na(sf::st_crs(shp))) {
-    sf::st_crs(shp) <- sf::st_crs(4326)
-  }
-  crs_orig <- sf::st_crs(shp)
-  shp_projected <- sf::st_transform(shp, crs)
-  if (!silent) {
-    message(paste0("Running function on a temporary projection: ", crs$proj4string))
-  }
-  res <- fun(shp_projected, ...)
-  if (grepl("sf", x = class(res)[1])) {
-    res <- sf::st_transform(res, crs_orig)
-  }
-  res
+  shp_sf <- sf::st_as_sf(shp)
+  res <- geo_projected.sf(shp_sf, fun, crs, silent, ...)
+  sf::st_geometry(res)
 }
 #' Perform a buffer operation on a temporary projected CRS
 #'

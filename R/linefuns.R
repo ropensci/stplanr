@@ -209,6 +209,7 @@ line_segment.sf <- function(
       }
 
       # segmentize the line strings
+      message("Using rsgeo::line_segmentize")
       res <- rsgeo::line_segmentize(geo, n_segments)
 
       # make them into sfc_LINESTRING
@@ -224,6 +225,7 @@ line_segment.sf <- function(
 
       # index the original sf object
       res_tbl <- sf::st_drop_geometry(l)[ids,]
+      browser()
 
       # assign the geometry column
       res_tbl[[attr(l, "sf_column")]] <- res
