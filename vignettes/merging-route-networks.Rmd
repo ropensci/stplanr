@@ -62,11 +62,27 @@ The initial merged result was as follows (original data on left)
 ```{r}
 funs = list(value = sum, Quietness = mean)
 brks = c(0, 100, 500, 1000, 5000)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 20, funs = funs)
+system.time({
+  rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 20, funs = funs)
+})
 m1 = tm_shape(rnet_y) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)  +
   tm_scale_bar()
 m2 = tm_shape(rnet_merged) + tm_lines("value", palette = "viridis", lwd = 5, breaks = brks)
 tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
+```
+
+Speed-up the results by transforming to a projected coordinate system:
+
+```{r}
+rnet_x = sf::st_transform(rnet_x, 27700)
+rnet_y = sf::st_transform(rnet_y, 27700)
+```
+
+```{r}
+rnet_y_segmented = line_segment(rnet_y, segment_length = 20, use_rsgeo = TRUE)
+system.time({
+  rnet_merged2 = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 20, funs = funs)
+})
 ```
 
 Let's check the results:

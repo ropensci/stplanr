@@ -46,6 +46,7 @@ Other lines:
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
 \code{\link{line_midpoint}()},
+\code{\link{line_segment1}()},
 \code{\link{line_segment}()},
 \code{\link{mats2line}()},
 \code{\link{n_vertices}()},

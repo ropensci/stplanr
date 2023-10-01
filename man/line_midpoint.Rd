@@ -30,6 +30,7 @@ Other lines:
 \code{\link{line2points}()},
 \code{\link{line_bearing}()},
 \code{\link{line_breakup}()},
+\code{\link{line_segment1}()},
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
