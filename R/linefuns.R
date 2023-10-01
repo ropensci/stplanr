@@ -69,9 +69,11 @@ is_linepoint <- function(l) {
 #' }
 line_bearing <- function(l, bidirectional = FALSE) {
   p <- sf::st_geometry(line2points(l))
-  i_s <- 1:length(sf::st_geometry(l)) * 2 - 1
+  i_s <- seq_along(sf::st_geometry(l)) * 2 - 1
+
   bearing_radians <- sapply(i_s, function(i) lwgeom::st_geod_azimuth(p[i:(i + 1)]))
-  bearing <- bearing_radians * 180 / (pi)
+
+  bearing <- bearing_radians * 180 / pi
   if (bidirectional) {
     bearing <- make_bidirectional(bearing)
   }
@@ -149,10 +151,11 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' This function keeps the attributes
 #'
 #' @inheritParams line2df
-#' @param n_segments The number of segments to divide the line into
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
 #' @param use_rsgeo Should the `rsgeo` package be used?
 #'  If `rsgeo` is available, this faster implementation is used by default.
+#'  If `rsgeo` is not available, the `lwgeom` package is used.
+#' @param debug_mode Should debug messages be printed? Default is FALSE.
 #' @family lines
 #' @export
 #' @examples
@@ -160,8 +163,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' l_seg_multi = line_segment(l, segment_length = 1000)
 #' plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
 #' # Test rsgeo implementation:
-#' # l_seg_multi_rsgeo = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
-#' # waldo::compare(l_seg_multi, l_seg_multi_rsgeo)
+#' # rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+#' # waldo::compare(l_seg_multi, rsmulti)
 line_segment <- function(
   l, 
   segment_length = NA,
@@ -172,7 +175,7 @@ line_segment <- function(
 }
 #' @export
 line_segment.sf <- function(
-  l, 
+  l,
   segment_length = NA,
   use_rsgeo = NULL,
   debug_mode = FALSE
@@ -226,6 +229,7 @@ line_segment.sfc_LINESTRING <- function(
 #' Segment a single line, using lwgeom or rsgeo
 #' 
 #' @inheritParams line_segment
+#' @param n_segments The number of segments to divide the line into
 #' @family lines
 #' @export
 #' @examples
@@ -333,7 +337,7 @@ use_rsgeo <- function(shp) {
   should_use_rsgeo
 }
 
-line_segment_rsgeo <- function(l, n_segments) {
+line_segment_rsgeo <- function(l, n_segments, segment_length) {
   crs <- sf::st_crs(l)
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))

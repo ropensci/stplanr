@@ -14,7 +14,8 @@ line_segment1(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
 
 \item{use_rsgeo}{Should the \code{rsgeo} package be used?
-If \code{rsgeo} is available, this faster implementation is used by default.}
+If \code{rsgeo} is available, this faster implementation is used by default.
+If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
 }
 \description{
 Segment a single line, using lwgeom or rsgeo
@@ -22,15 +23,16 @@ Segment a single line, using lwgeom or rsgeo
 \examples{
 l <- routes_fast_sf[2, ]
 l_seg2 <- line_segment1(l = l, n_segments = 2)
-l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
-waldo::compare(l_seg2, l_seg2_rsgeo)
+# Test with rsgeo (must be installed):
+# l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
+# waldo::compare(l_seg2, l_seg2_rsgeo)
 l_seg3 <- line_segment1(l = l, n_segments = 3)
 l_seg_100 <- line_segment1(l = l, segment_length = 100)
-l_seg_2000 <- line_segment1(l = l, segment_length = 2000)
+l_seg_1000 <- line_segment1(l = l, segment_length = 1000)
 plot(sf::st_geometry(l_seg2), col = 1:2, lwd = 5)
 plot(sf::st_geometry(l_seg3), col = 1:3, lwd = 5)
 plot(sf::st_geometry(l_seg_100), col = seq(nrow(l_seg_100)), lwd = 5)
-plot(sf::st_geometry(l_seg_2000), col = seq(nrow(l_seg_2000)), lwd = 5)
+plot(sf::st_geometry(l_seg_1000), col = seq(nrow(l_seg_1000)), lwd = 5)
 }
 \seealso{
 Other lines: 

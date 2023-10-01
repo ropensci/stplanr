@@ -4,17 +4,18 @@
 \alias{line_segment}
 \title{Divide an sf object with LINESTRING geometry into regular segments}
 \usage{
-line_segment(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
+line_segment(l, segment_length = NA, use_rsgeo = NULL, debug_mode = FALSE)
 }
 \arguments{
 \item{l}{A spatial lines object}
 
-\item{n_segments}{The number of segments to divide the line into}
-
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
 
 \item{use_rsgeo}{Should the \code{rsgeo} package be used?
-If \code{rsgeo} is available, this faster implementation is used by default.}
+If \code{rsgeo} is available, this faster implementation is used by default.
+If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
+
+\item{debug_mode}{Should debug messages be printed? Default is FALSE.}
 }
 \description{
 This function keeps the attributes
@@ -22,9 +23,10 @@ This function keeps the attributes
 \examples{
 l <- routes_fast_sf[2:4, ]
 l_seg_multi = line_segment(l, segment_length = 1000)
+plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
 # Test rsgeo implementation:
-# l_seg_multi_rsgeo = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
-# waldo::compare(l_seg_multi, l_seg_multi_rsgeo)
+# rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+# waldo::compare(l_seg_multi, rsmulti)
 }
 \seealso{
 Other lines: 
