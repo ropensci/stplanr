@@ -246,7 +246,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   names(rnetj)
   rnetj_df = sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
-  res_list = lapply(seq(length(funs)), function(i) {
+  res_list <- lapply(seq_along(funs), function(i) {
     # i = 1
     nm = names(funs[i])
     fn = funs[[i]]
