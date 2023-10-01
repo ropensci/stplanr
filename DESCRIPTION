@@ -67,7 +67,7 @@ Suggests:
     osrm,
     pct,
     rmarkdown (>= 1.10),
-    rsgeo (>= 0.1.6),
+    rsgeo (>= 0.1.6.9000),
     testthat (>= 2.0.0),
     tmap
 Remotes:
