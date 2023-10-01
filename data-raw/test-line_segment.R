@@ -54,7 +54,7 @@ geo <- rsgeo::as_rsgeo(sf::st_geometry(failing_line))
 
 
   # segmentize the line strings
-res <- rsgeo::line_segmentize(geo, 4)
+res <- rsgeo::line_segmentize(geo, n = 4)
 res <- sf::st_cast(sf::st_as_sfc(res), "LINESTRING")
 res
 length(res) # should be 4
