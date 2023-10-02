@@ -1,0 +1,42 @@
+---
+title: "Testing geo_buffer"
+output: github_document
+---
+
+```{r}
+# devtools::load_all()
+sf::sf_use_s2(FALSE)
+```
+
+```{r setup}
+remotes::install_dev("stplanr")
+packageVersion("stplanr")
+library(stplanr)
+library(dplyr)
+library(tmap)
+library(ggplot2)
+library(tmaptools)
+rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
+rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
+rnet_x_buffer = geo_buffer(rnet_x, dist = 20)
+plot(rnet_x_buffer$geometry)
+plot(geo_buffer(rnet_x, dist = 20, endCapStyle = "FLAT")$geometry)
+```
+
+With projected data:
+
+```{r}
+rnet_xp = sf::st_transform(rnet_x, "EPSG:27700")
+rnet_yp = sf::st_transform(rnet_y, "EPSG:27700")
+rnet_xp_buffer = geo_buffer(rnet_xp, dist = 20)
+plot(rnet_xp_buffer$geometry)
+```
+
+# Try merging projected data
+
+```{r}
+funs = list(value = sum, Quietness = mean)
+rnet_merged = rnet_merge(rnet_xp, rnet_yp, dist = 10, segment_length = 20, funs = funs)
+plot(rnet_merged)
+```
+
