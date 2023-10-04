@@ -191,7 +191,6 @@ line_segment.sf <- function(
   if (use_rsgeo) {
     # If using rsgeo, we can do the whole thing in one go:
     segment_lengths <- as.numeric(sf::st_length(l))
-    browser()
     n_segments <- n_segments(segment_lengths, segment_length)
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
@@ -308,7 +307,6 @@ make_bidirectional <- function(bearing) {
 bind_sf <- function(x) {
   if (length(x) == 0) stop("Empty list")
   geom_name <- attr(x[[1]], "sf_column")
-  # browser()
   x <- data.table::rbindlist(x, use.names = FALSE)
   # x = collapse::unlist2d(x, idcols = FALSE, recursive = FALSE)
   x[[geom_name]] <- sf::st_sfc(x[[geom_name]], recompute_bbox = TRUE)
@@ -326,8 +324,9 @@ use_rsgeo <- function(shp) {
 }
 
 line_segment_rsgeo <- function(l, n_segments) {
-  browser()
+
   crs <- sf::st_crs(l)
+  
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
 
@@ -343,7 +342,7 @@ line_segment_rsgeo <- function(l, n_segments) {
   # calculate the number of original geometries
   n_lines <- length(geo)
   # create index ids to grab rows from
-  ids <- rep.int(1:n_lines, rep(n_segments, n_lines))
+  ids <- rep.int(seq_len(n_lines), n_segments)
 
   # index the original sf object
   res_tbl <- sf::st_drop_geometry(l)[ids, ]

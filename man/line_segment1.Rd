@@ -4,7 +4,7 @@
 \alias{line_segment1}
 \title{Segment a single line, using lwgeom or rsgeo}
 \usage{
-line_segment1(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
+line_segment1(l, n_segments = NA, segment_length = NA)
 }
 \arguments{
 \item{l}{A spatial lines object}
@@ -12,10 +12,6 @@ line_segment1(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
 \item{n_segments}{The number of segments to divide the line into}
 
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
-
-\item{use_rsgeo}{Should the \code{rsgeo} package be used?
-If \code{rsgeo} is available, this faster implementation is used by default.
-If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
 }
 \description{
 Segment a single line, using lwgeom or rsgeo
@@ -47,6 +43,7 @@ Other lines:
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
+\code{\link{n_segments}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},
