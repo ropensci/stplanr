@@ -178,7 +178,6 @@ line_segment.sf <- function(
     segment_length = NA,
     use_rsgeo = NULL,
     debug_mode = FALSE) {
-  browser()
   if (is.na(segment_length)) {
     rlang::abort(
       "`segment_length` must be set.",
@@ -191,7 +190,10 @@ line_segment.sf <- function(
   }
   if (use_rsgeo) {
     # If using rsgeo, we can do the whole thing in one go:
-    res <- line_segment_rsgeo(l, n_segments = NA, segment_length = segment_length)
+    segment_lengths <- as.numeric(sf::st_length(l))
+    browser()
+    n_segments <- n_segments(segment_lengths, segment_length)
+    res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }
   n_row_l <- nrow(l)
@@ -323,31 +325,25 @@ use_rsgeo <- function(shp) {
   TRUE
 }
 
-line_segment_rsgeo <- function(l, n_segments, segment_length) {
+line_segment_rsgeo <- function(l, n_segments) {
   browser()
   crs <- sf::st_crs(l)
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
 
-  # if n_segments is missing it needs to be calculated
-  if (is.na(n_segments)) {
-    l_length <- rsgeo::length_euclidean(geo)
-    n_segments <- max(round(l_length / segment_length), 1)
-  }
-
   # segmentize the line strings
-  res <- rsgeo::line_segmentize(geo, n_segments)
+  res_rsgeo <- rsgeo::line_segmentize(geo, n_segments)
 
   # make them into sfc_LINESTRING
-  res <- sf::st_cast(sf::st_as_sfc(res), "LINESTRING")
+  res <- sf::st_cast(sf::st_as_sfc(res_rsgeo), "LINESTRING")
 
   # give them them CRS
   res <- sf::st_set_crs(res, crs)
 
   # calculate the number of original geometries
-  n <- length(geo)
+  n_lines <- length(geo)
   # create index ids to grab rows from
-  ids <- rep.int(1:n, rep(n_segments, n))
+  ids <- rep.int(1:n_lines, rep(n_segments, n_lines))
 
   # index the original sf object
   res_tbl <- sf::st_drop_geometry(l)[ids, ]
