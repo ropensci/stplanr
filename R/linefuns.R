@@ -178,6 +178,7 @@ line_segment.sf <- function(
     segment_length = NA,
     use_rsgeo = NULL,
     debug_mode = FALSE) {
+  browser()
   if (is.na(segment_length)) {
     rlang::abort(
       "`segment_length` must be set.",
@@ -187,6 +188,11 @@ line_segment.sf <- function(
   # Decide whether to use rsgeo or lwgeom, if not set:
   if (is.null(use_rsgeo)) {
     use_rsgeo <- use_rsgeo(l)
+  }
+  if (use_rsgeo) {
+    # If using rsgeo, we can do the whole thing in one go:
+    res <- line_segment_rsgeo(l, n_segments = NA, segment_length = segment_length)
+    return(res)
   }
   n_row_l <- nrow(l)
   if (n_row_l > 1) {
@@ -245,8 +251,7 @@ line_segment.sfc_LINESTRING <- function(
 line_segment1 <- function(
     l,
     n_segments = NA,
-    segment_length = NA,
-    use_rsgeo = NULL) {
+    segment_length = NA) {
   UseMethod("line_segment1")
 }
 
@@ -254,8 +259,7 @@ line_segment1 <- function(
 line_segment1.sf <- function(
     l,
     n_segments = NA,
-    segment_length = NA,
-    use_rsgeo = NULL) {
+    segment_length = NA) {
   if (is.na(n_segments) && is.na(segment_length)) {
     rlang::abort(
       "`n_segment` or `segment_length` must be set.",
@@ -270,11 +274,8 @@ line_segment1.sf <- function(
     return(l)
   }
 
-  if (use_rsgeo) {
-    res <- line_segment_rsgeo(l, n_segments)
-  } else {
-    res <- line_segment_lwgeom(l, n_segments)
-  }
+  res <- line_segment_lwgeom(l, n_segments)
+  
   res
 }
 #' @export
@@ -315,18 +316,15 @@ bind_sf <- function(x) {
 
 use_rsgeo <- function(shp) {
   rsgeo_installed <- rlang::is_installed("rsgeo", version = "0.1.6")
-  crs <- sf::st_crs(shp)
-  is_projected <- !crs$IsGeographic
-  # if its NA set false
-  if (is.na(is_projected)) {
-    warning("CRS is NA, assuming projected")
-    is_projected <- TRUE
+  if (!rsgeo_installed) {
+    warning("rsgeo not installed, using lwgeom")
+    return(FALSE)
   }
-  should_use_rsgeo <- rsgeo_installed & is_projected
-  should_use_rsgeo
+  TRUE
 }
 
 line_segment_rsgeo <- function(l, n_segments, segment_length) {
+  browser()
   crs <- sf::st_crs(l)
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
@@ -375,4 +373,18 @@ line_segment_lwgeom <- function(l, n_segments) {
   })
   res <- bind_sf(line_segment_list)
   res
+}
+
+#' Vectorised function to calculate number of segments given a max segment length
+#' @param line_length The length of the line
+#' @param max_segment_length The maximum length of each segment
+#' @family lines
+#' @export
+#' @examples
+#' n_segments(50, 10)
+#' n_segments(50.1, 10)
+#' n_segments(1, 10)
+#' n_segments(1:9, 2)
+n_segments <- function(line_length, max_segment_length) {
+  pmax(ceiling(line_length / max_segment_length), 1)
 }
