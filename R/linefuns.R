@@ -187,15 +187,11 @@ line_segment.sf <- function(
     )
   }
   n_row_l = nrow(l)
-  # browser()
   if (n_row_l > 1) {
     res_list = pbapply::pblapply(seq(n_row_l), function(i) {
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
       }
-      # if( i == 108) {
-      #   browser()
-      # }
       l_segmented = line_segment1(l[i, ], n_segments = NA, segment_length = segment_length, use_rsgeo)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
