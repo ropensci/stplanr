@@ -10,7 +10,7 @@ rnet_join(
   dist = 5,
   length_y = TRUE,
   key_column = 1,
-  subset_x = TRUE,
+  subset_x = FALSE,
   dist_subset = NULL,
   segment_length = 0,
   endCapStyle = "FLAT",
@@ -36,7 +36,7 @@ length of segments (e.g. weighted mean). \code{TRUE} by default.}
 
 \item{subset_x}{Subset the source route network by the target network before
 creating buffers? This can lead to faster and better results. Default:
-\code{TRUE}.}
+\code{FALSE}.}
 
 \item{dist_subset}{The buffer distance in m to apply when breaking up the
 source object \code{rnet_y}. Default: 5.}
