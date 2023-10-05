@@ -331,6 +331,7 @@ use_rsgeo <- function(shp) {
 
 line_segment_rsgeo <- function(l, n_segments) {
 
+  browser()
   crs <- sf::st_crs(l)
 
   # extract geometry and convert to rsgeo
@@ -348,12 +349,14 @@ line_segment_rsgeo <- function(l, n_segments) {
   # calculate the number of original geometries
   n_lines <- length(geo)
   # create index ids to grab rows from
-  ids <- rep.int(seq_len(n_lines), n_segments)
+  ids <- rep.int(seq_len(n_lines), n_segments[1:6])
 
   # index the original sf object
-  res_tbl <- sf::st_drop_geometry(l)[ids, ]
+  res_tbl <- sf::st_drop_geometry(l)[ids, , drop = FALSE]
 
   # assign the geometry column
+  nrow(res_tbl)
+
   res_tbl[[attr(l, "sf_column")]] <- res
 
   # convert to sf and return
