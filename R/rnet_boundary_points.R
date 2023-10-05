@@ -72,25 +72,3 @@ rnet_duplicated_vertices <- function(rnet, n = 2) {
   p
 }
 
-# bench::mark(check = FALSE,
-#             rnet_boundary_points(rnet),
-#             rnet_boundary_points_lwgeom(rnet),
-#             rnet_duplicated_vertices(rnet),
-#             line2points(rnet)
-# )
-# A tibble: 4 x 13
-# expression                             min   median `itr/sec` mem_alloc `gc/sec` n_itr  n_gc
-# <bch:expr>                        <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl> <int> <dbl>
-#   1 rnet_boundary_points(rnet)           372µs 384.58µs     2559.     331KB     15.0  1198     7
-# 2 rnet_boundary_points_lwgeom(rnet)   1.21ms   1.25ms      783.     249KB     15.1   363     7
-# 3 rnet_duplicated_vertices(rnet)      1.13ms   1.15ms      864.     273KB     10.6   408     5
-# 4 line2points(rnet)                   1.93ms   1.97ms      501.     265KB     13.0   231     6
-# # … with 5 more variables: total_time <bch:tm>, result <list>, memory <list>, time <list>,
-# #   gc <list>
-
-# coords_single <- stplanr::od_id_szudzik(coords$x, coords$y)
-# coords_count <- table(coords_single)
-# coords_in <- coords[coords_single %in% names(coords_count)[coords_count >= 3], ]
-# coords_n <- unique(coords_in[-c(1, 2)])
-
-

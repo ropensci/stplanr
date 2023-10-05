@@ -44,6 +44,7 @@ Other lines:
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
+\code{\link{n_segments}()},
 \code{\link{n_vertices}()},
 \code{\link{points2line}()},
 \code{\link{toptail_buff}()}

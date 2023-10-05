@@ -4,7 +4,7 @@
 \alias{line_segment1}
 \title{Segment a single line, using lwgeom or rsgeo}
 \usage{
-line_segment1(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
+line_segment1(l, n_segments = NA, segment_length = NA)
 }
 \arguments{
 \item{l}{A spatial lines object}
@@ -12,10 +12,6 @@ line_segment1(l, n_segments = NA, segment_length = NA, use_rsgeo = NULL)
 \item{n_segments}{The number of segments to divide the line into}
 
 \item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
-
-\item{use_rsgeo}{Should the \code{rsgeo} package be used?
-If \code{rsgeo} is available, this faster implementation is used by default.
-If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
 }
 \description{
 Segment a single line, using lwgeom or rsgeo
@@ -24,7 +20,7 @@ Segment a single line, using lwgeom or rsgeo
 l <- routes_fast_sf[2, ]
 l_seg2 <- line_segment1(l = l, n_segments = 2)
 # Test with rsgeo (must be installed):
-# l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
+# l_seg2_rsgeo = line_segment1(l = l, n_segments = 2)
 # waldo::compare(l_seg2, l_seg2_rsgeo)
 l_seg3 <- line_segment1(l = l, n_segments = 3)
 l_seg_100 <- line_segment1(l = l, segment_length = 100)
@@ -47,6 +43,7 @@ Other lines:
 \code{\link{line_segment}()},
 \code{\link{line_via}()},
 \code{\link{mats2line}()},
+\code{\link{n_segments}()},
 \code{\link{n_vertices}()},
 \code{\link{onewaygeo}()},
 \code{\link{points2line}()},

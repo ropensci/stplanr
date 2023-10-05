@@ -8,7 +8,7 @@
 #' @family lines
 #' @export
 #' @examples
-#' l = routes_fast_sf
+#' l <- routes_fast_sf
 #' n_vertices(l)
 #' n_vertices(zones_sf)
 n_vertices <- function(l) {
@@ -59,21 +59,21 @@ is_linepoint <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' lib_versions <- sf::sf_extSoftVersion()
-#' lib_versions
-#' # fails on some systems (with early versions of PROJ)
-#' if (lib_versions[3] >= "6.3.1") {
-#'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
-#'   bearings_sf_1_9 # lines of 0 length have NaN bearing
-#'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-#' }
+#' l <- flowlines_sf[1:5, ]
+#' bearings_sf_1_9 <- line_bearing(l)
+#' bearings_sf_1_9 # lines of 0 length have NaN bearing
+#' line_bearing(l, bidirectional = TRUE)
 line_bearing <- function(l, bidirectional = FALSE) {
-  p <- sf::st_geometry(line2points(l))
-  i_s <- seq_along(sf::st_geometry(l)) * 2 - 1
-
-  bearing_radians <- sapply(i_s, function(i) lwgeom::st_geod_azimuth(p[i:(i + 1)]))
-
-  bearing <- bearing_radians * 180 / pi
+  # Convert to lon/lat data if not already
+  is_longlat <- sf::st_is_longlat(l)
+  if (!is_longlat) {
+    l <- sf::st_transform(l, "EPSG:4326")
+  }
+  odc <- od::od_coordinates(l)
+  bearing <- geosphere::bearing(
+    p1 = odc[, 1:2],
+    p2 = odc[, 3:4]
+  )
   if (bidirectional) {
     bearing <- make_bidirectional(bearing)
   }
@@ -133,22 +133,25 @@ angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 #' @family lines
 #' @export
 #' @examples
-#' l = routes_fast_sf[2:5, ]
+#' l <- routes_fast_sf[2:5, ]
 #' plot(l$geometry, col = 2:5)
-#' midpoints = line_midpoint(l)
+#' midpoints <- line_midpoint(l)
 #' plot(midpoints, add = TRUE)
 line_midpoint <- function(l, tolerance = NULL) {
-  if(is.null(tolerance)) {
-    sub = lwgeom::st_linesubstring(x = l, from = 0, to = 0.5)
+  if (is.null(tolerance)) {
+    sub <- lwgeom::st_linesubstring(x = l, from = 0, to = 0.5)
   } else {
-    sub = lwgeom::st_linesubstring(x = l, from = 0, to = 0.5, tolerance = tolerance)
+    sub <- lwgeom::st_linesubstring(x = l, from = 0, to = 0.5, tolerance = tolerance)
   }
   lwgeom::st_endpoint(sub)
 }
 
 #' Divide an sf object with LINESTRING geometry into regular segments
 #'
-#' This function keeps the attributes
+#' This function keeps the attributes.
+#' Note: results differ when `use_rsgeo` is `TRUE`:
+#' the `{rsgeo}` implementation is faster and more reliably
+#' keeps returned linestrings below a the `segment_length` value.
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
@@ -159,56 +162,65 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @family lines
 #' @export
 #' @examples
+#' library(sf)
 #' l <- routes_fast_sf[2:4, ]
-#' l_seg_multi = line_segment(l, segment_length = 1000)
+#' l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
 #' plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
+#' round(st_length(l_seg_multi))
 #' # Test rsgeo implementation:
 #' # rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+#' # plot(rsmulti, col = seq_along(l_seg_multi), lwd = 5)
+#' # round(st_length(rsmulti))
 #' # waldo::compare(l_seg_multi, rsmulti)
 line_segment <- function(
-  l, 
-  segment_length = NA,
-  use_rsgeo = NULL,
-  debug_mode = FALSE
-) {
+    l,
+    segment_length = NA,
+    use_rsgeo = NULL,
+    debug_mode = FALSE) {
   UseMethod("line_segment")
 }
 #' @export
 line_segment.sf <- function(
-  l,
-  segment_length = NA,
-  use_rsgeo = NULL,
-  debug_mode = FALSE
-) {
+    l,
+    segment_length = NA,
+    use_rsgeo = NULL,
+    debug_mode = FALSE) {
   if (is.na(segment_length)) {
     rlang::abort(
       "`segment_length` must be set.",
       call = rlang::caller_env()
     )
   }
-  n_row_l = nrow(l)
-  # browser()
+  # Decide whether to use rsgeo or lwgeom, if not set:
+  if (is.null(use_rsgeo)) {
+    use_rsgeo <- use_rsgeo(l)
+  }
+  if (use_rsgeo) {
+    # If using rsgeo, we can do the whole thing in one go:
+    segment_lengths <- as.numeric(sf::st_length(l))
+    n_segments <- n_segments(segment_lengths, segment_length)
+    res <- line_segment_rsgeo(l, n_segments = n_segments)
+    return(res)
+  }
+  n_row_l <- nrow(l)
   if (n_row_l > 1) {
-    res_list = pbapply::pblapply(seq(n_row_l), function(i) {
+    res_list <- pbapply::pblapply(seq(n_row_l), function(i) {
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
       }
-      # if( i == 108) {
-      #   browser()
-      # }
-      l_segmented = line_segment1(l[i, ], n_segments = NA, segment_length = segment_length, use_rsgeo)
+      l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {
         res_names <<- names(sf::st_drop_geometry(l_segmented))
       }
-      l_segmented = l_segmented[res_names]
+      l_segmented <- l_segmented[res_names]
       l_segmented
-      })
-    res = bind_sf(res_list)
+    })
+    res <- bind_sf(res_list)
   } else {
     # If there's only one row:
-    res = line_segment1(l, n_segments = NA, segment_length = segment_length, use_rsgeo)
+    res <- line_segment1(l, n_segments = NA, segment_length = segment_length)
   }
   res
 }
@@ -216,18 +228,17 @@ line_segment.sf <- function(
 
 #' @export
 line_segment.sfc_LINESTRING <- function(
-  l, 
-  segment_length = NA,
-  use_rsgeo = NULL,
-  debug_mode = FALSE
-) {
+    l,
+    segment_length = NA,
+    use_rsgeo = NULL,
+    debug_mode = FALSE) {
   l <- sf::st_as_sf(l)
-  res = line_segment(l, segment_length = segment_length, use_rsgeo, debug_mode)
+  res <- line_segment(l, segment_length = segment_length, use_rsgeo, debug_mode)
   sf::st_geometry(res)
 }
 
 #' Segment a single line, using lwgeom or rsgeo
-#' 
+#'
 #' @inheritParams line_segment
 #' @param n_segments The number of segments to divide the line into
 #' @family lines
@@ -236,7 +247,7 @@ line_segment.sfc_LINESTRING <- function(
 #' l <- routes_fast_sf[2, ]
 #' l_seg2 <- line_segment1(l = l, n_segments = 2)
 #' # Test with rsgeo (must be installed):
-#' # l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
+#' # l_seg2_rsgeo = line_segment1(l = l, n_segments = 2)
 #' # waldo::compare(l_seg2, l_seg2_rsgeo)
 #' l_seg3 <- line_segment1(l = l, n_segments = 3)
 #' l_seg_100 <- line_segment1(l = l, segment_length = 100)
@@ -246,21 +257,17 @@ line_segment.sfc_LINESTRING <- function(
 #' plot(sf::st_geometry(l_seg_100), col = seq(nrow(l_seg_100)), lwd = 5)
 #' plot(sf::st_geometry(l_seg_1000), col = seq(nrow(l_seg_1000)), lwd = 5)
 line_segment1 <- function(
-  l, 
-  n_segments = NA,
-  segment_length = NA,
-  use_rsgeo = NULL
-) {
+    l,
+    n_segments = NA,
+    segment_length = NA) {
   UseMethod("line_segment1")
 }
 
 #' @export
 line_segment1.sf <- function(
-  l, 
-  n_segments = NA,
-  segment_length = NA,
-  use_rsgeo = NULL
-) {
+    l,
+    n_segments = NA,
+    segment_length = NA) {
   if (is.na(n_segments) && is.na(segment_length)) {
     rlang::abort(
       "`n_segment` or `segment_length` must be set.",
@@ -275,27 +282,17 @@ line_segment1.sf <- function(
     return(l)
   }
 
-  # Decide whether to use rsgeo or lwgeom, if not set:
-  if (is.null(use_rsgeo)) {
-    use_rsgeo <- use_rsgeo(l)
-  }
+  res <- line_segment_lwgeom(l, n_segments)
 
-  if (use_rsgeo) {
-    res <- line_segment_rsgeo(l, n_segments)
-  } else {
-    res <- line_segment_lwgeom(l, n_segments)
-  }
   res
 }
 #' @export
 line_segment1.sfc_LINESTRING <- function(
-  l,
-  n_segments = NA,
-  segment_length = NA,
-  use_rsgeo = NULL
-) {
+    l,
+    n_segments = NA,
+    segment_length = NA) {
   l <- sf::st_as_sf(l)
-  res <- line_segment1(l, n_segments, segment_length = segment_length, use_rsgeo)
+  res <- line_segment1(l, n_segments, segment_length = segment_length)
   sf::st_geometry(res)
 }
 
@@ -313,59 +310,52 @@ make_bidirectional <- function(bearing) {
 #' @param x List of sf objects to combine
 #' @return An sf data frame
 #' @family geo
-bind_sf = function(x) {
+bind_sf <- function(x) {
   if (length(x) == 0) stop("Empty list")
-  geom_name = attr(x[[1]], "sf_column")
-  # browser()
-  x = data.table::rbindlist(x, use.names = FALSE)
+  geom_name <- attr(x[[1]], "sf_column")
+  x <- data.table::rbindlist(x, use.names = FALSE)
   # x = collapse::unlist2d(x, idcols = FALSE, recursive = FALSE)
-  x[[geom_name]] = sf::st_sfc(x[[geom_name]], recompute_bbox = TRUE)
-  x = sf::st_as_sf(x)
+  x[[geom_name]] <- sf::st_sfc(x[[geom_name]], recompute_bbox = TRUE)
+  x <- sf::st_as_sf(x)
   x
 }
 
 use_rsgeo <- function(shp) {
   rsgeo_installed <- rlang::is_installed("rsgeo", version = "0.1.6")
-  crs <- sf::st_crs(shp)
-  is_projected <- !crs$IsGeographic
-  # if its NA set false
-  if (is.na(is_projected)) {
-    warning("CRS is NA, assuming projected")
-    is_projected <- TRUE
+  if (!rsgeo_installed) {
+    warning("rsgeo not installed, using lwgeom")
+    return(FALSE)
   }
-  should_use_rsgeo <- rsgeo_installed & is_projected
-  should_use_rsgeo
+  TRUE
 }
 
-line_segment_rsgeo <- function(l, n_segments, segment_length) {
+line_segment_rsgeo <- function(l, n_segments) {
+
   crs <- sf::st_crs(l)
+
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
 
-  # if n_segments is missing it needs to be calculated
-  if (is.na(n_segments)) {
-    l_length <- rsgeo::length_euclidean(geo)
-    n_segments <- max(round(l_length / segment_length), 1)
-  }
-
   # segmentize the line strings
-  res <- rsgeo::line_segmentize(geo, n_segments)
+  res_rsgeo <- rsgeo::line_segmentize(geo, n_segments)
 
   # make them into sfc_LINESTRING
-  res <- sf::st_cast(sf::st_as_sfc(res), "LINESTRING")
+  res <- sf::st_cast(sf::st_as_sfc(res_rsgeo), "LINESTRING")
 
   # give them them CRS
   res <- sf::st_set_crs(res, crs)
 
   # calculate the number of original geometries
-  n <- length(geo)
+  n_lines <- length(geo)
   # create index ids to grab rows from
-  ids <- rep.int(1:n, rep(n_segments, n))
+  ids <- rep.int(seq_len(n_lines), n_segments)
 
   # index the original sf object
-  res_tbl <- sf::st_drop_geometry(l)[ids, ]
+  res_tbl <- sf::st_drop_geometry(l)[ids, , drop = FALSE]
 
   # assign the geometry column
+  nrow(res_tbl)
+
   res_tbl[[attr(l, "sf_column")]] <- res
 
   # convert to sf and return
@@ -374,9 +364,9 @@ line_segment_rsgeo <- function(l, n_segments, segment_length) {
 }
 
 line_segment_lwgeom <- function(l, n_segments) {
-  from_to_sequence = seq(from = 0, to = 1, length.out = n_segments + 1)
+  from_to_sequence <- seq(from = 0, to = 1, length.out = n_segments + 1)
   suppressWarnings({
-    line_segment_list = lapply(seq(n_segments), function(i) {
+    line_segment_list <- lapply(seq(n_segments), function(i) {
       lwgeom::st_linesubstring(
         x = l,
         from = from_to_sequence[i],
@@ -386,4 +376,18 @@ line_segment_lwgeom <- function(l, n_segments) {
   })
   res <- bind_sf(line_segment_list)
   res
+}
+
+#' Vectorised function to calculate number of segments given a max segment length
+#' @param line_length The length of the line
+#' @param max_segment_length The maximum length of each segment
+#' @family lines
+#' @export
+#' @examples
+#' n_segments(50, 10)
+#' n_segments(50.1, 10)
+#' n_segments(1, 10)
+#' n_segments(1:9, 2)
+n_segments <- function(line_length, max_segment_length) {
+  pmax(ceiling(line_length / max_segment_length), 1)
 }
