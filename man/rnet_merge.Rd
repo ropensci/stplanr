@@ -55,6 +55,12 @@ plot(rnet_y$geometry, lwd = 5, col = "lightgrey")
 plot(rnet_merged["flow"], add = TRUE, lwd = 2)
 
 # # With a different CRS
+rnet_xp <- sf::st_transform(rnet_x, "EPSG:27700")
+rnet_yp <- sf::st_transform(rnet_y, "EPSG:27700")
+rnet_merged <- rnet_merge(rnet_xp[1], rnet_yp[c("flow", "quietness")],
+  dist = 9, segment_length = 20, funs = funs
+)
+plot(rnet_merged["flow"])
 # rnet_merged2 = rnet_merge(rnet_x[1], rnet_y[c("flow", "quietness")],
 #                          dist = 9, segment_length = 20, funs = funs,
 #                          crs = "EPSG:27700")

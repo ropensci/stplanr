@@ -62,7 +62,10 @@ is_linepoint <- function(l) {
 #' l <- flowlines_sf[1:5, ]
 #' bearings_sf_1_9 <- line_bearing(l)
 #' bearings_sf_1_9 # lines of 0 length have NaN bearing
-#' line_bearing(l, bidirectional = TRUE)
+#' b <- line_bearing(l, bidirectional = TRUE)
+#' r <- routes_fast_sf[1:5, ]
+#' b2 <- line_bearing(r, bidirectional = TRUE)
+#' plot(b, b2)
 line_bearing <- function(l, bidirectional = FALSE) {
   # Convert to lon/lat data if not already
   is_longlat <- sf::st_is_longlat(l)

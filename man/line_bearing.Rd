@@ -24,7 +24,10 @@ Returns a boolean vector. TRUE means that the associated line is in fact a point
 l <- flowlines_sf[1:5, ]
 bearings_sf_1_9 <- line_bearing(l)
 bearings_sf_1_9 # lines of 0 length have NaN bearing
-line_bearing(l, bidirectional = TRUE)
+b <- line_bearing(l, bidirectional = TRUE)
+r <- routes_fast_sf[1:5, ]
+b2 <- line_bearing(r, bidirectional = TRUE)
+plot(b, b2)
 }
 \seealso{
 Other lines: 
