@@ -43,6 +43,7 @@ Imports:
     curl (>= 3.2),
     data.table,
     dplyr (>= 0.7.6),
+    geosphere,
     httr (>= 1.3.1),
     jsonlite (>= 1.5),
     lwgeom (>= 0.1.4),
