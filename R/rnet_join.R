@@ -29,7 +29,7 @@
 #' @param key_column The index of the key (unique identifier) column in `rnet_x`.
 #' @param subset_x Subset the source route network by the target network before
 #'   creating buffers? This can lead to faster and better results. Default:
-#'   `TRUE`.
+#'   `FALSE`.
 #' @param dist_subset The buffer distance in m to apply when breaking up the
 #'   source object `rnet_y`. Default: 5.
 #' @param segment_length Should the source route network be split?
@@ -82,7 +82,7 @@
 #' #   mapview(route_network_small)
 #' @export
 rnet_join <- function(rnet_x, rnet_y, dist = 5, length_y = TRUE, key_column = 1,
-                      subset_x = TRUE, dist_subset = NULL, segment_length = 0,
+                      subset_x = FALSE, dist_subset = NULL, segment_length = 0,
                       endCapStyle = "FLAT", contains = TRUE, max_angle_diff = NULL,
                       crs = geo_select_aeq(rnet_x), ...) {
   if (is.null(dist_subset)) {
