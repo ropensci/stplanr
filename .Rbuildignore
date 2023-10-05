@@ -20,3 +20,4 @@ log-latest
 ^\.github$
 ^CRAN-SUBMISSION$
 .geojson
+^reprexes$
