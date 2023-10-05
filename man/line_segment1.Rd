@@ -20,7 +20,7 @@ Segment a single line, using lwgeom or rsgeo
 l <- routes_fast_sf[2, ]
 l_seg2 <- line_segment1(l = l, n_segments = 2)
 # Test with rsgeo (must be installed):
-# l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
+# l_seg2_rsgeo = line_segment1(l = l, n_segments = 2)
 # waldo::compare(l_seg2, l_seg2_rsgeo)
 l_seg3 <- line_segment1(l = l, n_segments = 3)
 l_seg_100 <- line_segment1(l = l, segment_length = 100)

@@ -48,8 +48,6 @@
 #' @examples
 #' library(sf)
 #' library(dplyr)
-#' # Uncomment for interactive examples:
-#' plot(st_geometry(route_network_small))
 #' plot(osm_net_example$geometry, lwd = 5, col = "grey", add = TRUE)
 #' plot(route_network_small["flow"], add = TRUE)
 #' rnetj = rnet_join(osm_net_example, route_network_small, dist = 9)
