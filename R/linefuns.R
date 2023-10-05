@@ -64,6 +64,11 @@ is_linepoint <- function(l) {
 #' bearings_sf_1_9 # lines of 0 length have NaN bearing
 #' line_bearing(l, bidirectional = TRUE)
 line_bearing <- function(l, bidirectional = FALSE) {
+  # Convert to lon/lat data if not already
+  is_longlat <- sf::st_is_longlat(l)
+  if (!is_longlat) {
+    l <- sf::st_transform(l, "EPSG:4326")
+  }
   odc <- od::od_coordinates(l)
   bearing <- geosphere::bearing(
     p1 = odc[, 1:2],
