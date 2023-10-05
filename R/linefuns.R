@@ -59,14 +59,23 @@ is_linepoint <- function(l) {
 #' @family lines
 #' @export
 #' @examples
-#' lib_versions <- sf::sf_extSoftVersion()
-#' lib_versions
-#' # fails on some systems (with early versions of PROJ)
-#' if (lib_versions[3] >= "6.3.1") {
-#'   bearings_sf_1_9 <- line_bearing(flowlines_sf[1:5, ])
-#'   bearings_sf_1_9 # lines of 0 length have NaN bearing
-#'   line_bearing(flowlines_sf[1:5, ], bidirectional = TRUE)
-#' }
+#' l <- flowlines_sf[1:5, ]
+#' bearings_sf_1_9 <- line_bearing(l)
+#' bearings_sf_1_9 # lines of 0 length have NaN bearing
+#' line_bearing(l, bidirectional = TRUE)
+#' # benchmark:
+#' # profvis::profvis(line_bearing(l))
+#' bm = bench::mark(line_bearing(l))
+#' bm2 = bench::mark(geosphere = {
+#' odc = od::od_coordinates(l)
+#' geosphere::bearing(
+#'   p1 = odc[, 1:2],
+#'   p2 = odc[, 3:4]
+#' )
+#' })
+#' bm$`itr/sec`
+#' bm2$`itr/sec`
+#' bm2$`itr/sec` / bm$`itr/sec`
 line_bearing <- function(l, bidirectional = FALSE) {
   p <- sf::st_geometry(line2points(l))
   i_s <- seq_along(sf::st_geometry(l)) * 2 - 1
@@ -199,7 +208,6 @@ line_segment.sf <- function(
     # If using rsgeo, we can do the whole thing in one go:
     segment_lengths <- as.numeric(sf::st_length(l))
     n_segments <- n_segments(segment_lengths, segment_length)
-    browser()
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }
