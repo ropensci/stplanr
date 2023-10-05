@@ -148,7 +148,10 @@ line_midpoint <- function(l, tolerance = NULL) {
 
 #' Divide an sf object with LINESTRING geometry into regular segments
 #'
-#' This function keeps the attributes
+#' This function keeps the attributes.
+#' Note: results differ when `use_rsgeo` is `TRUE`:
+#' the `{rsgeo}` implementation is faster and more reliably
+#' keeps returned linestrings below a the `segment_length` value.
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
@@ -159,11 +162,15 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @family lines
 #' @export
 #' @examples
+#' library(sf)
 #' l <- routes_fast_sf[2:4, ]
-#' l_seg_multi <- line_segment(l, segment_length = 1000)
+#' l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
 #' plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
+#' round(st_length(l_seg_multi))
 #' # Test rsgeo implementation:
 #' # rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+#' # plot(rsmulti, col = seq_along(l_seg_multi), lwd = 5)
+#' # round(st_length(rsmulti))
 #' # waldo::compare(l_seg_multi, rsmulti)
 line_segment <- function(
     l,
@@ -201,7 +208,7 @@ line_segment.sf <- function(
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
       }
-      l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length, use_rsgeo)
+      l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {
@@ -213,7 +220,7 @@ line_segment.sf <- function(
     res <- bind_sf(res_list)
   } else {
     # If there's only one row:
-    res <- line_segment1(l, n_segments = NA, segment_length = segment_length, use_rsgeo)
+    res <- line_segment1(l, n_segments = NA, segment_length = segment_length)
   }
   res
 }
@@ -240,7 +247,7 @@ line_segment.sfc_LINESTRING <- function(
 #' l <- routes_fast_sf[2, ]
 #' l_seg2 <- line_segment1(l = l, n_segments = 2)
 #' # Test with rsgeo (must be installed):
-#' # l_seg2_rsgeo = line_segment1(l = l, n_segments = 2, use_rsgeo = TRUE)
+#' # l_seg2_rsgeo = line_segment1(l = l, n_segments = 2)
 #' # waldo::compare(l_seg2, l_seg2_rsgeo)
 #' l_seg3 <- line_segment1(l = l, n_segments = 3)
 #' l_seg_100 <- line_segment1(l = l, segment_length = 100)
@@ -276,17 +283,16 @@ line_segment1.sf <- function(
   }
 
   res <- line_segment_lwgeom(l, n_segments)
-  
+
   res
 }
 #' @export
 line_segment1.sfc_LINESTRING <- function(
     l,
     n_segments = NA,
-    segment_length = NA,
-    use_rsgeo = NULL) {
+    segment_length = NA) {
   l <- sf::st_as_sf(l)
-  res <- line_segment1(l, n_segments, segment_length = segment_length, use_rsgeo)
+  res <- line_segment1(l, n_segments, segment_length = segment_length)
   sf::st_geometry(res)
 }
 
@@ -326,7 +332,7 @@ use_rsgeo <- function(shp) {
 line_segment_rsgeo <- function(l, n_segments) {
 
   crs <- sf::st_crs(l)
-  
+
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
 
