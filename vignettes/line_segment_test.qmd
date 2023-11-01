@@ -1,0 +1,54 @@
+```{r}
+remotes::install_dev("stplanr")
+library(stplanr)
+library(dplyr)
+library(sf)
+library(units)
+library(mapview)
+```
+
+```{r}
+rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
+rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
+```
+Set segment_length = 15 will get error:
+Error in `[[<-`:
+! Assigned data `res` must be compatible with existing data.
+✖ Existing data has 3859 rows.
+✖ Assigned data has 3858 rows.
+ℹ Only vectors of size 1 are recycled.
+Caused by error in `vectbl_recycle_rhs_rows()`:
+! Can't recycle input of size 3858 to size 3859.
+Run `rlang::last_trace()` to see where the error occurred.
+
+```{r}
+name_list = names(rnet_y)
+
+# Initialize an empty list
+funs = list()
+
+# Loop through each name and assign it a function based on specific conditions
+for (name in name_list) {
+    if (name == "geometry") {
+    next  # Skip the current iteration
+    } else if (name %in% c("Gradient", "Quietness")) {
+    funs[[name]] = mean
+    } else {
+    funs[[name]] = sum
+    }
+}
+
+# Define breaks for categorizing data
+brks = c(0, 50, 100, 200, 500,1000, 2000, 5000,10000,150000)
+
+# Merge the spatial objects rnet_xp and rnet_yp based on specified parameters
+dist = 20
+angle = 10
+rnet_merged_all = rnet_merge(rnet_x, rnet_y, dist = dist, segment_length = 15, funs = funs, max_angle_diff = angle) 
+
+```
+
+No error for setting segment_length = 10
+```{r}
+rnet_merged_all = rnet_merge(rnet_x, rnet_y, dist = dist, segment_length = 10, funs = funs, max_angle_diff = angle) 
+```
