@@ -202,6 +202,7 @@ line_segment.sf <- function(
     # If using rsgeo, we can do the whole thing in one go:
     segment_lengths <- as.numeric(sf::st_length(l))
     n_segments <- n_segments(segment_lengths, segment_length)
+    browser()
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }

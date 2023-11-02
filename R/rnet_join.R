@@ -222,7 +222,10 @@ line_cast <- function(x) {
 #' # system("gh release download v1.0.2")
 #' # rnet_x = sf::read_sf("rnet_x_ed.geojson")
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
-#' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
+#' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 15, funs = funs)
+#' if (FALSE) {
+#'
+#' }
 #' @return An sf object with the same geometry as `rnet_x`
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
   if (is.null(funs)) {
