@@ -224,7 +224,12 @@ line_cast <- function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 15, funs = funs)
 #' if (FALSE) {
-#'
+#'  rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
+#'  rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
+#'  segment_length = 15 # will cause error, but segment_length =10 is not
+#'  funs = list(vaue = sum, Quietness = mean)
+#'  res = rnet_merge(rnet_x, rnet_y)
+#'  res2 = rnet_merge(rnet_x, rnet_y, segment_length = segment_length)
 #' }
 #' @return An sf object with the same geometry as `rnet_x`
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {

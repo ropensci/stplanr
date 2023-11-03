@@ -202,7 +202,6 @@ line_segment.sf <- function(
     # If using rsgeo, we can do the whole thing in one go:
     segment_lengths <- as.numeric(sf::st_length(l))
     n_segments <- n_segments(segment_lengths, segment_length)
-    browser()
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }
@@ -341,10 +340,14 @@ line_segment_rsgeo <- function(l, n_segments) {
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
 
   # segmentize the line strings
+  sum(n_segments)
   res_rsgeo <- rsgeo::line_segmentize(geo, n_segments)
+  length(res_rsgeo)
 
   # make them into sfc_LINESTRING
   res <- sf::st_cast(sf::st_as_sfc(res_rsgeo), "LINESTRING")
+  length(res)
+
 
   # give them them CRS
   res <- sf::st_set_crs(res, crs)
@@ -359,6 +362,8 @@ line_segment_rsgeo <- function(l, n_segments) {
 
   # assign the geometry column
   nrow(res_tbl)
+
+  browser()
 
   res_tbl[[attr(l, "sf_column")]] <- res
 
