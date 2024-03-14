@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   # # Uncomment to speed-up build
-  eval = TRUE,
+  eval = FALSE,
   comment = "#>",
   echo = TRUE,
   message = FALSE,
