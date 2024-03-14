@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   # # Uncomment to speed-up build
   eval = FALSE,
   comment = "#>",
-  echo = FALSE,
+  echo = TRUE,
   message = FALSE,
   warning = FALSE
 )
@@ -22,7 +22,8 @@ sf::sf_use_s2(FALSE)
 ```
 
 ```{r setup}
-library(stplanr)
+# library(stplanr)
+devtools::load_all()
 library(dplyr)
 library(tmap)
 library(ggplot2)
@@ -88,6 +89,7 @@ system.time({
 Let's check the results:
 
 ```{r}
+names(rnet_merged)
 summary(rnet_merged$value)
 summary(rnet_y$value)
 sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
@@ -141,6 +143,23 @@ sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
 
+It also works with charaster strings:
+
+```{r}
+rnet_y$char = paste0("road", sample(1:3, nrow(rnet_y), replace = TRUE))
+most_common = function(x) {
+  ux = unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+funs = list(char = most_common)
+system.time({
+  rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 10, segment_length = 20, funs = funs)
+})
+plot(rnet_y["char"])
+plot(rnet_merged["char"])
+
+```
+
 Now let's testing on 3km dataset
 
 ```{r}
@@ -187,63 +206,4 @@ summary(rnet_y$all_fastest_bicycle)
 summary(exmaple_3km$all_fastest_bicycle)
 sum(exmaple_3km$all_fastest_bicycle * sf::st_length(exmaple_3km), na.rm = TRUE)
 sum(rnet_y$all_fastest_bicycle * sf::st_length(rnet_y), na.rm = TRUE)
-```
-
-Now let's testing on large dataset
-
-```{r}
-rnet_x = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/OS_large_route_network_example_edingurgh.geojson")
-rnet_y = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/large_route_network_example_edingurgh.geojson")
-
-```
-
-Read columns from rnet_y to assign functions to them
-```{r}
-# Extract column names from the rnet_x data frame
-name_list <- names(rnet_y)
-name_list
-# Initialize an empty list
-funs <- list()
-
-# Loop through each name and assign it a function based on specific conditions
-for (name in name_list) {
-  if (name == "geometry") {
-    next  # Skip the current iteration
-  } else if (name %in% c("Gradient", "Quietness")) {
-    funs[[name]] <- mean
-  } else {
-    funs[[name]] <- sum
-  }
-}
-```
-
-```{r, eval = FALSE}
-# Take 0.1% sample:
-# ...
-# Buffer of the 0.1% sample
-# ...
-# Select OS road data that intersects
-# rnet_x = rnet_x[osm_buffer, ] # or similar
-
-brks = c(0, 100, 500, 1000, 5000,10000)
-rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20, crs = "EPSG:27700")
-st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
-rnet_merged <- st_make_valid(rnet_merged)
-m1 = tm_shape(rnet_y) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
-m2 = tm_shape(rnet_merged) + tm_lines("all_fastest_bicycle", palette = "viridis", lwd = 5, breaks = brks)
-tmap_arrange(m1, m2, sync = TRUE, nrow = 1)
-dim(rnet_merged)
-st_write(rnet_merged, "data-raw/large_exmaple_merged.geojson", driver = "GeoJSON")
-```
-
-Read large_exmaple_merged from github
-```{r}
-large_exmaple_merged = sf::read_sf("https://github.com/nptscot/networkmerge/releases/download/v0.1/large_exmaple_merged.geojson")
-
-summary(rnet_y$all_fastest_bicycle)
-summary(large_exmaple_merged$all_fastest_bicycle)
-sum(large_exmaple_merged$all_fastest_bicycle * sf::st_length(large_exmaple_merged), na.rm = TRUE)
-sum(rnet_y$all_fastest_bicycle * sf::st_length(rnet_y), na.rm = TRUE)
-
-plot(large_exmaple_merged)
 ```

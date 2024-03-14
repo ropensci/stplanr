@@ -33,7 +33,7 @@ rnet_group(rnet, ...)
 \item{...}{Arguments passed to other methods.}
 
 \item{cluster_fun}{The clustering function to use. Various clustering functions
-are available in the \code{igraph} package. Default: \code{\link[igraph:components]{igraph::clusters()}}.}
+are available in the \code{igraph} package. Default: \code{\link[igraph:clusters]{igraph::clusters()}}.}
 
 \item{d}{Optional distance variable used to classify segments that are
 close (within a certain distance specified by \code{d}) to each other but not
