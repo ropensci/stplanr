@@ -225,9 +225,9 @@ line_cast <- function(x) {
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
 #' 
-rnet_y = sf::read_sf("rnet_y_ed.geojson")
-#add a string column to rnet_y with random strings
-rnet_y$random_string = sample(letters, nrow(rnet_y), replace = TRUE)
+# rnet_y = sf::read_sf("rnet_y_ed.geojson")
+# #add a string column to rnet_y with random strings
+# rnet_y$random_string = sample(letters, nrow(rnet_y), replace = TRUE)
 
 
 
