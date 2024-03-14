@@ -250,8 +250,8 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
       if (col == "geometry") {
         next  # Skip the current iteration
       } else if (is.numeric(rnet_y[[col]])) {
-        funs[[col]] <- sum
-      } else if (is.character(rnet_y[[name]])) {
+        funs[[col]] = sum
+      } else if (is.character(rnet_y[[col]])) {
         funs[[col]] = handle_strings
       } else if (col %in% c("gradient", "quietness")) {
         funs[[col]] = mean
