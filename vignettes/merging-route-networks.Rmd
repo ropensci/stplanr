@@ -46,6 +46,9 @@ We pre-processed the input simple geometry to make it even simpler as shown belo
 # summary(sf::st_length(rnet_x))
 plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20)
+names(rnet_x)
+# Keep only the id column for x:
+rnet_x = rnet_x %>% select(identifier)
 # nrow(rnet_x)
 # plot(sf::st_geometry(rnet_x))
 rnet_x = rnet_subset(rnet_x, rnet_y, dist = 20, min_length = 5)
@@ -140,6 +143,19 @@ summary(rnet_y$value)
 sum(rnet_merged$value * sf::st_length(rnet_merged), na.rm = TRUE)
 sum(rnet_y$value * sf::st_length(rnet_y), na.rm = TRUE)
 ```
+
+Let's try joining with a character column:
+
+```{r}
+rnet_y$road_type = sample(c("A", "B", "C"), nrow(rnet_y), replace = TRUE)
+funs = list(value = sum, road_type = function(x) { table(x)[[1]] })
+rnet_merged = rnet_merge(sum_flows = FALSE,
+  rnet_x, 
+  rnet_y, 
+  dist = 20, segment_length = 10, funs = funs, max_angle_diff = 20)
+```
+
+# 3 km dataset
 
 Now let's testing on 3km dataset
 
