@@ -232,7 +232,7 @@ rnet_y$random_string = sample(letters, nrow(rnet_y), replace = TRUE)
 
 
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
-  browser()
+
   # handle_strings = function(strings) {
   #   unique_strings = unique(strings)
   #   paste(unique_strings, collapse = "; ")
@@ -265,7 +265,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   sum_cols <- sapply(funs, function(f) identical(f, sum))
   sum_cols <- names(funs)[which(sum_cols)]
   rnetj <- rnet_join(rnet_x, rnet_y, dist = dist, crs = crs, ...)
-  names(rnetj)
+
   rnetj_df <- sf::st_drop_geometry(rnetj)
   # Apply functions to columns with lapply:
   res_list <- lapply(seq_along(funs), function(i) {
