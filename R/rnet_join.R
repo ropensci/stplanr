@@ -225,10 +225,6 @@ line_cast <- function(x) {
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
 #' 
-# rnet_y = sf::read_sf("rnet_y_ed.geojson")
-# #add a string column to rnet_y with random strings
-# rnet_y$random_string = sample(letters, nrow(rnet_y), replace = TRUE)
-
 
 
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
@@ -246,6 +242,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     
     return(most_frequent_string)
   }
+
   if (is.null(funs)) {
     print("funs is NULL")
     funs <- list()
@@ -254,7 +251,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
         next  # Skip the current iteration
       } else if (is.numeric(rnet_y[[col]])) {
         funs[[col]] <- sum
-      } else if (is.character(r2[[name]])) {
+      } else if (is.character(rnet_y[[name]])) {
         funs[[col]] = handle_strings
       } else if (col %in% c("gradient", "quietness")) {
         funs[[col]] = mean
