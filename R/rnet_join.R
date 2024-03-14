@@ -224,16 +224,44 @@ line_cast <- function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
+#' 
+rnet_y = sf::read_sf("rnet_y_ed.geojson")
+#add a string column to rnet_y with random strings
+rnet_y$random_string = sample(letters, nrow(rnet_y), replace = TRUE)
+
+
+
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
+  browser()
+  # handle_strings = function(strings) {
+  #   unique_strings = unique(strings)
+  #   paste(unique_strings, collapse = "; ")
+  # }
+  handle_strings <- function(strings) {
+    # Calculate the frequency of each unique string
+    string_freq <- table(strings)
+    
+    # Find the string(s) with the highest frequency
+    most_frequent_string <- names(which.max(string_freq))
+    
+    return(most_frequent_string)
+  }
   if (is.null(funs)) {
     print("funs is NULL")
     funs <- list()
     for (col in names(rnet_y)) {
-      if (is.numeric(rnet_y[[col]])) {
+      if (col == "geometry") {
+        next  # Skip the current iteration
+      } else if (is.numeric(rnet_y[[col]])) {
         funs[[col]] <- sum
+      } else if (is.character(r2[[name]])) {
+        funs[[col]] = handle_strings
+      } else if (col %in% c("gradient", "quietness")) {
+        funs[[col]] = mean
       }
     }
   }
+  
   sum_cols <- sapply(funs, function(f) identical(f, sum))
   sum_cols <- names(funs)[which(sum_cols)]
   rnetj <- rnet_join(rnet_x, rnet_y, dist = dist, crs = crs, ...)
