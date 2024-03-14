@@ -224,7 +224,7 @@ line_cast <- function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-#' 
+#'
 
 
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
@@ -233,15 +233,6 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
   #   unique_strings = unique(strings)
   #   paste(unique_strings, collapse = "; ")
   # }
-  handle_strings <- function(strings) {
-    # Calculate the frequency of each unique string
-    string_freq <- table(strings)
-    
-    # Find the string(s) with the highest frequency
-    most_frequent_string <- names(which.max(string_freq))
-    
-    return(most_frequent_string)
-  }
 
   if (is.null(funs)) {
     print("funs is NULL")
@@ -258,7 +249,7 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
       }
     }
   }
-  
+
   sum_cols <- sapply(funs, function(f) identical(f, sum))
   sum_cols <- names(funs)[which(sum_cols)]
   rnetj <- rnet_join(rnet_x, rnet_y, dist = dist, crs = crs, ...)
@@ -301,4 +292,14 @@ rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, 
     }
   }
   res_sf
+}
+
+handle_strings <- function(strings) {
+  # Calculate the frequency of each unique string
+  string_freq <- table(strings)
+
+  # Find the string(s) with the highest frequency
+  most_frequent_string <- names(which.max(string_freq))
+
+  return(most_frequent_string)
 }
