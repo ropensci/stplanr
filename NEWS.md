@@ -1,4 +1,4 @@
-# stplanr (development version)
+# stplanr 1.2.0
 
 - `line_segment()` now will use `rsgeo::line_segmentize()` if available and only when the input geometry is not in geographic coordinates or does not have a CRS set as it uses euclidean distance
   - `line_segment()` becomes an S3 generic which now has methods for `sf` and `sfc` class objects
