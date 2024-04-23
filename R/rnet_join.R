@@ -1,7 +1,7 @@
 #' Join route networks
 #'
-#' This is a spatial join function that is enables adding columns to a
-#' 'target' route network from a 'source' route
+#' Join function that adds columns to a
+#' 'target' route network `sf` object from a 'source' route
 #' network that contains the base geometry, e.g. from OSM
 #'
 #' The output is an sf object containing polygons representing
@@ -180,6 +180,10 @@ line_cast <- function(x) {
 }
 
 #' Merge route networks, keeping attributes with aggregating functions
+#' 
+#' This is a small wrapper around `rnet_join()`.
+#' In most cases we recommend using [`rnet_join()`] directly,
+#' as it gives more control over the results
 #'
 #' @inheritParams rnet_join
 #' @param sum_flows Should flows be summed? `TRUE` by default.
@@ -224,9 +228,6 @@ line_cast <- function(x) {
 #' # rnet_y = sf::read_sf("rnet_y_ed.geojson")
 #' # rnet_merged = rnet_merge(rnet_x, rnet_y, dist = 9, segment_length = 20, funs = funs)
 #' @return An sf object with the same geometry as `rnet_x`
-#'
-
-
 rnet_merge <- function(rnet_x, rnet_y, dist = 5, funs = NULL, sum_flows = TRUE, crs = geo_select_aeq(rnet_x), ...) {
 
   # handle_strings = function(strings) {

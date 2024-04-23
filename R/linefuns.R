@@ -154,7 +154,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' This function keeps the attributes.
 #' Note: results differ when `use_rsgeo` is `TRUE`:
 #' the `{rsgeo}` implementation is faster and more reliably
-#' keeps returned linestrings below a the `segment_length` value.
+#' keeps returned linestrings below a the `segment_length` value,
+#' but does not always return the number of segments requested.
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
@@ -354,6 +355,7 @@ line_segment_rsgeo <- function(l, n_segments) {
 
   # give them them CRS
   res <- sf::st_set_crs(res, crs)
+  n_segments <- length(res)
 
   # calculate the number of original geometries
   n_lines <- length(geo)
@@ -363,13 +365,12 @@ line_segment_rsgeo <- function(l, n_segments) {
   # index the original sf object
   res_tbl <- sf::st_drop_geometry(l)[ids, , drop = FALSE]
 
-  # assign the geometry column
-  nrow(res_tbl)
-
-  res_tbl[[attr(l, "sf_column")]] <- res
-
   # convert to sf and return
-  res_sf <- sf::st_as_sf(res_tbl)
+  res_sf <- sf::st_as_sf(
+    res_tbl,
+    geometry = res,
+    crs = crs    
+    )
   res_sf
 }
 

@@ -21,7 +21,8 @@ If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
 This function keeps the attributes.
 Note: results differ when \code{use_rsgeo} is \code{TRUE}:
 the \code{{rsgeo}} implementation is faster and more reliably
-keeps returned linestrings below a the \code{segment_length} value.
+keeps returned linestrings below a the \code{segment_length} value,
+but does not always return the number of segments requested.
 }
 \examples{
 library(sf)

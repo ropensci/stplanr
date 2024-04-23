@@ -61,8 +61,8 @@ to be returned}
 \item{...}{Additional arguments passed to \code{rnet_subset}.}
 }
 \description{
-This is a spatial join function that is enables adding columns to a
-'target' route network from a 'source' route
+Join function that adds columns to a
+'target' route network \code{sf} object from a 'source' route
 network that contains the base geometry, e.g. from OSM
 }
 \details{

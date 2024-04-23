@@ -69,3 +69,38 @@ funs = list(
     }
 
 rnet_merge(rnet_x, rnet_y, funs = funs, dist = 20)
+
+sfc_integer = sf::st_linestring(
+    cbind(
+        c(418938.4, 418949.7, 418961),
+        c(434303.2, 434280.1, 434257)
+    )
+) |>
+  sf::st_sfc() |>
+  sf::st_set_crs(27700)
+
+line_segment(sfc_integer, 10)
+
+sfc_no_integer = sf::st_linestring(
+    cbind(
+        c(418938.4, 418949.7, 418961.1),
+        c(434303.2, 434280.1, 434257)
+    )
+) |>
+  sf::st_sfc()
+
+
+rsgeo::line_segmentize(rsgeo::as_rsgeo(sfc_integer), n = 6) |>
+  sf::st_as_sfc() |>
+  sf::st_cast("LINESTRING") |>
+  length()
+
+rsgeo::line_segmentize(rsgeo::as_rsgeo(sfc_no_integer), n = 6) |>
+  sf::st_as_sfc() |>
+  sf::st_cast("LINESTRING") |>
+  length()
+
+library(stplanr)
+rnet_x = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_x_ed.geojson")
+rnet_y = sf::read_sf("https://github.com/ropensci/stplanr/releases/download/v1.0.2/rnet_y_ed.geojson")
+line_segment(rnet_y, 10)
