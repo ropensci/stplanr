@@ -28,10 +28,12 @@ but does not always return the number of segments requested.
 library(sf)
 l <- routes_fast_sf[2:4, ]
 l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
+# Number of subsegments
+table(l_seg_multi$ID)
 plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
 round(st_length(l_seg_multi))
-# Test rsgeo implementation:
-# rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+# rsgeo implementation:
+rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
 # plot(rsmulti, col = seq_along(l_seg_multi), lwd = 5)
 # round(st_length(rsmulti))
 # waldo::compare(l_seg_multi, rsmulti)

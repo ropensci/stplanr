@@ -169,10 +169,12 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' library(sf)
 #' l <- routes_fast_sf[2:4, ]
 #' l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
+#' # Number of subsegments
+#' table(l_seg_multi$ID)
 #' plot(l_seg_multi, col = seq_along(l_seg_multi), lwd = 5)
 #' round(st_length(l_seg_multi))
-#' # Test rsgeo implementation:
-#' # rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+#' # rsgeo implementation:
+#' rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
 #' # plot(rsmulti, col = seq_along(l_seg_multi), lwd = 5)
 #' # round(st_length(rsmulti))
 #' # waldo::compare(l_seg_multi, rsmulti)
@@ -266,7 +268,6 @@ line_segment1 <- function(
     segment_length = NA) {
   UseMethod("line_segment1")
 }
-
 #' @export
 line_segment1.sf <- function(
     l,
@@ -350,17 +351,28 @@ line_segment_rsgeo <- function(l, n_segments) {
   # segmentize the line strings
   res_rsgeo <- rsgeo::line_segmentize(geo, n_segments)
 
+  # sf linestring:
+  res_sfc_ml = sf::st_as_sfc(res_rsgeo)
+  n_segments_rsgeo = as.numeric(lengths(res_sfc_ml))
+  if (! identical(n_segments, n_segments_rsgeo)) {
+    sum_segments <- sum(n_segments)
+    sum_segments_rsgeo <- sum(n_segments_rsgeo)
+    msg = paste0(
+      "Requested number of segments (", sum_segments, ") ",
+      "does not match the number of segments returned by rsgeo (", sum_segments_rsgeo, ")."
+    )
+    message(msg)
+  }
   # make them into sfc_LINESTRING
-  res <- sf::st_cast(sf::st_as_sfc(res_rsgeo), "LINESTRING")
+  res <- sf::st_cast(res_sfc_ml, "LINESTRING")
 
   # give them them CRS
   res <- sf::st_set_crs(res, crs)
-  n_segments <- length(res)
 
   # calculate the number of original geometries
   n_lines <- length(geo)
   # create index ids to grab rows from
-  ids <- rep.int(seq_len(n_lines), n_segments)
+  ids <- rep.int(seq_len(n_lines), n_segments_rsgeo)
 
   # index the original sf object
   res_tbl <- sf::st_drop_geometry(l)[ids, , drop = FALSE]
