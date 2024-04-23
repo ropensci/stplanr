@@ -154,7 +154,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' This function keeps the attributes.
 #' Note: results differ when `use_rsgeo` is `TRUE`:
 #' the `{rsgeo}` implementation is faster and more reliably
-#' keeps returned linestrings below a the `segment_length` value.
+#' keeps returned linestrings below a the `segment_length` value,
+#' but does not always return the number of segments requested.
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overides n_segments if set)
