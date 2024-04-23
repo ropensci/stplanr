@@ -37,7 +37,9 @@ columns.}
 An sf object with the same geometry as \code{rnet_x}
 }
 \description{
-Merge route networks, keeping attributes with aggregating functions
+This is a small wrapper around \code{rnet_join()}.
+In most cases we recommend using \code{\link[=rnet_join]{rnet_join()}} directly,
+as it gives more control over the results
 }
 \examples{
 # The source object:
