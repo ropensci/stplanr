@@ -1,4 +1,4 @@
-Methods for exported generics registered
+Bug fix release.
 
 ## R CMD check results
 
