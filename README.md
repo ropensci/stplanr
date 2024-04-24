@@ -37,7 +37,7 @@ data, which are used to highlight where many short distance trips are
 being made, and estimate how many could switch to cycling. The results
 help identify where cycleways are most needed, an important component of
 sustainable transport planning infrastructure engineering and policy
-[design](https://www.icevirtuallibrary.com/doi/abs/10.1680/dfct.63495.001).
+design.
 
 See the package vignette (e.g. via `vignette("introducing-stplanr")`) or
 an [academic paper on the Propensity to Cycle Tool

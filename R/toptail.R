@@ -5,7 +5,7 @@
 #'
 #' Note: see the function
 #' [`toptailgs()`](https://github.com/ropensci/stplanr/blob/v1.0.0/R/toptail.R)
-#' in {stplanr} v0.8.5 for an implementation that uses the geosphere
+#' in stplanr v0.8.5 for an implementation that uses the geosphere
 #' package.
 #'
 #' @param l An `sf` object representing lines
