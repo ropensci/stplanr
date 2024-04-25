@@ -1,4 +1,4 @@
-Bug fix release.
+Bug fix release, with offending URLs removed thanks to feedback from CRAN.
 
 ## R CMD check results
 
