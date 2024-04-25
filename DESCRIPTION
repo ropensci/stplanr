@@ -23,16 +23,28 @@ Authors@R: c(
   )
 Maintainer: Robin Lovelace <rob00x@gmail.com>
 Description: Tools for transport planning with an emphasis on spatial
-    transport data and non-motorized modes. Create geographic "desire
+    transport data and non-motorized modes.
+    The package was originally developed to support the 'Propensity to Cycle Tool', a publicly available strategic cycle network planning tool
+    (Lovelace et al. 2017) <doi:10.5198/jtlu.2016.862>, but has since been
+    extended to support public transport routing and accessiblity analysis
+    (Moreno-Monroy et al. 2017) <doi:10.1016/j.jtrangeo.2017.08.012> and
+    routing with locally hosted routing engines such as 'OSRM'
+    (Lowans et al. 2023) <doi:10.1016/j.enconman.2023.117337>.
+    The main functions are for creating and manipulating geographic "desire
     lines" from origin-destination (OD) data (building on the 'od'
-    package); calculate routes on the transport network locally and via
-    interfaces to routing services such as <https://cyclestreets.net/>;
-    calculate route segment attributes such as bearing.  The package
+    package); calculating routes on the transport network locally and via
+    interfaces to routing services such as <https://cyclestreets.net/>
+    (Desjardins et al. 2021) <doi:10.1007/s11116-021-10197-1>;
+    and calculating route segment attributes such as bearing. The package
     implements the 'travel flow aggregration' method described in Morgan
-    and Lovelace (2020) <doi:10.1177/2399808320942779>.  Further
-    information on the package's aim and scope can be found in the
+    and Lovelace (2020) <doi:10.1177/2399808320942779> and the
+    'OD jittering' method described in Lovelace et al. (2022)
+    <doi:10.32866/001c.33873>.
+    Further information on the package's aim and scope can be found in the
     vignettes and in a paper in the R Journal (Lovelace and Ellison 2018)
-    <doi:10.32614/RJ-2018-053>.
+    <doi:10.32614/RJ-2018-053>, and in a paper outlining the landscape of
+    open source software for geographic methods in transport planning
+    (Lovelace, 2021) <doi:10.1007/s10109-020-00342-2>.
 License: MIT + file LICENSE
 URL: https://github.com/ropensci/stplanr,
     https://docs.ropensci.org/stplanr/
