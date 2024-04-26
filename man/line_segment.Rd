@@ -49,6 +49,10 @@ if (rlang::is_installed("rsgeo")) {
 }
 # Check they have the same total length, to nearest mm:
 # round(sum(st_length(l_seg_multi)), 3) == round(sum(st_length(rsmulti)), 3)
+# With n_segments for 1 line:
+l_seg_multi_n <- line_segment(l[1, ], n_segments = 3, use_rsgeo = FALSE)
+l_seg_multi_n <- line_segment(l$geometry[1], n_segments = 3, use_rsgeo = FALSE)
+l_seg_multi_n <- line_segment(l$geometry[1], n_segments = 3, use_rsgeo = TRUE)
 # With n_segments for all 3 lines:
 l_seg_multi_n <- line_segment(l, n_segments = 2)
 nrow(l_seg_multi_n) == nrow(l) * 2

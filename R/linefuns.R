@@ -186,6 +186,10 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' }
 #' # Check they have the same total length, to nearest mm:
 #' # round(sum(st_length(l_seg_multi)), 3) == round(sum(st_length(rsmulti)), 3)
+#' # With n_segments for 1 line:
+#' l_seg_multi_n <- line_segment(l[1, ], n_segments = 3, use_rsgeo = FALSE)
+#' l_seg_multi_n <- line_segment(l$geometry[1], n_segments = 3, use_rsgeo = FALSE)
+#' l_seg_multi_n <- line_segment(l$geometry[1], n_segments = 3, use_rsgeo = TRUE)
 #' # With n_segments for all 3 lines:
 #' l_seg_multi_n <- line_segment(l, n_segments = 2)
 #' nrow(l_seg_multi_n) == nrow(l) * 2
@@ -252,7 +256,7 @@ line_segment.sf <- function(
     res <- bind_sf(res_list)
   } else {
     # If there's only one row:
-    res <- line_segment1(l, n_segments = NA, segment_length = segment_length)
+    res <- line_segment1(l, n_segments = n_segments)
   }
   res
 }
@@ -265,7 +269,7 @@ line_segment.sfc_LINESTRING <- function(
     use_rsgeo = NULL,
     debug_mode = FALSE) {
   l <- sf::st_as_sf(l)
-  res <- line_segment(l, segment_length = segment_length, use_rsgeo, debug_mode)
+  res <- line_segment(l, segment_length = segment_length, n_segments = n_segments, use_rsgeo, debug_mode)
   sf::st_geometry(res)
 }
 
