@@ -1,4 +1,4 @@
-Bug fix release, with offending URLs removed thanks to feedback from CRAN.
+Fix to reverse dependencies
 
 ## R CMD check results
 
