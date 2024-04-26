@@ -159,6 +159,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overrides n_segments if set)
+#' @param n_segments The number of segments to divide the line into.
+#'   If there are multiple lines, this should be a vector of the same length.
 #' @param use_rsgeo Should the `rsgeo` package be used?
 #'  If `rsgeo` is available, this faster implementation is used by default.
 #'  If `rsgeo` is not available, the `lwgeom` package is used.
@@ -183,40 +185,51 @@ line_midpoint <- function(l, tolerance = NULL) {
 line_segment <- function(
     l,
     segment_length = NA,
+    n_segments = NA,
     use_rsgeo = NULL,
     debug_mode = FALSE) {
+  # Defensive programming:
+  if (is.na(segment_length) && is.na(n_segments)) {
+    rlang::abort(
+      "segment_length or n_segments must be set.",
+      call = rlang::caller_env()
+    )
+  }
   UseMethod("line_segment")
 }
 #' @export
 line_segment.sf <- function(
     l,
     segment_length = NA,
+    n_segments = NA,
     use_rsgeo = NULL,
-    debug_mode = FALSE) {
-  if (is.na(segment_length)) {
-    rlang::abort(
-      "`segment_length` must be set.",
-      call = rlang::caller_env()
-    )
-  }
+    debug_mode = FALSE
+  ) {
   # Decide whether to use rsgeo or lwgeom, if not set:
   if (is.null(use_rsgeo)) {
     use_rsgeo <- use_rsgeo(l)
   }
   if (use_rsgeo) {
     # If using rsgeo, we can do the whole thing in one go:
-    segment_lengths <- as.numeric(sf::st_length(l))
-    n_segments <- n_segments(segment_lengths, segment_length)
+    if (is.na(n_segments)) {
+      segment_lengths <- as.numeric(sf::st_length(l))
+      n_segments <- n_segments(segment_lengths, segment_length)
+    }
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }
+  # lwgeom implementation:
   n_row_l <- nrow(l)
   if (n_row_l > 1) {
     res_list <- pbapply::pblapply(seq(n_row_l), function(i) {
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
       }
-      l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length)
+      if (is.na(n_segments)) {
+        l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length)
+      } else {
+        l_segmented <- line_segment1(l[i, ], n_segments = n_segments[i], segment_length = NA)
+      }
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {
@@ -233,11 +246,11 @@ line_segment.sf <- function(
   res
 }
 
-
 #' @export
 line_segment.sfc_LINESTRING <- function(
     l,
     segment_length = NA,
+    n_segments = NA,
     use_rsgeo = NULL,
     debug_mode = FALSE) {
   l <- sf::st_as_sf(l)
@@ -267,7 +280,8 @@ line_segment.sfc_LINESTRING <- function(
 line_segment1 <- function(
     l,
     n_segments = NA,
-    segment_length = NA) {
+    segment_length = NA
+    ) {
   UseMethod("line_segment1")
 }
 #' @export

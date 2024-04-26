@@ -11,7 +11,7 @@ line_segment1(l, n_segments = NA, segment_length = NA)
 
 \item{n_segments}{The number of segments to divide the line into}
 
-\item{segment_length}{The approximate length of segments in the output (overides n_segments if set)}
+\item{segment_length}{The approximate length of segments in the output (overrides n_segments if set)}
 }
 \description{
 Segment a single line, using lwgeom or rsgeo
