@@ -11,7 +11,7 @@ downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/r-hub/
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/software-review/issues/10)
-[![R-CMD-check](https://github.com/ropensci/stplanr/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/stplanr/actions)
+[![R-CMD-check](https://github.com/ropensci/stplanr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/stplanr/actions/workflows/R-CMD-check.yaml)
 
 **stplanr** is a package for sustainable transport planning with R.
 
@@ -155,13 +155,9 @@ routes <- route(
   returnclass = "sf"
   )
 #> Warning: "returnclass" is deprecated.
-
 #> Warning: "returnclass" is deprecated.
-
 #> Warning: "returnclass" is deprecated.
-
 #> Warning: "returnclass" is deprecated.
-
 #> Warning: "returnclass" is deprecated.
 plot(sf::st_geometry(routes))
 plot(desire_lines, col = "red", add = TRUE)
