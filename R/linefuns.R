@@ -158,7 +158,7 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' but does not always return the number of segments requested.
 #'
 #' @inheritParams line2df
-#' @param segment_length The approximate length of segments in the output (overides n_segments if set)
+#' @param segment_length The approximate length of segments in the output (overrides n_segments if set)
 #' @param use_rsgeo Should the `rsgeo` package be used?
 #'  If `rsgeo` is available, this faster implementation is used by default.
 #'  If `rsgeo` is not available, the `lwgeom` package is used.
@@ -383,7 +383,7 @@ line_segment_rsgeo <- function(l, n_segments) {
   res_sf <- sf::st_as_sf(
     res_tbl,
     geometry = res,
-    crs = crs    
+    crs = crs
     )
   res_sf
 }
