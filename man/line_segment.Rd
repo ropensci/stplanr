@@ -42,12 +42,16 @@ table(l_seg_multi$ID)
 plot(l_seg_multi["ID"])
 plot(l_seg_multi$geometry, col = seq_along(l_seg_multi), lwd = 5)
 round(st_length(l_seg_multi))
-# rsgeo implementation:
-rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
-plot(rsmulti["ID"])
-plot(rsmulti$geometry, col = seq_along(l_seg_multi), lwd = 5)
-# round(st_length(rsmulti))
-# waldo::compare(l_seg_multi, rsmulti)
+# rsgeo implementation (default if available):
+if (rlang::is_installed("rsgeo")) {
+  rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+  plot(rsmulti["ID"])
+}
+# Check they have the same total length, to nearest mm:
+# round(sum(st_length(l_seg_multi)), 3) == round(sum(st_length(rsmulti)), 3)
+# With n_segments for all 3 lines:
+l_seg_multi_n <- line_segment(l, n_segments = 2)
+nrow(l_seg_multi_n) == nrow(l) * 2
 }
 \seealso{
 Other lines: 

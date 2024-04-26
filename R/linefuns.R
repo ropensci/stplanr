@@ -140,6 +140,9 @@ angle_diff <- function(l, angle, bidirectional = FALSE, absolute = TRUE) {
 #' plot(l$geometry, col = 2:5)
 #' midpoints <- line_midpoint(l)
 #' plot(midpoints, add = TRUE)
+#' # compare with sf::st_point_on_surface:
+#' midpoints2 <- sf::st_point_on_surface(l)
+#' plot(midpoints2, add = TRUE, col = "red")
 line_midpoint <- function(l, tolerance = NULL) {
   if (is.null(tolerance)) {
     sub <- lwgeom::st_linesubstring(x = l, from = 0, to = 0.5)
@@ -176,12 +179,16 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' plot(l_seg_multi["ID"])
 #' plot(l_seg_multi$geometry, col = seq_along(l_seg_multi), lwd = 5)
 #' round(st_length(l_seg_multi))
-#' # rsgeo implementation:
-#' rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
-#' plot(rsmulti["ID"])
-#' plot(rsmulti$geometry, col = seq_along(l_seg_multi), lwd = 5)
-#' # round(st_length(rsmulti))
-#' # waldo::compare(l_seg_multi, rsmulti)
+#' # rsgeo implementation (default if available):
+#' if (rlang::is_installed("rsgeo")) {
+#'   rsmulti = line_segment(l, segment_length = 1000, use_rsgeo = TRUE)
+#'   plot(rsmulti["ID"])
+#' }
+#' # Check they have the same total length, to nearest mm:
+#' # round(sum(st_length(l_seg_multi)), 3) == round(sum(st_length(rsmulti)), 3)
+#' # With n_segments for all 3 lines:
+#' l_seg_multi_n <- line_segment(l, n_segments = 2)
+#' nrow(l_seg_multi_n) == nrow(l) * 2
 line_segment <- function(
     l,
     segment_length = NA,
@@ -205,16 +212,24 @@ line_segment.sf <- function(
     use_rsgeo = NULL,
     debug_mode = FALSE
   ) {
+  # Get n_segments if not provided:
+  if (is.na(n_segments)) {
+    segment_lengths <- as.numeric(sf::st_length(l))
+    n_segments <- n_segments(segment_lengths, segment_length)
+  } else {
+    if (length(n_segments) != nrow(l)) {
+      if (length(n_segments) == 1) {
+        message("Setting n_segments to ", n_segments, " for all lines")
+        n_segments <- rep.int(n_segments, nrow(l))
+      }
+    }
+  }
   # Decide whether to use rsgeo or lwgeom, if not set:
   if (is.null(use_rsgeo)) {
     use_rsgeo <- use_rsgeo(l)
   }
   if (use_rsgeo) {
     # If using rsgeo, we can do the whole thing in one go:
-    if (is.na(n_segments)) {
-      segment_lengths <- as.numeric(sf::st_length(l))
-      n_segments <- n_segments(segment_lengths, segment_length)
-    }
     res <- line_segment_rsgeo(l, n_segments = n_segments)
     return(res)
   }
@@ -225,11 +240,7 @@ line_segment.sf <- function(
       if (debug_mode) {
         message(paste0("Processing row ", i, " of ", n_row_l))
       }
-      if (is.na(n_segments)) {
-        l_segmented <- line_segment1(l[i, ], n_segments = NA, segment_length = segment_length)
-      } else {
-        l_segmented <- line_segment1(l[i, ], n_segments = n_segments[i], segment_length = NA)
-      }
+      l_segmented <- line_segment1(l[i, ], n_segments = n_segments[i], segment_length = NA)
       res_names <- names(sf::st_drop_geometry(l_segmented))
       # Work-around for https://github.com/ropensci/stplanr/issues/531
       if (i == 1) {

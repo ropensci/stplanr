@@ -20,6 +20,9 @@ l <- routes_fast_sf[2:5, ]
 plot(l$geometry, col = 2:5)
 midpoints <- line_midpoint(l)
 plot(midpoints, add = TRUE)
+# compare with sf::st_point_on_surface:
+midpoints2 <- sf::st_point_on_surface(l)
+plot(midpoints2, add = TRUE, col = "red")
 }
 \seealso{
 Other lines: 
