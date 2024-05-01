@@ -174,6 +174,8 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' library(sf)
 #' l <- routes_fast_sf[2:4, ]
 #' l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
+#' l_seg_n <- line_segment(l, n_segments = 2)
+#' l_seg_n <- line_segment(l, n_segments = c(1:3))
 #' # Number of subsegments
 #' table(l_seg_multi$ID)
 #' plot(l_seg_multi["ID"])

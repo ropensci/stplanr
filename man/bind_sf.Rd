@@ -18,8 +18,8 @@ Rapid row-binding of sf objects
 \seealso{
 Other geo: 
 \code{\link{bbox_scale}()},
-\code{\link{geo_bb_matrix}()},
 \code{\link{geo_bb}()},
+\code{\link{geo_bb_matrix}()},
 \code{\link{geo_buffer}()},
 \code{\link{geo_length}()},
 \code{\link{geo_projected}()},

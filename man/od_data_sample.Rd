@@ -17,9 +17,9 @@ od_data_sample
 Other data: 
 \code{\link{cents_sf}},
 \code{\link{destinations_sf}},
+\code{\link{flow}},
 \code{\link{flow_dests}},
 \code{\link{flowlines_sf}},
-\code{\link{flow}},
 \code{\link{od_data_lines}},
 \code{\link{od_data_routes}},
 \code{\link{osm_net_example}},
