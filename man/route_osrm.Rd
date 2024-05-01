@@ -51,7 +51,7 @@ slower R interface to OSRM routing services compared with the excellent
 }
 \seealso{
 Other routes: 
-\code{\link{route_dodgr}()},
-\code{\link{route}()}
+\code{\link{route}()},
+\code{\link{route_dodgr}()}
 }
 \concept{routes}

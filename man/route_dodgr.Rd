@@ -35,7 +35,7 @@ if (requireNamespace("dodgr")) {
 }
 \seealso{
 Other routes: 
-\code{\link{route_osrm}()},
-\code{\link{route}()}
+\code{\link{route}()},
+\code{\link{route_osrm}()}
 }
 \concept{routes}

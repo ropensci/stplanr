@@ -172,8 +172,10 @@ line_midpoint <- function(l, tolerance = NULL) {
 #' @export
 #' @examples
 #' library(sf)
-#' l <- routes_fast_sf[2:4, ]
+#' l <- routes_fast_sf[2:4, "ID"]
 #' l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
+#' l_seg_n <- line_segment(l, n_segments = 2)
+#' l_seg_n <- line_segment(l, n_segments = c(1:3))
 #' # Number of subsegments
 #' table(l_seg_multi$ID)
 #' plot(l_seg_multi["ID"])
@@ -200,7 +202,7 @@ line_segment <- function(
     use_rsgeo = NULL,
     debug_mode = FALSE) {
   # Defensive programming:
-  if (is.na(segment_length) && is.na(n_segments)) {
+  if (any(is.na(segment_length)) && any(is.na(n_segments))) {
     rlang::abort(
       "segment_length or n_segments must be set.",
       call = rlang::caller_env()
@@ -217,7 +219,7 @@ line_segment.sf <- function(
     debug_mode = FALSE
   ) {
   # Get n_segments if not provided:
-  if (is.na(n_segments)) {
+  if (all(is.na(n_segments))) {
     segment_lengths <- as.numeric(sf::st_length(l))
     n_segments <- n_segments(segment_lengths, segment_length)
   } else {
