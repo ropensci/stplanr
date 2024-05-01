@@ -1,4 +1,4 @@
-Fix to reverse dependencies
+Bugfix release, apologies for submitting 2 versions in quick succession.
 
 ## R CMD check results
 

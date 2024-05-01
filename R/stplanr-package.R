@@ -2,7 +2,6 @@
 #'
 #' @name stplanr-package
 #' @aliases stplanr stplanr-package
-#' @docType _PACKAGE
 #' @author Robin Lovelace \email{rob00x@@gmail.com}
 #' @keywords package
 #' @seealso <https://github.com/ropensci/stplanr>
@@ -21,5 +20,5 @@
 #' @importFrom utils download.file tail unzip
 #' @importFrom rlang .data
 #' @importFrom dplyr first last n
-NULL
+'_PACKAGE'
 utils::globalVariables(c(".", "n", ".inc", "object", "x", "y", "stplanr_start", "stplanr_end", "stplanr_linkid"))
