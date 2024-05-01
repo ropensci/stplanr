@@ -2,7 +2,7 @@
 #'
 #' @name stplanr-package
 #' @aliases stplanr stplanr-package
-#' @docType package
+#' @docType _PACKAGE
 #' @author Robin Lovelace \email{rob00x@@gmail.com}
 #' @keywords package
 #' @seealso <https://github.com/ropensci/stplanr>

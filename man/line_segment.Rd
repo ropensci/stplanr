@@ -29,9 +29,15 @@ If \code{rsgeo} is not available, the \code{lwgeom} package is used.}
 \description{
 This function keeps the attributes.
 Note: results differ when \code{use_rsgeo} is \code{TRUE}:
-the \code{{rsgeo}} implementation is faster and more reliably
-keeps returned linestrings below a the \code{segment_length} value,
-but does not always return the number of segments requested.
+the \code{{rsgeo}} implementation will be faster.
+Results may not always keep returned linestrings below
+the \code{segment_length} value.
+The \code{{rsgeo}} implementation does not always
+return the number of segments requested due to an upstream issue in the
+\code{geo} Rust crate.
+}
+\details{
+Note: we recommend running these functions on projected data.
 }
 \examples{
 library(sf)

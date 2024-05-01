@@ -156,9 +156,14 @@ line_midpoint <- function(l, tolerance = NULL) {
 #'
 #' This function keeps the attributes.
 #' Note: results differ when `use_rsgeo` is `TRUE`:
-#' the `{rsgeo}` implementation is faster and more reliably
-#' keeps returned linestrings below a the `segment_length` value,
-#' but does not always return the number of segments requested.
+#' the `{rsgeo}` implementation will be faster.
+#' Results may not always keep returned linestrings below
+#' the `segment_length` value.
+#' The `{rsgeo}` implementation does not always
+#' return the number of segments requested due to an upstream issue in the
+#' `geo` Rust crate.
+#'
+#' Note: we recommend running these functions on projected data.
 #'
 #' @inheritParams line2df
 #' @param segment_length The approximate length of segments in the output (overrides n_segments if set)
@@ -386,8 +391,8 @@ line_segment_rsgeo <- function(l, n_segments) {
 
   # sf linestring:
   res_sfc_ml = sf::st_as_sfc(res_rsgeo)
-  n_segments_rsgeo = as.numeric(lengths(res_sfc_ml))
-  if (! identical(n_segments, n_segments_rsgeo)) {
+  n_segments_rsgeo = lengths(res_sfc_ml)
+  if (! all(n_segments == n_segments_rsgeo)) {
     sum_segments <- sum(n_segments)
     sum_segments_rsgeo <- sum(n_segments_rsgeo)
     msg = paste0(
