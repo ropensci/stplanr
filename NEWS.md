@@ -1,5 +1,7 @@
 # stplanr 1.2.1
 
+- Fixed bug causing errors when `length(n_segments) > 1` (#560)
+
 # stplanr 1.2.0 (2024-04)
 
 - Various fixes for `rnet_join()` (now recommended over `rnet_merge()`) and `line_segment()` (#552)
