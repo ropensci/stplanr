@@ -35,7 +35,7 @@ but does not always return the number of segments requested.
 }
 \examples{
 library(sf)
-l <- routes_fast_sf[2:4, ]
+l <- routes_fast_sf[2:4, "ID"]
 l_seg_multi <- line_segment(l, segment_length = 1000, use_rsgeo = FALSE)
 l_seg_n <- line_segment(l, n_segments = 2)
 l_seg_n <- line_segment(l, n_segments = c(1:3))
