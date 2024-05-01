@@ -375,13 +375,6 @@ use_rsgeo <- function(shp) {
 line_segment_rsgeo <- function(l, n_segments) {
 
   crs <- sf::st_crs(l)
-  # Test to see if the CRS is latlon or not and provide warning if so
-  if (sf::st_is_longlat(l)) {
-    warning(
-      "The CRS of the input object is latlon.\n",
-      "This may cause problems with the rsgeo implementation of line_segment()."
-    )
-  }
 
   # extract geometry and convert to rsgeo
   geo <- rsgeo::as_rsgeo(sf::st_geometry(l))
