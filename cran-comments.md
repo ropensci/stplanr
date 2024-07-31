@@ -1,4 +1,10 @@
-Bugfix release, apologies for submitting 2 versions in quick succession.
+I've added
+
+Additional_repositories: https://josiahparry.r-universe.dev
+
+To the DESCRIPTION file
+
+This works around the issue with rsgeo being removed from CRAN
 
 ## R CMD check results
 

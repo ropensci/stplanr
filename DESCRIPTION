@@ -83,6 +83,7 @@ Suggests:
     rsgeo (>= 0.1.6),
     testthat (>= 2.0.0),
     tmap
+Additional_repositories: https://josiahparry.r-universe.dev
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
