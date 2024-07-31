@@ -1,3 +1,5 @@
+# stplanr 1.2.2
+
 # stplanr 1.2.1
 
 - Fixed bug causing errors when `length(n_segments) > 1` (#560)
