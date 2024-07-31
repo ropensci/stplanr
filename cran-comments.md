@@ -1,3 +1,7 @@
+Previous submission had out-of-date documentation, hence failing checks.
+
+Failing example removed, it should work now.
+
 I've added
 
 Additional_repositories: https://josiahparry.r-universe.dev
