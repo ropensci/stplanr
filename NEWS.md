@@ -1,4 +1,6 @@
-# stplanr 1.2.2
+# stplanr 1.2.2 (2024-07)
+
+- CRAN checks fixed (#563)
 
 # stplanr 1.2.1
 
