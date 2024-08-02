@@ -65,7 +65,12 @@ functions are available:
 \verb{cluster_edge_betweenness, cluster_fast_greedy, cluster_label_prop,}
 \verb{cluster_leading_eigen, cluster_louvain, cluster_optimal, cluster_spinglass, cluster_walktrap}
 }
+\note{
+These functions rely on the igraph package. If igraph is not installed,
+the function will return a message.
+}
 \examples{
+if (requireNamespace("igraph", quietly = TRUE)) {
 rnet <- rnet_breakup_vertices(stplanr::osm_net_example)
 rnet$group <- rnet_group(rnet)
 plot(rnet["group"])
@@ -78,6 +83,7 @@ rnet$group_louvain <- rnet_group(rnet, igraph::cluster_louvain)
 plot(rnet["group_louvain"])
 rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 plot(rnet["group_fast_greedy"])
+}
 }
 \seealso{
 Other rnet: 

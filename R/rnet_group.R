@@ -21,9 +21,13 @@
 #'   rnet_group representing the groups of each network element. In the latter
 #'   case, the connectivity of the spatial object is derived from the sfNetwork
 #'   object.
+#' 
+#' @note These functions rely on the igraph package. If igraph is not installed,
+#'   the function will return a message.
 #'
 #' @family rnet
 #' @examples
+#' if (requireNamespace("igraph", quietly = TRUE)) {
 #' rnet <- rnet_breakup_vertices(stplanr::osm_net_example)
 #' rnet$group <- rnet_group(rnet)
 #' plot(rnet["group"])
@@ -36,6 +40,7 @@
 #' plot(rnet["group_louvain"])
 #' rnet$group_fast_greedy <- rnet_group(rnet, igraph::cluster_fast_greedy)
 #' plot(rnet["group_fast_greedy"])
+#' }
 #' @export
 rnet_group <- function(rnet, ...) {
   UseMethod("rnet_group")
