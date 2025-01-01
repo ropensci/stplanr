@@ -28,10 +28,12 @@
 #' # plot(r_foot$geometry, lwd = 9, col = "grey")
 #' # plot(r_bike, col = "blue", add = TRUE)
 #' # plot(r_car, col = "red", add = TRUE)
+#' # mapview::mapview(r_foot$geometry, col.regions = "grey") + 
+#' #   mapview::mapview(r_bike, col.regions = "blue") + 
+#' #   mapview::mapview(r_car, col.regions = "red")
 #' # }
 #' }
-route_osrm <- function(from, to, osrm.server = "https://routing.openstreetmap.de/",
-                       osrm.profile = "foot"){
+route_osrm <- function(from, to, osrm.server = "https://routing.openstreetmap.de/", osrm.profile = "foot"){
 
   if(osrm.server == "https://routing.openstreetmap.de/") {
     osrm.server = paste0(osrm.server, "routed-", osrm.profile, "/")
