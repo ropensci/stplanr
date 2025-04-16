@@ -161,6 +161,7 @@ most_common_class_of_list <- function(l, class_to_find = "sf") {
 #'
 #' @inheritParams route
 #' @param net sf object representing the route network
+#' @param wt_profile string corresponding to dodgr function weight_streetnet() parameter wt_profile
 #' @family routes
 #' @export
 #' @examples
@@ -179,7 +180,9 @@ most_common_class_of_list <- function(l, class_to_find = "sf") {
 route_dodgr <- function(from = NULL,
                         to = NULL,
                         l = NULL,
-                        net = NULL
+                        net = NULL,
+                        wt_profile = "bicycle" 
+                        # mimic the default behaviour of weight_streetnet
                         # ,
                         # return_net = FALSE
 ) {
@@ -198,7 +201,7 @@ route_dodgr <- function(from = NULL,
 
   ckh <- dodgr::dodgr_cache_off()
   suppressMessages(
-    ways_dg <- dodgr::weight_streetnet(net)
+    ways_dg <- dodgr::weight_streetnet(net, wt_profile = wt_profile)
   )
 
   verts <- dodgr::dodgr_vertices(ways_dg) # the vertices or points for routing
