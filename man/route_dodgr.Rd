@@ -4,7 +4,13 @@
 \alias{route_dodgr}
 \title{Route on local data using the dodgr package}
 \usage{
-route_dodgr(from = NULL, to = NULL, l = NULL, net = NULL)
+route_dodgr(
+  from = NULL,
+  to = NULL,
+  l = NULL,
+  net = NULL,
+  wt_profile = "bicycle"
+)
 }
 \arguments{
 \item{from}{An object representing origins
@@ -15,6 +21,8 @@ route_dodgr(from = NULL, to = NULL, l = NULL, net = NULL)
 \item{l}{A spatial (linestring) object}
 
 \item{net}{sf object representing the route network}
+
+\item{wt_profile}{string corresponding to dodgr function weight_streetnet() parameter wt_profile}
 }
 \description{
 Route on local data using the dodgr package
@@ -28,7 +36,7 @@ if (requireNamespace("dodgr")) {
   # colnames(pts) <- c("X", "Y")
   # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
   # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
-  r <- route_dodgr(from, to, net = osm_net_example)
+  r <- route_dodgr(from, to, net = osm_net_example, wt_profile = "bicycle")
   plot(osm_net_example$geometry)
   plot(r$geometry, add = TRUE, col = "red", lwd = 5)
 }
