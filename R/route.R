@@ -173,7 +173,7 @@ most_common_class_of_list <- function(l, class_to_find = "sf") {
 #'   # colnames(pts) <- c("X", "Y")
 #'   # net <- dodgr::dodgr_streetnet(pts = pts, expand = 0.1)
 #'   # osm_net_example <- net[c("highway", "name", "lanes", "maxspeed")]
-#'   r <- route_dodgr(from, to, net = osm_net_example)
+#'   r <- route_dodgr(from, to, net = osm_net_example, wt_profile = "bicycle")
 #'   plot(osm_net_example$geometry)
 #'   plot(r$geometry, add = TRUE, col = "red", lwd = 5)
 #' }
