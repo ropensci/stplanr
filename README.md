@@ -5,11 +5,10 @@
 
 <!-- [![Build Status](https://travis-ci.org/ropensci/stplanr.svg?branch=master)](https://travis-ci.org/ropensci/stplanr) -->
 
-
 [![rstudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/stplanr)](https://github.com/r-hub/cranlogs.app)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/stplanr)](https://cran.r-project.org/package=stplanr)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/stplanr)](https://cran.r-project.org/package=stplanr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![](https://badges.ropensci.org/10_status.svg)](https://github.com/ropensci/software-review/issues/10)
 [![R-CMD-check](https://github.com/ropensci/stplanr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/stplanr/actions/workflows/R-CMD-check.yaml)
@@ -275,25 +274,25 @@ Transport planning is a relatively new field of application in R.
 However, there are already some good resources on the topic, including
 (any further suggestions: welcome):
 
-- The Transport chapter of *Geocomputation with R*, which provides a
-  broad introduction from a geographic data perspective:
-  <https://r.geocompx.org/transport.html>
-- The **stplanr** paper, which describes the context in which the
-  package was developed:
-  <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
-  (please cite this if you use **stplanr** in your work)
-- The `dodgr` vignette, which provides an introduction to routing in R:
-  <https://github.com/UrbanAnalyst/dodgr>
+  - The Transport chapter of *Geocomputation with R*, which provides a
+    broad introduction from a geographic data perspective:
+    <https://r.geocompx.org/transport.html>
+  - The **stplanr** paper, which describes the context in which the
+    package was developed:
+    <https://journal.r-project.org/archive/2018/RJ-2018-053/index.html>
+    (please cite this if you use **stplanr** in your work)
+  - The `dodgr` vignette, which provides an introduction to routing in
+    R: <https://github.com/UrbanAnalyst/dodgr>
 
 ## Meta
 
-- Please report issues, feature requests and questions to the [github
-  issue tracker](https://github.com/ropensci/stplanr/issues)
-- License: MIT
-- Get citation information for **stplanr** in R doing
-  `citation(package = 'stplanr')`
-- This project is released with a [Contributor Code of
-  Conduct](https://github.com/ropensci/stplanr/blob/master/CONDUCT.md).
-  By participating in this project you agree to abide by its terms.
+  - Please report issues, feature requests and questions to the [github
+    issue tracker](https://github.com/ropensci/stplanr/issues)
+  - License: MIT
+  - Get citation information for **stplanr** in R doing
+    `citation(package = 'stplanr')`
+  - This project is released with a [Contributor Code of
+    Conduct](https://github.com/ropensci/stplanr/blob/master/CONDUCT.md).
+    By participating in this project you agree to abide by its terms.
 
 [![rofooter](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)

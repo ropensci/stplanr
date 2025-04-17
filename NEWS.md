@@ -1,3 +1,9 @@
+# stplanr 1.2.3 (Unreleased)
+
+-   Added `wt_profile` parameter passthrough to `route_dodgr` within the main `route()` function.
+-   Made examples for `rnet_group()` conditional on the `igraph` package being installed.
+-   General documentation updates.
+
 # stplanr 1.2.2 (2024-07)
 
 - CRAN checks fixed (#563)
