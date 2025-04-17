@@ -40,7 +40,7 @@ close (within a certain distance specified by \code{d}) to each other but not
 necessarily touching}
 
 \item{as.undirected}{Coerce the graph created internally into an undirected
-graph with \code{\link[igraph:as.directed]{igraph::as.undirected()}}? TRUE by default, which enables use
+graph with \code{\link[igraph:as.undirected]{igraph::as.undirected()}}? TRUE by default, which enables use
 of a wider range of clutering functions.}
 }
 \value{
