@@ -1,0 +1,91 @@
+
+
+```{r}
+system("gh release list")
+system("gh release download overlapping_segments_in_overline")
+# Additional code can be added here for further processing
+```
+
+```{r}
+library(tidyverse)
+library(stplanr)
+# Or 
+devtools::load_all() # if you are using the package locally
+```
+
+
+
+```{r}
+list.files(pattern = "geojson")
+overlapping_segments = sf::read_sf("overlapping_segments_in_overline.geojson")
+coordinates = sf::st_coordinates(overlapping_segments)
+head(coordinates)
+sf::st_crs(overlapping_segments)
+
+nrow(overlapping_segments) # 69
+mapview::mapview(overlapping_segments)
+```
+
+```{r}
+output_1 = overline(overlapping_segments, attrib = "all_fastest_bicycle_go_dutch")
+# Reduce precision of input data
+?sf::st_precision
+overlapping_segments_1m_geometry = sf::st_set_precision(overlapping_segments, 1) |>
+  sf::st_geometry() |>
+  sf::st_as_binary() |>
+  sf::st_as_sfc(crs = sf::st_crs(overlapping_segments))
+overlapping_segments_1m = sf::st_sf(
+  overlapping_segments |>
+    sf::st_drop_geometry(),
+  geometry = overlapping_segments_1m_geometry
+)
+sf::st_coordinates(overlapping_segments_1m)
+mapview::mapview(overlapping_segments_1m)
+output_2 = overline(overlapping_segments_1m, attrib = "all_fastest_bicycle_go_dutch")
+nrow(output_2)
+mapview::mapview(output_2) +
+  mapview::mapview(output_1)
+```
+
+Attempt with aggregating geometry from OSM
+
+```{r}
+edinburgh_net = osmactive::get_travel_network("edinburgh")
+example_bounds = overlapping_segments |>
+  sf::st_union() |>
+  sf::st_convex_hull() |>
+  sf::st_transform(sf::st_crs(edinburgh_net))
+base_network = edinburgh_net[example_bounds, ]
+nrow(base_network)
+base_net = sf::st_transform(base_network, sf::st_crs(overlapping_segments))
+```
+
+```{r}
+base_net$length_x = sf::st_length(base_net) |>
+  as.numeric()
+cols_to_keep = c("osm_id", "length_x")
+?rnet_join
+overlapping_joined = rnet_join(
+    base_net[cols_to_keep],
+    overlapping_segments
+    )
+overlapping_aggregated = overlapping_joined |>
+  sf::st_drop_geometry() |>
+  mutate(across(matches("bicycle"), function(x) x * length_y))  |>
+  group_by(osm_id) |>
+  summarise(across(matches("bicycle"), function(x) sum(x, na.rm = TRUE)))
+summary(overlapping_aggregated$all_fastest_bicycle_go_dutch)
+```
+
+```{r}
+rnet_joined = left_join(
+    base_net |>
+      select(osm_id, length_x),
+    overlapping_aggregated
+)
+rnet_final = rnet_joined |>
+  mutate(across(matches("bicycle"), function(x) x / length_x)) |>
+  filter(all_fastest_bicycle_go_dutch > 0)
+mapview::mapview(rnet_final, zcol = "all_fastest_bicycle_go_dutch")
+
+```
