@@ -67,7 +67,8 @@ cols_to_keep = c("osm_id", "length_x")
 ?rnet_join
 overlapping_joined = rnet_join(
     base_net[cols_to_keep],
-    overlapping_segments
+    overlapping_segments,
+    segment_length = 10
     )
 overlapping_aggregated = overlapping_joined |>
   sf::st_drop_geometry() |>
@@ -86,6 +87,7 @@ rnet_joined = left_join(
 rnet_final = rnet_joined |>
   mutate(across(matches("bicycle"), function(x) x / length_x)) |>
   filter(all_fastest_bicycle_go_dutch > 0)
+nrow(rnet_final)
 mapview::mapview(rnet_final, zcol = "all_fastest_bicycle_go_dutch")
 
 ```
